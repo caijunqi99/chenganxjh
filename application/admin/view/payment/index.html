@@ -1,0 +1,41 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>支付方式</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+
+    <table class="ds-default-table">
+        <thead>
+            <tr>
+                <th width="70%">支付方式</th>
+                <th width="20%">启用</th>
+                <th>{$Think.lang.ds_handle}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="payment_list" id="payment"}
+            <tr>
+                <td>{$payment.payment_name}</td>
+                <td>{if $payment.payment_state eq '1'}开启中{else}关闭中{/if}</td>
+                <td>
+                    <a href="{:url('/admin/Payment/edit',['payment_id'=>$payment.payment_id])}">{$Think.lang.ds_edit}</a>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+</div>
+
+

@@ -1,0 +1,62 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>邮箱短信</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <form method="post">
+        <div class="ncap-form-default">
+            <dl>
+                <dt>短信平台账号</dt>
+                <dd>
+                    <input type="text" name="mobile_username" id="mobile_username" value="{$list_config.mobile_username}" class="w200"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>短信平台密码</dt>
+                <dd>
+                    <input type="text" name="mobile_pwd" id="mobile_pwd" value="{$list_config.mobile_pwd}" class="w200"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>短信平台Key</dt>
+                <dd>
+                    <input type="text" name="mobile_key" id="mobile_key" value="{$list_config.mobile_key}" class="w200"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>短信内容签名</dt>
+                <dd>
+                    <input type="text" name="mobile_signature" id="mobile_signature" value="{$list_config.mobile_signature}" class="w200"/>
+                </dd>
+            </dl>
+            
+            <dl>
+                <dt>备注信息</dt>
+                <dd>
+                    <input type="text" name="mobile_memo" id="mobile_memo" value="{$list_config.mobile_memo}" class="w200"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt></dt>
+                <dd>
+                    <input class="btn" type="submit" value="提交"/>
+                </dd>
+            </dl>
+            
+        </div>
+    </form>
+    
+</div>
