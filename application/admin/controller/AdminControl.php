@@ -125,7 +125,7 @@ class AdminControl extends Controller {
             foreach ($v['children'] as $ck => $cv) {
                 $tmp = explode(',', $cv['args']);
                 //以下几项不需要验证
-                $except = array('Index', 'Dashboard', 'Login');
+                $except = array('Index', 'Dashboard', 'Login','');
                 if (in_array($tmp[1], $except))
                     continue;
                 if (!in_array($tmp[1], array_values($this->permission))) {
@@ -239,22 +239,37 @@ class AdminControl extends Controller {
                         'args' => 'aboutus,dashboard,dashboard',
                     ),
                      */
-                    'config' => array(
-                        'text' => lang('ds_base'),
-                        'args' => 'base,Config,dashboard',
-                    ),
-                    'member' => array(
-                        'text' => lang('ds_member_manage'),
-                        'args' => 'member,Member,dashboard',
-                    ),
+
+
                 ),
             ),
+
             'setting' => array(
                 'name' => 'setting',
                 'text' => lang('ds_setting'),
                 'children' => array(
                     'config' => array(
                         'text' => lang('ds_base'),
+                        'args' => 'base,Config,setting',
+                    ),
+                    'sctype' => array(
+                        'text' => lang('ds_sctype'),
+                        'args' => 'base,Config,setting',
+                    ),
+                    'cltype' => array(
+                        'text' => lang('ds_cltype'),
+                        'args' => 'base,Config,setting',
+                    ),
+                    'course' => array(
+                        'text' => lang('ds_course'),
+                        'args' => 'base,Config,setting',
+                    ),
+                    'revisit' => array(
+                        'text' => lang('ds_revisit'),
+                        'args' => 'base,Config,setting',
+                    ),
+                    'meal' => array(
+                        'text' => lang('ds_meal'),
                         'args' => 'base,Config,setting',
                     ),
                     'account' => array(
@@ -311,6 +326,54 @@ class AdminControl extends Controller {
                     ),
                 ),
             ),
+            'organize' => array(
+                'name' => 'dashboards',
+                'text' => lang('ds_organize'),
+                'children' => array(
+                    'welcome' => array(
+                        'text' => lang('ds_company'),
+                        'args' => 'welcome,Dashboard,organize',
+                    ),
+                    /*
+                    'aboutus' => array(
+                        'text' => lang('ds_aboutus'),
+                        'args' => 'aboutus,dashboard,dashboard',
+                    ),
+                     */
+                    'config' => array(
+                        'text' => lang('ds_gadmin'),
+                        'args' => 'base,Config,organize',
+                    ),
+                    'admin' => array(
+                        'text' => lang('ds_admin'),
+                        'args' => 'admin,Admin,organize',
+                    ),
+                ),
+            ),
+            'school' => array(
+                'name' => 'school',
+                'text' => lang('ds_school'),
+                'children' => array(
+                    'school' => array(
+                        'text' => lang('ds_school'),
+                        'args' => 'welcome,Dashboard,school',
+                    ),
+                    /*
+                    'aboutus' => array(
+                        'text' => lang('ds_aboutus'),
+                        'args' => 'aboutus,dashboard,dashboard',
+                    ),
+                     */
+                    'class' => array(
+                        'text' => lang('ds_classes'),
+                        'args' => 'base,Config,school',
+                    ),
+                    'student' => array(
+                        'text' => lang('ds_student'),
+                        'args' => 'member,Member,school',
+                    ),
+                ),
+            ),
             'member' => array(
                 'name' => 'member',
                 'text' => lang('ds_member'),
@@ -357,6 +420,80 @@ class AdminControl extends Controller {
                     ),
                 ),
             ),
+            'look' => array(
+                'name' => 'look',
+                'text' => lang('ds_look'),
+                'children' => array(
+                    'camera' => array(
+                        'text' => lang('ds_camera'),
+                        'args' => 'welcome,Dashboard,look',
+                    ),
+                    /*
+                    'aboutus' => array(
+                        'text' => lang('ds_aboutus'),
+                        'args' => 'aboutus,dashboard,dashboard',
+                    ),
+                     */
+                    'monitor' => array(
+                        'text' => lang('ds_monitor'),
+                        'args' => 'base,Config,look',
+                    ),
+                    'revisitclass' => array(
+                        'text' => lang('ds_revisitclass'),
+                        'args' => 'member,Member,look',
+                    ),
+                    'binding' => array(
+                        'text' => lang('ds_binding'),
+                        'args' => 'member,Member,look',
+                    ),
+                ),
+            ),
+            'trade' => array(
+                'name' => 'trade',
+                'text' => lang('ds_trade'),
+                'children' => array(
+                    'vrorder' => array(
+                        'text' => lang('ds_vrorder'),
+                        'args' => 'index,Vrorder,trade',
+                    ),
+                    'revisitorder' => array(
+                        'text' => lang('ds_revisitorder'),
+                        'args' => 'index,Vrorder,trade',
+                    ),
+                    'order' => array(
+                        'text' => lang('ds_order'),
+                        'args' => 'index,Order,trade',
+                    ),
+                    'refund' => array(
+                        'text' => lang('ds_refund'),
+                        'args' => 'refund_manage,Refund,trade',
+                    ),
+                    'return' => array(
+                        'text' => lang('ds_return'),
+                        'args' => 'return_manage,Returnmanage,trade',
+                    ),
+                    'vrrefund' => array(
+                        'text' => lang('ds_vrrefund'),
+                        'args' => 'refund_manage,Vrrefund,trade',
+                    ),
+                    'consulting' => array(
+                        'text' => lang('ds_consulting'),
+                        'args' => 'Consulting,Consulting,trade',
+                    ),
+                    'inform' => array(
+                        'text' => lang('ds_inform'),
+                        'args' => 'inform_list,Inform,trade',
+                    ),
+                    'evaluate' => array(
+                        'text' => lang('ds_evaluate'),
+                        'args' => 'evalgoods_list,Evaluate,trade',
+                    ),
+                    'complain' => array(
+                        'text' => lang('ds_complain'),
+                        'args' => 'complain_new_list,Complain,trade',
+                    ),
+                ),
+            ),
             'goods' => array(
                 'name' => 'goods',
                 'text' => lang('ds_goods'),
@@ -384,6 +521,44 @@ class AdminControl extends Controller {
                     'album' => array(
                         'text' => lang('ds_album'),
                         'args' => 'index,GoodsAlbum,goods',
+                    ),
+                ),
+            ),
+            'stat' => array(
+                'name' => 'stat',
+                'text' => lang('ds_stat'),
+                'children' => array(
+                    'stat_general' => array(
+                        'text' => lang('ds_statgeneral'),
+                        'args' => 'general,Statgeneral,stat',
+                    ),
+                    'stat_industry' => array(
+                        'text' => lang('ds_statindustry'),
+                        'args' => 'scale,Statindustry,stat',
+                    ),
+                    'stat_member' => array(
+                        'text' => lang('ds_statmember'),
+                        'args' => 'newmember,Statmember,stat',
+                    ),
+                    'stat_store' => array(
+                        'text' => lang('ds_statstore'),
+                        'args' => 'newstore,Statstore,stat',
+                    ),
+                    'stat_trade' => array(
+                        'text' => lang('ds_stattrade'),
+                        'args' => 'income,Stattrade,stat',
+                    ),
+                    'stat_goods' => array(
+                        'text' => lang('ds_statgoods'),
+                        'args' => 'pricerange,Statgoods,stat',
+                    ),
+                    'stat_marketing' => array(
+                        'text' => lang('ds_statmarketing'),
+                        'args' => 'promotion,Statmarketing,stat',
+                    ),
+                    'stat_stataftersale' => array(
+                        'text' => lang('ds_stataftersale'),
+                        'args' => 'refund,Stataftersale,stat',
                     ),
                 ),
             ),
@@ -417,48 +592,7 @@ class AdminControl extends Controller {
                     ),
                 ),
             ),
-            'trade' => array(
-                'name' => 'trade',
-                'text' => lang('ds_trade'),
-                'children' => array(
-                    'order' => array(
-                        'text' => lang('ds_order'),
-                        'args' => 'index,Order,trade',
-                    ),
-                    'vrorder' => array(
-                        'text' => lang('ds_vrorder'),
-                        'args' => 'index,Vrorder,trade',
-                    ),
-                    'refund' => array(
-                        'text' => lang('ds_refund'),
-                        'args' => 'refund_manage,Refund,trade',
-                    ),
-                    'return' => array(
-                        'text' => lang('ds_return'),
-                        'args' => 'return_manage,Returnmanage,trade',
-                    ),
-                    'vrrefund' => array(
-                        'text' => lang('ds_vrrefund'),
-                        'args' => 'refund_manage,Vrrefund,trade',
-                    ),
-                    'consulting' => array(
-                        'text' => lang('ds_consulting'),
-                        'args' => 'Consulting,Consulting,trade',
-                    ),
-                    'inform' => array(
-                        'text' => lang('ds_inform'),
-                        'args' => 'inform_list,Inform,trade',
-                    ),
-                    'evaluate' => array(
-                        'text' => lang('ds_evaluate'),
-                        'args' => 'evalgoods_list,Evaluate,trade',
-                    ),
-                    'complain' => array(
-                        'text' => lang('ds_complain'),
-                        'args' => 'complain_new_list,Complain,trade',
-                    ),
-                ),
-            ),
+
             'website' => array(
                 'name' => 'website',
                 'text' => lang('ds_website'),
@@ -560,44 +694,6 @@ class AdminControl extends Controller {
                     'Delivery' => array(
                         'text' => lang('ds_delivery'),
                         'args' => 'index,Delivery,operation',
-                    ),
-                ),
-            ),
-            'stat' => array(
-                'name' => 'stat',
-                'text' => lang('ds_stat'),
-                'children' => array(
-                    'stat_general' => array(
-                        'text' => lang('ds_statgeneral'),
-                        'args' => 'general,Statgeneral,stat',
-                    ),
-                    'stat_industry' => array(
-                        'text' => lang('ds_statindustry'),
-                        'args' => 'scale,Statindustry,stat',
-                    ),
-                    'stat_member' => array(
-                        'text' => lang('ds_statmember'),
-                        'args' => 'newmember,Statmember,stat',
-                    ),
-                    'stat_store' => array(
-                        'text' => lang('ds_statstore'),
-                        'args' => 'newstore,Statstore,stat',
-                    ),
-                    'stat_trade' => array(
-                        'text' => lang('ds_stattrade'),
-                        'args' => 'income,Stattrade,stat',
-                    ),
-                    'stat_goods' => array(
-                        'text' => lang('ds_statgoods'),
-                        'args' => 'pricerange,Statgoods,stat',
-                    ),
-                    'stat_marketing' => array(
-                        'text' => lang('ds_statmarketing'),
-                        'args' => 'promotion,Statmarketing,stat',
-                    ),
-                    'stat_stataftersale' => array(
-                        'text' => lang('ds_stataftersale'),
-                        'args' => 'refund,Stataftersale,stat',
                     ),
                 ),
             ),

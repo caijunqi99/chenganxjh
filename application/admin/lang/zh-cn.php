@@ -2,17 +2,22 @@
 
 /* 左侧按钮 BEGIN */
 //设置
-$lang['ds_dashboard'] = '控制台';
+$lang['ds_dashboard'] = '首页';
 $lang['ds_welcome'] = '欢迎界面';
 $lang['ds_aboutus'] = '关于我们';
-$lang['ds_setting'] = '设置';
-$lang['ds_base'] = '站点设置';
+$lang['ds_setting'] = '系统配置';
+$lang['ds_base'] = '通用设置/APP';
+$lang['ds_sctype'] = '学校类型配置';
+$lang['ds_cltype'] = '年级配置';
+$lang['ds_course'] = '课程配置';
+$lang['ds_revisit'] = '重温课堂价格配置';
+$lang['ds_meal'] = '套餐价格设置';
 $lang['ds_account'] = '账号同步';
 $lang['ds_seo_set'] = 'SEO设置';
 $lang['ds_upload_set'] = '上传设置';
 $lang['ds_message'] = '邮箱短信';
 $lang['ds_payment'] = '支付方式';
-$lang['ds_admin'] = '权限设置';
+$lang['ds_admin'] = '人员管理';
 $lang['ds_express'] = '快递公司';
 $lang['ds_waybill'] = '运单模板';
 $lang['ds_region'] = '地区管理';
@@ -20,8 +25,19 @@ $lang['ds_offpayarea'] = '配送地区';
 $lang['ds_cache'] = '清理缓存';
 $lang['ds_db'] = '数据备份';
 $lang['ds_adminlog'] = '操作日志';
+
+//组织管理
+$lang['ds_organize'] = '组织管理';
+$lang['ds_company'] = '分/子公司（代理）管理';
+$lang['ds_gadmin'] = '角色管理（权限组）';
+
+//学校管理
+$lang['ds_school'] = '学校管理';
+$lang['ds_classes'] = '班级管理';
+$lang['ds_student'] = '学生管理';
+
 //会员
-$lang['ds_member'] = '会员';
+$lang['ds_member'] = '会员/家长管理';
 $lang['ds_member_manage'] = '会员管理';
 $lang['ds_membergrade'] = '会员级别';
 $lang['ds_exppoints'] = '经验值管理';
@@ -34,8 +50,15 @@ $lang['ds_snsmember'] = '会员标签';
 $lang['ds_chatlog'] = '聊天记录';
 $lang['points_unit'] = '积分';
 
+//看孩管理
+$lang['ds_look'] = '看孩管理';
+$lang['ds_camera'] = '摄像头管理';
+$lang['ds_monitor'] = '网络监控';
+$lang['ds_revisitclass'] = '重温课堂管理';
+$lang['ds_binding'] = '待审核学生绑定';
+
 //商品
-$lang['ds_goods'] = '商品';
+$lang['ds_goods'] = '商城管理';
 $lang['ds_goodsclass'] = '商品分类';
 $lang['ds_brand'] = '品牌管理';
 $lang['ds_goods_manage'] = '商品管理';
@@ -51,9 +74,10 @@ $lang['ds_storehelp'] = '店铺帮助';
 $lang['ds_storejoin'] = '开店首页';
 $lang['ds_ownshop'] = '自营店铺';
 //交易
-$lang['ds_trade'] = '交易';
+$lang['ds_trade'] = '订单管理';
 $lang['ds_order'] = '实物订单';
-$lang['ds_vrorder'] = '虚拟订单';
+$lang['ds_vrorder'] = '看孩订单';
+$lang['ds_revisitorder'] = '重温课堂订单';
 $lang['ds_refund'] = '退款管理';
 $lang['ds_return'] = '退货管理';
 $lang['ds_vrrefund'] = '虚拟订单退款';
