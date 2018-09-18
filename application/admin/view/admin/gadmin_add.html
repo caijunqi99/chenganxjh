@@ -36,11 +36,19 @@
                     <tr>
                         <td>
                             <label style="width:100px"><?php echo (!empty($v['nav'])) ? $v['nav'] : '&nbsp;'; ?></label>
-                            <input id="limit<?php echo $k;?>" type="checkbox" onclick="selectLimit('limit<?php echo $k;?>')">
-                            <label for="limit<?php echo $k;?>"><b><?php echo $v['name'];?></b>&nbsp;&nbsp;</label>
+                            <input id="limit<?php echo $k;?>" type="checkbox" onclick="selectLimit('limit<?php echo $k;?>')" >
+                            <label for="limit<?php echo $k;?>"><b><?php echo $v['text'];?></b>&nbsp;&nbsp;</label>
                             <?php foreach($v['child'] as $xk => $xv) { ?>
-                            <label><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo $xv['op'];?>">
-                                <?php echo $xv['name'];?>&nbsp;</label>
+                                <tr>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label><input id="action<?php echo $k;?>_<?php echo $xk;?>" nctype='limit' class="limit<?php echo $k;?>" onclick="selectLimit('action<?php echo $k;?>_<?php echo $xk;?>')" type="checkbox" name="permission[]" value="<?php echo $xv['op'];?>@<?php echo $v['name']?>">
+                                            <?php echo $xv['text'];?>&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <?php foreach($xv['action'] as $xx => $vv) { ?>
+                                            <label><input nctype='limit' class="limit<?php echo $k;?> action<?php echo $k;?>_<?php echo $xk;?>" value="<?php echo $vv['id'];?>" type="checkbox" name="action[<?php echo $xv['permid'];?>][]" ><?php echo $vv['actname'];?></label>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
                             <?php } ?>
                         </td>
                     </tr>
@@ -63,6 +71,7 @@
 
 <script>
                                 function selectLimit(name) {
+                                    // alert('aaa');
                                     if ($('#'+name).prop('checked')) {
                                         $('.'+name).prop('checked', true);
                                     } else {
