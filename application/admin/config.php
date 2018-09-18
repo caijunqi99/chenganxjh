@@ -7,5 +7,15 @@ return [
     'dispatch_success_tmpl' => 'public:dispatch_jump',
     // URL普通方式参数 用于自动生成
     'url_common_param' => true,
+    'pkgs_list'=>[
+		'day'     =>'天',
+		'week'    =>'周',
+		'mouth'   =>'月',
+		'quarter' =>'季度',
+		'half'    =>'半年',
+		'year'    =>'年',
+		'hour'    =>'小时',
+
+	],
 ];
 

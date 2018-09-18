@@ -213,9 +213,10 @@ $(document).ready(function(){
 		var i_name  = $(this).attr('fieldname');
 		var i_src   = $(this).attr('src');
 		var i_val   = ($(this).attr('fieldvalue'))== 0 ? 1 : 0;
+		var i_vals   = $(this).attr('i_val')
 		var ajax_branch      = $(this).attr('ajax_branch');
 
-		$.get(ADMIN_URL+act+'/ajax',{branch:ajax_branch,id:i_id,column:i_name,value:i_val},function(data){
+		$.get(ADMIN_URL+act+'/ajax',{branch:ajax_branch,id:i_id,column:i_name,value:i_val,val:i_vals},function(data){
 		if(data == 'true')
 			{
 				if(i_val == 0){
@@ -223,6 +224,12 @@ $(document).ready(function(){
 				}else{
 					$('a[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':('disabled','enabled'),'title':('关闭','开启'),'fieldvalue':i_val});
 				}
+				if(i_vals == 1){
+					$('a[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr('i_val',2);
+				}else{
+					$('a[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr('i_val',1);					
+				}
+
 			}else{
 				alert('响应失败');
 			}

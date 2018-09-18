@@ -268,9 +268,9 @@ class AdminControl extends Controller {
                         'text' => lang('ds_revisit'),
                         'args' => 'base,Config,setting',
                     ),
-                    'meal' => array(
-                        'text' => lang('ds_meal'),
-                        'args' => 'base,Config,setting',
+                    'packages' => array(
+                        'text' => lang('pkgs_manage'),
+                        'args' => 'pkgs_manage,Pkgs,setting',
                     ),
                     'account' => array(
                         'text' => lang('ds_account'),

@@ -1,4 +1,0 @@
-<?php
-//000000003600
- exit();?>
-a:2:{i:0;a:15:{s:6:"adv_id";i:1;s:5:"ap_id";i:1;s:9:"adv_title";s:16:"首页轮播图1";s:8:"adv_link";s:0:"";s:8:"adv_code";s:17:"5a4341aeb0372.jpg";s:14:"adv_start_date";i:1199116800;s:12:"adv_end_date";i:1830268800;s:8:"adv_sort";i:0;s:11:"adv_enabled";i:1;s:9:"member_id";i:0;s:11:"member_name";N;s:9:"click_num";i:0;s:8:"is_allow";i:1;s:9:"buy_style";N;s:7:"goldpay";N;}i:1;a:15:{s:6:"adv_id";i:2;s:5:"ap_id";i:1;s:9:"adv_title";s:16:"首页轮播图2";s:8:"adv_link";s:0:"";s:8:"adv_code";s:17:"5a4341c011073.jpg";s:14:"adv_start_date";i:1199116800;s:12:"adv_end_date";i:1830268800;s:8:"adv_sort";i:0;s:11:"adv_enabled";i:1;s:9:"member_id";i:0;s:11:"member_name";N;s:9:"click_num";i:0;s:8:"is_allow";i:1;s:9:"buy_style";N;s:7:"goldpay";N;}}
