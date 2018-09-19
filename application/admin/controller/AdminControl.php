@@ -58,9 +58,12 @@ class AdminControl extends Controller {
     public function setMenuList() {
         $menu_list = $this->menuList();
 
+
         $menu_list=$this->parseMenu($menu_list);
         $this->assign('menu_list', $menu_list);
     }
+
+
 
     /**
      * 验证当前管理员权限是否可以进行操作
@@ -246,6 +249,7 @@ class AdminControl extends Controller {
             }
         }
         $menu = array_column($menu,NULL,'name');
+
          return $menu;
     }
 
@@ -321,99 +325,6 @@ class AdminControl extends Controller {
                 }
             }
         }
-
-//        halt($_limit);
-       /* $_limit = array(
-            array('name' => lang('ds_setting'), 'child' => array(
-                    array('name' => lang('ds_base'), 'op' => null, 'act' => 'Config'),
-                    array('name' => lang('ds_account'), 'op' => null, 'act' => 'Account'),
-                    array('name' => lang('ds_upload_set'), 'op' => null, 'act' => 'Upload'),
-                    array('name' => lang('ds_seo_set'), 'op' => null, 'act' => 'Seo'),
-                    array('name' => lang('ds_payment'), 'op' => null, 'act' => 'Payment'),
-                    array('name' => lang('ds_message'), 'op' => null, 'act' => 'Message'),
-                    array('name' => lang('ds_express'), 'op' => null, 'act' => 'Express'),
-                    array('name' => lang('ds_waybill'), 'op' => null, 'act' => 'Waybill'),
-                    array('name' => lang('ds_region'), 'op' => null, 'act' => 'Region'),
-                    array('name' => lang('ds_offpayarea'), 'op' => null, 'act' => 'Offpayarea'),
-                    array('name' => lang('ds_cache'), 'op' => null, 'act' => 'Cache'),
-                    array('name' => lang('ds_adminlog'), 'op' => null, 'act' => 'Adminlog'),
-                )),
-            array('name' => lang('ds_goods'), 'child' => array(
-                    array('name' => lang('ds_goods_manage'), 'op' => null, 'act' => 'Goods'),
-                    array('name' => lang('ds_goodsclass'), 'op' => null, 'act' => 'Goodsclass'),
-                    array('name' => lang('ds_brand'), 'op' => null, 'act' => 'Brand'),
-                    array('name' => lang('ds_type'), 'op' => null, 'act' => 'Type'),
-                    array('name' => lang('ds_spec'), 'op' => null, 'act' => 'Spec'),
-                    array('name' => lang('ds_album'), 'op' => null, 'act' => 'GoodsAlbum'),
-                )),
-            array('name' => lang('ds_store'), 'child' => array(
-                    array('name' => lang('ds_store_manage'), 'op' => null, 'act' => 'Store'),
-                    array('name' => lang('ds_storegrade'), 'op' => null, 'act' => 'Storegrade'),
-                    array('name' => lang('ds_storeclass'), 'op' => null, 'act' => 'Storeclass'),
-                    array('name' => lang('ds_Storehelp'), 'op' => null, 'act' => 'Storehelp'),
-                    array('name' => lang('ds_storejoin'), 'op' => null, 'act' => 'Storejoin'),
-                    array('name' => lang('ds_ownshop'), 'op' => null, 'act' => 'Ownshop'),
-                )),
-            array('name' => lang('ds_member'), 'child' => array(
-                    array('name' => lang('ds_member_manage'), 'op' => null, 'act' => 'Member'),
-                    array('name' => lang('ds_membergrade'), 'op' => null, 'act' => 'Membergrade'),
-                    array('name' => lang('ds_exppoints'), 'op' => null, 'act' => 'Exppoints'),
-                    array('name' => lang('ds_points'), 'op' => null, 'act' => 'Points'),
-                    array('name' => lang('ds_snsmalbum'), 'op' => null, 'act' => 'Snsmalbum'),
-                    array('name' => lang('ds_snstrace'), 'op' => null, 'act' => 'Snstrace'),
-                    array('name' => lang('ds_snsmember'), 'op' => null, 'act' => 'Snsmember'),
-                    array('name' => lang('ds_predeposit'), 'op' => null, 'act' => 'Predeposit'),
-                    array('name' => lang('ds_chatlog'), 'op' => null, 'act' => 'Chatlog'),
-                )),
-            array('name' => lang('ds_trade'), 'child' => array(
-                    array('name' => lang('ds_order'), 'op' => null, 'act' => 'Order'),
-                    array('name' => lang('ds_vrorder'), 'op' => null, 'act' => 'Vrorder'),
-                    array('name' => lang('ds_refund'), 'op' => null, 'act' => 'Refund'),
-                    array('name' => lang('ds_return'), 'op' => null, 'act' => 'Returnmanage'),
-                    array('name' => lang('ds_vrrefund'), 'op' => null, 'act' => 'Vrrefund'),
-                    array('name' => lang('ds_consulting'), 'op' => null, 'act' => 'Consulting'),
-                    array('name' => lang('ds_inform'), 'op' => null, 'act' => 'Inform'),
-                    array('name' => lang('ds_evaluate'), 'op' => null, 'act' => 'Evaluate'),
-                    array('name' => lang('ds_complain'), 'op' => null, 'act' => 'Complain'),
-                )),
-            array('name' => lang('ds_website'), 'child' => array(
-                    array('name' => lang('ds_articleclass'), 'op' => null, 'act' => 'Articleclass'),
-                    array('name' => lang('ds_article'), 'op' => null, 'act' => 'Article'),
-                    array('name' => lang('ds_document'), 'op' => null, 'act' => 'Document'),
-                    array('name' => lang('ds_navigation'), 'op' => null, 'act' => 'Navigation'),
-                    array('name' => lang('ds_adv'), 'op' => null, 'act' => 'Adv'),
-                    array('name' => lang('ds_recposition'), 'op' => null, 'act' => 'Recposition'),
-                    array('name' => lang('ds_link'), 'op' => null, 'act' => 'Link'),
-                )),
-            array('name' => lang('ds_operation'), 'child' => array(
-                    array('name' => lang('ds_operation_set'), 'op' => null, 'act' => 'Operation'),
-                    array('name' => lang('ds_groupbuy'), 'op' => null, 'act' => 'Groupbuy'),
-                    array('name' => lang('ds_groupbuy_vr'), 'op' => null, 'act' => 'Vrgroupbuy'),
-                    array('name' => lang('ds_activity_manage'), 'op' => null, 'act' => 'Activity'),
-                    array('name' => lang('ds_promotion_xianshi'), 'op' => null, 'act' => 'Promotionxianshi'),
-                    array('name' => lang('ds_promotion_mansong'), 'op' => null, 'act' => 'Promotionmansong'),
-                    array('name' => lang('ds_promotion_bundling'), 'op' => null, 'act' => 'Promotionbundling'),
-                    array('name' => lang('ds_promotion_booth'), 'op' => null, 'act' => 'Promotionbooth'),
-                    array('name' => lang('ds_pointprod'), 'op' => null, 'act' => 'Pointprod|Pointorder'),
-                    array('name' => lang('ds_voucher_price_manage'), 'op' => null, 'act' => 'Voucher'),
-                    array('name' => lang('ds_bill_manage'), 'op' => null, 'act' => 'Bill'),
-                    array('name' => lang('ds_activity_manage'), 'op' => null, 'act' => 'Vrbill'),
-                    array('name' => lang('ds_mall_consult'), 'op' => null, 'act' => 'Mallconsult'),
-                    array('name' => lang('ds_rechargecard'), 'op' => null, 'act' => 'Rechargecard'),
-                    array('name' => lang('ds_delivery'), 'op' => null, 'act' => 'Delivery')
-                )),
-            array('name' => lang('ds_stat'), 'child' => array(
-                    array('name' => lang('ds_statgeneral'), 'op' => null, 'act' => 'Statgeneral'),
-                    array('name' => lang('ds_statindustry'), 'op' => null, 'act' => 'Statindustry'),
-                    array('name' => lang('ds_statmember'), 'op' => null, 'act' => 'Statmember'),
-                    array('name' => lang('ds_statstore'), 'op' => null, 'act' => 'Statstore'),
-                    array('name' => lang('ds_stattrade'), 'op' => null, 'act' => 'Stattrade'),
-                    array('name' => lang('ds_statgoods'), 'op' => null, 'act' => 'Statgoods'),
-                    array('name' => lang('ds_statmarketing'), 'op' => null, 'act' => 'Statmarketing'),
-                    array('name' => lang('ds_stataftersale'), 'op' => null, 'act' => 'Stataftersale'),
-                )),
-        );*/
-
         return $_limit;
     }
 
@@ -437,6 +348,9 @@ class AdminControl extends Controller {
             case 'Select'://4
                 return '浏览';
                 break;
+            case 'DownMember'://5
+                return '查看所属成员';
+                break;
 
         }
     }
@@ -449,8 +363,27 @@ class AdminControl extends Controller {
      */
     function get_role_perms($roleid,$perm_id){
             $result = db('roleperms')->field('action')->where(" roleid=$roleid AND permsid=$perm_id")->find();
-            return $result;
+            $action = '';
+            if(!empty($result['action'])){
+                $action = explode(',',$result['action']);
+            }
+            return $action;
     }
+    /**
+     * @desc 根据当前用户角色和子目录id 获取该角色对此子目录的权限
+     * @author langzhiyao
+     * @time 2018/09/18
+     */
+    function get_permid($class_name){
+        $result = db('perms')->field('permid')->where(" name='$class_name' AND pid !=0")->find();
+        $permsid = '';
+        if(!empty($result['permid'])){
+            $permsid = $result['permid'];
+        }
+        return $permsid;
+    }
+
+
 
 
 }

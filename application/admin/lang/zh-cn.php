@@ -330,6 +330,7 @@ $lang['ds_new'] = '新增';
 $lang['ds_update'] = '更新';
 $lang['ds_edit'] = '编辑';
 $lang['ds_del'] = '删除';
+$lang['ds_down_member'] = '查看所属人员';
 
 $lang['ds_cut'] = '裁剪';
 $lang['download_lang'] = '数据分段下载';
