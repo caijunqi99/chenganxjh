@@ -251,6 +251,7 @@ class AdminControl extends Controller {
         $menu = array_column($menu,NULL,'name');
 
          return $menu;
+
     }
 
     /*
