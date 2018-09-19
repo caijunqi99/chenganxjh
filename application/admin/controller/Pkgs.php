@@ -4,7 +4,9 @@ namespace app\admin\controller;
 
 use think\Lang;
 use think\Validate;
-
+/**
+ * 套餐展示
+ */
 class Pkgs extends AdminControl {
 
     public function _initialize() {
@@ -33,7 +35,7 @@ class Pkgs extends AdminControl {
                 $this->setAdminCurItem('witch_back_manage');
             }
             if ($search_name != '') {
-                $condition['pkg_name'] = $search_name;
+                $condition['pkg_name'] = array('like', '%' . trim($search_name) . '%');
             }
             $pkg_list = $pkg->getPkgList($condition, '15');
             $this->assign('pkg_list', $pkg_list);
@@ -45,17 +47,12 @@ class Pkgs extends AdminControl {
 
     public function courseware(){
         $pkg = model('pkgs');
-        /**
-         * 多选删除广告位
-         */
+
         $condition = array();
         $orderby = '';
-        $search_name = trim(input('get.search_name'));
         $condition['pkg_type']= 3 ;
-        if ($search_name != '') {
-            $condition['pkg_name'] = $search_name;
-        }
-        $pkg_list = $pkg->getPkgList($condition, '15');
+        
+        $pkg_list = $pkg->getPkgList($condition, '10' ,'pkg_id desc');
         $this->assign('pkg_list', $pkg_list);
         $this->assign('page', $pkg->page_info->render());
         $this->setAdminCurItem('courseware');
@@ -63,12 +60,46 @@ class Pkgs extends AdminControl {
     }
 
     public function course_edit(){
+        if (request()->isPost()) {
+            $Pkgs = Model('pkgs');
+            $price = intval(input('price'));
+            
+            $param =array();            
+            $param['pkg_price']  = trim(input('post.price'));
+            $param['pkg_name']   = empty(trim(input('post.pname')))?'EasyTeacher':trim(input('post.pname'));
+            switch (input('actions')) {
+                case 'edit':
+                    $param['pkg_id'] = intval(input('param.pkg_id'));
+                    $result = $Pkgs->pkg_update($param);
+                    if ($result) {
+                        $this->log(lang('cour_edit_succ') . '[' . input('post.pkg_name') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('cour_edit_succ')]); 
+                    }
+                    break;                
+                default:
+                    $param['pkg_sort']   = 0;
+                    $param['pkg_type']   = 3;
+                    $param['pkg_length'] = 1;
+                    $param['pkg_axis']   = 'day';
+                    $param['pkg_desc']   = lang('easyteacher');
+                    $param['pkg_enabled'] = 1;
+                    $result = $Pkgs->pkg_add($param);
+                    if ($result) {
+                        $this->log(lang('cour_add_succ') . '[' . input('post.pkg_name') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('cour_add_succ')]); 
+                    }
+                    break;
+            }
+            exit;
+
+        }
+        
         return $this->fetch('course_edit');
     }
 
     /**
      *
-     * 修改广告位
+     * 
      */
     public function pkgs_edit() {
         $pkg_id = intval(input('param.pkg_id'));
@@ -84,11 +115,13 @@ class Pkgs extends AdminControl {
             $param =array();
             $param['pkg_name']   = trim(input('post.pkg_name'));
             $param['pkg_sort']   = intval(trim(input('post.pkg_sort')));
+            $param['pkg_cprice']  = trim(input('post.pkg_cprice'));
             $param['pkg_price']  = trim(input('post.pkg_price'));
             $param['pkg_type']   = intval(trim(input('post.pkg_type')));
             $param['pkg_length'] = intval(trim(input('post.pkg_length')));
             $param['pkg_axis']   = trim(input('post.pkg_axis'));
             $param['pkg_desc']   = trim(input('post.pkg_desc'));
+            $param['up_time']    = time();
             $validate_result     = $validate->check($param);
             if (input('post.pkg_enabled') != '') {
                 $param['pkg_enabled'] = intval(input('post.pkg_enabled'));

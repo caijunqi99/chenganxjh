@@ -63,6 +63,14 @@
                             <p class="notic">套餐时间刻度不能为空</p>
                         </dd>
                     </dl>
+                    <dl>
+                        <dt>{$Think.lang.pkg_cprice}</dt>
+                        <dd>
+                            <input type="text" name="pkg_cprice" id="pkg_cprice" class="input-txt" value="{$pkg_info.pkg_cprice|default=''}">
+                            <span class="err"></span>
+                            <p class="notic">{$Think.lang.pkg_price_notice}</p>
+                        </dd>
+                    </dl>
                      <dl>
                         <dt>{$Think.lang.pkg_price}</dt>
                         <dd>
@@ -125,6 +133,9 @@
                 pkg_price: {
                     required: true
                 },
+                pkg_cprice: {
+                    required: true
+                },
             },
             messages: {
                 pkg_name: {
@@ -132,6 +143,9 @@
                 },
                 pkg_price: {
                     required: '{$Think.lang.pkg_price_err}',
+                },
+                pkg_cprice: {
+                    required: '{$Think.lang.pkg_cprice_err}',
                 },
             }
         });

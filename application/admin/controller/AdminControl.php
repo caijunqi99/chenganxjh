@@ -254,7 +254,7 @@ class AdminControl extends Controller {
                     ),
                     'sctype' => array(
                         'text' => lang('ds_sctype'),
-                        'args' => 'base,Config,setting',
+                        'args' => 'sctype_manage,Sctype,setting',
                     ),
                     'cltype' => array(
                         'text' => lang('ds_cltype'),
@@ -262,7 +262,7 @@ class AdminControl extends Controller {
                     ),
                     'course' => array(
                         'text' => lang('ds_course'),
-                        'args' => 'base,Config,setting',
+                        'args' => 'course_manage,Course,setting',
                     ),
                     'revisit' => array(
                         'text' => lang('ds_revisit'),
