@@ -231,12 +231,12 @@ class AdminControl extends Controller {
     function menuList() {
 
         //获取父级所有栏目
-        $menu = db('perms')->where(array('pid'=>0))->select();
+        $menu = db('perms')->where(array('pid'=>0,'status'=>1))->select();
         if(!empty($menu)){
             foreach($menu as $key=>$val){
                 $menu[$key]['text'] = lang($val['text']);
                 //获取子目录
-                $menu[$key]['children'] = db('perms')->where(array('pid'=>$val['permid']))->select();
+                $menu[$key]['children'] = db('perms')->where(array('pid'=>$val['permid'],'status'=>1))->select();
                 if(!empty($menu[$key]['children'])){
                     foreach($menu[$key]['children'] as $k=>$v){
                         $menu[$key]['children'][$k]['text'] = lang($v['text']);
@@ -255,12 +255,12 @@ class AdminControl extends Controller {
     function limitList() {
         if ($this->admin_info['admin_is_super'] == 1) {
             //获取父级所有栏目
-            $_limit = db('perms')->field('permid,name,text')->where("pid=0  AND permid != 1")->select();
+            $_limit = db('perms')->field('permid,name,text')->where("pid=0  AND permid != 1 AND status=1")->select();
             if(!empty($_limit)){
                 foreach($_limit as $key=>$val){
                     $_limit[$key]['text'] = lang($val['text']);
                     //获取子目录
-                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."'")->select();
+                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."'  AND status=1")->select();
 //                halt($_limit);
                     if(!empty($_limit[$key]['child'])){
                         foreach($_limit[$key]['child'] as $k=>$v){
@@ -293,13 +293,13 @@ class AdminControl extends Controller {
             $limits = "'" . join("','", $ginfo['limits']) . "'";//小类
 //            halt($limits);
             //获取父级所有栏目
-            $_limit = db('perms')->field('permid,name,text')->where("pid=0 AND name IN ($nav) AND permid != 1")->select();
+            $_limit = db('perms')->field('permid,name,text')->where("pid=0 AND name IN ($nav) AND permid != 1  AND status=1")->select();
 //            halt($_limit);
             if(!empty($_limit)){
                 foreach($_limit as $key=>$val){
                     $_limit[$key]['text'] = lang($val['text']);
                     //获取子目录
-                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."' AND name IN ($limits)")->select();
+                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."' AND name IN ($limits)  AND status=1")->select();
 //                halt($_limit);
                     if(!empty($_limit[$key]['child'])){
                         foreach($_limit[$key]['child'] as $k=>$v){
