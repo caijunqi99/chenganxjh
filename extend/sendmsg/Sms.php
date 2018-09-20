@@ -2,19 +2,52 @@
 /**
  * 手机短信类
  */
-
 namespace sendmsg;
+use sendmsg\sdk\REST;
 class Sms
 {
     /*
+    
      * 发送手机短信
      * @param unknown $mobile 手机号
      * @param unknown $content 短信内容
     */
     public function send($mobile, $content)
-    {
-        return $this->mysend_sms($mobile, $content);
+    {   
+
+        return $this->mysend_sms1($mobile, $content);
     }
+
+    private function sendTemplateSMS($to,$datas,$tempId=198052){
+     // 初始化REST SDK
+     $rest = new REST();
+
+     // 发送模板短信
+     // 【想见孩】您于2018-09-20申请注册会员，动态码：353070。
+     $datas="【想见孩】您的验证码：".$datas."。安全提示：请勿向任何人泄露您的验证码。";
+     p($rest);
+     p($datas);
+     $result = $rest->QuerySMSTemplate($tempId);
+     p($result);exit;
+     if($result == NULL ) {
+         echo "result error!";
+         // break;
+     }
+     if($result->statusCode!=0) {
+         echo "error code :" . $result->statusCode . "<br>";
+         echo "error msg :" . $result->statusMsg . "<br>";
+         //TODO 添加错误处理逻辑
+     }else{
+         echo "Sendind TemplateSMS success!<br/>";
+         // 获取返回信息
+         $smsmessage = $result->TemplateSMS;
+         echo "dateCreated:".$smsmessage->dateCreated."<br/>";
+         echo "smsMessageSid:".$smsmessage->smsMessageSid."<br/>";
+         //TODO 添加成功处理逻辑
+     }
+}
+
+
 
     /*
     您于{$send_time}绑定手机号，验证码是：{$verify_code}。【{$site_name}】
@@ -32,7 +65,7 @@ class Sms
    大于0 短信发送数量
     http://utf8.api.smschinese.cn/?Uid=本站用户名&Key=接口安全秘钥&smsMob=手机号码&smsText=验证码:8888
     */
-    private function mysend_sms($mobile, $content)
+    private function mysend_sms1($mobile, $content)
     {
         $user_id = urlencode(config('mobile_username')); // 这里填写用户名
         $mobile_key = urlencode(config('mobile_key')); // 这里填接口安全密钥
@@ -112,6 +145,47 @@ class Sms
         else {
             return false;
         }
+    }
+
+
+    /**
+     * 请求接口返回内容
+     * @param  string $url [请求的URL地址]
+     * @param  string $params [请求的参数]
+     * @param  int $ipost [是否采用POST形式]
+     * @return  string
+     */
+    private function juhecurl($url,$params=false,$ispost=0){
+        $httpInfo = array();
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+        curl_setopt( $ch, CURLOPT_USERAGENT , 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22' );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 30 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT , 30);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+        if( $ispost )
+        {
+            curl_setopt( $ch , CURLOPT_POST , true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
+            curl_setopt( $ch , CURLOPT_URL , $url );
+        }
+        else
+        {
+            if($params){
+                curl_setopt( $ch , CURLOPT_URL , $url.'?'.$params );
+            }else{
+                curl_setopt( $ch , CURLOPT_URL , $url);
+            }
+        }
+        $response = curl_exec( $ch );
+        if ($response === FALSE) {
+            //echo "cURL Error: " . curl_error($ch);
+            return false;
+        }
+        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+        curl_close( $ch );
+        return $response;
     }
 
 
