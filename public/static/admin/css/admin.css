@@ -149,7 +149,7 @@ input[type="text"], input[type="password"], textarea, select, .type-file-text , 
 input[type="text"]:focus, input[type="text"]:hover, input[type="text"]:active, input[type="password"]:focus, input[type="password"]:hover, input[type="password"]:active, textarea:hover, textarea:focus, textarea:active { color: #33464F; background-color: #fff; border: 1px solid ; border-color:#71CBEF /*#CBE9F3 #CBE9F3 #71CBEF*/;-moz-box-shadow:0 0 5px rgba(82, 168, 236, 0.5); -webkit-box-shadow: 0 0 5px rgba(82, 168, 236, 0.5); box-shadow: 0 0 5px rgba(82, 168, 236, 0.5);}
 .editable2, .editable-tarea2 { color: #33464F; background-color: #FFF; border: 1px dotted ; border-color:#71CBEF;}
 textarea{ resize: vertical !important;/*Textarea支持调节元素的高度*/}
-.editable, .editable2, input[type="text"], input[type="password"] { line-height:20px; white-space: nowrap; display:inline-block; height:20px; overflow: hidden; cursor:text;}
+.editable, .editable2, input[type="text"], input[type="password"] { line-height:20px; white-space: nowrap; display:inline-block;overflow: hidden; cursor:text;}
 .editable-tarea, .editable-tarea2, textarea { line-height:18px; display:inline-block; height:36px; cursor:text; overflow:auto;}
 .tarea { height: 75px; width: 400px;}
 .sort input , .sort .editable , .sort .editable2 { width:36px;}
