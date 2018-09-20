@@ -1,0 +1,193 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselectiones.js"></script>
+<script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>分/子公司管理</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <form id="add_form" method="post" enctype="multipart/form-data">
+        <table class="ds-default-table">
+            <tbody>
+            <tr class="noborder">
+                <td colspan="2"><label class="validation" for="o_name">{$Think.lang.organize_index_title}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" id="o_name" name="o_name" class="txt" value="{$organize_array.o_name}">
+                <input type="hidden" id="o_id" name="o_id" value="{$organize_array.o_id}">
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label class="validation" >{$Think.lang.organize_index_role}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform">
+                    <li>
+                        <input name="o_role" type="radio" value="1" {if condition="$organize_array.o_role eq 1"} checked="checked"{/if}>
+                        <label>{$Think.lang.organize_index_company}</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="o_role" value="2" {if condition="$organize_array.o_role eq 2"} checked="checked"{/if}>
+                        <label>{$Think.lang.organize_index_province}</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="o_role" value="3" {if condition="$organize_array.o_role eq 3"} checked="checked"{/if}>
+                        <label>{$Think.lang.organize_index_city}</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="o_role" value="4" {if condition="$organize_array.o_role eq 4"} checked="checked"{/if}>
+                        <label>{$Think.lang.organize_index_special}</label>
+                    </li>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label class="validation" >{$Think.lang.region}:</label></td>
+            </tr>
+            <tr>
+                <td id="region">
+                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id" class="city_ids">
+                    <input type="hidden" name="area_id" id="area_id" value="{organize_array.o_areaid}" class="area_ids" />
+                    <input type="hidden" name="area_info" id="area_info" value="{organize_array.o_area}" class="area_names" />
+                    {notempty name="organize_array.o_areaid"}
+                    <span>{$organize_array.o_area}</span>
+                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
+                    <select style="display:none;">
+                        <option value="0">请选择分类</option>
+                        {volist name="region_list" id="region"}
+                        <option value="{$region.area_id}">{$region.area_name}</option>
+                        {/volist}
+                    </select>
+                    {else}
+                    <select>
+                        <option value="0">请选择分类</option>
+                        {volist name="region_list" id="region"}
+                        <option value="{$region.area_id}">{$region.area_name}</option>
+                        {/volist}
+                    </select>
+                    {/notempty}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required">{$Think.lang.address}:</td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" id="o_address" name="o_address" class="txt" value="{$organize_array.o_address}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label>{$Think.lang.mob_phone}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" id="o_phone" name="o_phone" class="txt" value="{$organize_array.o_phone}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label>{$Think.lang.organize_index_leading}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" id="o_leading" name="o_leading" class="txt" value="{$organize_array.o_leading}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label class="validation">{$Think.lang.organize_index_enddate}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" id="activity_end_date" name="activity_end_date" class="txt date" value="{$organize_array.o_enddate}"/></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label>{$Think.lang.organize_index_remark}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td>
+                    <textarea name="o_remark" id="o_remark">{$organize_array.o_remark}</textarea>
+
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr class="tfoot">
+                <td colspan="2"><a href="JavaScript:void(0);" class="btn" id="submitBtn"><span>{$Think.lang.ds_submit}</span></a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+
+</div>
+<script>
+    //按钮先执行验证再提交表单
+    $(function(){$("#submitBtn").click(function(){
+        if($("#add_form").valid()){
+            $("#add_form").submit();
+        }
+    });
+    });
+    $(document).ready(function(){
+        $("#activity_start_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#activity_end_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#add_form").validate({
+            errorPlacement: function(error, element){
+                error.appendTo(element.parent().parent().prev().find('td:first'));
+            },
+            rules : {
+                activity_title: {
+                    required : true
+                },
+                activity_start_date: {
+                    required : true,
+                    date      : false
+                },
+                activity_end_date: {
+                    required : true,
+                    date      : false
+                },
+                o_name: {
+                    required : true,
+                    date      : false
+                },
+
+                activity_sort: {
+                    required : true,
+                    min:0,
+                    max:255
+                }
+            },
+            messages : {
+                activity_title: {
+                    required : '{$Think.lang.activity_new_title_null}'
+                },
+                activity_start_date: {
+                    required : '{$Think.lang.activity_new_startdate_null}'
+                },
+                activity_end_date: {
+                    required : '{$Think.lang.organize_new_enddate_null}'
+                },
+                o_name: {
+                    required : '{$Think.lang.organize_name_null}'
+                },
+                activity_sort: {
+                    required : '{$Think.lang.activity_new_sort_null}',
+                    min:'{$Think.lang.activity_new_sort_minerror}',
+                    max:'{$Think.lang.activity_new_sort_maxerror}'
+                }
+            }
+        });
+    });
+
+    $(function(){
+// 模拟活动页面横幅Banner上传input type='file'样式
+        var textButton="<input type='text' name='textfield' id='textfield1' class='type-file-text' /><input type='button' name='button' id='button1' value='' class='type-file-button' />"
+        $(textButton).insertBefore("#activity_banner");
+        $("#activity_banner").change(function(){
+            $("#textfield1").val($("#activity_banner").val());
+        });
+    });
+    $(function() {
+        regionInit("region");
+    });
+</script> 

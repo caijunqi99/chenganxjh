@@ -30,6 +30,23 @@ $lang['ds_adminlog'] = '操作日志';
 $lang['ds_organize'] = '组织管理';
 $lang['ds_company'] = '分/子公司（代理）管理';
 $lang['ds_gadmin'] = '角色管理（权限组）';
+$lang['ds_number'] = '序号';
+$lang['ds_organize_name'] = '分/子(代理)公司名称';
+$lang['ds_organize_area'] = '地区';
+$lang['ds_organize_time'] = '添加/修改时间';
+$lang['ds_organize_remark'] = '备注';
+$lang['ds_organize_assign'] = '分配管理员账号';
+$lang['organize_index_title']='输入公司（代理）名称';
+$lang['organize_index_role']='公司（代理）角色';
+$lang['organize_index_company']='总公司';
+$lang['organize_index_province']='省级代理';
+$lang['organize_index_city']='市级代理';
+$lang['organize_index_special']='特约代理';
+$lang['organize_index_leading']='联系/负责人';
+$lang['organize_index_enddate']='合同截止日期';
+$lang['organize_index_remark']='备注说明';
+$lang['organize_new_enddate_null']='合同截止日期不能为空';
+$lang['organize_name_null']='公司名称不能为空';
 
 //学校管理
 $lang['ds_school'] = '学校管理';

@@ -334,7 +334,7 @@ tfoot label { +display: inline-block; +float:left; +line-height:38px; /* IE */}
 .rowform .date-short { background-color: #FAFAFA;}
 .rowform .date-short:hover { background-color: #FFF;}
 
-.rowform{ width:306px; overflow:auto; }
+.rowform{ width:400px; overflow:auto; }
 .rowform .txt, .rowform textarea{ margin-right:10px; width:250px; }
 .rowform select{ margin-right:10px; width:256px; }
 .rowform .class-select { width: 90px; margin: 0;}
