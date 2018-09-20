@@ -33,7 +33,23 @@
                             <td><?php echo $v['gname'];?></td>
                             <td class="w150 align-center">
                                 <!--{$Think.lang.gadmin_del_confirm}-->
-                                <a href="{:url('/Admin/Admin/gadmin_set',['gid'=>$v.gid])}">{$Think.lang.ds_edit}</a> | <a href="javascript:void(0)" onclick="if (confirm('确定删除吗？')){location.href = '{:url('/Admin/Admin/gadmin_del',['gid'=>$v.gid])}'}">{$Think.lang.admin_index_del_admin}</a>
+                                <?php if(session('admin_is_super') == 1){?>
+                                    <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}">{$Think.lang.ds_edit}</a> |
+                                    <?php if(!in_array($v['gid'],array(1,2,3,4,8))){?>
+                                        <a href="javascript:void(0)" onclick="if (confirm('确定删除吗？')){location.href = '{:url('/Admin/Gadmin/gadmin_del',['gid'=>$v.gid])}'}">{$Think.lang.admin_index_del_admin}</a> |
+                                    <?php }?>
+                                    <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}">{$Think.lang.ds_down_member}</a>
+                                <?php }else{?>
+                                    <?php if(in_array(3,$action)){?>
+                                    <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}">{$Think.lang.ds_edit}</a> |
+                                    <?php }?>
+                                    <?php if(in_array(2,$action) && !in_array($v['gid'],array(1,2,3,4,8))){?>
+                                    <a href="javascript:void(0)" onclick="if (confirm('确定删除吗？')){location.href = '{:url('/Admin/Gadmin/gadmin_del',['gid'=>$v.gid])}'}">{$Think.lang.admin_index_del_admin}</a> |
+                                    <?php }?>
+                                    <?php if(in_array(5,$action)){?>
+                                    <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}">{$Think.lang.ds_down_member}</a>
+                                    <?php }?>
+                                <?php }?>
                             </td>
                         </tr>
                     <?php } ?>
