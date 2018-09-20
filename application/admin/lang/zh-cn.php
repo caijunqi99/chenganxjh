@@ -35,6 +35,17 @@ $lang['ds_gadmin'] = '角色管理（权限组）';
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
 $lang['ds_student'] = '学生管理';
+$lang['school_time'] = '更新时间';
+$lang['school_province'] = '省';
+$lang['school_city'] = '市';
+$lang['school_area'] = '区';
+$lang['school_id'] = '序号';
+$lang['school_name'] = '学校名称';
+$lang['school_region'] = '地区';
+$lang['school_cratetime'] = '添加/修改时间';
+$lang['school_operation'] = '操作';
+$lang['school_desc'] = '备注';
+$lang['ds_addstudent'] = '添加学生';
 
 //会员
 $lang['ds_member'] = '会员/家长管理';
@@ -330,6 +341,7 @@ $lang['ds_new'] = '新增';
 $lang['ds_update'] = '更新';
 $lang['ds_edit'] = '编辑';
 $lang['ds_del'] = '删除';
+$lang['ds_view'] = '查看';
 
 $lang['ds_cut'] = '裁剪';
 $lang['download_lang'] = '数据分段下载';

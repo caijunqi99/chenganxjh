@@ -1,0 +1,169 @@
+{include file="public/header" /}
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
+<script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>班级管理</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <form method="get" name="formSearch" id="formSearch">
+        <table class="search-form">
+            <tbody>
+                <tr>
+                    <!--<td>-->
+                        <!--<select name="search_field_name" >-->
+                            <!--<option <?php if($search_field_name == 'member_email'){ ?>selected='selected'<?php } ?> value="member_email">{$Think.lang.member_index_email}</option>-->
+                            <!--<option <?php if($search_field_name == 'member_mobile'){ ?>selected='selected'<?php } ?> value="member_mobile">手机号码</option>-->
+                            <!--<option <?php if($search_field_name == 'member_truename'){ ?>selected='selected'<?php } ?> value="member_truename">{$Think.lang.member_index_true_name}</option>-->
+                        <!--</select>-->
+                    <!--</td>-->
+                    <!--<td><input type="text" value="<?php echo $search_field_value;?>" name="search_field_value" class="txt"></td>-->
+                    <th>{$Think.lang.school_name}</th>
+                    <td><input type="text" class="text w150" name="schoolname" value="{$Think.get.schoolname}"></td>
+                    <th>{$Think.lang.school_index_classname}</th>
+                    <td><input type="text" class="text w150" name="school_index_classname" value="{$Think.get.school_index_classname}"></td>
+                    <th>{$Think.lang.school_time}</th>
+                    <td>
+                        <input type="text" class="txt date" name="query_start_time" id="query_start_time" value="{$Think.get.query_start_time}">
+                        &nbsp;–&nbsp;
+                        <input id="query_end_time" class="txt date" type="text" name="query_end_time" value="{$Think.get.query_end_time}">
+                    </td>
+                    <!--<th>{$Think.lang.buyer_name}</th>-->
+                    <!--<td><input type="text" class="text w80" name="buyer_name" value="{$Think.get.buyer_name}"></td>-->
+                    <!--<td>-->
+                    <!--<select name="payment_code">-->
+                    <!--<option value="">{$Think.lang.ds_please_choose}</option>-->
+                    <!--{foreach $payment_list as $val} -->
+                    <!--<option {if condition="$Think.get.payment_code eq $val.payment_code"}selected{/if} value="{$val.payment_code}">{$val.payment_name}</option>-->
+                    <!--{/foreach}-->
+                    <!--</select>-->
+                    <!--</td>-->
+                    <!--<td>-->
+                        <!--<select name="search_sort" >-->
+                            <!--<option value="">{$Think.lang.ds_sort}</option>-->
+                            <!--<option <?php if($search_sort == 'member_login_time desc'){ ?>selected='selected'<?php } ?> value="member_login_time desc">{$Think.lang.member_index_last_login}</option>-->
+                            <!--<option <?php if($search_sort == 'member_login_num desc'){ ?>selected='selected'<?php } ?> value="member_login_num desc">{$Think.lang.member_index_login_time}</option>-->
+                        <!--</select>-->
+                    <!--</td>-->
+                    <td>
+                        <select name="school_type" >
+                            <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                            {volist name="schooltype" id="type"}
+                            <option value="{$type.sc_id}">{$type.sc_type}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                <tr class="noborder">
+                    <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_region}:</label></td>
+                </tr>
+                <tr>
+                    <td id="region">
+                        <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
+                        <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
+                        <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
+                        {notempty name="address.area_id"}
+                        <span>{$address.area_info}</span>
+                        <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
+                        <select style="display:none;">
+                            <option value="0">请选择分类</option>
+                            {volist name="region_list" id="region"}
+                            <option value="{$region.area_id}">{$region.area_name}</option>
+                            {/volist}
+                        </select>
+                        {else}
+                        <select>
+                            <option value="0">请选择分类</option>
+                            {volist name="region_list" id="region"}
+                            <option value="{$region.area_id}">{$region.area_name}</option>
+                            {/volist}
+                        </select>
+                        {/notempty}
+
+                    </td>
+                </tr>
+                    <td>
+                        <input type="submit" class="submit" value="搜索">
+                        <?php if($search_field_value != '' or $search_sort != ''){?>
+                        <a href="{:url('School/index')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
+                        <?php }?>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+        </ul>
+    </div>
+    <table class="ds-default-table">
+        <thead>
+        <tr class="thead">
+            <!--<th>&nbsp;</th>-->
+            <th colspan="align-center">{$Think.lang.school_index_id}</th>
+            <th class="align-center">{$Think.lang.school_index_classname}</th>
+            <th class="align-center">{$Think.lang.school_index_name}</th>
+            <th class="align-center">{$Think.lang.school_index_region}</th>
+            <th class="align-center">{$Think.lang.school_index_time}</th>
+            <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <th class="align-center">{$Think.lang.ds_handle}</th>
+        </tr>
+        <tbody>
+        <?php if(!empty($class_list) && is_array($class_list)){ ?>
+        <?php foreach($class_list as $k => $v){ ?>
+        <tr class="hover member">
+            <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
+            <td class="align-center"><?php echo $v['classid']; ?></td>
+            <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
+            <td class="align-center"><?php echo $v['schoolname']; ?></td>
+            <td class="align-center"><?php echo $v['school_region']; ?></td>
+            <td class="align-center"><?php echo $v['createtime']; ?></td>
+            <td class="align-center"><?php echo $v['desc']; ?></td>
+            <td class="align-center">
+                <a href="{:url('/admin/classes/view',['class_id'=>$v.classid])}">{$Think.lang.ds_view}</a> |
+                <a href="{:url('/admin/classes/edit',['class_id'=>$v.classid])}">{$Think.lang.ds_edit}</a> |
+                <a href="{:url('/admin/classes/drop',['class_id'=>$v.classid])}">{$Think.lang.ds_del}</a>
+            </td>
+        </tr>
+        <?php } ?>
+        <?php }else { ?>
+        <tr class="no_data">
+            <td colspan="11">{$Think.lang.ds_no_record}</td>
+        </tr>
+        <?php } ?>
+        </tbody>
+        <tfoot class="tfoot">
+        <?php if(!empty($member_list) && is_array($member_list)){ ?>
+        <tr>
+            <td class="w24"><input type="checkbox" class="checkall" id="checkallBottom"></td>
+            <td colspan="16">
+                <label for="checkallBottom">{$Think.lang.ds_select_all}</label>
+                &nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" onclick="if(confirm('{$Think.lang.ds_ensure_del}')){$('#form_member').submit();}"><span>{$Think.lang.ds_del}</span></a>
+            </td>
+        </tr>
+        <?php } ?>
+        </tfoot>
+    </table>
+    {$page}
+    
+</div>
+
+<script type="text/javascript">
+
+    $(function() {
+        regionInit("region");
+    });
+</script>

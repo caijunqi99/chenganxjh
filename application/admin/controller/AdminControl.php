@@ -356,17 +356,11 @@ class AdminControl extends Controller {
                 'children' => array(
                     'school' => array(
                         'text' => lang('ds_school'),
-                        'args' => 'welcome,Dashboard,school',
+                        'args' => 'member,School,school',
                     ),
-                    /*
-                    'aboutus' => array(
-                        'text' => lang('ds_aboutus'),
-                        'args' => 'aboutus,dashboard,dashboard',
-                    ),
-                     */
                     'class' => array(
                         'text' => lang('ds_classes'),
-                        'args' => 'base,Config,school',
+                        'args' => 'index,Classes,school',
                     ),
                     'student' => array(
                         'text' => lang('ds_student'),
