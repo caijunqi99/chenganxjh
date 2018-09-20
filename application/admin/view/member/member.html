@@ -129,7 +129,7 @@
           <td class="align-center"><?php echo $v['member_grade'];?></td>
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
-              <a href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a> | 
+              <a href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a> |
               <a href="{:url('/admin/notice/notice',['member_name'=>$v.member_name])}">{$Think.lang.member_index_to_message}</a> | 
               <a href="{:url('/admin/member/drop',['member_id'=>$v.member_id])}">{$Think.lang.ds_del}</a>
           </td>

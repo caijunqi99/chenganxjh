@@ -10,7 +10,7 @@ $lang['admin_add_limit_gadmin']			= '添加权限组';
  */
 $lang['admin_index_not_allow_del']	= '该账号为系统管理员,不得删除';
 $lang['admin_index_login_null']		= '此管理员未登录过';
-$lang['admin_index_username']		= '登录名';
+$lang['admin_index_username']		= '账号';
 $lang['admin_index_password']		= '密码';
 $lang['admin_rpassword']			= '确认密码';
 $lang['admin_index_truename']		= '真实姓名';
