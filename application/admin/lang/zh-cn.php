@@ -267,6 +267,7 @@ $lang['ds_year'] = '年';
 $lang['ds_month'] = '月';
 $lang['ds_day'] = '日';
 $lang['ds_reset'] = '重置';
+$lang['ds_reset_pwd'] = '重置密码';
 $lang['ds_set'] = '设置';
 $lang['ds_status'] = '状态';
 $lang['ds_cancel_search'] = '撤销检索';

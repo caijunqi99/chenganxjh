@@ -82,6 +82,11 @@ class Admin extends AdminControl {
             $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
+            $param['admin_company_id'] = $_POST['admin_company_id'];
+            $param['admin_phone'] = $_POST['admin_phone'];
+            $param['admin_truename'] = $_POST['admin_truename'];
+            $param['admin_department'] = $_POST['admin_department'];
+            $param['admin_description'] = $_POST['admin_description'];
             $rs = $model_admin->addAdmin($param);
             if ($rs) {
                 $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
@@ -110,6 +115,44 @@ class Admin extends AdminControl {
                     exit('true');
                 }
                 break;
+            case 'check_admin_phone':
+                $model_admin = Model('admin');
+                $condition['admin_phone'] = input('get.admin_phone');
+//                $condition['create_uid'] = $this->admin_info['admin_id'];
+//                $list = $model_admin->infoAdmin($condition);
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'check_admin_name_edit':
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = array('neq', intval(input('get.admin_id')));
+//                $condition['create_uid'] = $this->admin_info['admin_id'];
+//                $list = $model_admin->infoAdmin($condition);
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'check_admin_phone_edit':
+                $model_admin = Model('admin');
+                $condition['admin_phone'] = input('get.admin_phone');
+                $condition['admin_id'] = array('neq', intval(input('get.admin_id')));
+//                $condition['create_uid'] = $this->admin_info['admin_id'];
+//                $list = $model_admin->infoAdmin($condition);
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
         }
     }
 
@@ -126,6 +169,11 @@ class Admin extends AdminControl {
             }
             $data['admin_gid'] = intval($_POST['gid']);
             $data['create_uid'] = $admin_userid;
+            $data['admin_company_id'] = intval($_POST['admin_company_id']);
+            $data['admin_phone'] = $_POST['admin_phone'];
+            $data['admin_true_name'] = $_POST['admin_truename'];
+            $data['admin_department'] = $_POST['admin_department'];
+            $data['admin_description'] = $_POST['admin_description'];
             //查询管理员信息
             $admin_model = Model('admin');
             $result = $admin_model->updateAdmin($data,$admin_id);
@@ -142,12 +190,13 @@ class Admin extends AdminControl {
             if (!is_array($admin) || count($admin) <= 0) {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/Admin/admin'));
             }
+//            halt($admin);
             $this->assign('admin', $admin);
 
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_userid")->select();
             $this->assign('gadmin', $gadmin);
-            $this->setAdminCurItem('index');
+            $this->setAdminCurItem('admin');
             return $this->fetch('admin_edit');
         }
     }

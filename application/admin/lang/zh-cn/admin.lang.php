@@ -1,16 +1,18 @@
 <?php
 
 
-$lang['limit_admin']			= '管理员';
-$lang['limit_gadmin']			= '权限组';
-$lang['admin_add_limit_admin']			= '添加管理员';
-$lang['admin_add_limit_gadmin']			= '添加权限组';
+$lang['limit_admin']			    = '管理员';
+$lang['limit_gadmin']			    = '权限组';
+$lang['admin_add_limit_admin']		= '添加管理员';
+$lang['admin_add_limit_gadmin']		= '添加权限组';
 /**
  * 管理员列表
  */
 $lang['admin_index_not_allow_del']	= '该账号为系统管理员,不得删除';
 $lang['admin_index_login_null']		= '此管理员未登录过';
 $lang['admin_index_username']		= '账号';
+$lang['admin_index_company']	    = '所属公司';
+$lang['admin_index_department']	    = '所属部门';
 $lang['admin_index_password']		= '密码';
 $lang['admin_rpassword']			= '确认密码';
 $lang['admin_index_truename']		= '真实姓名';
@@ -21,20 +23,29 @@ $lang['admin_index_login_times']	= '登录次数';
 $lang['admin_index_sys_admin']		= '系统管理员';
 $lang['admin_index_del_admin']		= '删除';
 $lang['admin_index_sys_admin_no']	= '超级管理员不可编辑';
+$lang['admin_index_description']	= '备注';
 /**
  * 管理员添加
  */
 $lang['admin_add_admin_not_exists']		= '该名称已存在';
-$lang['admin_add_username_tip']			= '请输入登录名';
+$lang['admin_add_admin_phone_not_exists']		= '该手机号码已存在';
+$lang['admin_edit_valid_phone']         	= '请您填写有效的手机号码';
+$lang['admin_add_username_tip']			= '请输入账号';
+$lang['admin_add_truename_tip']			= '请输入真实姓名';
+$lang['admin_add_department_tip']		= '请输入所属部门';
+$lang['admin_add_description_tip']		= '请输入备注说明';
+$lang['admin_add_phone_tip']			= '请输入正确的手机号码';
 $lang['admin_add_password_tip']			= '请输入密码';
 $lang['admin_add_gid_tip']				= '请选择一个权限组，如果还未设置，请马上设置';
-$lang['admin_add_username_null']		= '登录名不能为空';
-$lang['admin_add_username_max']			= '登录名长度为3-20';
+$lang['admin_add_username_null']		= '账号不能为空';
+$lang['admin_add_username_max']			= '账号长度为3-20';
 $lang['admin_add_password_null']		= '密码不能为空';
 $lang['admin_add_gid_null']				= '请选择一个权限组';
+$lang['admin_add_company_id_null']		= '请选择一个所属公司';
 $lang['admin_add_password_type']		= '密码为英文或数字';
 $lang['admin_add_password_max']			= '密码长度为6-20';
 $lang['admin_add_username_not_exists']	= '该名称不存在，请换一个';
+$lang['admin_add_company_id_tip']	    = '请选择一个所属公司，如果还添加，请马上添加';
 /**
  * 管理权限设置
  */
@@ -61,7 +72,7 @@ $lang['admin_edit_admin_pw2']			= '确认密码';
 $lang['admin_edit_pwd_tip1']			= '不修改留空即可';
 
 
-$lang['gadmin_name']				= '权限组';
+$lang['gadmin_name']				    = '权限组';
 $lang['gadmin_del_confirm']				= '删除该组同时会清除该组内成员的所有权限，确认删除吗?';
 
 
