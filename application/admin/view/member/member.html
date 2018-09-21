@@ -43,6 +43,15 @@
                         </select>
                     </td>
                     <td>
+                        <select name="search_identity" >
+                            <option {if condition='$Think.get.search_identity'}selected='selected'{/if} value="">身份</option>
+                            <option {if condition='$Think.get.search_identity eq "1"'}selected='selected'{/if} value="1">家长</option>
+                            <option {if condition='$Think.get.search_identity eq "2"'}selected='selected'{/if} value="2">教师</option>
+                            <option {if condition='$Think.get.search_identity eq "3"'}selected='selected'{/if} value="3">其他</option>
+                            
+                        </select>
+                    </td>
+<!--                     <td>
                         <select name="search_grade" >
                             <option value='-1'>会员级别</option>
                             <?php if ($member_grade){?>
@@ -51,7 +60,7 @@
                             <?php }?>
                             <?php }?>
                         </select>
-                    </td>
+                    </td> -->
                     <td>
                         <input type="submit" class="submit" value="搜索">
                         <?php if($search_field_value != '' or $search_sort != ''){?>
@@ -68,6 +77,7 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
+            <li>平台会员管理，包括家长和教师个人基础信息</li>
             <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
         </ul>
     </div>
@@ -77,12 +87,14 @@
         <tr class="thead">
           <th>&nbsp;</th>
           <th colspan="2">{$Think.lang.member_index_name}</th>
+          <th class="align-center"><span>身份</span></th>
+          <th class="align-center"><span>年龄</span></th>
           <th class="align-center"><span fieldname="logins" nc_type="order_by">{$Think.lang.member_index_login_time}</span></th>
           <th class="align-center"><span fieldname="last_login" nc_type="order_by">{$Think.lang.member_index_last_login}</span></th>
-          <th class="align-center">{$Think.lang.member_index_points}</th>
+          <!-- <th class="align-center">{$Think.lang.member_index_points}</th> -->
           <th class="align-center">{$Think.lang.member_index_prestore}</th>
-          <th class="align-center">经验值</th>
-          <th class="align-center">级别</th>
+          <!-- <th class="align-center">经验值</th> -->
+          <!-- <th class="align-center">级别</th> -->
           <th class="align-center">{$Think.lang.member_index_login}</th>
           <th class="align-center">{$Think.lang.ds_handle}</th>
         </tr>
@@ -118,15 +130,30 @@
                <div style="font-size:13px; padding-left:10px">&nbsp;&nbsp;<?php echo $v['member_mobile']; ?></div>
                <?php } ?>
               </div></td>
+          <td class="align-center"><?php
+            switch ($v['member_identity']) {
+                case 2:
+                    echo '教师';
+                    break;
+                case 3:
+                    echo '其他';
+                    break;
+                
+                default:
+                    echo '家长';
+                    break;
+            }
+            ?></td>
+          <td class="align-center"><?php echo $v['member_age']; ?></td>
           <td class="align-center"><?php echo $v['member_login_num']; ?></td>
           <td class="w150 align-center"><p><?php echo $v['member_login_time']; ?></p>
             <p><?php echo $v['member_login_ip']; ?></p></td>
-          <td class="align-center"><?php echo $v['member_points']; ?></td>
+          <!-- <td class="align-center"><?php echo $v['member_points']; ?></td> -->
           <td class="align-center"><p>{$Think.lang.member_index_available}:&nbsp;<strong class="red"><?php echo $v['available_predeposit']; ?></strong>&nbsp;{$Think.lang.currency_zh}</p>
             <p>{$Think.lang.member_index_frozen}:&nbsp;<strong class="red"><?php echo $v['freeze_predeposit']; ?></strong>&nbsp;{$Think.lang.currency_zh}</p>
           </td>
-          <td class="align-center"><?php echo $v['member_exppoints'];?></td>
-          <td class="align-center"><?php echo $v['member_grade'];?></td>
+          <!-- <td class="align-center"><?php echo $v['member_exppoints'];?></td> -->
+          <!-- <td class="align-center"><?php echo $v['member_grade'];?></td> -->
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
               <a href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a> |

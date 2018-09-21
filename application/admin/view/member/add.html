@@ -41,12 +41,20 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="required"><label class="validation" for="member_email">{$Think.lang.member_index_email}:</label></td>
+                    <td colspan="2" class="required"><label>{$Think.lang.member_index_email}:</label></td>
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform"><input type="text" value="" id="member_email" name="member_email" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
+                <tr>
+                    <td colspan="2" class="required"><label>手机号码:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><input type="text" value="" id="member_mobile" name="member_mobile" class="txt"></td>
+                    <td class="vatop tips"></td>
+                </tr>
+
                 <tr>
                     <td colspan="2" class="required"><label for="member_truename">{$Think.lang.member_index_true_name}:</label></td>
                 </tr>
@@ -72,19 +80,30 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr>
+                    <td colspan="2" class="required"><label> 身份:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform">
+                        <label>
+                            <input type="radio" checked="checked" value="1" name="member_identity">家长
+                        </label>
+                        <label>
+                            <input type="radio" value="2" name="member_identity">教师
+                        </label>
+                        <label>
+                            <input type="radio" value="3" name="member_identity">其他
+                        </label>
+                    </td>
+                    <td class="vatop tips"></td>
+                </tr>
+    <!--             <tr>
                     <td colspan="2" class="required"><label for="member_qq">QQ:</label></td>
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform"><input type="text" value="" id="member_qq" name="member_qq" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
-                <tr>
-                    <td colspan="2" class="required"><label class="member_ww">{$Think.lang.member_edit_wangwang}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="member_ww" name="member_ww" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
+                -->
             </tbody>
             <tfoot>
                 <tr class="tfoot">
@@ -125,27 +144,27 @@
                 member_password: {
                     required: true,
                     maxlength: 20,
-                    minlength: 6
-                },
-                member_email: {
-                    required: true,
-                    email: true,
-                    remote: {
-                        url: "{:url('Admin/member/ajax',['branch'=>'check_email'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#member_email').val();
-                            },
-                            member_id: '{$member_array.member_id|default=0}'
-                        }
-                    }
-                },
-                member_qq: {
-                    digits: true,
-                    minlength: 5,
-                    maxlength: 11
+                    minlength: 50
                 }
+                // member_email: {
+                //     required: true,
+                //     email: true,
+                //     remote: {
+                //         url: "{:url('Admin/member/ajax',['branch'=>'check_email'])}",
+                //         type: 'get',
+                //         data: {
+                //             user_name: function() {
+                //                 return $('#member_email').val();
+                //             },
+                //             member_id: '{$member_array.member_id|default=0}'
+                //         }
+                //     }
+                // },
+                // member_qq: {
+                //     digits: true,
+                //     minlength: 5,
+                //     maxlength: 11
+                // }
             },
             messages: {
                 member_name: {
@@ -158,17 +177,17 @@
                     required: '密码不能为空',
                     maxlength: '{$Think.lang.member_edit_password_tip}',
                     minlength: '{$Think.lang.member_edit_password_tip}'
-                },
-                member_email: {
-                    required: '{$Think.lang.member_edit_email_null}',
-                    email: '{$Think.lang.member_edit_valid_email}',
-                    remote: '{$Think.lang.member_edit_email_exists}'
-                },
-                member_qq: {
-                    digits: '{$Think.lang.member_edit_qq_wrong}',
-                    minlength: '{$Think.lang.member_edit_qq_wrong}',
-                    maxlength: '{$Think.lang.member_edit_qq_wrong}'
                 }
+                // member_email: {
+                //     required: '{$Think.lang.member_edit_email_null}',
+                //     email: '{$Think.lang.member_edit_valid_email}',
+                //     remote: '{$Think.lang.member_edit_email_exists}'
+                // },
+                // member_qq: {
+                //     digits: '{$Think.lang.member_edit_qq_wrong}',
+                //     minlength: '{$Think.lang.member_edit_qq_wrong}',
+                //     maxlength: '{$Think.lang.member_edit_qq_wrong}'
+                // }
             }
         });
     });

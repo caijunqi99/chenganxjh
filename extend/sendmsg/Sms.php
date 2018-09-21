@@ -12,10 +12,10 @@ class Sms
      * @param unknown $mobile 手机号
      * @param unknown $content 短信内容
     */
-    public function send($mobile, $content)
+    public function send($mobile, $content,$tempId=198052)
     {   
 
-        return $this->mysend_sms1($mobile, $content);
+        return $this->sendTemplateSMS($mobile, $content,$tempId=198052);
     }
 
     private function sendTemplateSMS($to,$datas,$tempId=198052){
@@ -23,26 +23,25 @@ class Sms
      $rest = new REST();
 
      // 发送模板短信
-     // 【想见孩】您于2018-09-20申请注册会员，动态码：353070。
-     $datas="【想见孩】您的验证码：".$datas."。安全提示：请勿向任何人泄露您的验证码。";
-     p($rest);
-     p($datas);
-     $result = $rest->QuerySMSTemplate($tempId);
-     p($result);exit;
+     $datas=array($datas);
+     $result = $rest->sendTemplateSMS($to,$datas,$tempId);
      if($result == NULL ) {
-         echo "result error!";
+        return false;
+         // echo "result error!";
          // break;
      }
      if($result->statusCode!=0) {
-         echo "error code :" . $result->statusCode . "<br>";
-         echo "error msg :" . $result->statusMsg . "<br>";
+        return false;
+         // echo "error code :" . $result->statusCode . "<br>";
+         // echo "error msg :" . $result->statusMsg . "<br>";
          //TODO 添加错误处理逻辑
      }else{
-         echo "Sendind TemplateSMS success!<br/>";
-         // 获取返回信息
-         $smsmessage = $result->TemplateSMS;
-         echo "dateCreated:".$smsmessage->dateCreated."<br/>";
-         echo "smsMessageSid:".$smsmessage->smsMessageSid."<br/>";
+        return true;
+         // echo "Sendind TemplateSMS success!<br/>";
+         // // 获取返回信息
+         // $smsmessage = $result->TemplateSMS;
+         // echo "dateCreated:".$smsmessage->dateCreated."<br/>";
+         // echo "smsMessageSid:".$smsmessage->smsMessageSid."<br/>";
          //TODO 添加成功处理逻辑
      }
 }

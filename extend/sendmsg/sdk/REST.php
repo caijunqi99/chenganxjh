@@ -9,7 +9,7 @@ class REST {
   private $ServerPort  ;
   private $SoftVersion ;
   private $Batch;  //时间戳
-  private $BodyType     = "xml";//包体格式，可填值：json 、xml
+  private $BodyType     = "json";//包体格式，可填值：json 、xml
   private $enabeLog     = true; //日志开关。可填值：true、
   private $Filename     ="./log.txt"; //日志文件
   private $Handle; 
@@ -25,29 +25,6 @@ class REST {
     $this->Handle = fopen($this->Filename, 'a');
 	}
 
-   /**
-    * 设置主帐号
-    *  AUTH TOKEN 2686e11b7a154857a9e2a07597e21046
-    ACCOUNT SID： aaf98f895350b68801535ead1e8e1796
-    Rest URL(生产)： https://app.cloopen.com:8883
-    AppID(默认)： 8a48b5515350d1e201536dfe7cc62f90
-    * @param AccountSid 主帐号
-    * @param AccountToken 主帐号Token
-    */    
-    function setAccount($AccountSid,$AccountToken){
-      $this->AccountSid = $AccountSid;
-      $this->AccountToken = $AccountToken;   
-    }
-    
-    
-   /**
-    * 设置应用ID
-    * 
-    * @param AppId 应用ID
-    */
-    function setAppId($AppId){
-       $this->AppId = $AppId; 
-    }
     
    /**
     * 打印日志
@@ -78,7 +55,6 @@ class REST {
        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
        $result = curl_exec ($ch);
-       var_dump($result) ;exit;
        //连接失败
        if($result == FALSE){
           if($this->BodyType=='json'){
@@ -144,11 +120,6 @@ class REST {
         }else{ //xml格式
            $datas = simplexml_load_string(trim($result," \t\n\r"));
         }
-      //  if($datas == FALSE){
-//            $datas = new stdClass();
-//            $datas->statusCode = '172003';
-//            $datas->statusMsg = '返回包体错误'; 
-//        }
         //重新装填数据
         if($datas->statusCode==0){
          if($this->BodyType=="json"){

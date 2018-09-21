@@ -60,8 +60,10 @@ $(function(){
       data: {'co_sort': co_sort,'co_id':pid,'actions':actions,'co_type':co_type},
       success:function(sb){
         if (sb.m) {
+          
           layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            window.location.href="{:url('/Admin/Course/course_manage')}";  
+            window.location.href="{:url('/Admin/Course/course_manage')}"; 
+            layer.closeAll(); 
           });
           
         }
