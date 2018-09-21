@@ -2,9 +2,61 @@
 
 
 $lang['limit_admin']			    = '管理员';
+$lang['super_admin']			    = '超级管理员';
+$lang['admin_no_role']			    = '暂无角色';
 $lang['limit_gadmin']			    = '权限组';
 $lang['admin_add_limit_admin']		= '添加管理员';
 $lang['admin_add_limit_gadmin']		= '添加权限组';
+$lang['admin_index_reset_password']		= '重置密码';
+$lang['admin_index_status_on']		= '启用';
+$lang['admin_index_status_off']		= '禁用';
+
+$lang['gadmin_delete_before'] = '确认要删除该角色【';
+$lang['gadmin_delete_after'] = '】吗，一旦删除将无法恢复，请慎重';
+$lang['gadmin_index_delete'] = '请先清空权限组下的成员';
+
+$lang['gadmin_no_perms'] = '您不具备删除权限，请联系管理员';
+$lang['gadmin_delete_error'] = '删除失败，请联系管理员';
+$lang['gadmin_delete_error_member'] = '删除失败，请先清空权限组下的成员';
+$lang['gadmin_delete_error_td_member'] = '删除失败，该角色为特殊值，如需删除，请联系超级管理员操作';
+
+/**
+ * 操作列表
+ */
+$lang['admin_index_kl'] = '再考虑一下';
+$lang['admin_index_title'] = '提示';
+$lang['admin_index_qx'] = '已取消操作';
+
+$lang['admin_status_close_true'] = '确认禁用';
+$lang['admin_status_close_before'] = '确认要禁用该账号【';
+$lang['admin_status_close_after'] = '】吗？禁用后该账号将无法继续使用？';
+$lang['admin_status_close_success'] = '禁用成功';
+$lang['admin_status_close_error'] = '禁用失败，请联系管理员操作';
+
+$lang['admin_status_open_true'] = '确认启用';
+$lang['admin_status_open_before'] = '确认要启用该账号【';
+$lang['admin_status_open_after'] = '】吗？该账号已被禁用，启用后可以正常使用，请谨慎操作';
+$lang['admin_status_open_success'] = '启用成功';
+$lang['admin_status_open_error'] = '启用失败，请联系管理员操作';
+
+$lang['admin_reset_pwd_true'] = '确认重置密码';
+$lang['admin_reset_pwd_before'] = '确认要重置账号【';
+$lang['admin_reset_pwd_after'] = '】密码吗？重置后该账号会收到系统短信发送的临时密码，用户凭临时密码即可登录。';
+$lang['admin_reset_pwd_success'] = '密码已重置';
+$lang['admin_reset_pwd_error'] = '密码重置失败，请联系超级管理员';
+
+$lang['admin_delete_true'] = '确认删除';
+$lang['admin_delete_before'] = '确认要删除账号【';
+$lang['admin_delete_after'] = '】吗？删除后该账号将无法继续使用。';
+$lang['admin_delete_success'] = '删除成功';
+$lang['admin_delete_error'] = '删除失败，账号不存在或已删除';
+
+$lang['admin_delete_role_true'] = '确认移除';
+$lang['admin_delete_role_before'] = '确认要移除账号【';
+$lang['admin_delete_role_after'] = '】吗？移除后该账号将不再具有此角色权限。';
+$lang['admin_delete_role_success'] = '移除成功';
+$lang['admin_delete_role_error'] = '移除失败，账号不存在或已移除';
+
 /**
  * 管理员列表
  */
@@ -22,6 +74,7 @@ $lang['admin_index_last_login']		= '上次登录';
 $lang['admin_index_login_times']	= '登录次数';
 $lang['admin_index_sys_admin']		= '系统管理员';
 $lang['admin_index_del_admin']		= '删除';
+$lang['admin_index_delete_admin']		= '移除';
 $lang['admin_index_sys_admin_no']	= '超级管理员不可编辑';
 $lang['admin_index_description']	= '备注';
 /**

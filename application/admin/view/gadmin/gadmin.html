@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -26,60 +27,105 @@
         </ul>
     </div>
     <form method="post" id='form_admin'>
-
-        <table class="ds-default-table">
+        <table class="layui-table" lay-size="lg" >
+            <colgroup>
+                <col width="150">
+                <col width="200">
+                <col>
+            </colgroup>
             <thead>
-                <tr class="space">
-                    <th colspan="15" class="nobg">{$Think.lang.ds_list}</th>
-                </tr>
-                <tr class="thead">
-                    <th>{$Think.lang.gadmin_name}</th>
-                    <th class="align-center">{$Think.lang.ds_handle}</th>
-                </tr>
+            <!--<tr class="space">
+                <th colspan="15" class="nobg">{$Think.lang.ds_list}</th>
+            </tr>-->
+            <tr class="thead">
+                <th>{$Think.lang.gadmin_name}</th>
+                <th class="align-center">{$Think.lang.ds_handle}</th>
+            </tr>
             </thead>
             <tbody>
-                <?php if(!empty($list) && is_array($list)){ ?>
-                    <?php foreach($list as $k => $v){ ?>
-                        <tr class="hover">
-                            <td><?php echo $v['gname'];?></td>
-                            <td class="w150 align-center">
-                                <!--{$Think.lang.gadmin_del_confirm}-->
-                                <?php if(session('admin_is_super') == 1){?>
-                                    <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}">{$Think.lang.ds_edit}</a> |
-                                    <?php if(!in_array($v['gid'],array(1,2,3,4,8))){?>
-                                        <a href="javascript:void(0)" onclick="if (confirm('确定删除吗？')){location.href = '{:url('/Admin/Gadmin/gadmin_del',['gid'=>$v.gid])}'}">{$Think.lang.admin_index_del_admin}</a> |
-                                    <?php }?>
-                                    <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}">{$Think.lang.ds_down_member}</a>
-                                <?php }else{?>
-                                    <?php if(in_array(3,$action)){?>
-                                    <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}">{$Think.lang.ds_edit}</a> |
-                                    <?php }?>
-                                    <?php if(in_array(2,$action) && !in_array($v['gid'],array(1,2,3,4,8))){?>
-                                    <a href="javascript:void(0)" onclick="if (confirm('确定删除吗？')){location.href = '{:url('/Admin/Gadmin/gadmin_del',['gid'=>$v.gid])}'}">{$Think.lang.admin_index_del_admin}</a> |
-                                    <?php }?>
-                                    <?php if(in_array(5,$action)){?>
-                                    <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}">{$Think.lang.ds_down_member}</a>
-                                    <?php }?>
-                                <?php }?>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                <?php }else { ?>
-                <tr class="no_data">
-                    <td colspan="10">{$Think.lang.ds_no_record}</td>
-                </tr>
-                <?php } ?>
+            <?php if(!empty($list) && is_array($list)){ ?>
+            <?php foreach($list as $k => $v){ ?>
+            <tr class="hover">
+                <td><?php echo $v['gname'];?></td>
+                <td class="w150 align-center">
+                    <div class="layui-table-cell laytable-cell-9-10">
+                        <?php if(session('admin_is_super') == 1){?>
+                            <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}" class="layui-btn layui-btn-normal layui-btn-sm" style="line-height: 30px" lay-event="edit">{$Think.lang.ds_edit}</a>
+                            <?php if(!in_array($v['gid'],array(1,2,3,4,8))){?>
+                                <a href="javascript:void(0)" onclick="return del('<?php echo $v[gname];?>','<?php echo $v[gid];?>');" class="layui-btn layui-btn-danger layui-btn-sm"  style="line-height: 30px" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
+                            <?php }?>
+                            <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}" class="layui-btn layui-btn-warm layui-btn-sm"  style="line-height: 30px" lay-event="edit">{$Think.lang.ds_down_member}</a>
+
+                        <?php }else{?>
+                            <?php if(in_array(3,$action)){?>
+                                <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}" class="layui-btn layui-btn-normal layui-btn-sm" style="line-height: 30px" lay-event="edit">{$Think.lang.ds_edit}</a>
+                            <?php }?>
+                            <?php if(in_array(2,$action) && !in_array($v['gid'],array(1,2,3,4,8))){?>
+                                <a href="javascript:void(0)" onclick="return del('<?php echo $v[gname];?>','<?php echo $v[gid];?>');" class="layui-btn layui-btn-danger layui-btn-sm"  style="line-height: 30px" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
+                            <?php }?>
+                            <?php if(in_array(5,$action)){?>
+                                <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}" class="layui-btn layui-btn-warm layui-btn-sm"  style="line-height: 30px" lay-event="edit">{$Think.lang.ds_down_member}</a>
+                            <?php }?>
+                        <?php }?>
+                    </div>
+                    <!--{$Think.lang.gadmin_del_confirm}-->
+
+                </td>
+            </tr>
+            <?php } ?>
+            <?php }else { ?>
+            <tr class="no_data">
+                <td colspan="10">{$Think.lang.ds_no_record}</td>
+            </tr>
+            <?php } ?>
             </tbody>
             <tfoot>
-                <?php if(!empty($list) && is_array($list)){ ?>
-                <tr class="tfoot">
-                    {$page}
-                </tr>
-                <?php } ?>
+            <?php if(!empty($list) && is_array($list)){ ?>
+            <tr class="tfoot">
+                {$page}
+            </tr>
+            <?php } ?>
             </tfoot>
         </table>
-    </form>
 
+    </form>
+<script type="text/javascript">
+    //删除
+    function del(name,id){
+        var msg = '{$Think.lang.gadmin_delete_before}'+name+'{$Think.lang.gadmin_delete_after}';
+        layer.confirm(msg, {
+            btn: ['{$Think.lang.admin_index_kl}','{$Think.lang.admin_delete_true}'] //按钮
+            ,title:'{$Think.lang.admin_index_title}'},function(){
+            layer.msg('{$Think.lang.admin_index_qx}', {time: 2000,icon: 2});
+        }, function(){
+            $.ajax({
+                type:'get',
+                url:ADMIN_URL+'/Gadmin/gadmin_del',
+                data:{gid:id},
+                success:function (data) {
+                    data = jQuery.parseJSON(data);
+                    if(data.status == 1){
+                        layer.msg('{$Think.lang.admin_delete_success}',{time: 2000,icon: 1},function () {
+                            window.location.reload();
+                        });
+                    }else if(data.status == -2){
+                        layer.msg('{$Think.lang.gadmin_delete_error_member}',{time: 2000,icon: 2},function(){
+                            window.location.reload();
+                        });
+                    }else if(data.status == -3){
+                        layer.msg('{$Think.lang.gadmin_delete_error_td_member}',{time: 2000,icon: 2},function(){
+                            window.location.reload();
+                        });
+                    }else if(data.status == -4){
+                        layer.msg('{$Think.lang.ds_common_op_fail}',{time: 2000,icon: 2},function(){
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
+        });
+    }
+</script>
 
 
 </div>
