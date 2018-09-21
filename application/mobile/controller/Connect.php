@@ -52,6 +52,7 @@ class Connect extends MobileMall
                 $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
                 $captcha = rand(100000, 999999);
                 $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d");
+                $sms_tpl = config('sms_tpl');
                 switch ($log_type) {
                     case '1':
                         if(config('sms_register') != 1) {
@@ -61,6 +62,7 @@ class Connect extends MobileMall
                             $state = '当前手机号已被注册，请更换其他号码。';
                         }
                         $log_msg .= '申请注册会员，动态码：'.$captcha.'。';
+                        $tempId = $sms_tpl['sms_register'];
                         break;
                     case '2':
                         if(config('sms_login') != 1) {
@@ -72,6 +74,7 @@ class Connect extends MobileMall
                         $log_msg .= '申请登录，动态码：'.$captcha.'。';
                         $log_array['member_id'] = $member['member_id'];
                         $log_array['member_name'] = $member['member_name'];
+                        $tempId = $sms_tpl['sms_login'];
                         break;
                     case '3':
                         if(config('sms_password') != 1) {
@@ -83,6 +86,7 @@ class Connect extends MobileMall
                         $log_msg .= '申请重置登录密码，动态码：'.$captcha.'。';
                         $log_array['member_id'] = $member['member_id'];
                         $log_array['member_name'] = $member['member_name'];
+                        $tempId = $sms_tpl['sms_password'];
                         break;
                     default:
                         $state = '参数错误';
@@ -90,7 +94,7 @@ class Connect extends MobileMall
                 }
                 if($state == 'true'){
                     $sms = new \sendmsg\Sms();
-                    $result = $sms->send($phone,$log_msg);
+                    $result = $sms->send($phone,$captcha,$tempId);
                     if($result){
                         $log_array['log_phone'] = $phone;
                         $log_array['log_captcha'] = $captcha;

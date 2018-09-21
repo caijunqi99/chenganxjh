@@ -319,29 +319,29 @@ $lang['ds_default']                = '默认';
 
 //操作提示
 
-$lang['ds_common_op_succ'] = '操作成功';
-$lang['ds_common_op_fail'] = '操作失败';
-$lang['ds_common_del_succ'] = '删除成功';
-$lang['ds_common_del_fail'] = '删除失败';
-$lang['ds_common_save_succ'] = '保存成功';
-$lang['ds_common_save_fail'] = '保存失败';
-$lang['ds_succ'] = '成功';
-$lang['ds_fail'] = '失败';
+$lang['ds_common_op_succ']      = '操作成功';
+$lang['ds_common_op_fail']      = '操作失败';
+$lang['ds_common_del_succ']     = '删除成功';
+$lang['ds_common_del_fail']     = '删除失败';
+$lang['ds_common_save_succ']    = '保存成功';
+$lang['ds_common_save_fail']    = '保存失败';
+$lang['ds_succ']                = '成功';
+$lang['ds_fail']                = '失败';
 
-$lang['ds_add'] = '添加';
-$lang['ds_new'] = '新增';
-$lang['ds_update'] = '更新';
-$lang['ds_edit'] = '编辑';
-$lang['ds_del'] = '删除';
-$lang['ds_down_member'] = '查看所属人员';
+$lang['ds_add']                 = '添加';
+$lang['ds_new']                 = '新增';
+$lang['ds_update']              = '更新';
+$lang['ds_edit']                = '编辑';
+$lang['ds_del']                 = '删除';
+$lang['ds_down_member']         = '查看所属人员';
 
-$lang['ds_cut'] = '裁剪';
-$lang['download_lang'] = '数据分段下载';
+$lang['ds_cut']                 = '裁剪';
+$lang['download_lang']          = '数据分段下载';
 
-$lang['order_log_cancel'] = '取消了订单';
+$lang['order_log_cancel']       = '取消了订单';
 $lang['order_log_receive_paye'] = '收到了货款';
 
-$lang['ds_assign_right'] = '<br/><br/>您不具备进行该操作的权限';
+$lang['ds_assign_right']        = '<br/><br/>您不具备进行该操作的权限';
 
 $lang['ds_common_op_succ']         = '操作成功';
 $lang['ds_common_op_fail']         = '操作失败';
@@ -367,29 +367,41 @@ $lang['order_log_receive_paye']    = '收到了货款';
 $lang['ds_assign_right']           = '<br/><br/>您不具备进行该操作的权限';
 
 //学校类型管理
-$lang['school_type']               = '学校类型';
-$lang['sctype_manage']             = '学校类型管理';
-$lang['sc_type']                   = '学校类型';
-$lang['sc_enabled']                = '是否启用';
-$lang['up_time']                   = '更新时间';
-$lang['sc_del_fail']               = '学校类型删除失败';
-$lang['sc_del_succ']               = '学校类型删除成功';
-$lang['sc_add_succ']               = '学校类型添加成功';
-$lang['sc_add_fail']               = '学校类型添加失败';
-$lang['sc_edit_succ']              = '学校类型修改成功';
-$lang['sc_edit_fail']              = '学校类型修改失败';
+$lang['school_type']      = '学校类型';
+$lang['sctype_manage']    = '学校类型管理';
+$lang['sc_type']          = '学校类型';
+$lang['sc_enabled']       = '是否启用';
+$lang['up_time']          = '更新时间';
+$lang['sc_del_fail']      = '学校类型删除失败';
+$lang['sc_del_succ']      = '学校类型删除成功';
+$lang['sc_add_succ']      = '学校类型添加成功';
+$lang['sc_add_fail']      = '学校类型添加失败';
+$lang['sc_edit_succ']     = '学校类型修改成功';
+$lang['sc_edit_fail']     = '学校类型修改失败';
 
 //课程管理
-$lang['course_type']               = '课程';
-$lang['course_manage']             = '课程管理';
-$lang['co_type']                   = '课程';
-$lang['co_enabled']                = '是否启用';
-$lang['up_time']                   = '更新时间';
-$lang['co_del_fail']               = '课程删除失败';
-$lang['co_del_succ']               = '课程删除成功';
-$lang['co_add_succ']               = '课程添加成功';
-$lang['co_add_fail']               = '课程添加失败';
-$lang['co_edit_succ']              = '课程修改成功';
-$lang['co_edit_fail']              = '课程修改失败';
+$lang['course_type']      = '课程';
+$lang['course_manage']    = '课程管理';
+$lang['co_type']          = '课程';
+$lang['co_enabled']       = '是否启用';
+$lang['co_del_fail']      = '课程删除失败';
+$lang['co_del_succ']      = '课程删除成功';
+$lang['co_add_succ']      = '课程添加成功';
+$lang['co_add_fail']      = '课程添加失败';
+$lang['co_edit_succ']     = '课程修改成功';
+$lang['co_edit_fail']     = '课程修改失败';
+
+
+//年级管理
+$lang['classtype']        = '年级';
+$lang['classtype_manage'] = '年级管理';
+$lang['cl_type']          = '年级';
+$lang['cl_enabled']       = '是否启用';
+$lang['cl_del_fail']      = '年级删除失败';
+$lang['cl_del_succ']      = '年级删除成功';
+$lang['cl_add_succ']      = '年级添加成功';
+$lang['cl_add_fail']      = '年级添加失败';
+$lang['cl_edit_succ']     = '年级修改成功';
+$lang['cl_edit_fail']     = '年级修改失败';
 
 ?>

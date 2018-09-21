@@ -51,6 +51,19 @@ class Member extends AdminControl {
                 $condition['member_state'] = '0';
                 break;
         }
+
+        $search_identity = input('search_identity');
+        switch ($search_identity) {
+            case 1:
+                $condition['member_identity'] = 1;
+                break;
+            case 2:
+                $condition['member_identity'] = 2;
+                break;
+            case 3:
+                $condition['member_identity'] = 3;
+                break;
+        }
         //会员等级
         $search_grade = input('search_grade');
         if (!empty($search_grade) && $member_grade) {
@@ -90,16 +103,18 @@ class Member extends AdminControl {
             //需要完善地方 1.对录入数据进行判断  2.对判断用户名是否存在
             $model_member = Model('member');
             $data = array(
-                'member_name' => input('post.member_name'),
-                'member_password' => input('post.member_password'),
-                'member_email' => input('post.member_email'),
-                'member_truename' => input('post.member_truename'),
-                'member_sex' => input('post.member_sex'),
-                'member_qq' => input('post.member_qq'),
-                'member_ww' => input('post.member_ww'),
-                'member_add_time' => TIMESTAMP,
+                'member_name'      => input('post.member_name'),
+                'member_password'  => input('post.member_password'),
+                'member_email'     => input('post.member_email'),
+                'member_truename'  => input('post.member_truename'),
+                'member_sex'       => input('post.member_sex'),
+                'member_identity'  => input('post.member_identity'),
+                'member_nickname'  => input('post.member_nickname'),
+                // 'member_qq'     => input('post.member_qq'),
+                // 'member_ww'     => input('post.member_ww'),
+                'member_add_time'  => TIMESTAMP,
                 'member_login_num' => 0,
-                'inform_allow' => 1, //默认允许举报商品
+                'inform_allow'     => 1, //默认允许举报商品
             );
             //验证数据  BEGIN
             $rule = [
@@ -138,23 +153,25 @@ class Member extends AdminControl {
         } else {
 
             $data = array(
-                'member_email' => input('post.member_email'),
-                'member_truename' => input('post.member_truename'),
-                'member_sex' => input('post.member_sex'),
-                'member_qq' => input('post.member_qq'),
-                'member_ww' => input('post.member_ww'),
-                'inform_allow' => input('post.inform_allow'),
-                'is_buy' => input('post.isbuy'),
-                'is_allowtalk' => input('post.allowtalk'),
-                'member_state' => input('post.memberstate'),
-                'member_cityid' => input('post.city_id'),
-                'member_provinceid' => input('post.province_id'),
-                'member_areainfo' => input('post.area_info'),
-                'member_areaid' => input('post.area_id'),
-                'member_mobile' => input('post.member_mobile'),
-                'member_email_bind' => input('post.memberemailbind'),
+                'member_email'       => input('post.member_email'),
+                'member_truename'    => input('post.member_truename'),
+                'member_sex'         => input('post.member_sex'),
+                // 'member_qq'       => input('post.member_qq'),
+                // 'member_ww'       => input('post.member_ww'),
+                'inform_allow'       => input('post.inform_allow'),
+                'is_buy'             => input('post.isbuy'),
+                'is_allowtalk'       => input('post.allowtalk'),
+                'member_state'       => input('post.memberstate'),
+                'member_cityid'      => input('post.city_id'),
+                'member_provinceid'  => input('post.province_id'),
+                'member_areainfo'    => input('post.area_info'),
+                'member_areaid'      => input('post.area_id'),
+                'member_mobile'      => input('post.member_mobile'),
+                'member_email_bind'  => input('post.memberemailbind'),
                 'member_mobile_bind' => input('post.membermobilebind'),
-                'member_birthday' => input('post.member_birthday'),
+                'member_birthday'    => input('post.member_birthday'),
+                'member_identity'    => input('post.member_identity'),
+                'member_nickname'    => input('post.member_nickname'),
 
             );
 

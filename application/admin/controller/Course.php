@@ -67,10 +67,10 @@ class Course extends AdminControl {
         $result = $Course->course_del($co_id);
 
         if (!$result) {
-            $this->error(lang('pkg_del_fail'));
+            $this->error(lang('cl_del_fail'));
         } else {
-            $this->log(lang('pkg_del_succ') . '[' . $co_id . ']', null);
-            $this->success(lang('pkg_del_succ'));
+            $this->log(lang('cl_del_succ') . '[' . $co_id . ']', null);
+            $this->success(lang('cl_del_succ'));
         }
     }
 
