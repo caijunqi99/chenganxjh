@@ -86,33 +86,71 @@ function regionChange() {
 
 
     // ajax请求下级地区
-    if (this.value > 0) {
-        var _self = this;
-        var url = SITE_URL + 'index.php/Home/Mlselection/index/type/region.html';
-        $.getJSON(url, {'pid': this.value}, function (data) {
-            if (data.code == 10000) {
-                if(data.deep==1){
-                    $(".o_provinceid").val(id);
-                }else if(data.deep==2){
-                    $(".o_cityid").val(id);
-                }else{
-                    $(".area_ids").val(id);
-                }
+    var sid=$("#sid").val();
+    if(sid==1||sid==4) {
+        if (this.value > 0) {
+            var _self = this;
+            var url = SITE_URL + 'index.php/Home/Mlselection/index/type/region.html';
+            $.getJSON(url, {'pid': this.value}, function (data) {
+                if (data.code == 10000) {
+                    var dep=data.deep;
+                    if (data.deep == 1) {
+                        $(".o_provinceid").val(id);
+                    } else if (data.deep == 2) {
+                        $(".o_cityid").val(id);
+                    } else {
+                        $(".area_ids").val(id);
+                    }
 
-                $(".area_name").val(name);
-                $(".area_names").val(names.join("\t"));
-                if (data.result.length > 0) {
-                    $("<select><option>" + '请选择默认' + "</option></select>").change(regionChange).insertAfter(_self);
-                    var data = data.result;
-                    for (i = 0; i < data.length; i++) {
-                        $(_self).next("select").append("<option value='" + data[i].area_id + "'>" + data[i].area_name + "</option>");
+                    $(".area_name").val(name);
+                    $(".area_names").val(names.join("\t"));
+                    $(".dep").val(dep);
+                    if (data.result.length > 0) {
+                        $("<select><option>" + '请选择默认' + "</option></select>").change(regionChange).insertAfter(_self);
+                        var data = data.result;
+                        for (i = 0; i < data.length; i++) {
+                            $(_self).next("select").append("<option value='" + data[i].area_id + "'>" + data[i].area_name + "</option>");
+                        }
                     }
                 }
+                else {
+                    alert(data.message);
+                }
+            });
+        }
+    }else if(sid==3){
+        var dep=$("#dep").val();
+            if (this.value > 0) {
+                var _self = this;
+                var url = SITE_URL + 'index.php/Home/Mlselection/index/type/region.html';
+                $.getJSON(url, {'pid': this.value}, function (data) {
+                    if (data.code == 10000) {
+                        var dep=data.deep;
+                        if (data.deep == 1) {
+                            $(".o_provinceid").val(id);
+                        } else if (data.deep == 2) {
+                            $(".o_cityid").val(id);
+                        } else {
+                            $(".area_ids").val(id);
+                        }
+                        $(".area_name").val(name);
+                        $(".area_names").val(names.join("\t"));
+                        if(dep==1) {
+                            if (data.result.length > 0) {
+                                $("<select><option>" + '请选择默认' + "</option></select>").change(regionChange).insertAfter(_self);
+                                var data = data.result;
+                                for (i = 0; i < data.length; i++) {
+                                    $(_self).next("select").append("<option value='" + data[i].area_id + "'>" + data[i].area_name + "</option>");
+                                }
+                            }
+                        }
+                    }else {
+                        alert(data.message);
+                    }
+                });
             }
-            else {
-                alert(data.message);
-            }
-        });
+
+
     }
 }
 

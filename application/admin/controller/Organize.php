@@ -253,6 +253,8 @@ class Organize extends AdminControl {
             $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
+            $param['admin_company_id']=$_POST['oid'];
+            $param['admin_status']=1;
             $rs = $model_admin->addAdmin($param);
             if ($rs) {
                 $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);

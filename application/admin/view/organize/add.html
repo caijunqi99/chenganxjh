@@ -29,6 +29,8 @@
             </tr>
             <tr class="noborder">
                 <td class="vatop rowform">
+                    <input type="hidden"  name="sid" id="sid" value="1">
+                    <input type="hidden" name="dep" id="dep" class="dep" value="1">
                     <li>
                         <input name="o_role" type="radio" value="1" checked="checked">
                         <label>{$Think.lang.organize_index_company}</label>
@@ -180,6 +182,12 @@
     });
 
     $(function(){
+        $("input:radio[name='o_role']").change(function(){
+            var v = $(this).val();
+            $('#sid').val(v);
+            $('#dep').val(1);
+            
+        });
 // 模拟活动页面横幅Banner上传input type='file'样式
         var textButton="<input type='text' name='textfield' id='textfield1' class='type-file-text' /><input type='button' name='button' id='button1' value='' class='type-file-button' />"
         $(textButton).insertBefore("#activity_banner");
