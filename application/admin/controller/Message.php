@@ -56,11 +56,19 @@ class Message extends AdminControl {
             return $this->fetch('mobile');
         } else {
             $update_array = array();
-            $update_array['mobile_username'] = input('post.mobile_username');
-            $update_array['mobile_pwd'] = input('post.mobile_pwd');
-            $update_array['mobile_key'] = input('post.mobile_key');
-            $update_array['mobile_signature'] = input('post.mobile_signature');
-            $update_array['mobile_memo'] = input('post.mobile_memo');
+            // $update_array['mobile_username'] = input('post.mobile_username');
+            // $update_array['mobile_pwd'] = input('post.mobile_pwd');
+            // $update_array['mobile_key'] = input('post.mobile_key');
+            // $update_array['mobile_memo'] = input('post.mobile_memo');
+
+            $update_array['mobile_AccountSid']   = input('post.mobile_AccountSid');
+            $update_array['mobile_AccountToken'] = input('post.mobile_AccountToken');
+            $update_array['mobile_AppId']        = input('post.mobile_AppId');
+            $update_array['mobile_ServerIP']     = input('post.mobile_ServerIP');
+            $update_array['mobile_ServerPort']   = input('post.mobile_ServerPort');
+            $update_array['mobile_SoftVersion']  = input('post.mobile_SoftVersion');
+            $update_array['mobile_signature']    = input('post.mobile_signature');
+            $update_array['mobile_memo']         = input('post.mobile_memo');
             $result = $model_config->updateConfig($update_array);
             if ($result === true) {
                 $this->log(lang('ds_edit').lang('mobile_set'), 1);

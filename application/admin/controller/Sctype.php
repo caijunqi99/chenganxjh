@@ -11,7 +11,6 @@ class Sctype extends AdminControl {
 
     public function _initialize() {
         parent::_initialize();
-        Lang::load(APP_PATH . 'admin/lang/zh-cn/pkgs.lang.php');
     }
 
     public function sctype_manage(){

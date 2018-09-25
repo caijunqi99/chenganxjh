@@ -22,4 +22,8 @@ class Api
             include APP_PATH.'home/api/sina/index.php';
         }
     }
+
+
 }
+
+

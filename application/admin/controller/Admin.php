@@ -23,18 +23,11 @@ class Admin extends AdminControl {
     public function admin() {
         $admin_id = $this->admin_info['admin_id'];
         if (!request()->isPost()) {
-            $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->where("a.create_uid = $admin_id")->paginate(10,false,['query' => request()->param()]);
-            $this->assign('admin_list', $admin_list->items());
-            $this->assign('page', $admin_list->render());
-            $this->setAdminCurItem('admin');
-            return $this->fetch('admin');
+
+
         } else {
 
-            //ID为1的会员不允许删除
-            if (@in_array(1, $_POST['del_id'])) {
-                $this->error(lang('admin_index_not_allow_del'));
-            }
-            if (!empty($_POST['del_id'])) {
+            /*if (!empty($_POST['del_id'])) {
                 if (is_array($_POST['del_id'])) {
                     foreach ($_POST['del_id'] as $k => $v) {
                         db('admin')->where(array('admin_id' => intval($v)))->delete();
@@ -44,26 +37,38 @@ class Admin extends AdminControl {
                 $this->error(lang('ds_common_del_succ'));
             } else {
                 $this->error(lang('ds_common_del_succ'));
+            }*/
+
+        }
+        $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
+        $account = '';$role = '';
+        if (request()->isPost()) {
+//            halt($_POST);
+            if(!empty($_POST['account'])){
+                $where .= ' AND (a.admin_name LIKE "%'.$_POST["account"].'%" || a.admin_phone LIKE "%'.$_POST["account"].'%") ';
+                $account = trim($_POST['account']);
+            }
+
+            if(!empty($_POST['role'])){
+                $where .= ' AND a.admin_gid = '.intval($_POST["role"]);
+                $role = intval($_POST['role']);
             }
         }
+
+
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        //获取所创建的角色
+        $gadmin_list = db('gadmin')->field('gid,create_uid,gname')->where('create_uid= '.$admin_id.' ')->select();
+        $this->assign('gadmin_list',$gadmin_list);
+        $this->assign('admin_list', $admin_list->items());
+        $this->assign('account',$account);
+        $this->assign('role',$role);
+        $this->assign('page', $admin_list->render());
+        $this->setAdminCurItem('admin');
+        return $this->fetch('admin');
     }
 
-    /**
-     * 管理员删除
-     */
-    public function admin_del() {
-        $admin_id = intval(input('param.admin_id'));
-        if (!empty($admin_id)) {
-            if ($admin_id == 1) {
-                $this->error(lang('ds_common_save_fail'));
-            }
-            db('admin')->where(array('admin_id' => $admin_id))->delete();
-            $this->log(lang('ds_del').lang('limit_admin') . '[ID:' . $admin_id . ']', 1);
-            $this->success(lang('ds_common_del_succ'));
-        } else {
-            $this->error(lang('ds_common_del_fail'));
-        }
-    }
+
 
     /**
      * 管理员添加
@@ -82,6 +87,11 @@ class Admin extends AdminControl {
             $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
+            $param['admin_company_id'] = $_POST['admin_company_id'];
+            $param['admin_phone'] = $_POST['admin_phone'];
+            $param['admin_truename'] = $_POST['admin_truename'];
+            $param['admin_department'] = $_POST['admin_department'];
+            $param['admin_description'] = $_POST['admin_description'];
             $rs = $model_admin->addAdmin($param);
             if ($rs) {
                 $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
@@ -110,6 +120,75 @@ class Admin extends AdminControl {
                     exit('true');
                 }
                 break;
+            case 'check_admin_phone':
+                $model_admin = Model('admin');
+                $condition['admin_phone'] = input('get.admin_phone');
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'check_admin_name_edit':
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = array('neq', intval(input('get.admin_id')));
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'check_admin_phone_edit':
+                $model_admin = Model('admin');
+                $condition['admin_phone'] = input('get.admin_phone');
+                $condition['admin_id'] = array('neq', intval(input('get.admin_id')));
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'change_admin_status':
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = array('eq', intval(input('get.admin_id')));
+                $result = $model_admin->where($condition)->update(array('admin_status'=>intval(input('get.admin_status'))));
+                if (!$result) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+            case 'reset_admin_password':
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = array('eq', intval(input('get.admin_id')));
+                $result = $model_admin->where($condition)->update(array('admin_password'=>md5('147258369')));
+                if (!$result) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
+                case 'delete_admin':
+                //ID为1的会员不允许删除
+                if (@in_array(1, intval(input('get.admin_id')))) {
+                    $this->error(lang('admin_index_not_allow_del'));
+                }
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = array('eq', intval(input('get.admin_id')));
+                $result = $model_admin->where($condition)->update(array('admin_del_status'=>'-1'));
+                if (!$result) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
         }
     }
 
@@ -126,6 +205,11 @@ class Admin extends AdminControl {
             }
             $data['admin_gid'] = intval($_POST['gid']);
             $data['create_uid'] = $admin_userid;
+            $data['admin_company_id'] = intval($_POST['admin_company_id']);
+            $data['admin_phone'] = $_POST['admin_phone'];
+            $data['admin_true_name'] = $_POST['admin_truename'];
+            $data['admin_department'] = $_POST['admin_department'];
+            $data['admin_description'] = $_POST['admin_description'];
             //查询管理员信息
             $admin_model = Model('admin');
             $result = $admin_model->updateAdmin($data,$admin_id);
@@ -142,12 +226,13 @@ class Admin extends AdminControl {
             if (!is_array($admin) || count($admin) <= 0) {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/Admin/admin'));
             }
+//            halt($admin);
             $this->assign('admin', $admin);
 
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_userid")->select();
             $this->assign('gadmin', $gadmin);
-            $this->setAdminCurItem('index');
+            $this->setAdminCurItem('admin');
             return $this->fetch('admin_edit');
         }
     }

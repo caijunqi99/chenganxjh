@@ -36,6 +36,17 @@ class Gadmin extends AdminControl {
                     exit('true');
                 }
                 break;
+                case 'delete_role_admin':
+                $condition = array();
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_id'] = intval(input('get.admin_id'));
+                $info = db('admin')->where($condition)->update(array('admin_gid'=>null));
+                if (!empty($info)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
         }
     }
 
@@ -86,30 +97,14 @@ class Gadmin extends AdminControl {
      */
     public function gadmin() {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
-            $this->error('您不具备查看权限，请联系管理员');
+            $this->error(lang('gadmin_no_perms'));
         }
-        if (!request()->isPost()) {
-            $list = db('gadmin')->where('create_uid',$this->admin_info['admin_id'])->paginate(10);
-            $this->assign('list', $list->items());
-            $this->assign('page', $list->render());
-            $this->setAdminCurItem('gadmin');
-            return $this->fetch('gadmin');
-        } else {
-            if (@in_array(1, $_POST['del_id'])) {
-                $this->error(lang('admin_index_not_allow_del'));
-            }
-            if (!empty($_POST['del_id'])) {
-                if (is_array($_POST['del_id'])) {
-                    foreach ($_POST['del_id'] as $k => $v) {
-                        db('gadmin')->where(array('gid' => intval($v)))->delete();
-                    }
-                }
-                $this->log(lang('ds_del').lang('limit_gadmin') . '[ID:' . implode(',', $_POST['del_id']) . ']', 1);
-                $this->success(lang('ds_common_del_succ'));
-            } else {
-                $this->error(lang('ds_common_del_fail'));
-            }
-        }
+
+        $list = db('gadmin')->where('create_uid',$this->admin_info['admin_id'])->paginate(10);
+        $this->assign('list', $list->items());
+        $this->assign('page', $list->render());
+        $this->setAdminCurItem('gadmin');
+        return $this->fetch('gadmin');
     }
 
     /**
@@ -117,7 +112,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_add() {
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error('您不具备添加权限，请联系管理员');
+            $this->error(lang('gadmin_no_perms'));
         }
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
@@ -188,7 +183,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_set() {
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error('您不具备修改权限，请联系管理员');
+            $this->error(lang('gadmin_no_perms'));
         }
         $gid = intval(input('param.gid'));
         $ginfo = db('gadmin')->where('gid', $gid)->find();
@@ -258,8 +253,8 @@ class Gadmin extends AdminControl {
      * 组删除
      */
     public function gadmin_del() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error('您不具备删除权限，请联系管理员');
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('gadmin_no_perms'));
         }
         if (is_numeric(input('param.gid'))) {
             if(!in_array(intval(input('param.gid')),array(1,2,3,4,8))){
@@ -269,17 +264,17 @@ class Gadmin extends AdminControl {
                     db('gadmin')->where(array('gid' => intval(input('param.gid'))))->delete();
                     db('roleperms')->where(array('roleid' => intval(input('param.gid'))))->delete();
                     $this->log(lang('ds_del').lang('limit_gadmin') . '[ID' . intval(input('param.gid')) . ']', 1);
-                    redirect();
+                    $msg['status'] = 1;
                 }else{
-                    $this->error('请先清空权限组下的成员');
+                    $msg['status'] = -2;
                 }
             }else{
-                $this->error('该角色为特殊值，如需删除，请联系超级管理员操作');
+                $msg['status'] = -3;
             }
-
         } else {
-            $this->error(lang('ds_common_op_fail'));
+            $msg['status'] = -4;
         }
+        return json_encode($msg);
     }
 
     /**
@@ -289,7 +284,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_member(){
         if(session('admin_is_super') !=1 && !in_array(5,$this->action )){
-            $this->error('您不具备查看权限，请联系管理员');
+            $this->error(lang('gadmin_no_perms'));
         }
         $gid = intval(input('param.gid'));
 
