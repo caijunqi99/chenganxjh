@@ -29,7 +29,7 @@ class Classtype extends AdminControl {
         $this->assign('sc_list', $sc_list);
         $this->assign('page', $ClassType->page_info->render());
         $this->setAdminCurItem('classtype_manage');
-        return $this->fetch('Classtype');
+        return $this->fetch('classtype');
     }
 
     public function classtype_edit(){
