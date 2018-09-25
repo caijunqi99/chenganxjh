@@ -69,6 +69,25 @@
                         </ul></td>
                     <td class="vatop tips"></td>
                 </tr>
+
+                <tr>
+                    <td colspan="2" class="required"><label>身份:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><ul>
+
+                                <input type="radio" <?php if($member_array['member_identity'] == 1){ ?>checked="checked"<?php } ?> value="1" name="member_identity" id="member_identity1">
+                                       <label for="member_identity1">家长</label>
+
+                                <input type="radio" <?php if($member_array['member_identity'] == 2){ ?>checked="checked"<?php } ?> value="2" name="member_identity" id="member_identity2">
+                                       <label for="member_identity2">教师</label>
+
+                                <input type="radio" <?php if($member_array['member_identity'] == 3){ ?>checked="checked"<?php } ?> value="3" name="member_identity" id="member_identity3">
+                                       <label for="member_identity3">其他</label>
+
+                        </ul></td>
+                    <td class="vatop tips"></td>
+                </tr>
                 <!--V3-B11 显示所在地-->
                 <tr>
                     <td colspan="2" class="required"><label class="member_areainfo">所在地区:</label></td>
@@ -103,20 +122,15 @@
                     <td class="vatop tips"></td>
                 </tr>
 
-                <tr>
+<!--                 <tr>
                     <td colspan="2" class="required"><label class="member_qq">QQ:</label></td>
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform"><input type="text" value="<?php echo $member_array['member_qq'];?>" id="member_qq" name="member_qq" class="txt"></td>
                     <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label class="member_ww">{$Think.lang.member_edit_wangwang}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="<?php echo $member_array['member_ww'];?>" id="member_ww" name="member_ww" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
+                </tr> -->
+
+               
 
                 <tr>
                     <td colspan="2" class="required"><label>{$Think.lang.member_index_inform}:</label></td>

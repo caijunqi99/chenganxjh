@@ -20,10 +20,12 @@ class Mlselection extends BaseHome {
         $pid = intval(input('param.pid'));
         
         in_array($type, array('region', 'goodsclass')) or json_encode('invalid type');
+
         switch ($type) {
             case 'region':
                 $cityLevel = db('area')->field('area_id,area_deep')->where('area_id', $pid)->find();
                 $regions = db('area')->where('area_parent_id', $pid)->select();
+                // echo json_encode($regions);exit;
                 foreach ($regions as $key => $region) {
                     $result[$key]['area_name'] = htmlspecialchars($region['area_name']);
                     $result[$key]['area_id'] = $region['area_id'];
