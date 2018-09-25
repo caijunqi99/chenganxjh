@@ -34,9 +34,20 @@ $lang['ds_company']                = '分/子公司（代理）管理';
 $lang['ds_gadmin']                 = '角色管理（权限组）';
 
 //学校管理
-$lang['ds_school']                 = '学校管理';
-$lang['ds_classes']                = '班级管理';
-$lang['ds_student']                = '学生管理';
+$lang['ds_school'] = '学校管理';
+$lang['ds_classes'] = '班级管理';
+$lang['ds_student'] = '学生管理';
+$lang['school_time'] = '更新时间';
+$lang['school_province'] = '省';
+$lang['school_city'] = '市';
+$lang['school_area'] = '区';
+$lang['school_id'] = '序号';
+$lang['school_name'] = '学校名称';
+$lang['school_region'] = '地区';
+$lang['school_cratetime'] = '添加/修改时间';
+$lang['school_operation'] = '操作';
+$lang['school_desc'] = '备注';
+$lang['ds_addstudent'] = '添加学生';
 
 //会员
 $lang['ds_member']                 = '会员/家长管理';
@@ -320,26 +331,27 @@ $lang['ds_default']                = '默认';
 
 //操作提示
 
-$lang['ds_common_op_succ']      = '操作成功';
-$lang['ds_common_op_fail']      = '操作失败';
-$lang['ds_common_del_succ']     = '删除成功';
-$lang['ds_common_del_fail']     = '删除失败';
-$lang['ds_common_save_succ']    = '保存成功';
-$lang['ds_common_save_fail']    = '保存失败';
-$lang['ds_succ']                = '成功';
-$lang['ds_fail']                = '失败';
+$lang['ds_common_op_succ'] = '操作成功';
+$lang['ds_common_op_fail'] = '操作失败';
+$lang['ds_common_del_succ'] = '删除成功';
+$lang['ds_common_del_fail'] = '删除失败';
+$lang['ds_common_save_succ'] = '保存成功';
+$lang['ds_common_save_fail'] = '保存失败';
+$lang['ds_succ'] = '成功';
+$lang['ds_fail'] = '失败';
 
-$lang['ds_add']                 = '添加';
-$lang['ds_new']                 = '新增';
-$lang['ds_update']              = '更新';
-$lang['ds_edit']                = '编辑';
-$lang['ds_del']                 = '删除';
-$lang['ds_down_member']         = '查看所属人员';
+$lang['ds_add'] = '添加';
+$lang['ds_new'] = '新增';
+$lang['ds_update'] = '更新';
+$lang['ds_edit'] = '编辑';
+$lang['ds_del'] = '删除';
+$lang['ds_view'] = '查看';
+$lang['ds_down_member'] = '查看所属人员';
 
-$lang['ds_cut']                 = '裁剪';
-$lang['download_lang']          = '数据分段下载';
+$lang['ds_cut'] = '裁剪';
+$lang['download_lang'] = '数据分段下载';
 
-$lang['order_log_cancel']       = '取消了订单';
+$lang['order_log_cancel'] = '取消了订单';
 $lang['order_log_receive_paye'] = '收到了货款';
 
 $lang['ds_assign_right']        = '<br/><br/>您不具备进行该操作的权限';

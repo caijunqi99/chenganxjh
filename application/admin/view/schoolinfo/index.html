@@ -1,0 +1,80 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" name="form1" action="">
+        <div class="ncap-form-default">
+            <dl>
+                <dt>{$Think.lang.school_index_name}：</dt>
+                <dd>
+                    {$school_array.name}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_region}：</dt>
+                <dd>
+                    {$school_array.region}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_type}：</dt>
+                <dd>
+                    {volist name="schooltype" id="type"}
+                    {if condition="$school_array.typeid eq $type.sc_id"}
+                    {$type.sc_type}
+                    {/if}
+                    {/volist}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_address}：</dt>
+                <dd>
+                    {$school_array.address}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_phone}：</dt>
+                <dd>
+                    {$school_array.common_phone}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_username}：</dt>
+                <dd>
+                    {$school_array.username}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_dieline}：</dt>
+                <dd>
+                    {$school_array.dieline}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_desc}：</dt>
+                <dd>
+                    {$school_array.desc}
+                </dd>
+            </dl>
+
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
