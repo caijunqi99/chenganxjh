@@ -1,6 +1,7 @@
 {include file="public/header" /}
 <script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -141,10 +142,10 @@
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
-                <a href="{:url('/admin/school/view',['school_id'=>$v.schoolid])}">{$Think.lang.ds_view}</a> |
-                <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}">{$Think.lang.ds_edit}</a> |
-                <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}">{$Think.lang.ds_del}</a> |
-                <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}">{$Think.lang.school_class_add}</a>
+                <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_add}</a>
 
             </td>
         </tr>
@@ -172,6 +173,19 @@
 </div>
 
 <script type="text/javascript">
+    function dd(id) {
+        var urls=ADMIN_URL+'schoolinfo/index?school_id='+id;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2
+            , title: '查看'
+            , area: ['80%', '80%']
+            , shade: 0
+            , maxmin: true
+            , content: urls
+
+        });
+    }
 
     $(function() {
         regionInit("region");

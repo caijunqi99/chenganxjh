@@ -3,27 +3,23 @@
 namespace app\common\model;
 use think\Model;
 
-class School extends Model {
+class Student extends Model {
     public $page_info;
     
     /**
      * 取单条订单信息
      *
      * @param unknown_type $condition
-     * @param array $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return unknown
      */
-    public function getSchoolInfo($condition = array(), $extend = array(), $fields = '*', $school = '', $group = '') {
-        $school_info = db('school')->field($fields)->where($condition)->group($group)->order($school)->find();
-        if (empty($school_info)) {
+    public function getStudentInfo($condition = array(), $extend = array(), $fields = '*', $class = '', $group = '') {
+        $class_info = db('student')->field($fields)->where($condition)->group($group)->order($class)->find();
+        if (empty($class_info)) {
             return array();
         }
-        return $school_info;
+        return $class_info;
     }
 
-    public function getSchoolById($id){
-        return db('school')->where('schoolid',$id)->find();
-    }
     public function getOrderCommonInfo($condition = array(), $field = '*') {
         return db('ordercommon')->where($condition)->find();
     }
@@ -76,81 +72,14 @@ class School extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid desc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('school')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
-        $sql =  db('school')->getlastsql();
-        if($condition){
-            //print_r($sql);die;
-        }
+    public function getStudentList($condition, $page = '', $field = '*', $class = 's_id desc', $limit = '', $extend = array(), $master = false) {
+        $list_paginate = db('student')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
 
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
         if (empty($list))
             return array();
-//        $school_list = array();
-//        foreach ($list as $school) {
-//            if (isset($school['order_state'])) {
-//                $school['state_desc'] = orderState($school);
-//            }
-//            if (isset($school['payment_code'])) {
-//                $school['payment_name'] = orderPaymentName($school['payment_code']);
-//            }
-//            if (!empty($extend))
-//                $school_list[$school['order_id']] = $school;
-//        }
-//        if (empty($school_list))
-//            $school_list = $list;
-
-//        //追加返回订单扩展表信息
-//        if (in_array('order_common', $extend)) {
-//            $order_common_list = $this->getOrderCommonList(array('order_id' => array('in', array_keys($school_list))));
-//            foreach ($order_common_list as $value) {
-//                $school_list[$value['order_id']]['extend_order_common'] = $value;
-//                $school_list[$value['order_id']]['extend_order_common']['reciver_info'] = @unserialize($value['reciver_info']);
-//                $school_list[$value['order_id']]['extend_order_common']['invoice_info'] = @unserialize($value['invoice_info']);
-//            }
-//        }
-//        //追加返回店铺信息
-//        if (in_array('store', $extend)) {
-//            $store_id_array = array();
-//            foreach ($school_list as $value) {
-//                if (!in_array($value['store_id'], $store_id_array))
-//                    $store_id_array[] = $value['store_id'];
-//            }
-//            $store_list = db('store')->where('store_id', 'in', array_values($store_id_array))->select();
-//            $store_new_list = array();
-//            foreach ($store_list as $store) {
-//                $store_new_list[$store['store_id']] = $store;
-//            }
-//            foreach ($school_list as $order_id => $order) {
-//                $school_list[$order_id]['extend_store'] = isset($store_new_list[$order['store_id']])?$store_new_list[$order['store_id']]:'';
-//            }
-//        }
-//
-//        //追加返回买家信息
-//        if (in_array('member', $extend)) {
-//            foreach ($school_list as $order_id => $order) {
-//                $school_list[$order_id]['extend_member'] = Model('member')->getMemberInfoByID($order['buyer_id']);
-//            }
-//        }
-
-
-//        //追加返回商品信息
-//        if (in_array('order_goods', $extend)) {
-//            //取商品列表
-//            $order_goods_list = db('ordergoods')->where('order_id', 'in', array_keys($school_list))->select();
-//
-//            if (!empty($order_goods_list)) {
-//                foreach ($order_goods_list as $value) {
-//
-//                    $school_list[$value['order_id']]['extend_order_goods'][] = $value;
-//                }
-//            } else {
-//                $school_list[$value['order_id']]['extend_order_goods']= array();
-//            }
-//        }
-
         return $list;
     }
 
@@ -322,12 +251,12 @@ class School extends Model {
     }
 
     /**
-     * 插入订单表信息
+     * 插入班级表信息
      * @param array $data
      * @return int 返回 insert_id
      */
-    public function addSchool($data) {
-        $insert = db('school')->insertGetId($data);
+    public function addStudent($data) {
+        $insert = db('student')->insertGetId($data);
         return $insert;
     }
 
@@ -359,14 +288,14 @@ class School extends Model {
     }
 
     /**
-     * 更改学校信息
+     * 更改班级信息
      *
      * @param unknown_type $data
      * @param unknown_type $condition
      */
-    public function editSchool($data, $condition, $limit = '') {
+    public function editStudent($data, $condition, $limit = '') {
 
-        $update = db('school')->where($condition)->limit($limit)->update($data);
+        $update = db('student')->where($condition)->limit($limit)->update($data);
         return $update;
     }
 

@@ -5,7 +5,7 @@ namespace app\admin\controller;
 use think\Lang;
 use think\Validate;
 
-class Classes extends AdminControl {
+class Student extends AdminControl {
 
     public function _initialize() {
         parent::_initialize();
@@ -13,13 +13,13 @@ class Classes extends AdminControl {
     }
 
     public function index() {
-        $model_class = model('Classes');
+        $model_student = model('Student');
         $condition = array();
 
-        $classname = input('param.school_index_classname');//学校名称
-        if ($classname) {
-            $condition['classname'] = array('like', "%" . $classname . "%");
-        }
+//        $classname = input('param.school_index_classname');//学校名称
+//        if ($classname) {
+//            $condition['classname'] = array('like', "%" . $classname . "%");
+//        }
 //        $schooltype = input('param.school_type');//学校类型
 //        if ($schooltype) {
 //            $condition['common_phone'] = array('like', "%" . $schoolphone . "%");
@@ -28,54 +28,56 @@ class Classes extends AdminControl {
 //        if ($schoolusername) {
 //            $condition['username'] = array('like', "%" . $schoolusername . "%");
 //        }
-        $school_type = input('param.school_type');//学校类型
-        if ($school_type) {
-            $condition['typeid'] = $school_type;
-        }
-        $area_id = input('param.area_id');//地区
-        if($area_id){
-            $region_info = db('area')->where('area_id',$area_id)->find();
-            if($region_info['area_deep']==1){
-                $condition['school_provinceid'] = $area_id;
-            }elseif($region_info['area_deep']==2){
-                $condition['school_cityid'] = $area_id;
-            }else{
-                $condition['school_areaid'] = $area_id;
-            }
-        }
+//        $school_type = input('param.school_type');//学校类型
+//        if ($school_type) {
+//            $condition['typeid'] = $school_type;
+//        }
+//        $area_id = input('param.area_id');//地区
+//        if($area_id){
+//            $region_info = db('area')->where('area_id',$area_id)->find();
+//            if($region_info['area_deep']==1){
+//                $condition['school_provinceid'] = $area_id;
+//            }elseif($region_info['area_deep']==2){
+//                $condition['school_cityid'] = $area_id;
+//            }else{
+//                $condition['school_areaid'] = $area_id;
+//            }
+//        }
 //        $query_start_time = input('param.query_start_time');
 //        $query_end_time = input('param.query_end_time');
 //        if ($query_start_time || $query_end_time) {
 //            $condition['createtime'] = array('between', array($query_start_time, $query_end_time));
 //        }
-        $condition['isdel'] = 1;
-        $class_list = $model_class->getClasslList($condition, 10);
+        $condition['s_del'] = 1;
+        $student_list = $model_student->getStudentList($condition, 10);
         // 地区信息
-        $region_list = db('area')->where('area_parent_id','0')->select();
-        $this->assign('region_list', $region_list);
-        $address = array(
-            'true_name' => '',
-            'area_id' => '',
-            'city_id' => '',
-            'address' => '',
-            'tel_phone' => '',
-            'mob_phone' => '',
-            'is_default' => '',
-            'area_info'=>''
-        );
-        $this->assign('address', $address);
-        //学校类型
+//        $region_list = db('area')->where('area_parent_id','0')->select();
+//        $this->assign('region_list', $region_list);
+//        $address = array(
+//            'true_name' => '',
+//            'area_id' => '',
+//            'city_id' => '',
+//            'address' => '',
+//            'tel_phone' => '',
+//            'mob_phone' => '',
+//            'is_default' => '',
+//            'area_info'=>''
+//        );
+//        $this->assign('address', $address);
+
         $schooltype = db('schooltype')->where('sc_enabled','1')->select();
         $this->assign('schooltype', $schooltype);
 
-        foreach ($class_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $class_list[$k]['typename'] = $schooltype['sc_type'];
-            $school = db('school')->where('schoolid',$v['schoolid'])->find();
-            $class_list[$k]['schoolname'] = $school['name'];
+        foreach ($student_list as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
+            $student_list[$k]['typename'] = $schooltype['sc_type'];
+            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
+            $student_list[$k]['classname'] = $classinfo['classname'];
+            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
+            $student_list[$k]['schoolname'] = $school['name'];
         }
-        $this->assign('page', $model_class->page_info->render());
-        $this->assign('class_list', $class_list);
+        $this->assign('page', $model_student->page_info->render());
+        $this->assign('student_list', $student_list);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -186,40 +188,6 @@ class Classes extends AdminControl {
         }
     }
 
-    public function addstudent(){
-        $class_id = input('get.class_id');
-        if (!request()->isPost()) {
-            $this->setAdminCurItem('addstudent');
-            $this->assign('class_id', $class_id);
-            return $this->fetch();
-        } else {
-            $model_student = model('Student');
-            $data = array(
-                's_name' => input('post.student_name'),
-                's_sex' => input('post.student_sex'),
-                's_birthday' => input('post.student_birthday'),
-                's_card' => input('post.student_idcard'),
-                's_remark' => input('post.student_desc'),
-                's_createtime' => date('Y-m-d H:i:s',time())
-            );
-            $classinfo = db('class')->where('classid',$class_id)->find();
-            $data['s_provinceid'] = $classinfo['school_provinceid'];
-            $data['s_cityid'] = $classinfo['school_cityid'];
-            $data['s_areaid'] = $classinfo['school_areaid'];
-            $data['s_region'] = $classinfo['school_region'];
-            $data['s_schoolid'] = $classinfo['schoolid'];
-            $data['s_sctype'] = $classinfo['typeid'];
-            $data['s_classid'] = $classinfo['classid'];
-            //验证数据  END
-            $result = $model_student->addStudent($data);
-            if ($result) {
-                $this->success(lang('school_class_studentadd_succ'), 'Student/index');
-            } else {
-                $this->error(lang('school_class_studentadd_fail'));
-            }
-        }
-    }
-
     public function view(){
         $class_id = input('param.class_id');
         if (empty($class_id)) {
@@ -268,17 +236,36 @@ class Classes extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
-        $class_id = input('param.class_id');
-        if (empty($class_id)) {
+        $student_id = input('param.student_id');
+        if (empty($student_id)) {
             $this->error(lang('param_error'));
         }
-        $model_class = Model('classes');
-        $result = $model_class->editClass(array('isdel'=>2),array('classid'=>$class_id));
+        $model_student = Model('student');
+        $result = $model_student->editStudent(array('s_del'=>2),array('s_id'=>$student_id));
         if ($result) {
-            $this->success(lang('ds_common_del_succ'), 'Classes/index');
+            $this->success(lang('ds_common_del_succ'), 'Student/index');
         } else {
             $this->error('删除失败');
         }
+    }
+
+    public function fand_schooltype(){
+        $sc_id = intval(input('post.sc_id'));
+        $Schooltype = model('Schooltype');
+        $School = model('School');
+        $schoolInfo = $School->getSchoolById($sc_id);
+        if($schoolInfo){
+            $Schooltype_list = $Schooltype->get_sctype_List(array('sc_id'=>array('in',$schoolInfo['typeid'])));
+            exit(json_encode($Schooltype_list));
+        }
+
+
+
+
+
+
+
+
     }
 
     /**
@@ -289,29 +276,29 @@ class Classes extends AdminControl {
             array(
                 'name' => 'index',
                 'text' => '管理',
-                'url' => url('Admin/Classes/index')
+                'url' => url('Admin/Student/index')
             ),
         );
 
         if (request()->action() == 'add' || request()->action() == 'index') {
             $menu_array[] = array(
                 'name' => 'add',
-                'text' => '添加班级',
-                'url' => url('Admin/Classes/add')
+                'text' => '添加学生',
+                'url' => url('Admin/Student/add')
             );
         }
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',
                 'text' => '编辑',
-                'url' => url('Admin/Classes/edit')
+                'url' => url('Admin/Student/edit')
             );
         }
-        if (request()->action() == 'addstudent') {
+        if (request()->action() == 'view') {
             $menu_array[] = array(
-                'name' => 'addstudent',
-                'text' => '添加学生',
-                'url' => url('Admin/Classes/addstudent')
+                'name' => 'view',
+                'text' => '查看',
+                'url' => url('Admin/Student/view')
             );
         }
         return $menu_array;

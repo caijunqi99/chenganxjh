@@ -9,7 +9,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>班级管理</h3>
+                <h3>学生管理</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -20,14 +20,6 @@
         <table class="search-form">
             <tbody>
                 <tr>
-                    <!--<td>-->
-                        <!--<select name="search_field_name" >-->
-                            <!--<option <?php if($search_field_name == 'member_email'){ ?>selected='selected'<?php } ?> value="member_email">{$Think.lang.member_index_email}</option>-->
-                            <!--<option <?php if($search_field_name == 'member_mobile'){ ?>selected='selected'<?php } ?> value="member_mobile">手机号码</option>-->
-                            <!--<option <?php if($search_field_name == 'member_truename'){ ?>selected='selected'<?php } ?> value="member_truename">{$Think.lang.member_index_true_name}</option>-->
-                        <!--</select>-->
-                    <!--</td>-->
-                    <!--<td><input type="text" value="<?php echo $search_field_value;?>" name="search_field_value" class="txt"></td>-->
                     <th>{$Think.lang.school_name}</th>
                     <td><input type="text" class="text w150" name="schoolname" value="{$Think.get.schoolname}"></td>
                     <th>{$Think.lang.school_index_classname}</th>
@@ -115,6 +107,8 @@
         <tr class="thead">
             <!--<th>&nbsp;</th>-->
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
+            <th colspan="align-center">{$Think.lang.school_index_studentname}</th>
+            <th colspan="align-center">{$Think.lang.school_edit_sex}</th>
             <th class="align-center">{$Think.lang.school_index_classname}</th>
             <th class="align-center">{$Think.lang.school_index_name}</th>
             <th class="align-center">{$Think.lang.school_index_region}</th>
@@ -123,21 +117,22 @@
             <th class="align-center">{$Think.lang.ds_handle}</th>
         </tr>
         <tbody>
-        <?php if(!empty($class_list) && is_array($class_list)){ ?>
-        <?php foreach($class_list as $k => $v){ ?>
+        <?php if(!empty($student_list) && is_array($student_list)){ ?>
+        <?php foreach($student_list as $k => $v){ ?>
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
-            <td class="align-center"><?php echo $v['classid']; ?></td>
+            <td class="align-center"><?php echo $v['s_id']; ?></td>
+            <td class="align-center"><?php echo $v['s_name']; ?></td>
+            <td class="align-center"><?php if($v['s_sex']==1){echo "男";}else{echo "女";} ?></td>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
             <td class="align-center"><?php echo $v['schoolname']; ?></td>
-            <td class="align-center"><?php echo $v['school_region']; ?></td>
-            <td class="align-center"><?php echo $v['createtime']; ?></td>
-            <td class="align-center"><?php echo $v['desc']; ?></td>
+            <td class="align-center"><?php echo $v['s_region']; ?></td>
+            <td class="align-center"><?php echo $v['s_createtime']; ?></td>
+            <td class="align-center"><?php echo $v['s_remark']; ?></td>
             <td class="align-center">
-                <a href="javascript:dd({$v.classid})" class="layui-btn layui-btn-xs"">{$Think.lang.ds_view}</a>
-                <a href="{:url('/admin/classes/edit',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
-                <a href="{:url('/admin/classes/drop',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
-                <a href="{:url('/admin/classes/addstudent',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_studentadd}</a>
+                <a href="javascript:dd({$v.s_id})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <a href="{:url('/admin/student/edit',['student_id'=>$v.s_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <a href="{:url('/admin/student/drop',['student_id'=>$v.s_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
             </td>
         </tr>
         <?php } ?>
@@ -165,7 +160,7 @@
 
 <script type="text/javascript">
     function dd(id) {
-        var urls=ADMIN_URL+'classesinfo/index?class_id='+id;
+        var urls=ADMIN_URL+'studentinfo/index?student_id='+id;
         //多窗口模式，层叠置顶
         layer.open({
             type: 2

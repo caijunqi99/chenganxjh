@@ -1,0 +1,91 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" name="form1" action="">
+        <div class="ncap-form-default">
+            <dl>
+                <dt>{$Think.lang.school_index_studentname}：</dt>
+                <dd>
+                    {$student_array.s_name}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_edit_sex}：</dt>
+                <dd>
+                    {if condition="$student_array.s_sex eq 1"}
+                    男
+                    {/if}
+                    {if condition="$student_array.s_sex eq 2"}
+                    女
+                    {/if}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_studentbirthday}：</dt>
+                <dd>
+                    {$student_array.s_birthday}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_studentidcard}：</dt>
+                <dd>
+                    {$student_array.s_card}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_schoolregion}：</dt>
+                <dd>
+                    {$student_array.s_region}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_type}：</dt>
+                <dd>
+                    {volist name="schooltype" id="type"}
+                    {if condition="$student_array.s_sctype eq $type.sc_id"}
+                    {$type.sc_type}
+                    {/if}
+                    {/volist}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_name}：</dt>
+                <dd>
+                    {$schoolname}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_classesname}：</dt>
+                <dd>
+                    {$classname}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_desc}：</dt>
+                <dd>
+                    {$student_array.s_remark}
+                </dd>
+            </dl>
+
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
