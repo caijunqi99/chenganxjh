@@ -49,6 +49,26 @@ $lang['organize_index_enddate']='合同截止日期';
 $lang['organize_index_remark']='备注说明';
 $lang['organize_new_enddate_null']='合同截止日期不能为空';
 $lang['organize_name_null']='公司名称不能为空';
+$lang['organize_teaching_child']='教孩订单';
+$lang['organize_personnel_name']='员工姓名';
+$lang['organize_personnel_account']='账号';
+$lang['organize_personnel_role']='所属角色';
+$lang['organize_schoolnum_name']='学校名称';
+$lang['organize_schoolnum_city']='所在城市';
+$lang['organize_schoolnum_num']='累计发展学校总数';
+$lang['organize_camera_num']='累计摄像头个数';
+$lang['organize_camera_name']='摄像头名称';
+$lang['organize_camera_position']='所在位置';
+$lang['organize_camera_school']='所在学校名称';
+$lang['organize_membernum_num']='所属会员数';
+$lang['organize_membernum_name']='会员登录名称';
+$lang['organize_membernum_school']='所属学校名称';
+$lang['organize_membernum_class']='所属班级';
+$lang['organize_membernum_area']='所在区域';
+$lang['organize_studentnum_num']='绑定学生数';
+$lang['organize_studentnum_name']='绑定学生姓名';
+$lang['organize_studentnum_names']='所属会员登录名称';
+$lang['co_organize_succ']              = '分配成功';
 
 //学校管理
 $lang['ds_school']                 = '学校管理';

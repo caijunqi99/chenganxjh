@@ -10,7 +10,7 @@ class Organize extends AdminControl {
     public function _initialize()
     {
         parent::_initialize();
-        Lang::load(APP_PATH . 'admin/lang/zh-cn/brand.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
     }
     /**
      *
@@ -46,7 +46,7 @@ class Organize extends AdminControl {
             $condition['o_area']=array('like', '%' . trim($area_info) . '%');
             $this->assign('o_area',$o_area);
         }
-        $organize_list = $model_organize->getOrganizeList($condition, "*", 15);
+        $organize_list = $model_organize->getOrganizeList($condition, "*",15);
         $this->assign('page', $model_organize->page_info->render());
         $this->assign('organize_list', $organize_list);
         $this->setAdminCurItem('index');
@@ -69,8 +69,9 @@ class Organize extends AdminControl {
             )
         );
         if (request()->action() == 'edit') {
+            $oid=$_GET['organize_id'];
             $menu_array[1] = array(
-                'name' => 'organize_edit', 'text' => '编辑', 'url' => url('Admin/Organize/edit')
+                'name' => 'organize_edit', 'text' => '编辑', 'url' => url('Admin/Organize/edit',array('organize_id'=>$oid))
             );
         }
         return $menu_array;
@@ -90,7 +91,7 @@ class Organize extends AdminControl {
             $input['o_areaid'] = intval($_POST['area_id']);
             $input['o_area'] = trim($_POST['area_info']);
             $input['o_address'] = trim($_POST['o_address']);
-            $input['o_phone'] = intval($_POST['o_phone']);
+            $input['o_phone'] = trim($_POST['o_phone']);
             $input['o_leading'] = trim($_POST['o_leading']);
             $input['o_enddate'] = trim($_POST['activity_end_date']);
             $input['o_createtime']=date('Y-m-d H:i:s',time());
@@ -99,7 +100,7 @@ class Organize extends AdminControl {
             $activity = Model('organize');
             $result = $activity->addOrganize($input);
             if ($result) {
-                //$this->log(lang('ds_add') . lang('brand_index_brand') . '[' . $_POST['brand_name'] . ']', 1);
+                $this->log(lang('ds_add') . lang('ds_company') . '[' . $_POST['o_name'] . ']', 1);
                 $this->success(lang('ds_common_save_succ'),'organize/index');
             }
             else {
@@ -125,22 +126,22 @@ class Organize extends AdminControl {
             $update_array = array();
             $update_array['o_name'] = trim($_POST['o_name']);
             $update_array['o_role'] = intval($_POST['o_role']);
-            //$update_array['o_provinceid'] = intval($_POST['o_provinceid']);
-            //$update_array['o_cityid'] = intval($_POST['city_id']);
+            $update_array['o_provinceid'] = intval($_POST['o_provinceid']);
+            $update_array['o_cityid'] = intval($_POST['city_id']);
             $update_array['o_areaid'] = intval($_POST['area_id']);
             $update_array['o_area'] = trim($_POST['area_info']);
             $update_array['o_address'] = trim($_POST['o_address']);
-            $update_array['o_phone'] = intval($_POST['o_phone']);
+            $update_array['o_phone'] = trim($_POST['o_phone']);
             $update_array['o_leading'] = trim($_POST['o_leading']);
             $update_array['o_enddate'] = trim($_POST['activity_end_date']);
             $update_array['o_createtime'] = date('Y-m-d H:i:s', time());
             $update_array['o_remark'] = trim($_POST['o_remark']);
             $result = $model_organize->editOrganize($where, $update_array);
             if ($result) {
-                //$this->log(lang('ds_edit') . lang('brand_index_brand') . '[' . $_POST['brand_name'] . ']', 1);
+                $this->log(lang('ds_edit') . lang('ds_company') . '[' . $_POST['o_name'] . ']', 1);
                 $this->success(lang('ds_common_save_succ'), 'organize/index');
             } else {
-                //$this->log(lang('ds_edit').lang('brand_index_brand') . '[' . $_POST['brand_name'] . ']', 0);
+                $this->log(lang('ds_edit').lang('ds_company') . '[' . $_POST['o_name'] . ']', 0);
                 $this->error(lang('ds_common_save_fail'));
             }
         } else {
@@ -175,9 +176,9 @@ class Organize extends AdminControl {
     public function export_step1()
     {
         $dataResult = array();
-        $headTitle = "分/子公司列表";
+        //$headTitle = "分/子公司列表";
         $title = "分/子公司列表";
-        $headtitle= "<tr style='height:50px;border-style:none;><th border=\"0\" style='height:60px;width:270px;font-size:22px;' colspan='11' >{$headTitle}</th></tr>";
+        //$headtitle= "<tr style='height:50px;border-style:none;><th border=\"0\" style='height:60px;width:270px;font-size:22px;' colspan='11' >{$headTitle}</th></tr>";
         $titlename = "<tr>
                <th style='width:70px;' >序号</th>
                <th style='width:170px;' >公司名称</th>
@@ -240,6 +241,25 @@ class Organize extends AdminControl {
         header( "Pragma: no-cache" );
         header( "Expires: 0" );
         exit( $str );
+
+    }
+    /**
+     * 管理员添加
+     */
+    public function admin_add() {
+        $admin_id = $this->admin_info['admin_id'];
+            $model_admin = Model('admin');
+            $param['admin_name'] = $_POST['admin_name'];
+            $param['admin_gid'] = $_POST['gid'];
+            $param['admin_password'] = md5($_POST['admin_password']);
+            $param['create_uid'] = $admin_id;
+            $rs = $model_admin->addAdmin($param);
+            if ($rs) {
+                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
+                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
+            } else {
+                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
+            }
 
     }
 }

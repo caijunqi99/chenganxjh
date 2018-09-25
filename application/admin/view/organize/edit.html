@@ -54,9 +54,10 @@
             </tr>
             <tr>
                 <td id="region">
-                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id" class="city_ids">
-                    <input type="hidden" name="area_id" id="area_id" value="{organize_array.o_areaid}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{organize_array.o_area}" class="area_names" />
+                    <input type="hidden" value="{$organize_array.o_provinceid}" name="o_provinceid" id="o_provinceid" class="o_provinceid">
+                    <input type="hidden" value="{$organize_array.o_cityid}" name="city_id" id="city_id" class="o_cityid">
+                    <input type="hidden" name="area_id" id="area_id" value="{$organize_array.o_areaid}" class="area_ids" />
+                    <input type="hidden" name="area_info" id="area_info" value="{$organize_array.o_area}" class="area_names" />
                     {notempty name="organize_array.o_areaid"}
                     <span>{$organize_array.o_area}</span>
                     <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />

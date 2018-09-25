@@ -1,0 +1,65 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <h2>{$Think.lang.organize_membernum_num}0个</h2>
+    <form method="post" enctype="multipart/form-data" name="form1" action="">
+        <table class="ds-default-table">
+            <thead>
+            <tr class="thead">
+                <th class="w272">{$Think.lang.ds_number}</th>
+                <th class="w172">{$Think.lang.organize_membernum_name}</th>
+                <th class="w272 align-center">{$Think.lang.organize_membernum_school}</th>
+                <th class="w172">{$Think.lang.organize_membernum_class}</th>
+                <th class="w172">{$Think.lang.organize_membernum_area}</th>
+                <th class="w172">{$Think.lang.ds_organize_time}</th>
+                <th class="w172">{$Think.lang.ds_organize_remark}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {notempty name="organize_list"}
+            {volist name="organize_list" id="v"}
+            <tr class="hover edit">
+                <td class="sort">{$v.o_id}</td>
+                <td class="name">{$v.o_name}</td>
+                <td class="name">{$v.o_name}</td>
+                <td class="name">{$v.o_name}</td>
+                <td class="name">{$v.o_name}</td>
+                <td class="picture">{$v.o_createtime}</td>
+                <td class="align-center">{$v.o_remark}</td>
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="no_data">
+                <td colspan="10">{$Think.lang.ds_no_record}</td>
+            </tr>
+            {/notempty}
+            </tbody>
+            <tfoot>
+            {notempty name="organize_list"}
+            <tr colspan="15" class="tfoot">
+                <td colspan="16">
+                    <div class="pagination"> {$page} </div></td>
+            </tr>
+            {/notempty}
+            </tfoot>
+        </table>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
