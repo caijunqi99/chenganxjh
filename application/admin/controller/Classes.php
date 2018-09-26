@@ -20,14 +20,6 @@ class Classes extends AdminControl {
         if ($classname) {
             $condition['classname'] = array('like', "%" . $classname . "%");
         }
-//        $schooltype = input('param.school_type');//学校类型
-//        if ($schooltype) {
-//            $condition['common_phone'] = array('like', "%" . $schoolphone . "%");
-//        }
-//        $schoolusername = input('param.schoolusername');//联系/负责人
-//        if ($schoolusername) {
-//            $condition['username'] = array('like', "%" . $schoolusername . "%");
-//        }
         $school_type = input('param.school_type');//学校类型
         if ($school_type) {
             $condition['typeid'] = $school_type;
@@ -43,11 +35,6 @@ class Classes extends AdminControl {
                 $condition['school_areaid'] = $area_id;
             }
         }
-//        $query_start_time = input('param.query_start_time');
-//        $query_end_time = input('param.query_end_time');
-//        if ($query_start_time || $query_end_time) {
-//            $condition['createtime'] = array('between', array($query_start_time, $query_end_time));
-//        }
         $condition['isdel'] = 1;
         $class_list = $model_class->getClasslList($condition, 10);
         // 地区信息
@@ -117,6 +104,9 @@ class Classes extends AdminControl {
             $data['school_cityid'] = $city_id['area_parent_id'];
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['school_provinceid'] = $province_id['area_parent_id'];
+            //学校识别码
+            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
+            $data['classCard'] = $schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
             //验证数据  END
             $result = $model_classes->addClasses($data);
             if ($result) {
@@ -218,24 +208,6 @@ class Classes extends AdminControl {
                 $this->error(lang('school_class_studentadd_fail'));
             }
         }
-    }
-
-    public function view(){
-        $class_id = input('param.class_id');
-        if (empty($class_id)) {
-            $this->error(lang('param_error'));
-        }
-        $model_class = Model('classes');
-        $class_array = $model_class->getClassInfo(array("classid"=>$class_id));
-        $this->assign('class_array', $class_array);
-        //学校类型
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-        $this->assign('schooltype', $schooltype);
-        //学校名称
-        $schoolinfo = db('school')->where(array("schoolid"=>$class_array['schoolid']))->find();
-        $this->assign('schoolinfo', $schoolinfo);
-        $this->setAdminCurItem('view');
-        return $this->fetch();
     }
 
     /**

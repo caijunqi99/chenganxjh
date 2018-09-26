@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection_list.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
@@ -9,7 +9,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>学校管理</h3>
+                <h3>学校申请审核</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -22,13 +22,6 @@
                <tr>
                    <th>{$Think.lang.school_name}：</th>
                    <td><input type="text" class="text w150" name="schoolname" value="{$Think.get.schoolname}"></td>
-
-                   <td> <select name="school_type" >
-                            <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
-                            {volist name="schoolType" id="type"}
-                            <option value="{$type.sc_id}">{$type.sc_type}</option>
-                            {/volist}
-                        </select></td>
 
 
                    <td>  <label for="school_region">{$Think.lang.school_index_region}：</label></td>
@@ -56,7 +49,32 @@
                         </select>
                         {/notempty}
                    </td>
-                    
+                   <td id="school_list">
+                       <select name="school_name" >
+                           <option value="">{$Think.lang.school_index_allschool}</option>
+                       </select>
+                   </td>
+
+                   <td id="type_list">
+                       <select name="school_type" id="school_type">
+                           <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                           {volist name="schooltype" id="type"}
+                           <option value="{$type.sc_id}">{$type.sc_type}</option>
+                           {/volist}
+                       </select>
+                   </td>
+
+                   <td id="class_list">
+                       <select name="class_name" >
+                           <option value="">{$Think.lang.school_index_classname}</option>
+                       </select>
+                   </td>
+
+                   <td><select name="school_status" >
+                       <option value="">{$Think.lang.school_index_applystatus}</option>
+                       <option value="1">处理中</option>
+                       <option value="2">已处理</option>
+                   </select></td>
                      <td>   <input type="submit" class="submit" value="搜索">
                         <?php if($search_field_value != '' or $search_sort != ''){?>
                         <a href="{:url('School/index')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
@@ -78,39 +96,40 @@
     <table class="ds-default-table">
         <thead>
         <tr class="thead">
-            <th>&nbsp;</th>
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th class="align-center">{$Think.lang.school_index_name}</th>
             <th class="align-center">{$Think.lang.school_index_region}</th>
-            <th class="align-center">{$Think.lang.school_index_address}</th>
-            <th class="align-center">{$Think.lang.school_index_unique}</th>
-            <!--<th class="align-center">{$Think.lang.school_index_phone}</th>-->
-            <!--<th class="align-center">{$Think.lang.school_index_username}</th>-->
+            <th class="align-center">{$Think.lang.school_index_username}</th>
+            <th class="align-center">{$Think.lang.school_index_phone}</th>
+            <th class="align-center">{$Think.lang.school_index_applycontent}</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
-            <th class="align-center">{$Think.lang.school_index_desc}</th>
             <th class="align-center">{$Think.lang.ds_handle}</th>
+            <th class="align-center">{$Think.lang.school_index_applystatus}</th>
+            <th class="align-center">{$Think.lang.school_index_applyman}</th>
+            <th class="align-center">{$Think.lang.school_index_applytime}</th>
         </tr>
         <tbody>
-        <?php if(!empty($school_list) && is_array($school_list)){ ?>
-        <?php foreach($school_list as $k => $v){ ?>
+        <?php if(!empty($schoolapply_list) && is_array($schoolapply_list)){ ?>
+        <?php foreach($schoolapply_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>
-            <td class="align-center"><?php echo $v['schoolid']; ?></td>
-            <td class="align-center"><?php echo $v['name']; ?></td>
+            <td class="align-center"><?php echo $v['applyid']; ?></td>
+            <td class="align-center"><?php echo $v['schoolname']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
-            <td class="align-center"><?php echo $v['address']; ?></td>
-            <td class="align-center"><?php echo $v['schoolCard']; ?></td>
-            <!--<td class="align-center"><?php echo $v['common_phone']; ?></td>-->
-            <!--<td class="align-center"><?php echo $v['username']; ?></td>-->
-            <td class="align-center"><?php echo $v['createtime']; ?></td>
-            <td class="align-center"><?php echo $v['desc']; ?></td>
+            <td class="align-center"><?php echo $v['username']; ?></td>
+            <td class="align-center"><?php echo $v['phone']; ?></td>
+            <td class="align-center"><?php echo $v['message']; ?></td>
+            <th class="align-center"><?php echo $v['createtime']; ?></th>
             <td class="align-center">
-                <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
-                <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
-                <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
-                <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_add}</a>
-                <a href="javascript:jia({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_organize_assign}</a>
+                <?php if($v['status']==1){ ?>
+                <a href="{:url('/admin/schoolapply/deal',['applyid'=>$v.applyid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_index_applydeal}</a>
+                <?php }else{ ?>
+                无
+                <?php } ?>
+
             </td>
+            <td class="align-center"><?php if($v['status']==1){echo '处理中';}else{echo '已处理';} ?></td>
+            <td class="align-center"><?php echo $v['auditor']; ?></td>
+            <td class="align-center"><?php echo $v['auditortime']; ?></td>
         </tr>
         <?php } ?>
         <?php }else { ?>
@@ -200,89 +219,5 @@ function jia(role){
         }
     $(function() {
         regionInit("region");
-    });
-    //按钮先执行验证再提交表
-    $(document).ready(function() {
-
-        layui.use(['form', 'layedit', 'laydate'], function() {
-            var form = layui.form
-        });
-        //按钮先执行验证再提交表单
-        $("#submitBtn").click(function() {
-            if ($("#courForm").valid()) {
-                //$("#courForm").submit();
-                //$('.layui-layer-close1').click();
-                var admin_name = $("#admin_name").val();
-                var admin_password = $("#admin_password").val();
-                $.ajax({
-                    url: "{:url('/Admin/school/admin_add')}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {'admin_name': admin_name,'admin_password':admin_password},
-                    success:function(sb){
-                        if (sb.m) {
-                            layer.msg(sb.ms, {icon: 16,time: 500},function(){
-                                window.location.href="{:url('/Admin/School/member')}";
-                            });
-
-                        }
-                    }
-                });
-
-            }
-        });
-        $("#courForm").validate({
-            errorPlacement: function(error, element) {
-                error.appendTo(element.nextAll('span.err'));
-            },
-            rules: {
-                admin_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_name',
-                        type: 'get',
-                        data: {
-                            admin_name: function() {
-                                return $('#admin_name').val();
-                            }
-                        }
-                    }
-                },
-                admin_password: {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 20
-                },
-                admin_rpassword: {
-                    required: true,
-                    equalTo: '#admin_password'
-                },
-                gid: {
-                    required: true
-                }
-            },
-            messages: {
-                admin_name: {
-                    required: '{$Think.lang.admin_add_username_null}',
-                    minlength: '{$Think.lang.admin_add_username_max}',
-                    maxlength: '{$Think.lang.admin_add_username_max}',
-                    remote: '{$Think.lang.admin_add_admin_not_exists}'
-                },
-                admin_password: {
-                    required: '{$Think.lang.admin_add_password_null}',
-                    minlength: '{$Think.lang.admin_add_password_max}',
-                    maxlength: '{$Think.lang.admin_add_password_max}'
-                },
-                admin_rpassword: {
-                    required: '{$Think.lang.admin_add_password_null}',
-                    equalTo: '{$Think.lang.admin_edit_repeat_error}'
-                },
-                gid: {
-                    required: '{$Think.lang.admin_add_gid_null}',
-                }
-            }
-        });
     });
 </script>

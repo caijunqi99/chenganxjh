@@ -69,21 +69,13 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform" name="school_type">
-                        <input type="checkbox" name="school_type[]" id="school_index_region1" nc_province="1" value="1"> 幼儿园
-                        <input type="checkbox" name="school_type[]" id="school_index_region2" nc_province="2" value="2"> 小学
-                        <input type="checkbox" name="school_type[]" id="school_index_region3" nc_province="3" value="3"> 高中
+                    <td class="vatop rowform" name="school_type" id="school_type">
+                        {volist name="schoolType" id="type"}
+                        <input type="checkbox" name="school_type[]" id="school_index_region{$type.sc_id}" nc_province="{$type.sc_id}" value="{$type.sc_id}"> {$type.sc_type}
+                        {/volist}
                     </td>
                     <td class="vatop tips"></td>
                 </tr>
-                <!--{notempty name="pinfo.child"}-->
-                <!--{volist name="pinfo.child" id="city_name" key="city_id"}-->
-                <!--<label for="member_name">-->
-                <!--<input <?php if (isset($city_checked_array[$city_id])) echo 'checked';?> type="checkbox" nc_province="{$pid}" value="{$city_id}" name="city[]">-->
-                <!--{$city_name}-->
-                <!--</label>-->
-                <!--{/volist}-->
-                <!--{/notempty}-->
                 <tr>
                     <td colspan="2" class="required"><label for="school_address">{$Think.lang.school_index_address}:</label></td>
                 </tr>
@@ -122,7 +114,7 @@
             </tbody>
             <tfoot>
                 <tr class="tfoot">
-                    <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
                 </tr>
             </tfoot>
         </table>
@@ -152,17 +144,43 @@
                             user_name: function() {
                                 return $('#school_name').val();
                             },
-                            school_id:'{$school_array.school_id|default=0}'
+                            area_id: function () {
+                                return $('#area_id').val();
+                            }
                         }
                     }
+                },
+                school_phone:{
+                    required: true
+                },
+                school_username:{
+                    required: true
+                },
+                school_address:{
+                    required: true
+                },
+                school_type:{
+                    required: true
                 }
             },
             messages: {
                 school_name: {
-                    required: '{$Think.lang.school_add_name_null}',
+                    required: '{$Think.lang.school_add_sname_null}',
                     maxlength: '{$Think.lang.school_add_name_length}',
                     minlength: '{$Think.lang.school_add_name_length}',
                     remote: '{$Think.lang.school_add_name_exists}'
+                },
+                school_phone: {
+                    required: '{$Think.lang.school_add_phone_null}',
+                },
+                school_username: {
+                    required: '{$Think.lang.school_add_name_null}',
+                },
+                school_address: {
+                    required: '{$Think.lang.school_add_address_null}',
+                },
+                school_type: {
+                    required: '{$Think.lang.school_add_type_null}',
                 }
             }
         });

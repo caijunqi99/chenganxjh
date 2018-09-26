@@ -96,7 +96,7 @@ function regionChange() {
             var school_list = data.school_list;
 
             if (data.code == 10000) {
-                var select = '<select name="order_state" id="school_id" class="querySelect" onchange="fand_schooltype($(this))"><option>请选择学校名称</option>';
+                var select = '<select name="order_state" id="school_id" onchange="fand_schooltype($(this))"><option>请选择学校名称</option>';
                 if (school_length>0) {
                     for (var i = 0; i < school_length; i++) {
                         select += "<option value='" + school_list[i].schoolid + "'>" + school_list[i].name + "</option>";
@@ -157,7 +157,7 @@ function fand_classname(_sef) {
             var classname_length = data.length;
             var classname_list = data;
             if (data) {
-                var select = '<select name="class_name" id="class_name" class="querySelect"><option>请选择班级</option>';
+                var select = '<select name="class_name" class="querySelect"><option>请选择班级</option>';
                 if (classname_length > 0) {
                     for (var i = 0; i < classname_length; i++) {
                         select += "<option value='" + classname_list[i].classid + "'>" + classname_list[i].classname + "</option>";

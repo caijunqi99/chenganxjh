@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection2.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection3.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
@@ -7,7 +7,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>班级管理</h3>
+                <h3>学生管理</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -26,7 +26,7 @@
 
 
     <form id="user_form" enctype="multipart/form-data" method="post">
-
+        <input type="hidden" name="student_id" value="<?php echo $student_array['s_id'];?>" />
         <table class="ds-default-table">
             <tbody>
             <tr class="noborder">
@@ -35,10 +35,10 @@
             <tr>
                 <td id="region">
                     <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                    <input type="hidden" name="area_id" id="area_id" value="{$class_array.school_areaid}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$class_array.school_region}" class="area_names" />
-                    {notempty name="$class_array.school_areaid"}
-                    <span>{$class_array.school_region}</span>
+                    <input type="hidden" name="area_id" id="area_id" value="{$student_array.s_areaid}" class="area_ids" />
+                    <input type="hidden" name="area_info" id="area_info" value="{$student_array.s_region}" class="area_names" />
+                    {notempty name="$student_array.s_areaid"}
+                    <span>{$student_array.s_region}</span>
                     <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
                     <select style="display:none;">
                         <option value="0">请选择分类</option>
@@ -58,50 +58,93 @@
                 </td>
             </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td>
-                    <select name="school_type" class="querySelect">
-                        <!--<option value="">{$Think.lang.school_index_chosetype}</option>-->
-                        {volist name="schooltype" id="type"}
-                            <option value="{$type.sc_id}" {if condition="$class_array.typeid eq $type.sc_id"} selected {/if}>{$type.sc_type}</option>
-                        {/volist}
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
                 <td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
                 <td id="school_list">
-                    <select name="school_name" class="querySelect">
+                    <select name="order_state" class="querySelect">
                         <option value="">{$Think.lang.school_index_chosename}</option>
-                        {volist name="schoolname" id="name"}
-                        <option value="{$name.schoolid}" {if condition="$class_array.schoolid eq $name.schoolid"} selected {/if}>{$name.name}</option>
+                        {volist name="schoolList" id="school"}
+                        <option value="{$school.schoolid}" {if condition="$student_array.s_schoolid eq $school.schoolid"} selected {/if}>{$school.name}</option>
                         {/volist}
                     </select>
                 </td>
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classname}:</label></td>
+                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+                <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="<?php echo $class_array['classname'];?>" name="school_class_name" id="school_class_name" class="txt"></td>
+                <td id="type_list">
+                    <select name="classtype" class="querySelect" id="school_type">
+                        <option value="">{$Think.lang.school_index_chosetype}</option>
+                        {volist name="typeInfo" id="type"}
+                        <option value="{$type.sc_id}" {if condition="$student_array.s_sctype eq $type.sc_id"} selected {/if} >{$type.sc_type}</option>
+                        {/volist}
+                    </select>
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label>{$Think.lang.school_index_classesname}:</label></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td id="class_list">
+                    <select name="class_name" class="querySelect">
+                        <option value="">{$Think.lang.school_index_choseclass}</option>
+                        {volist name="classInfo" id="class"}
+                        <option value="{$class.classid}" {if condition="$student_array.s_classid eq $class.classid"} selected {/if}>{$class.classname}</option>
+                        {/volist}
+                    </select>
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="student_name">{$Think.lang.school_index_studentname}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="{$student_array.s_name}" id="student_name" name="student_name" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label> {$Think.lang.school_edit_sex}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform">
+                    <label>
+                        <input type="radio" value="1" {if condition="$student_array.s_sex eq 1"} checked {/if} name="member_sex">{$Think.lang.member_edit_male}
+                    </label>
+                    <label>
+                        <input type="radio" value="2" {if condition="$student_array.s_sex eq 2"} checked {/if} name="member_sex">{$Think.lang.member_edit_female}
+                    </label>
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="student_birthday">{$Think.lang.school_index_studentbirthday}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="{$student_array.s_birthday}" id="student_birthday" name="student_birthday" class="txt date"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="student_idcard">{$Think.lang.school_index_studentidcard}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="{$student_array.s_card}" id="student_idcard" name="student_idcard" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="student_desc">{$Think.lang.school_index_desc}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="{$student_array.s_remark}" id="student_desc" name="student_desc" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
 
-            <tr>
-                <td colspan="2" class="required"><label for="class_desc">{$Think.lang.school_index_desc}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="<?php echo $class_array['desc'];?>" id="class_desc" name="class_desc" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
             </tbody>
             <tfoot>
             <tr class="tfoot">
@@ -111,6 +154,7 @@
         </table>
     </form>
 </div>
+
 <script type="text/javascript">
 
     $(function(){
@@ -130,7 +174,7 @@
     });
 
     $(function(){
-        $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
+        $('#student_birthday').datepicker({dateFormat: 'yy-mm-dd'});
     });
 
     $(function() {
