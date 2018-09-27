@@ -80,7 +80,6 @@
                 <td id="school_list">
                     <select name="school_name" class="querySelect">
                         <option value="">{$Think.lang.school_index_chosename}</option>
-
                     </select>
                 </td>
                 <td class="vatop tips"></td>
@@ -103,7 +102,7 @@
             </tbody>
             <tfoot>
                 <tr class="tfoot">
-                    <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
                 </tr>
             </tfoot>
         </table>
@@ -131,27 +130,18 @@
             },
             rules: {
                 school_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#school_name').val();
-                            },
-                            school_id:'{$school_array.school_id|default=0}'
-                        }
-                    }
+                    required: true
+                },
+                school_class_name: {
+                    required: true
                 }
             },
             messages: {
                 school_name: {
-                    required: '{$Think.lang.school_add_name_null}',
-                    maxlength: '{$Think.lang.school_add_name_length}',
-                    minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
+                    required: '{$Think.lang.school_add_sname_null}'
+                },
+                school_class_name: {
+                    required: '{$Think.lang.school_add_class_null}'
                 }
             }
         });

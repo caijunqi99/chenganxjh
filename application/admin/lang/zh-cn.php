@@ -74,6 +74,7 @@ $lang['co_organize_succ']              = '分配成功';
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
 $lang['ds_student'] = '学生管理';
+$lang['ds_schoolapply'] = '学校申请审核';
 $lang['school_time'] = '更新时间';
 $lang['school_province'] = '省';
 $lang['school_city'] = '市';
@@ -454,4 +455,17 @@ $lang['cl_add_fail']      = '年级添加失败';
 $lang['cl_edit_succ']     = '年级修改成功';
 $lang['cl_edit_fail']     = '年级修改失败';
 
+
+//回放时间设置
+$lang['playback']        = '回放时间设置';
+$lang['playback_manage']        = '重温课堂设置';
+$lang['classtype_manage'] = '年级管理';
+$lang['cl_type']          = '年级';
+$lang['cl_enabled']       = '是否启用';
+$lang['cl_del_fail']      = '年级删除失败';
+$lang['cl_del_succ']      = '年级删除成功';
+$lang['cl_add_succ']      = '年级添加成功';
+$lang['cl_add_fail']      = '年级添加失败';
+$lang['cl_edit_succ']     = '年级修改成功';
+$lang['cl_edit_fail']     = '年级修改失败';
 ?>

@@ -75,12 +75,9 @@
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
-                <td>
+                <td id="type_list">
                     <select name="school_type" class="querySelect" id="school_type">
                         <option value="">{$Think.lang.school_index_chosetype}</option>
-                        <!--{volist name="schooltype" id="type"}-->
-                        <!--<option value="{$type.sc_id}">{$type.sc_type}</option>-->
-                        <!--{/volist}-->
                     </select>
                 </td>
                 <td class="vatop tips"></td>
@@ -96,6 +93,13 @@
 
                     </select>
                 </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classunique}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" name="classunique" id="classunique" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr>
@@ -120,10 +124,10 @@
                 <td class="vatop tips"></td>
             </tr>
             <tr>
-                <td colspan="2" class="required"><label for="school_dieline">{$Think.lang.school_index_studentbirthday}:</label></td>
+                <td colspan="2" class="required"><label for="student_birthday">{$Think.lang.school_index_studentbirthday}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="school_dieline" name="school_dieline" class="txt date"></td>
+                <td class="vatop rowform"><input type="text" value="" id="student_birthday" name="student_birthday" class="txt date"></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr>
@@ -133,32 +137,31 @@
                 <td class="vatop rowform"><input type="text" value="" id="student_idcard" name="student_idcard" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_susername}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td id="username_list">
-                    <select name="class_name" class="querySelect">
-                        <option value="">{$Think.lang.school_index_choseusername}</option>
+            <!--<tr class="noborder">-->
+                <!--<td colspan="2" class="required"><label>{$Think.lang.school_index_susername}:</label></td>-->
+                <!--<td class="vatop tips"></td>-->
+            <!--</tr>-->
+            <!--<tr class="noborder">-->
+                <!--<td id="username_list">-->
+                    <!--<select name="class_name" class="querySelect">-->
+                        <!--<option value="">{$Think.lang.school_index_choseusername}</option>-->
 
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
+                    <!--</select>-->
+                <!--</td>-->
+                <!--<td class="vatop tips"></td>-->
+            <!--</tr>-->
             <tr>
-                <td colspan="2" class="required"><label for="class_desc">{$Think.lang.school_index_desc}:</label></td>
+                <td colspan="2" class="required"><label for="student_desc">{$Think.lang.school_index_desc}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="class_desc" name="class_desc" class="txt"></td>
+                <td class="vatop rowform"><input type="text" value="" id="student_desc" name="student_desc" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
-
 
             </tbody>
             <tfoot>
                 <tr class="tfoot">
-                    <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
                 </tr>
             </tfoot>
         </table>
@@ -185,35 +188,51 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules: {
-                school_name: {
+                classunique: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 20,
                     remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
+                        url: "{:url('Admin/student/ajax',['branch'=>'check_unique_code'])}",
                         type: 'get',
                         data: {
-                            user_name: function() {
-                                return $('#school_name').val();
+                            class_name: function() {
+                                return $('#class_name').val();
                             },
-                            school_id:'{$school_array.school_id|default=0}'
+                            classunique: function () {
+                                return $('#classunique').val();
+                            }
                         }
                     }
+                },
+                school_name: {
+                    required: true
+                },
+                student_name: {
+                    required: true
+                },
+                student_idcard: {
+                    required: true
                 }
             },
             messages: {
                 school_name: {
-                    required: '{$Think.lang.school_add_name_null}',
-                    maxlength: '{$Think.lang.school_add_name_length}',
-                    minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
+                    required: '{$Think.lang.school_add_sname_null}'
+                },
+                classunique: {
+                    required: '{$Think.lang.school_classcard_null}',
+                    remote: '{$Think.lang.school_studentcode}'
+                },
+                student_name: {
+                    required: '{$Think.lang.school_add_studentname_null}'
+                },
+                student_idcard: {
+                    required: '{$Think.lang.school_studentcard_null}'
                 }
             }
         });
     });
 
     $(function(){
-        $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
+        $('#student_birthday').datepicker({dateFormat: 'yy-mm-dd'});
     });
 
     $(function() {

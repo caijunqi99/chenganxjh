@@ -31,8 +31,8 @@
                 <tr>
                     <td id="region">
                         <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                        <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                        <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
+                        <input type="hidden" name="area_id" id="area_id" value="{$school_array.areaid}" class="area_ids" />
+                        <input type="hidden" name="area_info" id="area_info" value="{$school_array.region}" class="area_names" />
                         {notempty name="$school_array.areaid"}
                         <span>{$school_array.region}</span>
                         <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
@@ -59,9 +59,9 @@
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform" name="school_type">
-                        <input type="checkbox" name="school_type[]" id="school_index_region1" nc_province="1" <?php if($school_array['typeid']==1){?>checked<?php }?> value="1"> 幼儿园
-                        <input type="checkbox" name="school_type[]" id="school_index_region2" nc_province="2" <?php if($school_array['typeid']==2){?>checked<?php }?> value="2"> 小学
-                        <input type="checkbox" name="school_type[]" id="school_index_region3" nc_province="3" <?php if($school_array['typeid']==3){?>checked<?php }?> value="3"> 高中
+                        {volist name="schoolType" id="type"}
+                        <input type="checkbox" name="school_type[]" id="school_index_region{$type.sc_id}" nc_province="{$type.sc_id}" {volist name="school_array.typeid" id="v"}{if condition="$v eq $type.sc_id"} checked {/if}{/volist} value="{$type.sc_id}"> {$type.sc_type}
+                        {/volist}
                     </td>
                     <td class="vatop tips"></td>
                 </tr>

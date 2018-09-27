@@ -30,34 +30,6 @@
         <table class="ds-default-table">
             <tbody>
             <input type="hidden" value="{$schoolid}" name="school_id" id="school_id">
-            <!--<tr class="noborder">-->
-                <!--<td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_schoolregion}:</label></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td id="region">-->
-                    <!--<input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">-->
-                    <!--<input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />-->
-                    <!--<input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />-->
-                    <!--{notempty name="address.area_id"}-->
-                    <!--<span>{$address.area_info}</span>-->
-                    <!--<input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />-->
-                    <!--<select style="display:none;">-->
-                        <!--<option value="0">请选择分类</option>-->
-                        <!--{volist name="region_list" id="region"}-->
-                        <!--<option value="{$region.area_id}">{$region.area_name}</option>-->
-                        <!--{/volist}-->
-                    <!--</select>-->
-                    <!--{else}-->
-                    <!--<select>-->
-                        <!--<option value="0">请选择分类</option>-->
-                        <!--{volist name="region_list" id="region"}-->
-                        <!--<option value="{$region.area_id}">{$region.area_name}</option>-->
-                        <!--{/volist}-->
-                    <!--</select>-->
-                    <!--{/notempty}-->
-
-                <!--</td>-->
-            <!--</tr>-->
             <tr class="noborder">
                 <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
                 <td class="vatop tips"></td>
@@ -67,25 +39,12 @@
                     <select name="school_type" class="querySelect">
                         <option value="">{$Think.lang.school_index_chosetype}</option>
                         {volist name="schooltype" id="type"}
-                        <option value="{$type.sc_id}">{$type.sc_type}</option>
+                        <option value="{$key}">{$type}</option>
                         {/volist}
                     </select>
                 </td>
                 <td class="vatop tips"></td>
             </tr>
-            <!--<tr class="noborder">-->
-                <!--<td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>-->
-                <!--<td class="vatop tips"></td>-->
-            <!--</tr>-->
-            <!--<tr class="noborder">-->
-                <!--<td id="school_list">-->
-                    <!--<select name="school_name" class="querySelect">-->
-                        <!--<option value="">{$Think.lang.school_index_chosename}</option>-->
-
-                    <!--</select>-->
-                <!--</td>-->
-                <!--<td class="vatop tips"></td>-->
-            <!--</tr>-->
             <tr class="noborder">
                 <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classname}:</label></td>
             </tr>

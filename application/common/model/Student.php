@@ -74,7 +74,6 @@ class Student extends Model {
      */
     public function getStudentList($condition, $page = '', $field = '*', $class = 's_id desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('student')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
-
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
