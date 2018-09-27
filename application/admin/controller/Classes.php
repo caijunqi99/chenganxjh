@@ -90,6 +90,7 @@ class Classes extends AdminControl {
             $this->setAdminCurItem('add');
             return $this->fetch();
         } else {
+            $admininfo = $this->getAdminInfo();
             $model_classes = model('Classes');
             $data = array(
                 'school_areaid' => input('post.area_id'),
@@ -98,6 +99,7 @@ class Classes extends AdminControl {
                 'schoolid' => input('post.order_state'),
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
+                'option_id' => $admininfo['admin_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
             $city_id = db('area')->where('area_id',input('post.area_id'))->find();
@@ -243,6 +245,10 @@ class Classes extends AdminControl {
         $class_id = input('param.class_id');
         if (empty($class_id)) {
             $this->error(lang('param_error'));
+        }
+        $students = db('student')->where(['s_classid'=>$class_id,'s_del'=>1])->limit(1)->find();
+        if($students){
+            $this->error('该班级下有学生在使用，不能删除，请将使用的学生移除后进行删除');
         }
         $model_class = Model('classes');
         $result = $model_class->editClass(array('isdel'=>2),array('classid'=>$class_id));

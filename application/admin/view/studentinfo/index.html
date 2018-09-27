@@ -52,9 +52,7 @@
                 <dt>{$Think.lang.school_index_type}：</dt>
                 <dd>
                     {volist name="schooltype" id="type"}
-                    {if condition="$student_array.s_sctype eq $type.sc_id"}
-                    {$type.sc_type}
-                    {/if}
+                    {$type}
                     {/volist}
                 </dd>
             </dl>

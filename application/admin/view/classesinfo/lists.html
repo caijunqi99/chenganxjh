@@ -26,7 +26,6 @@
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th class="align-center">{$Think.lang.school_index_studentname}</th>
             <th class="align-center">{$Think.lang.school_edit_sex}</th>
-            <th class="align-center">{$Think.lang.school_index_studentbirthday}</th>
             <th class="align-center">{$Think.lang.school_index_studentidcard}</th>
             <th class="align-center">{$Think.lang.school_index_susernamesuo}</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
@@ -39,9 +38,8 @@
             <td class="align-center"><?php echo $v['s_id']; ?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php if($v['s_sex']==1){echo "男";}else{echo "女";} ?></td>
-            <td class="align-center"><?php echo $v['s_birthday']; ?></td>
             <td class="align-center"><?php echo $v['s_card']; ?></td>
-            <td class="align-center"><?php echo $v['s_card']; ?></td>
+            <td class="align-center"><?php echo $v['member']; ?></td>
             <td class="align-center"><?php echo $v['s_createtime']; ?></td>
             <td class="align-center"><?php echo $v['s_remark']; ?></td>
         </tr>
