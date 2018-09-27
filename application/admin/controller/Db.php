@@ -300,6 +300,13 @@ class Db extends AdminControl {
         }
     }
 
+    public function ctrl(){
+        $this->setAdminCurItem('ctrl');
+        echo 111;exit;
+    }
+
+
+
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
@@ -315,6 +322,11 @@ class Db extends AdminControl {
                 'text' => '数据还原',
                 'url' => url('Admin/Db/restore')
             ),
+            // array(
+            //     'name' => 'ctrl',
+            //     'text' => '后台控制',
+            //     'url' => url('Admin/Db/ctrl')
+            // ),
         );
 
         return $menu_array;

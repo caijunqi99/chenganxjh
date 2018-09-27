@@ -13,8 +13,9 @@ class Member extends AdminControl {
     }
 
     public function member() {
-        $model_member = Model('member');
 
+        $model_member = Model('member');
+        // $model_member->ttttt();exit;
         //会员级别
         $member_grade = $model_member->getMemberGradeArr();
         $search_field_value = input('search_field_value');
@@ -74,7 +75,9 @@ class Member extends AdminControl {
         if (empty($order)) {
             $order = 'member_id desc';
         }
-        $member_list = $model_member->getMemberList($condition, '*', 10, $order);
+        $field = 'member_id,member_avatar,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
+        $member_list = $model_member->getMemberList($condition, $field, 10, $order);
+        // p($member_list);exit;
         //整理会员信息
         if (is_array($member_list)) {
             foreach ($member_list as $k => $v) {
@@ -83,6 +86,7 @@ class Member extends AdminControl {
                 $member_list[$k]['member_grade'] = ($t = $model_member->getOneMemberGrade($v['member_exppoints'], false, $member_grade)) ? $t['level_name'] : '';
             }
         }
+        
         $this->assign('member_grade', $member_grade);
         $this->assign('search_sort', $order);
         $this->assign('search_field_name', trim($search_field_name));
@@ -195,6 +199,47 @@ class Member extends AdminControl {
                 $this->error('编辑失败');
             }
         }
+    }
+
+    /**
+     * 重置密码
+     * @return [type] [description]
+     */
+    public function password_reset(){
+        $member_id = input('post.uid');
+        $Member = model('member');
+        $memberInfo=$Member->getMemberInfo(array('member_id'=>$member_id));
+        $sign = false;
+        $msg = '';
+        if ($memberInfo) {
+            //生成数字字符随机 密码
+            $pass = getRandomString(8,null,'n');
+            $user=array();
+            $user['member_password'] = md5(trim($pass));
+            $result=$Member->editMember(array('member_id'=>$member_id),$user);
+
+            if ($result) {
+                $sms_tpl = config('sms_tpl');
+                $tempId = $sms_tpl['sms_password_reset'];
+                $sms = new \sendmsg\Sms();
+                $send = $sms->send($memberInfo['member_mobile'],$pass,$tempId);
+                if($send){
+                    $sign = true;
+                    $msg='密码重置成功';
+                    $this->log($msg . '[' . $memberInfo['member_mobile'] . ']', null);   
+                }else{
+                    $msg='密码发送失败，请联系平台管理员';
+                }
+                
+            }else{
+                $msg='密码修改失败，请联系平台管理员';
+            }            
+        }else{
+            $msg='没有此用户';
+        }
+        exit(json_encode(array('state'=>$sign,'msg'=>$msg)));
+
+        
     }
 
     /**

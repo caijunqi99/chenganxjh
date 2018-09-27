@@ -15,7 +15,31 @@
         </div>
     </div>
 
-
+<script type="text/javascript">
+    $(function(){
+        $('#reset_possword').click(function(event) {
+            layer.confirm('是否重置用户密码？重置后会以短信的方式发送给用户！', {
+              btn: ['确定','取消'] //按钮
+            }, function(){
+                var uid = "<?php echo $member_array['member_id'];?>";
+                $.ajax({
+                    url: ADMIN_URL+'member/password_reset',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'uid': uid},
+                })   
+                .done(function(sb) {
+                     console.log(sb);
+                     if (sb.state) {
+                        layer.msg(sb.msg, {icon: 1});   
+                     }else{
+                        layer.msg(sb.msg, {icon: 2});
+                     }                     
+                 })
+            });
+        });
+    })
+</script>
     <form id="user_form" enctype="multipart/form-data" method="post">
         <input type="hidden" name="form_submit" value="ok" />
         <input type="hidden" name="member_id" value="<?php echo $member_array['member_id'];?>" />
@@ -34,8 +58,8 @@
                     <td colspan="2" class="required"><label for="member_password">{$Think.lang.member_edit_password}:</label></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" id="member_password" name="member_password" class="txt"></td>
-                    <td class="vatop tips">{$Think.lang.member_edit_password_keep}</td>
+                    <!-- <td class="vatop rowform"><input type="text" id="member_password" name="member_password" class="txt"></td> -->
+                    <td class="vatop tips"><input type="button" value="重置会员密码" class="btn btn-small" id="reset_possword" ></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="required"><label class="validation" for="member_email">{$Think.lang.member_index_email}:</label></td>
