@@ -49,14 +49,23 @@ class Member extends Model
     public function getMemberList($condition = array(), $field = '*', $page = 0, $order = 'member_id desc')
     {
         if ($page) {
-            $member_list = db('member')->where($condition)->order($order)->paginate($page,false,['query' => request()->param()]
-            );
+            $member_list = db('member')->field($field)->where($condition)
+            // ->join('__SCHOOLTYPE__ b','','LEFT')
+            ->order($order)
+            ->paginate($page,false,['query' => request()->param()]);
             $this->page_info = $member_list;
             return $member_list->items();
         }
         else {
             return db('member')->where($condition)->order($order)->select();
         }
+    }
+
+    public function ttttt($condition=array()){
+        $list = db('classtype classtype')->join('__SCHOOLTYPE__ b','classtype.sc_id=b.sc_id','LEFT')->where(array(
+            'cl_enabled'=>1
+        ))->select();
+        p($list);
     }
 
     /**

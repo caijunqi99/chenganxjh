@@ -15,10 +15,10 @@ class Sms
     public function send($mobile, $content,$tempId=198052)
     {   
 
-        return $this->sendTemplateSMS($mobile, $content,$tempId=198052);
+        return $this->sendTemplateSMS($mobile, $content,$tempId);
     }
 
-    private function sendTemplateSMS($to,$datas,$tempId=198052){
+    private function sendTemplateSMS($to,$datas,$tempId){
      // 初始化REST SDK
      $rest = new REST();
 
