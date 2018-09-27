@@ -4,15 +4,15 @@
  * 多级选择：地区选择，分类选择
  */
 
-namespace app\home\controller;
+namespace app\admin\controller;
 
 use think\Lang;
 
-class Mlselection extends BaseHome {
+class Mlselection extends AdminControl {
 
     public function _initialize() {
         parent::_initialize();
-        Lang::load(APP_PATH . 'home/lang/zh-cn/mlselection.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/mlselection.lang.php');
     }
 
     function index() {
@@ -20,12 +20,10 @@ class Mlselection extends BaseHome {
         $pid = intval(input('param.pid'));
         
         in_array($type, array('region', 'goodsclass')) or json_encode('invalid type');
-
         switch ($type) {
             case 'region':
                 $cityLevel = db('area')->field('area_id,area_deep')->where('area_id', $pid)->find();
                 $regions = db('area')->where('area_parent_id', $pid)->select();
-                // echo json_encode($regions);exit;
                 foreach ($regions as $key => $region) {
                     $result[$key]['area_name'] = htmlspecialchars($region['area_name']);
                     $result[$key]['area_id'] = $region['area_id'];
@@ -34,8 +32,20 @@ class Mlselection extends BaseHome {
                     'code' => 10000,
                     'message' => '',
                     'result' => $result,
-                    'deep'=>$cityLevel['area_deep'],
                 );
+                switch ($cityLevel['area_deep']){
+                    case 1:
+                        $seach_value = 'provinceid';
+                        break;
+                    case 2:
+                        $seach_value = 'cityid';
+                        break;
+                    case 3:
+                        $seach_value = 'areaid';
+                        break;
+                }
+                $school_list = db('school')->field('schoolid,name')->where(array($seach_value=>$pid))->select();
+                $data['school_list'] =$school_list;
                 echo json_encode($data);
                 break;
             case 'goodsclass':

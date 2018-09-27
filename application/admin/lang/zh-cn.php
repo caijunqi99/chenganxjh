@@ -29,14 +29,63 @@ $lang['ds_adminlog']               = '操作日志';
 $lang['pkgs_manage']               = '套餐管理';
 
 //组织管理
-$lang['ds_organize']               = '组织管理';
-$lang['ds_company']                = '分/子公司（代理）管理';
-$lang['ds_gadmin']                 = '角色管理（权限组）';
+$lang['ds_organize'] = '组织管理';
+$lang['ds_company'] = '分/子公司（代理）管理';
+$lang['ds_gadmin'] = '角色管理（权限组）';
+$lang['ds_number'] = '序号';
+$lang['ds_organize_name'] = '分/子(代理)公司名称';
+$lang['ds_organize_area'] = '地区';
+$lang['ds_organize_time'] = '添加/修改时间';
+$lang['ds_organize_remark'] = '备注';
+$lang['ds_organize_assign'] = '分配管理员账号';
+$lang['organize_index_title']='输入公司（代理）名称';
+$lang['organize_index_role']='公司（代理）角色';
+$lang['organize_index_company']='总公司';
+$lang['organize_index_province']='省级代理';
+$lang['organize_index_city']='市级代理';
+$lang['organize_index_special']='特约代理';
+$lang['organize_index_leading']='联系/负责人';
+$lang['organize_index_enddate']='合同截止日期';
+$lang['organize_index_remark']='备注说明';
+$lang['organize_new_enddate_null']='合同截止日期不能为空';
+$lang['organize_name_null']='公司名称不能为空';
+$lang['organize_teaching_child']='教孩订单';
+$lang['organize_personnel_name']='员工姓名';
+$lang['organize_personnel_account']='账号';
+$lang['organize_personnel_role']='所属角色';
+$lang['organize_schoolnum_name']='学校名称';
+$lang['organize_schoolnum_city']='所在城市';
+$lang['organize_schoolnum_num']='累计发展学校总数';
+$lang['organize_camera_num']='累计摄像头个数';
+$lang['organize_camera_name']='摄像头名称';
+$lang['organize_camera_position']='所在位置';
+$lang['organize_camera_school']='所在学校名称';
+$lang['organize_membernum_num']='所属会员数';
+$lang['organize_membernum_name']='会员登录名称';
+$lang['organize_membernum_school']='所属学校名称';
+$lang['organize_membernum_class']='所属班级';
+$lang['organize_membernum_area']='所在区域';
+$lang['organize_studentnum_num']='绑定学生数';
+$lang['organize_studentnum_name']='绑定学生姓名';
+$lang['organize_studentnum_names']='所属会员登录名称';
+$lang['co_organize_succ']              = '分配成功';
 
 //学校管理
-$lang['ds_school']                 = '学校管理';
-$lang['ds_classes']                = '班级管理';
-$lang['ds_student']                = '学生管理';
+$lang['ds_school'] = '学校管理';
+$lang['ds_classes'] = '班级管理';
+$lang['ds_student'] = '学生管理';
+$lang['ds_schoolapply'] = '学校申请审核';
+$lang['school_time'] = '更新时间';
+$lang['school_province'] = '省';
+$lang['school_city'] = '市';
+$lang['school_area'] = '区';
+$lang['school_id'] = '序号';
+$lang['school_name'] = '学校名称';
+$lang['school_region'] = '地区';
+$lang['school_cratetime'] = '添加/修改时间';
+$lang['school_operation'] = '操作';
+$lang['school_desc'] = '备注';
+$lang['ds_addstudent'] = '添加学生';
 
 //会员
 $lang['ds_member']                 = '会员/家长管理';
@@ -320,26 +369,27 @@ $lang['ds_default']                = '默认';
 
 //操作提示
 
-$lang['ds_common_op_succ']      = '操作成功';
-$lang['ds_common_op_fail']      = '操作失败';
-$lang['ds_common_del_succ']     = '删除成功';
-$lang['ds_common_del_fail']     = '删除失败';
-$lang['ds_common_save_succ']    = '保存成功';
-$lang['ds_common_save_fail']    = '保存失败';
-$lang['ds_succ']                = '成功';
-$lang['ds_fail']                = '失败';
+$lang['ds_common_op_succ'] = '操作成功';
+$lang['ds_common_op_fail'] = '操作失败';
+$lang['ds_common_del_succ'] = '删除成功';
+$lang['ds_common_del_fail'] = '删除失败';
+$lang['ds_common_save_succ'] = '保存成功';
+$lang['ds_common_save_fail'] = '保存失败';
+$lang['ds_succ'] = '成功';
+$lang['ds_fail'] = '失败';
 
-$lang['ds_add']                 = '添加';
-$lang['ds_new']                 = '新增';
-$lang['ds_update']              = '更新';
-$lang['ds_edit']                = '编辑';
-$lang['ds_del']                 = '删除';
-$lang['ds_down_member']         = '查看所属人员';
+$lang['ds_add'] = '添加';
+$lang['ds_new'] = '新增';
+$lang['ds_update'] = '更新';
+$lang['ds_edit'] = '编辑';
+$lang['ds_del'] = '删除';
+$lang['ds_view'] = '查看';
+$lang['ds_down_member'] = '查看所属人员';
 
-$lang['ds_cut']                 = '裁剪';
-$lang['download_lang']          = '数据分段下载';
+$lang['ds_cut'] = '裁剪';
+$lang['download_lang'] = '数据分段下载';
 
-$lang['order_log_cancel']       = '取消了订单';
+$lang['order_log_cancel'] = '取消了订单';
 $lang['order_log_receive_paye'] = '收到了货款';
 
 $lang['ds_assign_right']        = '<br/><br/>您不具备进行该操作的权限';
