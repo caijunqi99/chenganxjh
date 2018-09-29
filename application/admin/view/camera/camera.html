@@ -100,36 +100,6 @@
             </tr>
             </thead>
             <tbody id="html">
-            <!--<?php if(!empty($list) && is_array($list)){ ?>
-                <?php foreach($list as $k => $v){ ?>
-                <tr class="hover">
-                    <td class="align-center"><?php echo $v['camera_name'];?></td>
-                    <td class="align-center"><?php echo $v['class_area'];?></td>
-                    <td class="align-center"><?php if($v['is_public_area'] == 1){echo '是';}else{echo '否';}?></td>
-                    <td class="align-center"><?php echo $v['school_name'];?></td>
-                    <td class="align-center"><?php echo $v['address']; ?></td>
-                    <td class="align-center"><?php echo $v['sq_time'] ? date('Y-m-d H:i:s',$v['sq_time']) : lang('admin_index_login_null'); ?></td>
-                    <td class="align-center"><?php echo $v['sn']; ?></td>
-                    <td class="align-center"><?php echo $v['key']; ?></td>
-                    <td class="align-center"><?php echo $v['agent_name']; ?></td>
-                    <td class="align-center"><?php echo $v['content']; ?></td>
-                    <td class="w150 align-center">
-                        <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.look_camera_sb_bd}</a>
-                            <?php if($v['status'] = 2){?>
-                                <a href="javascript:void(0)" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.look_camera_status_wait}</a>
-                            <?php }else if($v['status'] = 1){?>
-                                <a href="javascript:void(0)" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.look_camera_status_true}</a>
-                            <?php }?>
-                        </div>
-                    </td>
-                </tr>
-                <?php } ?>
-            <?php }else { ?>
-                <tr class="no_data">
-                    <td colspan="11">{$Think.lang.ds_no_record}</td>
-                </tr>
-            <?php } ?>-->
             </tbody>
         </table>
         <div style="float: right;">

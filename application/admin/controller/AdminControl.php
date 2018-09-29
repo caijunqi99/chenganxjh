@@ -58,7 +58,6 @@ class AdminControl extends Controller {
     public function setMenuList() {
         $menu_list = $this->menuList();
 
-
         $menu_list=$this->parseMenu($menu_list);
         $this->assign('menu_list', $menu_list);
     }
@@ -318,13 +317,16 @@ class AdminControl extends Controller {
                             $_limit[$key]['child'][$k]['act'] = ucfirst($v['name']);
                             $_limit[$key]['child'][$k]['action'] = explode(',',$_limit[$key]['child'][$k]['action']);
                             if(!empty($_limit[$key]['child'][$k]['action'])){
-                                $actions= db('actions')->where("actid in ($v[action])")->select();
                                 $array = array();
-                                foreach ($actions as $kk=>$vv){
-                                    $array['id']=$vv['actid'];
-                                    $array['actname']=$this->get_action($vv['actname']);
-                                    $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                if(!empty($v['action'])){
+                                    $actions= db('actions')->where("actid in ($v[action])")->select();
+                                    foreach ($actions as $kk=>$vv){
+                                        $array['id']=$vv['actid'];
+                                        $array['actname']=$this->get_action($vv['actname']);
+                                        $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -408,7 +410,7 @@ class AdminControl extends Controller {
      * @time 2018/09/18
      */
     function get_permid($class_name){
-        $result = db('perms')->field('permid')->where(" name='$class_name' AND pid !=0")->find();
+        $result = db('perms')->field('permid')->where(" name='$class_name' AND pid !=0 AND status=1")->find();
         $permsid = '';
         if(!empty($result['permid'])){
             $permsid = $result['permid'];

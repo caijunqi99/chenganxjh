@@ -15,7 +15,11 @@ class Monitor extends AdminControl
         $province = db('area')->field('area_id,area_parent_id,area_name')->where('area_parent_id=0')->select();
         //获取学校
         $school = db('school')->field('schoolid,name')->select();
-
+//获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
 
         $this->assign('school',$school);
         $this->assign('province',$province);
@@ -27,7 +31,9 @@ class Monitor extends AdminControl
      * @time 20180926
      */
     public function monitor(){
-
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
 
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');

@@ -117,6 +117,7 @@ class Gadmin extends AdminControl {
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
                 $gid = intval($this->admin_info['admin_gid']);
+//                halt($gid);
                 $ginfo = db('gadmin')->where('gid', $gid)->find();
                 if (empty($ginfo)) {
                     $this->error(lang('admin_set_admin_not_exists'));

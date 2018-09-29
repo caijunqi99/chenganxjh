@@ -13,6 +13,7 @@ class Admin extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
+//        halt($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
@@ -21,7 +22,7 @@ class Admin extends AdminControl {
      * 管理员列表
      */
     public function admin() {
-        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];

@@ -12,12 +12,15 @@ class Camera extends AdminControl
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/look.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
         //获取省份
         $province = db('area')->field('area_id,area_parent_id,area_name')->where('area_parent_id=0')->select();
         //获取学校
         $school = db('school')->field('schoolid,name')->select();
-
-
         $this->assign('school',$school);
         $this->assign('province',$province);
     }
@@ -28,7 +31,9 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function camera(){
-
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $where = ' status=2 ';
         if(!empty($_GET)){
             if(!empty($_GET['name'])){
@@ -153,7 +158,9 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function download(){
-
+        if(session('admin_is_super') !=1 && !in_array('8',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $this->setAdminCurItem('camera');
         return $this->fetch('download');
     }
@@ -164,7 +171,9 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function excelTrue(){
-
+        if(session('admin_is_super') !=1 && !in_array('8',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
 
         $this->setAdminCurItem('camera');
         return $this->fetch('excelTrue');
@@ -176,7 +185,9 @@ class Camera extends AdminControl
      * @time 20180928
      */
     public function insert_excel(){
-
+        if(session('admin_is_super') !=1 && !in_array('8',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
 //        halt($_SESSION['excel']);
         if(!empty($_SESSION['excel'])){
             $excel = $_SESSION['excel']['excel_data'];
@@ -224,7 +235,9 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
-
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $where = ' status=1 ';
         if(!empty($_GET)){
             if(!empty($_GET['name'])){
