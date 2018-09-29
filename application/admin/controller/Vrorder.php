@@ -16,58 +16,35 @@ class Vrorder extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/vrorder.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
     }
 
     public function index() {
         $model_vr_order = Model('vrorder');
         $condition = array();
-
-        $order_sn = input('get.order_sn');
-        if ($order_sn) {
-            $condition['order_sn'] = $order_sn;
-        }
-        $store_name = input('get.store_name');
-        if ($store_name) {
-            $condition['store_name'] = $store_name;
-        }
-        $order_state = input('get.order_state');
-        if (!empty($order_state)) {
-            $condition['order_state'] = intval($order_state);
-        }
-        $payment_code = input('get.payment_code');
-        if ($payment_code) {
-            $condition['payment_code'] = $payment_code;
-        }
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
             $condition['buyer_name'] = $buyer_name;
         }
-        $query_start_time = input('get.query_start_time');
-        $query_end_time = input('get.query_end_time');
-        $if_start_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_start_time);
-        $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
-        $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
-        $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
-        if ($start_unixtime || $end_unixtime) {
-            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        $order_state = input('get.order_state');
+        if ($order_state!="") {
+            $condition['order_state'] = intval($order_state);
         }
-        $order_list = $model_vr_order->getOrderList($condition, 30);
-
-        foreach ($order_list as $k => $order_info) {
-            //显示取消订单
-            $order_list[$k]['if_cancel'] = $model_vr_order->getOrderOperateState('system_cancel', $order_info);
-            //显示收到货款
-            $order_list[$k]['if_system_receive_pay'] = $model_vr_order->getOrderOperateState('system_receive_pay', $order_info);
+        $payment_code = input('get.payment_code');
+        if (!empty($payment_code)) {
+            $condition['payment_code'] = $payment_code;
         }
-
-        //显示支付接口列表(搜索)
-        $payment_list = Model('payment')->getPaymentOpenList();
-        $this->assign('payment_list', $payment_list);
-
+        $order_list = $model_vr_order->getOrderList($condition, 15);
+        foreach ($order_list as $key=>$item) {
+            $studentinfo = db('student')->where(array('s_id'=>$item['student_id']))->find();
+            $order_list[$key]['student_name'] = $studentinfo['s_name'];
+        }
+        $payment = db('payment')->select();
+        $this->assign('payment', $payment);
         $this->assign('order_list', $order_list);
         $this->assign('show_page', $model_vr_order->page_info->render());
         $this->setAdminCurItem('index');
-        return $this->fetch('vr_order_index');
+        return $this->fetch();
     }
 
     /**

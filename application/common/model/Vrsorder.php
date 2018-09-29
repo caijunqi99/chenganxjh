@@ -4,7 +4,7 @@ namespace app\common\model;
 
 use think\Model;
 
-class Vrorder extends Model {
+class Vrsorder extends Model {
     public $page_info;
     /**
      * 取单条订单信息
@@ -13,7 +13,7 @@ class Vrorder extends Model {
      * @return unknown
      */
     public function getOrderInfo($condition = array(), $fields = '*', $master = false) {
-        $order_info = db('vrorder')->field($fields)->where($condition)->master($master)->find();
+        $order_info = db('x_packagesorder')->field($fields)->where($condition)->master($master)->find();
         if (empty($order_info)) {
             return array();
         }
@@ -33,7 +33,7 @@ class Vrorder extends Model {
      * @return int 返回 insert_id
      */
     public function addOrder($data) {
-        $insert = db('vrorder')->insertGetId($data);
+        $insert = db('x_packagesorder')->insertGetId($data);
         return $insert;
     }
 
@@ -44,7 +44,7 @@ class Vrorder extends Model {
      * @param array $condition
      */
     public function editOrder($data, $condition, $limit = '') {
-        return db('vrorder')->where($condition)->limit($limit)->update($data);
+        return db('x_packagesorder')->where($condition)->limit($limit)->update($data);
     }
 
     /**
@@ -57,11 +57,21 @@ class Vrorder extends Model {
      */
     public function getOrderList($condition, $pagesize = '', $field = '*', $order = 'order_id desc', $limit = '') {
         if($pagesize){
-            $list = db('order')->field($field)->where($condition)->order($order)->limit($limit)->paginate($pagesize,false,['query' => request()->param()]);
+            $list = db('x_packagesorder')->field($field)->where($condition)->order($order)->limit($limit)->paginate($pagesize,false,['query' => request()->param()]);
             $this->page_info = $list;
             $list = $list->items();
         }else{
-            $list = db('order')->field($field)->where($condition)->order($order)->limit($limit)->select();
+            $list = db('x_packagesorder')->field($field)->where($condition)->order($order)->limit($limit)->select();
+        }
+        if (empty($list))
+            return array();
+        foreach ($list as $key => $order) {
+            if (isset($order['order_state'])) {
+                list($list[$key]['state_desc'], $list[$key]['order_state_text']) = $this->_orderState($order['order_state']);
+            }
+            if (isset($order['payment_code'])) {
+                $list[$key]['payment_name'] = orderPaymentName($order['payment_code']);
+            }
         }
 
         return $list;
