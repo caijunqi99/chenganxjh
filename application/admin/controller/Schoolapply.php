@@ -223,31 +223,9 @@ class Schoolapply extends AdminControl {
             array(
                 'name' => 'member',
                 'text' => '管理',
-                'url' => url('Admin/School/member')
+                'url' => url('Admin/Schoolapply/index')
             ),
         );
-
-        if (request()->action() == 'add' || request()->action() == 'member') {
-            $menu_array[] = array(
-                'name' => 'add',
-                'text' => '添加学校',
-                'url' => url('Admin/School/add')
-            );
-        }
-        if (request()->action() == 'edit') {
-            $menu_array[] = array(
-                'name' => 'edit',
-                'text' => '编辑',
-                'url' => url('Admin/School/edit')
-            );
-        }
-        if (request()->action() == 'addclass') {
-            $menu_array[] = array(
-                'name' => 'addclass',
-                'text' => '添加班级',
-                'url' => url('Admin/School/addclass')
-            );
-        }
         return $menu_array;
     }
 
