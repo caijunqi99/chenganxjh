@@ -107,7 +107,9 @@
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_status}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action))){?>
             <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php } ?>
         </tr>
         <tbody>
         <?php if(!empty($student_list) && is_array($student_list)){ ?>
@@ -124,9 +126,15 @@
             <td class="align-center"><?php if(empty($v['s_ownerAccount'])){echo "未绑定";}else{echo "已绑定";} ?></td>
             <td class="align-center"><?php echo $v['s_remark']; ?></td>
             <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('4',$action)){ ?>
                 <a href="javascript:dd({$v.s_id})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <a href="{:url('/admin/student/edit',['student_id'=>$v.s_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
                 <a href="{:url('/admin/student/drop',['student_id'=>$v.s_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <?php } ?>
             </td>
         </tr>
         <?php } ?>

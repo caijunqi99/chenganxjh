@@ -10,12 +10,25 @@ class Classes extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('Classes');
         $condition = array();
-
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+        }
         $classname = input('param.school_index_classname');//学校名称
         if ($classname) {
             $condition['classname'] = array('like', "%" . $classname . "%");
@@ -85,7 +98,9 @@ class Classes extends AdminControl {
     }
 
     public function add() {
-
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         if (!request()->isPost()) {
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
@@ -137,6 +152,9 @@ class Classes extends AdminControl {
     }
 
     public function edit() {
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $class_id = input('param.class_id');
         if (empty($class_id)) {
             $this->error(lang('param_error'));
@@ -196,12 +214,16 @@ class Classes extends AdminControl {
     }
 
     public function addstudent(){
+        if(session('admin_is_super') !=1 && !in_array(11,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $class_id = input('get.class_id');
         if (!request()->isPost()) {
             $this->setAdminCurItem('addstudent');
             $this->assign('class_id', $class_id);
             return $this->fetch();
         } else {
+            $admininfo = $this->getAdminInfo();
             $model_student = model('Student');
             $data = array(
                 's_name' => input('post.student_name'),
@@ -209,6 +231,7 @@ class Classes extends AdminControl {
                 's_birthday' => input('post.student_birthday'),
                 's_card' => input('post.student_idcard'),
                 's_remark' => input('post.student_desc'),
+                'option_id' => $admininfo['admin_id'],
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
             $classinfo = db('class')->where('classid',$class_id)->find();
@@ -259,6 +282,9 @@ class Classes extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $class_id = input('param.class_id');
         if (empty($class_id)) {
             $this->error(lang('param_error'));
@@ -287,14 +313,16 @@ class Classes extends AdminControl {
                 'url' => url('Admin/Classes/index')
             ),
         );
-
-        if (request()->action() == 'add' || request()->action() == 'index') {
-            $menu_array[] = array(
-                'name' => 'add',
-                'text' => '添加班级',
-                'url' => url('Admin/Classes/add')
-            );
+        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+            if (request()->action() == 'add' || request()->action() == 'index') {
+                $menu_array[] = array(
+                    'name' => 'add',
+                    'text' => '添加班级',
+                    'url' => url('Admin/Classes/add')
+                );
+            }
         }
+
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',

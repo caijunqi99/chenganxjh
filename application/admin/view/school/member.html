@@ -88,7 +88,9 @@
             <!--<th class="align-center">{$Think.lang.school_index_username}</th>-->
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('10',$action) || in_array('6',$action))){?>
             <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php }?>
         </tr>
         <tbody>
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
@@ -105,11 +107,21 @@
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('4',$action)){ ?>
                 <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
                 <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('10',$action)){ ?>
                 <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_add}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('6',$action)){ ?>
                 <a href="javascript:jia({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_organize_assign}</a>
+                <?php } ?>
             </td>
         </tr>
         <?php } ?>

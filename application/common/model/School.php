@@ -40,8 +40,7 @@ class School extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid desc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('school')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
-        //$sql =  db('school')->getlastsql();
+        $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
