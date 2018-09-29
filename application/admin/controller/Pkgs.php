@@ -27,7 +27,7 @@ class Pkgs extends AdminControl {
             $condition = array();
             $orderby = '';
             $search_name = trim(input('get.search_name'));
-            if (input('get.pkg_type')==1) {
+            if (input('param.pkg_type',1)==1) {
                 $condition['pkg_type']= 1;
                 $this->setAdminCurItem('witch_manage');
             }else{

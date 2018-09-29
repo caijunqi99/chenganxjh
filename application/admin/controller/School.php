@@ -155,16 +155,17 @@ class School extends AdminControl {
             $this->setAdminCurItem('addclass');
             return $this->fetch();
         } else {
+            $admininfo = $this->getAdminInfo();
             $model_class = model('Classes');
             $data = array(
                 'schoolid' => $school_id,
                 'typeid' => input('post.school_type'),
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
+                'option_id' => $admininfo['admin_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
             $schoolinfo = $model_school->find(array("schoolid"=>$school_id));
-            //$data['schoolid'] = $schoolinfo['schoolid'];
             $data['school_provinceid'] = $schoolinfo['provinceid'];
             $data['school_cityid'] = $schoolinfo['cityid'];
             $data['school_areaid'] = $schoolinfo['areaid'];
@@ -277,6 +278,10 @@ class School extends AdminControl {
         $school_id = input('param.school_id');
         if (empty($school_id)) {
             $this->error(lang('param_error'));
+        }
+        $classes = db('class')->where(['schoolid'=>$school_id,'isdel'=>1])->limit(1)->find();
+        if($classes){
+            $this->error('该学校下存在正在使用的班级，不能删除，请将使用的班级移除后进行删除');
         }
         $model_school = Model('school');
         $result = $model_school->editSchool(array('isdel'=>2),array('schoolid'=>$school_id));

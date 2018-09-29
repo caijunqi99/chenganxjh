@@ -6,7 +6,7 @@
  * Time: 20:21
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Memberfeedback extends MobileMember

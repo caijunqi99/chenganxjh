@@ -3,7 +3,7 @@
  * 公众号行为处理
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 use app\mobile\controller\WechatApi;
 
 class Wechat

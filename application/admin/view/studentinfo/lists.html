@@ -17,7 +17,7 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>共有绑定账号：<?php echo count($student_list); ?>人。</li>
+            <li>共有绑定账号：<?php echo count($member); ?>人。</li>
         </ul>
     </div>
     <table class="ds-default-table">
@@ -29,13 +29,17 @@
             <th class="align-center">{$Think.lang.school_index_desc}</th>
         </tr>
         <tbody>
-        <?php if(!empty($student_list) && is_array($student_list)){ ?>
-        <?php foreach($student_list as $k => $v){ ?>
+        <?php if(!empty($member)){ ?>
+        <?php foreach($member as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['s_id']; ?></td>
-            <td class="align-center"><?php echo $v['s_id']; ?></td>
-            <td class="align-center"><?php echo $v['s_createtime']; ?></td>
-            <td class="align-center"><?php echo $v['s_remark']; ?></td>
+            <td class="align-center">{$v.member_id}</td>
+            <td class="align-center">{$v.member_name}</td>
+            <td class="align-center">{$v.member_add_time}</td>
+            <?php if($k==0){ ?>
+            <td class="align-center">绑定主账号(家长)</td>
+            <?php }else{ ?>
+            <td class="align-center">绑定副账号<?php if($v['member_desc']!=""){echo "(".$v['member_desc'].")";} ?></td>
+            <?php } ?>
         </tr>
         <?php } ?>
         <?php }else { ?>

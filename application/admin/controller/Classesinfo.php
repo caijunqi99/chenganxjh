@@ -36,26 +36,22 @@ class Classesinfo extends AdminControl {
         $condition['s_classid'] = input('param.class_id');
         $condition['s_del'] = 1;
         $student_list = $model_student->getStudentList($condition, 10);
+        //家长主账号
+        foreach ($student_list as $key=>$item) {
+            $memberinfo = db('member')->where(array('member_id'=>$item['s_ownerAccount']))->find();
+            $student_list[$key]['member'] = $memberinfo['member_name'];
+        }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
-//        //学校类型
-//        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-//        $this->assign('schooltype', $schooltype);
         $this->setAdminCurItem('lists');
         return $this->fetch();
     }
 
     public function camera() {
-        $model_class = model('Classes');
-        $condition = array();
-        $condition['schoolid'] = input('param.school_id');
-        $condition['isdel'] = 1;
-        $class_list = $model_class->getClasslList($condition, 10);
-        $this->assign('page', $model_class->page_info->render());
-        $this->assign('class_list', $class_list);
-        //学校类型
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-        $this->assign('schooltype', $schooltype);
+        $class_id = input('param.class_id');
+        $cameraList = db('camera')->where(array('class_id'=>$class_id))->select();
+        //$this->assign('page', $model_class->page_info->render());
+        $this->assign('camera_list', $cameraList);
         $this->setAdminCurItem('camera');
         return $this->fetch();
     }

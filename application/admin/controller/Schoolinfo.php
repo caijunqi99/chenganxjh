@@ -22,7 +22,15 @@ class Schoolinfo extends AdminControl {
         $this->assign('school_array', $school_array);
         //学校类型
         $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-        $this->assign('schooltype', $schooltype);
+        $typeids = explode(',',$school_array['typeid']);
+        foreach ($schooltype as $k=>$v){
+            foreach ($typeids as $key=>$item){
+                if($item ==$v['sc_id']){
+                    $type[$item] = $v['sc_type'];
+                }
+            }
+        }
+        $this->assign('schooltype', $type);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -36,6 +44,11 @@ class Schoolinfo extends AdminControl {
         //学校类型
         $schooltype = db('schooltype')->where('sc_enabled','1')->select();
         $this->assign('schooltype', $schooltype);
+        //操作人
+        foreach ($class_list as $key=>$item) {
+            $admininfo = db('admin')->where(['admin_id'=>$item['option_id']])->find();
+            $class_list[$key]['option_name'] = $admininfo['admin_name'];
+        }
         $this->assign('page', $model_class->page_info->render());
         $this->assign('class_list', $class_list);
         $this->setAdminCurItem('list');
@@ -43,16 +56,11 @@ class Schoolinfo extends AdminControl {
     }
 
     public function camera() {
-        $model_class = model('Classes');
-        $condition = array();
-        $condition['schoolid'] = input('param.school_id');
-        $condition['isdel'] = 1;
-        $class_list = $model_class->getClasslList($condition, 10);
-        $this->assign('page', $model_class->page_info->render());
-        $this->assign('class_list', $class_list);
-        //学校类型
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-        $this->assign('schooltype', $schooltype);
+        $schoolid = input('param.school_id');
+        $cameraList = db('camera')->where(array('school_id'=>$schoolid))->select();
+        //print_r($cameraList);die;
+        //$this->assign('page', $model_class->page_info->render());
+        $this->assign('cameraList', $cameraList);
         $this->setAdminCurItem('camera');
         return $this->fetch();
     }
@@ -76,7 +84,7 @@ class Schoolinfo extends AdminControl {
             ),
             array(
                 'name' => 'camera',
-                'text' => '班级所属的摄像头',
+                'text' => '摄像头个数',
                 'url' => url('Admin/Schoolinfo/camera',array('school_id'=>$schoolid))
             ),
         );

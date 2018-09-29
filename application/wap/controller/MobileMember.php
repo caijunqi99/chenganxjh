@@ -1,6 +1,6 @@
 <?php
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 class MobileMember extends MobileHome {
 

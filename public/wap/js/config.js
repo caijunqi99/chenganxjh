@@ -3,7 +3,7 @@ var si=Domain.indexOf('wap');
 var SiteDomain =Domain.substring(7,si-1);
 var http = 'https:' == document.location.protocol ? 'https://': 'http://';
 var SiteUrl = http+SiteDomain+"/index.php/home";
-var ApiUrl = http+SiteDomain+"/index.php/mobile";
+var ApiUrl = http+SiteDomain+"/index.php/wap";
 var pagesize = 10;
 var WapSiteUrl = http+SiteDomain+"/wap";
 var IOSSiteUrl = http+SiteDomain+"/app.ipa";

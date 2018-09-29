@@ -3,7 +3,7 @@
  * 微信相关接口
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Wxauto extends MobileMember

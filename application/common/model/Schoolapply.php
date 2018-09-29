@@ -20,8 +20,8 @@ class Schoolapply extends Model {
         return $school_info;
     }
 
-    public function getSchoolById($id){
-        return db('school')->where('schoolid',$id)->find();
+    public function getSchoolapplyById($id){
+        return db('schoolapply')->where('applyid',$id)->find();
     }
 
 
