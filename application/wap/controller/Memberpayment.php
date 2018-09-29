@@ -1,6 +1,6 @@
 <?php
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 use think\Lang;
 
@@ -13,7 +13,7 @@ class Memberpayment extends MobileMember
     public function _initialize()
     {
         parent::_initialize();
-        Lang::load(APP_PATH . 'mobile\lang\zh-cn\memberpayment.lang.php');
+        Lang::load(APP_PATH . 'wap\lang\zh-cn\memberpayment.lang.php');
 
         if (request()->action() != 'payment_list' && !input('param.payment_code')) {
             $payment_code = 'alipay';

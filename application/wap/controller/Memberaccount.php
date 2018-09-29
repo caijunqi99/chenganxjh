@@ -6,7 +6,7 @@
  * Time: 20:14
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Memberaccount extends MobileMember

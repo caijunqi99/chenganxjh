@@ -6,7 +6,7 @@
  * Time: 20:12
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Logout extends MobileMember

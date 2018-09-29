@@ -6,7 +6,7 @@
  * Time: 20:31
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Membersignin extends MobileMember
