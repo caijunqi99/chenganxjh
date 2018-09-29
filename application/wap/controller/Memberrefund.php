@@ -6,7 +6,7 @@
  * Time: 20:29
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Memberrefund extends MobileMember

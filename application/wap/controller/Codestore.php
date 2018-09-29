@@ -3,7 +3,7 @@
  * 二维码
  * */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Codestore

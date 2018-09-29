@@ -3,7 +3,7 @@
  * 公众号管理
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
  final class WechatApi
 {

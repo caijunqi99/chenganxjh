@@ -6,7 +6,7 @@
  * Time: 20:35
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Payment extends MobileMall

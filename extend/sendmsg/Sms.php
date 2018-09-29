@@ -18,13 +18,15 @@ class Sms
         return $this->sendTemplateSMS($mobile, $content,$tempId);
     }
 
-    private function sendTemplateSMS($to,$datas,$tempId){
+    private function sendTemplateSMS($mobile,$datas,$tempId){
      // 初始化REST SDK
      $rest = new REST();
 
      // 发送模板短信
      $datas=array($datas);
-     $result = $rest->sendTemplateSMS($to,$datas,$tempId);
+     
+     $result = $rest->sendTemplateSMS($mobile,$datas,$tempId);
+
      if($result == NULL ) {
         return false;
          // echo "result error!";
