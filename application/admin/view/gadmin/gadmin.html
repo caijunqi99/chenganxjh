@@ -49,24 +49,15 @@
                 <td><?php echo $v['gname'];?></td>
                 <td class="w150 align-center">
                     <div class="layui-table-cell laytable-cell-9-10">
-                        <?php if(session('admin_is_super') == 1){?>
-                            <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}" class="layui-btn layui-btn-normal layui-btn-sm" style="line-height: 30px" lay-event="edit">{$Think.lang.ds_edit}</a>
-                            <?php if(!in_array($v['gid'],array(1,2,3,4,8))){?>
-                                <a href="javascript:void(0)" onclick="return del('<?php echo $v[gname];?>','<?php echo $v[gid];?>');" class="layui-btn layui-btn-danger layui-btn-sm"  style="line-height: 30px" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
-                            <?php }?>
-                            <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}" class="layui-btn layui-btn-warm layui-btn-sm"  style="line-height: 30px" lay-event="edit">{$Think.lang.ds_down_member}</a>
-
-                        <?php }else{?>
-                            <?php if(in_array(3,$action)){?>
+                            <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
                                 <a href="{:url('/Admin/Gadmin/gadmin_set',['gid'=>$v.gid])}" class="layui-btn layui-btn-normal layui-btn-sm" style="line-height: 30px" lay-event="edit">{$Think.lang.ds_edit}</a>
                             <?php }?>
-                            <?php if(in_array(2,$action) && !in_array($v['gid'],array(1,2,3,4,8))){?>
+                            <?php if((session('admin_is_super') == 1 || in_array(2,$action)) && !in_array($v['gid'],array(1,2,3,4,8))){?>
                                 <a href="javascript:void(0)" onclick="return del('<?php echo $v[gname];?>','<?php echo $v[gid];?>');" class="layui-btn layui-btn-danger layui-btn-sm"  style="line-height: 30px" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
                             <?php }?>
-                            <?php if(in_array(5,$action)){?>
+                            <?php if(session('admin_is_super') == 1 || in_array(5,$action)){?>
                                 <a href="{:url('/Admin/Gadmin/gadmin_member',['gid'=>$v.gid])}" class="layui-btn layui-btn-warm layui-btn-sm"  style="line-height: 30px" lay-event="edit">{$Think.lang.ds_down_member}</a>
                             <?php }?>
-                        <?php }?>
                     </div>
                     <!--{$Think.lang.gadmin_del_confirm}-->
 

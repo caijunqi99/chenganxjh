@@ -112,7 +112,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_add() {
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error(lang('gadmin_no_perms'));
+            $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
@@ -182,8 +182,8 @@ class Gadmin extends AdminControl {
      * 设置权限组权限
      */
     public function gadmin_set() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error(lang('gadmin_no_perms'));
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
         }
         $gid = intval(input('param.gid'));
         $ginfo = db('gadmin')->where('gid', $gid)->find();
@@ -254,7 +254,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_del() {
         if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
-            $this->error(lang('gadmin_no_perms'));
+            $this->error(lang('ds_assign_right'));
         }
         if (is_numeric(input('param.gid'))) {
             if(!in_array(intval(input('param.gid')),array(1,2,3,4,8))){
@@ -284,7 +284,7 @@ class Gadmin extends AdminControl {
      */
     public function gadmin_member(){
         if(session('admin_is_super') !=1 && !in_array(5,$this->action )){
-            $this->error(lang('gadmin_no_perms'));
+            $this->error(lang('ds_assign_right'));
         }
         $gid = intval(input('param.gid'));
 
@@ -300,18 +300,28 @@ class Gadmin extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        $menu_array = array(
-            array(
-                'name' => 'gadmin',
-                'text' => '权限组',
-                'url' => url('Admin/Gadmin/gadmin')
-            ),
-            array(
-                'name' => 'gadmin_add',
-                'text' => '添加权限组',
-                'url' => url('Admin/Gadmin/gadmin_add')
-            ),
-        );
+        if(session('admin_is_super') ==1 || in_array('1',$this->action)) {
+            $menu_array = array(
+                array(
+                    'name' => 'gadmin',
+                    'text' => '权限组',
+                    'url' => url('Admin/Gadmin/gadmin')
+                ),
+                array(
+                    'name' => 'gadmin_add',
+                    'text' => '添加权限组',
+                    'url' => url('Admin/Gadmin/gadmin_add')
+                ),
+            );
+        }else{
+            $menu_array = array(
+                array(
+                    'name' => 'gadmin',
+                    'text' => '权限组',
+                    'url' => url('Admin/Gadmin/gadmin')
+                ),
+            );
+        }
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',

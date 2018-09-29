@@ -104,16 +104,23 @@
                         <?php if($v['admin_is_super']){?>
                             <a class="layui-btn layui-btn-disabled layui-btn-sm" >{$Think.lang.admin_index_sys_admin_no}</a>
                         <?php }else{?>
-                        <?php if($v['admin_status'] == 1){?>
-                            <a class="layui-unselect layui-form-checkbox layui-form-checked" onclick="return close_status('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');"><span>{$Think.lang.admin_index_status_on}</span><i class="layui-icon layui-icon-ok"></i></a>
-                        <?php }else if($v['admin_status'] == -1){?>
-                            <a class="layui-unselect layui-form-checkbox" onclick="return open_status('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');"><i class="layui-icon layui-icon-ok"></i><span>{$Think.lang.admin_index_status_off}</span></a>
+                        <?php if(session('admin_is_super')==1 || in_array('13',$action)){?>
+                            <?php if($v['admin_status'] == 1){?>
+                                <a class="layui-unselect layui-form-checkbox layui-form-checked" onclick="return close_status('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');"><span>{$Think.lang.admin_index_status_on}</span><i class="layui-icon layui-icon-ok"></i></a>
+                            <?php }else if($v['admin_status'] == -1){?>
+                                <a class="layui-unselect layui-form-checkbox" onclick="return open_status('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');"><i class="layui-icon layui-icon-ok"></i><span>{$Think.lang.admin_index_status_off}</span></a>
+                            <?php }?>
                         <?php }?>
-                        <a href="{:url('/Admin/admin/admin_edit',['admin_id'=>$v.admin_id])}" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">{$Think.lang.ds_edit}</a>
+                        <?php if(session('admin_is_super')==1 || in_array('3',$action)){?>
+                            <a href="{:url('/Admin/admin/admin_edit',['admin_id'=>$v.admin_id])}" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">{$Think.lang.ds_edit}</a>
+                        <?php }?>
+                        <?php if(session('admin_is_super')==1 || in_array('2',$action)){?>
                         <a href="javascript:void(0)" onclick="return del('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
+                        <?php }?>
+                        <?php if(session('admin_is_super')==1 || in_array('12',$action)){?>
                         <a href="javascript:void(0)" onclick="return reset_pwd('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.admin_index_reset_password}</a>
                         <?php }?>
-
+                        <?php }?>
                     </div>
                 </td>
             </tr>
