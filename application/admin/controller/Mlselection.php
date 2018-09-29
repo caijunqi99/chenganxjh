@@ -64,6 +64,33 @@ class Mlselection extends AdminControl {
                 );
                 echo json_encode($data);
                 break;
+            case 'schoolname':
+                $cityLevel = db('area')->field('area_id,area_deep')->where('area_id', $pid)->find();
+                $regions = db('area')->where('area_parent_id', $pid)->select();
+                foreach ($regions as $key => $region) {
+                    $result[$key]['area_name'] = htmlspecialchars($region['area_name']);
+                    $result[$key]['area_id'] = $region['area_id'];
+                }
+                $data = array(
+                    'code' => 10000,
+                    'message' => '',
+                    'result' => $result,
+                );
+                switch ($cityLevel['area_deep']){
+                    case 1:
+                        $seach_value = 'provinceid';
+                        break;
+                    case 2:
+                        $seach_value = 'cityid';
+                        break;
+                    case 3:
+                        $seach_value = 'areaid';
+                        break;
+                }
+                $school_list = db('schoolapply')->field('applyid,schoolname')->where(array($seach_value=>$pid))->select();
+                $data['school_list'] =$school_list;
+                echo json_encode($data);
+                break;
         }
     }
 

@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection_list.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection_apply.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
@@ -64,11 +64,11 @@
                        </select>
                    </td>
 
-                   <td id="class_list">
-                       <select name="class_name" >
-                           <option value="">{$Think.lang.school_index_classname}</option>
-                       </select>
-                   </td>
+                   <!--<td id="class_list">-->
+                       <!--<select name="class_name" >-->
+                           <!--<option value="">{$Think.lang.school_index_classname}</option>-->
+                       <!--</select>-->
+                   <!--</td>-->
 
                    <td><select name="school_status" >
                        <option value="">{$Think.lang.school_index_applystatus}</option>
@@ -93,6 +93,7 @@
             <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
         </ul>
     </div>
+    <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('schoolapply/excel',['o_name'=>$search_organize_name])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
     <table class="ds-default-table">
         <thead>
         <tr class="thead">

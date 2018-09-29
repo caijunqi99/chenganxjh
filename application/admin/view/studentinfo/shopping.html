@@ -11,35 +11,26 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <div class="explanation" id="explanation">
-        <div class="title" id="checkZoom">
-            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
-            <span id="explanationZoom" title="收起提示" class="arrow"></span>
-        </div>
-        <ul>
-            <li>所属摄像头个数：<?php echo count($class_list); ?>个。</li>
-        </ul>
-    </div>
     <table class="ds-default-table">
         <thead>
         <tr class="thead">
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
-            <th class="align-center">{$Think.lang.school_index_cameraname}</th>
-            <th class="align-center">{$Think.lang.school_index_cameraaddress}</th>
-            <th class="align-center">{$Think.lang.school_index_time}</th>
+            <th class="align-center">{$Think.lang.school_index_order}</th>
+            <th class="align-center">{$Think.lang.school_index_sing}</th>
+            <th class="align-center">{$Think.lang.school_index_price}</th>
+            <th class="align-center">{$Think.lang.school_order_createtime}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
         </tr>
         <tbody>
-        <?php if(!empty($class_list) && is_array($class_list)){ ?>
-        <?php foreach($class_list as $k => $v){ ?>
+        <?php if(!empty($lookOrder) && is_array($lookOrder)){ ?>
+        <?php foreach($lookOrder as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['classid']; ?></td>
-            <td class="align-center">
-                {volist name="schooltype" id="type"}
-                {if condition="$type.sc_id eq $v.typeid"}{$type.sc_type}--{$v.classname}{/if}
-                {/volist}
-            <td class="align-center"><?php echo $v['createtime']; ?></td>
-            <td class="align-center"><?php echo $v['desc']; ?></td>
+            <td class="align-center"><?php echo $v['order_id']; ?></td>
+            <td class="align-center"><?php echo $v['order_name']; ?></td>
+            <td class="align-center"><?php echo $v['length']; ?></td>
+            <td class="align-center"><?php echo $v['order_amount']; ?></td>
+            <td class="align-center"><?php echo $v['finnshed_time']; ?></td>
+            <td class="align-center"><?php echo $v['order_desc']; ?></td>
         </tr>
         <?php } ?>
         <?php }else { ?>
@@ -65,10 +56,9 @@
 </div>
 
 <script type="text/javascript">
-    function dd(id) {
-        var urls=ADMIN_URL+'school/view?school_id='+id;
-        //多窗口模式，层叠置顶
-        layer.open({
+    $(function() {
+
+         layer.open({
             type: 2
             , title: '学校信息'
             , area: ['80%', '80%']
@@ -77,6 +67,22 @@
             , content: urls
 
         });
+    });
+    function dd(id) {
+        var urls=ADMIN_URL+'school/view?school_id='+id;
+        //多窗口模式，层叠置顶
+//        layer.open({
+//            type: 2
+//            , title: '学校信息'
+//            , area: ['80%', '80%']
+//            , shade: 0
+//            , maxmin: true
+//            , content: urls
+//
+//        });
+        //tab层
+
+
     }
 
     $(function() {
