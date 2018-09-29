@@ -21,9 +21,13 @@ class Schoolapply extends AdminControl {
         if ($schoolname) {
             $condition['schoolname'] = array('like', "%" . $schoolname . "%");
         }
+        $school_name = input('param.school_name');//学校名称
+        if ($school_name) {
+            $condition['applyid'] = $school_name;
+        }
         $school_type = input('param.school_type');//学校类型
         if ($school_type) {
-            $condition['typeid'] = array('like', "%" . $school_type . "%");
+            $condition['sc_type'] = $school_type;
         }
         $area_id = input('param.area_id');//地区
         if($area_id){
@@ -54,8 +58,13 @@ class Schoolapply extends AdminControl {
             'is_default' => '',
             'area_info'=>''
         );
+        $allschoolapply = $model_schoolapply->getSchoolapplyList();
+
+        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+        $this->assign('schooltype', $schooltype);
         $this->assign('page', $model_schoolapply->page_info->render());
         $this->assign('schoolapply_list', $schoolapply_list);
+        $this->assign('allschoolapply', $allschoolapply);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }

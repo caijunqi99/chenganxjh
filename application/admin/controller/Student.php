@@ -22,7 +22,15 @@ class Student extends AdminControl {
         }
         $schooltype = input('param.school_type');//学校类型
         if ($schooltype) {
-            $condition['s_sctype'] = array('like', "%" . $schooltype . "%");
+            $condition['s_sctype'] = $schooltype;
+        }
+        $class_name = input('param.class_name');
+        if ($class_name) {
+            $condition['s_classid'] = $class_name;
+        }
+        $school_name = input('param.school_name');
+        if ($school_name) {
+            $condition['s_schoolid'] = $school_name;
         }
         $student_status = input('param.student_status');//绑定状态
         if ($student_status==1) {
@@ -69,8 +77,20 @@ class Student extends AdminControl {
             $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
             $student_list[$k]['schoolname'] = $school['name'];
         }
+
+        //学校名称
+        $searchInfo = $model_student->getStudentList(array('s_del'=>1));
+        foreach ($searchInfo as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
+            $searchInfo[$k]['typename'] = $schooltype['sc_type'];
+            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
+            $searchInfo[$k]['classname'] = $classinfo['classname'];
+            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
+            $searchInfo[$k]['schoolname'] = $school['name'];
+        }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
+        $this->assign('schoolname', $searchInfo);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }

@@ -24,6 +24,14 @@ class Classes extends AdminControl {
         if ($school_type) {
             $condition['typeid'] = $school_type;
         }
+        $class_name = input('param.class_name');
+        if ($class_name) {
+            $condition['classid'] = $class_name;
+        }
+        $school_name = input('param.school_name');
+        if ($school_name) {
+            $condition['schoolid'] = $school_name;
+        }
         $area_id = input('param.area_id');//地区
         if($area_id){
             $region_info = db('area')->where('area_id',$area_id)->find();
@@ -61,7 +69,16 @@ class Classes extends AdminControl {
             $school = db('school')->where('schoolid',$v['schoolid'])->find();
             $class_list[$k]['schoolname'] = $school['name'];
         }
+        //学校名称
+        $searchInfo = $model_class->getClasslList(array('isdel'=>1));
+        foreach ($searchInfo as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
+            $searchInfo[$k]['typename'] = $schooltype['sc_type'];
+            $school = db('school')->where('schoolid',$v['schoolid'])->find();
+            $searchInfo[$k]['schoolname'] = $school['name'];
+        }
         $this->assign('page', $model_class->page_info->render());
+        $this->assign('schoolname', $searchInfo);
         $this->assign('class_list', $class_list);
         $this->setAdminCurItem('index');
         return $this->fetch();

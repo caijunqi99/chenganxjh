@@ -52,14 +52,17 @@
                    <td id="school_list">
                        <select name="school_name" >
                            <option value="">{$Think.lang.school_index_allschool}</option>
+                           {volist name="allschoolapply" id="all"}
+                           <option value="{$all.applyid}" {if condition='$Think.get.school_name eq $all.applyid'}selected='selected'{/if}>{$all.schoolname}</option>
+                           {/volist}
                        </select>
                    </td>
 
                    <td id="type_list">
                        <select name="school_type" id="school_type">
-                           <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                           <option value="">{$Think.lang.school_index_type}</option>
                            {volist name="schooltype" id="type"}
-                           <option value="{$type.sc_id}">{$type.sc_type}</option>
+                           <option {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if} value="{$type.sc_id}">{$type.sc_type}</option>
                            {/volist}
                        </select>
                    </td>
@@ -72,8 +75,8 @@
 
                    <td><select name="school_status" >
                        <option value="">{$Think.lang.school_index_applystatus}</option>
-                       <option value="1">处理中</option>
-                       <option value="2">已处理</option>
+                       <option value="1" {if condition='$Think.get.school_status eq 1'}selected='selected'{/if}>处理中</option>
+                       <option value="2" {if condition='$Think.get.school_status eq 2'}selected='selected'{/if}>已处理</option>
                    </select></td>
                      <td>   <input type="submit" class="submit" value="搜索">
                         <?php if($search_field_value != '' or $search_sort != ''){?>
