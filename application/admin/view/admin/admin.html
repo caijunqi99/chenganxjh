@@ -89,7 +89,7 @@
                 <td><?php echo $v['admin_name'];?></td>
                 <td><?php echo $v['admin_true_name'];?></td>
                 <td><?php echo $v['admin_phone'];?></td>
-                <td><?php echo $v['admin_company_id'];?></td>
+                <td><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>
                 <td class="align-center"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
                 <td class="align-center"><?php echo $v['admin_login_num']; ?></td>
                 <?php if($v['admin_is_super']){?>

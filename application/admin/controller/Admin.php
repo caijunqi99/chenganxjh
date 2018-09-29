@@ -22,24 +22,7 @@ class Admin extends AdminControl {
      */
     public function admin() {
         $admin_id = $this->admin_info['admin_id'];
-        if (!request()->isPost()) {
 
-
-        } else {
-
-            /*if (!empty($_POST['del_id'])) {
-                if (is_array($_POST['del_id'])) {
-                    foreach ($_POST['del_id'] as $k => $v) {
-                        db('admin')->where(array('admin_id' => intval($v)))->delete();
-                    }
-                }
-                $this->log(lang('ds_del').lang('limit_admin'), 1);
-                $this->error(lang('ds_common_del_succ'));
-            } else {
-                $this->error(lang('ds_common_del_succ'));
-            }*/
-
-        }
         $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
         $account = '';$role = '';
         if (request()->isPost()) {
@@ -56,9 +39,16 @@ class Admin extends AdminControl {
         }
 
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__ORGANIZE__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+
+//        halt($admin_list);
+
         //获取所创建的角色
         $gadmin_list = db('gadmin')->field('gid,create_uid,gname')->where('create_uid= '.$admin_id.' ')->select();
+
+
+
         $this->assign('gadmin_list',$gadmin_list);
         $this->assign('admin_list', $admin_list->items());
         $this->assign('account',$account);
@@ -78,6 +68,10 @@ class Admin extends AdminControl {
         if (!request()->isPost()) {
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
+
+            //所有公司
+            $company = db('organize')->field('o_id,o_name')->where('o_del = 1')->select();
+            $this->assign('company',$company);
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin_add');
             return $this->fetch('admin_add');
@@ -226,6 +220,10 @@ class Admin extends AdminControl {
             if (!is_array($admin) || count($admin) <= 0) {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/Admin/admin'));
             }
+
+            //所有公司
+            $company = db('organize')->field('o_id,o_name')->where('o_del = 1')->select();
+            $this->assign('company',$company);
 //            halt($admin);
             $this->assign('admin', $admin);
 
