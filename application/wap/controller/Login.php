@@ -20,6 +20,7 @@ class Login extends MobileMall
         $client   = input('param.client');
         $log_type = input('param.log_type');        
         $captcha  = input('post.captcha');
+        $is_pass  = intval(input('post.is_pass'));
         switch ($log_type) {
             case 'sms_register':
                 $log_type=1;
@@ -46,9 +47,12 @@ class Login extends MobileMall
         }
         $model_member = Model('member');
         $array = array();
+        $is_pass = 1;
         $array['member_mobile'] = $phone;     
-        if ($captcha) {
+        if ($is_pass==2) {
+            if (empty($captcha))output_error(array('type'=>input('post.log_type'),'status'=>'请输入正确的验证码'));
             $state = 'true';
+            $is_pass = 2;
             $condition = array();
             $condition['log_phone'] = $phone;
             $condition['log_captcha'] = $captcha;
@@ -59,9 +63,10 @@ class Login extends MobileMall
             if(empty($sms_log) || ($sms_log['add_time'] < TIMESTAMP-1800)) {//半小时内进行验证为有效
                 output_error(array('type'=>input('post.log_type'),'status'=>'动态码错误或已过期，重新输入','t'=>1));
             }
-        }else{
-            output_error(array('type'=>input('post.log_type'),'status'=>'动态码错误或已过期，重新输入','t'=>2));  
-        }  
+        }
+        if ($is_pass == 1) {
+            if(empty($password))output_error(array('type'=>input('post.log_type'),'status'=>'非法登陆'));
+        }
         $member_info = $model_member->getMemberInfo($array,'member_password,member_name,member_id');
         if (!$member_info) {//注册
             // $this->register($register_info)
@@ -91,9 +96,12 @@ class Login extends MobileMall
                 // }
             }
         }else{//登陆
-            if ($password)if ($member_info['member_password'] != md5($password)) {//密码对比
+            if ($password){
+                if ($member_info['member_password'] != md5($password)) {//密码对比
                     output_error(array('type'=>input('post.log_type'),'msg'=>'密码填写错误！'));
                 }
+            }
+            
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
         if (is_array($member) && !empty($member)) {
@@ -106,6 +114,8 @@ class Login extends MobileMall
             }else {
                 output_error('登录失败');
             }
+        }else{
+            output_error('网络错误！');
         }
 
     }

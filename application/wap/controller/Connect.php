@@ -152,7 +152,7 @@ class Connect extends MobileMall
                 $state = '动态码错误或已过期，重新输入';
                 output_error(array('type'=>input('post.log_type'),'msg'=>$state));
             }
-            output_data($state);
+            output_data(array('status'=>$state));
         }
         output_error($state);
     }
