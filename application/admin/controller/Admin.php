@@ -118,6 +118,19 @@ class Admin extends AdminControl {
                     exit('true');
                 }
                 break;
+            case 'company_admin_name':
+                $model_admin = Model('company');
+                $condition['o_name'] = input('get.o_name');
+                $condition['o_del']=1;
+//                $condition['create_uid'] = $this->admin_info['admin_id'];
+//                $list = $model_admin->infoAdmin($condition);
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
             case 'check_admin_phone':
                 $model_admin = Model('admin');
                 $condition['admin_phone'] = input('get.admin_phone');

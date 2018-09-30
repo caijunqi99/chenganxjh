@@ -136,6 +136,20 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules : {
+                o_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20,
+                    remote: {
+                        url: ADMIN_URL+'/Admin/ajax.html?branch=company_admin_name',
+                        type: 'get',
+                        data: {
+                            o_name: function() {
+                                return $('#o_name').val();
+                            }
+                        }
+                    }
+                },
                 activity_title: {
                     required : true
                 },
@@ -144,10 +158,6 @@
                     date      : false
                 },
                 activity_end_date: {
-                    required : true,
-                    date      : false
-                },
-                o_name: {
                     required : true,
                     date      : false
                 },
@@ -169,12 +179,10 @@
                     required : '{$Think.lang.organize_new_enddate_null}'
                 },
                 o_name: {
-                    required : '{$Think.lang.organize_name_null}'
-                },
-                activity_sort: {
-                    required : '{$Think.lang.activity_new_sort_null}',
-                    min:'{$Think.lang.activity_new_sort_minerror}',
-                    max:'{$Think.lang.activity_new_sort_maxerror}'
+                    required : '{$Think.lang.organize_name_null}',
+                    minlength: '{$Think.lang.company_add_username_max}',
+                    maxlength: '{$Think.lang.company_add_username_max}',
+                    remote: '{$Think.lang.admin_add_admin_not_exists}'
                 }
             }
         });

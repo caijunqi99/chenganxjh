@@ -69,6 +69,8 @@ $lang['organize_studentnum_num']='绑定学生数';
 $lang['organize_studentnum_name']='绑定学生姓名';
 $lang['organize_studentnum_names']='所属会员登录名称';
 $lang['co_organize_succ']              = '分配成功';
+$lang['company_add_username_max']              = '公司名称长度为3-20';
+
 
 //学校管理
 $lang['ds_school'] = '学校管理';
