@@ -101,6 +101,7 @@
                 <?php }else{?>
                     <td class="align-center" style="color: #0C0C0C"> {$Think.lang.admin_no_role}</td>
                 <?php }?>
+                <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
                 <td class="w150 align-center">
                     <div class="layui-table-cell laytable-cell-9-8" style="height: 32px;">
                         <?php if($v['admin_is_super']){?>
@@ -125,6 +126,7 @@
                         <?php }?>
                     </div>
                 </td>
+                <?php }?>
             </tr>
             <?php } ?>
             <?php }else { ?>

@@ -26,7 +26,12 @@ class Admin extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
-        $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
+        if(session('admin_is_super') == 1){
+            $where = ' a.admin_del_status=1';
+        }else{
+            $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
+        }
+
         $account = '';$role = '';
         if (request()->isPost()) {
             if(!empty($_POST['account'])){
@@ -39,7 +44,9 @@ class Admin extends AdminControl {
             }
         }
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__ORGANIZE__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+
+//        halt($admin_list);
         //获取所创建的角色
         $gadmin_list = db('gadmin')->field('gid,create_uid,gname')->where('create_uid= '.$admin_id.' ')->select();
 
@@ -65,7 +72,7 @@ class Admin extends AdminControl {
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
 
             //所有公司
-            $company = db('organize')->field('o_id,o_name')->where('o_del = 1')->select();
+            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
             $this->assign('company',$company);
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin_add');
@@ -227,7 +234,7 @@ class Admin extends AdminControl {
             }
 
             //所有公司
-            $company = db('organize')->field('o_id,o_name')->where('o_del = 1')->select();
+            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
             $this->assign('company',$company);
 //            halt($admin);
             $this->assign('admin', $admin);
