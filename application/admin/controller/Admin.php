@@ -108,6 +108,7 @@ class Admin extends AdminControl {
             case 'check_admin_name':
                 $model_admin = Model('admin');
                 $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_del_status']=1;
 //                $condition['create_uid'] = $this->admin_info['admin_id'];
 //                $list = $model_admin->infoAdmin($condition);
                 $list = $model_admin->where($condition)->find();
