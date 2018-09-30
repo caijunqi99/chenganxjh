@@ -55,7 +55,9 @@
           <th class="align-center">{$Think.lang.pkg_enabled}</th>
           <th class="align-center">{$Think.lang.pkg_sort}</th>
           <th class="align-center">{$Think.lang.uptime}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('3',$action) || in_array('2',$action))){?>
           <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php } ?>
         </tr>
       </thead>
       <tbody>
@@ -86,8 +88,12 @@
             <td class="align-center"><?php echo $v['pkg_sort'];?></td>
             <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>
           <td class="align-center">
-              <a class="layui-btn layui-btn-sm" href="{:url('/Admin/Pkgs/pkgs_edit',['pkg_id'=>$v.pkg_id])}">{$Think.lang.ds_edit}</a> 
+              <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
+              <a class="layui-btn layui-btn-sm" href="{:url('/Admin/Pkgs/pkgs_edit',['pkg_id'=>$v.pkg_id])}">{$Think.lang.ds_edit}</a>
+              <?php } ?>
+              <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
               <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Pkgs/pkgs_del',['pkg_id'=>$v.pkg_id])}">{$Think.lang.ds_del}</a>
+              <?php } ?>
           </td>
         </tr>
         <?php } ?>
