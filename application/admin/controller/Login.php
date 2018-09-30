@@ -49,22 +49,27 @@ class Login extends Controller {
             $condition['admin_name'] = $admin_name;
             $condition['admin_password'] = md5($admin_password);
             $admin_info = db('admin')->where($condition)->find();
-
+//            halt($admin_info);
             if (is_array($admin_info) and !empty($admin_info)) {
-                //更新 admin 最新信息
-                $update_info = array(
-                    'admin_login_num' => ($admin_info['admin_login_num'] + 1),
-                    'admin_login_time' => TIMESTAMP
-                );
-                db('admin')->where('admin_id', $admin_info['admin_id'])->update($update_info);
+                if(!empty($admin_info['admin_gid']) || $admin_info['admin_is_super'] == 1){
+                    //更新 admin 最新信息
+                    $update_info = array(
+                        'admin_login_num' => ($admin_info['admin_login_num'] + 1),
+                        'admin_login_time' => TIMESTAMP
+                    );
+                    db('admin')->where('admin_id', $admin_info['admin_id'])->update($update_info);
 
-                //设置 session
-                session('admin_id', $admin_info['admin_id']);
-                session('admin_name', $admin_info['admin_name']);
-                session('admin_gid', $admin_info['admin_gid']);
-                session('admin_is_super', $admin_info['admin_is_super']);
+                    //设置 session
+                    session('admin_id', $admin_info['admin_id']);
+                    session('admin_name', $admin_info['admin_name']);
+                    session('admin_gid', $admin_info['admin_gid']);
+                    session('admin_is_super', $admin_info['admin_is_super']);
 
-                $this->success('登录成功', 'Admin/Index/index');
+                    $this->success('登录成功', 'Admin/Index/index');
+                }else{
+                    $this->success('该会员没有角色，请联系超级管理员');
+                }
+
             } else {
                 $this->success('帐号密码错误');
             }
