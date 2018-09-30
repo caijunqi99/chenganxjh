@@ -176,13 +176,12 @@ class Admin extends AdminControl {
                 if (@in_array(1, intval(input('get.admin_id')))) {
                     $this->error(lang('admin_index_not_allow_del'));
                 }
-                $model_admin = Model('admin');
+                $model_admin = db('admin');
                 $condition['admin_name'] = input('get.admin_name');
                 $condition['admin_id'] = array('eq', intval(input('get.admin_id')));
-
                 $res = $model_admin->where(array('create_uid'=>intval(input('get.admin_id'))))->find();
-                if($res){
-                    $result = $model_admin->where($condition)->update(array('admin_del_status'=>'-1'));
+                if(!$res){
+                    $result = $model_admin->where($condition)->update(array('admin_del_status'=>-1));
                     if (!$result) {
                         exit('false');
                     } else {
