@@ -54,9 +54,11 @@
                                 <?php if(in_array(substr($xv['op'],0,($t=strpos($xv['op'],'|'))?$t:100),$ginfo['limits'])){ echo "checked=\"checked\""; }?> >
                                 <?php echo $xv['text'];?>&nbsp;</label>
                                 <?php foreach($xv['action'] as $xx => $vv) { ?>
+                                <?php if(!empty($vv['actname'])){?>
                                 <label class="qx_fourth" ><input nctype='limit' class="limit<?php echo $k;?> action<?php echo $k;?>_<?php echo $xk;?>" value="<?php echo $vv['id'];?>" type="checkbox" name="action[<?php echo $xv['permid'];?>][]"
                                     <?php if(in_array($vv['id'],$gaction[$xv['permid']]['action'])){ echo "checked=\"checked\""; }?> >
                                     <?php echo $vv['actname'];?></label>
+                                <?php } ?>
                                 <?php } ?>
                             </td>
                         </tr>
