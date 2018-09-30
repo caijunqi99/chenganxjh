@@ -17,7 +17,8 @@ class Member extends Model
      * @return array
      */
     public function getMemberInfo($condition, $field = '*', $master = false)
-    {
+    {   
+        $condition['is_del'] = isset($condition['is_del'])?$condition['is_del']:1;
         $res = db('member')->field($field)->where($condition)->master($master)->find();
         return $res;
     }
@@ -47,7 +48,8 @@ class Member extends Model
      * @param string $order
      */
     public function getMemberList($condition = array(), $field = '*', $page = 0, $order = 'member_id desc')
-    {
+    {   
+        $condition['is_del'] = isset($condition['is_del'])?$condition['is_del']:1;
         if ($page) {
             $member_list = db('member')->field($field)->where($condition)
             // ->join('__SCHOOLTYPE__ b','','LEFT')

@@ -1,6 +1,7 @@
 {include file="public/header" /}
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
+ <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">       
 
 <div class="page">
     <div class="fixed-bar">
@@ -156,9 +157,9 @@
           <!-- <td class="align-center"><?php echo $v['member_grade'];?></td> -->
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
-              <a href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a> |
-              <a href="{:url('/admin/notice/notice',['member_name'=>$v.member_name])}">{$Think.lang.member_index_to_message}</a> | 
-              <a href="{:url('/admin/member/drop',['member_id'=>$v.member_id])}">{$Think.lang.ds_del}</a>
+              <a class="layui-btn layui-btn-sm" href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a>
+              <a class="layui-btn layui-btn-sm" href="{:url('/admin/notice/notice',['member_name'=>$v.member_name])}">{$Think.lang.member_index_to_message}</a>
+              <a class="layui-btn layui-btn-sm layui-btn-danger" href="javascript:member_drop('{$v.member_id}')">{$Think.lang.ds_del}</a>
           </td>
         </tr>
         <?php } ?>
@@ -168,6 +169,15 @@
         </tr>
         <?php } ?>
       </tbody>
+      <script type="text/javascript">
+        function member_drop(id){
+          layer.confirm('是否删除此用户？', {
+            btn: ['删除','取消'] //按钮
+          }, function(){
+            window.location.href="{:url('/admin/member/drop')}?member_id="+id;
+          });
+        }
+      </script>
       <tfoot class="tfoot">
         <?php if(!empty($member_list) && is_array($member_list)){ ?>
         <tr>
