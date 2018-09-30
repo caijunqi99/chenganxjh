@@ -191,13 +191,25 @@ class Company extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(2,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
+        $o_id = input('param.o_id');
+        if (empty($o_id)) {
+            $this->error(lang('param_error'));
+        }
+        $admin = db('admin')->where(['admin_company_id'=>$o_id,'admin_del_status'=>1])->limit(1)->find();
+        if($admin){
+            $this->error('该公司下存在正在使用的人员，不能删除，请将使用的人员移除后进行删除');
+        }
         $where = array();
-        $where['o_id'] = intval($_GET['o_id']);
+        $where['o_id'] =$o_id;
         $del_array = array();
         $del_array['o_del']=2;
         $model_organize = Model('company');
         $result = $model_organize->editOrganize($where, $del_array);
-        $this->success(lang('ds_common_del_succ'));
+        if ($result) {
+            $this->success(lang('ds_common_del_succ'), 'Company/index');
+        } else {
+            $this->error('删除失败');
+        }
     }
     /**
      * 子公司列表导出
