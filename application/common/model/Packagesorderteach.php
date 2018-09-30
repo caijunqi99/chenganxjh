@@ -3,7 +3,7 @@
 namespace app\common\model;
 use think\Model;
 
-class Packagesorder extends Model {
+class Packagesorderteach extends Model {
     public $page_info;
     
     /**
@@ -13,7 +13,7 @@ class Packagesorder extends Model {
      * @return unknown
      */
     public function getOrderInfo($condition = array(), $extend = array(), $fields = '*', $class = '', $group = '') {
-        $class_info = db('packagesorder')->field($fields)->where($condition)->group($group)->order($class)->find();
+        $class_info = db('packagesorderteach')->field($fields)->where($condition)->group($group)->order($class)->find();
         if (empty($class_info)) {
             return array();
         }
@@ -31,7 +31,7 @@ class Packagesorder extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getOrderList($condition, $page = '', $field = '*', $class = 'order_id desc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('packagesorder')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('packagesorderteach')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
@@ -46,7 +46,7 @@ class Packagesorder extends Model {
      * @return int 返回 insert_id
      */
     public function addOrder($data) {
-        $insert = db('packagesorder')->insertGetId($data);
+        $insert = db('packagesorderteach')->insertGetId($data);
         return $insert;
     }
 
@@ -57,7 +57,7 @@ class Packagesorder extends Model {
      * @param unknown_type $condition
      */
     public function editOrder($data, $condition, $limit = '') {
-        $update = db('packagesorder')->where($condition)->limit($limit)->update($data);
+        $update = db('packagesorderteach')->where($condition)->limit($limit)->update($data);
         return $update;
     }
 

@@ -5,7 +5,7 @@ namespace app\admin\controller;
 use think\Lang;
 use think\Validate;
 
-class Vrsorder extends AdminControl {
+class Revisitorder extends AdminControl {
 
     /**
      * 每次导出订单数量
@@ -25,7 +25,7 @@ class Vrsorder extends AdminControl {
         $this->assign('action',$action);
     }
 
-    public function index() {
+    public function index(){
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
@@ -37,10 +37,11 @@ class Vrsorder extends AdminControl {
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
             $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
-        $condition['order_type'] = 1;
+
+        $condition['order_type'] = 3;
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
-            $condition['buyer_name'] = $buyer_name;
+            $condition['buyer_name'] = array('like', "%" . $buyer_name . "%");
         }
         $order_state = input('get.order_state');
         if ($order_state!="") {
@@ -52,7 +53,7 @@ class Vrsorder extends AdminControl {
         }
         $order_list = $order->getOrderList($condition, 15);
         foreach ($order_list as $key=>$item) {
-            $studentinfo = db('student')->where(array('s_id'=>$item['student_id']))->find();
+            $studentinfo = db('student')->where(array('s_id' => $item['student_id']))->find();
             $order_list[$key]['student_name'] = $studentinfo['s_name'];
         }
         $payment = db('payment')->select();
@@ -63,13 +64,12 @@ class Vrsorder extends AdminControl {
         return $this->fetch();
     }
 
-
     protected function getAdminItemList() {
         $menu_array = array(
             array(
                 'name' => 'index',
                 'text' => '管理',
-                'url' => url('Admin/Vrsorder/index')
+                'url' => url('Admin/Revisitorder/index')
             ),
         );
         return $menu_array;

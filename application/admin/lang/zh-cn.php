@@ -127,8 +127,9 @@ $lang['ds_ownshop']                = '自营店铺';
 //交易
 $lang['ds_trade']                  = '订单管理';
 $lang['ds_order']                  = '实物订单';
-$lang['ds_vrsorder']                = '看孩-教孩-重温课堂';
+$lang['ds_vrsorder']                = '看孩订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
+$lang['ds_teach']           = '教孩订单';
 $lang['ds_teachorder']           = '教孩订单';
 $lang['ds_refund']                 = '退款管理';
 $lang['ds_return']                 = '退货管理';
