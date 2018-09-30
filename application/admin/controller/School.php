@@ -11,12 +11,27 @@ class School extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function member() {
+
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_school = model('School');
         $condition = array();
 
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+        }
+        //$data = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where(array('s.isdel'=>1,'a.admin_company_id'=>$a))->select();
         $schoolname = input('param.schoolname');//学校名称
         if ($schoolname) {
             $condition['name'] = array('like', "%" . $schoolname . "%");
@@ -75,6 +90,9 @@ class School extends AdminControl {
     }
 
     public function add() {
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         if (!request()->isPost()) {
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
@@ -134,6 +152,9 @@ class School extends AdminControl {
     }
 
     public function addclass() {
+        if(session('admin_is_super') !=1 && !in_array(10,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $school_id = input('param.school_id');
         $model_school = model('School');
         if (empty($school_id)) {
@@ -184,6 +205,9 @@ class School extends AdminControl {
     }
 
     public function edit() {
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $school_id = input('param.school_id');
         if (empty($school_id)) {
             $this->error(lang('param_error'));
@@ -275,6 +299,9 @@ class School extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $school_id = input('param.school_id');
         if (empty($school_id)) {
             $this->error(lang('param_error'));
@@ -295,6 +322,9 @@ class School extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
+        if(session('admin_is_super') !=1 && !in_array(6,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $admin_id = $this->admin_info['admin_id'];
             $model_admin = Model('admin');
             $param['admin_name'] = $_POST['admin_name'];
@@ -322,13 +352,14 @@ class School extends AdminControl {
                 'url' => url('Admin/School/member')
             ),
         );
-
-        if (request()->action() == 'add' || request()->action() == 'member') {
-            $menu_array[] = array(
-                'name' => 'add',
-                'text' => '添加学校',
-                'url' => url('Admin/School/add')
-            );
+        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+            if (request()->action() == 'add' || request()->action() == 'member') {
+                $menu_array[] = array(
+                    'name' => 'add',
+                    'text' => '添加学校',
+                    'url' => url('Admin/School/add')
+                );
+            }
         }
         if (request()->action() == 'edit') {
             $menu_array[] = array(

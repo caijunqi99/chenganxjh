@@ -28,7 +28,7 @@
                     <select name="admin_company_id">
                         <option value="1">总公司</option>
                         <?php foreach((array)$company as $v){?>
-                        <option value="<?php echo $v['o_id'];?>"><?php echo $v['o_name'];?></option>
+                        <option value="<?php echo $v['o_id'];?>" <?php if($v['o_id']==$admin['admin_company_id']){?>selected<?php }?>><?php echo $v['o_name'];?></option>
                         <?php }?>
                     </select>
                     <span class="err"></span>

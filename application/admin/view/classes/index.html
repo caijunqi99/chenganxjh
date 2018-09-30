@@ -49,20 +49,26 @@
                     <td id="school_list">
                     <select name="school_name" >
                         <option value="">{$Think.lang.school_index_allschool}</option>
+                        {volist name="$schoolname" id="school"}
+                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.schoolname}</option>
+                        {/volist}
                     </select>
                 </td>
                     <td id="type_list">
                     <select name="school_type" id="school_type">
-                        <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                        <option value="">{$Think.lang.school_index_type}</option>
                         {volist name="schooltype" id="type"}
-                        <option value="{$type.sc_id}">{$type.sc_type}</option>
+                        <option {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if} value="{$type.sc_id}">{$type.sc_type}</option>
                         {/volist}
                     </select>
                 </td>
 
                 <td id="class_list">
-                    <select name="class_name" >
+                    <select name="class_name" id="class_name">
                         <option value="">{$Think.lang.school_index_classname}</option>
+                        {volist name="$schoolname" id="v"}
+                        <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.typename}-{$v.classname}</option>
+                        {/volist}
                     </select>
                 </td>
                     <td>
@@ -95,7 +101,9 @@
             <th class="align-center">{$Think.lang.school_index_region}</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('11',$action))){?>
             <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php } ?>
         </tr>
         <tbody>
         <?php if(!empty($class_list) && is_array($class_list)){ ?>
@@ -110,10 +118,18 @@
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('4',$action)){ ?>
                 <a href="javascript:dd({$v.classid})" class="layui-btn layui-btn-xs"">{$Think.lang.ds_view}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <a href="{:url('/admin/classes/edit',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
                 <a href="{:url('/admin/classes/drop',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('11',$action)){ ?>
                 <a href="{:url('/admin/classes/addstudent',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_studentadd}</a>
+                <?php } ?>
             </td>
         </tr>
         <?php } ?>
