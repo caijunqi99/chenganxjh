@@ -24,9 +24,9 @@
                    <td><input type="text" class="text w150" name="schoolname" value="{$Think.get.schoolname}"></td>
 
                    <td> <select name="school_type" >
-                            <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                            <option value="">{$Think.lang.school_index_type}</option>
                             {volist name="schoolType" id="type"}
-                            <option value="{$type.sc_id}">{$type.sc_type}</option>
+                            <option value="{$type.sc_id}" {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if}>{$type.sc_type}</option>
                             {/volist}
                         </select></td>
 
@@ -44,7 +44,7 @@
                         <select style="display:none;">
                             <option value="0">请选择分类</option>
                             {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
+                            <option value="{$region.area_id}" {if condition='$Think.get.area_id eq $region.area_id'}selected='selected'{/if}>{$region.area_name}</option>
                             {/volist}
                         </select>
                         {else}
@@ -88,7 +88,9 @@
             <!--<th class="align-center">{$Think.lang.school_index_username}</th>-->
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('10',$action) || in_array('6',$action))){?>
             <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php }?>
         </tr>
         <tbody>
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
@@ -105,11 +107,21 @@
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('4',$action)){ ?>
                 <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
                 <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('10',$action)){ ?>
                 <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_add}</a>
+                <?php } ?>
+                <?php if(session('admin_is_super') ==1 || in_array('6',$action)){ ?>
                 <a href="javascript:jia({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_organize_assign}</a>
+                <?php } ?>
             </td>
         </tr>
         <?php } ?>

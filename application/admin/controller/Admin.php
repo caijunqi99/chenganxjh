@@ -13,7 +13,8 @@ class Admin extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+//        halt($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
@@ -21,44 +22,34 @@ class Admin extends AdminControl {
      * 管理员列表
      */
     public function admin() {
-        $admin_id = $this->admin_info['admin_id'];
-        if (!request()->isPost()) {
-
-
-        } else {
-
-            /*if (!empty($_POST['del_id'])) {
-                if (is_array($_POST['del_id'])) {
-                    foreach ($_POST['del_id'] as $k => $v) {
-                        db('admin')->where(array('admin_id' => intval($v)))->delete();
-                    }
-                }
-                $this->log(lang('ds_del').lang('limit_admin'), 1);
-                $this->error(lang('ds_common_del_succ'));
-            } else {
-                $this->error(lang('ds_common_del_succ'));
-            }*/
-
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
+            $this->error(lang('ds_assign_right'));
         }
-        $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
+        $admin_id = $this->admin_info['admin_id'];
+        if(session('admin_is_super') == 1){
+            $where = ' a.admin_del_status=1';
+        }else{
+            $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
+        }
+
         $account = '';$role = '';
         if (request()->isPost()) {
-//            halt($_POST);
             if(!empty($_POST['account'])){
                 $where .= ' AND (a.admin_name LIKE "%'.$_POST["account"].'%" || a.admin_phone LIKE "%'.$_POST["account"].'%") ';
                 $account = trim($_POST['account']);
             }
-
             if(!empty($_POST['role'])){
                 $where .= ' AND a.admin_gid = '.intval($_POST["role"]);
                 $role = intval($_POST['role']);
             }
         }
 
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+//        halt($admin_list);
         //获取所创建的角色
         $gadmin_list = db('gadmin')->field('gid,create_uid,gname')->where('create_uid= '.$admin_id.' ')->select();
+
         $this->assign('gadmin_list',$gadmin_list);
         $this->assign('admin_list', $admin_list->items());
         $this->assign('account',$account);
@@ -68,16 +59,22 @@ class Admin extends AdminControl {
         return $this->fetch('admin');
     }
 
-
-
     /**
      * 管理员添加
      */
     public function admin_add() {
+
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $admin_id = $this->admin_info['admin_id'];
         if (!request()->isPost()) {
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
+
+            //所有公司
+            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            $this->assign('company',$company);
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin_add');
             return $this->fetch('admin_add');
@@ -182,12 +179,19 @@ class Admin extends AdminControl {
                 $model_admin = Model('admin');
                 $condition['admin_name'] = input('get.admin_name');
                 $condition['admin_id'] = array('eq', intval(input('get.admin_id')));
-                $result = $model_admin->where($condition)->update(array('admin_del_status'=>'-1'));
-                if (!$result) {
+
+                $res = $model_admin->where(array('create_uid'=>intval(input('get.admin_id'))))->find();
+                if($res){
+                    $result = $model_admin->where($condition)->update(array('admin_del_status'=>'-1'));
+                    if (!$result) {
+                        exit('false');
+                    } else {
+                        exit('true');
+                    }
+                }else{
                     exit('false');
-                } else {
-                    exit('true');
                 }
+
                 break;
         }
     }
@@ -196,6 +200,9 @@ class Admin extends AdminControl {
      * 设置管理员权限
      */
     public function admin_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $admin_userid = $this->admin_info['admin_id'];
         $admin_id = intval(input('param.admin_id'));
         if (request()->isPost()) {
@@ -226,6 +233,10 @@ class Admin extends AdminControl {
             if (!is_array($admin) || count($admin) <= 0) {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/Admin/admin'));
             }
+
+            //所有公司
+            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            $this->assign('company',$company);
 //            halt($admin);
             $this->assign('admin', $admin);
 
@@ -237,24 +248,33 @@ class Admin extends AdminControl {
         }
     }
 
-
-
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        $menu_array = array(
-            array(
-                'name' => 'admin',
-                'text' => '管理员',
-                'url' => url('Admin/Admin/admin')
-            ),
-            array(
-                'name' => 'admin_add',
-                'text' => '添加管理员',
-                'url' => url('Admin/Admin/admin_add')
-            )
-        );
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $menu_array = array(
+                array(
+                    'name' => 'admin',
+                    'text' => '管理员',
+                    'url' => url('Admin/Admin/admin')
+                )
+            );
+        }else{
+            $menu_array = array(
+                array(
+                    'name' => 'admin',
+                    'text' => '管理员',
+                    'url' => url('Admin/Admin/admin')
+                ),
+                array(
+                    'name' => 'admin_add',
+                    'text' => '添加管理员',
+                    'url' => url('Admin/Admin/admin_add')
+                )
+            );
+        }
+
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',

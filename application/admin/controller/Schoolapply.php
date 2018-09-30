@@ -11,19 +11,37 @@ class Schoolapply extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_schoolapply = model('Schoolapply');
         $condition = array();
+
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+        }
 
         $schoolname = input('param.schoolname');//学校名称
         if ($schoolname) {
             $condition['schoolname'] = array('like', "%" . $schoolname . "%");
         }
+        $school_name = input('param.school_name');//学校名称
+        if ($school_name) {
+            $condition['applyid'] = $school_name;
+        }
         $school_type = input('param.school_type');//学校类型
         if ($school_type) {
-            $condition['typeid'] = array('like', "%" . $school_type . "%");
+            $condition['sc_type'] = $school_type;
         }
         $area_id = input('param.area_id');//地区
         if($area_id){
@@ -54,8 +72,13 @@ class Schoolapply extends AdminControl {
             'is_default' => '',
             'area_info'=>''
         );
+        $allschoolapply = $model_schoolapply->getSchoolapplyList();
+
+        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+        $this->assign('schooltype', $schooltype);
         $this->assign('page', $model_schoolapply->page_info->render());
         $this->assign('schoolapply_list', $schoolapply_list);
+        $this->assign('allschoolapply', $allschoolapply);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -91,16 +114,19 @@ class Schoolapply extends AdminControl {
      * 处理
      */
     public function deal() {
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $admininfo = $this->getAdminInfo();
         $applyid = input('param.applyid');
         if (empty($applyid)) {
             $this->error(lang('param_error'));
         }
         $model_schoolapply = Model('schoolapply');
-        $where = array(array('status'=>2,'auditor'=>$admininfo['admin_id'],'auditortime'=>date("Y-m-d H:i:s",time())));
-        $result = $model_schoolapply->editSchoolapply($where,array('applyid'=>$applyid));
+        $data = array('status'=>2,'auditor'=>$admininfo['admin_id'],'auditortime'=>date("Y-m-d H:i:s",time()));
+        $result = $model_schoolapply->editSchoolapply($data,array('applyid'=>$applyid));
         if ($result) {
-            $this->success(lang('school_index_applydealSuccess'), 'Schoolapply/index');
+            $this->success(lang('处理成功'), 'Schoolapply/index');
         } else {
             $this->error('处理失败');
         }
@@ -132,6 +158,9 @@ class Schoolapply extends AdminControl {
      */
     public function excel()
     {
+        if(session('admin_is_super') !=1 && !in_array(7,$this->action )){
+            $this->error(lang('gadmin_no_perms'));
+        }
         $dataResult = array();
         $title = "学校申请审核";
         ob_end_clean();
@@ -214,31 +243,9 @@ class Schoolapply extends AdminControl {
             array(
                 'name' => 'member',
                 'text' => '管理',
-                'url' => url('Admin/School/member')
+                'url' => url('Admin/Schoolapply/index')
             ),
         );
-
-        if (request()->action() == 'add' || request()->action() == 'member') {
-            $menu_array[] = array(
-                'name' => 'add',
-                'text' => '添加学校',
-                'url' => url('Admin/School/add')
-            );
-        }
-        if (request()->action() == 'edit') {
-            $menu_array[] = array(
-                'name' => 'edit',
-                'text' => '编辑',
-                'url' => url('Admin/School/edit')
-            );
-        }
-        if (request()->action() == 'addclass') {
-            $menu_array[] = array(
-                'name' => 'addclass',
-                'text' => '添加班级',
-                'url' => url('Admin/School/addclass')
-            );
-        }
         return $menu_array;
     }
 
