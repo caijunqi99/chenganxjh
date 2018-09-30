@@ -128,7 +128,9 @@ $(function(){
           <th>{$Think.lang.sc_type}</th>
           <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.up_time}</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('13',$action) )){?>
           <th class="align-center">{$Think.lang.sc_enabled}</th>
+            <?php } ?>
             <?php  if(session('admin_is_super') ==1 || (in_array('14',$action) || in_array('3',$action) || in_array('2',$action))){?>
           <th class="align-center">{$Think.lang.ds_handle}</th>
             <?php } ?>
@@ -142,11 +144,15 @@ $(function(){
           <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>          
           <td class="align-center"><?php echo $v['sc_sort'];?></td>
           <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>
-          <td class="align-center yes-onoff"><?php if($v['sc_enabled'] == '0'){ ?>
+          <td class="align-center yes-onoff">
+              <?php if(session('admin_is_super') ==1 || in_array('13',$action)){ ?>
+              <?php if($v['sc_enabled'] == '0'){ ?>
             <a href="JavaScript:void(0);" class=" disabled" ajax_branch="sc_enabled" nc_type="inline_edit" fieldname="sc_enabled" fieldid="<?php echo $v['sc_id']?>" fieldvalue="0" i_val='0' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
             <?php }else { ?>
             <a href="JavaScript:void(0);" class=" enabled" ajax_branch="sc_enabled" nc_type="inline_edit" fieldname="sc_enabled" fieldid="<?php echo $v['sc_id']?>" fieldvalue="1" i_val='1' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
-            <?php } ?></td>          
+            <?php } ?>
+              <?php } ?>
+          </td>
           <td class="align-center">
               <?php if(session('admin_is_super') ==1 || in_array('14',$action)){ ?>
               <a class="layui-btn layui-btn-sm" href="javascript:check_class('<?php echo $v['sc_id'];?>')" >{$Think.lang.classtype_manage}</a>
