@@ -79,7 +79,7 @@
                 <th class="w172">{$Think.lang.ds_organize_name}</th>
                 <th class="w272 align-center">{$Think.lang.ds_organize_area}</th>
                 <th class="w272 align-center">{$Think.lang.ds_organize_time}</th>
-                <?php if(session('admin_is_super') ==1 || in_array(4,$this->action) || in_array(3,$this->action) || in_array(2,$this->action) || in_array(6,$this->action)){?>
+                <?php if(session('admin_is_super') ==1 || in_array(4,$action) || in_array(3,$action) || in_array(2,$action) || in_array(6,$action)){?>
                 <th class="w172">{$Think.lang.ds_handle}</th>
                 <?php }?>
                 <th class="w172">{$Think.lang.ds_organize_remark}</th>
@@ -93,19 +93,19 @@
                 <td class="name">{$v.o_name}</td>
                 <td class="class">{$v.o_area}</td>
                 <td class="picture">{$v.o_createtime}</td>
-                <?php if(session('admin_is_super') ==1 || in_array(4,$this->action) || in_array(3,$this->action) || in_array(2,$this->action) || in_array(6,$this->action)){?>
+                <?php if(session('admin_is_super') ==1 || in_array(4,$action) || in_array(3,$action) || in_array(2,$action) || in_array(6,$action)){?>
                 <td class="align-center">
-                    <?php if(session('admin_is_super') ==1 || in_array(4,$this->action)){?>
+                    <?php if(session('admin_is_super') ==1 || in_array(4,$action)){?>
                     <a href="javascript:dd({$v.o_id})" data-method="setTop" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
                     <?php }?>
-                    <?php if(session('admin_is_super') ==1 || in_array(3,$this->action)){?>
+                    <?php if(session('admin_is_super') ==1 || in_array(3,$action)){?>
                     <a href="{:url('company/edit',['organize_id'=>$v.o_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
                     <?php }?>
-                    <?php if(session('admin_is_super') ==1 || in_array(2,$this->action)){?>
+                    <?php if(session('admin_is_super') ==1 || in_array(2,$action)){?>
                     <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
                         location.href='{:url('company/del',['o_id'=>$v.o_id])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
                     <?php }?>
-                    <?php if(session('admin_is_super') ==1 || in_array(6,$this->action)){?>
+                    <?php if(session('admin_is_super') ==1 || in_array(6,$action)){?>
                     <a href="javascript:jia({$v.o_role},{$v.o_id})" class="layui-btn layui-btn-xs" id="parentIframe">{$Think.lang.ds_organize_assign}</a>
                     <?php }?>
                 </td>
