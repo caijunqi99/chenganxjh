@@ -289,7 +289,7 @@ class Gadmin extends AdminControl {
         }
         $gid = intval(input('param.gid'));
 
-        $member = db('admin')->where('admin_gid',$gid)->select();
+        $member = db('admin')->where('admin_gid = '.$gid.' AND admin_del_status = 1')->select();
 
         $this->assign('member',$member);
         $this->setAdminCurItem('gadmin');

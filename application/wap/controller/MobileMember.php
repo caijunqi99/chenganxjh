@@ -19,7 +19,7 @@ class MobileMember extends MobileHome {
             }
             $mb_user_token_info = $model_mb_user_token->getMbUserTokenInfoByToken($key);
             if (empty($mb_user_token_info)) {
-                output_error('请登录', array('login' => '0'));
+                output_error('请登录', array('login' => '0'),400);
             }
             $model_member = Model('member');
             $this->member_info = $model_member->getMemberInfoByID($mb_user_token_info['member_id']);
@@ -27,7 +27,7 @@ class MobileMember extends MobileHome {
 
 
             if (empty($this->member_info)) {
-                output_error('请登录', array('login' => '0'));
+                output_error('请登录', array('login' => '0'),400);
             } else {
                 $this->member_info['client_type'] = $mb_user_token_info['client_type'];
                 $this->member_info['openid'] = $mb_user_token_info['openid'];

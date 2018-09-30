@@ -1,9 +1,10 @@
 <?php
 
 
-function output_data($datas, $extend_data = array()) {
+function output_data($datas, $extend_data = array(),$codd=1) {
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
+    if ($codd !=1) $data['code'] = '400';
     $data['result']=isset($datas['error'])?array():$datas;
     $data['message'] = isset($datas['error'])?$datas['error']:'';
     //$data['datas']=$datas;
@@ -18,9 +19,9 @@ function output_data($datas, $extend_data = array()) {
     }
 }
 
-function output_error($message, $extend_data = array()) {
+function output_error($message, $extend_data = array(),$codd=1) {
     $datas = array('error' => $message);
-    output_data($datas, $extend_data);
+    output_data($datas, $extend_data,$codd);
 }
 
 function mobile_page($page_info) {
