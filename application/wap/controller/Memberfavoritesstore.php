@@ -7,7 +7,7 @@
  * Time: 20:20
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 class Memberfavoritesstore extends MobileMember {
 

@@ -17,7 +17,7 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>所属摄像头个数：<?php echo count($class_list); ?>个。</li>
+            <li>所属摄像头个数：<?php echo count($cameraList); ?>个。</li>
         </ul>
     </div>
     <table class="ds-default-table">
@@ -28,23 +28,20 @@
             <th class="align-center">{$Think.lang.school_index_cameraaddress}</th>
             <th class="align-center">{$Think.lang.school_index_schoolname}</th>
             <th class="align-center">{$Think.lang.school_index_cityname}</th>
-            <th class="align-center">{$Think.lang.school_index_time}</th>
+            <th class="align-center">{$Think.lang.school_camera_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
         </tr>
         <tbody>
-        <?php if(!empty($class_list) && is_array($class_list)){ ?>
-        <?php foreach($class_list as $k => $v){ ?>
+        <?php if(!empty($cameraList) && is_array($cameraList)){ ?>
+        <?php foreach($cameraList as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['classid']; ?></td>
-            <td class="align-center"><?php echo $v['classid']; ?></td>
-            <td class="align-center"><?php echo $v['classid']; ?></td>
-            <td class="align-center"><?php echo $v['classid']; ?></td>
-            <td class="align-center">
-                {volist name="schooltype" id="type"}
-                {if condition="$type.sc_id eq $v.typeid"}{$type.sc_type}--{$v.classname}{/if}
-                {/volist}
-            <td class="align-center"><?php echo $v['createtime']; ?></td>
-            <td class="align-center"><?php echo $v['desc']; ?></td>
+            <td class="align-center"><?php echo $v['id']; ?></td>
+            <td class="align-center"><?php echo $v['camera_name']; ?></td>
+            <td class="align-center"><?php echo $v['class_area']; ?></td>
+            <td class="align-center"><?php echo $v['school_name']; ?></td>
+            <td class="align-center"><?php echo $v['area']; ?></td>
+            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['sq_time']); ?></td>
+            <td class="align-center"><?php echo $v['content']; ?></td>
         </tr>
         <?php } ?>
         <?php }else { ?>

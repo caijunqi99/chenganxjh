@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection_list.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection_apply.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
@@ -52,28 +52,31 @@
                    <td id="school_list">
                        <select name="school_name" >
                            <option value="">{$Think.lang.school_index_allschool}</option>
+                           {volist name="allschoolapply" id="all"}
+                           <option value="{$all.applyid}" {if condition='$Think.get.school_name eq $all.applyid'}selected='selected'{/if}>{$all.schoolname}</option>
+                           {/volist}
                        </select>
                    </td>
 
                    <td id="type_list">
                        <select name="school_type" id="school_type">
-                           <option {if condition='$Think.get.school_type'}selected='selected'{/if} value="">{$Think.lang.school_index_type}</option>
+                           <option value="">{$Think.lang.school_index_type}</option>
                            {volist name="schooltype" id="type"}
-                           <option value="{$type.sc_id}">{$type.sc_type}</option>
+                           <option {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if} value="{$type.sc_id}">{$type.sc_type}</option>
                            {/volist}
                        </select>
                    </td>
 
-                   <td id="class_list">
-                       <select name="class_name" >
-                           <option value="">{$Think.lang.school_index_classname}</option>
-                       </select>
-                   </td>
+                   <!--<td id="class_list">-->
+                       <!--<select name="class_name" >-->
+                           <!--<option value="">{$Think.lang.school_index_classname}</option>-->
+                       <!--</select>-->
+                   <!--</td>-->
 
                    <td><select name="school_status" >
                        <option value="">{$Think.lang.school_index_applystatus}</option>
-                       <option value="1">处理中</option>
-                       <option value="2">已处理</option>
+                       <option value="1" {if condition='$Think.get.school_status eq 1'}selected='selected'{/if}>处理中</option>
+                       <option value="2" {if condition='$Think.get.school_status eq 2'}selected='selected'{/if}>已处理</option>
                    </select></td>
                      <td>   <input type="submit" class="submit" value="搜索">
                         <?php if($search_field_value != '' or $search_sort != ''){?>
@@ -93,6 +96,9 @@
             <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
         </ul>
     </div>
+    <?php if(session('admin_is_super') ==1 || in_array('7',$action)){ ?>
+    <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('schoolapply/excel',['o_name'=>$search_organize_name])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
+    <?php } ?>
     <table class="ds-default-table">
         <thead>
         <tr class="thead">
@@ -103,7 +109,9 @@
             <th class="align-center">{$Think.lang.school_index_phone}</th>
             <th class="align-center">{$Think.lang.school_index_applycontent}</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
-            <th class="align-center">{$Think.lang.ds_handle}</th>
+            <th class="align-center">
+                <?php  if(session('admin_is_super') ==1 || in_array('3',$action)){?>{$Think.lang.ds_handle}<?php } ?>
+            </th>
             <th class="align-center">{$Think.lang.school_index_applystatus}</th>
             <th class="align-center">{$Think.lang.school_index_applyman}</th>
             <th class="align-center">{$Think.lang.school_index_applytime}</th>
@@ -120,12 +128,13 @@
             <td class="align-center"><?php echo $v['message']; ?></td>
             <th class="align-center"><?php echo $v['createtime']; ?></th>
             <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <?php if($v['status']==1){ ?>
                 <a href="{:url('/admin/schoolapply/deal',['applyid'=>$v.applyid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_index_applydeal}</a>
                 <?php }else{ ?>
                 无
                 <?php } ?>
-
+                <?php } ?>
             </td>
             <td class="align-center"><?php if($v['status']==1){echo '处理中';}else{echo '已处理';} ?></td>
             <td class="align-center"><?php echo $v['auditor']; ?></td>

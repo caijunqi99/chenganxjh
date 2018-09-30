@@ -20,7 +20,13 @@
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_type}：</dt>
+                <dt>{$Think.lang.school_index_classunique}：</dt>
+                <dd>
+                    {$class_array.classCard}
+                </dd>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.school_index_classtype}：</dt>
                 <dd>
                     {volist name="schooltype" id="type"}
                     {if condition="$class_array.typeid eq $type.sc_id"}

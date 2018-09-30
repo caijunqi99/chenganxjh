@@ -1,6 +1,6 @@
 <?php
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 use think\Lang;
 
@@ -8,7 +8,7 @@ class Index extends MobileMall {
 
     public function _initialize() {
         parent::_initialize();
-        Lang::load(APP_PATH . 'mobile\lang\zh-cn\index.lang.php');
+        Lang::load(APP_PATH . 'wap\lang\zh-cn\index.lang.php');
     }
 
     /**

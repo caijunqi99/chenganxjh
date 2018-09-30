@@ -1,6 +1,6 @@
 <?php
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 use think\Lang;
 
@@ -11,7 +11,7 @@ class Goods extends MobileMall {
 
     public function _initialize() {
         parent::_initialize();
-        Lang::load(APP_PATH . 'mobile\lang\zh-cn\goods.lang.php');
+        Lang::load(APP_PATH . 'wap\lang\zh-cn\goods.lang.php');
         $this->x_pi = 3.14159265358979324 * 3000.0 / 180.0;
     }
 

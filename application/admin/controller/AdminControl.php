@@ -58,7 +58,6 @@ class AdminControl extends Controller {
     public function setMenuList() {
         $menu_list = $this->menuList();
 
-
         $menu_list=$this->parseMenu($menu_list);
         $this->assign('menu_list', $menu_list);
     }
@@ -96,8 +95,8 @@ class AdminControl extends Controller {
             }
         }
 
-        //以下几项不需要验证
-        $tmp = array('Index','Dashboard','Login');
+        //以下几项不需要验证   langzhiyao修改不需要验证的控制器：Organizes  Schoolinfo 过滤
+        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Studentinfo');
         if (in_array($act,$tmp)) return true;
         if (in_array($act,$permission) || in_array("$act.$op",$permission)){
             return true;
@@ -274,13 +273,18 @@ class AdminControl extends Controller {
                             $_limit[$key]['child'][$k]['act'] = ucfirst($v['name']);
                             $_limit[$key]['child'][$k]['action'] = explode(',',$_limit[$key]['child'][$k]['action']);
                             if(!empty($_limit[$key]['child'][$k]['action'])){
-                                $actions= db('actions')->where("actid in ($v[action])")->select();
                                 $array = array();
-                                foreach ($actions as $kk=>$vv){
-                                    $array['id']=$vv['actid'];
-                                    $array['actname']=$this->get_action($vv['actname']);
-                                    $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                if(!empty($v['action'])){
+                                    $actions= db('actions')->where("actid in ($v[action])")->select();
+                                    if(!empty($actions)){
+                                        foreach ($actions as $kk=>$vv){
+                                            $array['id']=$vv['actid'];
+                                            $array['actname']=$this->get_action($vv['actname']);
+                                            $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                        }
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -313,13 +317,16 @@ class AdminControl extends Controller {
                             $_limit[$key]['child'][$k]['act'] = ucfirst($v['name']);
                             $_limit[$key]['child'][$k]['action'] = explode(',',$_limit[$key]['child'][$k]['action']);
                             if(!empty($_limit[$key]['child'][$k]['action'])){
-                                $actions= db('actions')->where("actid in ($v[action])")->select();
                                 $array = array();
-                                foreach ($actions as $kk=>$vv){
-                                    $array['id']=$vv['actid'];
-                                    $array['actname']=$this->get_action($vv['actname']);
-                                    $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                if(!empty($v['action'])){
+                                    $actions= db('actions')->where("actid in ($v[action])")->select();
+                                    foreach ($actions as $kk=>$vv){
+                                        $array['id']=$vv['actid'];
+                                        $array['actname']=$this->get_action($vv['actname']);
+                                        $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -350,7 +357,34 @@ class AdminControl extends Controller {
                 return '浏览';
                 break;
             case 'DownMember'://5
-                return '查看所属成员';
+                return '查看成员';
+                break;
+            case 'AssignAccount'://6
+                return '分配账号';
+                break;
+            case 'Export'://7
+                return '导出';
+                break;
+            case 'Import'://8
+                return '导入';
+                break;
+            case 'DownLoad'://9
+                return '下载';
+                break;
+            case 'AddClass'://10
+                return '添加班级';
+                break;
+            case 'AddStudent'://11
+                return '添加学生';
+                break;
+            case 'ResetPwd'://12
+                return '重置密码';
+                break;
+            case 'Disable'://13
+                return '禁用';
+                break;
+            case 'AddGrade'://14
+                return '年级管理';
                 break;
 
         }
@@ -376,7 +410,7 @@ class AdminControl extends Controller {
      * @time 2018/09/18
      */
     function get_permid($class_name){
-        $result = db('perms')->field('permid')->where(" name='$class_name' AND pid !=0")->find();
+        $result = db('perms')->field('permid')->where(" name='$class_name' AND pid !=0 AND status=1")->find();
         $permsid = '';
         if(!empty($result['permid'])){
             $permsid = $result['permid'];

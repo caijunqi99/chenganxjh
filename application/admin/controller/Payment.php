@@ -10,12 +10,21 @@ class Payment extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/payment.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     /**
      * 支付方式
      */
     public function index() {
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_payment = model('payment');
         $payment_list = $model_payment->getPaymentList(array('payment_code' => array('neq', 'predeposit')));
         $this->assign('payment_list', $payment_list);
@@ -27,6 +36,9 @@ class Payment extends AdminControl {
      * 编辑
      */
     public function edit() {
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_payment = model('payment');
         $payment_id = intval(input('param.payment_id'));
         if (!(request()->isPost())) {

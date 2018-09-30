@@ -20,8 +20,8 @@ class Schoolapply extends Model {
         return $school_info;
     }
 
-    public function getSchoolById($id){
-        return db('school')->where('schoolid',$id)->find();
+    public function getSchoolapplyById($id){
+        return db('schoolapply')->where('applyid',$id)->find();
     }
 
 
@@ -35,7 +35,7 @@ class Schoolapply extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getSchoolapplyList($condition, $page = '', $field = '*', $school = 'applyid desc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('schoolapply')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('schoolapply')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.auditor ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
@@ -64,7 +64,6 @@ class Schoolapply extends Model {
      * @param unknown_type $condition
      */
     public function editSchoolapply($data, $condition, $limit = '') {
-
         $update = db('schoolapply')->where($condition)->limit($limit)->update($data);
         return $update;
     }

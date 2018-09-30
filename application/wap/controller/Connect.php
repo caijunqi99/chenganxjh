@@ -6,7 +6,7 @@
  * Time: 20:05
  */
 
-namespace app\mobile\controller;
+namespace app\wap\controller;
 
 
 class Connect extends MobileMall
@@ -35,32 +35,39 @@ class Connect extends MobileMall
      */
     public function get_sms_captcha(){
         $state = '发送失败';
-        $phone = $_GET['phone'];
-        if (strlen($phone) == 11){
-            $log_type = $_GET['type'];//短信类型:1为注册,2为登录,3为找回密码
+        $phone = input('post.mobile');
+        
+        if (preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+            $model_member = Model('member');
+            $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
+
+            $log_type = input('post.type');;//短信类型:1为注册,2为登录,3为找回密码
+            if ($log_type !=3) {
+                if (!$member) {
+                    $log_type = 1 ;
+                }else{
+                    $log_type = 2 ;
+                }
+            }
             $model_sms_log = Model('smslog');
             $condition = array();
             $condition['log_ip'] = getIp();
             $condition['log_type'] = $log_type;
             $sms_log = $model_sms_log->getSmsInfo($condition);
-            if(!empty($sms_log) && ($sms_log['add_time'] > TIMESTAMP-10)) {//同一IP十分钟内只能发一条短信
-                $state = '同一IP地址十分钟内，请勿多次获取动态码！';
+            if(!empty($sms_log) && ($sms_log['add_time'] > TIMESTAMP-1)) {//同一IP十分钟内只能发一条短信
+                $state = '同一IP地址一分钟内，请勿多次获取动态码！';
             } else {
                 $state = 'true';
-                $log_array = array();
-                $model_member = Model('member');
-                $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
+                $log_array = array();                
                 $captcha = rand(100000, 999999);
                 $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d");
-                $sms_tpl = config('sms_tpl');
+                $sms_tpl = config('sms_tpl');                
                 switch ($log_type) {
                     case '1':
                         if(config('sms_register') != 1) {
                             $state = '系统没有开启手机注册功能';
                         }
-                        if(!empty($member)) {//检查手机号是否已被注册
-                            $state = '当前手机号已被注册，请更换其他号码。';
-                        }
+                        $type = 'sms_register';
                         $log_msg .= '申请注册会员，动态码：'.$captcha.'。';
                         $tempId = $sms_tpl['sms_register'];
                         break;
@@ -71,6 +78,7 @@ class Connect extends MobileMall
                         if(empty($member)) {//检查手机号是否已绑定会员
                             $state = '当前手机号未注册，请检查号码是否正确。';
                         }
+                        $type = 'sms_login';
                         $log_msg .= '申请登录，动态码：'.$captcha.'。';
                         $log_array['member_id'] = $member['member_id'];
                         $log_array['member_name'] = $member['member_name'];
@@ -80,9 +88,7 @@ class Connect extends MobileMall
                         if(config('sms_password') != 1) {
                             $state = '系统没有开启手机找回密码功能';
                         }
-                        if(empty($member)) {//检查手机号是否已绑定会员
-                            $state = '当前手机号未注册，请检查号码是否正确。';
-                        }
+                        $type = 'sms_password_reset';
                         $log_msg .= '申请重置登录密码，动态码：'.$captcha.'。';
                         $log_array['member_id'] = $member['member_id'];
                         $log_array['member_name'] = $member['member_name'];
@@ -94,21 +100,24 @@ class Connect extends MobileMall
                 }
                 if($state == 'true'){
                     $sms = new \sendmsg\Sms();
+
                     $result = $sms->send($phone,$captcha,$tempId);
                     if($result){
-                        $log_array['log_phone'] = $phone;
+                        $log_array['log_phone']   = $phone;
                         $log_array['log_captcha'] = $captcha;
-                        $log_array['log_ip'] = getIp();
-                        $log_array['log_msg'] = $log_msg;
-                        $log_array['log_type'] = $log_type;
-                        $log_array['add_time'] = time();
+                        $log_array['log_ip']      = getIp();
+                        $log_array['log_msg']     = $log_msg;
+                        $log_array['log_type']    = $log_type;
+                        $log_array['add_time']    = time();
                         $model_sms_log->addSms($log_array);
-                        output_data(array('sms_time'=>10));exit;
+                        output_data(array('sms_time'=>10,'type'=>$type));exit;
                     } else {
                         $state = '手机短信发送失败';
                     }
                 }
             }
+        }else{
+            $state='请输入正确的手机号码！';
         }
         output_error($state);
     }
@@ -117,10 +126,21 @@ class Connect extends MobileMall
      */
     public function check_sms_captcha(){
         $state = '验证失败';
-        $phone = $_GET['phone'];
-        $captcha = $_GET['captcha'];
-        $log_type=$_GET['type'];
-        if (strlen($phone) == 11){
+        $phone = input('post.mobile');
+        $captcha = input('post.captcha');
+        $log_type = input('post.log_type');
+        switch ($log_type) {
+            case 'sms_register':
+                $log_type=1;
+                break;
+            case 'sms_login':
+                $log_type=2;
+                break;
+            case 'sms_password_reset':
+                $log_type=3;
+                break;       
+        }
+        if (preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
             $state = 'true';
             $condition = array();
             $condition['log_phone'] = $phone;
@@ -130,7 +150,7 @@ class Connect extends MobileMall
             $sms_log = $model_sms_log->getSmsInfo($condition);
             if(empty($sms_log) || ($sms_log['add_time'] < TIMESTAMP-1800)) {//半小时内进行验证为有效
                 $state = '动态码错误或已过期，重新输入';
-                output_error($state);
+                output_error(array('type'=>input('post.log_type'),'msg'=>$state));
             }
             output_data($state);
         }
