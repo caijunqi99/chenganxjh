@@ -105,6 +105,7 @@ $(function(){
       <ul>
           <li>课程管理</li>
           <li>学校类型：如‘语文’，‘数学’，‘英语’</li>
+          
       </ul>
   </div>
   
@@ -137,7 +138,7 @@ $(function(){
             <?php } ?></td>          
           <td class="align-center">
               <a class="layui-btn layui-btn-sm" href="javascript:course_edit('edit','<?php echo $v['co_id'];?>')" >{$Think.lang.ds_edit}</a> 
-              <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Course/course_del',['co_id'=>$v.co_id])}">{$Think.lang.ds_del}</a>
+       <!--        <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Course/course_del',['co_id'=>$v.co_id])}">{$Think.lang.ds_del}</a> -->
           </td>
         </tr>
         <?php } ?>

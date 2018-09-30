@@ -76,6 +76,11 @@ class Member extends AdminControl {
             $order = 'member_id desc';
         }
         $field = 'member_id,member_avatar,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
+        $is_del = intval(input('is_del'));
+        $condition['is_del'] = 1;
+        if ($is_del) {
+            $condition['is_del'] = $is_del;
+        }
         $member_list = $model_member->getMemberList($condition, $field, 10, $order);
         // p($member_list);exit;
         //整理会员信息
@@ -293,7 +298,7 @@ class Member extends AdminControl {
         if (empty($member_id)) {
             $this->error(lang('param_error'));
         }
-        $result = db('member')->delete($member_id);
+        $result = db('member')->where('member_id',$member_id)->setField('is_del',2);;
         if ($result) {
             $this->success(lang('ds_common_del_succ'), 'Member/member');
         } else {

@@ -173,7 +173,7 @@ $(function(){
           <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>        
           <td class="align-center">
               <a class="layui-btn layui-btn-sm" href="{:url('/Admin/Playback/playback_manage',['ptype'=>$type,'pid'=>$v.pid])}" >{$Think.lang.ds_edit}</a> 
-              <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Playback/playback_del',['ptype'=>$type,'pid'=>$v.pid])}">{$Think.lang.ds_del}</a>
+              <!-- <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Playback/playback_del',['ptype'=>$type,'pid'=>$v.pid])}">{$Think.lang.ds_del}</a> -->
                 <a id="dp_{$v.pid}" class="layui-unselect layui-form-checkbox {if condition="$v.pl_enabled eq 1"} layui-form-checked {/if}" onclick="makedefault('<?php echo $v[pid];?>');" ><span>使用</span><i class="layui-icon layui-icon-ok"></i></a>
           </td>
         </tr>

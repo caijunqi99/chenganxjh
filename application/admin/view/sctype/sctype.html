@@ -148,7 +148,7 @@ $(function(){
           <td class="align-center">
               <a class="layui-btn layui-btn-sm" href="javascript:check_class('<?php echo $v['sc_id'];?>')" >{$Think.lang.classtype_manage}</a>
               <a class="layui-btn layui-btn-sm" href="javascript:sctype_edit('edit','<?php echo $v['sc_id'];?>')" >{$Think.lang.ds_edit}</a> 
-              <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Sctype/sctype_del',['sc_id'=>$v.sc_id])}">{$Think.lang.ds_del}</a>
+              <!-- <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Sctype/sctype_del',['sc_id'=>$v.sc_id])}">{$Think.lang.ds_del}</a> -->
           </td>
         </tr>
         <?php } ?>

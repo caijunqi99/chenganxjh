@@ -47,12 +47,10 @@ class Login extends MobileMall
         }
         $model_member = Model('member');
         $array = array();
-        $is_pass = 1;
         $array['member_mobile'] = $phone;     
         if ($is_pass==2) {
             if (empty($captcha))output_error(array('type'=>input('post.log_type'),'status'=>'请输入正确的验证码'));
             $state = 'true';
-            $is_pass = 2;
             $condition = array();
             $condition['log_phone'] = $phone;
             $condition['log_captcha'] = $captcha;
@@ -100,8 +98,7 @@ class Login extends MobileMall
                 if ($member_info['member_password'] != md5($password)) {//密码对比
                     output_error(array('type'=>input('post.log_type'),'msg'=>'密码填写错误！'));
                 }
-            }
-            
+            }            
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
         if (is_array($member) && !empty($member)) {
@@ -109,6 +106,7 @@ class Login extends MobileMall
             if ($token) {
                 $logindata = array(
                     'member_mobile' => $member['member_mobile'], 'uid' => $member['member_id'], 'key' => $token
+                    //头像，用户名，副账号数量，本身账号属性，角色属性， 是否已绑定孩子，
                 );
                 output_data($logindata);
             }else {
@@ -121,8 +119,44 @@ class Login extends MobileMall
     }
 
 
+    public function password_reset(){
+        if(config('sms_password') != 1) {
+            output_error('系统没有开启手机找回密码功能','','error');
+        }
+        $phone       = input('post.mobile');
+        $password    = input('param.password');
+        $re_password = input('param.re_password');
+        $client      = input('param.client');
+        $log_type    = input('param.log_type');        
+        switch ($log_type) {
+            case 'sms_password':
+                $log_type=3;
+                $type='重置密码';
+                break;            
+            default:
+                output_error('验证类型错误!');
+                break;
+        }
+        $model_member = Model('member');
+        $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
+        if(!empty($member)) {
+            $new_password = md5($_POST['password']);
+            $model_member->editMember(array('member_id'=> $member['member_id']),array('member_password'=> $new_password));
+            $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
+            if($token) {
+                $logindata = array(
+                    'member_mobile' => $member['member_mobile'], 'uid' => $member['member_id'], 'key' => $token
+                );
+                output_data($logindata);
+            }else {
+                output_error('网络错误');
+            }
+        }else{
+           output_error('没有此用户!'); 
+        }
 
-    
+        output_error($state);
+    }
     public function get_inviter(){
         $inviter_id=intval(input('get.inviter_id'));
         $member=db('member')->where('member_id',$inviter_id)->field('member_id,member_name')->find();
@@ -137,11 +171,11 @@ class Login extends MobileMall
         $model_mb_user_token = Model('mbusertoken');
 
         //重新登录后以前的令牌失效
-        //暂时停用
-        //$condition = array();
-        //$condition['member_id'] = $member_id;
-        //$condition['client_type'] = $client;
-        //$model_mb_user_token->delMbUserToken($condition);
+        
+        $condition = array();
+        $condition['member_id'] = $member_id;
+        $condition['client_type'] = $client;
+        $model_mb_user_token->delMbUserToken($condition);
         //生成新的token
         $mb_user_token_info = array();
         $token = md5($member_name . strval(TIMESTAMP) . strval(rand(0, 999999)));
