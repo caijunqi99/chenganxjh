@@ -63,7 +63,8 @@ class Admin extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
-        if(session('admin_is_super') !=0 && !in_array('1',$this->action)){
+
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
