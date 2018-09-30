@@ -61,7 +61,8 @@ class Connect extends MobileMall
                 $log_array = array();                
                 $captcha = rand(100000, 999999);
                 $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d");
-                $sms_tpl = config('sms_tpl');                
+                $sms_tpl = config('sms_tpl'); 
+                               
                 switch ($log_type) {
                     case '1':
                         if(config('sms_register') != 1) {
@@ -88,7 +89,7 @@ class Connect extends MobileMall
                         if(config('sms_password') != 1) {
                             $state = '系统没有开启手机找回密码功能';
                         }
-                        $type = 'sms_password_reset';
+                        $type = 'sms_password';
                         $log_msg .= '申请重置登录密码，动态码：'.$captcha.'。';
                         $log_array['member_id'] = $member['member_id'];
                         $log_array['member_name'] = $member['member_name'];
@@ -136,7 +137,7 @@ class Connect extends MobileMall
             case 'sms_login':
                 $log_type=2;
                 break;
-            case 'sms_password_reset':
+            case 'sms_password':
                 $log_type=3;
                 break;       
         }
@@ -152,7 +153,7 @@ class Connect extends MobileMall
                 $state = '动态码错误或已过期，重新输入';
                 output_error(array('type'=>input('post.log_type'),'msg'=>$state));
             }
-            output_data($state);
+            output_data(array('status'=>$state));
         }
         output_error($state);
     }
