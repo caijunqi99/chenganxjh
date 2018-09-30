@@ -49,6 +49,7 @@
             <?php foreach($list as $k => $v){ ?>
             <tr class="hover">
                 <td><?php echo $v['gname'];?></td>
+                <?php if(session('admin_is_super')==1 || in_array('3',$action) || in_array('2',$action) || in_array('5',$action) ){?>
                 <td class="w150 align-center">
                     <div class="layui-table-cell laytable-cell-9-10">
                             <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
@@ -62,8 +63,8 @@
                             <?php }?>
                     </div>
                     <!--{$Think.lang.gadmin_del_confirm}-->
-
                 </td>
+                <?php }?>
             </tr>
             <?php } ?>
             <?php }else { ?>

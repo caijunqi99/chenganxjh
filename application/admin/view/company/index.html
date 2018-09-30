@@ -69,7 +69,9 @@
 
 
     <form method='post' onsubmit="if(confirm('{$Think.lang.ds_ensure_del}')){return true;}else{return false;}" name="brandForm">
-        <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('organize/export_step1',['o_name'=>$search_organize_name])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
+        <?php if(session('admin_is_super') ==1 || in_array(7,$this->action)){?>
+            <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('company/export_step1',['o_name'=>$search_organize_name])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
+        <?php }?>
         <table class="ds-default-table">
             <thead>
             <tr class="thead">
@@ -77,7 +79,9 @@
                 <th class="w172">{$Think.lang.ds_organize_name}</th>
                 <th class="w272 align-center">{$Think.lang.ds_organize_area}</th>
                 <th class="w272 align-center">{$Think.lang.ds_organize_time}</th>
+                <?php if(session('admin_is_super') ==1 || in_array(4,$this->action) || in_array(3,$this->action) || in_array(2,$this->action) || in_array(6,$this->action)){?>
                 <th class="w172">{$Think.lang.ds_handle}</th>
+                <?php }?>
                 <th class="w172">{$Think.lang.ds_organize_remark}</th>
             </tr>
             </thead>
@@ -89,13 +93,23 @@
                 <td class="name">{$v.o_name}</td>
                 <td class="class">{$v.o_area}</td>
                 <td class="picture">{$v.o_createtime}</td>
+                <?php if(session('admin_is_super') ==1 || in_array(4,$this->action) || in_array(3,$this->action) || in_array(2,$this->action) || in_array(6,$this->action)){?>
                 <td class="align-center">
+                    <?php if(session('admin_is_super') ==1 || in_array(4,$this->action)){?>
                     <a href="javascript:dd({$v.o_id})" data-method="setTop" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
-                    <a href="{:url('organize/edit',['organize_id'=>$v.o_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                    <?php }?>
+                    <?php if(session('admin_is_super') ==1 || in_array(3,$this->action)){?>
+                    <a href="{:url('company/edit',['organize_id'=>$v.o_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                    <?php }?>
+                    <?php if(session('admin_is_super') ==1 || in_array(2,$this->action)){?>
                     <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
-                        location.href='{:url('organize/del',['o_id'=>$v.o_id])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                        location.href='{:url('company/del',['o_id'=>$v.o_id])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                    <?php }?>
+                    <?php if(session('admin_is_super') ==1 || in_array(6,$this->action)){?>
                     <a href="javascript:jia({$v.o_role},{$v.o_id})" class="layui-btn layui-btn-xs" id="parentIframe">{$Think.lang.ds_organize_assign}</a>
+                    <?php }?>
                 </td>
+                <?php }?>
                 <td class="align-center">{$v.o_remark}</td>
             </tr>
             {/volist}
@@ -218,7 +232,7 @@
                 var gid = $("#role").val();
                 var oid=$("#oid").val();
                 $.ajax({
-                    url: "{:url('/Admin/organize/admin_add')}",
+                    url: "{:url('/Admin/company/admin_add')}",
                     type: 'POST',
                     dataType: 'json',
                     data: {'admin_name': admin_name,'admin_password':admin_password,'gid':gid,'oid':oid},

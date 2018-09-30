@@ -380,7 +380,7 @@ class Common extends AdminControl
         if($company['admin_company_id'] == 1){
             $data = array('agent_id'=>1,'agent_name'=>'总公司');
         }else{
-            $res = db('organize')->field('o_id,o_name,o_del')->where('o_del = 1')->find();
+            $res = db('company')->field('o_id,o_name,o_del')->where('o_del = 1')->find();
             if($res){
                 $data = array('agent_id'=>$res['o_id'],'agent_name'=>$res['o_name']);
             }

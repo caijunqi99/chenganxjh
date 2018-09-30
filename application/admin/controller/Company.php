@@ -6,11 +6,17 @@ use think\Lang;
 use think\Validate;
 
 
-class Organize extends AdminControl {
+class Company extends AdminControl {
     public function _initialize()
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+//        halt($perm_id);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
     /**
      *
@@ -18,6 +24,9 @@ class Organize extends AdminControl {
      */
     public function index()
     {
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);
@@ -33,7 +42,7 @@ class Organize extends AdminControl {
         );
         $this->assign('address', $address);
         //分子公司列表
-        $model_organize = Model('organize');
+        $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
         if (!empty($_POST['search_organize_name'])) {
@@ -44,7 +53,7 @@ class Organize extends AdminControl {
         if(!empty($_POST['area_info'])){
             $area_info=$_POST['area_info'];
             $condition['o_area']=array('like', '%' . trim($area_info) . '%');
-            $this->assign('o_area',$o_area);
+            $this->assign('o_area',$area_info);
         }
         $organize_list = $model_organize->getOrganizeList($condition, "*",15);
         $this->assign('page', $model_organize->page_info->render());
@@ -56,22 +65,33 @@ class Organize extends AdminControl {
      * 获取分/子公司栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        $menu_array = array(
-            array(
-                'name' => 'index',
-                'text' => '分/子（代理）公司管理',
-                'url' => url('Admin/Organize/index')
-            ),
-            array(
-                'name' => 'add',
-                'text' => '添加',
-                'url' => url('Admin/Organize/add')
-            )
-        );
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action)){
+            $menu_array = array(
+                array(
+                    'name' => 'index',
+                    'text' => '分/子（代理）公司管理',
+                    'url' => url('Admin/Company/index')
+                )
+            );
+        }else{
+            $menu_array = array(
+                array(
+                    'name' => 'index',
+                    'text' => '分/子（代理）公司管理',
+                    'url' => url('Admin/Company/index')
+                ),
+                array(
+                    'name' => 'add',
+                    'text' => '添加',
+                    'url' => url('Admin/Company/add')
+                )
+            );
+        }
+
         if (request()->action() == 'edit') {
             $oid=$_GET['organize_id'];
             $menu_array[1] = array(
-                'name' => 'organize_edit', 'text' => '编辑', 'url' => url('Admin/Organize/edit',array('organize_id'=>$oid))
+                'name' => 'organize_edit', 'text' => '编辑', 'url' => url('Admin/Company/edit',array('organize_id'=>$oid))
             );
         }
         return $menu_array;
@@ -80,6 +100,9 @@ class Organize extends AdminControl {
      * 子公司新增
     */
     public function add() {
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         if (request()->isPost()) {
             //提交表单
             //保存
@@ -97,11 +120,11 @@ class Organize extends AdminControl {
             $input['o_createtime']=date('Y-m-d H:i:s',time());
             $input['o_remark'] = trim($_POST['o_remark']);
             $input['o_del']=1;
-            $activity = Model('organize');
+            $activity = Model('company');
             $result = $activity->addOrganize($input);
             if ($result) {
                 $this->log(lang('ds_add') . lang('ds_company') . '[' . $_POST['o_name'] . ']', 1);
-                $this->success(lang('ds_common_save_succ'),'organize/index');
+                $this->success(lang('ds_common_save_succ'),'company/index');
             }
             else {
                 $this->error(lang('ds_common_save_fail'));
@@ -119,7 +142,10 @@ class Organize extends AdminControl {
      */
     public function edit()
     {
-        $model_organize = Model('organize');
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $model_organize = Model('company');
         if (request()->isPost()) {
             $where = array();
             $where['o_id'] = intval($_POST['o_id']);
@@ -139,7 +165,7 @@ class Organize extends AdminControl {
             $result = $model_organize->editOrganize($where, $update_array);
             if ($result) {
                 $this->log(lang('ds_edit') . lang('ds_company') . '[' . $_POST['o_name'] . ']', 1);
-                $this->success(lang('ds_common_save_succ'), 'organize/index');
+                $this->success(lang('ds_common_save_succ'), 'company/index');
             } else {
                 $this->log(lang('ds_edit').lang('ds_company') . '[' . $_POST['o_name'] . ']', 0);
                 $this->error(lang('ds_common_save_fail'));
@@ -162,11 +188,14 @@ class Organize extends AdminControl {
      * 子公司删除
     */
     public function del(){
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $where = array();
         $where['o_id'] = intval($_GET['o_id']);
         $del_array = array();
         $del_array['o_del']=2;
-        $model_organize = Model('organize');
+        $model_organize = Model('company');
         $result = $model_organize->editOrganize($where, $del_array);
         $this->success(lang('ds_common_del_succ'));
     }
@@ -175,6 +204,9 @@ class Organize extends AdminControl {
      */
     public function export_step1()
     {
+        if(session('admin_is_super') !=1 && !in_array(7,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $dataResult = array();
         //$headTitle = "分/子公司列表";
         $title = "分/子公司列表";
@@ -193,7 +225,7 @@ class Organize extends AdminControl {
            </tr>";
 
         $filename = $title.".xls";
-        $model_organize = Model('organize');
+        $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
         if (!empty($_GET['o_name'])) {
@@ -247,6 +279,9 @@ class Organize extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
+        if(session('admin_is_super') !=1 && !in_array(6,$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $admin_id = $this->admin_info['admin_id'];
             $model_admin = Model('admin');
             $param['admin_name'] = $_POST['admin_name'];

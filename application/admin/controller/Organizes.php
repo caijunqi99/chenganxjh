@@ -56,7 +56,7 @@ class Organizes extends AdminControl
     public function company()
     {
         //分子公司列表
-        $model_organize = Model('organize');
+        $model_organize = Model('company');
         $oid=$_GET['o_id'];
         $organize_info = $model_organize->getOrganizeInfo(array('o_id' => $oid));
         $this->assign('organize_info', $organize_info);
