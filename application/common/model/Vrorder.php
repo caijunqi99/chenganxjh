@@ -63,7 +63,6 @@ class Vrorder extends Model {
         }else{
             $list = db('order')->field($field)->where($condition)->order($order)->limit($limit)->select();
         }
-
         return $list;
     }
 
