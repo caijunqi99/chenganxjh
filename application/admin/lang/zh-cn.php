@@ -40,7 +40,7 @@ $lang['ds_organize_remark'] = '备注';
 $lang['ds_organize_assign'] = '分配管理员账号';
 $lang['organize_index_title']='输入公司（代理）名称';
 $lang['organize_index_role']='公司（代理）角色';
-$lang['organize_index_company']='总公司';
+$lang['organize_index_company']='分公司';
 $lang['organize_index_province']='省级代理';
 $lang['organize_index_city']='市级代理';
 $lang['organize_index_special']='特约代理';
@@ -69,6 +69,8 @@ $lang['organize_studentnum_num']='绑定学生数';
 $lang['organize_studentnum_name']='绑定学生姓名';
 $lang['organize_studentnum_names']='所属会员登录名称';
 $lang['co_organize_succ']              = '分配成功';
+$lang['company_add_username_max']              = '公司名称长度为3-20';
+
 
 //学校管理
 $lang['ds_school'] = '学校管理';
