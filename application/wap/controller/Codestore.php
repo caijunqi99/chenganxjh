@@ -6,7 +6,7 @@
 namespace app\wap\controller;
 
 
-class MakeCode
+class Codestore
 {
     public function make_code()
     {
