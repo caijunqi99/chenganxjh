@@ -11,7 +11,7 @@ class REST {
   private $Batch;  //时间戳
   private $BodyType     = "json";//包体格式，可填值：json 、xml
   private $enabeLog     = true; //日志开关。可填值：true、
-  private $Filename     ="./log.txt"; //日志文件
+  private $Filename     ="./uploads/sms_log/".date('Y-m-d').'log.txt'; //日志文件
   private $Handle; 
 	function __construct()	
 	{

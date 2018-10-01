@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-绑定学生</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../../content/scripts/mobile-util.js"></script>
+</head>
+
+<body>
+    <header class="head">
+        <div class="head0">
+            <div class="menu_bar_box">
+                <!--  <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                 <i class="icon iconfont icon-jiantou3"></i>
+                 </a> -->
+                <a href="javascript:;" class="back_btn" onClick="back('test')">
+                    <i class="icon iconfont icon-jiantou3"></i>
+                </a>
+            </div>
+            <div class="head_title">
+                <p>绑定学生</p>
+            </div>
+            <div class="head_r">
+                <a href="javascript:;">
+                    <i class="icon iconfont icon-saoyisao"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="main">
+        <div class="container2">
+            <div class="bang_list">
+                <div class="name_box">
+                    <label for="bang_name"><span class="redstar">*</span>姓名</label>
+                </div>
+                <div class="input_box">
+                    <input class="input_txt" id="bang_name" type="text" placeholder="请输入您的姓名">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="sex" type="text" value="女">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="date" class="weui-label">生日</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="date" type="text" value="2018/09/20">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="city" class="weui-label"><span class="redstar">*</span>所在地</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="city" type="text" value="湖北省 武汉市 武昌区">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="school" class="weui-label"><span class="redstar">*</span>就读学校</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="school" type="text" value="江苏实验幼儿园1">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="classes" class="weui-label"><span class="redstar">*</span>所在年级</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="classes" type="text" value="大班 1班">
+                </div>
+            </div>
+
+            <div class="bang_list">
+                <div class="name_box">
+                    <label for="bang_name"><span class="redstar">*</span>班级识别码</label>
+                </div>
+                <div class="input_box">
+                    <input class="input_txt" id="bang_name" type="text" placeholder="请输入班级识别码">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
+                <div class="weui-cell__bd">
+                    <a href="javascript:;" class="input_txt color_blue">2019/09/20 到期</a>
+                </div>
+            </div>
+
+            <div class="bang_submit_box">
+                <input id="bang_submit" class="bang_submit" type="button" value="提 交" />
+            </div>
+        </div>
+
+
+        <script src="../../content/scripts/jquery.min.js"></script>
+        <script src="../../content/plugins/jqweui/lib/fastclick.js"></script>
+        <script src="../../content/plugins/jqweui/js/jquery-weui.js"></script>
+        <script src="../../content/plugins/jqweui/js/city-picker.js"></script>
+        <script src="../../content/scripts/commom.js"></script>
+
+        <script>
+            $(function() {
+                // 性别选择
+                $("#sex").picker({
+                    title: "请选择您的性别",
+                    cols: [{
+                        textAlign: 'center',
+                        values: ['男', '女']
+                    }],
+                    onChange: function(p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function(p, v, d) {
+                        console.log("close");
+                    }
+                });
+
+                //生日选择
+                $("#date").calendar({
+                    onChange: function(p, values, displayValues) {
+                        console.log(values, displayValues);
+                    }
+                });
+
+                // 所在地区选择
+                $("#city").cityPicker({
+                    title: "请选择所在地",
+                    onChange: function(picker, values, displayValues) {
+                        console.log(values, displayValues);
+                        // $("h1:contains(选择所在地)").parents(".weui-picker-modal").height("16rem");
+                    }
+                });
+
+                // 学校就读选择
+                $("#school").picker({
+                    title: "请选择学校",
+                    cols: [{
+                        textAlign: 'center',
+                        values: ['江苏实验小学', '江苏实验幼儿园1', '江苏实验幼儿园2', '江苏实验幼儿园3', '江苏实验幼儿园4']
+                    }],
+                    onChange: function(p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function(p, v, d) {
+                        console.log("close");
+                    }
+                });
+
+                //年级选择
+                $("#classes").picker({
+                    title: "请选择所在年级",
+                    cols: [{
+                        textAlign: 'center',
+                        values: ['小班', '中班', '大班']
+                    }, {
+                        textAlign: 'center',
+                        values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班']
+                    }]
+                });
+            })
+
+            //绑定学生的提交操作
+            $("#bang_submit").click(function() {
+                //ActionName：原生中对应的方法名；parameter：回传的参数
+                //json传递参数
+                var jsonObj = new Object();
+                jsonObj["name"] = "name";
+                jsonObj["age"] = 12;
+                jsonObj["../../content"] = "提交成功";
+                window.webkit.messageHandlers.submitClick.postMessage(JSON.stringify(jsonObj));
+            })
+
+            //返回操作
+            function back(param) {
+                if (plateType() == 1) {
+                    //安卓
+                    alert("设备不支持")
+                } else {
+                    window.webkit.messageHandlers.backClick.postMessage('back!!');
+                }
+            }
+
+            //判读是什么设备
+            function plateType() {
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isAndroid) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        </script>
+</body>
+
+</html>

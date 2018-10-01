@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-个人信息</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../../content/scripts/mobile-util.js"></script>
+</head>
+
+<body class="infobody" ontouchstart>
+    <header class="head">
+        <div class="head0">
+            <div class="menu_bar_box">
+                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+                    <i class="icon iconfont icon-jiantou3"></i>
+                </a>
+            </div>
+            <div class="head_title">
+                <p>人个信息</p>
+            </div>
+            <div class="head_r">
+
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="main">
+        <div class="cont margt30">
+            <div class="container2">
+                <div class="bang_list userhead" style="position:relative;">
+                    <div class="name_box user_head_txt">
+                        <label for="picture" class="picture_label">头像</label>
+                        <input type="file" placeholder="" id="picture" style="visibility:hidden;width: 0;height: 0;" />
+                    </div>
+                    <div class="input_box user_head_cont" style="float:right;">
+                        <div class="user_head_box" style="background:url(../../content/images/user/user_head.jpg) no-repeat center;background-size:cover;">
+                            <img src="../../content/images/user/user_head.jpg" alt="" class="visibility_hide">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cont">
+            <div class="container2">
+                <div class="bang_list">
+                    <div class="name_box">
+                        <label for="nickname">昵称</label>
+                    </div>
+                    <div class="input_box">
+                        <input class="input_txt" id="nickname" type="text" placeholder="" value="18518787797" />
+                    </div>
+                </div>
+
+                <div class="weui-cell bang_list">
+                    <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input input_txt inputpointer" id="shenfen" type="text" value="家长" />
+                    </div>
+                </div>
+
+                <div class="weui-cell bang_list">
+                    <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input input_txt inputpointer" id="sex" type="text" value="男" />
+                    </div>
+                </div>
+
+                <div class="bang_list">
+                    <div class="name_box">
+                        <label for="nickname">年龄</label>
+                    </div>
+                    <div class="input_box">
+                        <input class="input_txt" id="nickname" type="text" placeholder="请输入年龄" value="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cont">
+            <div class="container2">
+                <div class="weui-cell bang_list">
+                    <div class="weui-cell__hd name_box"><label for="city" class="weui-label">所在地</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input input_txt inputpointer" id="city" type="text" value="湖北省 武汉市 武昌区">
+                    </div>
+                </div>
+
+                <div class="weui-cell bang_list">
+                    <div class="weui-cell__hd name_box"><label for="trade" class="weui-label">行业</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input input_txt inputpointer" id="trade" type="text" value="金融/银行/投资/保险" />
+                    </div>
+                </div>
+
+                <div class="bang_list">
+                    <div class="name_box">
+                        <label for="email">邮箱</label>
+                    </div>
+                    <div class="input_box">
+                        <input class="input_txt" id="email" type="text" placeholder="请输入您的邮箱">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bang_submit_box" style="padding-top: 100px;">
+            <input class="bang_submit" type="button" value="保 存" />
+        </div>
+
+    </div>
+
+
+    <script src="../../content/scripts/jquery.min.js"></script>
+    <script src="../../content/plugins/jqweui/lib/fastclick.js"></script>
+    <script src="../../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../../content/plugins/jqweui/js/city-picker.js"></script>
+    <script src="../../content/scripts/commom.js"></script>
+
+    <script>
+        $(function() {
+            // 身份选择
+            $("#shenfen").picker({
+                title: "请选择您的身份",
+                cols: [{
+                    textAlign: 'center',
+                    values: ['爸爸', '妈妈', '爷爷', '奶奶']
+                }],
+                onChange: function(p, v, dv) {
+                    console.log(p, v, dv);
+                },
+                onClose: function(p, v, d) {
+                    console.log("close");
+                }
+            });
+
+            // 性别选择
+            $("#sex").picker({
+                title: "请选择您的性别",
+                cols: [{
+                    textAlign: 'center',
+                    values: ['男', '女']
+                }],
+                onChange: function(p, v, dv) {
+                    console.log(p, v, dv);
+                },
+                onClose: function(p, v, d) {
+                    console.log("close");
+                }
+            });
+
+            // 行业选择
+            $("#trade").picker({
+                title: "请选择行业",
+                cols: [{
+                    textAlign: 'center',
+                    values: ['计算机/互联网/通讯', '生产/工艺/制造', '医疗/护理/制造', '金融/银行/投资/保险', '商业/服务业/个体经营', '文化/广告/传媒', '娱乐/艺术/表演', '律师/法务', '教育/培训', '公务员/行政/事业单位', '在校大学生', '自由职业', '其他职业']
+                }],
+                onChange: function(p, v, dv) {
+                    console.log(p, v, dv);
+                },
+                onClose: function(p, v, d) {
+                    console.log("close");
+                }
+            });
+
+            // 所在地区选择
+            $("#city").cityPicker({
+                title: "请选择所在地",
+                onChange: function(picker, values, displayValues) {
+                    console.log(values, displayValues);
+                    // $("h1:contains(选择所在地)").parents(".weui-picker-modal").height("16rem");
+                }
+            });
+
+        })
+    </script>
+</body>
+
+</html>
