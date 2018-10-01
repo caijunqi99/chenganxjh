@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselectiones.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
@@ -33,9 +33,12 @@
                 <td><input class="txt" name="search_organize_name" id="search_organize_name" value="{$search_organize_name}" type="text"></td>
 
                 <td id="region">
-                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
                     <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
                     <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
+                    <input type="hidden"  name="o_provinceid" id="o_provinceid" class="o_provinceid">
+                    <input type="hidden"  name="o_cityid" id="o_cityid" class="o_cityid">
+                    <input type="hidden" name="dep" id="dep" class="dep" value="1">
+                    <input type="hidden"  name="sid" id="sid" value="1">
                     {notempty name="address.area_id"}
                     <span>{$address.area_info}</span>
                     <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />

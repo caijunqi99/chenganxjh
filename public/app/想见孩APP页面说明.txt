@@ -1,4 +1,3 @@
-
 我-绑定学生：app/user/boundstudent.html
 
 个人信息：app/user/personalinfo.html
@@ -36,4 +35,5 @@
 商城-：app/mall/index.html 首页
 商城-：app/mall/content.html 详情
 商城-：app/mall/cart.html 购物车
+
 
