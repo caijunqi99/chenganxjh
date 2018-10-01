@@ -46,14 +46,28 @@ class Company extends AdminControl {
         $condition = array();
         $condition['o_del']=1;
         if (!empty($_POST['search_organize_name'])) {
-            $o_name=$_POST['search_organize_name'];
+            $o_name=input('param.search_organize_name');
             $condition['o_name']=array('like', '%' . trim($o_name) . '%');
             $this->assign('search_organize_name',$o_name);
         }
-        if(!empty($_POST['area_info'])){
-            $area_info=$_POST['area_info'];
-            $condition['o_area']=array('like', '%' . trim($area_info) . '%');
-            $this->assign('o_area',$area_info);
+        if(!empty($_POST['o_provinceid'])){
+            $o_provinceid=input('param.o_provinceid');
+            $condition['o_provinceid']=$o_provinceid;
+            $this->assign('o_provinceid',$o_provinceid);
+        }
+        if(!empty($_POST['o_cityid'])) {
+            if ($_POST['dep'] == 2 || $_POST['dep'] == 3){
+                $o_cityid = input('param.o_cityid');
+                $condition['o_cityid'] =$o_cityid;
+                $this->assign('o_cityid', $o_cityid);
+            }
+        }
+        if(!empty($_POST['area_id'])){
+            if ($_POST['dep'] == 3) {
+                $area_id = input('param.area_id');
+                $condition['o_areaid'] =$area_id;
+                $this->assign('area_id', $area_id);
+            }
         }
         $organize_list = $model_organize->getOrganizeList($condition, "*",15);
         $this->assign('page', $model_organize->page_info->render());
