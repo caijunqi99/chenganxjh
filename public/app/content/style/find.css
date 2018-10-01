@@ -1,0 +1,511 @@
+.week_bar {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.week_bar li {
+    width: 33.33%;
+    float: left;
+    height: 60px;
+    border-top: 1px solid #4ec3bb;
+    border-bottom: 1px solid #4ec3bb;
+    background: #4ec3bb;
+    box-sizing: border-box;
+}
+
+.week_bar li:first-child {
+    border-radius: 30px 0 0 30px;
+}
+
+.week_bar li:last-child {
+    border-radius: 0 30px 30px 0;
+}
+
+.week_bar li a {
+    display: block;
+    width: 100%;
+    height: 58px;
+    line-height: 58px;
+    font-size: 24px;
+    text-align: center;
+    color: #fff;
+}
+
+.week_bar li.active {
+    background: #fff;
+    border-top-color: #4ec3bb;
+    border-bottom-color: #4ec3bb;
+}
+
+.week_bar li.active a {
+    color: #4ec3bb;
+}
+
+.week_list li {
+    border-bottom: 1px solid #ececec;
+}
+
+.week_list li.active .week_class_cont {
+    display: block;
+}
+
+.week_list>li>a {
+    display: block;
+    height: 80px;
+    line-height: 80px;
+    padding: 0 30px;
+    font-size: 26px;
+    color: #6b6b6b;
+}
+
+.linkpointer {
+    float: right;
+    font-size: 26px;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    -o-transition: .3s;
+    transition: .3s;
+}
+
+.week_list li.active>a {
+    background: #effffe;
+    color: #4ec3bb;
+}
+
+.week_list li.active>a .linkpointer {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.week_class_cont {
+    padding: 12px 40px;
+    display: none;
+}
+
+.week_class_txt {
+    border-left: 1px dashed #6dcec7;
+}
+
+.classplan dt {
+    font-size: 24px;
+    line-height: 60px;
+    margin-left: -18px;
+}
+
+.classplan dt i {
+    font-size: 36px;
+    color: #4ec3bb;
+    position: relative;
+    top: -2px;
+    margin-right: 15px;
+}
+
+.classplan dd {
+    font-size: 24px;
+    line-height: 60px;
+    margin-left: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.classplan dd a {
+    color: #6b6b6b;
+    display: block;
+}
+
+.classplan dd span.dot {
+    margin-right: 15px;
+    color: #4ec3bb;
+}
+
+.cook_bar {
+    width: 140px;
+    position: fixed;
+    left: 0;
+    top: 74px;
+    z-index: 10;
+    display: block;
+    height: 100%;
+    background: #f7f7f7;
+}
+
+.cook_bar>a {
+    display: block;
+    height: 90px;
+    background: #f7f7f7;
+    border-left: 4px solid #f7f7f7;
+    box-sizing: border-box;
+    line-height: 90px;
+    padding: 0;
+    font-size: 28px;
+    color: #6b6b6b;
+}
+
+.cook_cont {
+    padding-left: 190px;
+    position: relative;
+}
+
+.cook_bar a.weui-bar__item--on {
+    border-left-color: #4ec3bb;
+    background: #fff;
+}
+
+.recipes li {
+    position: relative;
+    padding-right: 15px;
+    margin-bottom: 15px;
+}
+
+.foot_img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 89;
+}
+
+.cook_txt {
+    padding-left: 80px;
+    min-height: 60px;
+}
+
+.cook_txt h2 {
+    font-size: 28px;
+    line-height: 60px;
+    color: #333;
+}
+
+.cook_txt p {
+    font-size: 24px;
+    line-height: 46px;
+    color: #aaa;
+}
+
+.cook_cont {
+    min-height: 667px;
+}
+
+.nofood {
+    width: 167px;
+    height: 199px;
+    position: absolute;
+    z-index: 99;
+    left: 50%;
+    top: 50%;
+    margin-left: -40px;
+    margin-top: -100px;
+}
+
+.cook_foot {
+    width: 100%;
+    height: 100px;
+    background: #fff;
+    border-top: 1px solid #e1e1e1;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+}
+
+.cookmain {
+    padding-bottom: 120px;
+}
+
+.cook_foot_date {
+    width: 720px;
+    margin: 0 auto;
+    padding-top: 20px;
+    -webkit-display: flex;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cook_foot_date li {
+    height: 60px;
+    border-radius: 7px;
+    background: #4ec3bb;
+    font-size: 30px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.cook_foot_date li a {
+    color: #fff;
+}
+
+.cook_foot_date li.prev_week {
+    /* float: left; */
+    width: 150px;
+}
+
+.cook_foot_date li.showday {
+    background: none;
+    color: #333;
+    font-size: 30px;
+}
+
+.cook_foot_date li.next_week {
+    /* float: right; */
+    width: 150px;
+}
+
+.school_logo {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    bottom: -50px;
+    z-index: 7;
+}
+
+.school_imgbox {
+    position: relative;
+    margin-bottom: 80px;
+}
+
+.school_title {
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    line-height: 50px;
+}
+
+.sub_school_title {
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    line-height: 50px;
+}
+
+.sub_school_title {
+    font-size: 26px;
+    color: #aaa;
+    text-align: center;
+    line-height: 40px;
+}
+
+.schooladdress {
+    font-size: 28px;
+    color: #6b6b6b;
+    background: url(../images/user/link_pointer.png) no-repeat right center;
+    padding: 30px 30px 30px 40px;
+    position: relative;
+}
+
+.schooladdress .icon {
+    font-size: 32px;
+    color: #aaa;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -20px;
+}
+
+.school_info {
+    margin-bottom: 30px;
+}
+
+.school_info_txt {
+    height: 220px;
+    overflow: hidden;
+}
+
+.school_info_title {
+    font-size: 30px;
+    color: #333;
+    text-align: center;
+    line-height: 50px;
+    margin-bottom: 15px;
+}
+
+.school_info_p {
+    font-size: 26px;
+    color: #6b6b6b;
+    line-height: 46px;
+    text-indent: 2em;
+    margin-bottom: 10px;
+}
+
+a.lookall {
+    font-size: 28px;
+    color: #aaa;
+    text-align: center;
+    display: block;
+    padding: 15px 0;
+}
+
+.lookall .icon {
+    font-size: 28px;
+    margin-left: 10px;
+}
+
+.scenery_list li {
+    width: 33.33%;
+    height: 210px;
+    float: left;
+    margin-bottom: 20px;
+}
+
+.scenery_img {
+    width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.scenery_title {
+    font-size: 30px;
+    color: #333;
+    line-height: 50px;
+    text-align: center;
+    padding: 20px 0 30px;
+}
+
+.school_cont img {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.head_picbox {
+    margin-bottom: 20px;
+}
+
+.head_piccont {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    float: left;
+}
+
+.head_pic {
+    font-size: 30px;
+    color: #333;
+    line-height: 78px;
+    padding-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mood_p {
+    font-size: 28px;
+    color: #242424;
+    line-height: 46px;
+}
+
+.mood_txt {
+    padding: 10px 0;
+}
+
+.mood_list>li {
+    clear: both;
+    margin-bottom: 30px;
+}
+
+.mood_imglist li {
+    width: 33.33%;
+    height: 300px;
+    float: left;
+    padding: 15px 10px;
+    box-sizing: border-box;
+}
+
+.moodimg {
+    height: 100%;
+}
+
+.moodimg img {
+    width: 100%;
+}
+
+.thumbs {
+    width: 220px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.thumbs_l {
+    width: 50%;
+    float: left;
+    color: #aeaeae;
+    font-size: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.thumbs_l i {
+    font-size: 30px;
+    margin-right: 5px;
+    position: relative;
+    top: -2px;
+}
+
+.thumbs_r {
+    width: 50%;
+    float: right;
+    text-align: right;
+    font-size: 22px;
+    color: #242424;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msg_date {
+    height: 70px;
+    text-align: center;
+    font-size: 24px;
+    color: #aaaeae;
+}
+
+.msg_title {
+    font-size: 28px;
+    color: #4f4f4f;
+    text-align: center;
+    margin-bottom: 15px;
+    line-height: 50px;
+}
+
+.msg_p {
+    font-size: 26px;
+    color: #aeaeae;
+    text-indent: 2em;
+    line-height: 46px;
+}
+
+.msg_txt {
+    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    height: 196px;
+    overflow: hidden;
+}
+
+.msg_list {
+    margin-bottom: 30px;
+}
+
+.msgs_title {
+    font-size: 30px;
+    color: #333;
+    line-height: 50px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.msgs_subtitle {
+    font-size: 28px;
+    color: #aaaeae;
+    line-height: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+}
