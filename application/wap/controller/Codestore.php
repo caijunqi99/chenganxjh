@@ -6,14 +6,15 @@
 namespace app\wap\controller;
 
 
-class Codestore
+class MakeCode
 {
-    public function store_code()
+    public function make_code()
     {
         if ($_GET['text']) {
             $text = $_GET['text'];
             $size = '6';
             $level = 'H';
+            //二维码log   需要替换
             $logo = BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . '/mb_default_store.png';
             $padding = '2';
             $path = BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS;
