@@ -24,15 +24,15 @@
             </tr>
             </thead>
             <tbody>
-            {notempty name="organize_list"}
-            {volist name="organize_list" id="v"}
+            {notempty name="admin_list"}
+            {volist name="admin_list" id="v"}
             <tr class="hover edit">
-                <td class="sort">{$v.o_id}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="class">{$v.o_area}</td>
-                <td class="class">{$v.o_area}</td>
-                <td class="picture">{$v.o_createtime}</td>
-                <td class="align-center">{$v.o_remark}</td>
+                <td class="sort">{$key+1}</td>
+                <td class="name">{$v.admin_true_name}</td>
+                <td class="class">{$v.admin_name}</td>
+                <td class="class">{$v.gname}</td>
+                <td class="picture"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
+                <td class="align-center">{$v.admin_description}</td>
             </tr>
             {/volist}
             {else /}
