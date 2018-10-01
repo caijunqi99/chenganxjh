@@ -87,6 +87,7 @@ class Goodsclass extends Model
      */
     public function getGoodsClassList($condition, $field = '*')
     {
+        $condition['gc_show'] = isset($condition['gc_show'])?$condition['gc_show']:1;
         $result = db('goodsclass')->field($field)->where($condition)->order('gc_parent_id asc,gc_sort asc,gc_id asc')->limit(false)->select();
         return $result;
     }

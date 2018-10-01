@@ -46,7 +46,7 @@
     <table class="ds-default-table">
       <thead>
         <tr class="thead">
-          <th><input type="checkbox" class="checkall"/></th>
+          <!-- <th><input type="checkbox" class="checkall"/></th> -->
           <th>{$Think.lang.pkg_name}</th>
           <th class="align-center">{$Think.lang.pkg_price}</th>          
           <th class="align-center">{$Think.lang.pkg_cprice}</th>          
@@ -67,7 +67,7 @@
         <?php if(!empty($pkg_list) && is_array($pkg_list)){ ?>
         <?php foreach($pkg_list as $k => $v){ ?>
         <tr class="hover">
-          <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['pkg_id']; ?>" /></td>
+          <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['pkg_id']; ?>" /></td> -->
           <td><span title="<?php echo $v['pkg_name'];?>"><?php echo str_cut($v['pkg_name'], '40');?></span></td>
           <td class="align-center"><?php echo $v['pkg_price'];?></td>
           <td class="align-center"><?php echo $v['pkg_cprice'];?></td>

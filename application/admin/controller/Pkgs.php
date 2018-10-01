@@ -16,6 +16,7 @@ class Pkgs extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
+        // halt($perm_id);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
@@ -46,7 +47,7 @@ class Pkgs extends AdminControl {
             if ($search_name != '') {
                 $condition['pkg_name'] = array('like', '%' . trim($search_name) . '%');
             }
-            $pkg_list = $pkg->getPkgList($condition, '15');
+            $pkg_list = $pkg->getPkgList($condition, 10);
             $this->assign('pkg_list', $pkg_list);
 
             $this->assign('page', $pkg->page_info->render());
