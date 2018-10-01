@@ -259,10 +259,20 @@ class Company extends AdminControl {
             $condition['o_name']=array('like', '%' . trim($o_name) . '%');
             $this->assign('search_organize_name',$o_name);
         }
-        if(!empty($_POST['area_info'])){
-            $area_info=$_POST['area_info'];
-            $condition['o_area']=array('like', '%' . trim($area_info) . '%');
-            $this->assign('o_area',$o_area);
+        if(!empty($_GET['o_provinceid'])){
+            $o_provinceid=input('param.o_provinceid');
+            $condition['o_provinceid']=$o_provinceid;
+            $this->assign('o_provinceid',$o_provinceid);
+        }
+        if(!empty($_GET['o_cityid'])) {
+                $o_cityid = input('param.o_cityid');
+                $condition['o_cityid'] =$o_cityid;
+                $this->assign('o_cityid', $o_cityid);
+        }
+        if(!empty($_GET['area_id'])){
+                $area_id = input('param.area_id');
+                $condition['o_areaid'] =$area_id;
+                $this->assign('area_id', $area_id);
         }
         $dataResult = $model_organize->getOrganizeList($condition, "o_id,o_name,o_role,o_area,o_address,o_phone,o_leading,o_enddate,o_createtime,o_remark");
         foreach($dataResult as $key=>$v){
