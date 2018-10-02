@@ -34,7 +34,7 @@ class Member extends MobileMall
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($member_id)){
-            $result = db('member')->field('member_id,member_nickname,member_avatar,member_identity,member_age,member_sex,member_email,member_provinceid,member_cityid,member_areaid,member_jobid')->where($where)->find();
+            $result = db('member')->field('member_id,member_nickname,member_avatar,member_identity,member_age,member_sex,member_email,member_provinceid,member_cityid,member_areaid,member_jobid,member_provinceid,member_cityid,member_areaid')->where($where)->find();
             if(!empty($result)){
                 output_data($result);
             }else{
