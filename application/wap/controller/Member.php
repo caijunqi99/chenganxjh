@@ -12,7 +12,6 @@ class Member extends MobileMall
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
-        header("Access-Control-Allow-Origin: *");
     }
 
     /**
