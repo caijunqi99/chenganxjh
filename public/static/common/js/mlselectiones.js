@@ -6,10 +6,7 @@
 function regionInit(divId) {
     var area_id = 0;
     getArea(function(){
-        if(typeof(nc_a[area_id]) == 'object' && nc_a[area_id].length > 0){//数组存在
-            var area_select = $("#" + divId + " > select");//选择要初始化的对象
-            areaInit(area_select,area_id);
-        }
+        
     $("#" + divId + " > select").change(regionChange); // select的onchange事件
     $("#" + divId + " > input:button[class='edit_region']").click(regionEdit); // 编辑按钮的onclick事件
     });
