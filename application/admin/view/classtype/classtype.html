@@ -138,7 +138,7 @@ $(function(){
     <table class="ds-default-table">
       <thead>
         <tr class="thead">
-          <th><input type="checkbox" class="checkall"/></th>
+          <!-- <th><input type="checkbox" class="checkall"/></th> -->
           <th class="align-center">{$Think.lang.cl_type}</th>
           <th class="align-center">{$Think.lang.school_type}</th>
           <th class="align-center">{$Think.lang.ds_sort}</th>
@@ -155,7 +155,7 @@ $(function(){
         <?php if(!empty($class_list) && is_array($class_list)){ ?>
         <?php foreach($class_list as $k => $v){ ?>
         <tr class="hover" id="pid_<?php echo $v['cl_id'];?>" sc_id="<?php echo $v['sc_id'];?>" cl_sort="<?php echo $v['cl_sort'];?>" cl_type="<?php echo str_cut($v['cl_type'], '40');?>">
-          <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['cl_id']; ?>" /></td>
+          <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['cl_id']; ?>" /></td> -->
           <td><span title="<?php echo $v['cl_type'];?>"><?php echo str_cut($v['cl_type'], '40');?></span></td>          
           <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>          
           <td class="align-center"><?php echo $v['cl_sort'];?></td>

@@ -9,6 +9,14 @@ $(function () {
     FastClick.attach(document.body);
 
 })
+
+function doLogin(){
+    var appType = getCookie('appType');
+    //'android', 'wap', 'wechat', 'ios', 'windows', 'jswechat'
+    if (appType == 'Android') {alert('Android - 登陆方法');}
+    if (appType == 'IOS') {alert('IOS - 登陆方法');}
+}
+
 // foot定位底部函数
 function footerfixed() {
     $("#footer").css("position", "static");

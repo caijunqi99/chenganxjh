@@ -124,7 +124,7 @@ $(function(){
     <table class="ds-default-table">
       <thead>
         <tr class="thead">
-          <th><input type="checkbox" class="checkall"/></th>
+          <!-- <th><input type="checkbox" class="checkall"/></th> -->
           <th>{$Think.lang.sc_type}</th>
           <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.up_time}</th>
@@ -140,7 +140,7 @@ $(function(){
         <?php if(!empty($sctype_list) && is_array($sctype_list)){ ?>
         <?php foreach($sctype_list as $k => $v){ ?>
         <tr class="hover" id="pid_<?php echo $v['sc_id'];?>" sc_sort="<?php echo $v['sc_sort'];?>" sc_type="<?php echo str_cut($v['sc_type'], '40');?>">
-          <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['sc_id']; ?>" /></td>
+          <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['sc_id']; ?>" /></td> -->
           <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>          
           <td class="align-center"><?php echo $v['sc_sort'];?></td>
           <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>

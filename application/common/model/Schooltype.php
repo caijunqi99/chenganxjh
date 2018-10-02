@@ -71,7 +71,15 @@ class Schooltype extends Model {
     public function getOnePkg($condition = array()) {
         return db('schooltype')->where($condition)->find();
     }
-
+    /**
+     * api获取学校类型列表
+     *
+     * @param array $condition 查询条件
+     * @return array 二维数组
+     */
+    public function get_sctype_Lists($condition = array(), $field, $orderby = 'sc_sort asc') {
+            return db('schooltype')->field($field)->where($condition)->order($orderby)->select();
+    }
 
 
 
