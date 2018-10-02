@@ -81,7 +81,7 @@ class Common extends MobileMall
                     $where .= ' AND areaid = "'.$area.'"';
                 }
             }
-            $school = db('school')->field('schoolid,name')->where($where)->select();
+            $school = db('school')->field('name as title,schoolid as value')->where($where)->select();
         }
 
         output_data($school);
