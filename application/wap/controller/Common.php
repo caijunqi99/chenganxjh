@@ -25,20 +25,65 @@ class Common extends MobileMall
             output_error('缺少参数token');
         }
         $where = ' area_parent_id = 0';
-        $area = db('area')->field('area_id,area_parent_id,area_name')->where($where)->select();
+        $area = db('area')->field('area_id as code,area_name as name')->where($where)->select();
         if(!empty($area)){
             foreach($area as $key=>$value){
-                    $area[$key]['child'] = db('area')->field('area_id,area_parent_id,area_name')->where(' area_parent_id = "'.$value['area_id'].'"')->select();
-                    if(!empty($area[$key]['child'])){
-                        foreach($area[$key]['child'] as $k=>$v){
-                            $area[$key]['child'][$k]['child'] = db('area')->field('area_id,area_parent_id,area_name')->where(' area_parent_id = "'.$v['area_id'].'"')->select();
-                        }
+                $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$value['code'].'"')->select();
+                if(!empty($area[$key]['sub'])){
+                    foreach($area[$key]['sub'] as $k=>$v){
+                        $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$v['code'].'"')->select();
                     }
+                }
             }
         }
 
 
         output_data($area);
+
+    }
+
+    /**
+     * @desc 行业获取
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function industry(){
+
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $where = '1=1';
+        $industry = db('industry')->where($where)->select();
+        output_data($industry);
+    }
+
+    /**
+     * @desc 学校获取
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function school(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $province = intval(input('post.province'));
+        $city = intval(input('post.city'));
+        $area = intval(input('post.area'));
+        $where = 'isdel =1 ';
+        if(!empty($province)){
+            $where .= ' AND provinceid = "'.$province.'"';
+            if(!empty($city)){
+                $where .= ' AND cityid = "'.$city.'"';
+                if(!empty($area)){
+                    $where .= ' AND areaid = "'.$area.'"';
+                }
+            }
+        }
+        $school = db('school')->field('schoolid,name')->where($where)->select();
+
+        output_data($school);
 
     }
 

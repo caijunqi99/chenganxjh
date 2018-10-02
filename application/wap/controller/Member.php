@@ -451,7 +451,8 @@ class Member extends MobileMall
         $data = array(
             'is_owner' => $member_id,
             'member_aboutname' => $member_aboutname,
-            'member_mobile' => $member_mobile
+            'member_mobile' => $member_mobile,
+            'member_add_time' =>time()
         );
         if(!empty($member_about)){
             if($member_about['is_owner'] != 0){
