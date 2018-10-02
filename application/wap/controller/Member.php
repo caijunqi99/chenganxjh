@@ -12,6 +12,7 @@ class Member extends MobileMall
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
+        header("Access-Control-Allow-Origin: *");
     }
 
     /**
@@ -312,10 +313,6 @@ class Member extends MobileMall
             output_error('新密码不能和原密码一样，请重新输入');
         }
 
-
-
-
-
     }
 
     /**
@@ -324,6 +321,53 @@ class Member extends MobileMall
      * @time 20181002
      */
     public function studentBind(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,member_paypwd')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+
+        $name = trim(input('post.name'));//姓名
+        $sex = intval(input('post.sex'));//性别
+        $birthday = trim(input('post.birthday'));//出生日期
+        $province_id = intval(input('post.province'));//省ID
+        $city_id = intval(input('post.city'));//市ID
+        $area_id = intval(input('post.area'));//区ID
+        $school_id = intval(input('post.school'));//学校ID
+        $grade_id = intval(input('post.grade'));//年级ID
+        $class_id = intval(input('post.class'));//班级ID
+        $classCard = intval(input('post.class_code'));//班级识别码
+        if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
+            output_error('传的参数不完整');
+        }
+
+        $data = array(
+            's_ownerAccount' => $member_id,
+            's_name' => $name,
+            's_sex' => $sex,
+            's_classid' => $class_id,
+            's_schoolid' => $school_id,
+            's_sctype' => $grade_id,
+            's_birthday' => $birthday,
+            's_provinceid' => $province_id,
+            's_cityid' => $city_id,
+            's_areaid' => $area_id,
+            'classCard' =>$classCard
+        );
+
+
+
+
+
 
     }
 
