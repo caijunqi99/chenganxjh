@@ -86,7 +86,7 @@ class Admin extends AdminControl {
             $param['create_uid'] = $admin_id;
             $param['admin_company_id'] = $_POST['admin_company_id'];
             $param['admin_phone'] = $_POST['admin_phone'];
-            $param['admin_truename'] = $_POST['admin_truename'];
+            $param['admin_true_name'] = $_POST['admin_truename'];
             $param['admin_department'] = $_POST['admin_department'];
             $param['admin_description'] = $_POST['admin_description'];
             $rs = $model_admin->addAdmin($param);

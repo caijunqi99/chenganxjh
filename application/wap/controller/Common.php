@@ -54,7 +54,7 @@ class Common extends MobileMall
             output_error('缺少参数token');
         }
         $where = '1=1';
-        $industry = db('industry')->where($where)->select();
+        $industry = db('industry')->field('name as title,id as value')->where($where)->select();
         output_data($industry);
     }
 
@@ -72,6 +72,7 @@ class Common extends MobileMall
         $city = intval(input('post.city'));
         $area = intval(input('post.area'));
         $where = 'isdel =1 ';
+        $school = '';
         if(!empty($province)){
             $where .= ' AND provinceid = "'.$province.'"';
             if(!empty($city)){
@@ -80,10 +81,45 @@ class Common extends MobileMall
                     $where .= ' AND areaid = "'.$area.'"';
                 }
             }
+            $school = db('school')->field('schoolid,name')->where($where)->select();
         }
-        $school = db('school')->field('schoolid,name')->where($where)->select();
 
         output_data($school);
+
+    }
+    /**
+     * @desc 获取年级接口
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function grade(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $school_id = intval(input('post.school_id'));
+        if(empty($school_id)){
+            output_error('缺少参数school_id');
+        }
+        $where = 'isdel =1 AND schoolid="'.$school_id.'"';
+
+        $school = db('school')->field('schoolid,name,typeid')->where($where)->find();
+        if(empty($school)){
+           output_error('该学校不存在或已被删除，请联系管理员');
+        }
+        $arr = '';
+        if(!empty($school['typeid'])){
+            $type = explode(',',$school['typeid']);
+            foreach($type as $key=>$value){
+                $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'"')->find();
+                $arr['id'] = $name['sc_id'];
+                $arr['name'] = $name['sc_type'];
+                $arr['child'] = db('class')->field('classid,classname')->where('schoolid = "'.$school_id.'" AND typeid = "'.$value.'"')->select();
+            }
+        }
+
+        output_data($arr);
+
 
     }
 
