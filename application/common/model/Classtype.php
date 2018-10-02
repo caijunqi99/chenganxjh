@@ -81,7 +81,15 @@ class Classtype extends Model {
     public function getOnePkg($condition = array()) {
         return db('classtype')->where($condition)->find();
     }
-
+    /**
+     * api获取班级类型列表
+     *
+     * @param array $condition 查询条件
+     * @return array 二维数组
+     */
+    public function get_classtype_Lists($condition = array(), $field, $orderby = 'cl_sort asc') {
+            return db('classtype')->field($field)->where($condition)->order($orderby)->select();
+    }
 
 
 

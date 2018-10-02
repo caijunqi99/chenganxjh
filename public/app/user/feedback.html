@@ -8,14 +8,14 @@
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
     <meta id="viewport" name="viewport" content="width=750" />
-    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
-    <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
-    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
-    <script src="../content/scripts/mobile-util.js"></script>
+    <link rel="stylesheet" href="../../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../../content/style/user.css" type="text/css" />
+    <link rel="shortcut icon" href="../../content/images/ico.ico" type="image/x-icon" />
+    <script src="../../content/scripts/mobile-util.js"></script>
 </head>
 
 <body class="infobody" ontouchstart>
@@ -69,20 +69,18 @@
     </div>
 
 
-    <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/scripts/config.js"></script>
-    <script src="../content/scripts/commom.js"></script>
-    <script src="../content/scripts/user/feedback.js"></script>
+    <script src="../../content/scripts/jquery.min.js"></script>
+    <script src="../../content/plugins/jqweui/lib/fastclick.js"></script>
+    <script src="../../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../../content/scripts/commom.js"></script>
     <script>
         $(function() {
             // 反馈意见字数限制
             $("#sizeStatistics").on("keyup", function() {
                 var size = $("#sizeStatistics").val().length;
-                if (size > 300) {
-                    size = 300;
-                    $("#sizeStatistics").val($("#sizeStatistics").val().substring(0, 300));
+                if (size > 400) {
+                    size = 400;
+                    $("#sizeStatistics").val($("#sizeStatistics").val().substring(0, 400));
                 }
                 $("#currentSize").html(size);
             })
