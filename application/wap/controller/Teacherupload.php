@@ -18,9 +18,36 @@ class Teacherupload
     //上传视频课件下拉列表
     public function select(){
         $list=array();
-
-
+        $ClassType = model('Classtype');
+        $condition = array();
+        $class=$ClassType->get_classtype_Lists($condition, 'cl_id,cl_type');
+        $list['class']=$class;
+        $Course = model('Course');
+        $conditiones = array();
+        $course = $Course->get_course_Lists($conditiones, 'co_id,co_type' ,'co_id asc');
+        $list['course']=$course;
+        $pkg = model('pkgs');
+        $conditions = array();
+        $conditions['pkg_type']= 3 ;
+        $pkg_list = $pkg->getPkgLists($conditions,'pkg_id,pkg_price','pkg_id desc');
+        $list['pkg']=$pkg_list;
         output_data($list);
-        output_data($sc_list);
+    }
+    //上传课件提交
+    public function addcourse(){
+        $model_teachchild = Model('teachchild');
+        $condition = array();
+        $condition['t_url']=input('param.url');
+        $condition['t_picture'] = input('param.picture');
+        $condition['t_title']   = input('param.title');
+        $condition['t_profile'] = input('param.profile');
+        $condition['t_classid']  = input('param.classid');
+        $condition['t_courseid']  = input('param.courseid');
+        $condition['t_price']  = input('param.price');
+        $condition['t_maketime']  = time();
+        $condition['t_audit']=1;
+        $condition['t_del']=1;
+        $condition['t_supreme']=1;
+        $model_teachchild->addTeachchild($condition);
     }
 }

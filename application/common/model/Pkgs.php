@@ -72,7 +72,16 @@ class Pkgs extends Model {
         return db('packages')->where($condition)->find();
     }
 
+    /**
+     * api获取套餐列表
+     *
+     * @param array $condition 查询条件
+     * @return array 二维数组
+     */
+    public function getPkgLists($condition = array(), $field, $orderby = 'pkg_sort asc') {
+            return db('packages')->field($field)->where($condition)->order($orderby)->select();
 
+    }
 
 
 

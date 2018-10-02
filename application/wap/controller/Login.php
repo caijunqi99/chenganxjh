@@ -104,10 +104,16 @@ class Login extends MobileMall
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if ($token) {
-                $logindata = array(
-                    'member_mobile' => $member['member_mobile'], 'uid' => $member['member_id'], 'key' => $token
-                    //头像，用户名，副账号数量，本身账号属性，角色属性， 是否已绑定孩子，
-                );
+                $logindata = array();
+                //返回数据头像，用户名，副账号数量，本身账号属性，角色属性，是否主账号，
+                $logindata['key']=$token;
+                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                $logindata['user_name'] = $member['member_name'];
+                $logindata['member_mobile'] = $member['member_mobile'];
+                $logindata['uid'] = $member['member_id'];                
+                $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
+                $logindata['favorites_goods'] = Model('favorites')->getGoodsFavoritesCountByMemberId($this->member_info['member_id']);
+     
                 output_data($logindata);
             }else {
                 output_error('登录失败');
