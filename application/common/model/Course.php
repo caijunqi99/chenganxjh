@@ -71,7 +71,15 @@ class Course extends Model {
     public function getOnePkg($condition = array()) {
         return db('course')->where($condition)->find();
     }
-
+    /**
+     * api获取学校类型列表
+     *
+     * @param array $condition 查询条件
+     * @return array 二维数组
+     */
+    public function get_course_Lists($condition = array(),$field, $orderby = 'co_sort asc') {
+            return db('course')->field($field)->where($condition)->order($orderby)->select();
+    }
 
 
 
