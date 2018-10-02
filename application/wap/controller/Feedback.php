@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Logout extends MobileMember
+class Feedback extends MobileMember
 {
     public function _initialize()
     {
@@ -18,11 +18,26 @@ class Logout extends MobileMember
     /**
      * 注销
      */
-    public function feed_back(){
-        if(empty($_POST['uid']) || !in_array($_POST['client'], $this->client_type_array)) {
-            output_error('参数错误1');
-        }
+    public function feedback_add(){
+        $model_mb_feedback = Model('mbfeedback');
 
-       
+        $param = array();
+        $param['content'] = $_POST['feedback'];
+
+        $param['type'] = $this->member_info['client_type'];
+        $param['ftime'] = TIMESTAMP;
+        $param['member_id'] = $this->member_info['member_id'];
+        $param['member_name'] = $this->member_info['member_name'];
+        $param['member_mobile'] = input('member_mobile');
+        if(empty($param['content']))output_error('反馈内容不能为空');
+        if(empty($param['member_mobile']))output_error('手机号码不能为空');
+        $result = $model_mb_feedback->addMbFeedback($param);
+
+        if ($result) {
+            output_data(array('state'=>true));
+        }
+        else {
+            output_error('保存失败');
+        }
     }
 }
