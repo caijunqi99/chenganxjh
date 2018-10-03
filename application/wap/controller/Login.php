@@ -105,15 +105,21 @@ class Login extends MobileMall
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if ($token) {
                 $logindata = array();
-                //返回数据头像，用户名，副账号数量，本身账号属性，角色属性，是否主账号，
                 $logindata['key']=$token;
                 $logindata['avator'] = getMemberAvatarForID($member['member_id']);
                 $logindata['user_name'] = $member['member_name'];
                 $logindata['member_mobile'] = $member['member_mobile'];
+                $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
-                $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
-                $logindata['favorites_goods'] = Model('favorites')->getGoodsFavoritesCountByMemberId($this->member_info['member_id']);
-     
+                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
+
+                // $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
+                // $logindata['favorites_goods'] = Model('favorites')->getGoodsFavoritesCountByMemberId($this->member_info['member_id']);
+                // $logindata['student'] = $Student->getMemberStudentInfoById('m.member_id='.$member['member_id']);
+
+                // $logindata['sql'] = $Student->getLastSql();
+                
                 output_data($logindata);
             }else {
                 output_error('登录失败');

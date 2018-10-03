@@ -92,3 +92,8 @@ function http_postdata($url, $postdata) {
 
     return @file_get_contents($url, false, $context);
 }
+function p($arr){
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
+}

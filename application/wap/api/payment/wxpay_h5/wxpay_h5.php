@@ -9,17 +9,17 @@ class wxpay_h5
     public function __construct()
     {
         $this->config = (object) array(
-            'appId' => '',
-            'partnerId' => '',
-            'apiKey' => '',
+            'wxpay_appid' => '',
+            'wxpay_partnerid' => '',
+            'wxpay_partnerkey' => '',
 
-            'notifyUrl' => MOBILE_SITE_URL . '/payment/wx_notify',
+            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify',
 
             'orderSn' => date('YmdHis'),
             'orderInfo' => '',
             'orderFee' => 1,
             'orderAttach' => '_',
-            'sceneInfo' =>json_encode(array('h5_info'=>array('type'=>'WAP','wap_url'=>WAP_SITE_URL,'wap_name'=>config('site_name')))),
+            'sceneInfo' =>json_encode(array('h5_info'=>array('type'=>'WAP','wap_url'=>APP_SITE_URL,'wap_name'=>config('site_name')))),
         );
     }
 
@@ -35,20 +35,19 @@ class wxpay_h5
     /*mweb_url*/
     public function get_mweb_url(){
         $data = array();
-        $data['appid'] = $this->config->appId;
-        $data['mch_id'] = $this->config->partnerId;
-        $data['nonce_str'] = md5(uniqid(mt_rand(), true));
-        $data['body'] = $this->config->orderInfo;
-        $data['attach'] = $this->config->orderAttach;
-        $data['out_trade_no'] = $this->config->orderSn;
-        $data['total_fee'] = $this->config->orderFee;
+        $data['appid']            = $this->config->wxpay_appid;
+        $data['mch_id']           = $this->config->wxpay_partnerid;
+        $data['nonce_str']        = md5(uniqid(mt_rand(), true));
+        $data['body']             = $this->config->orderInfo;
+        $data['attach']           = $this->config->orderAttach;
+        $data['out_trade_no']     = $this->config->orderSn;
+        $data['total_fee']        = $this->config->orderFee;
         $data['spbill_create_ip'] = $_SERVER['REMOTE_ADDR'];
-        $data['notify_url'] = $this->config->notifyUrl;
-        $data['trade_type'] = 'MWEB';
-        $data['scene_info']= $this->config->sceneInfo;
-        $sign = $this->sign($data);
-        $data['sign'] = $sign;
-
+        $data['notify_url']       = $this->config->notifyUrl;
+        $data['trade_type']       = 'MWEB';
+        $data['scene_info']       = $this->config->sceneInfo;
+        $sign                     = $this->sign($data);
+        $data['sign']             = $sign;        
         $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
 
         if ($result['return_code'] != 'SUCCESS') {
@@ -69,7 +68,7 @@ class wxpay_h5
             $resultXml = $this->arrayToXml(array(
                                                'return_code' => 'SUCCESS',
                                            ));
-trace('notify'.json_encode($data),'debug');
+            trace('notify'.json_encode($data),'debug');
 
         } catch (Exception $ex) {
 

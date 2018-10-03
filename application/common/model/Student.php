@@ -20,6 +20,39 @@ class Student extends Model {
         return $class_info;
     }
 
+    /**
+     * 根据孩子id 查找学校班级信息 单条
+     * @param  [type] $chind_id [description]
+     * @return [type]           [description]
+     */
+    public function getChildrenInfoById($chind_id){
+        $list_paginate = db('student')->alias('s')
+        ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
+        ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
+        ->field('s.s_id,s.s_name,sc.schoolid,sc.name,cl.classid,cl.classname')
+        ->where('s_id',$chind_id)
+        ->find();
+        return $list_paginate;
+    }
+
+    /**
+     * 根据用户id查找名下所有学生  多个学生
+     * @param  [type] $member_id [description]
+     * @return [type]            [description]
+     */
+    public function getAllChilds($member_id){
+
+        $result = db('student')->alias('s')
+        ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
+        ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
+        ->field('s.s_id,s.s_name,sc.schoolid,sc.name,cl.classid,cl.classname,cl.classCard')
+        ->where('s_ownerAccount',$member_id)
+        ->whereor('FIND_IN_SET('.$member_id.',s_viceAccount)')
+        ->select();
+        
+        return $result;
+    }
+
     public function getOrderCommonInfo($condition = array(), $field = '*') {
         return db('ordercommon')->where($condition)->find();
     }

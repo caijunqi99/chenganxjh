@@ -24,6 +24,15 @@ class Member extends Model
     }
 
     /**
+     * 查询副账号数量
+     * @param  [type] $member_id [description]
+     * @return [type]            [description]
+     */
+    public function getMemberViceAccount($member_id){
+        return $this->where('is_owner',$member_id)->count();
+    }
+
+    /**
      * 取得会员详细信息（优先查询缓存）
      * 如果未找到，则缓存所有字段
      * @param int $member_id

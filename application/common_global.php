@@ -4,26 +4,6 @@ define('MD5_KEY', 'a2382918dbb49c8643f19bc3ab90ecf9');
 
 /*
 
-define('BASE_SITE_URL', $config['url_domain_root']);
-define('SHOP_SITE_URL', $config['url_domain_root'].'home/');
-define('CMS_SITE_URL', $config['url_domain_root'].'cms/');
-define('CIRCLE_SITE_URL', $config['url_domain_root'].'circle/');
-define('MICROSHOP_SITE_URL', $config['url_domain_root'].'circle/');
-define('ADMIN_SITE_URL', $config['url_domain_root'].'admin/');
-define('MOBILE_SITE_URL', $config['url_domain_root'].'mobile/');
-define('WAP_SITE_URL', $config['url_domain_root'].'wap/');
-define('UPLOAD_SITE_URL',$config['url_domain_root'].'uploads/');
-define('RESOURCE_SITE_URL',$config['url_domain_root'].'data/resource/');
-define('DELIVERY_SITE_URL',$config['url_domain_root'].'delivery/');
-define('CHAT_SITE_URL', $config['url_domain_root'].'chat/');
-define('NODE_SITE_URL', $config['url_domain_root']);
-define('UPLOAD_SITE_URL_HTTPS', $config['url_domain_root'].'uploads/');
-
-
-define('BASE_DATA_PATH',ROOT_PATH.'/public/data');
-define('BASE_UPLOAD_PATH',ROOT_PATH.'/public/uploads');
-define('BASE_RESOURCE_PATH',ROOT_PATH.'/public/resource');
-define('ATTACH_GOODS_CLASS','home/goods_class');
  * 
  */
 define('CHARSET','UTF-8');
@@ -41,6 +21,7 @@ define('DIR_MICROSHOP','microshop');
 define('DIR_ADMIN','admin');
 define('DIR_API','api');
 define('DIR_MOBILE','mobile');
+define('DIR_APP','wap');
 define('DIR_WAP','wap');
 
 define('DIR_RESOURCE','data/resource');
@@ -148,6 +129,8 @@ define('OFFLINE_ORDER_CANCEL_TIME', 3);//单位为天
 define('MOBILE_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php')).'mobile');
 define('SHOP_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php')).'home');
 define('WAP_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php')).'wap');
+
+define('APP_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php')).'app');
 
 
 ?>
