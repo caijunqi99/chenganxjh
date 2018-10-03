@@ -22,20 +22,25 @@ class Member extends MobileMall
     public function info(){
         $token = trim(input('post.key'));
         $member_id = intval(input('post.member_id'));
-        $where = ' member_id = "'.$member_id.'"';
+        $where = ' m.member_id = "'.$member_id.'"';
         if(empty($token)){
             output_error('缺少参数token');
         }
         if(empty($member_id)){
             output_error('缺少参数id');
         }
-        $member = db('member')->field('member_id,member_paypwd')->where($where)->find();
+        $member = db('member')->alias('m')->field('m.member_id,m.member_paypwd')->where($where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($member_id)){
-            $result = db('member')->field('member_id,member_nickname,member_avatar,member_identity,member_age,member_sex,member_email,member_provinceid,member_cityid,member_areaid,member_jobid,member_provinceid,member_cityid,member_areaid')->where($where)->find();
+            $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
+
             if(!empty($result)){
+                $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');
+                $result['city_name'] = db('area')->where('area_id = "'.$result["member_cityid"].'"')->value('area_name');
+                $result['area_name'] = db('area')->where('area_id = "'.$result["member_areaid"].'"')->value('area_name');
+                $result['job_name'] = db('industry')->where('id = "'.$result["member_jobid"].'"')->value('name');
                 output_data($result);
             }else{
                 output_error('该用户不存在');
