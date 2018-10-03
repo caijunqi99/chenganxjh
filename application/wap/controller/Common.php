@@ -14,6 +14,12 @@ class Common extends MobileMall
         Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
     }
 
+    public function navicon(){
+        $type = intval(input('post.type',1));
+        $navlist = db('navimage')->where('type',$type)->select();
+        output_data($navlist);
+    }
+
     /**
      * @desc 地区获取
      * @author langzhiyao
