@@ -18,6 +18,7 @@ Loader::import('controller/Jump', TRAIT_PATH, EXT);
 
 class Controller
 {
+
     use Jump;
 
     /**
@@ -47,6 +48,8 @@ class Controller
      */
     public function __construct(Request $request = null)
     {
+
+        header("Access-Control-Allow-Origin: *");
         if (is_null($request)) {
             $request = Request::instance();
         }

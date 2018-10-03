@@ -37,20 +37,25 @@ class Member extends MobileMember
     public function info(){
         $token = trim(input('post.key'));
         $member_id = intval(input('post.member_id'));
-        $where = ' member_id = "'.$member_id.'"';
+        $where = ' m.member_id = "'.$member_id.'"';
         if(empty($token)){
             output_error('缺少参数token');
         }
         if(empty($member_id)){
             output_error('缺少参数id');
         }
-        $member = db('member')->field('member_id,member_paypwd')->where($where)->find();
+        $member = db('member')->alias('m')->field('m.member_id,m.member_paypwd')->where($where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($member_id)){
-            $result = db('member')->field('member_id,member_nickname,member_avatar,member_identity,member_age,member_sex,member_email,member_provinceid,member_cityid,member_areaid,member_jobid')->where($where)->find();
+            $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
+
             if(!empty($result)){
+                $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');
+                $result['city_name'] = db('area')->where('area_id = "'.$result["member_cityid"].'"')->value('area_name');
+                $result['area_name'] = db('area')->where('area_id = "'.$result["member_areaid"].'"')->value('area_name');
+                $result['job_name'] = db('industry')->where('id = "'.$result["member_jobid"].'"')->value('name');
                 output_data($result);
             }else{
                 output_error('该用户不存在');
@@ -327,10 +332,6 @@ class Member extends MobileMember
             output_error('新密码不能和原密码一样，请重新输入');
         }
 
-
-
-
-
     }
 
     /**
@@ -339,6 +340,233 @@ class Member extends MobileMember
      * @time 20181002
      */
     public function studentBind(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,member_paypwd')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+
+        $name = trim(input('post.name'));//姓名
+        $sex = intval(input('post.sex'));//性别
+        $birthday = strtotime(trim(input('post.birthday')));//出生日期
+        $province_id = intval(input('post.province'));//省ID
+        $city_id = intval(input('post.city'));//市ID
+        $area_id = intval(input('post.area'));//区ID
+        $school_id = intval(input('post.school'));//学校ID
+        $grade_id = intval(input('post.grade'));//年级ID
+        $class_id = intval(input('post.class'));//班级ID
+        $classCard = trim(input('post.class_code'));//班级识别码
+        $card = trim(input('post.card'));//学生身份证ID
+        if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
+            output_error('传的参数不完整');
+        }
+        //判断该学生是否有绑定人
+        $student = db('student')->field('s_ownerAccount')->where(' s_card = "'.$card.'"')->find();
+        if(!empty($student) && !empty($student['s_ownerAccount'])){
+            output_error('该学生已有绑定人，请联系管理员');
+        }
+        //判断识别码是否存在 并是不是这个班级的识别码
+        $class = db('class')->field('classCard,classid')->where(' classid =  "'.$class_id.'"')->find();
+        if(empty($class)){
+            output_error('班级不存在');
+        }
+        if($class['classCard'] != $classCard){
+            output_error('选择班级和填写的班级识别码不一致');
+        }
+
+        $data = array(
+            's_ownerAccount' => $member_id,
+            's_name' => $name,
+            's_sex' => $sex,
+            's_classid' => $class_id,
+            's_schoolid' => $school_id,
+            's_sctype' => $grade_id,
+            's_birthday' => $birthday,
+            's_provinceid' => $province_id,
+            's_cityid' => $city_id,
+            's_areaid' => $area_id,
+            's_card' => $card,
+            'classCard' =>$classCard
+        );
+
+    $student = db('student')->insert($data);
+
+    if($student){
+        output_data(array('message'=>'绑定成功'));
+    }else{
+        output_error('绑定失败');
+    }
+
+    }
+
+    /**
+     * @desc 副账号列表
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function account(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $member_where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,member_paypwd')->where($member_where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        $where = ' is_owner = "'.$member_id.'"';
+
+        $account = db('member')->field('member_id,member_aboutname,member_mobile')->where($where)->select();
+        output_data($account);
+
+
+
+
+    }
+    /**
+     * @desc 绑定副账号
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function accountBind(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $member_where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,member_paypwd')->where($member_where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        //查询该会员绑定的孩子
+        $member_student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.classCard,s.s_card')->where($member_where)->select();
+
+        $member_aboutname = trim(input('post.member_aboutname'));//关系名称
+        $member_mobile = trim(input('post.member_mobile'));//手机号
+
+        if(empty($member_aboutname) || empty($member_mobile)){
+            output_error('传参数不正确');
+        }
+        $member_mobile_where = ' member_mobile = "'.$member_mobile.'" ';
+        $member_about = db('member')->where($member_mobile_where)->find();
+        $data = array(
+            'is_owner' => $member_id,
+            'member_aboutname' => $member_aboutname,
+            'member_mobile' => $member_mobile,
+            'member_add_time' =>time()
+        );
+        if(!empty($member_about)){
+            if($member_about['is_owner'] != 0){
+                output_error('该手机号已有副账号，不能绑定');
+            }else{
+                //判断该手机号绑定的孩子
+                $student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.classCard,s.s_card')->where($member_mobile_where)->select();
+                if(!empty($student[0]['classCard'])){
+                    if(count($student) != 1){
+                        output_error('该手机号绑定有多个孩子，不能绑定');
+                    }else{
+                        if(!empty($member_student[0]['classCard'])){
+                            $is_bind = 0;
+                            foreach($member_student as $key=>$value){
+                                if($value['classCard'] == $student[0]['classCard'] && $value['s_card'] == $student[0]['s_card']){
+                                    $is_bind = 1;
+                                }
+                            }
+                            if($is_bind == 1){
+                                $res = db('member')->where($member_where)->update($data);
+                            }else{
+                                output_error('该手机号绑定孩子和会员绑定孩子不一致，不能绑定');
+                            }
+                        }else{
+                            output_error('该手机号绑定孩子和会员绑定孩子不一致，不能绑定');
+                        }
+
+                    }
+                }else{
+                    $res = db('member')->where($member_where)->update($data);
+                }
+            }
+
+        }else{
+            $res = db('member')->insert($data);
+        }
+
+        output_data(array('message'=>'绑定成功'));
+
+
+
+    }
+    /**
+     * @desc 解绑
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function accountDel(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $jb_id = intval(input('post.jb_id'));
+        if(empty($jb_id)){
+            output_error('缺少参数jb_id');
+        }
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+
+        $jb_where = ' member_id = "'.$jb_id.'"';
+
+        $jb_account = db('member')->field('member_id,is_owner')->where($jb_where)->find();
+        if(empty($jb_account)){
+            output_error('副账号不存在，请联系管理员');
+        }
+
+        if($jb_account['is_owner'] == 0){
+            output_error('已解绑，无需重复操作');
+        }
+        if($member_id == $jb_account['is_owner']){
+            $data = array(
+                'is_owner'=>0,
+                'member_aboutname' => ''
+            );
+            $res = db('member')->where($jb_where)->update($data);
+            if($res){
+                output_data(array('message'=>'解绑成功'));
+            }else{
+                output_error('已解绑，无需重复操作');
+            }
+        }else{
+            output_error('解绑失败，该账号不属于该会员，请联系管理员解除');
+        }
+
+
+
 
     }
 

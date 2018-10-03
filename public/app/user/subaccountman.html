@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+                <a href="javascript:;" class="back_btn" onClick="$.closePopup();">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -30,7 +30,7 @@
                 <p>副帐户管理</p>
             </div>
             <div class="head_r">
-                <a href="javascript:;" class="open-popup" data-target="#full">
+                <a href="javascript:;" data-target="#full" id="open_popup">
                     <i class="icon iconfont icon-jiahao"></i>
                 </a>
             </div>
@@ -47,7 +47,7 @@
 
         <div class="subacc_list_box">
             <div class="container2">
-                <div class="weui-cells subacc_list">
+                <!-- <div class="weui-cells subacc_list">
                     <div class="weui-cell weui-cell_swiped">
                         <div class="weui-cell__bd">
                             <div class="weui-cell">
@@ -110,11 +110,11 @@
                             <a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" href="javascript:">关闭</a>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
-        <div class="container2">
+        <div class="container2 tishi">
             <p class="subacc_info_p"><i class="icon iconfont icon-tixing"></i> 向左滑动进行删除操作.</p>
         </div>
     </div>
@@ -124,7 +124,10 @@
         <div class="weui-popup__overlay"></div>
         <div class="weui-popup__modal">
             <header class='demos-header'>
-                <h2 class="demos-second-title add_subacctitle">新增副账户</h2>
+                <h2 class="demos-second-title add_subacctitle">
+                    <a href="javascript:;" class="quit_popup">
+                        <i class="icon iconfont icon-jiantou3"></i>
+                    </a> 新增副账户</h2>
             </header>
             <article class="weui-article" style="padding-left:0;padding-right:0;">
                 <section>
@@ -143,14 +146,14 @@
                                 <label for="nickname">手机号码</label>
                             </div>
                             <div class="input_box">
-                                <input class="input_txt" id="nickname" type="text" placeholder="请输入您的手机号" value="">
+                                <input class="input_txt" id="phone" type="number" placeholder="请输入您的手机号" value="">
                             </div>
                         </div>
                     </div>
                 </section>
             </article>
             <div class="close-popup_box">
-                <a href="javascript:;" class="weui-btn weui-btn_primary close-popup">添 加</a>
+                <a href="javascript:;" class="weui-btn weui-btn_primary close-popup_add">添 加</a>
             </div>
         </div>
     </div>
@@ -160,33 +163,133 @@
     <script src="../content/plugins/layer/mobile/layer.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
-    <script src="../content/scripts/config.js"></script>
-<script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
+    <script src="../content/scripts/regular.js"></script>
 
     <script>
         $(function() {
+
+            // 获取副账户列表
+            function list() {
+                $.ajax({
+                    type: "POST",
+                    url: api + '/Member/account.html',
+                    data: {
+                        key: token,
+                        member_id: 2
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response['result'].length == 0) {
+                            $('.tishi').hide();
+                        } else {
+                            $('.tishi').show();
+                        }
+                        $('.subacc_list_box .container2').html(HTML(response['result']));
+                        $('.weui-cell_swiped').swipeout();
+                    }
+                });
+            }
+            list();
+
             // 删除付帐户
-            $('.delete-swipeout').click(function() {
-                _this = $(this);
+            Delete = function(event, el) {
+                _this = $(el);
                 $.confirm("您确定要删除该帐号吗?", "确认删除?", function() {
-                    _this.parents('.weui-cell').remove();
-                    $.toast("该账号删除成功!");
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Member/accountDel.html',
+                        data: {
+                            key: token,
+                            member_id: 2,
+                            jb_id: event.target.dataset.id
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            _this.parents('.weui-cell').remove();
+                            $.toast("该账号删除成功!");
+                            list();
+                        }
+                    });
                 }, function() {
                     _this.parents('.weui-cell').swipeout('close');
                 });
-            })
+            }
 
             // 关闭
-            $('.close-swipeout').click(function() {
-                $(this).parents('.weui-cell').swipeout('close')
+            Close = function(_this) {
+                $(_this).parents('.weui-cell').swipeout('close')
+            }
+
+            // 打开添加副账户popup
+            $("#open_popup").click(function() {
+                if ($('.subacc_list').length >= 5) {
+                    $.alert('不能添加了！')
+                } else {
+                    $("#full").popup();
+                }
             })
 
             //提交添加的副帐户
-            $(document).on("click", ".close-popup", function() {
-                $.alert("添加成功！", "提示", function() {
-                    //处理函数
-                });
+            $(document).on("click", ".close-popup_add", function() {
+                if (Tools.IsNull($('#nickname').val())) {
+                    $.alert('请输入亲属关系');
+                } else if (!Tools.IsPhoneNum($('#phone').val()) || Tools.IsNull($('#phone').val())) {
+                    $.alert('请输入正确的电话号码')
+                } else {
+                    // 添加副帐号
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Member/accountBind.html',
+                        data: {
+                            key: token,
+                            member_id: 2,
+                            member_aboutname: $('#nickname').val(),
+                            member_mobile: $('#phone').val()
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            $.alert("添加成功！", "提示", function() {});
+                            list();
+                            $("#nickname").val("");
+                            $("#phone").val("");
+                            $.closePopup(); //关闭添加popup弹窗
+                        }
+                    });
+                }
             });
+
+            //弹出popup之后，点击箭头关闭popup
+            $(".quit_popup").click(function() {
+                $("#nickname").val("");
+                $("#phone").val("");
+                $.closePopup(); //关闭添加popup弹窗
+            })
+
+            // html模板
+            function HTML(data) {
+                var template = '';
+                for (var i = 0; i < data.length; i++) {
+                    template += '<div class="weui-cells subacc_list">' +
+                        '<div class="weui-cell weui-cell_swiped">' +
+                        '<div class="weui-cell__bd">' +
+                        '<div class="weui-cell">' +
+                        '<div class="weui-cell__bd">' +
+                        '<p>' + data[i]['member_aboutname'] + '</p>' +
+                        '</div>' +
+                        '<div class="weui-cell__ft"><span class="paddr10">' + data[i]['member_mobile'] + '</span></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="weui-cell__ft">' +
+                        '<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" data-id="' + data[i]['member_id'] + '" onclick="Delete(event, this)">删除</a>' +
+                        '<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" onclick="Close(this)">关闭</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                }
+                return template;
+            }
 
         })
     </script>

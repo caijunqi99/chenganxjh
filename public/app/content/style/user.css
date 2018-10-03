@@ -22,6 +22,14 @@
     margin-right: 40px;
     border-radius: 50%;
     overflow: hidden;
+    position: relative;
+}
+
+.user_head_box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .picture_label {
@@ -58,10 +66,10 @@
 }
 
 .subacc_list .weui-swiped-btn {
-    height: 54px;
-    line-height: 54px;
+    height: 52px;
+    line-height: 52px;
     font-size: 26px;
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 .subacc_info_p {
@@ -467,4 +475,42 @@ a.total_cont_btn {
 .keepwatch {
     font-size: 26px;
     color: #aaa;
+}
+
+.xiugaipwd.hidden {
+    display: none !important;
+}
+
+.shezhi_cont.hidden {
+    display: none;
+}
+
+.orderforms_list2>li {
+    -webkit-display: flex;
+    display: flex;
+    justify-content: space-around;
+}
+
+.close-popup_add {
+    font-size: 30px;
+}
+
+a.quit_popup {
+    width: 90px;
+    height: 74px;
+    text-align: center;
+    display: block;
+    float: left;
+    font-size: 16px;
+}
+
+a.quit_popup i {
+    font-size: 30px;
+    color: #666;
+}
+
+.weui-cell.weui-check_label {
+    font-size: 26px;
+    padding: 0 30px;
+    line-height: 80px;
 }

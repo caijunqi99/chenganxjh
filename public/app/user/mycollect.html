@@ -40,19 +40,19 @@
         <div class="cont margt30">
             <div class="container2">
                 <ul class="orderforms_nav collectbar clearfix">
-                    <li class="active">
+                    <li id="jobs1" onclick="setTab('jobs',1,2)" class="active">
                         <a href="javascript:;">课件</a>
                     </li>
-                    <li>
+                    <li id="jobs2" onclick="setTab('jobs',2,2)">
                         <a href="javascript:;">商城</a>
                     </li>
                 </ul>
-                <div class="orderforms_cont clear">
+                <div class="orderforms_cont clear hover" id="order_jobs_1">
                     <ul class="collect_list">
                         <li>
                             <a href="javascript:;">
-                                <span class="pay_type pay_free">免费</span>
-                                <div class="collect_img" style="background: url(../../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <span class="pay_type pay_free">免费1</span>
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
                                 <dl class="collect_txt">
                                     <dt>一起学唐诗</dt>
                                     <dd class="bolds">作者：好看的猫</dd>
@@ -63,7 +63,7 @@
                         <li>
                             <a href="javascript:;">
                                 <span class="pay_type">￥100.00</span>
-                                <div class="collect_img" style="background: url(../../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
                                 <dl class="collect_txt">
                                     <dt>一起学唐诗</dt>
                                     <dd class="bolds">作者：好看的猫</dd>
@@ -73,7 +73,43 @@
                         </li>
                         <li>
                             <a href="javascript:;">
-                                <div class="collect_img" style="background: url(../../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <dl class="collect_txt">
+                                    <dt>一起学唐诗</dt>
+                                    <dd class="bolds">作者：好看的猫</dd>
+                                    <dd>唐诗宋词经典语录快速学习</dd>
+                                </dl>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="orderforms_cont clear" id="order_jobs_2" style="display: none;">
+                    <ul class="collect_list">
+                        <li>
+                            <a href="javascript:;">
+                                <span class="pay_type pay_free">免费2</span>
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <dl class="collect_txt">
+                                    <dt>一起学唐诗</dt>
+                                    <dd class="bolds">作者：好看的猫</dd>
+                                    <dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>
+                                </dl>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="pay_type">￥100.00</span>
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
+                                <dl class="collect_txt">
+                                    <dt>一起学唐诗</dt>
+                                    <dd class="bolds">作者：好看的猫</dd>
+                                    <dd>唐诗宋词经典语录快速学习</dd>
+                                </dl>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
                                 <dl class="collect_txt">
                                     <dt>一起学唐诗</dt>
                                     <dd class="bolds">作者：好看的猫</dd>
@@ -92,13 +128,100 @@
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
-    <script src="../content/scripts/config.js"></script>
-<script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
 
     <script>
-        $(function() {
+        // 默认加载我收藏的课件列表
+        $.ajax({
+            type: "POST",
+            url: api + "/Member/collect.html",
+            data: {
+                key: token,
+                member_id: 2,
+                type_id: 1
+            },
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $("#order_jobs_1 .collect_list").html(HTML(response['result']))
+            }
+        });
 
-        })
+        function setTab(name, cursel, n) {
+            for (i = 1; i <= n; i++) {
+                var menu = $("#" + name + i);
+                var con = $("#" + "order_" + name + "_" + i);
+                if (i == cursel) {
+                    menu.addClass("active");
+                    con.fadeIn();
+                    // $.$.ajax({
+                    //     type: "POST",
+                    //     url: api + "/Member/collect.html",
+                    //     data: "json",
+                    //     dataType: "dataType",
+                    //     success: function (response) {
+
+                    //     }
+                    // });
+                } else {
+                    menu.removeClass("active");
+                    con.hide();
+                }
+            }
+        }
+
+
+        // html模板
+        function HTML(data) {
+            var template = '';
+            for (var i = 0; i < data.length; i++) {
+                var freeState = '';
+                if (data[i]['goods_price'] == '') {
+                    freeState = '免费'
+                } else {
+                    freeState = data[i]['goods_price'];
+                }
+
+                template += '<li>' +
+                    '<a href="javascript:;">' +
+                    '<span class="pay_type pay_free">' + freeState + '</span>' +
+                    '<div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>' +
+                    '<dl class="collect_txt">' +
+                    '<dt>一起学唐诗</dt>' +
+                    '<dd class="bolds">作者：好看的猫</dd>' +
+                    '<dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>' +
+                    '</dl>' +
+                    '</a>' +
+                    '</li>'
+            }
+            return template;
+        }
+        // html模板
+        function HTML(data) {
+            var template = '';
+            for (var i = 0; i < data.length; i++) {
+                var freeState = '';
+                if (data[i]['goods_price'] == '') {
+                    freeState = '免费'
+                } else {
+                    freeState = data[i]['goods_price'];
+                }
+
+                template += '<li>' +
+                    '<a href="javascript:;">' +
+                    '<span class="pay_type pay_free">' + freeState + '</span>' +
+                    '<div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>' +
+                    '<dl class="collect_txt">' +
+                    '<dt>一起学唐诗</dt>' +
+                    '<dd class="bolds">作者：好看的猫</dd>' +
+                    '<dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>' +
+                    '</dl>' +
+                    '</a>' +
+                    '</li>'
+            }
+            return template;
+        }
     </script>
 </body>
 

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
@@ -29,8 +30,8 @@
             <div class="head_title">
                 <p>安全密码</p>
             </div>
-            <div class="head_r">
-
+            <div class="head_r" style="width:130px;">
+                <a href="javascript:;" class="xiugaipwd_btn xiugaipwd">修改密码</a>
             </div>
         </div>
     </header>
@@ -40,29 +41,40 @@
 
         <div class="cont margt30">
             <div class="container2">
-                <div class="bang_list">
-                    <div class="name_box">
-                        <label for="nickname">设置6位安全密码：</label>
+                <div class="shezhi_cont hidden">
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nickname">设置6位安全密码：</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="pwd1" onkeyup="maxLengths(event)" type="text" placeholder="请输入安全密码" value="" />
+                        </div>
                     </div>
-                    <div class="input_box">
-                        <input class="input_txt" id="pwd1" type="text" placeholder="请输入安全密码" value="" />
+
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nickname">确认安全密码：</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="pwd2" onkeyup="maxLengths(event)" type="text" placeholder="请再一次输入安全密码" value="" />
+                        </div>
                     </div>
+
+                    <div class="bang_submit_box" style="padding-top: 300px;">
+                        <input class="bang_submit" type="button" value="完 成" onclick="" />
+                    </div>
+
                 </div>
 
-                <div class="bang_list">
+                <div class="bang_list xiugaipwd">
                     <div class="name_box">
-                        <label for="nickname">确认安全密码：</label>
+                        <label for="nickname">已成功设置安全密码</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd2" type="text" placeholder="请再一次输入安全密码" value="" />
                     </div>
                 </div>
 
             </div>
-        </div>
-
-        <div class="bang_submit_box" style="padding-top: 300px;">
-            <input class="bang_submit" type="button" value="完 成" onclick="window.location.href='securepwdsuccess.html'" />
         </div>
 
     </div>
@@ -71,8 +83,71 @@
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/scripts/config.js"></script>
-<script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
+    <script src="../content/scripts/regular.js"></script>
+    <script>
+        $(function() {
+
+            maxLengths = function(event) {
+                if (event.target.value.length > 6) {
+                    $.toast('支付密码只能有六位数字')
+                    event.target.value = event.target.value.substring(0, 6);
+                }
+            }
+
+            $(".xiugaipwd_btn").click(function() {
+                $(".shezhi_cont").removeClass("hidden");
+                $(".xiugaipwd").addClass("hidden");
+            });
+
+            $.ajax({
+                type: "POST",
+                url: api + '/Member/payPwd.html',
+                data: {
+                    key: token,
+                    member_id: 2
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response['result']['member_paypwd'] == '') {
+                        $(".shezhi_cont").removeClass("hidden");
+                        $(".xiugaipwd").addClass("hidden");
+                    } else {
+                        $(".shezhi_cont").addClass("hidden");
+                        $(".xiugaipwd").removeClass("hidden");
+                    }
+                }
+            });
+
+            $('.bang_submit').click('on', function() {
+                if ($('#pwd1').val() == '') {
+                    alert('请输入安全密码')
+                } else if ($('#pwd2').val() == '') {
+                    alert('请再一次输入安全密码')
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Member/editPayPwd.html',
+                        data: {
+                            key: token,
+                            member_id: 2,
+                            payPwd: $('#pwd1').val(),
+                            rePayPwd: $('#pwd2').val()
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response['code'] == 200) {
+                                $.toast(response['result']['message'])
+                            } else {
+                                $.alert(response['message'])
+                            }
+                        }
+                    });
+                }
+            })
+        })
+    </script>
 
 </body>
 

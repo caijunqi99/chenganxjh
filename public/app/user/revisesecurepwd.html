@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>想见孩-修改安全密码</title>
+    <title>想见孩-修改登录密码</title>
     <meta name="author" content="想见孩" />
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
@@ -27,7 +27,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>修改安全密码</p>
+                <p>修改登录密码</p>
             </div>
             <div class="head_r">
 
@@ -45,7 +45,7 @@
                         <label for="nickname">原始密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd1" type="text" placeholder="请输入原始密码" value="" />
+                        <input class="input_txt" id="pwd1" type="number" placeholder="请输入原始密码" value="" />
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@
                         <label for="nickname">新密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd2" type="text" placeholder="请输入新密码" value="" />
+                        <input class="input_txt" id="pwd2" type="number" placeholder="请输入新密码" value="" />
                     </div>
                 </div>
                 <div class="bang_list">
@@ -62,7 +62,7 @@
                         <label for="nickname">确认新密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd3" type="text" placeholder="请再一次输入新密码" value="" />
+                        <input class="input_txt" id="pwd3" type="number" placeholder="请再一次输入新密码" value="" />
                     </div>
                 </div>
 
@@ -70,7 +70,7 @@
         </div>
 
         <div class="bang_submit_box" style="padding-top: 300px;">
-            <input class="bang_submit" type="button" value="完 成" onclick="window.location.href='securepwdsuccess.html'" />
+            <input class="bang_submit" type="button" value="完 成" />
         </div>
 
     </div>
@@ -79,8 +79,40 @@
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/scripts/config.js"></script>
-<script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
+    <script>
+        $(function() {
+            $('.bang_submit').on('click', function() {
+                if ($('#pwd1').val() == '') {
+                    alert('请输入原始密码')
+                } else if ($('#pwd2').val() == '') {
+                    alert('请输入新密码')
+                } else if ($('#pwd3').val() == '') {
+                    alert('请再一次输入新密码')
+                }
+                $.ajax({
+                    type: "POST",
+                    url: api + '/Member/editPwd.html',
+                    data: {
+                        key: token,
+                        member_id: 2,
+                        oldPwd: $('#pwd1').val(),
+                        newPwd: $('#pwd2').val(),
+                        reNewPwd: $('#pwd3').val()
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            $.toast('修改成功')
+                        } else {
+                            $.toast(response['message'])
+                        }
+                    }
+                });
+            })
+        })
+    </script>
 
 </body>
 
