@@ -112,13 +112,47 @@ class Common extends MobileMall
             $type = explode(',',$school['typeid']);
             foreach($type as $key=>$value){
                 $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'"')->find();
-                $arr['id'] = $name['sc_id'];
-                $arr['name'] = $name['sc_type'];
-                $arr['child'] = db('class')->field('classid,classname')->where('schoolid = "'.$school_id.'" AND typeid = "'.$value.'"')->select();
+                $arr['value'] = $name['sc_id'];
+                $arr['title'] = $name['sc_type'];
             }
         }
 
         output_data($arr);
+
+
+    }
+
+    /**
+     * @desc 获取班级接口
+     * @author langzhiyao
+     * @time 20181002
+     */
+    public function classData(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $school_id = intval(input('post.school_id'));
+        if(empty($school_id)){
+            output_error('缺少参数school_id');
+        }
+        $grade_id = intval(input('post.grade_id'));
+        if(empty($grade_id)){
+            output_error('缺少参数grade_id');
+        }
+
+        $where = 'isdel =1 AND schoolid="'.$school_id.'"';
+
+        $school = db('school')->field('schoolid,name,typeid')->where($where)->find();
+        if(empty($school)){
+            output_error('该学校不存在或已被删除，请联系管理员');
+        }
+        $grade =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$grade_id.'"')->find();
+        if(empty($grade)){
+            output_error('该年级不存在或已被删除，请联系管理员');
+        }
+        $class = db('class')->field('classid as value,classname as title')->where('schoolid = "'.$school_id.'" AND typeid = "'.$grade_id.'"')->select();
+        output_data($class);
 
 
     }
