@@ -62,37 +62,44 @@
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="date" class="weui-label">生日</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="date" type="text" value="2018/09/20">
+                    <input class="weui-input input_txt inputpointer" id="date" type="text" value="" placeholder="请选择生日">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="city" class="weui-label"><span class="redstar">*</span>所在地</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="city" type="text" value="湖北省 武汉市 武昌区">
+                    <input class="weui-input input_txt inputpointer" id="city" type="text" value="" placeholder="请选择地址">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="school" class="weui-label"><span class="redstar">*</span>就读学校</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="school" type="text" value="江苏实验幼儿园1">
+                    <input class="weui-input input_txt inputpointer" id="school" type="text" data-values="" value="" placeholder="请先选择所在地">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="classes" class="weui-label"><span class="redstar">*</span>所在年级</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="classes" type="text" value="大班 1班">
+                    <input class="weui-input input_txt inputpointer" id="classes" type="text" data-values="" value="" placeholder="请先选择所在学校">
+                </div>
+            </div>
+
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="banji" class="weui-label"><span class="redstar">*</span>班级</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="banji" type="text" data-values="" value="" placeholder="请先选择所在年级">
                 </div>
             </div>
 
             <div class="bang_list">
                 <div class="name_box">
-                    <label for="bang_name"><span class="redstar">*</span>班级识别码</label>
+                    <label for="shibiema"><span class="redstar">*</span>班级识别码</label>
                 </div>
                 <div class="input_box">
-                    <input class="input_txt" id="bang_name" type="text" placeholder="请输入班级识别码">
+                    <input class="input_txt" id="shibiema" type="text" placeholder="请输入班级识别码">
                 </div>
             </div>
 
@@ -110,14 +117,16 @@
 
 
         <script src="../content/scripts/jquery.min.js"></script>
-        <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
+        <!-- <script src="../content/plugins/jqweui/lib/fastclick.js"></script> -->
         <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
         <script src="../content/plugins/jqweui/js/city-picker.js"></script>
-        <script src="../content/scripts/config.js"></script>
-<script src="../content/scripts/commom.js"></script>
+        <!-- <script src="../content/scripts/commom.js"></script> -->
+        <script src="../content/scripts/API.js"></script>
+        <script src="../content/scripts/regular.js"></script>
 
         <script>
             $(function() {
+
                 // 性别选择
                 $("#sex").picker({
                     title: "请选择您的性别",
@@ -125,67 +134,145 @@
                         textAlign: 'center',
                         values: ['男', '女']
                     }],
-                    onChange: function(p, v, dv) {
-                        console.log(p, v, dv);
-                    },
-                    onClose: function(p, v, d) {
-                        console.log("close");
-                    }
                 });
 
                 //生日选择
                 $("#date").calendar({
-                    onChange: function(p, values, displayValues) {
-                        console.log(values, displayValues);
-                    }
+                    onChange: function(p, values, displayValues) {}
                 });
 
                 // 所在地区选择
                 $("#city").cityPicker({
                     title: "请选择所在地",
-                    onChange: function(picker, values, displayValues) {
-                        console.log(values, displayValues);
-                        // $("h1:contains(选择所在地)").parents(".weui-picker-modal").height("16rem");
+                    onClose: function(picker) {
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/school.html',
+                            data: {
+                                key: token,
+                                province: picker.value[0],
+                                city: picker.value[1],
+                                area: picker.value[2]
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#school").select("update", {
+                                    items: response['result']
+                                })
+                            }
+                        });
                     }
                 });
 
                 // 学校就读选择
-                $("#school").picker({
+                var schollID = '';
+                $("#school").select({
                     title: "请选择学校",
-                    cols: [{
-                        textAlign: 'center',
-                        values: ['江苏实验小学', '江苏实验幼儿园1', '江苏实验幼儿园2', '江苏实验幼儿园3', '江苏实验幼儿园4']
-                    }],
-                    onChange: function(p, v, dv) {
-                        console.log(p, v, dv);
-                    },
+                    items: [{}],
                     onClose: function(p, v, d) {
-                        console.log("close");
+                        schollID = p.data.values;
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/grade.html',
+                            data: {
+                                key: token,
+                                school_id: p.data.values
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#classes").select("update", {
+                                    items: response['result']
+                                })
+                            }
+                        });
                     }
                 });
 
                 //年级选择
-                $("#classes").picker({
+                $("#classes").select({
                     title: "请选择所在年级",
-                    cols: [{
-                        textAlign: 'center',
-                        values: ['小班', '中班', '大班']
-                    }, {
-                        textAlign: 'center',
-                        values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班']
-                    }]
+                    items: [{}],
+                    onClose: function(p, v, d) {
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/classData.html',
+                            data: {
+                                key: token,
+                                school_id: schollID,
+                                grade_id: p.data.values
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                console.log(response)
+                                $("#banji").select("update", {
+                                    items: response['result']
+                                })
+                            }
+                        });
+                    }
                 });
+
+                //班级选择
+                $("#banji").select({
+                    title: "请选择所在班级",
+                    items: [{}],
+                    onClose: function(p, v, d) {
+
+                    }
+                });
+
             })
 
             //绑定学生的提交操作
             $("#bang_submit").click(function() {
-                //ActionName：原生中对应的方法名；parameter：回传的参数
-                //json传递参数
-                var jsonObj = new Object();
-                jsonObj["name"] = "name";
-                jsonObj["age"] = 12;
-                jsonObj["../../content"] = "提交成功";
-                window.webkit.messageHandlers.submitClick.postMessage(JSON.stringify(jsonObj));
+                if ($("#bang_name").val() == '') {
+                    $.alert("请先填写孩子的姓名")
+                } else if ($("#city").val() == '') {
+                    $.alert("请选择所在地")
+                } else if ($("#school").val() == '') {
+                    $.alert("请选择孩子就读学校")
+                } else if ($("#classes").val() == '') {
+                    $.alert("请选择孩子所在年级")
+                } else if ($("#banji").val() == '') {
+                    $.alert("请选择孩子的班级")
+                } else if ($("#shibiema").val() == '') {
+                    $.alert("请填写班级识别码")
+                } else {
+                    //ActionName：原生中对应的方法名；parameter：回传的参数
+                    //json传递参数
+                    var params = new Object();
+                    params['key'] = token;
+                    params['member_id'] = 2;
+                    params["name"] = $('#bang_name').val();
+                    switch ($('#sex').val()) {
+                        case '男':
+                            params["sex"] = 1;
+                            break;
+                        case '女':
+                            params["sex"] = 2;
+                            break;
+                    }
+                    params["birthday"] = $('#date').val().split('/')[0] + '-' + $('#date').val().split('/')[1] + '-' + $('#date').val().split('/')[2];
+                    params["province"] = $('#city').get(0).dataset.codes.split(',')[0];
+                    params["city"] = $('#city').get(0).dataset.codes.split(',')[1];
+                    params["area"] = $('#city').get(0).dataset.codes.split(',')[2];
+                    params["school"] = $('#school').get(0).dataset.values;
+                    params['grade'] = $('#classes').get(0).dataset.values;
+                    params['class'] = $('#banji').get(0).dataset.values;
+                    // params['class'] = 15;
+                    params['class_code'] = $('#shibiema').val();
+                    params['card'] = 10;
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Member/studentBind.html',
+                        data: params,
+                        dataType: "json",
+                        success: function(response) {
+                            $.alert(response['message'])
+                        }
+                    });
+
+                }
             })
 
             //返回操作

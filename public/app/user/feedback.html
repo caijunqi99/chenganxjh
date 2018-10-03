@@ -8,14 +8,14 @@
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
     <meta id="viewport" name="viewport" content="width=750" />
-    <link rel="stylesheet" href="../../content/style/reset.css" type="text/css" />
-    <link rel="stylesheet" href="../../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
-    <link rel="stylesheet" href="../../content/style/common.css" type="text/css" />
-    <link rel="stylesheet" href="../../content/style/user.css" type="text/css" />
-    <link rel="shortcut icon" href="../../content/images/ico.ico" type="image/x-icon" />
-    <script src="../../content/scripts/mobile-util.js"></script>
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
 <body class="infobody" ontouchstart>
@@ -69,10 +69,11 @@
     </div>
 
 
-    <script src="../../content/scripts/jquery.min.js"></script>
-    <script src="../../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../../content/scripts/commom.js"></script>
+    <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
     <script>
         $(function() {
             // 反馈意见字数限制
@@ -87,9 +88,38 @@
 
             // 验证提示
             $(document).on("click", "#show-alert", function() {
-                $.alert("请填写手机号！", "警告！");
+                if ($('.input_txt').val() == '' || !Tools.IsPhoneNum($('.input_txt').val())) {
+                    $.alert("请填写手机号！", "警告！");
+                }
+                $.ajax({
+                    type: "POST",
+                    url: api + '/Feedback/feedback_add.html',
+                    data: {
+                        key: token,
+                        feedback: $('#sizeStatistics').val(),
+                        member_mobile: $('.input_txt').val()
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        $.alert(response['message'])
+                    }
+                });
             });
+
         })
+
+        var Tools = {
+            // 是否为空
+            IsNull: function(str) {
+                return str == null || typeof(str) == "undefined" || str == "";
+            },
+
+            //判断是否是手机号
+            IsPhoneNum: function(str) {
+                var myreg = /^1\d{10}$/;
+                return myreg.test(str);
+            }
+        }
     </script>
 
 </body>
