@@ -41,6 +41,7 @@ class School extends Model {
      */
     public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        //print_r(db('school')->getLastSql());die;
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
@@ -137,6 +138,9 @@ class School extends Model {
     {
         if (empty($str)) {
             return '';
+        }
+        if($str == "重"){
+            return 'C';
         }
         $fchar = ord($str{0});
         if ($fchar >= ord('A') && $fchar <= ord('z')) return strtoupper($str{0});
