@@ -14,6 +14,8 @@ class Login extends MobileMall
         Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
     }
 
+
+
     public function dologin(){
         $phone    = input('post.mobile');
         $password = input('param.password');
@@ -156,9 +158,16 @@ class Login extends MobileMall
             $model_member->editMember(array('member_id'=> $member['member_id']),array('member_password'=> $new_password));
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if($token) {
-                $logindata = array(
-                    'member_mobile' => $member['member_mobile'], 'uid' => $member['member_id'], 'key' => $token
-                );
+                $logindata = array();
+                $logindata['key']=$token;
+                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                $logindata['user_name'] = $member['member_name'];
+                $logindata['member_mobile'] = $member['member_mobile'];
+                $logindata['member_identity'] = $member['member_identity'];
+                $logindata['uid'] = $member['member_id'];                
+                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
+                
                 output_data($logindata);
             }else {
                 output_error('网络错误');

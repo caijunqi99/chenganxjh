@@ -5,7 +5,7 @@ function output_data($datas, $extend_data = array(),$codd=1) {
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     if ($codd !=1) $data['code'] = '400';
-    $data['result']=isset($datas['error'])?array():$datas;
+    $data['result']=isset($datas['error'])?(object)array():(object)$datas;
     $data['message'] = isset($datas['error'])?$datas['error']:'';
     //$data['datas']=$datas;
     if(!empty($extend_data)) {
