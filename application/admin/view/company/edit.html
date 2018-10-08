@@ -31,6 +31,8 @@
             </tr>
             <tr class="noborder">
                 <td class="vatop rowform">
+                    <input type="hidden"  name="sid" id="sid" value="1">
+                    <input type="hidden" name="dep" id="dep" class="dep" value="1">
                     <li>
                         <input name="o_role" type="radio" value="1" {if condition="$organize_array.o_role eq 1"} checked="checked"{/if}>
                         <label>{$Think.lang.organize_index_company}</label>
@@ -136,20 +138,7 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules : {
-                o_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: ADMIN_URL+'/Admin/ajax.html?branch=company_admin_name',
-                        type: 'get',
-                        data: {
-                            o_name: function() {
-                                return $('#o_name').val();
-                            }
-                        }
-                    }
-                },
+                
                 activity_title: {
                     required : true
                 },
@@ -189,6 +178,12 @@
     });
 
     $(function(){
+        $("input:radio[name='o_role']").change(function(){
+            var v = $(this).val();
+            $('#sid').val(v);
+            $('#dep').val(1);
+
+        });
 // 模拟活动页面横幅Banner上传input type='file'样式
         var textButton="<input type='text' name='textfield' id='textfield1' class='type-file-text' /><input type='button' name='button' id='button1' value='' class='type-file-button' />"
         $(textButton).insertBefore("#activity_banner");
