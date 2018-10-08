@@ -149,6 +149,8 @@ function regionChange() {
 
 
     }
+    $(".o_provinceid").val(id);
+    $(".area_names").val(names.join("\t"));
 }
 
 function regionEdit() {
