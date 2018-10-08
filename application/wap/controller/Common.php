@@ -16,8 +16,18 @@ class Common extends MobileMall
 
     public function navicon(){
         $type = intval(input('post.type',1));
-        $navlist = db('navimage')->where('type',$type)->group('group_type')->select();
-        output_data($navlist);
+        $navlist = db('navimage')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name')->where('type',$type)->select();
+        if ($type==1) {
+            output_data($navlist);
+        }else{
+            $list = array();
+            foreach ($navlist as $key => $v) {
+                $list[$v['group_type']]['tab']=$v['group_name'];
+                $list[$v['group_type']]['subTab'][]=$v;
+            }
+            output_data(array_values($list));
+        }
+        
     }
 
     /**
