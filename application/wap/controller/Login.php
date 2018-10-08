@@ -14,11 +14,13 @@ class Login extends MobileMall
         Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
     }
 
+
+
     public function dologin(){
         $phone    = input('post.mobile');
-        $password = input('param.password');
-        $client   = input('param.client');
-        $log_type = input('param.log_type');        
+        $password = input('post.password');
+        $client   = input('post.client');
+        $log_type = input('post.log_type');        
         $captcha  = input('post.captcha');
         $is_pass  = intval(input('post.is_pass'));
         switch ($log_type) {
@@ -29,11 +31,7 @@ class Login extends MobileMall
             case 'sms_login':
                 $log_type=2;
                 $type='登陆';
-                break;
-            case 'sms_password_reset':
-                $log_type=3;
-                $type='重置密码';
-                break;            
+                break;          
             default:
                 output_error('验证类型错误!');
                 break;
@@ -48,7 +46,7 @@ class Login extends MobileMall
         $model_member = Model('member');
         $array = array();
         $array['member_mobile'] = $phone;     
-        if ($is_pass==2) {
+        if ($is_pass==2) { // 验证码判断
             if (empty($captcha))output_error('请输入正确的验证码',array('type'=>input('post.log_type')));
             $state = 'true';
             $condition = array();
@@ -70,7 +68,7 @@ class Login extends MobileMall
             // $this->register($register_info)
             $member = array();
             $member['member_name'] = $phone;
-            $member['member_password'] = $password;
+            $member['member_password'] = md5(trim($password));;
             $member['member_mobile'] = $phone;
             $member['member_email'] = '';
             $member['member_mobile_bind'] = 1;
@@ -94,13 +92,17 @@ class Login extends MobileMall
                 // }
             }
         }else{//登陆
-            if ($password){
-                if ($member_info['member_password'] != md5($password)) {//密码对比
+            if ($password && $is_pass == 1){
+                if ($member_info['member_password'] != md5(trim($password))) {//密码对比
                     output_error('密码填写错误！',array('type'=>input('post.log_type')));
                 }
             }            
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
+        
+        db('testt')->insertGetId(array('content'=>json_encode(input())));
+        db('testt')->insertGetId(array('content'=>md5(trim($password))));
+
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if ($token) {
@@ -136,10 +138,10 @@ class Login extends MobileMall
             output_error('系统没有开启手机找回密码功能','','error');
         }
         $phone       = input('post.mobile');
-        $password    = input('param.password');
-        $re_password = input('param.re_password');
-        $client      = input('param.client');
-        $log_type    = input('param.log_type');        
+        $password    = input('post.password');
+        $re_password = input('post.re_password');
+        $client      = input('post.client');
+        $log_type    = input('post.log_type');        
         switch ($log_type) {
             case 'sms_password':
                 $log_type=3;
@@ -156,9 +158,16 @@ class Login extends MobileMall
             $model_member->editMember(array('member_id'=> $member['member_id']),array('member_password'=> $new_password));
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if($token) {
-                $logindata = array(
-                    'member_mobile' => $member['member_mobile'], 'uid' => $member['member_id'], 'key' => $token
-                );
+                $logindata = array();
+                $logindata['key']=$token;
+                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                $logindata['user_name'] = $member['member_name'];
+                $logindata['member_mobile'] = $member['member_mobile'];
+                $logindata['member_identity'] = $member['member_identity'];
+                $logindata['uid'] = $member['member_id'];                
+                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
+                
                 output_data($logindata);
             }else {
                 output_error('网络错误');
