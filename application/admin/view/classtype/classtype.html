@@ -13,7 +13,6 @@
       <label class="layui-form-label">搜索选择框</label>
       <div class="layui-input-inline">
         <select name="modules" lay-verify="required" lay-search="" id="sc_type">
-          <option value="">选择学校类型</option>
           <?php foreach($sc_list as $k => $v){ ?>
           <option id="sc_<?php echo $v['sc_id'];?>"  value="<?php echo $v['sc_id'];?>"><?php echo str_cut($v['sc_type'], '40');?></option>
           <?php } ?>
@@ -24,7 +23,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">年级设置</label>
     <div class="layui-input-inline">
-     <input type="text" required lay-verify="required" placeholder="请填写课程" autocomplete="off" class="layui-input" id="cl_type" />
+     <input type="text" required lay-verify="required" placeholder="请填写年级" autocomplete="off" class="layui-input" id="cl_type" />
     <div class="layui-form-mid layui-word-aux">如 ‘一年级’，‘初一’</div>
     </div>
     
@@ -77,6 +76,8 @@ $(function(){
     var actions = $("#actions").val();
     var cl_type = $("#cl_type").val();
     var sc_id = $("#sc_type").val();
+
+      if (cl_type == '') {layer.tips('请输入年级名称', '#cl_type');return false;}
     if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
     $.ajax({
       url: "{:url('/Admin/Classtype/classtype_edit')}",
@@ -104,14 +105,14 @@ $(function(){
       var cl_type = $('#pid_'+id).attr('cl_type');
       var sc_id   = $('#pid_'+id).attr('sc_id');
       $('#cl_sort').val(cl_sort);
-      $('#cl_type').val(cl_type);      
+      $('#cl_type').val(cl_type);
       $('#sc_'+sc_id).attr('selected','selected');
-    }else{      
+    }else{
       $('#cl_id').val('');
     } 
     layer.open({
       type: 1,
-      title: '课程管理',
+      title: '年级管理',
       shadeClose: true,
       shade: 0.4,
       maxmin: false, //开启最大化最小化按钮
@@ -129,7 +130,7 @@ $(function(){
           <span id="explanationZoom" title="收起提示" class="arrow"></span>
       </div>
       <ul>
-          <li>课程管理</li>
+          <li>年级管理</li>
           <li>学校类型：如‘语文’，‘数学’，‘英语’</li>
       </ul>
   </div>
@@ -141,9 +142,10 @@ $(function(){
       <thead>
         <tr class="thead">
           <!-- <th><input type="checkbox" class="checkall"/></th> -->
+
+            <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.cl_type}</th>
           <th class="align-center">{$Think.lang.school_type}</th>
-          <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.up_time}</th>
         <?php  if(session('admin_is_super') ==1 || (in_array('13',$action) )){?>
             <th class="align-center">{$Think.lang.cl_enabled}</th>
@@ -158,9 +160,9 @@ $(function(){
         <?php foreach($class_list as $k => $v){ ?>
         <tr class="hover" id="pid_<?php echo $v['cl_id'];?>" sc_id="<?php echo $v['sc_id'];?>" cl_sort="<?php echo $v['cl_sort'];?>" cl_type="<?php echo str_cut($v['cl_type'], '40');?>">
           <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['cl_id']; ?>" /></td> -->
-          <td><span title="<?php echo $v['cl_type'];?>"><?php echo str_cut($v['cl_type'], '40');?></span></td>          
-          <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>          
-          <td class="align-center"><?php echo $v['cl_sort'];?></td>
+            <td class="align-center"><?php echo $v['cl_sort'];?></td>
+          <td><span title="<?php echo $v['cl_type'];?>"><?php echo str_cut($v['cl_type'], '40');?></span></td>
+          <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>
           <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>
             <?php if(session('admin_is_super') ==1 || in_array('13',$action)){ ?>
           <td class="align-center yes-onoff">
