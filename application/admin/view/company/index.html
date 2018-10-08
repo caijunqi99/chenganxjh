@@ -72,7 +72,7 @@
 
 
     <form method='post' onsubmit="if(confirm('{$Think.lang.ds_ensure_del}')){return true;}else{return false;}" name="brandForm">
-        <?php if(session('admin_is_super') ==1 || in_array(7,$this->action)){?>
+        <?php if(session('admin_is_super') ==1 || in_array(7,$action)){?>
             <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('company/export_step1',['o_name'=>$search_organize_name,'o_provinceid'=>$o_provinceid,'o_cityid'=>$o_cityid,'area_id'=>$area_id])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
         <?php }?>
         <table class="ds-default-table">

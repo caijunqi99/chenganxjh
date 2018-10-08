@@ -90,8 +90,17 @@ class Classes extends AdminControl {
             $school = db('school')->where('schoolid',$v['schoolid'])->find();
             $searchInfo[$k]['schoolname'] = $school['name'];
         }
+        //全部学校
+        if($admininfo['admin_id']!=1){
+            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            $condition_school['a.admin_company_id'] = $admin['admin_company_id'];
+        }
+        $condition_school['isdel'] = 1;
+        $model_school = model('School');
+        $school_list = $model_school->getSchoolList($condition_school);
         $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolname', $searchInfo);
+        $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
         $this->setAdminCurItem('index');
         return $this->fetch();

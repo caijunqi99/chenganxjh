@@ -33,22 +33,21 @@
                 <td class="vatop rowform">
                     <input type="hidden"  name="sid" id="sid" value="1">
                     <input type="hidden" name="dep" id="dep" class="dep" value="1">
-                    <li>
-                        <input name="o_role" type="radio" value="1" {if condition="$organize_array.o_role eq 1"} checked="checked"{/if}>
-                        <label>{$Think.lang.organize_index_company}</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="o_role" value="2" {if condition="$organize_array.o_role eq 2"} checked="checked"{/if}>
-                        <label>{$Think.lang.organize_index_province}</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="o_role" value="3" {if condition="$organize_array.o_role eq 3"} checked="checked"{/if}>
-                        <label>{$Think.lang.organize_index_city}</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="o_role" value="4" {if condition="$organize_array.o_role eq 4"} checked="checked"{/if}>
-                        <label>{$Think.lang.organize_index_special}</label>
-                    </li>
+                    <?php if(!empty($gadmin)){?>
+                        <?php foreach($gadmin as $key=>$value){?>
+                            <?php if($value['gid'] == $organize_array['o_role']){?>
+                                <li>
+                                    <input name="o_role" type="radio" value="<?php echo $value['gid'];?>" checked="checked">
+                                    <label><?php echo $value['gname'];?></label>
+                                </li>
+                            <?php }else{?>
+                                <li>
+                                    <input type="radio" name="o_role" value="<?php echo $value['gid'];?>">
+                                    <label><?php echo $value['gname'];?></label>
+                                </li>
+                            <?php }?>
+                        <?php }?>
+                    <?php }?>
                 </td>
             </tr>
             <tr>
