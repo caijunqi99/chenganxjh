@@ -293,7 +293,7 @@ class Member extends Model
             $this->startTrans();
             $member_info = array();
             $member_info['member_name'] = $param['member_name'];
-            $member_info['member_password'] = md5(trim($param['member_password']));
+            $member_info['member_password'] = $param['member_password'];
             if (isset($param['member_email'])) {
                 $member_info['member_email'] = $param['member_email'];
             }

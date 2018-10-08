@@ -102,8 +102,25 @@ class Student extends AdminControl {
             $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
             $searchInfo[$k]['schoolname'] = $school['name'];
         }
+        //全部学校
+        if($admininfo['admin_id']!=1){
+            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            $condition_school['a.admin_company_id'] = $admin['admin_company_id'];
+        }
+        $condition_school['isdel'] = 1;
+        $model_school = model('School');
+        $school_list = $model_school->getSchoolList($condition_school);
+        //全部班级
+        $model_class = model('Classes');
+        $class_list = $model_class->getClasslList($condition_school);
+        foreach ($class_list as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
+            $class_list[$k]['typename'] = $schooltype['sc_type'];
+        }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
+        $this->assign('schoolList', $school_list);
+        $this->assign('classList', $class_list);
         $this->assign('schoolname', $searchInfo);
         $this->setAdminCurItem('index');
         return $this->fetch();
