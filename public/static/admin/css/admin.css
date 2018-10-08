@@ -362,7 +362,7 @@ tfoot label { +display: inline-block; +float:left; +line-height:38px; /* IE */}
 .ncap-form-default dl:nth-child(even),.ncap-form-all dd:nth-child(even){background-color: #FDFDFD;}
 .ncap-form-default dl:hover,.ncap-form-all dd:hover{color: #000; background-color: #FFF; border-style: dotted; border-color: #D7D7D7; z-index: 2; box-shadow: 0 0 4px rgba(0,0,0,0.05);}
 .ncap-form-default dt,.ncap-form-default dd{ font-size: 12px; line-height: 26px; vertical-align: top; letter-spacing: normal; display: inline-block; *display: inline/*IE7*/;*zoom:1/*IE7*/;}
-.ncap-form-default dt{text-align: right; width: 14%; padding-right: 2%;}
+.ncap-form-default dt{text-align: left; width: 14%; padding-right: 2%;}
 .ncap-form-default dd{text-align: left; width: 83%;}
 .ncap-form-default dt em{ font: bold 14px/20px tahoma, verdana; color: #F60; vertical-align: middle; display: inline-block; margin-right: 5px; }
 .ncap-form-default .input-txt,.ncap-form-all .input-txt{width: 280px !important;}
