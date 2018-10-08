@@ -27,6 +27,7 @@ $lang['ds_cache']                  = '清理缓存';
 $lang['ds_db']                     = '数据备份';
 $lang['ds_adminlog']               = '操作日志';
 $lang['pkgs_manage']               = '套餐管理';
+$lang['nc_none_input']               = '权限组名称不能为空';
 
 //组织管理
 $lang['ds_organize'] = '组织管理';
