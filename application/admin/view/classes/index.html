@@ -49,8 +49,8 @@
                     <td id="school_list">
                     <select name="school_name" >
                         <option value="">{$Think.lang.school_index_allschool}</option>
-                        {volist name="$schoolname" id="school"}
-                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.schoolname}</option>
+                        {volist name="schoolList" id="school"}
+                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.name}</option>
                         {/volist}
                     </select>
                 </td>
@@ -66,7 +66,7 @@
                 <td id="class_list">
                     <select name="class_name" id="class_name">
                         <option value="">{$Think.lang.school_index_classname}</option>
-                        {volist name="$schoolname" id="v"}
+                        {volist name="class_list" id="v"}
                         <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.typename}-{$v.classname}</option>
                         {/volist}
                     </select>
