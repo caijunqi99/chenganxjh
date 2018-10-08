@@ -19,13 +19,11 @@ class School extends AdminControl {
     }
 
     public function member() {
-
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $model_school = model('School');
         $condition = array();
-
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
@@ -133,12 +131,14 @@ class School extends AdminControl {
             $data['cityid'] = $city_id['area_parent_id'];
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['provinceid'] = $province_id['area_parent_id'];
+            //print_r($province_id['area_shortname']);
             if($province_id['area_shortname']){
                 $uniqueCard = "";
                 for($i=0;$i<strlen($province_id['area_shortname']);$i=$i+3){
                     $uniqueCard .= $model_school->getFirstCharter(substr($province_id['area_shortname'],$i,3));
                 }
             }
+            //print_r($uniqueCard);die;
             $number = $model_school -> getNumber($uniqueCard);
             $data['schoolCard'] = $uniqueCard.$number;
             //验证数据  END
