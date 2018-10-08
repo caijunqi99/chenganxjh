@@ -16,7 +16,7 @@ class Common extends MobileMall
 
     public function navicon(){
         $type = intval(input('post.type',1));
-        $navlist = db('navimage')->where('type',$type)->select();
+        $navlist = db('navimage')->where('type',$type)->group('group_type')->select();
         output_data($navlist);
     }
 
