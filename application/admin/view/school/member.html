@@ -78,7 +78,6 @@
     <table class="ds-default-table">
         <thead>
         <tr class="thead">
-            <th>&nbsp;</th>
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th class="align-center">{$Think.lang.school_index_name}</th>
             <th class="align-center">{$Think.lang.school_index_region}</th>
@@ -96,7 +95,6 @@
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
         <?php foreach($school_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>
             <td class="align-center"><?php echo $v['schoolid']; ?></td>
             <td class="align-center"><?php echo $v['name']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
