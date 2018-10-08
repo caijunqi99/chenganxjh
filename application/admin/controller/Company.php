@@ -144,6 +144,9 @@ class Company extends AdminControl {
                 $this->error(lang('ds_common_save_fail'));
             }
         } else {
+            // 角色
+            $gadmin = db('gadmin')->where('gid < 5')->select();
+            $this->assign('gadmin',$gadmin);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
             $this->assign('region_list', $region_list);
@@ -185,7 +188,9 @@ class Company extends AdminControl {
                 $this->error(lang('ds_common_save_fail'));
             }
         } else {
-
+            // 角色
+            $gadmin = db('gadmin')->where('gid < 5')->select();
+            $this->assign('gadmin',$gadmin);
             $organize_info = $model_organize->getOrganizeInfo(array('o_id' => intval(input('param.organize_id'))));
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
