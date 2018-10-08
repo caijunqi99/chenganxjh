@@ -451,6 +451,7 @@ $lang['co_edit_fail']     = '课程修改失败';
 //年级管理
 $lang['classtype']        = '年级';
 $lang['classtype_manage'] = '年级管理';
+$lang['ds_cltype'] = '年级管理';
 $lang['cl_type']          = '年级';
 $lang['cl_enabled']       = '是否启用';
 $lang['cl_del_fail']      = '年级删除失败';
