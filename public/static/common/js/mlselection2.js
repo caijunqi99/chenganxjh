@@ -96,7 +96,7 @@ function regionChange() {
             var school_list = data.school_list;
 
             if (data.code == 10000) {
-                var select = '<select name="order_state" class="querySelect"><option>请选择学校</option>';
+                var select = '<select name="order_state" id="school_id" class="querySelect" onchange="fand_schooltype($(this))"><option>请选择学校</option>';
                 if (school_length>0) {
                     for (var i = 0; i < school_length; i++) {
                         select += "<option value='" + school_list[i].schoolid + "'>" + school_list[i].name + "</option>";
@@ -119,6 +119,32 @@ function regionChange() {
             }
         });
     }
+}
+function fand_schooltype(_sef) {
+    var sc_id = $(_sef).val();
+    if(sc_id){
+        var url = SITE_URL + 'index.php/Admin/Student/fand_schooltype';
+        $.post(url, {'sc_id': sc_id}, function (data) {
+            data=$.parseJSON( data );
+            // console.log(data);return ;
+            var schooltype_length = data.length;
+            var schooltype_list = data;
+            if (data) {
+                //var select = '';
+                var select = '<select name="classtype" class="querySelect" onchange="fand_classname($(this))"><option>请选择学校类型</option>';
+                if (schooltype_length>0) {
+                    for (var i = 0; i < schooltype_length; i++) {
+                        select += "<option value='" + schooltype_list[i].sc_id + "'>" + schooltype_list[i].sc_type + "</option>";
+                    }
+                }
+                select +='</select>';
+                $("#type_list").html(select);
+            }else {
+                alert(data.message);
+            }
+        });
+    }
+
 }
 
 function regionEdit() {
