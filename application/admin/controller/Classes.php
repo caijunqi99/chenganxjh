@@ -254,7 +254,7 @@ class Classes extends AdminControl {
             //验证数据  END
             $result = $model_student->addStudent($data);
             if ($result) {
-                $this->success(lang('school_class_studentadd_succ'), 'Student/index');
+                $this->success(lang('school_class_studentadd_succ'), 'Classes/index');
             } else {
                 $this->error(lang('school_class_studentadd_fail'));
             }
