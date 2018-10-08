@@ -9,9 +9,9 @@ namespace app\common\model;
 
 use think\Model;
 
-class Teachchlid extends Model {
+class Teachchild extends Model {
     /**
-     * 分子公司列表
+     * 课件列表
      * @param array $condition
      * @param string $field
      * @param string $order
@@ -19,7 +19,7 @@ class Teachchlid extends Model {
      * @param string $limit
      * @return array
      */
-    public function getTeachchildList($condition, $field = '*', $page = 0, $order = 'o_id desc', $limit = '') {
+    public function getTeachchildList($condition, $field = '*', $page = 0, $order = 't_id desc', $limit = '') {
         if($limit) {
             return db('teachchild')->where($condition)->field($field)->order($order)->page($page)->limit($limit)->select();
         }else{
@@ -29,7 +29,7 @@ class Teachchlid extends Model {
         }
     }
     /**
-     * 添加分子公司
+     * 添加课件
      * @param array $insert
      * @return boolean
      */
@@ -37,7 +37,7 @@ class Teachchlid extends Model {
         return db('teachchild')->insert($insert);
     }
     /**
-     * 取单个分子公司内容
+     * 取单个课件内容
      * @param array $condition
      * @param string $field
      * @return array
@@ -46,7 +46,7 @@ class Teachchlid extends Model {
         return db('teachchild')->field($field)->where($condition)->find();
     }
     /**
-     * 编辑分子公司
+     * 编辑课件
      * @param array $condition
      * @param array $update
      * @return boolean

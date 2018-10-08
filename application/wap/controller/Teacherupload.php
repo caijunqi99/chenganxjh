@@ -35,19 +35,44 @@ class Teacherupload
     }
     //上传课件提交
     public function addcourse(){
-        $model_teachchild = Model('teachchild');
-        $condition = array();
-        $condition['t_url']=input('param.url');
-        $condition['t_picture'] = input('param.picture');
-        $condition['t_title']   = input('param.title');
-        $condition['t_profile'] = input('param.profile');
-        $condition['t_classid']  = input('param.classid');
-        $condition['t_courseid']  = input('param.courseid');
-        $condition['t_price']  = input('param.price');
-        $condition['t_maketime']  = time();
-        $condition['t_audit']=1;
-        $condition['t_del']=1;
-        $condition['t_supreme']=1;
-        $model_teachchild->addTeachchild($condition);
+        $member_id = intval(input('post.member_id'));
+        $where = ' member_id = "'.$member_id.'"';
+        $member_identity = db('member')->field('member_identity')->where($where)->find();
+        if($member_identity['member_identity']!=2){
+            output_error('该会员不属于教师，无法上传课件');
+        }
+        if(!empty($_POST)) {
+            $teachchild = model('Teachchild');
+            $condition = array();
+            $condition['t_url'] = trim(input('post.url'));
+            $condition['t_picture'] = trim(input('post.picture'));
+            $condition['t_title'] = trim(input('post.title'));
+            $condition['t_profile'] = trim(input('post.profile'));
+            $condition['t_classid'] = intval(input('post.classid'));
+            $condition['t_courseid'] = intval(input('post.courseid'));
+            $condition['t_price'] = trim(input('post.price'));
+            $condition['t_userid']=$member_id;
+            $condition['t_maketime'] = time();
+            $condition['t_audit'] = 1;
+            $condition['t_del'] = 1;
+            $condition['t_supreme'] = 1;
+            $ClassType = model('Classtype');
+            $cl_id=input('post.classid');
+            $class=$ClassType->getOneById($cl_id);
+            $condition['t_scid']=$class['sc_id'];
+            if (empty($condition['t_url'])) output_error('上传课件不能为空');
+            if (empty($condition['t_picture'])) output_error('上传封面不能为空');
+            if (empty($condition['t_title'])) output_error('标题不能为空');
+            if (empty($condition['t_profile'])) output_error('简介不能为空');
+            if (empty($condition['t_price'])) output_error('价格不能为空');
+            $result=$teachchild->addTeachchild($condition);
+            if($result){
+                output_data(array('message'=>'上传成功'));
+            }else{
+                output_error('上传失败');
+            }
+        }else{
+            output_error('网络错误');
+        }
     }
 }
