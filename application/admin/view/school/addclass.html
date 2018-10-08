@@ -49,7 +49,7 @@
                 <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classname}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" name="school_class_name" id="school_class_name" class="txt"></td>
+                <td class="vatop rowform"><input type="text" value="" name="school_class_name" id="class_name" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
 
@@ -90,28 +90,30 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules: {
-                school_name: {
+                school_class_name: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 20,
                     remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
+                        url: "{:url('Admin/school/ajax',['branch'=>'check_class_name'])}",
                         type: 'get',
                         data: {
-                            user_name: function() {
-                                return $('#school_name').val();
+                            class_name: function() {
+                                return $('#class_name').val();
                             },
-                            school_id:'{$school_array.school_id|default=0}'
+                            school_id:'{$schoolid|default=0}'
                         }
                     }
+                },
+                school_type: {
+                    required: true
                 }
             },
             messages: {
-                school_name: {
-                    required: '{$Think.lang.school_add_name_null}',
-                    maxlength: '{$Think.lang.school_add_name_length}',
-                    minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
+                school_class_name: {
+                    required: '{$Think.lang.school_add_class_null}',
+                    remote: '{$Think.lang.class_add_name_exists}'
+                },
+                school_type: {
+                    required: '{$Think.lang.school_add_type_null}'
                 }
             }
         });
