@@ -197,7 +197,7 @@ class School extends AdminControl {
             //验证数据  END
             $result = $model_class->addClasses($data);
             if ($result) {
-                $this->success(lang('school_class_add_succ'), 'Classes/index');
+                $this->success(lang('school_class_add_succ'), 'School/member');
             } else {
                 $this->error(lang('school_class_add_fail'));
             }

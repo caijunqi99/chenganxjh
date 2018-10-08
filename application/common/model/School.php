@@ -39,7 +39,7 @@ class School extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid desc', $limit = '', $extend = array(), $master = false) {
+    public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid asc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         //print_r(db('school')->getLastSql());die;
         $this->page_info = $list_paginate;
