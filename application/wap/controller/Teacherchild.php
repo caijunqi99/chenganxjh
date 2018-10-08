@@ -40,7 +40,52 @@ class Teacherchild
         $super=array('sc_id'=>'0','sc_type'=>'精品','school'=>$pkgess,'class'=>$class,'course'=>$course);
         array_unshift($list['right'],$super);
         output_data($list);
-        output_data($sc_list);
     }
-
+    //教孩列表页面
+    public function list(){
+        $teachchild = model('Teachchild');
+        $condition = array();
+        $condition['t_audit']=2;
+        $condition['t_del']=1;
+        if(!empty($_POST['supreme'])) {
+            $condition['t_supreme']=1;
+        }
+        if(!empty($_POST['scid'])) {
+            $condition['t_scid']=intval(input('post.scid'));
+        }
+        if(!empty($_POST['classid'])) {
+            $condition['t_classid']=intval(input('post.classid'));
+        }
+        if(!empty($_POST['courseid'])) {
+            $condition['t_courseid']=intval(input('post.courseid'));
+        }
+        if(!empty($_POST['left'])) {
+            $order=intval(input('post.left'));
+            if($order==2){
+                $order='t_id desc';
+            }else if($order==5){
+                $order='t_price desc';
+            }else if($order==6){
+                $order='t_price asc';
+            }
+        }else{
+            $order='t_id desc';
+        }
+        if(!empty($_POST['between'])) {
+            $condition['t_price']=0;
+        }
+        $list = $teachchild->getTeachchildList($condition,'t_id,t_picture,t_title,t_profile,t_price,t_userid', '' ,$order);
+        foreach ($list as $k=>$v){
+            $conditions=array();
+            $conditions['member_id']=$v['t_userid'];
+            $model_member = Model('member');
+            $res=$model_member->getMemberInfo($conditions);
+            $list[$k]['member_nickname'] = $res['member_nickname'];
+        }
+        if($list){
+            output_data($list);
+        }else{
+            output_error('暂无数据');
+        }
+    }
 }
