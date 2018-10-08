@@ -292,6 +292,22 @@ class School extends AdminControl {
                     exit;
                 }
                 break;
+            /**
+             * 验证班级名是否重复
+             */
+            case 'check_class_name':
+                $class_member = Model('classes');
+                $condition['classname'] = input('param.class_name');
+                $condition['schoolid'] = input('param.school_id');
+                $list = $class_member->getClassInfo($condition);
+                if (empty($list)) {
+                    echo 'true';
+                    exit;
+                } else {
+                    echo 'false';
+                    exit;
+                }
+                break;
         }
     }
 
@@ -328,7 +344,7 @@ class School extends AdminControl {
         $admin_id = $this->admin_info['admin_id'];
             $model_admin = Model('admin');
             $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = 5;
+            $param['admin_gid'] = 8;
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
             $rs = $model_admin->addAdmin($param);

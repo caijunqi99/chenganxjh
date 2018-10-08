@@ -151,7 +151,9 @@
                     }
                 },
                 school_phone:{
-                    required: true
+                    required: true,
+                    minlength: 8,
+                    maxlength: 12
                 },
                 school_username:{
                     required: true
@@ -172,6 +174,8 @@
                 },
                 school_phone: {
                     required: '{$Think.lang.school_add_phone_null}',
+                    maxlength: '{$Think.lang.school_add_phone_length}',
+                    minlength: '{$Think.lang.school_add_phone_length}',
                 },
                 school_username: {
                     required: '{$Think.lang.school_add_name_null}',
