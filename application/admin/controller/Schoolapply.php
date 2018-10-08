@@ -241,7 +241,7 @@ class Schoolapply extends AdminControl {
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'member',
+                'name' => 'index',
                 'text' => '管理',
                 'url' => url('Admin/Schoolapply/index')
             ),

@@ -34,7 +34,7 @@ class Schoolapply extends Model {
      * @param string $limit
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getSchoolapplyList($condition, $page = '', $field = '*', $school = 'applyid desc', $limit = '', $extend = array(), $master = false) {
+    public function getSchoolapplyList($condition, $page = '', $field = '*', $school = 'applyid asc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('schoolapply')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.auditor ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
