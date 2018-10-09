@@ -100,8 +100,6 @@ class Login extends MobileMall
         }
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
         
-        db('testt')->insertGetId(array('content'=>json_encode(input())));
-        db('testt')->insertGetId(array('content'=>md5(trim($password))));
 
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
@@ -154,7 +152,7 @@ class Login extends MobileMall
         $model_member = Model('member');
         $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
         if(!empty($member)) {
-            $new_password = md5($_POST['password']);
+            $new_password = md5($password);
             $model_member->editMember(array('member_id'=> $member['member_id']),array('member_password'=> $new_password));
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
             if($token) {

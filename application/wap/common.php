@@ -1,13 +1,13 @@
 <?php
 
 
-function output_data($datas, $extend_data = array(),$codd=1) {
+function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
+    
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     if ($codd !=1) $data['code'] = '400';
-    $data['result']=isset($datas['error'])?(object)array():(object)$datas;
+    $data['result']=isset($datas['error'])?array():$isAssoc == 'true'?(object)$datas:$datas;
     $data['message'] = isset($datas['error'])?$datas['error']:'';
-    //$data['datas']=$datas;
     if(!empty($extend_data)) {
         $data = array_merge($data, $extend_data);
     }
@@ -18,6 +18,17 @@ function output_data($datas, $extend_data = array(),$codd=1) {
         echo json_encode($data);die;
     }
 }
+function output_datas($data,$transfer = 'true'){
+    output_data($data, array(),1,$transfer);
+}
+function _checkAssocArray($arr){
+    $index = 0;
+    foreach (array_keys($arr) as $key) {
+        if ($index++ != $key) return 'false';
+    }
+    return 'true';
+}
+
 
 function output_error($message, $extend_data = array(),$codd=1) {
     $datas = array('error' => $message);
