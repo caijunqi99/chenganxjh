@@ -265,7 +265,7 @@ class Shopping extends AdminControl {
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'index', 'text' => lang('manage'), 'url' => url('vrorder/index')
+                'name' => 'index', 'text' => lang('manage'), 'url' => url('shopping/index')
             )
         );
         if(request()->action() == 'change_state') {
