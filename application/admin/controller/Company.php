@@ -409,6 +409,7 @@ class Company extends AdminControl {
             $param['create_uid'] = $admin_id;
             $param['admin_company_id']=$_POST['oid'];
             $param['admin_status']=1;
+            $param['admin_del_status']=1;
             $rs = $model_admin->addAdmin($param);
             if ($rs) {
                 $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
