@@ -144,6 +144,9 @@ class Company extends AdminControl {
                 $this->error(lang('ds_common_save_fail'));
             }
         } else {
+            // 角色
+            $gadmin = db('gadmin')->where('gid < 5')->select();
+            $this->assign('gadmin',$gadmin);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
             $this->assign('region_list', $region_list);
@@ -239,19 +242,7 @@ class Company extends AdminControl {
         //$headTitle = "分/子公司列表";
         $title = "分/子公司列表";
         //$headtitle= "<tr style='height:50px;border-style:none;><th border=\"0\" style='height:60px;width:270px;font-size:22px;' colspan='11' >{$headTitle}</th></tr>";
-        $titlename = "<tr>
-               <td style='width:70px;' >序号</td>
-               <td style='width:170px;' >公司名称</td>
-               <td style='width:70px;'>公司角色</td>
-               <td style='width:150px;'>地区</td>
-               <td style='width:170px;'>详细地址</td>
-               <td style='width:100px;'>电话</td>
-               <td style='width:70px;'>负责人</td>
-               <td style='width:170px;'>合同截止日期</td>
-               <td style='width:170px;'>创建时间</td>
-               <td style='width:70px;'>备注</td>
-           </tr>";
-
+        $titlename = "<tr><th style='width:70px;' >序号</th><th style='width:170px;' >公司名称</th><th style='width:70px;'>公司角色</th><th style='width:150px;'>地区</th><th style='width:170px;'>详细地址</th><th style='width:100px;'>电话</th><th style='width:70px;'>负责人</th><th style='width:170px;'>合同截止日期</th><th style='width:170px;'>创建时间</th><th style='width:70px;'>备注</th></tr>";
         $filename = $title.".xls";
         $model_organize = Model('company');
         $condition = array();
