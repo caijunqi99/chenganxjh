@@ -15,11 +15,11 @@ $lang['pkg_name']          = '套餐名称';
 $lang['pkg_name_err']      = '套餐名称不能为空';
 $lang['pkg_name_notice']   = '套餐名称不能为空';
 
-$lang['pkg_price']         = '套餐优惠价格';
+$lang['pkg_price']         = '套餐优惠价格（元）';
 $lang['pkg_price_err']     = '套餐优惠价格不能为空';
 $lang['pkg_price_notice']  = '套餐优惠价格不能为空';
 
-$lang['pkg_cprice']         = '套餐原价格';
+$lang['pkg_cprice']         = '套餐原价格（元）';
 $lang['pkg_cprice_err']     = '套餐原价格不能为空';
 $lang['pkg_cprice_notice']  = '套餐原价格不能为空';
 

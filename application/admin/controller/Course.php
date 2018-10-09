@@ -71,7 +71,7 @@ class Course extends AdminControl {
      * 删除套餐
      */
     public function course_del() {
-        if(session('admin_is_super') !=2 && !in_array(4,$this->action )){
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $Course = Model('Course');
@@ -82,10 +82,10 @@ class Course extends AdminControl {
         $result = $Course->course_del($co_id);
 
         if (!$result) {
-            $this->error(lang('cl_del_fail'));
+            $this->error(lang('co_del_fail'));
         } else {
-            $this->log(lang('cl_del_succ') . '[' . $co_id . ']', null);
-            $this->success(lang('cl_del_succ'));
+            $this->log(lang('co_del_succ') . '[' . $co_id . ']', null);
+            $this->success(lang('co_del_succ'));
         }
     }
 

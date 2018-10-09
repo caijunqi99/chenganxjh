@@ -764,6 +764,21 @@ function getMemberAvatar($member_avatar)
     }
 }
 
+function getIconImage($icon,$key)
+{   
+    $key = explode('_',$key);
+    $multiple = 'x'.$key[1];    
+    if (empty($icon)) {
+        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+    }else {
+        if (!file_exists(UPLOAD_SITE_URL . '/' . ATTACH_NAVICON . '/' .$multiple.'/'. $icon)) {
+            return UPLOAD_SITE_URL . '/' . ATTACH_NAVICON . '/' .$multiple.'/'. $icon;
+        }else {
+            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+        }
+    }
+}
+
 /**
  * 成员头像
  * @param string $member_id

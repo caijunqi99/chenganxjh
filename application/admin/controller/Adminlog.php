@@ -24,7 +24,7 @@ class Adminlog extends AdminControl
         $time1='';
         $time2='';
         if (!empty(input('param.admin_name'))) {
-            $condition['admin_name'] = input('param.admin_name');
+            $condition['admin_name'] = array('LIKE','%'.input('param.admin_name').'%');
         }
         if (!empty(input('param.time_from'))) {
             $time1 = strtotime(input('param.time_from'));

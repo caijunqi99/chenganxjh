@@ -54,6 +54,8 @@ $(function(){
     var sc_sort = $("#sc_sort").val();
     var actions = $("#actions").val();
     var sc_type = $("#sc_type").val();
+
+      if (sc_type == '') {layer.tips('请输入学校类型', '#sc_type');return false;}
     if (sc_sort < 1) {layer.tips('请输入正确的排序', '#sc_sort');return false;}
     $.ajax({
       url: "{:url('/Admin/Sctype/sctype_edit')}",

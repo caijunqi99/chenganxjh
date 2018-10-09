@@ -58,21 +58,6 @@
                 </td>
             </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td>
-                    <select name="school_type" class="querySelect">
-                        <option value="">{$Think.lang.school_index_chosetype}</option>
-                        {volist name="schooltype" id="type"}
-                        <option value="{$type.sc_id}">{$type.sc_type}</option>
-                        {/volist}
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
                 <td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>
                 <td class="vatop tips"></td>
             </tr>
@@ -80,6 +65,29 @@
                 <td id="school_list">
                     <select name="school_name" class="querySelect">
                         <option value="">{$Think.lang.school_index_chosename}</option>
+                    </select>
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <!--<tr class="noborder">-->
+                <!--<td>-->
+                    <!--<select name="school_type" class="querySelect">-->
+                        <!--<option value="">{$Think.lang.school_index_chosetype}</option>-->
+                        <!--{volist name="schooltype" id="type"}-->
+                        <!--<option value="{$type.sc_id}">{$type.sc_type}</option>-->
+                        <!--{/volist}-->
+                    <!--</select>-->
+                <!--</td>-->
+                <!--<td class="vatop tips"></td>-->
+            <!--</tr>-->
+            <tr class="noborder">
+                <td id="type_list">
+                    <select name="school_type" class="querySelect" id="school_type">
+                        <option value="">{$Think.lang.school_index_chosetype}</option>
                     </select>
                 </td>
                 <td class="vatop tips"></td>

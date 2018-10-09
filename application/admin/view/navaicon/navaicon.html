@@ -13,6 +13,7 @@
       <label class="layui-form-label">搜索选择框</label>
       <div class="layui-input-inline">
         <select name="modules" lay-verify="required" lay-search="" id="sc_type">
+          <option value="">选择学校类型</option>
           <?php foreach($sc_list as $k => $v){ ?>
           <option id="sc_<?php echo $v['sc_id'];?>"  value="<?php echo $v['sc_id'];?>"><?php echo str_cut($v['sc_type'], '40');?></option>
           <?php } ?>
@@ -23,7 +24,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">年级设置</label>
     <div class="layui-input-inline">
-     <input type="text" required lay-verify="required" placeholder="请填写年级" autocomplete="off" class="layui-input" id="cl_type" />
+     <input type="text" required lay-verify="required" placeholder="请填写课程" autocomplete="off" class="layui-input" id="cl_type" />
     <div class="layui-form-mid layui-word-aux">如 ‘一年级’，‘初一’</div>
     </div>
     
@@ -47,7 +48,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>{$Think.lang.classtype_manage}</h3>
+                <h3>{$Think.lang.icon_manage}</h3>
             </div>
             {include file="public/admin_items" /}
         </div>
@@ -56,7 +57,7 @@
   <div class="fixed-empty"></div>
     <?php if(session('admin_is_super') ==1 || in_array('1',$action)){ ?>
             <th>
-                <button class="layui-btn" onclick="classtype_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button>
+                <!-- <button class="layui-btn" onclick="classtype_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button> -->
             </th>
     <?php } ?>
   <script>     
@@ -76,8 +77,6 @@ $(function(){
     var actions = $("#actions").val();
     var cl_type = $("#cl_type").val();
     var sc_id = $("#sc_type").val();
-
-      if (cl_type == '') {layer.tips('请输入年级名称', '#cl_type');return false;}
     if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
     $.ajax({
       url: "{:url('/Admin/Classtype/classtype_edit')}",
@@ -105,14 +104,14 @@ $(function(){
       var cl_type = $('#pid_'+id).attr('cl_type');
       var sc_id   = $('#pid_'+id).attr('sc_id');
       $('#cl_sort').val(cl_sort);
-      $('#cl_type').val(cl_type);
+      $('#cl_type').val(cl_type);      
       $('#sc_'+sc_id).attr('selected','selected');
-    }else{
+    }else{      
       $('#cl_id').val('');
     } 
     layer.open({
       type: 1,
-      title: '年级管理',
+      title: '课程管理',
       shadeClose: true,
       shade: 0.4,
       maxmin: false, //开启最大化最小化按钮
@@ -130,8 +129,8 @@ $(function(){
           <span id="explanationZoom" title="收起提示" class="arrow"></span>
       </div>
       <ul>
-          <li>年级管理</li>
-          <li>学校类型：如‘语文’，‘数学’，‘英语’</li>
+          <li>导航图标</li>
+          <li>app导航图标，暂不做添加修改操作</li>
       </ul>
   </div>
   
@@ -142,47 +141,58 @@ $(function(){
       <thead>
         <tr class="thead">
           <!-- <th><input type="checkbox" class="checkall"/></th> -->
-
-            <th class="align-center">{$Think.lang.ds_sort}</th>
-          <th class="align-center">{$Think.lang.cl_type}</th>
-          <th class="align-center">{$Think.lang.school_type}</th>
-          <th class="align-center">{$Think.lang.up_time}</th>
-        <?php  if(session('admin_is_super') ==1 || (in_array('13',$action) )){?>
-            <th class="align-center">{$Think.lang.cl_enabled}</th>
-        <?php } ?>
-        <?php  if(session('admin_is_super') ==1 || (in_array('3',$action) || in_array('2',$action))){?>
-            <th class="align-center">{$Think.lang.ds_handle}</th>
-        <?php } ?>
+          <th class="align-center">图标分组</th>
+          <th class="align-center">说明</th>
+          <th class="align-center">X2展示</th>
+          <th class="align-center">X3展示</th>
+          <th class="align-center">链接方式</th>
+          <th class="align-center">图片标签</th>
+            <?php  if(session('admin_is_super') ==1 || (in_array('13',$action) )){?>
+          <!-- <th class="align-center">{$Think.lang.cl_enabled}</th> -->
+            <?php } ?>
+            <?php  if(session('admin_is_super') ==1 || (in_array('3',$action) || in_array('2',$action))){?>
+          <!-- <th class="align-center">{$Think.lang.ds_handle}</th> -->
+            <?php } ?>
         </tr>
       </thead>
       <tbody>
-        <?php if(!empty($class_list) && is_array($class_list)){ ?>
-        <?php foreach($class_list as $k => $v){ ?>
+        <?php if(!empty($nalist) && is_array($nalist)){ ?>
+        <?php foreach($nalist as $k => $v){ ?>
         <tr class="hover" id="pid_<?php echo $v['cl_id'];?>" sc_id="<?php echo $v['sc_id'];?>" cl_sort="<?php echo $v['cl_sort'];?>" cl_type="<?php echo str_cut($v['cl_type'], '40');?>">
           <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['cl_id']; ?>" /></td> -->
-            <td class="align-center"><?php echo $v['cl_sort'];?></td>
-          <td><span title="<?php echo $v['cl_type'];?>"><?php echo str_cut($v['cl_type'], '40');?></span></td>
-          <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['sc_type'], '40');?></span></td>
-          <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>
-            <?php if(session('admin_is_super') ==1 || in_array('13',$action)){ ?>
-          <td class="align-center yes-onoff">
-            <?php if($v['cl_enabled'] == '0'){ ?>
-                <a href="JavaScript:void(0);" class=" disabled" ajax_branch="cl_enabled" nc_type="inline_edit" fieldname="cl_enabled" fieldid="<?php echo $v['cl_id']?>" fieldvalue="0" i_val='0' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+          <td><span title="<?php echo $v['cl_type'];?>"><?php echo $v['group_name'];?></span></td>          
+          <td><span title="<?php echo $v['sc_type'];?>"><?php echo str_cut($v['icon_name'], '40');?></span></td>          
+          <td class="align-center">
+            <div class="size-44x44">
+              <span class="thumb"><i></i>
+                  <img title="{$v['icon_2']}" src="{:getIconImage($v['icon_2'],'icon_2')}?{:microtime()}"  onload="javascript:DrawImage(this,44,44);"/>
+              </span>
+            </div></td>
+          <td class="align-center">
+            <div class="size-44x44">
+              <span class="thumb"><i></i>
+                  <img title="{$v['icon_3']}" src="{:getIconImage($v['icon_3'],'icon_3')}?{:microtime()}"  onload="javascript:DrawImage(this,44,44);"/>
+              </span>
+            </div></td>
+          <td class="align-center"><?php echo $v['link_type']==1?'APP':'H5';?></td>
+          <td class="align-center"><?php echo $v['icon_sign'];?></td>
+         <!--  <td class="align-center yes-onoff">
+              <?php if(session('admin_is_super') ==1 || in_array('13',$action)){ ?>
+              <?php if($v['cl_enabled'] == '0'){ ?>
+            <a href="JavaScript:void(0);" class=" disabled" ajax_branch="cl_enabled" nc_type="inline_edit" fieldname="cl_enabled" fieldid="<?php echo $v['cl_id']?>" fieldvalue="0" i_val='0' title="{$Think.lang.ds_editable}"></a>
             <?php }else { ?>
-                <a href="JavaScript:void(0);" class=" enabled" ajax_branch="cl_enabled" nc_type="inline_edit" fieldname="cl_enabled" fieldid="<?php echo $v['cl_id']?>" fieldvalue="1" i_val='1' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+            <a href="JavaScript:void(0);" class=" enabled" ajax_branch="cl_enabled" nc_type="inline_edit" fieldname="cl_enabled" fieldid="<?php echo $v['cl_id']?>" fieldvalue="1" i_val='1' title="{$Think.lang.ds_editable}"></a>
             <?php } ?>
-          </td>
-            <?php } ?>
-            <?php  if(session('admin_is_super') ==1 || (in_array('3',$action) || in_array('2',$action))){?>
+              <?php } ?>
+          </td> -->
           <td class="align-center">
               <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
-              <a class="layui-btn layui-btn-sm" href="javascript:classtype_edit('edit','<?php echo $v['cl_id'];?>')" >{$Think.lang.ds_edit}</a>
+              <!-- <a class="layui-btn layui-btn-sm" href="javascript:classtype_edit('edit','<?php echo $v['cl_id'];?>')" >{$Think.lang.ds_edit}</a> -->
               <?php } ?>
               <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
-              <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Classtype/classtype_del',['cl_id'=>$v.cl_id])}">{$Think.lang.ds_del}</a>
+              <!-- <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Classtype/classtype_del',['cl_id'=>$v.cl_id])}">{$Think.lang.ds_del}</a> -->
               <?php } ?>
           </td>
-            <?php } ?>
         </tr>
         <?php } ?>
         <?php }else { ?>

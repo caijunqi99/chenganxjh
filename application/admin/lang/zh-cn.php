@@ -474,4 +474,11 @@ $lang['cl_add_succ']      = '年级添加成功';
 $lang['cl_add_fail']      = '年级添加失败';
 $lang['cl_edit_succ']     = '年级修改成功';
 $lang['cl_edit_fail']     = '年级修改失败';
+
+//icon图标设置
+$lang['icon_manage']     = '导航图标';
+$lang['ds_icon']     = '导航图标';
+$lang['icon_member']     = '个人中心';
+$lang['icon_find']     = '发现';
+
 ?>
