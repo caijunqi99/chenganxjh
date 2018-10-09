@@ -63,7 +63,7 @@ class School extends AdminControl {
             $condition['createtime'] = array('between', array($query_start_time, $query_end_time));
         }
         $condition['isdel'] = 1;
-        $school_list = $model_school->getSchoolList($condition, 10);
+        $school_list = $model_school->getSchoolList($condition, 15);
         //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);

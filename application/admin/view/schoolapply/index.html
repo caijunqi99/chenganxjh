@@ -97,7 +97,7 @@
         </ul>
     </div>
     <?php if(session('admin_is_super') ==1 || in_array('7',$action)){ ?>
-    <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('schoolapply/excel',['o_name'=>$search_organize_name])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
+    <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('schoolapply/excel',['school_status'=>$Think.get.school_status,'school_type'=>$Think.get.school_type,'schoolname'=>$Think.get.schoolname,'school_name'=>$Think.get.school_name,'area_id'=>$Think.get.area_id])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
     <?php } ?>
     <table class="ds-default-table">
         <thead>
@@ -126,7 +126,7 @@
             <td class="align-center"><?php echo $v['username']; ?></td>
             <td class="align-center"><?php echo $v['phone']; ?></td>
             <td class="align-center"><?php echo $v['message']; ?></td>
-            <th class="align-center"><?php echo $v['createtime']; ?></th>
+            <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center">
                 <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <?php if($v['status']==1){ ?>
@@ -159,7 +159,7 @@
         <?php } ?>
         </tfoot>
     </table>
-    {$page}
+    {$show_page}
     
 </div>
 <form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
