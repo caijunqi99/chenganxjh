@@ -64,7 +64,7 @@ class Student extends AdminControl {
             }
         }
         $condition['s_del'] = 1;
-        $student_list = $model_student->getStudentList($condition, 10);
+        $student_list = $model_student->getStudentList($condition, 15);
          //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);
@@ -92,16 +92,6 @@ class Student extends AdminControl {
             $student_list[$k]['schoolname'] = $school['name'];
         }
 
-        //学校名称
-        $searchInfo = $model_student->getStudentList(array('s_del'=>1));
-        foreach ($searchInfo as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
-            $searchInfo[$k]['typename'] = $schooltype['sc_type'];
-            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
-            $searchInfo[$k]['classname'] = $classinfo['classname'];
-            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
-            $searchInfo[$k]['schoolname'] = $school['name'];
-        }
         //全部学校
         if($admininfo['admin_id']!=1){
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
@@ -121,7 +111,6 @@ class Student extends AdminControl {
         $this->assign('student_list', $student_list);
         $this->assign('schoolList', $school_list);
         $this->assign('classList', $class_list);
-        $this->assign('schoolname', $searchInfo);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }

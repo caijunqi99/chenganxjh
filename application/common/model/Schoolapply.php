@@ -68,4 +68,12 @@ class Schoolapply extends Model {
         return $update;
     }
 
+    /**
+     * 取得数量
+     * @param unknown $condition
+     */
+    public function getApplyCount($condition) {
+        return db('schoolapply')->where($condition)->count();
+    }
+
 }

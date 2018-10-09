@@ -55,7 +55,7 @@ class Vrorder extends Model {
      * @param string $order
      * @return array
      */
-    public function getOrderList($condition, $pagesize = '', $field = '*', $order = 'order_id desc', $limit = '') {
+    public function getOrderList($condition, $pagesize = '', $field = '*', $order = 'order_id asc', $limit = '') {
         if($pagesize){
             $list = db('order')->field($field)->where($condition)->order($order)->limit($limit)->paginate($pagesize,false,['query' => request()->param()]);
             $this->page_info = $list;
