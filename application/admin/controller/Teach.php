@@ -29,7 +29,7 @@ class Teach extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
-        $order = Model('Packagesorder');
+        $order = Model('Packagesorderteach');
         $condition = array();
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
