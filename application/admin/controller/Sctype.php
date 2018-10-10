@@ -25,7 +25,7 @@ class Sctype extends AdminControl {
         }
         $pkg = model('Schooltype');
         $condition = array();        
-        $sc_list = $pkg->get_sctype_List($condition, '10' ,'sc_id asc');
+        $sc_list = $pkg->get_sctype_List($condition, '10' ,'sc_sort asc');
         $this->assign('sctype_list', $sc_list);
         $this->assign('page', $pkg->page_info->render());
         $this->setAdminCurItem('sctype_manage');
