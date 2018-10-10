@@ -22,14 +22,13 @@ class Packagesbuy extends MobileMember
         $condition = array();
         $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
+        
         if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
             $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
         }
         if ($mb_payment_info) {
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
-            // if ($this->payment_code=='wxpay_app')$this->payment_code = 'wxpay_h5';
-            // if ($this->payment_code=='alipay_app')$this->payment_code = 'alipay_app';
             $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
             
             
@@ -140,7 +139,7 @@ class Packagesbuy extends MobileMember
         $order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
         //加入套餐信息
-        if(is_array($childinfo))$order +=$packageInfo;
+        if(is_array($packageInfo))$order +=$packageInfo;
         unset($order['up_time']);
         $Children = model('Student');
         $childinfo=$Children->getChildrenInfoById($chind_id);
@@ -177,10 +176,16 @@ class Packagesbuy extends MobileMember
      * @return [type]                 [description]
      */
     private function _app_pay($order_pay_info){
-
         $param = $this->payment_config;
+        
+
+        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
+
+            $param['wxpay_appid'] = 'wxa1fbfdb142a2f2e1';
+            $param['wxpay_partnerid'] = '1486854912';
+
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (int)(100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
@@ -193,13 +198,19 @@ class Packagesbuy extends MobileMember
             Header("Location: $mweburl");
             exit;
         }
-        
+
+        $aaa= file_get_contents(ssss);
+        $aaa = json_decode($aaa,true)
+
+        $param['app_alipay_appid'] = '2017083008467017';
+        $param['app_private_key'] = 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAPEnDbFsqWxLgR9RPxoxPc6+ufbqefSBq/QjO6pBKe/2xpxhxZGxrcWvAtKrVrOSf04dyd2z+xDiWyn502hDnzgR6R5G+aNRl+hAWmo9QlD8PgBn7L5dk4TXJM9ak+8ElMswM6TY/glLJGeCVQcXpg0weUVqitLAYM64lgFYJkJ3AgMBAAECgYEAxOtrFxLwVmphij1CFhVXr1e3a5WU+MBatgV/V0vW/wi4rkJ4nrxEdkSvPXCEYCakphlVGiE6R1NPtjs3EtEFVaIBsP8VOoKoUiwn78JB77XVDbPyzeaIRFr3+K4Mlyf/ka0Jz6FHmaYKJ+JuZs8uIhd2XLwTuaHJmp63TGq6JoECQQD+nExuFr6SlcXipiIZljLdpyCB9C3Be9bJcCivKbBkHeo0/k0kjMlRsCFJVfI7mREQ07kUDOVEdzye4BOnStRHAkEA8nf0HQNz6SXkgITUJ6Tp5xOdSVV0MEw1livNlFUw4qz7q8O4DR17/cx0sov2bZ8IOmT80VU9WBPCn7giEkIoUQJAc0p7IW6TJPVFAfiQgF2O8ud2xOG4xmA5RkXPZmHOScdyAkUU0XQexSqoJ/kPEwWgwKneqMGeH36OqLJ2s84iiQJBAO+NncvwdltZyalEEotcfo+DrHkgiVuSX7sPadvsUxERENEB3FxwzejRUFZ6u6xQXAO9dJ6pFaNoWngMpvTdEhECQQCBTQody+QdW3XY+8DBwC8jj3lMmQzKqOy3jg0YMKCIb76BAoBgEeh8pyMMMmaTfAAJ8zw0+g9ROL53aHLRzjsS';
+        $param['app_public_key'] = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPXfE+mKzBC+NBgN68OORr2WtqHzhkNgbrqlfW4ClwHgRO/YABz2e7iHD4SFcFidFEUvKp7eQPWr39IwNOQ8tBYMzdIHTgebzuI36RaGO0ojEokm5QyIBNnutWuJVQ7AWD3gexqivn+Aoh0WA0pnXq7vI348EvkrQFRVkLDbMpd/FzwYQ8q4HCM/ffVnAN7gZ/kYLOuvc3LypwTkXZOUlZYvzCVg1d9nPxBXj5zxXV/lXDzPyIswX/99yONixC+RA2OCRmeiskEYaSrXN+WY8i7aBrFvLnHQ7IppYGWlhdhjc6YovrUnVR/7mY2ThkMsns9/o24tEUSljT8I/gGGoQIDAQAB';
         //alipay and so on
         $param['order_sn'] = $order_pay_info['pay_sn'];
         $param['order_amount'] = $order_pay_info['order_amount'];
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $payment_api = new $this->payment_code($param);
-        $return = $payment_api->submit();
+        $payment_api = new $this->payment_code();
+        $return = $payment_api->get_payform($param);
         echo $return;
         exit;
     }

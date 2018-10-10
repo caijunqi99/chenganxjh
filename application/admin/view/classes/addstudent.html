@@ -124,6 +124,9 @@
                     required: true,
                     minlength: 15,
                     maxlength: 18
+                },
+                student_birthday: {
+                    required: true
                 }
             },
             messages: {
@@ -134,6 +137,9 @@
                     required: '{$Think.lang.school_idcard_null}',
                     maxlength: '{$Think.lang.school_idcard_length}',
                     minlength: '{$Think.lang.school_idcard_length}'
+                },
+                student_birthday: {
+                    required: '{$Think.lang.school_birthday_null}'
                 }
             }
         });

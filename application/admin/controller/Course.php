@@ -46,18 +46,30 @@ class Course extends AdminControl {
             $param['up_time']   = time();
             switch (input('actions')) {
                 case 'edit':
-                    $param['co_id'] = intval(input('param.co_id'));
-                    $result = $Course->course_update($param);
-                    if ($result) {
-                        $this->log(lang('co_edit_succ') . '[' . input('post.co_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('co_edit_succ')]); 
+                    $res = db('Course')->where('co_id != "'.intval(input("param.co_id")).'" AND co_type="'.trim(input("post.co_type")).'" ')->find();
+                    if($res){
+                        $this->log(lang('name_isset') . '[' . input('post.cl_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
+                    }else {
+                        $param['co_id'] = intval(input('param.co_id'));
+                        $result = $Course->course_update($param);
+                        if ($result) {
+                            $this->log(lang('co_edit_succ') . '[' . input('post.co_type') . ']', null);
+                            echo json_encode(['m' => true, 'ms' => lang('co_edit_succ')]);
+                        }
                     }
                     break;                
                 default:
-                    $result = $Course->course_add($param);
-                    if ($result) {
-                        $this->log(lang('co_add_succ') . '[' . input('post.co_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('co_add_succ')]); 
+                    $res = db('Course')->where(' co_type="'.trim(input("post.co_type")).'" ')->find();
+                    if($res){
+                        $this->log(lang('name_isset') . '[' . input('post.cl_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
+                    }else {
+                        $result = $Course->course_add($param);
+                        if ($result) {
+                            $this->log(lang('co_add_succ') . '[' . input('post.co_type') . ']', null);
+                            echo json_encode(['m' => true, 'ms' => lang('co_add_succ')]);
+                        }
                     }
                     break;
             }

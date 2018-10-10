@@ -56,7 +56,7 @@
   <div class="fixed-empty"></div>
     <?php if(session('admin_is_super') ==1 || in_array('1',$action)){ ?>
             <th>
-                <button class="layui-btn" onclick="classtype_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button>
+                <button class="layui-btn" onclick="classtype_edit('add',false,'')"><i class="layui-icon">&#xe608;</i> 添加</button>
             </th>
     <?php } ?>
   <script>     
@@ -96,9 +96,8 @@ $(function(){
     });      
   });
 })
-  function classtype_edit(act,id=false){
+  function classtype_edit(act,id=false,str=''){
     $('#actions').val(act);
-    
     if (id) {
       $('#cl_id').val(id);
       var cl_sort = $('#pid_'+id).attr('cl_sort');
@@ -107,6 +106,22 @@ $(function(){
       $('#cl_sort').val(cl_sort);
       $('#cl_type').val(cl_type);
       $('#sc_'+sc_id).attr('selected','selected');
+        //1、首先设置输框
+        $("#sc_type").siblings("div[class='layui-form-select']").children("div[class='layui-select-title']").children("input").val(str);
+        //2、其次，设置dl下的dd
+        $("#sc_type").siblings("div[class='layui-form-select']").children("dl").children("dd").each(function(){
+            if ($(this).text() == str){
+                if (!$(this).hasClass("layui-this")) {
+                    $(this).addClass("layui-this");
+                    $(this).click();
+                }
+                return true;
+            }else{
+                if ($(this).hasClass("layui-this")) {
+                    $(this).removeClass("layui-this");
+                }
+            }
+        });
     }else{
       $('#cl_id').val('');
     } 
@@ -176,7 +191,7 @@ $(function(){
             <?php  if(session('admin_is_super') ==1 || (in_array('3',$action) || in_array('2',$action))){?>
           <td class="align-center">
               <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
-              <a class="layui-btn layui-btn-sm" href="javascript:classtype_edit('edit','<?php echo $v['cl_id'];?>')" >{$Think.lang.ds_edit}</a>
+              <a class="layui-btn layui-btn-sm" href="javascript:classtype_edit('edit','<?php echo $v['cl_id'];?>','<?php echo $v['sc_type'];?>')" >{$Think.lang.ds_edit}</a>
               <?php } ?>
               <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
               <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('/Admin/Classtype/classtype_del',['cl_id'=>$v.cl_id])}">{$Think.lang.ds_del}</a>

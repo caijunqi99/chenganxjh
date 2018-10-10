@@ -153,9 +153,11 @@ $lang['school_add_name_null']		= '联系人不能为空';
 $lang['class_add_name_exists']		= '班级名已存在，请重新输入';
 $lang['school_add_class_null']		= '班级名不能为空';
 $lang['school_classcard_null']		= '班级识别码不能为空';
+$lang['school_dieline_null']		= '合同截止日期不能为空';
 $lang['school_add_address_null']		= '地址不能为空';
 $lang['school_add_studentname_null']		= '学生姓名不能为空';
 $lang['school_add_type_null']		= '类型不能为空';
+$lang['school_birthday_null']		= '生日不能为空';
 $lang['school_studentcard_null']		= '身份证号不能为空';
 $lang['school_studentcode']		= '班级识别码不正确';
 ?>

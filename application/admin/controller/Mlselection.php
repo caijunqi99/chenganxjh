@@ -44,7 +44,7 @@ class Mlselection extends AdminControl {
                         $seach_value = 'areaid';
                         break;
                 }
-                $school_list = db('school')->field('schoolid,name')->where(array($seach_value=>$pid))->select();
+                $school_list = db('school')->field('schoolid,name')->where(array($seach_value=>$pid,'isdel'=>1))->select();
                 $data['school_list'] =$school_list;
                 echo json_encode($data);
                 break;

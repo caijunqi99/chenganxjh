@@ -55,18 +55,30 @@ class Classtype extends AdminControl {
             $param['up_time']   = time();
             switch (input('actions')) {
                 case 'edit':
-                    $param['cl_id'] = intval(input('param.cl_id'));
-                    $result = $ClassType->classtype_update($param);
-                    if ($result) {
-                        $this->log(lang('cl_edit_succ') . '[' . input('post.cl_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('cl_edit_succ')]); 
+                    $res = db('Classtype')->where('cl_id != "'.intval(input("param.cl_id")).'" AND sc_id="'.intval(input("post.sc_id")).'" AND cl_type="'.trim(input("post.cl_type")).'"')->find();
+                    if($res){
+                        $this->log(lang('name_isset') . '[' . input('post.cl_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
+                    }else {
+                        $param['cl_id'] = intval(input('param.cl_id'));
+                        $result = $ClassType->classtype_update($param);
+                        if ($result) {
+                            $this->log(lang('cl_edit_succ') . '[' . input('post.cl_type') . ']', null);
+                            echo json_encode(['m' => true, 'ms' => lang('cl_edit_succ')]);
+                        }
                     }
                     break;                
                 default:
-                    $result = $ClassType->classtype_add($param);
-                    if ($result) {
-                        $this->log(lang('cl_add_succ') . '[' . input('post.cl_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('cl_add_succ')]); 
+                     $res = db('Classtype')->where('sc_id="'.intval(input("post.sc_id")).'" AND cl_type="'.trim(input("post.cl_type")).'"')->find();
+                     if($res){
+                        $this->log(lang('name_isset') . '[' . input('post.cl_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
+                    }else {
+                        $result = $ClassType->classtype_add($param);
+                        if ($result) {
+                            $this->log(lang('cl_add_succ') . '[' . input('post.cl_type') . ']', null);
+                            echo json_encode(['m' => true, 'ms' => lang('cl_add_succ')]);
+                        }
                     }
                     break;
             }

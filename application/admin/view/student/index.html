@@ -48,7 +48,7 @@
                     <select name="school_name" >
                         <option value="">{$Think.lang.school_index_allschool}</option>
                         {volist name="schoolList" id="school"}
-                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.s_schoolid}">{$school.name}</option>
+                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.name}</option>
                         {/volist}
                     </select>
                 </td>
@@ -78,9 +78,8 @@
                     </select></td>
                
                        <td> <input type="submit" class="submit" value="搜索">
-                        <?php if($search_field_value != '' or $search_sort != ''){?>
-                        <a href="{:url('School/index')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
-                        <?php }?></td>
+                        <a href="{:url('Student/index')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
+                        </td>
             </tr>
             </tbody>
         </table>
