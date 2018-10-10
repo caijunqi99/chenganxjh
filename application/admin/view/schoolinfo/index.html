@@ -14,60 +14,33 @@
     <form method="post" enctype="multipart/form-data" name="form1" action="">
         <div class="ncap-form-default">
             <dl>
-                <dt>{$Think.lang.school_index_name}：</dt>
-                <dd>
-                    {$school_array.name}
-                </dd>
+                <dt>{$Think.lang.school_index_name}：{$school_array.name}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_unique}：</dt>
-                <dd>
-                    {$school_array.schoolCard}
-                </dd>
+                <dt>{$Think.lang.school_index_unique}：{$school_array.schoolCard}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_region}：</dt>
-                <dd>
-                    {$school_array.region}
-                </dd>
+                <dt>{$Think.lang.school_index_region}：{$school_array.region}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_type}：</dt>
-                <dd>
-                    {volist name="schooltype" id="type"}
+                <dt>{$Think.lang.school_index_type}：{volist name="schooltype" id="type"}
                     {$type}
-                    {/volist}
-                </dd>
+                    {/volist}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_address}：</dt>
-                <dd>
-                    {$school_array.address}
-                </dd>
+                <dt>{$Think.lang.school_index_address}：{$school_array.address}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_phone}：</dt>
-                <dd>
-                    {$school_array.common_phone}
-                </dd>
+                <dt>{$Think.lang.school_index_phone}：{$school_array.common_phone}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_username}：</dt>
-                <dd>
-                    {$school_array.username}
-                </dd>
+                <dt>{$Think.lang.school_index_username}：{$school_array.username}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_dieline}：</dt>
-                <dd>
-                    {$school_array.dieline}
-                </dd>
+                <dt>{$Think.lang.school_index_dieline}：{$school_array.dieline}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_desc}：</dt>
-                <dd>
-                    {$school_array.desc}
-                </dd>
+                <dt>{$Think.lang.school_index_desc}：{$school_array.desc}</dt>
             </dl>
 
         </div>

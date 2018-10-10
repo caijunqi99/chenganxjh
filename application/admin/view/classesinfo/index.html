@@ -14,44 +14,26 @@
     <form method="post" enctype="multipart/form-data" name="form1" action="">
         <div class="ncap-form-default">
             <dl>
-                <dt>{$Think.lang.school_index_classname}：</dt>
-                <dd>
-                    {$class_array.classname}
-                </dd>
+                <dt>{$Think.lang.school_index_classname}：{$class_array.classname}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_classunique}：</dt>
-                <dd>
-                    {$class_array.classCard}
-                </dd>
+                <dt>{$Think.lang.school_index_classunique}：{$class_array.classCard}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_type}：</dt>
-                <dd>
-                    {volist name="schooltype" id="type"}
+                <dt>{$Think.lang.school_index_type}：{volist name="schooltype" id="type"}
                     {if condition="$class_array.typeid eq $type.sc_id"}
                     {$type.sc_type}
                     {/if}
-                    {/volist}
-                </dd>
+                    {/volist}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_name}：</dt>
-                <dd>
-                    {$schoolname}
-                </dd>
+                <dt>{$Think.lang.school_index_name}：{$schoolname}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_schoolregion}：</dt>
-                <dd>
-                    {$class_array.school_region}
-                </dd>
+                <dt>{$Think.lang.school_index_schoolregion}：{$class_array.school_region}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_desc}：</dt>
-                <dd>
-                    {$class_array.desc}
-                </dd>
+                <dt>{$Think.lang.school_index_desc}：{$class_array.desc}</dt>
             </dl>
 
         </div>

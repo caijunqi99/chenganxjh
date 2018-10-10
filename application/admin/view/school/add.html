@@ -47,7 +47,7 @@
                                 {notempty name="address.area_id"}
                                     <span>{$address.area_info}</span>
                                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                                  <select style="display:none;">
+                                  <select style="display:none;" id="region_">
                                       <option value="0">请选择分类</option>
                                     {volist name="region_list" id="region"}
                                     <option value="{$region.area_id}">{$region.area_name}</option>
@@ -128,7 +128,13 @@
                 $("#user_form").submit();
             }
         });
+        $.datepicker.regional["zh-CN"] = { closeText: "关闭", prevText: "&#x3c;上月", nextText: "下月&#x3e;", currentText: "今天", monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"], dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"], weekHeader: "周", dateFormat: "yy-mm-dd", firstDay: 1, isRTL: !1, showMonthAfterYear: !0, yearSuffix: "年" }
+        $.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+
+        $("#activity_start_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#activity_end_date").datepicker({dateFormat: 'yy-mm-dd'});
         $('#user_form').validate({
+
             errorPlacement: function(error, element) {
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
@@ -163,6 +169,12 @@
                 },
                 school_type:{
                     required: true
+                },
+                school_dieline:{
+                    required: true
+                },
+                region_:{
+                    required: true
                 }
             },
             messages: {
@@ -185,6 +197,12 @@
                 },
                 school_type: {
                     required: '{$Think.lang.school_add_type_null}',
+                },
+                school_dieline: {
+                    required: '{$Think.lang.school_dieline_null}',
+                },
+                region_: {
+                    required: '{$Think.lang.school_dieline_null}',
                 }
             }
         });
