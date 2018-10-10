@@ -18,18 +18,17 @@ class Packagesbuy extends MobileMember
         else {
             $payment_code = input('post.payment_code');
         }
-
         $model_mb_payment = Model('mbpayment');
         $condition = array();
-        $condition['payment_code'] = $payment_code;
+        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-
         if ($mb_payment_info) {
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
-            if ($this->payment_code=='wxpay_app')$this->payment_code = 'wxpay_h5';
+            // if ($this->payment_code=='wxpay_app')$this->payment_code = 'wxpay_h5';
             // if ($this->payment_code=='alipay_app')$this->payment_code = 'alipay_app';
             $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+            
             
 
             if (!is_file($inc_file)) {
@@ -48,6 +47,7 @@ class Packagesbuy extends MobileMember
         $pkg=model('Pkgs');
         $condition=array();
         $condition['pkg_type'] = !empty(input('post.pkg_type'))?input('post.pkg_type'):1;
+        $condition['pkg_enabled']=1;
         $list = $pkg->getPkgList($condition);
         if ($list) {
             output_data($list);
@@ -114,10 +114,13 @@ class Packagesbuy extends MobileMember
             output_error('缺少参数！');
         }
         $Pkgs=model('Pkgs');
-        $packageInfo = $Pkgs->getOneById($package_id);
+
+        $packageInfo = $Pkgs->getOnePkg(array('pkg_id'=>$package_id,'pkg_enabled'=>1));
         if ($packageInfo) {
             unset($packageInfo['pkg_sort']);
             unset($packageInfo['pkg_enabled']);
+        }else{
+            output_error('没有此套餐的信息！');
         }
         $pay_sn = $this->_logic_buy_1->makePaySn($member_id);
         $order = array();

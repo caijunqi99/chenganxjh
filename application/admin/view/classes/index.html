@@ -111,7 +111,11 @@
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
             <td class="align-center"><?php echo $v['classid']; ?></td>
+            <?php if($v['typename']){ ?>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
+            <?php }else{ ?>
+            <td class="align-center"><?php echo $v['classname']; ?></td>
+            <?php } ?>
             <td class="align-center"><?php echo $v['classCard']; ?></td>
             <td class="align-center"><?php echo $v['schoolname']; ?></td>
             <td class="align-center"><?php echo $v['school_region']; ?></td>
