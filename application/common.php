@@ -738,7 +738,7 @@ function addUpTime($start, $end = '', $dec = 3)
 function defaultGoodsImage($key)
 {
     // $file = str_ireplace('.', '_' . $key . '.', config('default_goods_image'));
-    $file = 'default_goods_image.gif';
+    $file = 'default_goods_image.png';
     return ATTACH_COMMON . '/' . $file;
 }
 
@@ -751,7 +751,7 @@ function defaultGoodsImage($key)
 function getMemberAvatar($member_avatar)
 {
     if (empty($member_avatar)) {
-        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }
     else {
 
@@ -759,7 +759,7 @@ function getMemberAvatar($member_avatar)
             return UPLOAD_SITE_URL . '/' . ATTACH_AVATAR . '/' . $member_avatar;
         }
         else {
-            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
     }
 }
@@ -769,12 +769,12 @@ function getIconImage($icon,$key)
     $key = explode('_',$key);
     $multiple = 'x'.$key[1];    
     if (empty($icon)) {
-        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }else {
         if (!file_exists(UPLOAD_SITE_URL . '/' . ATTACH_NAVICON . '/' .$multiple.'/'. $icon)) {
             return UPLOAD_SITE_URL . '/' . ATTACH_NAVICON . '/' .$multiple.'/'. $icon;
         }else {
-            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
     }
 }
@@ -794,7 +794,7 @@ function getMemberAvatarForID($id)
             return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . config('default_user_portrait');
         }
         else {
-            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+            return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
 
     }
@@ -808,13 +808,13 @@ function getMemberAvatarForID($id)
 function getMemberAvatarHttps($member_avatar)
 {
     if (empty($member_avatar)) {
-        return UPLOAD_SITE_URL. '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+        return UPLOAD_SITE_URL. '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }
     else if (file_exists(BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/' . $member_avatar)) {
         return UPLOAD_SITE_URL. '/' . ATTACH_AVATAR . '/' . $member_avatar;
     }
     else {
-        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.gif';
+        return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }
 }
 

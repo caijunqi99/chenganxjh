@@ -22,6 +22,9 @@ class Packagesbuy extends MobileMember
         $condition = array();
         $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
+        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
+            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
+        }
         if ($mb_payment_info) {
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
@@ -137,12 +140,16 @@ class Packagesbuy extends MobileMember
         $order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
         //加入套餐信息
-        $order +=$packageInfo;
+        if(is_array($childinfo))$order +=$packageInfo;
         unset($order['up_time']);
         $Children = model('Student');
         $childinfo=$Children->getChildrenInfoById($chind_id);
+        if (!$childinfo) {
+            output_error('没有当前孩子信息！');
+        }
         //加入学生学校班级信息
-        $order +=$childinfo;        
+        if(is_array($childinfo))$order += $childinfo;        
+        
         $order['order_amount'] = $packageInfo['pkg_price'];        
         try {
             $model = Model('Packagesorder');
@@ -171,7 +178,6 @@ class Packagesbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
 
-        
         $param = $this->payment_config;
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
@@ -183,7 +189,7 @@ class Packagesbuy extends MobileMember
             $api->setConfigs($param);
 
             $mweburl = $api->get_mweb_url($this);
-
+            output_data($mweburl);
             Header("Location: $mweburl");
             exit;
         }

@@ -232,7 +232,7 @@ return [
     //验证码配置
     'captcha' => [
         // 验证码字符集合
-        'codeSet' => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
+        'codeSet' => '2345678abcdefhjkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
         // 验证码字体大小(px)
         'fontSize' => 14,
         // 是否画混淆曲线
@@ -247,14 +247,14 @@ return [
         'reset' => true
     ],
     'pkgs_list'=>[
-        'one'     =>'个(每个视频)',
-        'day'     =>'天',
-        'week'    =>'周(7天)',
+        // 'one'     =>'个(每个视频)',
+        // 'day'     =>'天',
+        // 'week'    =>'周(7天)',
         'mouth'   =>'月',
-        'quarter' =>'季度(三个月)',
+        // 'quarter' =>'季度(三个月)',
         'half'    =>'半年(6个月)',
         'year'    =>'年',
-        'hour'    =>'小时',
+        // 'hour'    =>'小时',
     ],
     'week'=>[
         0 =>'星期日',
