@@ -75,6 +75,22 @@ class Organizes extends AdminControl
     }
     //发展学校个数
     public function schoolnum(){
+        $oid=$_GET['o_id'];
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        $model_school = model('School');
+        $conditions = array();
+        $list=array();
+        foreach($admin as $v){
+            $conditions['option_id']=$v['admin_id'];
+            $conditions['isdel']=1;
+            $list+=$model_school->getSchoolList($condition);
+        }
+        $num=count($list);
+        $this->assign('num',$num);
+        $this->assign('school', $list);
         $this->setAdminCurItem('schoolnum');
         return $this->fetch();
     }

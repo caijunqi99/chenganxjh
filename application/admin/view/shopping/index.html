@@ -17,9 +17,9 @@
         <table class="search-form">
             <tbody>
             <tr>
-                <th><label>{$Think.lang.school_index_names}</label></th>
+                <td><label>{$Think.lang.school_index_names}</label></td>
                 <td><input class="txt2" type="text" name="buyer_name" value="{$Think.get.buyer_name}" /></td>
-                <th><label>{$Think.lang.school_index_paytype}</label></th>
+                <td><label>{$Think.lang.school_index_paytype}</label></td>
                 <td colspan="4">
                     <select name="payment_code" class="querySelect">
                         <option value="">{$Think.lang.ds_please_choose}</option>
@@ -28,7 +28,7 @@
                         {/volist}
                     </select>
                 </td>
-                <th><label>{$Think.lang.order_state}</label></th>
+                <td><label>{$Think.lang.order_state}</label></td>
                 <td colspan="4"><select name="order_state" class="querySelect">
                     <option value="">{$Think.lang.ds_please_choose}</option>
                     <option value="10" {if condition="$Think.get.order_state eq '10'"}selected{/if}>{$Think.lang.order_state_new}</option>
@@ -72,7 +72,7 @@
             <td class="align-center"><?php echo $v['order_name']; ?></td>
             <td class="align-center"><?php echo $v['length']; ?></td>
             <td class="align-center"><?php echo $v['order_amount']; ?></td>
-            <td class="align-center"><?php if($v['order_state']==10){echo "代付款";}
+            <td class="align-center"><?php if($v['order_state']==10){echo "待付款";}
             elseif($v['order_state']==20){echo "已付款";}
             elseif($v['order_state']==30){echo "已发货";}
             elseif($v['order_state']==40){echo "已收货";}
@@ -90,12 +90,8 @@
         </tr>
         <?php } ?>
         </tbody>
-        <tfoot>
-            <tr class="tfoot">
-                <td colspan="15" id="dataFuncs">{$show_page}</td>
-            </tr>
-        </tfoot>
     </table>
+    {$show_page}
 </div>
 <script type="text/javascript">
     $(function () {

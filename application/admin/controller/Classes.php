@@ -57,7 +57,7 @@ class Classes extends AdminControl {
             }
         }
         $condition['isdel'] = 1;
-        $class_list = $model_class->getClasslList($condition, 10);
+        $class_list = $model_class->getClasslList($condition, 15);
         // 地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);
@@ -82,14 +82,6 @@ class Classes extends AdminControl {
             $school = db('school')->where('schoolid',$v['schoolid'])->find();
             $class_list[$k]['schoolname'] = $school['name'];
         }
-        //学校名称
-        $searchInfo = $model_class->getClasslList(array('isdel'=>1));
-        foreach ($searchInfo as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $searchInfo[$k]['typename'] = $schooltype['sc_type'];
-            $school = db('school')->where('schoolid',$v['schoolid'])->find();
-            $searchInfo[$k]['schoolname'] = $school['name'];
-        }
         //全部学校
         if($admininfo['admin_id']!=1){
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
@@ -99,7 +91,6 @@ class Classes extends AdminControl {
         $model_school = model('School');
         $school_list = $model_school->getSchoolList($condition_school);
         $this->assign('page', $model_class->page_info->render());
-        $this->assign('schoolname', $searchInfo);
         $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
         $this->setAdminCurItem('index');
@@ -136,7 +127,7 @@ class Classes extends AdminControl {
             $data = array(
                 'school_areaid' => input('post.area_id'),
                 'school_region' => input('post.area_info'),
-                'typeid' => input('post.school_type'),
+                'typeid' => input('post.classtype'),
                 'schoolid' => input('post.order_state'),
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),

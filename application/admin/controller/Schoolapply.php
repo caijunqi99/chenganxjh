@@ -7,6 +7,8 @@ use think\Validate;
 
 class Schoolapply extends AdminControl {
 
+    const EXPORT_SIZE = 1000;
+
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
@@ -58,7 +60,7 @@ class Schoolapply extends AdminControl {
         if ($school_status) {
             $condition['status'] = $school_status;
         }
-        $schoolapply_list = $model_schoolapply->getSchoolapplyList($condition, 10);
+        $schoolapply_list = $model_schoolapply->getSchoolapplyList($condition, 15);
         //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);
@@ -72,13 +74,12 @@ class Schoolapply extends AdminControl {
             'is_default' => '',
             'area_info'=>''
         );
+        $this->assign('show_page', $model_schoolapply->page_info->render());
         $allschoolapply = $model_schoolapply->getSchoolapplyList();
-
+        $this->assign('allschoolapply', $allschoolapply);
         $schooltype = db('schooltype')->where('sc_enabled','1')->select();
         $this->assign('schooltype', $schooltype);
-        $this->assign('page', $model_schoolapply->page_info->render());
         $this->assign('schoolapply_list', $schoolapply_list);
-        $this->assign('allschoolapply', $allschoolapply);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -153,86 +154,114 @@ class Schoolapply extends AdminControl {
         }
     }
 
+
     /**
      * 导出
+     *
      */
-    public function excel()
-    {
+    public function excel() {
+
         if(session('admin_is_super') !=1 && !in_array(7,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
-        $dataResult = array();
-        $title = "学校申请审核";
-        ob_end_clean();
 
-        ob_start();
-        $headtitle= "<tr style='height:50px;border-style:none;><th border=\"0\" style='height:60px;width:270px;font-size:22px;' colspan='11' >{$headTitle}</th></tr>";
-        $titlename = "<tr>
-               <th style='width:70px;' >序号</th>
-               <th style='width:170px;' >学校名称</th>
-               <th style='width:170px;'>所在地区</th>
-               <th style='width:120px;'>负责/联系人</th>
-               <th style='width:130px;'>电话</th>
-               <th style='width:170px;'>留言内容</th>
-               <th style='width:150px;'>添加/修改时间</th>
-               <th style='width:170px;'>状态</th>
-               <th style='width:100px;'>审核人</th>
-               <th style='width:150px;'>审核时间</th>
-           </tr>";
-
-        $filename = $title.".xlsx";
         $model_apply = Model('schoolapply');
         $condition = array();
-//        if (!empty($_GET['o_name'])) {
-//            $o_name=$_GET['o_name'];
-//            $condition['o_name']=array('like', '%' . trim($o_name) . '%');
-//            $this->assign('search_organize_name',$o_name);
-//        }
-//        if(!empty($_POST['area_info'])){
-//
-//            $area_info=$_POST['area_info'];
-//            $condition['o_area']=array('like', '%' . trim($area_info) . '%');
-//            $this->assign('o_area',$o_area);
-//        }
-        $dataResults = $model_apply->getSchoolapplyList($condition);
-        foreach ($dataResults as $k=>$v){
-            $dataResult[$k]['applyid'] = $v['applyid'];
-            $dataResult[$k]['schoolname'] = $v['schoolname'];
-            $dataResult[$k]['region'] = $v['region'];
-            $dataResult[$k]['username'] = $v['username'];
-            $dataResult[$k]['phone'] = $v['phone'];
-            $dataResult[$k]['message'] = $v['message'];
-            $dataResult[$k]['createtime'] = $v['createtime'];
-            $dataResult[$k]['status'] = $v['status']==1?"处理中":"已处理";
-            $memberinfo = db('member')->where(array('member_id'=>$v['auditor']))->find();
-            $dataResult[$k]['auditor'] = $memberinfo['member_name'];
-            $dataResult[$k]['auditortime'] = $v['auditortime'];
+
+        $schoolname = input('param.schoolname');//学校名称
+        if ($schoolname) {
+            $condition['schoolname'] = array('like', "%" . $schoolname . "%");
         }
-        //print_r($dataResult);die;
-        $this->excelData($dataResult,$titlename,$headtitle,$filename);
+        $school_name = input('param.school_name');//学校名称
+        if ($school_name) {
+            $condition['applyid'] = $school_name;
+        }
+        $school_type = input('param.school_type');//学校类型
+        if ($school_type) {
+            $condition['sc_type'] = $school_type;
+        }
+        $area_id = input('param.area_id');//地区
+        if($area_id){
+            $region_info = db('area')->where('area_id',$area_id)->find();
+            if($region_info['area_deep']==1){
+                $condition['provinceid'] = $area_id;
+            }elseif($region_info['area_deep']==2){
+                $condition['cityid'] = $area_id;
+            }else{
+                $condition['areaid'] = $area_id;
+            }
+        }
+        $school_status = input('param.school_status');//状态
+        if ($school_status) {
+            $condition['status'] = $school_status;
+        }
+        if (!is_numeric($_GET['show_page'])) {
+
+            $count = $model_apply->getApplyCount($condition);
+            $array = array();
+            if ($count > self::EXPORT_SIZE) { //显示下载链接
+                $page = ceil($count / self::EXPORT_SIZE);
+                for ($i = 1; $i <= $page; $i++) {
+                    $limit1 = ($i - 1) * self::EXPORT_SIZE + 1;
+                    $limit2 = $i * self::EXPORT_SIZE > $count ? $count : $i * self::EXPORT_SIZE;
+                    $array[$i] = $limit1 . ' ~ ' . $limit2;
+                }
+                $this->assign('list', $array);
+                $this->assign('murl', url('order/index'));
+                return $this->fetch('export.excel');
+            } else { //如果数量小，直接下载
+                $data = $model_apply->getSchoolapplyList($condition, '', '*', 'applyid asc', self::EXPORT_SIZE);
+                $this->createExcel($data);
+            }
+        } else { //下载
+            $limit1 = ($_GET['show_page'] - 1) * self::EXPORT_SIZE;
+            $limit2 = self::EXPORT_SIZE;
+            $data = $model_apply->getSchoolapplyList($condition, '', '*', 'applyid asc', "{$limit1},{$limit2}");
+            $this->createExcel($data);
+        }
     }
 
-    public function excelData($datas,$titlename,$title,$filename){
-        $str = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\"\r\nxmlns:x=\"urn:schemas-microsoft-com:office:excel\"\r\nxmlns=\"http://www.w3.org/TR/REC-html40\">\r\n<head>\r\n<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\r\n</head>\r\n<body>";
-        $str .= $title;
-        $str .="<table border=1><head>".$titlename."</head>";
-        foreach ($datas as $key=> $rt )
-        {
-            $str .= "<tr>";
-            foreach ( $rt as $k => $v )
-            {
-                $str .= "<td>{$v}</td>";
-            }
-            $str .= "</tr>\n";
+    /**
+     * 生成excel
+     *
+     * @param array $data
+     */
+    private function createExcel($data = array()) {
+        $excel_obj = new \excel\Excel();
+        $excel_data = array();
+        //设置样式
+        $excel_obj->setStyle(array('id' => 's_title', 'Font' => array('FontName' => '宋体', 'Size' => '12', 'Bold' => '1')));
+        //header
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "序号");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "学校名称");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "所在地区");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "负责/联系人");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "电话");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "留言内容");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "添加/修改时间");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "状态");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "审核人");
+        $excel_data[0][] = array('styleid' => 's_title', 'data' => "审核时间");
+        //data
+        foreach ((array) $data as $k => $v) {
+            $tmp = array();
+            $tmp[] = array('data' => 'DS' . $v['applyid']);
+            $tmp[] = array('data' => $v['schoolname']);
+            $tmp[] = array('data' => $v['region']);
+            $tmp[] = array('data' => $v['username']);
+            $tmp[] = array('data' => $v['phone']);
+            $tmp[] = array('data' => $v['message']);
+            $tmp[] = array('data' => $v['createtime']);
+            $tmp[] = array('data' => $v['status']==1?"处理中":"已处理");
+            $memberinfo = db('admin')->where(array('admin_id'=>$v['auditor']))->find();
+            $tmp[] = array('data' => $memberinfo['admin_name']);
+            $tmp[] = array('data' => $v['auditortime']);
+            $excel_data[] = $tmp;
         }
-        header( "Content-Type: application/vnd.ms-excel; name='excel'" );
-        header( "Content-type: application/octet-stream" );
-        header( "Content-Disposition: attachment; filename=".$filename );
-        header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-        header( "Pragma: no-cache" );
-        header( "Expires: 0" );
-        exit( $str );
-
+        $excel_data = $excel_obj->charset($excel_data, CHARSET);
+        $excel_obj->addArray($excel_data);
+        $excel_obj->addWorksheet($excel_obj->charset("学校申请审核", CHARSET));
+        $excel_obj->generateXML($excel_obj->charset("学校申请审核", CHARSET) . $_GET['curpage'] . '-' . date('Y-m-d-H', time()));
     }
 
     /**
