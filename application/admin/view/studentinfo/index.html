@@ -14,65 +14,38 @@
     <form method="post" enctype="multipart/form-data" name="form1" action="">
         <div class="ncap-form-default">
             <dl>
-                <dt>{$Think.lang.school_index_studentname}：</dt>
-                <dd>
-                    {$student_array.s_name}
-                </dd>
+                <dt>{$Think.lang.school_index_studentname}：{$student_array.s_name}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_edit_sex}：</dt>
-                <dd>
-                    {if condition="$student_array.s_sex eq 1"}
+                <dt>{$Think.lang.school_edit_sex}：{if condition="$student_array.s_sex eq 1"}
                     男
                     {/if}
                     {if condition="$student_array.s_sex eq 2"}
                     女
-                    {/if}
-                </dd>
+                    {/if}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_studentbirthday}：</dt>
-                <dd>
-                    {$student_array.s_birthday}
-                </dd>
+                <dt>{$Think.lang.school_index_studentbirthday}：{$student_array.s_birthday}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_studentidcard}：</dt>
-                <dd>
-                    {$student_array.s_card}
-                </dd>
+                <dt>{$Think.lang.school_index_studentidcard}：{$student_array.s_card}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_schoolregion}：</dt>
-                <dd>
-                    {$student_array.s_region}
-                </dd>
+                <dt>{$Think.lang.school_index_schoolregion}：{$student_array.s_region}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_type}：</dt>
-                <dd>
-                    {volist name="schooltype" id="type"}
+                <dt>{$Think.lang.school_index_type}：{volist name="schooltype" id="type"}
                     {$type}
-                    {/volist}
-                </dd>
+                    {/volist}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_name}：</dt>
-                <dd>
-                    {$schoolname}
-                </dd>
+                <dt>{$Think.lang.school_index_name}：{$schoolname}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_classesname}：</dt>
-                <dd>
-                    {$classname}
-                </dd>
+                <dt>{$Think.lang.school_index_classesname}：{$classname}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.school_index_desc}：</dt>
-                <dd>
-                    {$student_array.s_remark}
-                </dd>
+                <dt>{$Think.lang.school_index_desc}：{$student_array.s_remark}</dt>
             </dl>
 
         </div>

@@ -44,7 +44,7 @@ class School extends AdminControl {
         }
         $school_type = input('param.school_type');//学校类型
         if ($school_type) {
-            $condition['typeid'] = array('like', "%" . $school_type . "%");
+            $condition['typeid'] = $school_type;
         }
         $area_id = input('param.area_id');//地区
         if($area_id){
@@ -57,6 +57,15 @@ class School extends AdminControl {
                 $condition['areaid'] = $area_id;
             }
         }
+//        if(!empty($_GET['province'])){
+//            $condition['provinceid'] = intval(input('param.province'));
+//        }
+//        if(!empty($_GET['city'])){
+//            $condition['cityid'] = intval(input('param.city'));
+//        }
+//        if(!empty($_GET['area'])){
+//            $condition['areaid'] = intval(input('param.area'));
+//        }
         $query_start_time = input('param.query_start_time');
         $query_end_time = input('param.query_end_time');
         if ($query_start_time || $query_end_time) {
@@ -235,7 +244,8 @@ class School extends AdminControl {
             $this->assign('address', $address);
             $this->assign('school_array', $school_array);
             //类型
-            $schoolType = db("schooltype")->where(array('sc_enabled'=>1))->select();
+            $model_schooltype = model('Schooltype');
+            $schoolType = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
             $this->assign('schoolType', $schoolType);
             $this->setAdminCurItem('edit');
             return $this->fetch();
@@ -301,6 +311,7 @@ class School extends AdminControl {
                 $class_member = Model('classes');
                 $condition['classname'] = input('param.class_name');
                 $condition['schoolid'] = input('param.school_id');
+                $condition['isdel'] = 1;
                 $list = $class_member->getClassInfo($condition);
                 if (empty($list)) {
                     echo 'true';

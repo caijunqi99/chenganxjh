@@ -41,9 +41,24 @@ class School extends Model {
      */
     public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid asc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
-        //print_r(db('school')->getLastSql());die;
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
+        if($condition['typeid']){
+            $where = "FIND_IN_SET({$condition['typeid']},typeid) AND isdel = 1";
+            if($condition['name']){
+                $where .= ' AND name like "'.$condition['name'][1].'"';
+            }
+            if($condition['provinceid']){
+                $where .= " AND provinceid=".$condition['provinceid'];
+            }elseif($condition['cityid']){
+                $where .= " AND cityid=".$condition['cityid'];
+            }elseif($condition['areaid']){
+                $where .= " AND areaid=".$condition['areaid'];
+            }
+            $sql = "SELECT * FROM x_school s LEFT JOIN x_admin a ON a.admin_id=s.option_id WHERE $where  ORDER BY schoolid asc LIMIT 0,15";
+            $list = db('school')->query($sql);
+        }
+
 
         if (empty($list))
             return array();
