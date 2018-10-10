@@ -33,7 +33,7 @@
         <?php if(!empty($class_list) && is_array($class_list)){ ?>
         <?php foreach($class_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['classid']; ?></td>
+            <td class="align-center"><?php echo $k+1; ?></td>
             <td class="align-center">
                 {volist name="schooltype" id="type"}
                 {if condition="$type.sc_id eq $v.typeid"}{$type.sc_type}--{$v.classname}{/if}
