@@ -1,3 +1,4 @@
+back
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -132,7 +133,6 @@
 
     <script>
         $(function() {
-
             // 获取个人信息
             $.ajax({
                 type: "POST",
@@ -245,56 +245,58 @@
                 if (!Tools.IsEmail($("#email").val())) {
                     $.alert("请输入正确的邮箱地址");
                 }
-
-
-                //修改个人信息
-                var params = {};
-                params['key'] = user_token;
-                params['member_id'] = user_member_id;
-                params['member_nickname'] = $('#nickname').val();
-                switch ($('#shenfen').val()) {
-                    case '家长':
-                        params['member_identity'] = 1;
-                        break;
-                    case '教师':
-                        params['member_identity'] = 2;
-                        break;
-                    case '其他':
-                        params['member_identity'] = 3;
-                        break;
-                }
-                params['member_age'] = $('#nianling').val();
-                switch ($('#sex').val()) {
-                    case '保密':
-                        params['member_sex'] = 0;
-                        break;
-                    case '男':
-                        params['member_sex'] = 1;
-                        break;
-                    case '女':
-                        params['member_sex'] = 2;
-                        break;
-                }
-                params['member_email'] = $('#email').val();
-                params['member_avatar'] = img_name;
-                params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
-                params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
-                params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
-                params['member_jobid'] = $('#trade').get(0).dataset.values;
-                $.ajax({
-                    type: "POST",
-                    url: api + '/Member/addInfo.html',
-                    data: params,
-                    dataType: "json",
-                    success: function(response) {
-                        if (response['code'] == 200) {
-                            $.toast(response['result']['message'])
-                        }
-                    },
-                    error(error) {
-                        $.toast(error)
+                esle {
+                    //修改个人信息
+                    var params = {};
+                    params['key'] = user_token;
+                    params['member_id'] = user_member_id;
+                    params['member_nickname'] = $('#nickname').val();
+                    switch ($('#shenfen').val()) {
+                        case '家长':
+                            params['member_identity'] = 1;
+                            break;
+                        case '教师':
+                            params['member_identity'] = 2;
+                            break;
+                        case '其他':
+                            params['member_identity'] = 3;
+                            break;
                     }
-                });
+                    params['member_age'] = $('#nianling').val();
+                    switch ($('#sex').val()) {
+                        case '保密':
+                            params['member_sex'] = 0;
+                            break;
+                        case '男':
+                            params['member_sex'] = 1;
+                            break;
+                        case '女':
+                            params['member_sex'] = 2;
+                            break;
+                    }
+                    params['member_email'] = $('#email').val();
+                    params['member_avatar'] = img_name;
+                    params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
+                    params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
+                    params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
+                    params['member_jobid'] = $('#trade').get(0).dataset.values;
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Member/addInfo.html',
+                        data: params,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response['code'] == 200) {
+                                $.toast(response['result']['message'])
+                            }
+                        },
+                        error(error) {
+                            $.toast(error)
+                        }
+                    });
+                }
+
+
             })
 
         })
