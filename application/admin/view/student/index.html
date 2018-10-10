@@ -118,7 +118,7 @@
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
             <td class="align-center"><?php echo $v['s_id']; ?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
-            <td class="align-center"><?php if($v['s_sex']==1){echo "男";}else{echo "女";} ?></td>
+            <td class="align-center"><?php if($v['s_sex']==1){echo "男";}elseif($v['s_sex']==2){echo "女";} ?></td>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
             <td class="align-center"><?php echo $v['schoolname']; ?></td>
             <td class="align-center"><?php echo $v['s_region']; ?></td>
