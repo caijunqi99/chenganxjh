@@ -115,7 +115,7 @@
         <?php foreach($student_list as $k => $v){ ?>
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
-            <td class="align-center"><?php echo $v['s_id']; ?></td>
+            <td class="align-center"><?php echo $k+1; ?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php if($v['s_sex']==1){echo "男";}elseif($v['s_sex']==2){echo "女";} ?></td>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
