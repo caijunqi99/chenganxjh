@@ -192,11 +192,12 @@ class Classes extends AdminControl {
             if(input('post.order_state')){
                 $schoolname = input('post.order_state');
             }
+            $schoolid = isset($schoolname)?input('post.order_state'):input('post.school_name');
             $data = array(
                 'school_areaid' => input('post.area_id'),
                 'school_region' => input('post.area_info'),
                 'typeid' => input('post.school_type'),
-                'schoolid' => isset($schoolname)?input('post.order_state'):input('post.school_name'),
+                'schoolid' => $schoolid,
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'createtime' => date('Y-m-d H:i:s',time())
@@ -205,6 +206,9 @@ class Classes extends AdminControl {
             $data['school_cityid'] = $city_id['area_parent_id'];
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['school_provinceid'] = $province_id['area_parent_id'];
+            //学校识别码
+            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
+            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
             //验证数据  END
             $result = $model_class->editClass($data,array('classid'=>$class_id));
             if ($result) {
