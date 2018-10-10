@@ -6,7 +6,7 @@ function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') 
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     if ($codd !=1) $data['code'] = '400';
-    $data['result']=isset($datas['error'])?array():$isAssoc == 'true'?(object)$datas:$datas;
+    $data['result']=isset($datas['error'])?array():($isAssoc == 'true'?(object)$datas:$datas);
     $data['message'] = isset($datas['error'])?$datas['error']:'';
     if(!empty($extend_data)) {
         $data = array_merge($data, $extend_data);
