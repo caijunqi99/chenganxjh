@@ -113,7 +113,7 @@
                 <td colspan="2" class="required"><label> {$Think.lang.school_edit_sex}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform">
+                <td class="required" name="student_sex" id="student_sex">
                     <label>
                         <input type="radio" value="1" name="member_sex">{$Think.lang.member_edit_male}
                     </label>
@@ -216,6 +216,15 @@
                 },
                 student_idcard: {
                     required: true
+                },
+                school_type: {
+                    required: true
+                },
+                class_name: {
+                    required: true
+                },
+                student_birthday: {
+                    required: true
                 }
             },
             messages: {
@@ -231,6 +240,15 @@
                 },
                 student_idcard: {
                     required: '{$Think.lang.school_studentcard_null}'
+                },
+                school_type: {
+                    required: '{$Think.lang.school_add_type_null}'
+                },
+                class_name: {
+                    required: '{$Think.lang.school_add_class_null}'
+                },
+                student_birthday: {
+                    required: '{$Think.lang.school_birthday_null}'
                 }
             }
         });
