@@ -24,18 +24,20 @@ $(function() {
 
     //启用fastclick
     FastClick.attach(document.body);
+
+
+
 })
 
 //返回函数
 function historyback() {
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
         // window.webkit.messageHandlers.backClick();
-        window.webkit.messageHandlers.backClick.postMessage();
+        // window.webkit.messageHandlers.backClick.postMessage();
+        window.history.back(-1);
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
         Android.backToApp();
     } else { //pc
         window.history.back(-1);
-    }
+    };
 }
-
-
