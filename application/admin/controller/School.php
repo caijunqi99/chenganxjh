@@ -78,7 +78,8 @@ class School extends AdminControl {
             'area_info'=>''
         );
         //类型
-        $schoolType = db("schooltype")->where(array('sc_enabled'=>1))->select();
+        $model_schooltype = model('Schooltype');
+        $schoolType = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schoolType', $schoolType);
         $this->assign('address', $address);
         $this->assign('page', $model_school->page_info->render());
@@ -107,7 +108,8 @@ class School extends AdminControl {
             );
             $this->assign('address', $address);
             //类型
-            $schoolType = db("schooltype")->where(array('sc_enabled'=>1))->select();
+            $model_schooltype = model('Schooltype');
+            $schoolType = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
             $this->assign('schoolType', $schoolType);
             $this->setAdminCurItem('add');
             return $this->fetch();
