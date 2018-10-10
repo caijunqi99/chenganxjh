@@ -16,16 +16,14 @@
         </div>
     </div>
 
-    <!--<form method="get" name="formSearch" id="formSearch" class="layui-form">-->
     <form method="get" name="formSearch" id="formSearch">
         <table class="search-form">
             <tbody>
                <tr>
                    <td> <label>{$Think.lang.school_name}：</label></td>
-                   <td><input type="text" name="schoolname" value="{$Think.get.schoolname}"></td>
-                   <!--<td><input type="text" class="layui-input" name="schoolname" value="{$Think.get.schoolname}"></td>-->
+                   <td><input type="text" class="text w150" name="schoolname" value="{$Think.get.schoolname}"></td>
 
-                   <td> <select name="school_type" lay-verify="type" class="select">
+                   <td> <select name="school_type" >
                             <option value="">{$Think.lang.school_index_type}</option>
                             {volist name="schoolType" id="type"}
                             <option value="{$type.sc_id}" {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if}>{$type.sc_type}</option>
@@ -58,27 +56,12 @@
                         </select>
                         {/notempty}
                    </td>
-                   <!--<td>-->
-                       <!--<select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">-->
-                       <!--<option value="0" selected>请选择省</option>-->
-                           <!--{volist name="region_list" id="region"}-->
-                       <!--<option value="{$region.area_id}" {if condition='$Think.get.province eq $region.area_id'}selected='selected'{/if}>{$region.area_name}</option>-->
-                       <!--{/volist}-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                       <!--<select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">-->
-                       <!--<option value="0">请选择市</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                        <!--<select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">-->
-                        <!--<option value="0">请选择区</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
-                     <td class="layui-inline">   <input type="submit" class="submit" value="搜索">
-                        <a href="{:url('School/member')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
-                        </td>
+                    
+                     <td>   <input type="submit" class="submit" value="搜索">
+                        <?php if($search_field_value != '' or $search_sort != ''){?>
+                        <a href="{:url('School/index')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
+                        <?php }?></td>
+
                </tr>
             </tbody>
         </table>
@@ -112,7 +95,7 @@
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
         <?php foreach($school_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php echo $v['schoolid']; ?></td>
             <td class="align-center"><?php echo $v['name']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
             <td class="align-center"><?php echo $v['address']; ?></td>
@@ -165,37 +148,154 @@
     <input type="hidden" id="role" value="">
     <div  class="ncap-form-default">
         <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_username}</dt>
+            <dt>{$Think.lang.admin_index_username}</dt>
             <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_username_tip}</p>
+                <input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
+                <span class="err"></span>
+                <p class="notic">{$Think.lang.admin_add_username_tip}</p>
             </dd>
         </dl>
         <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_password}</dt>
+            <dt>{$Think.lang.admin_index_password}</dt>
             <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
+                <input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
+                <span class="err"></span>
+                <p class="notic">{$Think.lang.admin_add_password_tip}</p>
             </dd>
         </dl>
         <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_rpassword}</dt>
+            <dt>{$Think.lang.admin_rpassword}</dt>
             <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
+                <input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
+                <span class="err"></span>
+                <p class="notic">{$Think.lang.admin_add_password_tip}</p>
             </dd>
         </dl>
         <input type="hidden" name="gid" value="{$role}">
         <dl>
-            <dd>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
+            <dt></dt>
+            <dd><a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
         </dl>
     </div>
 
 </form>
 <script type="text/javascript">
+    function dd(id) {
+        var urls=ADMIN_URL+'schoolinfo/index?school_id='+id;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2
+            , title: '查看'
+            , area: ['80%', '80%']
+            , shade: 0
+            , maxmin: true
+            , content: urls
+
+        });
+    }
+function jia(role){
+            $('#role').val(role);
+            //var urls=ADMIN_URL+'organizes/admin?role_id='+id;
+            //多窗口模式，层叠置顶
+            layer.open({
+                type: 1,
+                title: '分配管理员账号',
+                area: ['700px', '450px'],
+                fixed: false, //不固定
+                shadeClose: true,
+                shade: 0.4,
+                maxmin: false, //开启最大化最小化按钮
+                content: $("#courForm")
+            });
+        }
+    $(function() {
+        regionInit("region");
+    });
+    //按钮先执行验证再提交表
+    $(document).ready(function() {
+
+        layui.use(['form', 'layedit', 'laydate'], function() {
+            var form = layui.form
+        });
+        //按钮先执行验证再提交表单
+        $("#submitBtn").click(function() {
+            if ($("#courForm").valid()) {
+                //$("#courForm").submit();
+                //$('.layui-layer-close1').click();
+                var admin_name = $("#admin_name").val();
+                var admin_password = $("#admin_password").val();
+                $.ajax({
+                    url: "{:url('/Admin/school/admin_add')}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'admin_name': admin_name,'admin_password':admin_password},
+                    success:function(sb){
+                        if (sb.m) {
+                            layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                                window.location.href="{:url('/Admin/School/member')}";
+                            });
+
+                        }
+                    }
+                });
+
+            }
+        });
+        $("#courForm").validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.nextAll('span.err'));
+            },
+            rules: {
+                admin_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20,
+                    remote: {
+                        url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_name',
+                        type: 'get',
+                        data: {
+                            admin_name: function() {
+                                return $('#admin_name').val();
+                            }
+                        }
+                    }
+                },
+                admin_password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 20
+                },
+                admin_rpassword: {
+                    required: true,
+                    equalTo: '#admin_password'
+                },
+                gid: {
+                    required: true
+                }
+            },
+            messages: {
+                admin_name: {
+                    required: '{$Think.lang.admin_add_username_null}',
+                    minlength: '{$Think.lang.admin_add_username_max}',
+                    maxlength: '{$Think.lang.admin_add_username_max}',
+                    remote: '{$Think.lang.admin_add_admin_not_exists}'
+                },
+                admin_password: {
+                    required: '{$Think.lang.admin_add_password_null}',
+                    minlength: '{$Think.lang.admin_add_password_max}',
+                    maxlength: '{$Think.lang.admin_add_password_max}'
+                },
+                admin_rpassword: {
+                    required: '{$Think.lang.admin_add_password_null}',
+                    equalTo: '{$Think.lang.admin_edit_repeat_error}'
+                },
+                gid: {
+                    required: '{$Think.lang.admin_add_gid_null}',
+                }
+            }
+        });
+    });
+
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
             laypage = layui.laypage
@@ -387,120 +487,5 @@
             }
         });
 
-    });
-    function dd(id) {
-        var urls=ADMIN_URL+'schoolinfo/index?school_id='+id;
-        //多窗口模式，层叠置顶
-        layer.open({
-            type: 2
-            , title: '查看'
-            , area: ['80%', '80%']
-            , shade: 0
-            , maxmin: true
-            , content: urls
-
-        });
-    }
-function jia(role){
-            $('#role').val(role);
-            //var urls=ADMIN_URL+'organizes/admin?role_id='+id;
-            //多窗口模式，层叠置顶
-            layer.open({
-                type: 1,
-                title: '分配管理员账号',
-                area: ['700px', '450px'],
-                fixed: false, //不固定
-                shadeClose: true,
-                shade: 0.4,
-                maxmin: false, //开启最大化最小化按钮
-                content: $("#courForm")
-            });
-        }
-    $(function() {
-        regionInit("region");
-    });
-    //按钮先执行验证再提交表
-    $(document).ready(function() {
-
-        layui.use(['form', 'layedit', 'laydate'], function() {
-            var form = layui.form
-        });
-        //按钮先执行验证再提交表单
-        $("#submitBtn").click(function() {
-            if ($("#courForm").valid()) {
-                //$("#courForm").submit();
-                //$('.layui-layer-close1').click();
-                var admin_name = $("#admin_name").val();
-                var admin_password = $("#admin_password").val();
-                $.ajax({
-                    url: "{:url('/Admin/school/admin_add')}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {'admin_name': admin_name,'admin_password':admin_password},
-                    success:function(sb){
-                        if (sb.m) {
-                            layer.msg(sb.ms, {icon: 16,time: 500},function(){
-                                window.location.href="{:url('/Admin/School/member')}";
-                            });
-
-                        }
-                    }
-                });
-
-            }
-        });
-        $("#courForm").validate({
-            errorPlacement: function(error, element) {
-                error.appendTo(element.nextAll('span.err'));
-            },
-            rules: {
-                admin_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_name',
-                        type: 'get',
-                        data: {
-                            admin_name: function() {
-                                return $('#admin_name').val();
-                            }
-                        }
-                    }
-                },
-                admin_password: {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 20
-                },
-                admin_rpassword: {
-                    required: true,
-                    equalTo: '#admin_password'
-                },
-                gid: {
-                    required: true
-                }
-            },
-            messages: {
-                admin_name: {
-                    required: '{$Think.lang.admin_add_username_null}',
-                    minlength: '{$Think.lang.admin_add_username_max}',
-                    maxlength: '{$Think.lang.admin_add_username_max}',
-                    remote: '{$Think.lang.admin_add_admin_not_exists}'
-                },
-                admin_password: {
-                    required: '{$Think.lang.admin_add_password_null}',
-                    minlength: '{$Think.lang.admin_add_password_max}',
-                    maxlength: '{$Think.lang.admin_add_password_max}'
-                },
-                admin_rpassword: {
-                    required: '{$Think.lang.admin_add_password_null}',
-                    equalTo: '{$Think.lang.admin_edit_repeat_error}'
-                },
-                gid: {
-                    required: '{$Think.lang.admin_add_gid_null}',
-                }
-            }
-        });
     });
 </script>
