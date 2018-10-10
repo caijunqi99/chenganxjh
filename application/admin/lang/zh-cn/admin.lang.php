@@ -87,7 +87,7 @@ $lang['admin_add_username_tip']			= '请输入账号';
 $lang['admin_add_truename_tip']			= '请输入真实姓名';
 $lang['admin_add_department_tip']		= '请输入所属部门';
 $lang['admin_add_description_tip']		= '请输入备注说明';
-$lang['admin_add_phone_tip']			= '请输入正确的手机号码';
+$lang['admin_add_phone_tip']			= '请输入手机号码';
 $lang['admin_add_password_tip']			= '请输入密码';
 $lang['admin_add_gid_tip']				= '请选择一个权限组，如果还未设置，请马上设置';
 $lang['admin_add_username_null']		= '账号不能为空';
@@ -99,6 +99,8 @@ $lang['admin_add_password_type']		= '密码为英文或数字';
 $lang['admin_add_password_max']			= '密码长度为6-20';
 $lang['admin_add_username_not_exists']	= '该名称不存在，请换一个';
 $lang['admin_add_company_id_tip']	    = '请选择一个所属公司，如果还添加，请马上添加';
+$lang['admin_add_company_chose']	    = '请选择所属公司';
+$lang['admin_add_role_chose']	    = '请选择所属角色';
 /**
  * 管理权限设置
  */

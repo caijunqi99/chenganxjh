@@ -223,17 +223,18 @@ class Admin extends AdminControl {
             if ($_POST['new_pw'] != '') {
                 $data['admin_password'] = md5($_POST['new_pw']);
             }
+            $data['admin_name'] = trim($_POST['admin_name']);
             $data['admin_gid'] = intval($_POST['gid']);
-            $data['create_uid'] = $admin_userid;
+            $data['create_uid'] = intval($admin_userid);
             $data['admin_company_id'] = intval($_POST['admin_company_id']);
-            $data['admin_phone'] = $_POST['admin_phone'];
-            $data['admin_true_name'] = $_POST['admin_truename'];
-            $data['admin_department'] = $_POST['admin_department'];
-            $data['admin_description'] = $_POST['admin_description'];
+            $data['admin_phone'] = trim($_POST['admin_phone']);
+            $data['admin_true_name'] = trim($_POST['admin_truename']);
+            $data['admin_department'] = trim($_POST['admin_department']);
+            $data['admin_description'] = trim($_POST['admin_description']);
             //查询管理员信息
             $admin_model = Model('admin');
             $result = $admin_model->updateAdmin($data,$admin_id);
-            if ($result) {
+            if ($result >=0) {
                 $this->log(lang('ds_edit').lang('limit_admin') . '[ID:' . $admin_id . ']', 1);
                 $this->success(lang('admin_edit_success'), url('Admin/Admin/admin'));
             } else {

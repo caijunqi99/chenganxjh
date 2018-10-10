@@ -26,6 +26,7 @@
                 <dt>{$Think.lang.admin_index_company}</dt>
                 <dd>
                     <select name="admin_company_id">
+                        <option value="" selected>{$Think.lang.admin_add_company_chose}</option>
                         <option value="1">总公司</option>
                         <?php foreach((array)$company as $v){?>
                         <option value="<?php echo $v['o_id'];?>"><?php echo $v['o_name'];?></option>
@@ -39,6 +40,7 @@
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
                     <select name="gid">
+                        <option value="" selected>{$Think.lang.admin_add_role_chose}</option>
                         <?php foreach((array)$gadmin as $v){?>
                         <option value="<?php echo $v['gid'];?>"><?php echo $v['gname'];?></option>
                         <?php }?>
@@ -139,6 +141,7 @@
                     }
                 },
                 admin_phone: {
+                    required: true,
                     isMobile:true,
                     remote: {
                         url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_phone',
@@ -161,6 +164,9 @@
                 },
                 gid: {
                     required: true
+                },
+                admin_company_id: {
+                    required: true
                 }
             },
             messages: {
@@ -171,6 +177,7 @@
                     remote: '{$Think.lang.admin_add_admin_not_exists}'
                 },
                 admin_phone: {
+                    required: '{$Think.lang.admin_add_phone_tip}',
                     isMobile: '{$Think.lang.admin_edit_valid_phone}',
                     remote: '{$Think.lang.admin_add_admin_phone_not_exists}'
                 },
