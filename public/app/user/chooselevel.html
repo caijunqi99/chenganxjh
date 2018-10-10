@@ -126,6 +126,7 @@
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
     <script src="../content/scripts/commom.js"></script>
+    <script src="../content/scripts/API.js"></script>
 
     <script>
         $(function() {
@@ -133,6 +134,21 @@
             $(".level_list>li").click(function() {
                 $(this).siblings().removeClass("active").end().addClass("active");
             })
+
+            $('.total_cont_btn').click(function(event) {
+                $.post(api+'/Packagesbuy/buy_step1',
+                {
+                    'key': 'c9c480ce862617356889f2b852722572',
+                    'pkg_id': '8',
+                    'payment_code': 'wxpay_h5',
+                    'chind_id': '19',
+                }, function(data, textStatus, xhr) {
+                /*optional stuff to do after success */
+                    console.log(data);
+                    alert(data);
+
+                });
+            });
         })
     </script>
 </body>
