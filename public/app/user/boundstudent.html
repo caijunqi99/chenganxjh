@@ -149,7 +149,7 @@
                             type: "POST",
                             url: api + '/Common/school.html',
                             data: {
-                                key: token,
+                                key: user_token,
                                 province: picker.value[0],
                                 city: picker.value[1],
                                 area: picker.value[2]
@@ -175,7 +175,7 @@
                             type: "POST",
                             url: api + '/Common/grade.html',
                             data: {
-                                key: token,
+                                key: user_token,
                                 school_id: p.data.values
                             },
                             dataType: "json",
@@ -197,7 +197,7 @@
                             type: "POST",
                             url: api + '/Common/classData.html',
                             data: {
-                                key: token,
+                                key: user_token,
                                 school_id: schollID,
                                 grade_id: p.data.values
                             },
