@@ -24,16 +24,13 @@ $(function() {
 
     //启用fastclick
     FastClick.attach(document.body);
-
-    //获取cookie中存储的token,member_id
-    const user_token = $.cookie('token');
-    const user_member_id = $.cookie('member_id');
 })
 
 //返回函数
 function historyback() {
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.backClick();
+        // window.webkit.messageHandlers.backClick();
+        window.webkit.messageHandlers.backClick.postMessage();
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
         Android.backToApp();
     } else { //pc
