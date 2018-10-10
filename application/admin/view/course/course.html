@@ -54,6 +54,7 @@ $(function(){
     var co_sort = $("#co_sort").val();
     var actions = $("#actions").val();
     var co_type = $("#co_type").val();
+    if (co_type == '') {layer.tips('请输入课程名称', '#co_type');return false;}
     if (co_sort < 1) {layer.tips('请输入正确的排序', '#co_sort');return false;}
     $.ajax({
       url: "{:url('/Admin/Course/course_edit')}",

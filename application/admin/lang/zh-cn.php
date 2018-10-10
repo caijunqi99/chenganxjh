@@ -435,6 +435,10 @@ $lang['sc_add_fail']      = '学校类型添加失败';
 $lang['sc_edit_succ']     = '学校类型修改成功';
 $lang['sc_edit_fail']     = '学校类型修改失败';
 
+
+
+$lang['name_isset']     = '操作失败,名称已存在';
+
 //课程管理
 $lang['course_type']      = '课程';
 $lang['course_manage']    = '课程管理';

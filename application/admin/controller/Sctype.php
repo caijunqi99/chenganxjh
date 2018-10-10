@@ -45,10 +45,10 @@ class Sctype extends AdminControl {
             $param['up_time']   = time();
             switch (input('actions')) {
                 case 'edit':
-                    $res = db('schooltype')->where('sc_id != "'.intval(input("param.sc_id")).'" AND sc_type="'.trim(input("post.sc_type")).'"');
+                    $res = db('schooltype')->where('sc_id != "'.intval(input("param.sc_id")).'" AND sc_type="'.trim(input("post.sc_type")).'"')->find();
                     if($res){
-                        $this->log(lang('pkg_name_isset') . '[' . input('post.sc_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('sc_name_isset')]);
+                        $this->log(lang('name_isset') . '[' . input('post.sc_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
                     }else{
                         $param['sc_id'] = intval(input('param.sc_id'));
                         $result = $Sctype->sctype_update($param);
@@ -59,10 +59,10 @@ class Sctype extends AdminControl {
                     }
                     break;                
                 default:
-                    $res = db('schooltype')->where(' sc_type="'.trim(input("post.sc_type")).'"');
+                    $res = db('schooltype')->where(' sc_type="'.trim(input("post.sc_type")).'"')->find();
                     if($res){
-                        $this->log(lang('pkg_name_isset') . '[' . input('post.sc_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('sc_name_isset')]);
+                        $this->log(lang('name_isset') . '[' . input('post.sc_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('name_isset')]);
                     }else{
                         $result = $Sctype->sctype_add($param);
                         if ($result) {
@@ -95,10 +95,10 @@ class Sctype extends AdminControl {
         $result = $Sctype->sctype_del($sc_id);
 
         if (!$result) {
-            $this->error(lang('pkg_del_fail'));
+            $this->error(lang('sc_del_fail'));
         } else {
             $this->log(lang('pkg_del_succ') . '[' . $sc_id . ']', null);
-            $this->success(lang('pkg_del_succ'));
+            $this->success(lang('sc_del_succ'));
         }
     }
 
