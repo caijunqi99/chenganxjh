@@ -14,6 +14,7 @@ $lang['uptime']         = '编辑时间';
 $lang['pkg_name']          = '套餐名称';
 $lang['pkg_name_err']      = '套餐名称不能为空';
 $lang['pkg_name_notice']   = '套餐名称不能为空';
+$lang['pkg_name_isset']   = '修改失败，名称已存在';
 
 $lang['pkg_price']         = '套餐优惠价格（元）';
 $lang['pkg_price_err']     = '套餐优惠价格不能为空';

@@ -54,6 +54,7 @@ class Classtype extends AdminControl {
             $param['cl_enabled']   = 1;
             $param['up_time']   = time();
             switch (input('actions')) {
+
                 case 'edit':
                     $param['cl_id'] = intval(input('param.cl_id'));
                     $result = $ClassType->classtype_update($param);

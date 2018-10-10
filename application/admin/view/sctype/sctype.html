@@ -64,7 +64,7 @@ $(function(){
       data: {'sc_sort': sc_sort,'sc_id':pid,'actions':actions,'sc_type':sc_type},
       success:function(sb){
         if (sb.m) {
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
+          layer.msg(sb.ms, {icon: 16,time: 5000},function(){
             window.location.href="{:url('/Admin/Sctype/sctype_manage')}";  
           });
           

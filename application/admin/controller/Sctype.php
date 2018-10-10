@@ -45,18 +45,30 @@ class Sctype extends AdminControl {
             $param['up_time']   = time();
             switch (input('actions')) {
                 case 'edit':
-                    $param['sc_id'] = intval(input('param.sc_id'));
-                    $result = $Sctype->sctype_update($param);
-                    if ($result) {
-                        $this->log(lang('sc_edit_succ') . '[' . input('post.sc_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('sc_edit_succ')]); 
+                    $res = db('schooltype')->where('sc_id != "'.intval(input("param.sc_id")).'" AND sc_type="'.trim(input("post.sc_type")).'"');
+                    if($res){
+                        $this->log(lang('pkg_name_isset') . '[' . input('post.sc_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('sc_name_isset')]);
+                    }else{
+                        $param['sc_id'] = intval(input('param.sc_id'));
+                        $result = $Sctype->sctype_update($param);
+                        if ($result) {
+                            $this->log(lang('pkg_edit_succ') . '[' . input('post.sc_type') . ']', null);
+                            echo json_encode(['m'=>true,'ms'=>lang('sc_edit_succ')]);
+                        }
                     }
                     break;                
                 default:
-                    $result = $Sctype->sctype_add($param);
-                    if ($result) {
-                        $this->log(lang('sc_add_succ') . '[' . input('post.sc_type') . ']', null);
-                        echo json_encode(['m'=>true,'ms'=>lang('sc_add_succ')]); 
+                    $res = db('schooltype')->where(' sc_type="'.trim(input("post.sc_type")).'"');
+                    if($res){
+                        $this->log(lang('pkg_name_isset') . '[' . input('post.sc_type') . ']', null);
+                        echo json_encode(['m'=>true,'ms'=>lang('sc_name_isset')]);
+                    }else{
+                        $result = $Sctype->sctype_add($param);
+                        if ($result) {
+                            $this->log(lang('sc_add_succ') . '[' . input('post.sc_type') . ']', null);
+                            echo json_encode(['m'=>true,'ms'=>lang('sc_add_succ')]);
+                        }
                     }
                     break;
             }
