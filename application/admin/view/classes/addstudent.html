@@ -41,7 +41,7 @@
                 <td colspan="2" class="required"><label> {$Think.lang.school_edit_sex}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform">
+                <td class="vatop rowform" for="student_sex">
                     <label>
                         <input type="radio" value="1" name="student_sex">{$Think.lang.member_edit_male}
                     </label>
@@ -117,28 +117,23 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules: {
-                school_name: {
+                student_name: {
+                    required: true
+                },
+                student_idcard: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#school_name').val();
-                            },
-                            school_id:'{$school_array.school_id|default=0}'
-                        }
-                    }
+                    minlength: 15,
+                    maxlength: 18
                 }
             },
             messages: {
-                school_name: {
-                    required: '{$Think.lang.school_add_name_null}',
-                    maxlength: '{$Think.lang.school_add_name_length}',
-                    minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
+                student_name: {
+                    required: '{$Think.lang.school_studentname_null}'
+                },
+                student_idcard: {
+                    required: '{$Think.lang.school_idcard_null}',
+                    maxlength: '{$Think.lang.school_idcard_length}',
+                    minlength: '{$Think.lang.school_idcard_length}'
                 }
             }
         });

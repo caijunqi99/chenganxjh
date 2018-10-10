@@ -73,7 +73,8 @@ class Classes extends AdminControl {
         );
         $this->assign('address', $address);
         //学校类型
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+        $model_schooltype = model('Schooltype');
+        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
 
         foreach ($class_list as $k=>$v){
@@ -117,7 +118,8 @@ class Classes extends AdminControl {
             );
             $this->assign('address', $address);
             //学校类型
-            $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+            $model_schooltype = model('Schooltype');
+            $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
             $this->assign('schooltype', $schooltype);
             $this->setAdminCurItem('add');
             return $this->fetch();
@@ -127,7 +129,7 @@ class Classes extends AdminControl {
             $data = array(
                 'school_areaid' => input('post.area_id'),
                 'school_region' => input('post.area_info'),
-                'typeid' => input('post.school_type'),
+                'typeid' => input('post.classtype'),
                 'schoolid' => input('post.order_state'),
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
