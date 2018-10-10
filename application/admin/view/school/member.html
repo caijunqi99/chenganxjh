@@ -112,7 +112,7 @@
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
         <?php foreach($school_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['schoolid']; ?></td>
+            <td class="align-center"><?php echo $k+1; ?></td>
             <td class="align-center"><?php echo $v['name']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
             <td class="align-center"><?php echo $v['address']; ?></td>
@@ -161,6 +161,7 @@
     {$page}
     
 </div>
+
 <form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
     <input type="hidden" id="role" value="">
     <div  class="ncap-form-default">

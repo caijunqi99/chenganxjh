@@ -119,7 +119,7 @@
         <?php if(!empty($schoolapply_list) && is_array($schoolapply_list)){ ?>
         <?php foreach($schoolapply_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['applyid']; ?></td>
+            <td class="align-center"><?php echo $k+1; ?></td>
             <td class="align-center"><?php echo $v['schoolname']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
             <td class="align-center"><?php echo $v['username']; ?></td>
