@@ -26,7 +26,7 @@ class Course extends AdminControl {
         }
         $Course = model('Course');
         $condition = array();        
-        $sc_list = $Course->get_course_List($condition, '10' ,'co_id asc');
+        $sc_list = $Course->get_course_List($condition, '10' ,'co_sort asc');
         $this->assign('course_list', $sc_list);
         $this->assign('page', $Course->page_info->render());
         $this->setAdminCurItem('course_manage');

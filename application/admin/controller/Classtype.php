@@ -31,7 +31,7 @@ class Classtype extends AdminControl {
         }
         $Sctype = model('Schooltype');
         $sc_list = $Sctype->get_sctype_List(array('sc_enabled'=>1), '30' ,'sc_sort asc');
-        $class_list = $ClassType->get_classtype_List($condition, '10' ,'a.sc_id asc');
+        $class_list = $ClassType->get_classtype_List($condition, '10' ,'a.cl_sort asc');
         // p($sc_list);exit;
         $this->assign('sc_id', $sc_id);
         $this->assign('class_list', $class_list);

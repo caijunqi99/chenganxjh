@@ -47,7 +47,7 @@ class Pkgs extends AdminControl {
             if ($search_name != '') {
                 $condition['pkg_name'] = array('like', '%' . trim($search_name) . '%');
             }
-            $pkg_list = $pkg->getPkgList($condition, 10);
+            $pkg_list = $pkg->getPkgList($condition, 10,'pkg_sort asc');
             $this->assign('pkg_list', $pkg_list);
 
             $this->assign('page', $pkg->page_info->render());
