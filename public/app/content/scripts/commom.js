@@ -24,9 +24,6 @@ $(function() {
 
     //启用fastclick
     FastClick.attach(document.body);
-    //获取cookie中存储的token,member_id
-    const user_token = $.cookie('token');
-    const user_member_id = $.cookie('member_id');
 })
 
 //返回函数
