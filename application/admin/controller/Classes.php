@@ -127,7 +127,7 @@ class Classes extends AdminControl {
             $data = array(
                 'school_areaid' => input('post.area_id'),
                 'school_region' => input('post.area_info'),
-                'typeid' => input('post.school_type'),
+                'typeid' => input('post.classtype'),
                 'schoolid' => input('post.order_state'),
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
