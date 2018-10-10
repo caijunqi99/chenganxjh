@@ -77,7 +77,8 @@ class Schoolapply extends AdminControl {
         $this->assign('show_page', $model_schoolapply->page_info->render());
         $allschoolapply = $model_schoolapply->getSchoolapplyList();
         $this->assign('allschoolapply', $allschoolapply);
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+        $model_schooltype = model('Schooltype');
+        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
         $this->assign('schoolapply_list', $schoolapply_list);
         $this->setAdminCurItem('index');
