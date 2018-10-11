@@ -44,7 +44,7 @@ class Admin extends AdminControl {
             }
         }
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->order('a.admin_id DESC')->paginate(10,false,['query' => request()->param()]);
 
 //        halt($admin_list);
         //获取所创建的角色
@@ -63,17 +63,25 @@ class Admin extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
-
         if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
+
         if (!request()->isPost()) {
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
+            $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
 
-            //所有公司
-            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            if($company_id['admin_company_id'] != 1){
+                //代理商公司 不能选择
+                $company = db('company')->field('o_id,o_name')->where('o_id = "'.$company_id["admin_company_id"].'" AND o_del = 1')->find();
+            }else{
+                //总公司 可以选择
+                $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            }
+
+            $this->assign('company_id',$company_id['admin_company_id']);
             $this->assign('company',$company);
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin_add');
@@ -84,7 +92,13 @@ class Admin extends AdminControl {
             $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
-            $param['admin_company_id'] = $_POST['admin_company_id'];
+            if(session('admin_is_super') == 1){
+                $param['admin_company_id'] = $_POST['admin_company_id'];
+            }else{
+                $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
+                $param['admin_company_id'] = $company_id['admin_company_id'];
+            }
+
             $param['admin_phone'] = $_POST['admin_phone'];
             $param['admin_true_name'] = $_POST['admin_truename'];
             $param['admin_department'] = $_POST['admin_department'];
@@ -109,8 +123,6 @@ class Admin extends AdminControl {
                 $model_admin = Model('admin');
                 $condition['admin_name'] = input('get.admin_name');
                 $condition['admin_del_status']=1;
-//                $condition['create_uid'] = $this->admin_info['admin_id'];
-//                $list = $model_admin->infoAdmin($condition);
                 $list = $model_admin->where($condition)->find();
                 if (!empty($list)) {
                     exit('false');
@@ -247,13 +259,19 @@ class Admin extends AdminControl {
             if (!is_array($admin) || count($admin) <= 0) {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/Admin/admin'));
             }
+            $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
 
-            //所有公司
-            $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            if($company_id['admin_company_id'] != 1){
+                //代理商公司 不能选择
+                $company = db('company')->field('o_id,o_name')->where('o_id = "'.$company_id["admin_company_id"].'" AND o_del = 1')->find();
+            }else{
+                //总公司 可以选择
+                $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
+            }
+
+            $this->assign('company_id',$company_id['admin_company_id']);
             $this->assign('company',$company);
-//            halt($admin);
             $this->assign('admin', $admin);
-
             //得到权限组
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_userid")->select();
             $this->assign('gadmin', $gadmin);

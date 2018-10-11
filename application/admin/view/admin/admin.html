@@ -64,7 +64,7 @@
     </form>
 
     <form method="post" id='form_admin' class="layui-form">
-        <table class="layui-table" lay-size="lg" >
+        <table class="layui-table"  >
             <colgroup>
                 <col width="150">
                 <col width="200">
@@ -72,12 +72,12 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th>{$Think.lang.admin_index_username}</th>
-                <th>{$Think.lang.admin_index_truename}</th>
-                <th>{$Think.lang.mob_phone}</th>
-                <th>{$Think.lang.admin_index_company}</th>
+                <th class="align-center">{$Think.lang.admin_index_username}</th>
+                <th class="align-center">{$Think.lang.admin_index_truename}</th>
+                <th class="align-center">{$Think.lang.mob_phone}</th>
+                <th class="align-center">{$Think.lang.admin_index_company}</th>
                 <th class="align-center">{$Think.lang.admin_index_last_login}</th>
-                <th class="align-center">{$Think.lang.admin_index_login_times}</th>
+                <!--<th class="align-center">{$Think.lang.admin_index_login_times}</th>-->
                 <th class="align-center">{$Think.lang.gadmin_name}</th>
                 <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
                 <th class="align-center">{$Think.lang.ds_handle}</th>
@@ -88,18 +88,18 @@
             <?php if(!empty($admin_list) && is_array($admin_list)){ ?>
             <?php foreach($admin_list as $k => $v){ ?>
             <tr class="hover">
-                <td><?php echo $v['admin_name'];?></td>
-                <td><?php echo $v['admin_true_name'];?></td>
-                <td><?php echo $v['admin_phone'];?></td>
-                <td><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>
-                <td class="align-center"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
-                <td class="align-center"><?php echo $v['admin_login_num']; ?></td>
+                <td class="align-center w50"><?php echo $v['admin_name'];?></td>
+                <td class="align-center w50"><?php echo $v['admin_true_name'];?></td>
+                <td class="align-center w50"><?php echo $v['admin_phone'];?></td>
+                <td class="align-center w150"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>
+                <td class="align-center w150"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
+                <!--<td class="align-center w50"><?php echo $v['admin_login_num']; ?></td>-->
                 <?php if($v['admin_is_super']){?>
-                    <td class="align-center" style="color: #D90909">{$Think.lang.super_admin}</td>
+                    <td class="align-center w50" style="color: #D90909">{$Think.lang.super_admin}</td>
                 <?php }else if($v['gname']){?>
-                    <td class="align-center" style="color: #D39600"> <?php echo $v['gname']; ?></td>
+                    <td class="align-center w50" style="color: #D39600"> <?php echo $v['gname']; ?></td>
                 <?php }else{?>
-                    <td class="align-center" style="color: #0C0C0C"> {$Think.lang.admin_no_role}</td>
+                    <td class="align-center w50" style="color: #0C0C0C"> {$Think.lang.admin_no_role}</td>
                 <?php }?>
                 <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
                 <td class="w150 align-center">

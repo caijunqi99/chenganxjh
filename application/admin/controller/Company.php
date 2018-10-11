@@ -48,6 +48,12 @@ class Company extends AdminControl {
         $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
+        //判断登陆角色
+        $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
+        if($adminUser['admin_company_id'] != 1){
+            $condition['o_id'] = $adminUser['admin_company_id'];
+        }
+
         if (!empty($_POST['search_organize_name'])) {
             $o_name=input('param.search_organize_name');
             $condition['o_name']=array('like', '%' . trim($o_name) . '%');
@@ -172,9 +178,17 @@ class Company extends AdminControl {
             $update_array = array();
             $update_array['o_name'] = trim($_POST['o_name']);
             $update_array['o_role'] = intval($_POST['o_role']);
+            if($_POST['o_role']==2){
+                $update_array['o_cityid']=0;
+                $update_array['o_areaid'] = 0;
+            }else if($_POST['o_role']==3){
+                $update_array['o_cityid'] = intval($_POST['city_id']);
+                $update_array['o_areaid'] = 0;
+            }else{
+                $update_array['o_cityid'] = intval($_POST['city_id']);
+                $update_array['o_areaid'] = intval($_POST['area_id']);
+            }
             $update_array['o_provinceid'] = intval($_POST['o_provinceid']);
-            $update_array['o_cityid'] = intval($_POST['city_id']);
-            $update_array['o_areaid'] = intval($_POST['area_id']);
             $update_array['o_area'] = trim($_POST['area_info']);
             $update_array['o_address'] = trim($_POST['o_address']);
             $update_array['o_phone'] = trim($_POST['o_phone']);

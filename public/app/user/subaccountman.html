@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="$.closePopup();">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -176,11 +176,12 @@
                     type: "POST",
                     url: api + '/Member/account.html',
                     data: {
-                        key: token,
-                        member_id: 2
+                        key: user_token,
+                        member_id: user_member_id
                     },
                     dataType: "json",
                     success: function(response) {
+                        console.log(response);
                         if (response['result'].length == 0) {
                             $('.tishi').hide();
                         } else {
@@ -201,8 +202,8 @@
                         type: "POST",
                         url: api + '/Member/accountDel.html',
                         data: {
-                            key: token,
-                            member_id: 2,
+                            key: user_token,
+                            member_id: user_member_id,
                             jb_id: event.target.dataset.id
                         },
                         dataType: "json",
@@ -225,7 +226,7 @@
             // 打开添加副账户popup
             $("#open_popup").click(function() {
                 if ($('.subacc_list').length >= 5) {
-                    $.alert('不能添加了！')
+                    $.alert('只能添加5个副帐号，已不能再添加了！')
                 } else {
                     $("#full").popup();
                 }
@@ -243,8 +244,8 @@
                         type: "POST",
                         url: api + '/Member/accountBind.html',
                         data: {
-                            key: token,
-                            member_id: 2,
+                            key: user_token,
+                            member_id: user_member_id,
                             member_aboutname: $('#nickname').val(),
                             member_mobile: $('#phone').val()
                         },

@@ -54,6 +54,7 @@ $(function(){
     var price = $("#price").val();
     var actions = $("#actions").val();
     var pname = $("#pname").val();
+    if (pname == '') {layer.tips('请输入价格说明', '#pname');return false;}
     if (price < 1) {layer.tips('请输入正确的价格', '#price');return false;}
     $.ajax({
       url: "{:url('/Admin/Pkgs/course_edit')}",
