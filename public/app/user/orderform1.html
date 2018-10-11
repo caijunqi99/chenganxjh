@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -134,8 +134,8 @@
             type: "POST",
             url: api + '/Member/order.html',
             data: {
-                key: token,
-                member_id: 2,
+                key: user_token,
+                member_id: user_member_id,
                 type_id: 1
             },
             dataType: "json",
@@ -155,8 +155,8 @@
                         type: "POST",
                         url: api + '/Member/order.html',
                         data: {
-                            key: token,
-                            member_id: 2,
+                            key: user_token,
+                            member_id: user_member_id,
                             type_id: cursel
                         },
                         dataType: "json",
