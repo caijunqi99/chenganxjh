@@ -46,7 +46,7 @@
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
                     <select name="gid">
-                        <option value="" selected>{$Think.lang.admin_add_role_chose}</option>
+                        <option value="" <?php if(empty($admin['admin_gid'])){?>selected<?php }?>>{$Think.lang.admin_add_role_chose}</option>
                         <?php foreach((array)$gadmin as $v){?>
                             <option value="<?php echo $v['gid'];?>" <?php if($v['gid']==$admin['admin_gid']){?>selected<?php }?>><?php echo $v['gname'];?></option>
                         <?php }?>
