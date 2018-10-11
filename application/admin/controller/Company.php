@@ -48,6 +48,12 @@ class Company extends AdminControl {
         $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
+        //判断登陆角色
+        $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
+        if($adminUser['admin_company_id'] != 1){
+            $condition['o_id'] = $adminUser['admin_company_id'];
+        }
+
         if (!empty($_POST['search_organize_name'])) {
             $o_name=input('param.search_organize_name');
             $condition['o_name']=array('like', '%' . trim($o_name) . '%');
