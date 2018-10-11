@@ -71,7 +71,12 @@ $lang['organize_studentnum_name']='绑定学生姓名';
 $lang['organize_studentnum_names']='所属会员登录名称';
 $lang['co_organize_succ']              = '分配成功';
 $lang['company_add_username_max']              = '公司名称长度为3-20';
-
+$lang['company_address']='详细地址不能为空';
+$lang['company_address']='详细地址不能为空';
+$lang['company_leading']='负责人不能为空';
+$lang['company_phone']='手机号码不能为空';
+$lang['company_phoneerror']='请输入正确的手机号';
+$lang['company_area']='所在地区不能为空';
 
 //学校管理
 $lang['ds_school'] = '学校管理';

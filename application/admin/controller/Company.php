@@ -317,13 +317,13 @@ class Company extends AdminControl {
         $dataResult = $model_organize->getOrganizeList($condition, "o_id,o_name,o_role,o_area,o_address,o_phone,o_leading,o_enddate,o_createtime,o_remark");
         foreach($dataResult as $key=>$v){
             if($v['o_role']==1){
-                $dataResult[$key]['o_role']='总公司';
+                $dataResult[$key]['o_role']='分公司';
             }else if($v['o_role']==2){
                 $dataResult[$key]['o_role']='省级代理';
             }else if($v['o_role']==3){
                 $dataResult[$key]['o_role']='市级代理';
             }else{
-                $dataResult[$key]['o_role']='特约代理';
+                $dataResult[$key]['o_role']='区级代理';
             }
         }
         $this->createExcel($dataResult);
