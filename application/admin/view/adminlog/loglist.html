@@ -24,7 +24,7 @@
                 <td><input class="txt date" type="text" value="{$Request.get.time_from}" id="time_from" name="time_from">
                     <label for="time_to">~</label>
                     <input class="txt date" type="text" value="{$Request.get.time_to}" id="time_to" name="time_to"/></td>
-                <td><a href="javascript:document.formSearch.submit();" class="btn-search " title="{$Think.lang.ds_query}"></a>
+                <td><a href="javascript:void(0);" class="btn-search " title="{$Think.lang.ds_query}"></a>
                 </td>
             </tr>
             </tbody>
@@ -98,5 +98,17 @@
 
         $('#time_from').datepicker({dateFormat: 'yy-mm-dd'});
         $('#time_to').datepicker({dateFormat: 'yy-mm-dd'});
+
+        $('.btn-search').click(function(){
+            var time_from = $('#time_from').val();
+            time_from = new Date(time_from.replace("-", "/").replace("-", "/"));
+            var time_to = $('#time_to').val();
+            time_to = new Date(time_to.replace("_","/").replace("-","/"));
+            if(time_to<time_from){
+                alert('开始时间必须要大于结束时间');return false;
+            }
+
+            $('#formSearch').submit();
+        })
     });
 </script>
