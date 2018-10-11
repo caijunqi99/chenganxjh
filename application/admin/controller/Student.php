@@ -100,10 +100,10 @@ class Student extends AdminControl {
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
-        $school_list = $model_school->getSchoolList($condition_school);
+        $school_list = $model_school->getAllAchool($condition_school);
         //全部班级
         $model_class = model('Classes');
-        $class_list = $model_class->getClasslList($condition_school);
+        $class_list = $model_class->getAllClasses($condition_school);
         foreach ($class_list as $k=>$v){
             $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
             $class_list[$k]['typename'] = $schooltype['sc_type'];

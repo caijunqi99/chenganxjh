@@ -37,23 +37,12 @@
                     <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
                     <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
                     <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                    {notempty name="address.area_id"}
-                    <span>{$address.area_info}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="0">请选择分类</option>
+                    <select name="typeid" id="typeid">
+                        <option value="">请选择分类</option>
                         {volist name="region_list" id="region"}
                         <option value="{$region.area_id}">{$region.area_name}</option>
                         {/volist}
                     </select>
-                    {else}
-                    <select>
-                        <option value="0">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
 
                 </td>
             </tr>
@@ -115,7 +104,7 @@
             <tr class="noborder">
                 <td class="required" name="student_sex" id="student_sex">
                     <label>
-                        <input type="radio" value="1" name="member_sex">{$Think.lang.member_edit_male}
+                        <input type="radio" value="1" name="member_sex" checked="true">{$Think.lang.member_edit_male}
                     </label>
                     <label>
                         <input type="radio" value="2" name="member_sex">{$Think.lang.member_edit_female}
@@ -225,6 +214,9 @@
                 },
                 student_birthday: {
                     required: true
+                },
+                typeid: {
+                    required: true
                 }
             },
             messages: {
@@ -249,6 +241,9 @@
                 },
                 student_birthday: {
                     required: '{$Think.lang.school_birthday_null}'
+                },
+                typeid: {
+                    required: '{$Think.lang.school_add_area_null}'
                 }
             }
         });

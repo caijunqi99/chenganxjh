@@ -37,31 +37,19 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
-                    <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_region}:</label></td>
+                    <td colspan="2" class="required"><label for="typeid">{$Think.lang.school_index_region}:</label></td>
                 </tr>
                 <tr>
                     <td id="region">
                                  <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
                                 <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
                                 <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                                {notempty name="address.area_id"}
-                                    <span>{$address.area_info}</span>
-                                   <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                                  <select style="display:none;" id="region_">
-                                      <option value="0">请选择分类</option>
-                                    {volist name="region_list" id="region"}
-                                    <option value="{$region.area_id}">{$region.area_name}</option>
-                                    {/volist}
-                               </select>
-                                    {else}
-                                    <select>
-                                        <option value="0">请选择分类</option>
+                                    <select name="typeid" id="typeid">
+                                        <option value="">请选择分类</option>
                                     {volist name="region_list" id="region"}
                                     <option value="{$region.area_id}">{$region.area_name}</option>
                                     {/volist}
                                     </select>
-                                    {/notempty}
-
                     </td>
                 </tr>
                 <tr class="noborder">
@@ -69,9 +57,9 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform" name="school_type" id="school_type">
+                    <td class="vatop rowform">
                         {volist name="schoolType" id="type"}
-                        <input type="checkbox" name="school_type[]" id="school_index_region{$type.sc_id}" nc_province="{$type.sc_id}" value="{$type.sc_id}"> {$type.sc_type}
+                        <input type="checkbox" name="school_type[]" id="school_index_region{$type.sc_id}" nc_province="{$type.sc_id}" value="{$type.sc_id}" required> {$type.sc_type}
                         {/volist}
                     </td>
                     <td class="vatop tips"></td>
@@ -173,7 +161,7 @@
                 school_dieline:{
                     required: true
                 },
-                region_:{
+                typeid:{
                     required: true
                 }
             },
@@ -201,8 +189,8 @@
                 school_dieline: {
                     required: '{$Think.lang.school_dieline_null}',
                 },
-                region_: {
-                    required: '{$Think.lang.school_dieline_null}',
+                typeid: {
+                    required: '{$Think.lang.school_add_area_null}',
                 }
             }
         });

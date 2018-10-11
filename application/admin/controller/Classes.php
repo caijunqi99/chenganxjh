@@ -90,10 +90,16 @@ class Classes extends AdminControl {
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
-        $school_list = $model_school->getSchoolList($condition_school);
+        $school_list = $model_school->getAllAchool($condition_school);
         $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
+        $classname = $model_class->getAllClasses($condition_school);
+        foreach ($classname as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
+            $classname[$k]['typename'] = $schooltype['sc_type'];
+        }
+        $this->assign('classname', $classname);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }

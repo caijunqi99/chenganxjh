@@ -155,6 +155,7 @@ $lang['school_add_class_null']		= '班级名不能为空';
 $lang['school_classcard_null']		= '班级识别码不能为空';
 $lang['school_dieline_null']		= '合同截止日期不能为空';
 $lang['school_add_address_null']		= '地址不能为空';
+$lang['school_add_area_null']		= '所在地区不能为空';
 $lang['school_add_studentname_null']		= '学生姓名不能为空';
 $lang['school_add_type_null']		= '类型不能为空';
 $lang['school_birthday_null']		= '生日不能为空';

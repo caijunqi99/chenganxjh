@@ -75,7 +75,7 @@ class Schoolapply extends AdminControl {
             'area_info'=>''
         );
         $this->assign('show_page', $model_schoolapply->page_info->render());
-        $allschoolapply = $model_schoolapply->getSchoolapplyList();
+        $allschoolapply = $model_schoolapply->getAllAchoolapply();
         $this->assign('allschoolapply', $allschoolapply);
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));

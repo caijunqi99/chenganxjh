@@ -56,12 +56,19 @@ class School extends Model {
             //$sql = "SELECT * FROM x_school s LEFT JOIN x_admin a ON a.admin_id=s.option_id WHERE $where  ORDER BY schoolid asc LIMIT 0,15";
             $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($where)->order($school)->paginate($page,false,['query' => request()->param()]);
         }
+
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
         if (empty($list))
             return array();
         return $list;
+    }
+
+    public function getAllAchool($condtion){
+        $result = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        //print_r(db('school')->getLastSql());die;
+        return $result;
     }
 
     /**
