@@ -33,7 +33,7 @@
                 <p>绑定学生</p>
             </div>
             <div class="head_r">
-                <a href="javascript:;">
+                <a href="javascript:;" onClick="scanning()">
                     <i class="icon iconfont icon-saoyisao"></i>
                 </a>
             </div>
@@ -295,6 +295,17 @@
                 } else {
                     return 0;
                 }
+            }
+
+
+            //扫描二维码
+            function scanning() {
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    window.webkit.messageHandlers.scanCode.postMessage('');
+                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                    Android.scanCode();
+                } else { //pc
+                };
             }
         </script>
 </body>

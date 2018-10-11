@@ -244,8 +244,8 @@ back
             $('.bang_submit').on('click', function() {
                 if (!Tools.IsEmail($("#email").val())) {
                     $.alert("请输入正确的邮箱地址");
-                }
-                esle {
+                } else {
+
                     //修改个人信息
                     var params = {};
                     params['key'] = user_token;
