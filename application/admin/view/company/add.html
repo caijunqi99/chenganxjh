@@ -49,7 +49,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="required"><label class="validation" >{$Think.lang.region}:</label></td>
+                <td colspan="2" class="required"><label class="validation" for="type_ides">{$Think.lang.region}:</label></td>
             </tr>
             <tr>
                 <td id="region">
@@ -58,23 +58,12 @@
                     <input type="hidden" name="area_info" id="area_info"  class="area_names" />
                     <input type="hidden"  name="o_provinceid" id="o_provinceid" class="o_provinceid">
                     <input type="hidden"  name="o_cityid" id="o_cityid" class="o_cityid">
-                    {notempty name="address.area_id"}
-                    <span>{$address.area_info}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="0">请选择地区</option>
+                    <select name="type_ides" id="type_ides">
+                        <option value="">请选择地区</option>
                         {volist name="region_list" id="region"}
                         <option value="{$region.area_id}">{$region.area_name}</option>
                         {/volist}
                     </select>
-                    {else}
-                    <select>
-                        <option value="0">请选择地区</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
                 </td>
             </tr>
             <tr>
@@ -167,6 +156,9 @@
                 activity_end_date: {
                     required : true,
                     date      : false
+                },
+                type_ides : {
+                    required : true
                 }
             },
             messages : {
@@ -189,6 +181,9 @@
                 },
                 activity_end_date: {
                     required : '{$Think.lang.organize_new_enddate_null}'
+                },
+                type_ides : {
+                    required :'{$Think.lang.company_area}'
                 }
             }
         });
@@ -199,16 +194,12 @@
             var v = $(this).val();
             $('#sid').val(v);
             $('#dep').val(1);
-            
-        });
-// 模拟活动页面横幅Banner上传input type='file'样式
-        var textButton="<input type='text' name='textfield' id='textfield1' class='type-file-text' /><input type='button' name='button' id='button1' value='' class='type-file-button' />"
-        $(textButton).insertBefore("#activity_banner");
-        $("#activity_banner").change(function(){
-            $("#textfield1").val($("#activity_banner").val());
+
         });
     });
     $(function() {
         regionInit("region");
     });
-</script> 
+</script>
+
+
