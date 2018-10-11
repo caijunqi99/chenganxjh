@@ -57,9 +57,9 @@ class Schoolinfo extends AdminControl {
 
     public function camera() {
         $schoolid = input('param.school_id');
-        $cameraList = db('camera')->where(array('school_id'=>$schoolid))->select();
-        //print_r($cameraList);die;
-        //$this->assign('page', $model_class->page_info->render());
+        $model_camera = model('Camera');
+        $cameraList = $model_camera->getCameraList(array('school_id'=>$schoolid), 10);
+        $this->assign('page', $model_camera->page_info->render());
         $this->assign('cameraList', $cameraList);
         $this->setAdminCurItem('camera');
         return $this->fetch();

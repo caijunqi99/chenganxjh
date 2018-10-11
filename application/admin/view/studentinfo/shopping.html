@@ -25,7 +25,7 @@
         <?php if(!empty($lookOrder) && is_array($lookOrder)){ ?>
         <?php foreach($lookOrder as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['order_id']; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
             <td class="align-center"><?php echo $v['order_name']; ?></td>
             <td class="align-center"><?php echo $v['length']; ?></td>
             <td class="align-center"><?php echo $v['order_amount']; ?></td>

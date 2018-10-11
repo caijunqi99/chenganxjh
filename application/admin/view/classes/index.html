@@ -108,7 +108,7 @@
         <?php foreach($class_list as $k => $v){ ?>
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <?php if($v['typename']){ ?>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
             <?php }else{ ?>

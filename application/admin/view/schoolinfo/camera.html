@@ -35,7 +35,7 @@
         <?php if(!empty($cameraList) && is_array($cameraList)){ ?>
         <?php foreach($cameraList as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['id']; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
             <td class="align-center"><?php echo $v['camera_name']; ?></td>
             <td class="align-center"><?php echo $v['class_area']; ?></td>
             <td class="align-center"><?php echo $v['school_name']; ?></td>

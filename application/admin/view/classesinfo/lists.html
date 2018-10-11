@@ -35,7 +35,7 @@
         <?php if(!empty($student_list) && is_array($student_list)){ ?>
         <?php foreach($student_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php if($v['s_sex']==1){echo "男";}else{echo "女";} ?></td>
             <td class="align-center"><?php echo $v['s_card']; ?></td>

@@ -69,42 +69,61 @@ class Studentinfo extends AdminControl {
     //看孩订单
     public function order() {
         $student_id = input('param.student_id');
-        $lookOrder = db('packagesorder')->where(array('student_id'=>$student_id,'order_type'=>1))->select();
-//        $class_list = $model_class->getClasslList($condition, 10);
-//        $this->assign('page', $model_class->page_info->render());
+        $model_packagesorder = model('Packagesorder');
+
+        $condition = array();
+//        $admininfo = $this->getAdminInfo();
+//        if($admininfo['admin_id']!=1){
+//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+//        }
+        $condition['student_id'] = $student_id;
+        $condition['order_type'] = 1;
+        $lookOrder = $model_packagesorder->getOrderList($condition,10);
+        $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
         $this->setAdminCurItem('order');
-        return $this->fetch();
-    }
-
-    //教孩订单
-    public function teachorder() {
-        $student_id = input('param.student_id');
-        $lookOrder = db('packagesorder')->where(array('student_id'=>$student_id,'order_type'=>2))->select();
-//        $class_list = $model_class->getClasslList($condition, 10);
-//        $this->assign('page', $model_class->page_info->render());
-        $this->assign('lookOrder', $lookOrder);
-        $this->setAdminCurItem('teachorder');
         return $this->fetch();
     }
 
     //重温课堂订单
     public function reviveorder() {
         $student_id = input('param.student_id');
-        $lookOrder = db('packagesorder')->where(array('student_id'=>$student_id,'order_type'=>3))->select();
-//        $class_list = $model_class->getClasslList($condition, 10);
-//        $this->assign('page', $model_class->page_info->render());
+        $model_packagesorder = model('Packagesorder');
+
+        $condition = array();
+        $condition['student_id'] = $student_id;
+        $condition['order_type'] = 2;
+        $lookOrder = $model_packagesorder->getOrderList($condition,10);
+        $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
         $this->setAdminCurItem('reviveorder');
         return $this->fetch();
     }
 
+    //教孩订单
+    public function teachorder() {
+        $student_id = input('param.student_id');
+        $model_packagesorder = model('Packagesorderteach');
+
+        $condition = array();
+        $condition['student_id'] = $student_id;
+        $lookOrder = $model_packagesorder->getOrderList($condition,10);
+        $this->assign('page', $model_packagesorder->page_info->render());
+        $this->assign('lookOrder', $lookOrder);
+        $this->setAdminCurItem('teachorder');
+        return $this->fetch();
+
+    }
+
     //商城订单
     public function shopping() {
         $student_id = input('param.student_id');
-        $lookOrder = db('order')->where(array('student_id'=>$student_id))->select();
-//        $class_list = $model_class->getClasslList($condition, 10);
-//        $this->assign('page', $model_class->page_info->render());
+        $model_order = model('Order');
+        $condition = array();
+        $condition['student_id'] = $student_id;
+        $lookOrder = $model_order->getOrderList($condition,10);
+        $this->assign('page', $model_order->page_info->render());
         $this->assign('lookOrder', $lookOrder);
         $this->setAdminCurItem('shopping');
         return $this->fetch();
