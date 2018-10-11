@@ -148,8 +148,10 @@ function regionChange() {
             }
 
 
+    }else{
+        $(".o_provinceid").val(id);
     }
-    $(".o_provinceid").val(id);
+
     $(".area_names").val(names.join("\t"));
 }
 
