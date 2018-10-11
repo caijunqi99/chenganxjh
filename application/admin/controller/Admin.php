@@ -44,7 +44,7 @@ class Admin extends AdminControl {
             }
         }
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->order('a.admin_id DESC')->paginate(10,false,['query' => request()->param()]);
 
 //        halt($admin_list);
         //获取所创建的角色
