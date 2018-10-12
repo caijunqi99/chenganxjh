@@ -255,9 +255,7 @@ back
                     alert('111');
                     $ ("input[name='file']").attr('capture','camera');
                 }
-                alert('bbb');return false;
                 var formData = new FormData($('#form')[0]);
-                alert(formData);
                 formData.append('file',$('#form')[0]);
                 formData.append('key',user_token);
                 formData.append('member_id',user_member_id);
