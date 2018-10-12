@@ -37,101 +37,95 @@ back
     </header>
 
     <!-- 主要内容 -->
-    <div class="main">
-        <div class="cont margt30">
-            <div class="container2">
-                <div class="bang_list userhead" style="position:relative;">
-                    <div class="name_box user_head_txt">
-                        <label for="picture" class="picture_label">头像</label>
-                        <!--<input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />-->
-                        <input type="file" placeholder="" id="picture" style="visibility:hidden;width: 0;height: 0;" />
-                    </div>
-                    <div class="input_box user_head_cont" style="float:right;">
-                        <div class="user_head_box">
-                            <img src="../content/images/user/user_head.jpg" alt="" class="user_img">
+    <form id="form" action="POST" enctype="multipart/form-data">
+
+        <div class="main">
+            <div class="cont margt30">
+                <div class="container2">
+                    <div class="bang_list userhead" style="position:relative;">
+                        <div class="name_box user_head_txt">
+                            <label for="filePickerBtn" class="picture_label">头像</label>
+                            <!--<input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />-->
+                            <input type="file" placeholder="" name="file" id="filePickerBtn" capture="camera" style="visibility:hidden;width: 0;height: 0;" />
+                        </div>
+                        <div class="input_box user_head_cont" style="float:right;">
+                            <div class="user_head_box">
+                                <img src="../content/images/user/user_head.jpg" alt="" class="user_img">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="cont margt30">
-            <div class="container2">
-                <div id="camera_btn" style="width: 100%;height: 100px;">点击拍照</div>
-            </div>
-            <div class="container2">
-                <input type="file" name="file" id="file" />
-                <button id="aaa">aaaa</button>
-            </div>
-        </div>
-        <div class="cont">
-            <div class="container2">
-                <div class="bang_list">
-                    <div class="name_box">
-                        <label for="nickname">昵称</label>
+            <div class="cont">
+                <div class="container2">
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nickname">昵称</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="nickname" type="text" placeholder="" value="18518787797" />
+                        </div>
                     </div>
-                    <div class="input_box">
-                        <input class="input_txt" id="nickname" type="text" placeholder="" value="18518787797" />
-                    </div>
-                </div>
 
-                <div class="weui-cell bang_list">
-                    <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
-                    <div class="weui-cell__bd">
-                        <input class="weui-input input_txt inputpointer" id="shenfen" type="text" value="家长" />
+                    <div class="weui-cell bang_list">
+                        <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input input_txt inputpointer" id="shenfen" type="text" value="家长" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="weui-cell bang_list">
-                    <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
-                    <div class="weui-cell__bd">
-                        <input class="weui-input input_txt inputpointer" id="sex" type="text" data-values="1" value="男" />
+                    <div class="weui-cell bang_list">
+                        <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input input_txt inputpointer" id="sex" type="text" data-values="1" value="男" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="bang_list">
-                    <div class="name_box">
-                        <label for="nianling">年龄</label>
-                    </div>
-                    <div class="input_box">
-                        <input class="input_txt" id="nianling" type="number" placeholder="请输入年龄" value="" />
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nianling">年龄</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="nianling" type="number" placeholder="请输入年龄" value="" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="cont">
-            <div class="container2">
-                <div class="weui-cell bang_list">
-                    <div class="weui-cell__hd name_box"><label for="city" class="weui-label">所在地</label></div>
-                    <div class="weui-cell__bd city_wrap">
-                        <input class="weui-input input_txt inputpointer" id="city" type="text" value="" placeholder="请选择所在地">
+            <div class="cont">
+                <div class="container2">
+                    <div class="weui-cell bang_list">
+                        <div class="weui-cell__hd name_box"><label for="city" class="weui-label">所在地</label></div>
+                        <div class="weui-cell__bd city_wrap">
+                            <input class="weui-input input_txt inputpointer" id="city" type="text" value="" placeholder="请选择所在地">
+                        </div>
                     </div>
-                </div>
 
-                <div class="weui-cell bang_list">
-                    <div class="weui-cell__hd name_box"><label for="trade" class="weui-label">行业</label></div>
-                    <div class="weui-cell__bd">
-                        <input class="weui-input input_txt inputpointer" id="trade" type="text" data-values="" value="" placeholder="请选择行业" />
+                    <div class="weui-cell bang_list">
+                        <div class="weui-cell__hd name_box"><label for="trade" class="weui-label">行业</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input input_txt inputpointer" id="trade" type="text" data-values="" value="" placeholder="请选择行业" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="bang_list">
-                    <div class="name_box">
-                        <label for="email">邮箱</label>
-                    </div>
-                    <div class="input_box">
-                        <input class="input_txt" id="email" type="text" placeholder="请输入您的邮箱">
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="email">邮箱</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="email" type="text" placeholder="请输入您的邮箱">
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+            <div class="bang_submit_box" style="padding-top: 100px;">
+                <input class="bang_submit" type="button" value="保 存" />
+            </div>
+
         </div>
-
-
-        <div class="bang_submit_box" style="padding-top: 100px;">
-            <input class="bang_submit" type="button" value="保 存" />
-        </div>
-
-    </div>
+    </form>
 
 
     <script src="../content/scripts/jquery.min.js"></script>
@@ -145,28 +139,6 @@ back
 
     <script>
         $(function() {
-
-            $("#aaa").click(function(){
-                alert('aaaa');
-            })
-
-            // 调用相机和相册 start
-            var img=$(".img");
-            var callBack=function(album){
-                //alert(album);
-                console.log(album);
-                console.log(img);
-                album.forEach(function(val,idx){
-                    var div=$("<div></div>");
-                    var img=$("<img/>");
-                    img.attr("src",val.data);
-                    div.append(img);
-                    $(".album").append(div);
-                });
-            }
-            var carera=new $.Pgater($("#camera_btn"),callBack);
-
-            // 调用相机和相册 end
 
             // 获取个人信息
             $.ajax({
@@ -272,7 +244,44 @@ back
             });
 
             // 上传头像
-            fileChange = function(event) {
+            $('#filePickerBtn').click(function(){
+                var u = navigator.userAgent, app = navigator.appVersion;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器 
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+//alert('是否是Android：'+isAndroid); 
+//alert('是否是iOS：'+isiOS);
+
+                if(isAndroid){
+                    alert('111');
+                    $ ("input[name='file']").attr('capture','camera');
+                }
+                var formData = new FormData($('#form')[0]);
+                formData.append('file',$('#form')[0]);
+                formData.append('key',user_token);
+                formData.append('member_id',user_member_id);
+                $.ajax({
+                    type:'post',
+                    url:api+'/Common/upload_avatar',
+                    // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
+                    data:formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success:function(response){
+                        if (response['code'] == 200) {
+                            $.toast(response['result'][0]['message']);
+                            img_name = response['result'][0]['avatar_url'];
+                            img_url = upload_url+response['result'][0]['avatar_url'];
+                            $('.user_img').attr('src',img_url);
+                        }
+                    },
+                    error(error) {
+                        $.toast(error)
+                    }
+                });
+            });
+
+            /*fileChange = function(event) {
                 alert('aaa');
                 var formData = new FormData(event.target.files['0']);
                 alert(formData);
@@ -299,7 +308,7 @@ back
                         $.toast(error)
                     }
                 });
-            }
+            }*/
 
             $('.bang_submit').on('click', function() {
                 if (!Tools.IsEmail($("#email").val())) {
