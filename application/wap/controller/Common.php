@@ -177,4 +177,63 @@ class Common extends MobileMall
 
     }
 
+    /**
+     * @desc 上传头像
+     * @author langzhiyao
+     * @time 20181012
+     */
+    public function upload_avatar(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        if(!empty($_FILES)){
+            if ((($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
+            {
+                if($_FILES["file"]["size"] < 80000){
+                    if ($_FILES["file"]["error"] > 0)
+                    {
+                        output_error($_FILES["file"]["error"]);
+                    }
+                    else
+                    {
+                        if (!empty($_FILES['file']['tmp_name'])) {
+                            $file_object= request()->file('file');
+                            $base_url=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/';
+                            $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+                            $file_name='avatar_'.$member_id.'_new'.".$ext";
+                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif'])->move($base_url,$file_name);
+                            if (!$info) {
+                                output_error($file_object->getError());
+                            }
+                        } else {
+                            output_error('上传失败，请尝试更换图片格式或小图片');
+                        }
+                        $name_dir=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/' . $info->getFilename();
+                        $imageinfo=getimagesize($name_dir);
+                        $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
+                        output_data(array('message'=>'修改成功','avatar_url'=>$file_dir));
+                    }
+                }else{
+                    output_error('图片上传大小不允许超过8M，请重新上传');
+                }
+            }
+            else
+            {
+                output_error('图片上传类型不符合，请重新上传');
+            }
+        }
+
+    }
+
 }

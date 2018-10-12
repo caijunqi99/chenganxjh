@@ -238,7 +238,28 @@ back
 
             // 上传头像
             fileChange = function(event) {
-                img_name = event.target.files['0'].name;
+                var formData = new FormData(event.target.files['0']);
+                formData.append('file',event.target.files['0']);
+                formData.append('key',user_token);
+                formData.append('member_id',user_member_id);
+                $.ajax({
+                    type:'post',
+                    url:api+'/Common/upload_avatar',
+                    // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
+                    data:formData,
+                    contentType: false,
+                    processData: false,
+                    success:function(response){
+                        if (response['code'] == 200) {
+                            $.toast(response['result']['message']);
+                            img_name = response['result']['avatar_url'];
+                        }
+
+                    },
+                    error(error) {
+                        $.toast(error)
+                    }
+                });
             }
 
             $('.bang_submit').on('click', function() {
