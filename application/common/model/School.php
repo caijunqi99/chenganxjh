@@ -53,6 +53,9 @@ class School extends Model {
             }elseif($condition['areaid']){
                 $where .= " AND areaid=".$condition['areaid'];
             }
+            if($condition['a.admin_company_id']){
+                $where .= " AND a.admin_company_id=".$condition['a.admin_company_id'];
+            }
             //$sql = "SELECT * FROM x_school s LEFT JOIN x_admin a ON a.admin_id=s.option_id WHERE $where  ORDER BY schoolid asc LIMIT 0,15";
             $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($where)->order($school)->paginate($page,false,['query' => request()->param()]);
         }
