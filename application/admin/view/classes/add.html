@@ -130,7 +130,19 @@
                     required: true
                 },
                 school_class_name: {
-                    required: true
+                    required: true,
+                    remote: {
+                        url: "{:url('Admin/classes/ajax',['branch'=>'check_user_name'])}",
+                        type: 'get',
+                        data: {
+                            class_name: function() {
+                                return $('#school_class_name').val();
+                            },
+                            school_id: function () {
+                                return $('#school_id').val();
+                            }
+                        }
+                    }
                 },
                 classtype: {
                     required: true
@@ -144,7 +156,8 @@
                     required: '{$Think.lang.school_add_sname_null}'
                 },
                 school_class_name: {
-                    required: '{$Think.lang.school_add_class_null}'
+                    required: '{$Think.lang.school_add_class_null}',
+                    remote: '{$Think.lang.class_add_name_exists}'
                 },
                 classtype: {
                     required: '{$Think.lang.school_add_type_null}'

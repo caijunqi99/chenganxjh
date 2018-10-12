@@ -272,13 +272,31 @@ class Classes extends AdminControl {
 
         switch ($branch) {
             /**
-             * 验证学校名是否重复
+             * 验证班级名是否重复
              */
             case 'check_user_name':
-                $school_member = Model('school');
-                $condition['name'] = input('param.school_name');
-                $condition['schoolid'] = array('neq', intval(input('get.school_id')));
-                $list = $school_member->getSchoolInfo($condition);
+                $model_class = Model('classes');
+                $condition['classname'] = input('param.class_name');
+                $condition['schoolid'] = input('param.school_id');
+                $condition['isdel'] = 1;
+                $list = $model_class->getClassInfo($condition);
+                if (empty($list)) {
+                    echo 'true';
+                    exit;
+                } else {
+                    echo 'false';
+                    exit;
+                }
+                break;
+            /**
+             * 验证身份证是否重复（同一班级）
+             */
+            case 'check_user_cards':
+                $model_student = model('Student');
+                $condition['s_card'] = input('param.student_idcard');
+                $condition['s_classid'] = input('param.class_name');
+                $condition['s_del'] = 1;
+                $list = $model_student->getStudentInfo($condition);
                 if (empty($list)) {
                     echo 'true';
                     exit;

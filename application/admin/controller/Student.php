@@ -256,7 +256,24 @@ class Student extends AdminControl {
                 $condition['classid'] = input('param.class_name');
                 $condition['classCard'] = input('param.classunique');
                 $list = $classes->getClassInfo($condition);
-                if (!empty($list)) {
+                if (empty($list)) {
+                    echo 'true';
+                    exit;
+                } else {
+                    echo 'false';
+                    exit;
+                }
+                break;
+            /**
+             * 验证身份证是否重复（同一班级）
+             */
+            case 'check_user_cards':
+                $model_student = model('Student');
+                $condition['s_card'] = input('param.student_idcard');
+                $condition['s_classid'] = input('param.class_name');
+                $condition['s_del'] = 1;
+                $list = $model_student->getStudentInfo($condition);
+                if (empty($list)) {
                     echo 'true';
                     exit;
                 } else {
