@@ -247,14 +247,16 @@ back
                     url:api+'/Common/upload_avatar',
                     // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
                     data:formData,
+                    dataType: "json",
                     contentType: false,
                     processData: false,
                     success:function(response){
                         if (response['code'] == 200) {
-                            $.toast(response['result']['message']);
-                            img_name = response['result']['avatar_url'];
+                            $.toast(response['result'][0]['message']);
+                            img_name = response['result'][0]['avatar_url'];
+                            img_url = upload_url+response['result'][0]['avatar_url'];
+                            $('.user_img').attr('src',img_url);
                         }
-
                     },
                     error(error) {
                         $.toast(error)

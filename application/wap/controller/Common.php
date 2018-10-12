@@ -211,18 +211,20 @@ class Common extends MobileMall
                             $file_object= request()->file('file');
                             $base_url=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/';
                             $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
-                            $file_name='avatar_'.$member_id.'_new'.".$ext";
-                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif'])->move($base_url,$file_name);
+                            $file_name='avatar_'.$member_id.'_'.time().rand(1000,9999).".$ext";
+                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$file_name);
                             if (!$info) {
                                 output_error($file_object->getError());
                             }
                         } else {
                             output_error('上传失败，请尝试更换图片格式或小图片');
                         }
-                        $name_dir=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/' . $info->getFilename();
+                        $name_dir= '/' . ATTACH_AVATAR . '/' . $info->getFilename();
                         $imageinfo=getimagesize($name_dir);
                         $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
-                        output_data(array('message'=>'修改成功','avatar_url'=>$file_dir));
+//                        halt($file_dir);
+                        $result[] = array('message'=>'修改成功','avatar_url'=>$name_dir);
+                        output_data($result);
                     }
                 }else{
                     output_error('图片上传大小不允许超过8M，请重新上传');

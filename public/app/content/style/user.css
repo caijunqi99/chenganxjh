@@ -18,14 +18,18 @@
 .user_head_box {
     width: 74px;
     height: 74px;
+    line-height: 74px;
+    text-align: center;
     float: right;
     margin-right: 40px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 10px #aaa;
 }
 
 .user_head_box img {
+    width: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
