@@ -60,6 +60,7 @@ back
             </div>
             <div class="container2">
                 <input type="file" name="file" id="file" />
+                <button id="aaa">aaaa</button>
             </div>
         </div>
         <div class="cont">
@@ -144,6 +145,11 @@ back
 
     <script>
         $(function() {
+
+            $("#aaa").click(function(){
+                alert('aaaa');
+            })
+
             // 调用相机和相册 start
             var img=$(".img");
             var callBack=function(album){
