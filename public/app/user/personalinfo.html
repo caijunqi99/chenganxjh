@@ -46,7 +46,7 @@ back
                         <div class="name_box user_head_txt">
                             <label for="filePickerBtn" class="picture_label">头像</label>
                             <!--<input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />-->
-                            <input type="file" placeholder="" id="filePickerBtn" style="visibility:hidden;width: 0;height: 0;" />
+                            <input type="file" placeholder="" name="file" id="filePickerBtn" capture="camera" style="visibility:hidden;width: 0;height: 0;" />
                         </div>
                         <div class="input_box user_head_cont" style="float:right;">
                             <div class="user_head_box">
@@ -252,8 +252,10 @@ back
 //alert('是否是iOS：'+isiOS);
 
                 if(isAndroid){
+                    alert('111');
                     $ ("input[name='file']").attr('capture','camera');
                 }
+                alert('bbb');return false;
                 var formData = new FormData($('#form')[0]);
                 alert(formData);
                 formData.append('file',$('#form')[0]);
