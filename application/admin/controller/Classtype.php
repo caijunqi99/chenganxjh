@@ -41,6 +41,12 @@ class Classtype extends AdminControl {
         return $this->fetch('classtype');
     }
 
+    public function type(){
+
+        $this->setAdminCurItem('classtype_manage');
+        return $this->fetch('type');
+    }
+
     public function classtype_edit(){
         if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
