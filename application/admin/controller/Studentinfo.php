@@ -48,7 +48,9 @@ class Studentinfo extends AdminControl {
         $studentInfo = $model_student->getStudentInfo($condition);
         //主账号
         $member = db('member')->where(['member_id'=>$studentInfo['s_ownerAccount']])->select();
-        $member[0]['member_add_time']=date('Y-m-d H:i:s',$member[0]['member_add_time']);
+        if(!empty($member)){
+            $member[0]['member_add_time']=date('Y-m-d H:i:s',$member[0]['member_add_time']);
+        }
         //副账户
         if(!empty($studentInfo['s_viceAccount'])){
             $viceAccountids = explode(',',$studentInfo['s_viceAccount']);

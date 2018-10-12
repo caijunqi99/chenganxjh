@@ -145,19 +145,19 @@
                 school_name: {
                     required: true,
                     minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#school_name').val();
-                            },
-                            area_id: function () {
-                                return $('#area_id').val();
-                            }
-                        }
-                    }
+                    maxlength: 20
+//                    remote: {
+//                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
+//                        type: 'get',
+//                        data: {
+//                            user_name: function() {
+//                                return $('#school_name').val();
+//                            },
+//                            area_id: function () {
+//                                return $('#area_id').val();
+//                            }
+//                        }
+//                    }
                 },
                 school_phone:{
                     required: true,
@@ -185,7 +185,7 @@
                     required: '{$Think.lang.school_add_sname_null}',
                     maxlength: '{$Think.lang.school_add_name_length}',
                     minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
+                    //remote: '{$Think.lang.school_add_name_exists}'
                 },
                 school_phone: {
                     required: '{$Think.lang.school_add_phone_null}',

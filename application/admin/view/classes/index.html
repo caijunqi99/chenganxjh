@@ -129,7 +129,8 @@
                 <a href="{:url('/admin/classes/edit',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
-                <a href="{:url('/admin/classes/drop',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
+                location.href='{:url('/admin/classes/drop',['class_id'=>$v.classid])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('11',$action)){ ?>
                 <a href="{:url('/admin/classes/addstudent',['class_id'=>$v.classid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_studentadd}</a>

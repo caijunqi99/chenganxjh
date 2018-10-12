@@ -213,8 +213,8 @@ class Classes extends AdminControl {
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['school_provinceid'] = $province_id['area_parent_id'];
             //学校识别码
-            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
-            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
+//            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
+//            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
             //验证数据  END
             $result = $model_class->editClass($data,array('classid'=>$class_id));
             if ($result) {
