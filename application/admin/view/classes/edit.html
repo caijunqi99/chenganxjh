@@ -78,7 +78,7 @@
             </tr>
             <tr class="noborder">
                 <td id="school_list">
-                    <select name="school_name" class="querySelect">
+                    <select name="school_name" id="school_id" class="querySelect">
                         <option value="">{$Think.lang.school_index_chosename}</option>
                         {volist name="schoolname" id="name"}
                         <option value="{$name.schoolid}" {if condition="$class_array.schoolid eq $name.schoolid"} selected {/if}>{$name.name}</option>
@@ -120,6 +120,7 @@
             }
         });
     });
+
     $(function() {
         //按钮先执行验证再提交表单
         $("#submitBtn").click(function() {
@@ -127,8 +128,53 @@
                 $("#user_form").submit();
             }
         });
+        $('#user_form').validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().prev().find('td:first'));
+            },
+            rules: {
+                school_name: {
+                    required: true
+                },
+                school_class_name: {
+                    required: true,
+                    remote: {
+                        url: "{:url('Admin/classes/ajax',['branch'=>'check_user_name'])}",
+                        type: 'get',
+                        data: {
+                            class_name: function() {
+                                return $('#school_class_name').val();
+                            },
+                            school_id: function () {
+                                return $('#school_id').val();
+                            }
+                        }
+                    }
+                },
+                classtype: {
+                    required: true
+                },
+                typeid: {
+                    required: true
+                }
+            },
+            messages: {
+                school_name: {
+                    required: '{$Think.lang.school_add_sname_null}'
+                },
+                school_class_name: {
+                    required: '{$Think.lang.school_add_class_null}',
+                    remote: '{$Think.lang.class_add_name_exists}'
+                },
+                classtype: {
+                    required: '{$Think.lang.school_add_type_null}'
+                },
+                typeid: {
+                    required: '{$Think.lang.school_add_area_null}',
+                }
+            }
+        });
     });
-
     $(function(){
         $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
     });

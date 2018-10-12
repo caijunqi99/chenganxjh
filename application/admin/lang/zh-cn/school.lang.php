@@ -151,6 +151,7 @@ $lang['school_idcard_length']     = '请输入正确的身份证号';
 $lang['school_add_phone_null']		= '电话不能为空';
 $lang['school_add_name_null']		= '联系人不能为空';
 $lang['class_add_name_exists']		= '班级名已存在，请重新输入';
+$lang['class_add_cards_exists']		= '身份证号已存在，请重新输入';
 $lang['school_add_class_null']		= '班级名不能为空';
 $lang['school_classcard_null']		= '班级识别码不能为空';
 $lang['school_dieline_null']		= '合同截止日期不能为空';
