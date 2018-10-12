@@ -212,7 +212,7 @@ class Common extends MobileMall
                             $base_url=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/';
                             $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
                             $file_name='avatar_'.$member_id.'_new'.".$ext";
-                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif'])->move($base_url,$file_name);
+                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$file_name);
                             if (!$info) {
                                 output_error($file_object->getError());
                             }

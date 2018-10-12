@@ -49,9 +49,10 @@ class Member extends MobileMember
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($member_id)){
-            $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
+            $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.is_owner,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
 
             if(!empty($result)){
+                $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
                 $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');
                 $result['city_name'] = db('area')->where('area_id = "'.$result["member_cityid"].'"')->value('area_name');
                 $result['area_name'] = db('area')->where('area_id = "'.$result["member_areaid"].'"')->value('area_name');
