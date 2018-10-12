@@ -238,7 +238,9 @@ back
 
             // 上传头像
             fileChange = function(event) {
+                alert('aaa');
                 var formData = new FormData(event.target.files['0']);
+                alert(formData);
                 formData.append('file',event.target.files['0']);
                 formData.append('key',user_token);
                 formData.append('member_id',user_member_id);
