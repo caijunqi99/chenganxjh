@@ -23,7 +23,7 @@ $(function() {
     });
 
     //启用fastclick
-    FastClick.attach(document.body);
+    // FastClick.attach(document.body);
 
 
 
