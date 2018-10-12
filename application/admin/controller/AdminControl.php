@@ -96,7 +96,7 @@ class AdminControl extends Controller {
         }
 
         //以下几项不需要验证   langzhiyao修改不需要验证的控制器：Organizes  Schoolinfo 过滤
-        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Studentinfo','Mlselection');
+        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Classinfo','Studentinfo','Mlselection');
         if (in_array($act,$tmp)) return true;
         if (in_array($act,$permission) || in_array("$act.$op",$permission)){
             return true;

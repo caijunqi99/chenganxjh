@@ -222,7 +222,8 @@ class Common extends MobileMall
                         $name_dir=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/' . $info->getFilename();
                         $imageinfo=getimagesize($name_dir);
                         $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
-                        output_data(array('message'=>'修改成功','avatar_url'=>$file_dir));
+                        $result[] = array('message'=>'修改成功','avatar_url'=>$file_dir);
+                        output_data($result);
                     }
                 }else{
                     output_error('图片上传大小不允许超过8M，请重新上传');
