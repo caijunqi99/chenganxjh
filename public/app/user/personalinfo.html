@@ -59,8 +59,11 @@ back
                 <div id="camera_btn" style="width: 100%;height: 100px;">点击拍照</div>
             </div>
             <div class="container2">
-                <input type="file" name="file" id="file" />
-                <button id="aaa">aaaa</button>
+                <input type="file" name="" id="j-file">
+
+                <img src="" id='j-img' alt="" >
+
+                <button id='j-btn'>upload</button>
             </div>
         </div>
         <div class="cont">
@@ -142,7 +145,39 @@ back
     <script src="../content/plugins/cslCamera.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
+    <script type="text/javascript">
 
+        var o_file = document.getElementById('j-file'),
+
+            o_btn = document.getElementById('j-btn'),
+
+            o_img = document.getElementById('j-img');
+
+
+
+        o_file.addEventListener('change',function(event){      var file = event.target.files[0];      if(!file) return;      var url = window.URL.createObjectURL(file);      if(/image/.test(file.type)){
+
+            o_img.setAttribute('src',url);
+
+        }else{
+
+            console.log('请选择图片');
+
+        }
+
+        },false);
+
+
+
+        o_btn.onclick = function(){      var data = new FormData();
+
+            data.append('file_a',o_file.files[0]);
+
+            data.append('text','test');
+
+            console.log(data);
+
+        } </script>
     <script>
         $(function() {
 
