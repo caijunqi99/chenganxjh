@@ -295,6 +295,7 @@ class School extends AdminControl {
                 $school_member = Model('school');
                 $condition['name'] = input('param.school_name');
                 $condition['areaid'] = array('eq', intval(input('get.area_id')));
+                $condition['isdel'] = 1;
                 $list = $school_member->getSchoolInfo($condition);
                 if (empty($list)) {
                     echo 'true';
@@ -357,7 +358,7 @@ class School extends AdminControl {
         $admin_id = $this->admin_info['admin_id'];
             $model_admin = Model('admin');
             $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = 8;
+            $param['admin_gid'] = 5;
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
             $rs = $model_admin->addAdmin($param);
