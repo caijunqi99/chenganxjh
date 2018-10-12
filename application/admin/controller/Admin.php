@@ -146,6 +146,7 @@ class Admin extends AdminControl {
             case 'check_admin_phone':
                 $model_admin = Model('admin');
                 $condition['admin_phone'] = input('get.admin_phone');
+                $condition['admin_del_status']=1;
                 $list = $model_admin->where($condition)->find();
                 if (!empty($list)) {
                     exit('false');
