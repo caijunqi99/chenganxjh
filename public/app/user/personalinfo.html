@@ -53,6 +53,11 @@ back
                 </div>
             </div>
         </div>
+        <div class="cont margt30">
+            <div class="container2">
+                <div id="camera_btn" style="width: 100%;height: 100px;">点击拍照</div>
+            </div>
+        </div>
         <div class="cont">
             <div class="container2">
                 <div class="bang_list">
@@ -116,6 +121,7 @@ back
             </div>
         </div>
 
+
         <div class="bang_submit_box" style="padding-top: 100px;">
             <input class="bang_submit" type="button" value="保 存" />
         </div>
@@ -128,11 +134,30 @@ back
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
+    <script src="../content/plugins/cslCamera.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
 
     <script>
         $(function() {
+            // 调用相机和相册 start
+            var img=$(".img");
+            var callBack=function(album){
+                //alert(album);
+                console.log(album);
+                console.log(img);
+                album.forEach(function(val,idx){
+                    var div=$("<div></div>");
+                    var img=$("<img/>");
+                    img.attr("src",val.data);
+                    div.append(img);
+                    $(".album").append(div);
+                });
+            }
+            var carera=new $.Pgater($("#camera_btn"),callBack);
+
+            // 调用相机和相册 end
+
             // 获取个人信息
             $.ajax({
                 type: "POST",
@@ -238,7 +263,9 @@ back
 
             // 上传头像
             fileChange = function(event) {
+                alert('aaa');
                 var formData = new FormData(event.target.files['0']);
+                alert(formData);
                 formData.append('file',event.target.files['0']);
                 formData.append('key',user_token);
                 formData.append('member_id',user_member_id);
