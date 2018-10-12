@@ -54,16 +54,6 @@ back
                 </div>
             </div>
         </div>
-        <div class="cont margt30">
-            <div class="container2">
-                <div id="camera_btn" style="width: 100%;height: 100px;">点击拍照</div>
-            </div>
-            <div class="container2">
-                <input type="file" name="" id="j-file">
-                <img src="" id='j-img' alt="" width="100%">
-                <button id='j-btn'>upload</button>
-            </div>
-        </div>
         <div class="cont">
             <div class="container2">
                 <div class="bang_list">
@@ -143,53 +133,9 @@ back
     <script src="../content/plugins/cslCamera.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
-    <script type="text/javascript">
-        var o_file = document.getElementById('j-file'),
-            o_btn = document.getElementById('j-btn'),
-            o_img = document.getElementById('j-img');
 
-        o_file.addEventListener('change',function(event){
-            var file = event.target.files[0];
-            if(!file) return;
-
-
-            var reader = new FileReader();
-            if(/image/.test(file.type)){
-                reader.readAsDataURL(file); //读取
-            }else{
-                console.log('请选择图片');
-            }
-
-            reader.onload = function(){
-                o_img.setAttribute('src',reader.result);// 获取地址
-            }
-
-        },false);
-    </script>
     <script>
         $(function() {
-
-            $("#aaa").click(function(){
-                alert('aaaa');
-            })
-
-            // 调用相机和相册 start
-            var img=$(".img");
-            var callBack=function(album){
-                //alert(album);
-                console.log(album);
-                console.log(img);
-                album.forEach(function(val,idx){
-                    var div=$("<div></div>");
-                    var img=$("<img/>");
-                    img.attr("src",val.data);
-                    div.append(img);
-                    $(".album").append(div);
-                });
-            }
-            var carera=new $.Pgater($("#camera_btn"),callBack);
-
-            // 调用相机和相册 end
 
             // 获取个人信息
             $.ajax({
@@ -295,6 +241,11 @@ back
             });
 
             // 上传头像
+
+            $('#uploaderInput').click(function(){
+                alert('aaa');
+            })
+
             fileChange = function(event) {
                 alert('aaa');
                 var formData = new FormData(event.target.files['0']);
