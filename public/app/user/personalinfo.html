@@ -44,9 +44,9 @@ back
                 <div class="container2">
                     <div class="bang_list userhead" style="position:relative;">
                         <div class="name_box user_head_txt">
-                            <label for="uploaderInput" class="picture_label">头像</label>
+                            <label for="filePickerBtn" class="picture_label">头像</label>
                             <!--<input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />-->
-                            <input type="file" placeholder="" id="uploaderInput" style="visibility:hidden;width: 0;height: 0;" />
+                            <input type="file" placeholder="" name="file" id="filePickerBtn" capture="camera" style="visibility:hidden;width: 0;height: 0;" />
                         </div>
                         <div class="input_box user_head_cont" style="float:right;">
                             <div class="user_head_box">
@@ -244,11 +244,19 @@ back
             });
 
             // 上传头像
+            $('#filePickerBtn').click(function(){
+                var u = navigator.userAgent, app = navigator.appVersion;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器 
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+//alert('是否是Android：'+isAndroid); 
+//alert('是否是iOS：'+isiOS);
 
-            $('#uploaderInput').click(function(){
+                if(isAndroid){
+                    alert('111');
+                    $ ("input[name='file']").attr('capture','camera');
+                }
                 var formData = new FormData($('#form')[0]);
-                alert(formData);
-                formData.append('file',event.target.files['0']);
+                formData.append('file',$('#form')[0]);
                 formData.append('key',user_token);
                 formData.append('member_id',user_member_id);
                 $.ajax({
