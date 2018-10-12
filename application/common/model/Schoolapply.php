@@ -45,6 +45,11 @@ class Schoolapply extends Model {
         return $list;
     }
 
+    public function getAllAchoolapply($condtion){
+        $result = db('schoolapply')->where($condtion)->select();
+        return $result;
+    }
+
 
     /**
      * 插入订单表信息

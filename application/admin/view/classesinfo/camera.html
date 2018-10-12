@@ -33,7 +33,7 @@
         <?php if(!empty($camera_list) && is_array($camera_list)){ ?>
         <?php foreach($camera_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['id']; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
             <td class="align-center"><?php echo $v['camera_name']; ?></td>
             <td class="align-center"><?php echo $v['area']; ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['sq_time']); ?></td>

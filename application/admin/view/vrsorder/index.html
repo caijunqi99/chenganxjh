@@ -79,7 +79,7 @@
         <?php if(!empty($order_list) && is_array($order_list)){ ?>
         <?php foreach($order_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['order_id']; ?></td>
+            <td class="align-center"><?php echo $k+1; ?></td>
             <td class="align-center"><?php echo $v['buyer_name']; ?></td>
             <td class="align-center"><?php echo $v['student_name']; ?></td>
             <td class="align-center"><?php echo $v['order_name']; ?></td>

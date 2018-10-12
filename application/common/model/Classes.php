@@ -45,6 +45,11 @@ class Classes extends Model {
         return $list;
     }
 
+    public function getAllClasses($condtion){
+        $result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        return $result;
+    }
+
     /**
      * 插入班级表信息
      * @param array $data

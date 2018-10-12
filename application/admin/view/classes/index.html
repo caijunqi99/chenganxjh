@@ -49,9 +49,11 @@
                     <td id="school_list">
                     <select name="school_name" >
                         <option value="">{$Think.lang.school_index_allschool}</option>
+                        <?php if(!empty($schoolList)){ ?>
                         {volist name="schoolList" id="school"}
                         <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.name}</option>
                         {/volist}
+                        <?php } ?>
                     </select>
                 </td>
                     <td id="type_list">
@@ -66,7 +68,7 @@
                 <td id="class_list">
                     <select name="class_name" id="class_name">
                         <option value="">{$Think.lang.school_index_classname}</option>
-                        {volist name="class_list" id="v"}
+                        {volist name="classname" id="v"}
                         <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.typename}-{$v.classname}</option>
                         {/volist}
                     </select>
@@ -108,7 +110,7 @@
         <?php foreach($class_list as $k => $v){ ?>
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <?php if($v['typename']){ ?>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
             <?php }else{ ?>

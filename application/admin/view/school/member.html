@@ -112,7 +112,7 @@
         <?php if(!empty($school_list) && is_array($school_list)){ ?>
         <?php foreach($school_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <td class="align-center"><?php echo $v['name']; ?></td>
             <td class="align-center"><?php echo $v['region']; ?></td>
             <td class="align-center"><?php echo $v['address']; ?></td>
