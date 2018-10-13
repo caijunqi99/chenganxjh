@@ -278,6 +278,13 @@ back
                 });*/
             }
 
+            //头像赋值
+            function fz_avatar(avatar_url){
+                img_url = upload_url+avatar_url;
+                $('.user_img').attr('src',img_url);
+            }
+
+
             $('.bang_submit').on('click', function() {
                 if (!Tools.IsEmail($("#email").val())) {
                     $.alert("请输入正确的邮箱地址");
