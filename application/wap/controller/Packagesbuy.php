@@ -177,9 +177,6 @@ class Packagesbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
-        
-
-        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
@@ -195,7 +192,6 @@ class Packagesbuy extends MobileMember
             Header("Location: $url");
             exit;
         }
-        
         //alipay and so on
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
