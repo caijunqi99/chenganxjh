@@ -28,16 +28,16 @@ class alipay
                 'merchant_private_key' => $param['private_key'],
 
                 //异步通知地址
-                'notify_url' => MOBILE_SITE_URL . '/payment/notify',
+                'notify_url' => WAP_SITE_URL . '/payment/notify',
 
                 //同步跳转
-                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url',
+                'return_url' => WAP_SITE_URL . '/payment/alipay_return_url',
 
                 //编码格式
                 'charset' => "UTF-8",
 
                 //签名方式
-                'sign_type' => "RSA2",
+                'sign_type' => "RSA",
 
                 //支付宝网关
                 'gatewayUrl' => "https://openapi.alipay.com/gateway.do",

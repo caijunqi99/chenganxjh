@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
+    <link rel="stylesheet" href="/static/plugins/layer/css/layui.css">      
 </head>
 
 <body ontouchstart>
@@ -84,7 +85,7 @@
                                 </p>
                             </div>
                             <div class="weui-cell__hd">
-                                <input type="radio" class="weui-check" name="payment_mode" checked="checked" id="s11" >
+                                <input type="radio" class="weui-check" name="payment_code" checked="checked" id="s11" >
                                 <i class="weui-icon-checked"></i>
                             </div>
                         </label>
@@ -95,7 +96,7 @@
                                 </p>
                             </div>
                             <div class="weui-cell__hd">
-                                <input type="radio" name="payment_mode" class="weui-check" id="s12">
+                                <input type="radio" name="payment_code" class="weui-check" id="s12">
                                 <i class="weui-icon-checked"></i>
                                 </div>
                         </label>
@@ -125,6 +126,10 @@
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
+    <script src="/static/plugins/layer/layui.all.js"></script>
+    <script src="/static/plugins/layer/layui.js"></script>
+    <script src="/static/plugins/layer/layer.js"></script>
+  
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
 
@@ -136,20 +141,47 @@
             })
 
             $('.total_cont_btn').click(function(event) {
+                var pay = 'alipay_app';
                 $.post(api+'/Packagesbuy/buy_step1',
                 {
-                    'key': '43d7776fe8c6e694fbd1b5a34c1e2df8',
+                    'key': '4570a44f7d6512c8ec2e20507a80009a',
                     'pkg_id': '8',
-                    'payment_code': 'alipay_app',
-                    'chind_id': '19',
+                    'payment_code': pay,
+                    'chind_id': '1',
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
-                    console.log(data);
                     alert(data);
+                    console.log(data);
+                    if (pay == 'alipay_app') {
+                        layer.open({
+                          type: 1,
+                          title: '课程管理',
+                          shadeClose: true,
+                          shade: false,
+                          maxmin: false, //开启最大化最小化按钮
+                          // area: ['400px', '300px'],
+                          content: data
+                        });
 
+                        return ;
+                    }
+                    if(pay=='wxpay_h5'){
+                        data =$.parseJSON(data);
+                        var mbs = data.result;
+
+                        if (mbs.result_code== 'SUCCESS') {
+                            window.location.href=mbs.mweb_url;return ;
+                        }
+                    }
                 });
             });
         })
+
+
+  // $.alert("AlphaGo 就是天网的前身，人类要完蛋了！", "警告！",function(){
+  //       alert("看来真的药丸");
+  // });
+
     </script>
 </body>
 
