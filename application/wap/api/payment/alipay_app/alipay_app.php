@@ -4,9 +4,9 @@ class alipay_app {
 
 
     public function getSubmitUrl($param){
-        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/AlipayTradeService.php';
-        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/AlipayTradeWapPayContentBuilder.php';
-        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/config.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/lib/AlipayTradeService.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/lib/AlipayTradeWapPayContentBuilder.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/lib/config.php';
         if (!empty($param)){
             //商户订单号，商户网站订单系统中唯一订单号，必填
             $out_trade_no = "{$param['orderSn']}-{$param['order_type']}";
@@ -34,8 +34,11 @@ class alipay_app {
             $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
 
             return ;
+        }else{
+            output_error('参数错误1！');
         }
     }
+
     function get_payform($param) {
 
         require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/AopClient.php';
