@@ -50,6 +50,18 @@ class Payment extends MobileMall
         return $this->fetch('payment_message');
     }
 
+    public function notify_url(){
+        $input = input();
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'input' =>$input
+            ))
+        );
+        db('testt')->insert($insert);
+        echo 'success';
+    }
+
     /**
      * 支付宝支付提醒
      */

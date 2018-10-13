@@ -300,5 +300,44 @@ class WxPayApi
 		$time = $time2[0];
 		return $time;
 	}
+
+	/**
+	 * 
+	 * 测速上报，该方法内部封装在report中，使用时请注意异常流程
+	 * WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
+	 * @param WxPayReport $inputObj
+	 * @param int $timeOut
+	 * @throws WxPayException
+	 * @return 成功时返回，其他抛异常
+	 */
+	public static function report($inputObj, $timeOut = 1)
+	{
+		$url = "https://api.mch.weixin.qq.com/payitil/report";
+		//检测必填参数
+		if(!$inputObj->IsInterface_urlSet()) {
+			throw new WxPayException("接口URL，缺少必填参数interface_url！");
+		} if(!$inputObj->IsReturn_codeSet()) {
+			throw new WxPayException("返回状态码，缺少必填参数return_code！");
+		} if(!$inputObj->IsResult_codeSet()) {
+			throw new WxPayException("业务结果，缺少必填参数result_code！");
+		} if(!$inputObj->IsUser_ipSet()) {
+			throw new WxPayException("访问接口IP，缺少必填参数user_ip！");
+		} if(!$inputObj->IsExecute_time_Set()) {
+			throw new WxPayException("接口耗时，缺少必填参数execute_time_！");
+		}
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$inputObj->SetUser_ip($_SERVER['REMOTE_ADDR']);//终端ip
+		$inputObj->SetTime(date("YmdHis"));//商户上报时间	 
+		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+		
+		$inputObj->SetSign();//签名
+		$xml = $inputObj->ToXml();
+		
+		$startTimeStamp = self::getMillisecond();//请求开始时间
+		$response = self::postXmlCurl($xml, $url, false, $timeOut);
+		return $response;
+	}
 }
 
