@@ -134,7 +134,7 @@ $lang['ds_storejoin']              = '开店首页';
 $lang['ds_ownshop']                = '自营店铺';
 //交易
 $lang['ds_trade']                  = '订单管理';
-$lang['ds_order']                  = '实物订单';
+$lang['ds_order']                  = '商品订单列表';
 $lang['ds_vrsorder']                = '看孩订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
 $lang['ds_teach']           = '教孩订单';

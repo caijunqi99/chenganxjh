@@ -37,10 +37,10 @@ class Vrsorder extends AdminControl {
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
             $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
-        $condition['order_type'] = 1;
+        $condition['pkg_type'] = 1;
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
-            $condition['buyer_name'] = $buyer_name;
+            $condition['buyer_mobile'] = array('like', "%" . $buyer_name . "%");
         }
         $order_state = input('get.order_state');
         if ($order_state!="") {

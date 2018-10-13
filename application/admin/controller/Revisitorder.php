@@ -38,10 +38,10 @@ class Revisitorder extends AdminControl {
             $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
 
-        $condition['order_type'] = 3;
+        $condition['pkg_type'] = 2;
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
-            $condition['buyer_name'] = array('like', "%" . $buyer_name . "%");
+            $condition['buyer_mobile'] = array('like', "%" . $buyer_name . "%");
         }
         $order_state = input('get.order_state');
         if ($order_state!="") {
