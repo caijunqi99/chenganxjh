@@ -45,8 +45,7 @@ back
                     <div class="bang_list userhead" style="position:relative;">
                         <div class="name_box user_head_txt">
                             <label for="picture" class="picture_label">头像</label>
-                            <input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />
-                            <!--<input type="file" placeholder="" name="file" id="filePickerBtn" capture="camera" style="visibility:hidden;width: 0;height: 0;" />-->
+                            <input type="text" placeholder="" id="picture" onclick="fileChange()" style="visibility:hidden;width: 0;height: 0;" />
                         </div>
                         <div class="input_box user_head_cont" style="float:right;">
                             <div class="user_head_box">
@@ -244,35 +243,16 @@ back
             });
 
             // 上传头像
-            $('#filePickerBtn').click(function(){
-                var formData = new FormData($('#form')[0]);
-                formData.append('file',$('#form')[0]);
-                formData.append('key',user_token);
-                formData.append('member_id',user_member_id);
-                $.ajax({
-                    type:'post',
-                    url:api+'/Common/upload_avatar',
-                    // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
-                    data:formData,
-                    dataType: "json",
-                    contentType: false,
-                    processData: false,
-                    success:function(response){
-                        if (response['code'] == 200) {
-                            $.toast(response['result'][0]['message']);
-                            img_name = response['result'][0]['avatar_url'];
-                            img_url = upload_url+response['result'][0]['avatar_url'];
-                            $('.user_img').attr('src',img_url);
-                        }
-                    },
-                    error(error) {
-                        $.toast(error)
-                    }
-                });
-            });
 
-            fileChange = function(event) {
-                var formData = new FormData(event.target.files['0']);
+            fileChange = function() {
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    window.webkit.messageHandlers.uploadImage.postMessage('');
+                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                    Android.uploadImage();
+                } else { //pc
+                };
+
+                /*var formData = new FormData(event.target.files['0']);
                 formData.append('file',event.target.files['0']);
                 formData.append('key',user_token);
                 formData.append('member_id',user_member_id);
@@ -295,7 +275,7 @@ back
                     error(error) {
                         $.toast(error)
                     }
-                });
+                });*/
             }
 
             $('.bang_submit').on('click', function() {
