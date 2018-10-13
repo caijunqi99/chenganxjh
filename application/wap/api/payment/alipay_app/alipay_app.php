@@ -2,6 +2,40 @@
 
 class alipay_app {
 
+
+    public function getSubmitUrl($param){
+        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/AlipayTradeService.php';
+        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/AlipayTradeWapPayContentBuilder.php';
+        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/lib/config.php';
+        if (!empty($param)){
+            //商户订单号，商户网站订单系统中唯一订单号，必填
+            $out_trade_no = "{$param['orderSn']}-{$param['order_type']}";
+
+            //订单名称，必填
+            $subject = $param['orderInfo'];
+
+            //付款金额，必填
+            $total_amount = $param['orderFee'];
+
+            //商品描述，可空
+            $body = $param['orderSn'];
+
+            //超时时间
+            $timeout_express="1m";
+
+            $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
+            $payRequestBuilder->setBody($body);
+            $payRequestBuilder->setSubject($subject);
+            $payRequestBuilder->setOutTradeNo($out_trade_no);
+            $payRequestBuilder->setTotalAmount($total_amount);
+            $payRequestBuilder->setTimeExpress($timeout_express);
+
+            $payResponse = new AlipayTradeService($config);
+            $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+
+            return ;
+        }
+    }
     function get_payform($param) {
 
         require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/AopClient.php';

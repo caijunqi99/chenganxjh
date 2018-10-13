@@ -140,7 +140,7 @@ class Packagesbuy extends MobileMember
         $order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
         //加入套餐信息
-        if(is_array($childinfo))$order +=$packageInfo;
+        if(is_array($packageInfo))$order +=$packageInfo;
         unset($order['up_time']);
         $Children = model('Student');
         $childinfo=$Children->getChildrenInfoById($chind_id);
@@ -179,6 +179,7 @@ class Packagesbuy extends MobileMember
     private function _app_pay($order_pay_info){
 
         $param = $this->payment_config;
+        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];

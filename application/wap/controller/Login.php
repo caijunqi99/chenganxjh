@@ -193,7 +193,7 @@ class Login extends MobileMall
         
         $condition = array();
         $condition['member_id'] = $member_id;
-        $condition['client_type'] = $client;
+        // $condition['client_type'] = $client;
         $model_mb_user_token->delMbUserToken($condition);
         //生成新的token
         $mb_user_token_info = array();
