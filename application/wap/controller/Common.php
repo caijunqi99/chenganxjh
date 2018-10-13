@@ -214,6 +214,7 @@ class Common extends MobileMall
                             $file_name='avatar_'.$member_id.'_'.time().rand(1000,9999).".$ext";
                             $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$file_name);
                             if (!$info) {
+                                output_error('aaa');
                                 output_error($file_object->getError());
                             }
                         } else {
