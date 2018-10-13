@@ -136,7 +136,10 @@ back
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
 
-    <script>
+    <script>//头像赋值
+
+
+
         $(function() {
 
             // 获取个人信息
@@ -278,8 +281,7 @@ back
                 });*/
             }
 
-            //头像赋值
-            function fz_avatar(avatar_url){
+             fz_avatar = function(avatar_url){
                 img_url = upload_url+avatar_url;
                 $('.user_img').attr('src',img_url);
             }
