@@ -54,6 +54,7 @@ define('ATTACH_VOUCHER',ATTACH_PATH.'/voucher');
 define('ATTACH_STORE_JOININ',ATTACH_PATH.'/store_joinin');
 define('ATTACH_REC_POSITION',ATTACH_PATH.'/rec_position');
 define('ATTACH_MOBILE','mobile');
+define('ATTACH_WAP','wap');
 define('ATTACH_NAVICON',ATTACH_MOBILE.'/navicon');
 define('ATTACH_CIRCLE','circle');
 define('ATTACH_CMS','cms');
