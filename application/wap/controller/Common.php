@@ -183,8 +183,6 @@ class Common extends MobileMall
      * @time 20181012
      */
     public function upload_avatar(){
-
-        output_data($_FILES);
         $token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
