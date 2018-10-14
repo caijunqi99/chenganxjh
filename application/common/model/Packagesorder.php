@@ -21,7 +21,7 @@ class Packagesorder extends Model {
     }
 
     /**
-     * 取得学校列表(所有)
+     * 取得套餐订单列表(所有)
      * @param unknown $condition
      * @param string $page
      * @param string $field

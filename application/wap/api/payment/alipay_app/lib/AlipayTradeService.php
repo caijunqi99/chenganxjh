@@ -6,11 +6,11 @@
  * 说明：
  * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  */
+require dirname ( __FILE__ ).'/config.php';
 
 require_once dirname ( __FILE__ ).'/AlipayTradeWapPayRequest.php';
-require dirname ( __FILE__ ).'/config.php';
 require dirname ( __FILE__ ).'/AopClient.php';
-
+require dirname ( __FILE__ ).'/AlipayTradeQueryRequest.php';
 class AlipayTradeService {
 
 	//支付宝网关地址

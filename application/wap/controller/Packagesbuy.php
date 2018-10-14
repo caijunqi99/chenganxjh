@@ -177,6 +177,9 @@ class Packagesbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
+        
+
+        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
@@ -192,6 +195,7 @@ class Packagesbuy extends MobileMember
             Header("Location: $url");
             exit;
         }
+        
         //alipay and so on
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
@@ -216,8 +220,18 @@ class Packagesbuy extends MobileMember
         if(!$pay_sn)output_error('订单号错误！');
         $Order = model('Packagesorder');
 
-        $orderInfo = $Order->getOrderBySn(array('pay_sn'=>$pay_sn,'buyer_mobile'=>$this->member_info['member_mobile']));
-        output_data($orderInfo);
+        $orderInfo = $Order->getOrderInfo(array('pay_sn'=>$pay_sn,'buyer_mobile'=>$this->member_info['member_mobile']));
+        if(!$orderInfo)output_error('没有此订单信息！');
+        if($this->payment_code == 'wxpay_h5'){
+            $payment = new $this->payment_code();
+        }else if($this->payment_code == 'alipay_app'){
+            $payment = new $this->payment_code();
+        }else{
+            output_error('支付类型错误！');
+        }
+        $Status = $payment->getOrderStateBysn($orderInfo['pay_sn']);
+        p($Status);exit;
+        output_data($this);
     }
 
 
