@@ -201,7 +201,6 @@ class Packagesbuy extends MobileMember
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
         $param['orderSn'] = $order_pay_info['pay_sn'];
         $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];
-        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
         $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
 
         
