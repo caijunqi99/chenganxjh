@@ -142,12 +142,15 @@
 
             $('.total_cont_btn').click(function(event) {
                 var pay = $("input[name='payment_code']:checked").val();
+                // api = 'http://w.xjh.com/index.php/Wap';
+                user_token = '4570a44f7d6512c8ec2e20507a80009a';
+                var chind_id = '1';
                 $.post(api+'/Packagesbuy/buy_step1',
                 {
-                    'key': '4570a44f7d6512c8ec2e20507a80009a',
+                    'key': user_token,
                     'pkg_id': '8',
                     'payment_code': pay,
-                    'chind_id': '1',
+                    'chind_id': chind_id,
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
                     alert(data);
