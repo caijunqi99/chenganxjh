@@ -65,22 +65,25 @@ class Payment extends MobileMall
     /**
      * 支付宝支付提醒
      */
-    public function notify()
+    /**
+     * 支付宝支付异步提醒
+     */
+    public function alipay_notify_app()
     {
-        $this->payment_code = 'alipay';
-
+        $this->payment_code = 'alipay_app';
+        $input = input();
         $payment_config = $this->_get_payment_config();
-        $payment_api = $this->_get_payment_api($payment_config);
-        $pay_sn = explode('-', input('param.out_trade_no'));
+        $payment_api = $this->_get_payment_api();
+        $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
-        $data['order_amount'] = input('param.total_amount');
-        $order_model = model('order');
-        $order_info = $order_model->getOrderInfo($data);
+        $data['order_amount'] =$input['total_amount'];
+        $Package = model('Packagesorder');
+        $order_info = $Package->getOrderInfo($data);
         if (!empty($order_info)) {
-            $callback_info = $payment_api->getNotifyInfo();
-            if ($callback_info) {
+            $callback_info = $payment_api->verify_notify($input);
+            if ($callback_info['trade_status'] == '1') {
                 //验证成功
-                $result = $this->_update_order($callback_info['out_trade_no'], $callback_info['trade_no']);
+                $result = $this->_update_order($input, $order_info);
                 if ($result['code']) {
                     echo 'success';
                     die;
@@ -145,35 +148,7 @@ class Payment extends MobileMall
         exit;
     }
 
-    /**
-     * 支付宝支付提醒
-     */
-    public function alipay_notify_app()
-    {
-        $this->payment_code = 'alipay_app';
 
-        $payment_config = $this->_get_payment_config();
-        $payment_api = $this->_get_payment_api();
-        $pay_sn = explode('-', input('param.out_trade_no'));
-        $data['pay_sn'] = $pay_sn['0'];
-        $data['order_amount'] = input('param.total_amount');
-        $order_model = model('order');
-        $order_info = $order_model->getOrderInfo($data);
-        if (!empty($order_info)) {
-            $callback_info = $payment_api->verify_notify($payment_config);
-            if ($callback_info['trade_status'] == '1') {
-                //验证成功
-                $result = $this->_update_order($callback_info['out_trade_no'], $callback_info['trade_no']);
-                if ($result['code']) {
-                    echo 'success';
-                    die;
-                }
-            }
-        }
-        //验证失败
-        echo "fail";
-        die;
-    }
 
     /**
      * 获取支付接口实例
@@ -214,38 +189,23 @@ class Payment extends MobileMall
     /**
      * 更新订单状态
      */
-    private function _update_order($out_trade_no, $trade_no)
+    private function _update_order($input, $orderInfo)
     {
-        $model_order = model('order');
-        $logic_payment = model('payment', 'logic');
-
-        $tmp = explode('_', $out_trade_no);
-        $out_trade_no = $tmp[0];
-        if (!empty($tmp[1])) {
-            $order_type = $tmp[1];
-        }
-        else {
-            $order_pay_info = Model('order')->getOrderPayInfo(array('pay_sn' => $out_trade_no));
-            if (empty($order_pay_info)) {
-                $order_type = 'v';
-            }
-            else {
-                $order_type = 'r';
-            }
-        }
+        $model_order = model('Packagesorder');
 
         $paymentCode = $this->payment_code;
 
-        if ($paymentCode == 'wxpay_jsapi'||$paymentCode == 'wxpay_app' ||$paymentCode == 'wxpay_h5') {
-            $paymentCode = 'wxpay';
-        }
 
-        if ($order_type == 'r') {
-            $result = $logic_payment->getRealOrderInfo($out_trade_no);
-            if (intval($result['data']['api_pay_state'])) {
-                return array('state' => true);
-            }
-            $order_list = $result['data']['order_list'];
+        if ($orderInfo) {
+            $update = array(
+                'out_pay_sn' => ,
+                'payment_time' => ,
+                'finnshed_time' => ,
+                'pd_amount' => , //预存款支付金额
+                'evaluation_state' => , //评价状态 0未评价，1已评价，2已过期未评价
+                'order_state' => , //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                'order_dieline' => , //套餐到期日
+            );
             $result = $logic_payment->updateRealOrder($out_trade_no, $paymentCode, $order_list, $trade_no);
 
             $api_pay_amount = 0;
@@ -258,19 +218,6 @@ class Payment extends MobileMall
             $log_buyer_name = $order_list[0]['buyer_name'];
             $log_desc = '实物订单使用' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $out_trade_no;
 
-        }
-        elseif ($order_type == 'v') {
-            $result = $logic_payment->getVrOrderInfo($out_trade_no);
-            $order_info = $result['data'];
-            if (!in_array($result['data']['order_state'], array(ORDER_STATE_NEW, ORDER_STATE_CANCEL))) {
-                return array('state' => true);
-            }
-            $result = $logic_payment->updateVrOrder($out_trade_no, $paymentCode, $result['data'], $trade_no);
-
-            $api_pay_amount = $order_info['order_amount'] - $order_info['pd_amount'] - $order_info['rcb_amount'];
-            $log_buyer_id = $order_info['buyer_id'];
-            $log_buyer_name = $order_info['buyer_name'];
-            $log_desc = '虚拟订单使用' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $out_trade_no;
         }
         if ($result['code']) {
             //记录消费日志
