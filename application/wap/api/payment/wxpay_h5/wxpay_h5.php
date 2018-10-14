@@ -13,7 +13,7 @@ class wxpay_h5
             'wxpay_partnerid' => '',
             'wxpay_partnerkey' => '',
 
-            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify',
+            'notifyUrl' => WAP_SITE_URL . '/payment/notify_url.html',
 
             'orderSn' => date('YmdHis'),
             'orderInfo' => '',
@@ -47,7 +47,7 @@ class wxpay_h5
         $input->SetGoods_tag('');
         $input->SetSpbill_create_ip($Spbill_create_ip);
         $input->SetDevice_info('WEB');
-        $input->SetNotify_url(WAP_SITE_URL . '/Payment/notify_url.html');
+        $input->SetNotify_url($this->config->notifyUrl);
         $input->SetTrade_type("MWEB");
         switch ($_GET['apptype']) {
             case 'Android':
