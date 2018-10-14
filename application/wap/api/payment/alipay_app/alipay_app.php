@@ -168,13 +168,13 @@ class alipay_app {
         require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/AopClient.php';
         $aop = new \AopClient;
         
-        $aop->alipayrsaPublicKey = $param['app_public_key'];
-        $flag = $aop->rsaCheckV1($_POST, NULL, "RSA2");
+        $aop->alipayrsaPublicKey = $config['app_public_key'];
+        $flag = $aop->rsaCheckV1($param, NULL, "RSA2");
         if ($flag) {
             $notify_result = array(
-                'out_trade_no' => $_POST["out_trade_no"], #商户订单号
-                'trade_no' => $_POST['trade_no'], #交易凭据单号
-                'total_fee' => $_POST["total_amount"], #涉及金额
+                'out_trade_no' => $param["out_trade_no"], #商户订单号
+                'trade_no' => $param['trade_no'], #交易凭据单号
+                'total_fee' => $param["total_amount"], #涉及金额
                 'trade_status' => '1',
             );
         } else {

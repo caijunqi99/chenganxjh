@@ -47,7 +47,7 @@ class wxpay_h5
         $input->SetGoods_tag('');
         $input->SetSpbill_create_ip($Spbill_create_ip);
         $input->SetDevice_info('WEB');
-        $input->SetNotify_url(WAP_SITE_URL . '/Packagesbuy/notify_url');
+        $input->SetNotify_url(WAP_SITE_URL . '/Payment/notify_url.html');
         $input->SetTrade_type("MWEB");
         switch ($_GET['apptype']) {
             case 'Android':
