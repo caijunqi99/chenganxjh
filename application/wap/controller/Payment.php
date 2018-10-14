@@ -102,7 +102,7 @@ class Payment extends MobileMall
                     'finnshed_time' => time(),
                     'pd_amount' => 0, //预存款支付金额
                     'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
-                    'order_state' => 40 //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                    'order_state' => 40 ,//订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
                     'over_amount' => $input['buyer_pay_amount'], //最终支付金额
                 );
                 $result = $this->_update_order($update, $order_info);
@@ -139,7 +139,7 @@ class Payment extends MobileMall
                     'finnshed_time' => time(),
                     'pd_amount' => 0, //预存款支付金额
                     'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
-                    'order_state' => 40 //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                    'order_state' => 40, //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
                     'over_amount' => $input['total_fee']/100, //最终支付金额
                 );
                 $result = $this->_update_order($update, $order_info);
