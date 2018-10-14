@@ -509,7 +509,7 @@ function readFileList($path, &$file_list, $ignore_dir = array())
  */
 function dsPriceFormat($price)
 {
-    $price_format = number_format($price, 2, '.', '');
+    $price_format = number_format($price, 4, '.', '');
     return $price_format;
 }
 
@@ -522,7 +522,7 @@ function dsPriceFormat($price)
 function dsPriceFormatForList($price)
 {
     if ($price >= 10000) {
-        return number_format(floor($price / 100) / 100, 2, '.', '') . lang('ten_thousand');
+        return number_format(floor($price / 100) / 100, 4, '.', '') . lang('ten_thousand');
     }
     else {
         return lang('currency') . $price;

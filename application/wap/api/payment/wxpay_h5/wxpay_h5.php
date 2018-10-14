@@ -13,7 +13,7 @@ class wxpay_h5
             'wxpay_partnerid' => '',
             'wxpay_partnerkey' => '',
 
-            'notifyUrl' => WAP_SITE_URL . '/payment/notify_url.html',
+            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify_h5.html',
 
             'orderSn' => date('YmdHis'),
             'orderInfo' => '',

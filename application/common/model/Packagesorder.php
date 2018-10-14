@@ -61,4 +61,14 @@ class Packagesorder extends Model {
         return $update;
     }
 
+
+    /**
+     * 添加订单日志
+     */
+    public function addOrderLog($data) {
+        $data['log_role'] = str_replace(array('buyer', 'seller', 'system', 'admin'), array('买家', '商家', '系统', '管理员'), $data['log_role']);
+        $data['log_time'] = TIMESTAMP;
+        return db('orderlog')->insertGetId($data);
+    }
+
 }
