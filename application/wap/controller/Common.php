@@ -197,10 +197,10 @@ class Common extends MobileMall
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-        output_data($_FILES["file"]["type"]);
+//        output_data($_FILES["file"]["type"]);
         if(!empty($_FILES)){
-            if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
-            {
+//            if ((($_FILES["file"]["type"] == "image\/*") || ($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
+//            {
                 if($_FILES["file"]["size"] < 8*1024*1024){
                     if ($_FILES["file"]["error"] > 0)
                     {
@@ -230,11 +230,11 @@ class Common extends MobileMall
                 }else{
                     output_error('图片上传大小不允许超过8M，请重新上传');
                 }
-            }
-            else
-            {
-                output_error('图片上传类型不符合，请重新上传');
-            }
+//            }
+//            else
+//            {
+//                output_error('图片上传类型不符合，请重新上传');
+//            }
         }
 
     }
