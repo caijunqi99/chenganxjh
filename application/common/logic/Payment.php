@@ -160,6 +160,12 @@ class Payment extends Model
         return model('order','logic')->changeOrderReceivePay($order_list, 'system', '系统', $post);
     }
 
+
+    public function updatePackageOrder($input, $order_list, $payment_code)
+    {
+        return model('order','logic')->changePackageOrder($order_list, 'system', '系统', $input);
+    }    
+
     /**
      * 支付成功后修改虚拟订单状态
      */

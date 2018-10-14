@@ -51,15 +51,28 @@ class Payment extends MobileMall
     }
 
     public function notify_url(){
+        $this->payment_code = 'wxpay_h5';
+        $api = $this->_get_payment_api();
+        $params = $this->_get_payment_config();
+        // $api->setConfigs($params);
+
+        // $data= $api->onNotify();
+        $d = $this->xmlToArray(file_get_contents('php://input'));
         $input = input();
         $insert = array(
             'content'=>json_encode(array(
                 'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'input' =>$input
+                'input' =>$input,
+                'data' =>$d
             ))
         );
         db('testt')->insert($insert);
         echo 'success';
+    }
+
+    public function xmlToArray($xml)
+    {
+        return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
     }
 
     /**
@@ -83,44 +96,63 @@ class Payment extends MobileMall
             $callback_info = $payment_api->verify_notify($input);
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
-                $result = $this->_update_order($input, $order_info);
+                $update = array(
+                    'out_pay_sn' => $input['trade_no'],
+                    'payment_time' => strtotime($input['gmt_create']),
+                    'finnshed_time' => time(),
+                    'pd_amount' => 0, //预存款支付金额
+                    'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
+                    'order_state' => 40 //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                    'over_amount' => $input['buyer_pay_amount'], //最终支付金额
+                );
+                $result = $this->_update_order($update, $order_info);
                 if ($result['code']) {
                     echo 'success';
-                    die;
+                    exit;
                 }
             }
         }
         //验证失败
         echo "fail";
-        die;
+        exit;
     }
 
     /**
      *微信h5支付回调
      */
-    public function wx_notify()
+    public function wx_notify_h5()
     {
         $this->payment_code = 'wxpay_h5';
         $api = $this->_get_payment_api();
         $params = $this->_get_payment_config();
-        $api->setConfigs($params);
-
-        list($result, $output) = $api->notify();
-
-        if ($result) {
-            $internalSn = $result['out_trade_no'] . '_' . $result['attach'];
-            $externalSn = $result['transaction_id'];
-            $updateSuccess = $this->_update_order($internalSn, $externalSn);
-
-            if (!$updateSuccess) {
-                // @todo
-                // 直接退出 等待下次通知
-                exit;
+        $input = $this->xmlToArray(file_get_contents('php://input'));
+        if (is_array($input) && !empty($input)) {
+            $Package = model('Packagesorder');
+            $order_info = $Package->getOrderInfo($input['out_trade_no']);
+            if ($order_info && $input['result_code']=="SUCCESS") {
+                //验证订单
+                
+                //验证成功
+                $update = array(
+                    'out_pay_sn' => $input['transaction_id'],
+                    'payment_time' => strtotime($input['time_end']),
+                    'finnshed_time' => time(),
+                    'pd_amount' => 0, //预存款支付金额
+                    'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
+                    'order_state' => 40 //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                    'over_amount' => $input['total_fee']/100, //最终支付金额
+                );
+                $result = $this->_update_order($update, $order_info);
+                if ($result['code']) {
+                    echo 'success';
+                    exit;
+                }
             }
         }
-
-        echo $output;
+        echo 'fail';
         exit;
+
+
     }
 
     /**
@@ -192,38 +224,23 @@ class Payment extends MobileMall
     private function _update_order($input, $orderInfo)
     {
         $model_order = model('Packagesorder');
-
+        $logic_payment = model('payment', 'logic');
         $paymentCode = $this->payment_code;
-
-
         if ($orderInfo) {
-            $update = array(
-                'out_pay_sn' => ,
-                'payment_time' => ,
-                'finnshed_time' => ,
-                'pd_amount' => , //预存款支付金额
-                'evaluation_state' => , //评价状态 0未评价，1已评价，2已过期未评价
-                'order_state' => , //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
-                'order_dieline' => , //套餐到期日
-            );
-            $result = $logic_payment->updateRealOrder($out_trade_no, $paymentCode, $order_list, $trade_no);
 
-            $api_pay_amount = 0;
-            if (!empty($order_list)) {
-                foreach ($order_list as $order_info) {
-                    $api_pay_amount += $order_info['order_amount'] - $order_info['pd_amount'] - $order_info['rcb_amount'];
-                }
-            }
-            $log_buyer_id = $order_list[0]['buyer_id'];
-            $log_buyer_name = $order_list[0]['buyer_name'];
-            $log_desc = '实物订单使用' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $out_trade_no;
+            $result = $logic_payment->updatePackageOrder($input, $orderInfo, $paymentCode);
+
+            
+            $log_buyer_id = $orderInfo['buyer_id'];
+            $log_buyer_name = $orderInfo['buyer_name'];
+            $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
 
         }
         if ($result['code']) {
             //记录消费日志
             \mall\queue\QueueClient::push('addConsume', array(
                 'member_id' => $log_buyer_id, 'member_name' => $log_buyer_name,
-                'consume_amount' => dsPriceFormat($api_pay_amount), 'consume_time' => TIMESTAMP,
+                'consume_amount' => dsPriceFormat($orderInfo['order_amount']), 'consume_time' => TIMESTAMP,
                 'consume_remark' => $log_desc
             ));
         }

@@ -442,4 +442,58 @@ class Order extends Model
 
         return ds_callback(true, '操作成功');
     }
+
+
+
+    public function changePackageOrder($order_info, $role, $user = '', $post = array())
+    {
+        $model_order = Model('Packagesorder');
+
+        try {
+            $model_order->startTrans();
+
+            $condition = array();
+            $condition['order_id'] = $order_info['order_id'];
+
+            $update = $model_order->editOrder($post, $condition);
+            if (!$update) {
+                 Exception('更新支付单状态失败');
+            }
+
+            $model_order->commit();
+        } catch (Exception $e) {
+            $model_order->rollback();
+            return ds_callback(false, $e->getMessage());
+        }        
+        $order_id = $order_info['order_id'];
+        // 支付成功发送买家消息
+        $param = array();
+        $param['code'] = 'order_payment_success';
+        $param['member_id'] = $order_info['buyer_id'];
+        $param['param'] = array(
+            'order_sn' => $order_info['order_sn'],
+            'order_url' => url('memberorder/show_order', array('order_id' => $order_info['order_id']))
+        );
+         \mall\queue\QueueClient::push('sendMemberMsg', $param);
+
+        // 支付成功发送店铺消息
+        $param = array();
+        $param['code'] = 'new_order';
+        $param['store_id'] = $order_info['store_id'];
+        $param['param'] = array(
+            'order_sn' => $order_info['order_sn']
+        );
+         \mall\queue\QueueClient::push('sendStoreMsg', $param);
+
+        //添加订单日志
+        $data = array();
+        $data['order_id'] = $order_id;
+        $data['log_role'] = $role;
+        $data['log_user'] = $user;
+        $data['log_msg'] = '收到了货款 ( 支付平台交易号 : ' . $post['out_pay_sn'] . ' )';
+        $data['log_orderstate'] = ORDER_STATE_SUCCESS;
+        $model_order->addOrderLog($data);
+
+        return ds_callback(true, '操作成功');
+    }
 }
