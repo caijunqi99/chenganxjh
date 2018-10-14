@@ -183,6 +183,7 @@ class Common extends MobileMall
      * @time 20181012
      */
     public function upload_avatar(){
+        header("Content-type: text/html; charset=utf-8");
         $token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
@@ -198,7 +199,7 @@ class Common extends MobileMall
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($_FILES)){
-            output_data($_FILES);
+            output_data($_FILES["file"]);
             if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
             {
                 if($_FILES["file"]["size"] < 8*1024*1024){
