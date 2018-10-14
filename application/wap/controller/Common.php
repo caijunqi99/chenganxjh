@@ -199,7 +199,7 @@ class Common extends MobileMall
             output_error('会员不存在，请联系管理员');
         }
         if(!empty($_FILES)){
-            output_data($_FILES["file"]);
+            output_data($_FILES);
             if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
             {
                 if($_FILES["file"]["size"] < 8*1024*1024){
