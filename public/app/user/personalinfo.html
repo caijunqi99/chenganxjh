@@ -153,7 +153,8 @@ back
                 dataType: "json",
                 success: function(response) {
                     if (response['code'] == 200) {
-                        console.log(response)
+                        // console.log(response)
+                        alert(response['result']['member_avatar']);
                         img_name = upload_url+response['result']['member_avatar'];
                         $('.user_img').attr('src', response['result']['member_avatar']);
                         $('#nickname').val(response['result']['member_nickname']);
