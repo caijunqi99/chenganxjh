@@ -127,7 +127,6 @@
 
         <script>
             $(function() {
-
                 // 性别选择
                 $("#sex").picker({
                     title: "请选择您的性别",
@@ -157,6 +156,7 @@
                             },
                             dataType: "json",
                             success: function(response) {
+                                console.log(response['result']);
                                 $("#school").select("update", {
                                     items: response['result']
                                 })
