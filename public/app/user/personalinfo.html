@@ -327,9 +327,15 @@
                     }
                     params['member_email'] = $('#email').val();
                     params['member_avatar'] = img_name;
-                    params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
-                    params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
-                    params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
+                    if($('#city').val() ==''){
+                        params['member_provinceid'] = '';
+                        params['member_cityid'] = '';
+                        params['member_areaid'] = '';
+                    }else{
+                        params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
+                        params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
+                        params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
+                    }
                     params['member_jobid'] = $('#trade').get(0).dataset.values;
                     $.ajax({
                         type: "POST",
@@ -366,13 +372,22 @@
 
             //判断是否是邮箱地址
             IsEmail: function(str) {
-                var myreg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-                return myreg.test(str);
+                if(str == ''){
+                    return true;
+                }else {
+                    var myreg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+                    return myreg.test(str);
+                }
             },
             //判断是否是邮箱地址
             IsAge: function(str) {
-                var myreg = /^([1-9]\d?|200)$/;
-                return myreg.test(str);
+                if(str == ''){
+                    return true;
+                }else{
+                    var myreg = /^([1-9]\d?|200)$/;
+                    return myreg.test(str);
+                }
+
             }
         }
     </script>
