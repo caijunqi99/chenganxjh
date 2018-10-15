@@ -21,6 +21,7 @@ class Common extends MobileMall
             $v['icon_2'] = getIconImage($v['icon_2'],'icon_2');
             $v['icon_3'] = getIconImage($v['icon_3'],'icon_3');
         }
+        unset($v);
         if ($type==1) {
             output_data($navlist);
         }else{
