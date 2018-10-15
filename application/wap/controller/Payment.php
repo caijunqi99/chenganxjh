@@ -51,12 +51,6 @@ class Payment extends MobileMall
     }
 
     public function notify_url(){
-        $this->payment_code = 'wxpay_h5';
-        $api = $this->_get_payment_api();
-        $params = $this->_get_payment_config();
-        // $api->setConfigs($params);
-
-        // $data= $api->onNotify();
         $d = $this->xmlToArray(file_get_contents('php://input'));
         $input = input();
         $insert = array(
@@ -67,7 +61,6 @@ class Payment extends MobileMall
             ))
         );
         db('testt')->insert($insert);
-        echo 'success';
     }
 
     public function xmlToArray($xml)
@@ -84,26 +77,12 @@ class Payment extends MobileMall
     public function alipay_notify_app()
     {
         $this->payment_code = 'alipay_app';
-
-        $d = $this->xmlToArray(file_get_contents('php://input'));
-        $input = input();
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$input,
-                'data' =>$d
-            ))
-        );
-        // db('testt')->insert($insert);
-
-
-        $input = input();
-        $payment_config = $this->_get_payment_config();
         $payment_api = $this->_get_payment_api();
+
+        $this->notify_url();
+        $input = input();
         $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
-        // $data['order_amount'] =$input['total_amount'];
         $Package = model('Packagesorder');
         $order_info = $Package->getOrderInfo($data);
         
@@ -142,32 +121,14 @@ class Payment extends MobileMall
     public function wx_notify_h5()
     {
         $this->payment_code = 'wxpay_h5';
-        
-        $d = $this->xmlToArray(file_get_contents('php://input'));
-        $input = input();
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$input,
-                'data' =>$d
-            ))
-        );
-
-        // db('testt')->insert($insert);
-
-
-        if(!$input)$input = $d;
-        
         $api = $this->_get_payment_api();
-
+        
+        $this->notify_url();
         if (is_array($input) && !empty($input)) {
             $Package = model('Packagesorder');
             $data =array();
             $data['pay_sn'] = $input['out_trade_no'];
-
             $order_info = $Package->getOrderInfo($data);
-
             if ($order_info && $input['result_code']=="SUCCESS") {
                 //验证订单
             
