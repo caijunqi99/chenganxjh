@@ -1,7 +1,9 @@
 <?php
 
 function CalculationTime($order_info,$packagetime){
-    $nowTime = isset($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
+    $package_end_time = isset($packagetime['end_time'])?$packagetime['end_time']:'';
+    $nowTime = !empty($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
+    
     $pkg_length = $order_info['pkg_length'];    
     switch ($order_info['pkg_axis']) {
         case 'hour':
