@@ -78,6 +78,9 @@ $lang['company_phone']='手机号码不能为空';
 $lang['company_phoneerror']='请输入正确的手机号';
 $lang['company_area']='所在地区不能为空';
 
+//发现
+$lang['ds_find']='发现';
+$lang['ds_mood']='晒心情';
 //学校管理
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
