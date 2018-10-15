@@ -181,9 +181,13 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                $("#classes").select("update", {
-                                    items: response['result']
-                                })
+                                console.log(response['result'].length);
+                                if(response['result'].length != 0){
+                                    $("#classes").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
                             }
                         });
                     }
