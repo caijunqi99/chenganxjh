@@ -154,9 +154,8 @@ back
                 success: function(response) {
                     if (response['code'] == 200) {
                         // console.log(response)
-                        alert(response['result']['member_avatar']);
                         img_name = upload_url+response['result']['member_avatar'];
-                        $('.user_img').attr('src', response['result']['member_avatar']);
+                        $('.user_img').attr('src', img_name);
                         $('#nickname').val(response['result']['member_nickname']);
                         switch (response['result']['member_identity']) {
                             case 1:
