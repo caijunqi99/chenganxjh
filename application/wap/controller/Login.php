@@ -106,8 +106,12 @@ class Login extends MobileMall
             if ($token) {
                 $logindata = array();
                 $logindata['key']=$token;
-                $logindata['member_avator'] = $member['member_avatar'];
-                $logindata['rel_member_avatar'] = getMemberAvatarForID($member['member_id']);
+                $logindata['member_avatar'] = $member['member_avatar'];
+                if(!empty($member['member_avatar'])){
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL.$member['member_avatar'];
+                }else{
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                }
                 $logindata['user_name'] = $member['member_name'];
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];
