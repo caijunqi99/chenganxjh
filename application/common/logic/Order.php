@@ -482,7 +482,7 @@ class Order extends Model
             }
             $condition = array();
             $condition['order_id'] = $order_info['order_id'];
-
+            $post['order_dieline']=$end_time;
             $update = $model_order->editOrder($post, $condition);
             if (!$update) {
                  Exception('更新支付单状态失败');
