@@ -95,7 +95,7 @@ class Payment extends MobileMall
                 'data' =>$d
             ))
         );
-        db('testt')->insert($insert);
+        // db('testt')->insert($insert);
 
 
         $input = input();
@@ -103,23 +103,28 @@ class Payment extends MobileMall
         $payment_api = $this->_get_payment_api();
         $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
-        $data['order_amount'] =$input['total_amount'];
+        // $data['order_amount'] =$input['total_amount'];
         $Package = model('Packagesorder');
         $order_info = $Package->getOrderInfo($data);
+        
+
         if (!empty($order_info)) {
             $callback_info = $payment_api->verify_notify($input);
+            
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
                 $update = array(
-                    'out_pay_sn' => $input['trade_no'],
+                    'out_pay_sn' => $callback_info['trade_no'],
                     'payment_time' => strtotime($input['gmt_create']),
                     'finnshed_time' => time(),
                     'pd_amount' => 0, //预存款支付金额
                     'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
                     'order_state' => 40 ,//订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
-                    'over_amount' => $input['buyer_pay_amount'], //最终支付金额
+                    'over_amount' => $callback_info['total_fee'], //最终支付金额
                 );
+
                 $result = $this->_update_order($update, $order_info);
+
                 if ($result['code']) {
                     echo 'success';
                     exit;
@@ -148,18 +153,24 @@ class Payment extends MobileMall
                 'data' =>$d
             ))
         );
-        db('testt')->insert($insert);
+
+        // db('testt')->insert($insert);
 
 
         if(!$input)$input = $d;
         
         $api = $this->_get_payment_api();
-        $params = $this->_get_payment_config();
+
         if (is_array($input) && !empty($input)) {
             $Package = model('Packagesorder');
-            $order_info = $Package->getOrderInfo($input['out_trade_no']);
+            $data =array();
+            $data['pay_sn'] = $input['out_trade_no'];
+
+            $order_info = $Package->getOrderInfo($data);
+
             if ($order_info && $input['result_code']=="SUCCESS") {
                 //验证订单
+            
                 
                 //验证成功
                 $update = array(
@@ -216,7 +227,7 @@ class Payment extends MobileMall
      */
     private function _get_payment_api($payment_config=array())
     {
-        $inc_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+        $inc_file = APP_PATH . 'wap' . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
 
         if (is_file($inc_file)) {
             require($inc_file);
@@ -256,7 +267,6 @@ class Payment extends MobileMall
         $logic_payment = model('payment', 'logic');
         $paymentCode = $this->payment_code;
         if ($orderInfo) {
-
             $result = $logic_payment->updatePackageOrder($input, $orderInfo, $paymentCode);
 
             
@@ -265,14 +275,7 @@ class Payment extends MobileMall
             $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
 
         }
-        if ($result['code']) {
-            //记录消费日志
-            \mall\queue\QueueClient::push('addConsume', array(
-                'member_id' => $log_buyer_id, 'member_name' => $log_buyer_name,
-                'consume_amount' => dsPriceFormat($orderInfo['order_amount']), 'consume_time' => TIMESTAMP,
-                'consume_remark' => $log_desc
-            ));
-        }
+
 
         return $result;
     }
