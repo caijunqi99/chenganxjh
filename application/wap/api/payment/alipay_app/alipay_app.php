@@ -166,7 +166,7 @@ class alipay_app {
 
     function verify_notify($param) {
         require_once APP_PATH .'wap/api/payment/alipay_app/lib/config.php';
-        require_once APP_PATH .'wap/api/payment/alipay_app/AopClient.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/lib/AopClient.php';
         $aop = new \AopClient;
         
         $aop->alipayrsaPublicKey = $config['merchant_public_key'];
