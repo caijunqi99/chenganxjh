@@ -1,6 +1,35 @@
 <?php
 
-
+function CalculationTime($order_info,$packagetime){
+    $nowTime = isset($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
+    $pkg_length = $order_info['pkg_length'];    
+    switch ($order_info['pkg_axis']) {
+        case 'hour':
+            $endTime = strtotime("+{$pkg_length} hour",$nowTime);
+            break;
+        case 'day':
+            $endTime = strtotime("+{$pkg_length} day",$nowTime);
+            break;
+        case 'week':
+            $endTime = strtotime("+{$pkg_length} week",$nowTime);
+            break;
+        case 'mouth':
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'quarter':
+            $pkg_length*=3;
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'half':
+            $pkg_length*=6;
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'year':
+            $endTime = strtotime("+{$pkg_length} year",$nowTime);
+            break;
+    }
+    return $endTime;
+}
 function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
     
     $data = array();

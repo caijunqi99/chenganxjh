@@ -165,10 +165,11 @@ class alipay_app {
     }
 
     function verify_notify($param) {
-        require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/AopClient.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/lib/config.php';
+        require_once APP_PATH .'wap/api/payment/alipay_app/AopClient.php';
         $aop = new \AopClient;
         
-        $aop->alipayrsaPublicKey = $config['app_public_key'];
+        $aop->alipayrsaPublicKey = $config['merchant_public_key'];
         $flag = $aop->rsaCheckV1($param, NULL, "RSA2");
         if ($flag) {
             $notify_result = array(
