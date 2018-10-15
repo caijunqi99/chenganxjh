@@ -457,6 +457,7 @@ class Order extends Model
             'pkg_type'=>$order_info['pkg_type']
         );
         $packagetime = $PkgTime->getOnePkg($condition);
+        $order_info['finnshed_time'] = empty($order_info['finnshed_time'])?time():$order_info['finnshed_time'];
         $end_time = CalculationTime($order_info,$packagetime);
         $pkgtype = $order_info['pkg_type']==1?'看孩':'回放';
         $pdata = array(
