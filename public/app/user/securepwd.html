@@ -122,9 +122,11 @@
 
             $('.bang_submit').click('on', function() {
                 if ($('#pwd1').val() == '') {
-                    alert('请输入安全密码')
+                    alert('请输入安全密码');
                 } else if ($('#pwd2').val() == '') {
-                    alert('请再一次输入安全密码')
+                    alert('请再一次输入安全密码');
+                }  else if ($('#pwd2').val() != $('#pwd1').val()) {
+                    alert('两次密码不一致，请重新输入');
                 } else {
                     $.ajax({
                         type: "POST",
