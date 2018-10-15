@@ -39,7 +39,7 @@ class Login extends MobileMall
         if (empty($phone) || !in_array($client, $this->client_type_array)) {
             output_error($type.'失败!',array('type'=>input('post.log_type')));
         }
-        if (!preg_match('/^0?(13|15|16|17|18|14)[0-9]{9}$/i', $phone)) {//根据会员名没找到时查手机号
+        if (!preg_match('/^1(3|5|6|7|8|4)[0-9]{9}$/', $phone)) {//根据会员名没找到时查手机号
             output_error('请输入正确的手机号码！',array('type'=>input('post.log_type')));
             
         }
