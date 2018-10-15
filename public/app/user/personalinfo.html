@@ -312,9 +312,6 @@ back
                             break;
                     }
                     params['member_age'] = $('#nianling').val();
-                    if(params['member_age'] > 200){
-                        $.alert("年龄不符合科学，请重新输入");
-                    }
                     switch ($('#sex').val()) {
                         case '保密':
                             params['member_sex'] = 0;
@@ -372,7 +369,7 @@ back
             },
             //判断是否是邮箱地址
             IsAge: function(str) {
-                var myreg = /^\d$/;
+                var myreg = /^([1-9]\d?|200)$/;
                 return myreg.test(str);
             }
         }
