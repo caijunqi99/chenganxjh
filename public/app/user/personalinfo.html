@@ -293,7 +293,7 @@ back
                     $.alert("请输入正确的邮箱地址");
                 } else if (!Tools.IsAge($("#nianling").val())) {
                     $.alert("年龄不符合科学，请重新输入");
-                }else{
+                } else {
 
                     //修改个人信息
                     var params = {};
@@ -369,7 +369,10 @@ back
             },
             //判断是否是邮箱地址
             IsAge: function(str) {
-                var myreg = /^\d{3}$/;
+                var myreg = /^\d$/;
+                if(str >200){
+                    return false;
+                }
                 return myreg.test(str);
             }
         }
