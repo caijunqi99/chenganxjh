@@ -56,8 +56,8 @@ class Packagesorder extends Model {
      * @param unknown_type $data
      * @param unknown_type $condition
      */
-    public function editOrder($data, $condition, $limit = '') {
-        $update = db('packagesorder')->where($condition)->limit($limit)->update($data);
+    public function editOrder($data, $condition) {
+        $update = db('packagesorder')->where($condition)->update($data);
         return $update;
     }
 
