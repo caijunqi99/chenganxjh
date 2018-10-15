@@ -323,6 +323,8 @@
                         success: function(response) {
                             if (response['code'] == 200) {
                                 $.toast(response['result']['message'])
+                            }else{
+                                $.toast(response['message'])
                             }
                         },
                         error(error) {
