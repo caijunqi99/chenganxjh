@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 request body = {'to':'18514070310','templateId':'338580','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['224843',]}
 request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=A46CD435A64FD846345A852D78E56B87
 response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"3f98f59f20ee4f5981ab6da3f02bf06e","dateCreated":"20181015094711"}}
@@ -25,3 +26,14 @@ response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"9bfc495b1
 request body = {'to':'15038197952','templateId':'198052','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['150194',]}
 request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=F079FF1F9957271335CB3E7558BD1876
 response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"c9e16d9fb2c74580bb32df45e2e4eb6d","dateCreated":"20181015155608"}}
+=======
+request body = {'to':'18514070310','templateId':'198052','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['【想见孩】1000000000000801的款项已经收到，请留意出库通知。',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=84B438E18A43265B59075178149259D2
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"59ff8a363eb94caa9558df8ef9e2ab8b","dateCreated":"20181015105712"}}
+request body = {'to':'18514070310','templateId':'198052','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['【想见孩】1000000000000801的款项已经收到，请留意出库通知。',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=502D3051B18864C4CEB1A407087EA102
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"7d8697dcbb014e9dbad5779f54a08df4","dateCreated":"20181015105820"}}
+request body = {'to':'18514070310','templateId':'198052','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['【想见孩】1000000000000701的款项已经收到，请留意出库通知。',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=087A4D3CB4D1BB75F999662ED76D3E7D
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"28e3e662e5ec445fb117d6808dbe601d","dateCreated":"20181015110501"}}
+>>>>>>> 8cd362f03b59e18dda65c3466bb32aef99fa023b

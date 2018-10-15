@@ -148,7 +148,6 @@ class Packagesbuy extends MobileMember
         }
         //加入学生学校班级信息
         if(is_array($childinfo))$order += $childinfo;        
-        
         $order['order_amount'] = $packageInfo['pkg_price'];        
         try {
             $model = Model('Packagesorder');
