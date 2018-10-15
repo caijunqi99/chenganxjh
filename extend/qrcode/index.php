@@ -28,8 +28,8 @@ class PhpQRCode {
     //processing form input
     //remember to sanitize user input in real-life solution !!!
     private $errorCorrectionLevel = 'H';  // L M Q H
-    private $matrixPointSize = 3;    // 1 2 3 4 5 6 7 8 9 10
-    private $date = 'dsmall';
+    private $matrixPointSize = 10;    // 1 2 3 4 5 6 7 8 9 10
+    private $date = 'xjh';
     private $pngTempDir = '';
     private $pngTempName = '';
 
@@ -49,7 +49,7 @@ class PhpQRCode {
         if (!file_exists($this->pngTempDir))
             mkdir($this->pngTempDir);
 
-        if ($this->date != 'dsmall') {
+        if ($this->date != 'xjh') {
 
             // user data
             if ($this->pngTempName != '') {
@@ -60,7 +60,7 @@ class PhpQRCode {
             QRcode::png($this->date, $filename, $this->errorCorrectionLevel, $this->matrixPointSize, 2);
         } else {
             //default data
-            QRcode::png('http://www.csdeshang.com', $filename, $this->errorCorrectionLevel, $this->matrixPointSize, 2);
+            QRcode::png('http://www.xiangjianhai.com', $filename, $this->errorCorrectionLevel, $this->matrixPointSize, 2);
         }
 
         //display generated file
