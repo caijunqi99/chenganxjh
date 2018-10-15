@@ -156,10 +156,16 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                console.log(response['result']);
-                                $("#school").select("update", {
-                                    items: response['result']
-                                })
+                                if(response['result'].length == 0){
+                                    $("#school").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#school").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
                             }
                         });
                     }
@@ -181,8 +187,11 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                console.log(response['result'].length);
-                                if(response['result'].length != 0){
+                                if(response['result'].length == 0){
+                                    $("#classes").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
                                     $("#classes").select("update", {
                                         items: response['result']
                                     })
@@ -208,10 +217,15 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                console.log(response)
-                                $("#banji").select("update", {
-                                    items: response['result']
-                                })
+                                if(response['result'].length == 0){
+                                    $("#banji").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#banji").select("update", {
+                                        items: response['result']
+                                    })
+                                }
                             }
                         });
                     }
