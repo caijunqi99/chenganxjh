@@ -27,7 +27,7 @@ class MobileMember extends MobileHome {
 
 
             if (empty($this->member_info)) {
-                output_error('请登录', array('login' => '0'),400);
+                output_error('会员不存在', array('login' => '0'),400);
             } else {
                 $this->member_info['client_type'] = $mb_user_token_info['client_type'];
                 $this->member_info['openid'] = $mb_user_token_info['openid'];
