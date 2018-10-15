@@ -19,7 +19,7 @@ class MobileMember extends MobileHome {
             }
             $mb_user_token_info = $model_mb_user_token->getMbUserTokenInfoByToken($key);
             if (empty($mb_user_token_info)) {
-                output_error('token失效，请重新登陆'.$key, array('login' => '0'),400);
+                output_error('token失效，请重新登陆', array('login' => '0'),400);
             }
             $model_member = Model('member');
             $this->member_info = $model_member->getMemberInfoByID($mb_user_token_info['member_id']);
