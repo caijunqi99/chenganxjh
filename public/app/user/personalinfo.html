@@ -137,8 +137,6 @@
 
     <script>//头像赋值
 
-
-
         $(function() {
 
             // 获取个人信息
@@ -178,11 +176,16 @@
                                 $('#sex').val('女');
                                 break;
                         }
+
                         $('#nianling').val(response['result']['member_age']);
                         $('#email').val(response['result']['member_email']);
                         $('#city').get(0).dataset.code = response['result']['member_provinceid'];
                         $('#city').get(0).dataset.codes = response['result']['member_provinceid'] + ',' + response['result']['member_cityid'] + ',' + response['result']['member_areaid'];
-                        $('#city').val(response['result']['province_name'] + ' ' + response['result']['city_name'] + ' ' + response['result']['area_name']);
+                        if(response['result']['member_provinceid'] == null){
+                            $('#city').val('')
+                        }else{
+                            $('#city').val(response['result']['province_name'] + ' ' + response['result']['city_name'] + ' ' + response['result']['area_name']);
+                        }
                         $('#trade').val(response['result']['job_name'])
                         $('#trade').get(0).dataset.values = response['result']['member_jobid']
                     };
@@ -254,31 +257,6 @@
                     Android.uploadImage();
                 } else { //pc
                 };
-
-                /*var formData = new FormData(event.target.files['0']);
-                formData.append('file',event.target.files['0']);
-                formData.append('key',user_token);
-                formData.append('member_id',user_member_id);
-                $.ajax({
-                    type:'post',
-                    // url:api+'/Common/upload_avatar',
-                    url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
-                    data:formData,
-                    dataType: "json",
-                    contentType: false,
-                    processData: false,
-                    success:function(response){
-                        if (response['code'] == 200) {
-                            $.toast(response['result'][0]['message']);
-                            img_name = response['result'][0]['avatar_url'];
-                            img_url = upload_url+response['result'][0]['avatar_url'];
-                            $('.user_img').attr('src',img_url);
-                        }
-                    },
-                    error(error) {
-                        $.toast(error)
-                    }
-                });*/
             }
 
              fz_avatar = function(avatar_url){
@@ -381,7 +359,7 @@
             },
             //判断是否是邮箱地址
             IsAge: function(str) {
-                if(str == ''){
+                if(str == '' || str == 0){
                     return true;
                 }else{
                     var myreg = /^([1-9]\d?|200)$/;
