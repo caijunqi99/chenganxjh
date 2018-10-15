@@ -52,7 +52,12 @@ class Member extends MobileMember
             $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.is_owner,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
 
             if(!empty($result)){
-                $result['rel_member_avatar'] = getMemberAvatarForID($result['member_id']);
+                if(!empty($result['member_avatar'])){
+                    $result['rel_member_avatar'] = UPLOAD_SITE_URL.$result['member_avatar'];
+                }else{
+                    $result['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                    $result['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                }
                 $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
                 $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');
                 $result['city_name'] = db('area')->where('area_id = "'.$result["member_cityid"].'"')->value('area_name');
