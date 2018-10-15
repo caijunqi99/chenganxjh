@@ -55,6 +55,7 @@ class Member extends MobileMember
                 if(!empty($result['member_avatar'])){
                     $result['rel_member_avatar'] = UPLOAD_SITE_URL.$result['member_avatar'];
                 }else{
+                    $result['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
                     $result['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
                 }
                 $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
