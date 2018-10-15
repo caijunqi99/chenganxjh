@@ -41,6 +41,7 @@
     </header>
 
     <!-- 主要内容 -->
+    <div class="screen" id="screen"></div>
     <div class="main">
         <div class="container2">
             <div class="bang_list">
@@ -114,9 +115,8 @@
                 <input id="bang_submit" class="bang_submit" type="button" value="提 交" />
             </div>
         </div>
-        <div class="screen" id="screen">
+    </div>
 
-        </div>
 
         <script src="../content/scripts/jquery.min.js"></script>
         <script src="../content/scripts/juqery.cookie.js"></script>
@@ -144,7 +144,7 @@
                 });
 
                 // 所在地区选择
-                $("#city #school #classes #banji").click(function() {
+                $("#city,#school,#classes,#banji").click(function() {
                     $("#screen").addClass("show");
                 });
                 $("#city").cityPicker({
