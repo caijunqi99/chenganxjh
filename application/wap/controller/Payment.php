@@ -150,9 +150,11 @@ class Payment extends MobileMall
         );
         db('testt')->insert($insert);
 
+
+        if(!$input)$input = $d;
+        
         $api = $this->_get_payment_api();
         $params = $this->_get_payment_config();
-        $input = $this->xmlToArray(file_get_contents('php://input'));
         if (is_array($input) && !empty($input)) {
             $Package = model('Packagesorder');
             $order_info = $Package->getOrderInfo($input['out_trade_no']);
