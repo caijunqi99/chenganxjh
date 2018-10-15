@@ -457,3 +457,26 @@
         font-size: 28px;
         padding: 15px 0 20px;
     }
+
+    .screen {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        display: none;
+        -webkit-opacity: 0;
+        opacity: 0;
+        -webkit-transition: .3s;
+        -moz-transition: .3s;
+        -ms-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
+    }
+    .screen.show {
+        display: block;
+        -webkit-opacity: 1;
+        opacity: 1;
+    }

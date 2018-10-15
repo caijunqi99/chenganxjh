@@ -114,7 +114,9 @@
                 <input id="bang_submit" class="bang_submit" type="button" value="提 交" />
             </div>
         </div>
+        <div class="screen" id="screen">
 
+        </div>
 
         <script src="../content/scripts/jquery.min.js"></script>
         <script src="../content/scripts/juqery.cookie.js"></script>
@@ -142,9 +144,13 @@
                 });
 
                 // 所在地区选择
+                $("#city #school #classes #banji").click(function() {
+                    $("#screen").addClass("show");
+                });
                 $("#city").cityPicker({
                     title: "请选择所在地",
                     onClose: function(picker) {
+                        $("#screen").removeClass("show");
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/school.html',
@@ -177,6 +183,7 @@
                     title: "请选择学校",
                     items: [{}],
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
                         schollID = p.data.values;
                         $.ajax({
                             type: "POST",
@@ -207,6 +214,7 @@
                     title: "请选择所在年级",
                     items: [{}],
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/classData.html',
@@ -236,6 +244,7 @@
                     title: "请选择所在班级",
                     items: [{}],
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
 
                     }
                 });
