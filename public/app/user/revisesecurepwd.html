@@ -85,16 +85,17 @@
         $(function() {
             $('.bang_submit').on('click', function() {
                 if ($('#pwd1').val() == '') {
-                    alert('请输入原始密码');
+                    $.toast('请输入原始密码');return false;
                 } else if ($('#pwd2').val() == '') {
-                    alert('请输入新密码');
+                    $.toast('请输入新密码');return false;
                 } else if ($('#pwd2').val().length < 6 || $('#pwd2').val().length > 12 ) {
-                    alert('密码长度为6~12位');
+                    $.toast('密码长度为6~12位');return false;
                 } else if ($('#pwd3').val() == '') {
-                    alert('请再一次输入新密码')
+                    $.toast('请再一次输入新密码');return false;
                 } else if ($('#pwd3').val() != $('#pwd2').val()) {
-                    alert('两次密码输入不一致，请重新输入');
+                    $.toast('两次密码输入不一致，请重新输入');return false;
                 }
+                alert(user_token);
                 $.ajax({
                     type: "POST",
                     url: api + '/Member/editPwd.html',
