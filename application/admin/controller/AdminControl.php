@@ -172,6 +172,7 @@ class AdminControl extends Controller {
         $data['admin_id'] = $admin_id;
         $data['ip'] = request()->ip();
         $data['url'] = request()->controller() . '&' . request()->action();
+        $data['admin_company_id'] = db('admin')->where('admin_id',$admin_id)->value('admin_company_id');
         return db('adminlog')->insertGetId($data);
     }
 

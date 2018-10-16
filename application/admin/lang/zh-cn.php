@@ -493,4 +493,7 @@ $lang['ds_icon']     = '导航图标';
 $lang['icon_member']     = '个人中心';
 $lang['icon_find']     = '发现';
 
+$lang['ds_schoolbus']     = '校车管理';
+$lang['ds_schoolfood']     = '食谱管理';
+
 ?>
