@@ -85,7 +85,7 @@
         $(function() {
             $('.bang_submit').on('click', function() {
                 alert(document.cookie);
-                alert($.cookie('token'));
+                alert(user_token);
                 if ($('#pwd1').val() == '') {
                     $.toast('请输入原始密码');return false;
                 } else if ($('#pwd2').val() == '') {
