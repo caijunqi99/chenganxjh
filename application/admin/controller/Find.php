@@ -27,61 +27,42 @@ class Find extends AdminControl {
      */
     public function index()
     {
-        echo 123;exit;
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
-            $this->error(lang('ds_assign_right'));
-        }
-        //地区信息
-        $region_list = db('area')->where('area_parent_id','0')->select();
-        $this->assign('region_list', $region_list);
-        $address = array(
-            'true_name' => '',
-            'area_id' => '',
-            'city_id' => '',
-            'address' => '',
-            'tel_phone' => '',
-            'mob_phone' => '',
-            'is_default' => '',
-            'area_info'=>''
-        );
-        $this->assign('address', $address);
-        //分子公司列表
-        $model_organize = Model('company');
-        $condition = array();
-        $condition['o_del']=1;
+        //晒心情列表
+        $where = array();
         //判断登陆角色
-        $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
-        if($adminUser['admin_company_id'] != 1){
-            $condition['o_id'] = $adminUser['admin_company_id'];
-        }
-
-        if (!empty($_POST['search_organize_name'])) {
-            $o_name=input('param.search_organize_name');
-            $condition['o_name']=array('like', '%' . trim($o_name) . '%');
-            $this->assign('search_organize_name',$o_name);
-        }
-        if(!empty($_POST['o_provinceid'])){
-            $o_provinceid=input('param.o_provinceid');
-            $condition['o_provinceid']=$o_provinceid;
-            $this->assign('o_provinceid',$o_provinceid);
-        }
-        if(!empty($_POST['o_cityid'])) {
-            if ($_POST['dep'] == 2 || $_POST['dep'] == 3){
-                $o_cityid = input('param.o_cityid');
-                $condition['o_cityid'] =$o_cityid;
-                $this->assign('o_cityid', $o_cityid);
-            }
-        }
-        if(!empty($_POST['area_id'])){
-            if ($_POST['dep'] == 3) {
-                $area_id = input('param.area_id');
-                $condition['o_areaid'] =$area_id;
-                $this->assign('area_id', $area_id);
-            }
-        }
-        $organize_list = $model_organize->getOrganizeList($condition, "*",15);
-        $this->assign('page', $model_organize->page_info->render());
-        $this->assign('organize_list', $organize_list);
+        //$adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
+//        if($adminUser['admin_company_id'] != 1){
+//            $condition['o_id'] = $adminUser['admin_company_id'];
+//        }
+//
+//        if (!empty($_POST['search_organize_name'])) {
+//            $o_name=input('param.search_organize_name');
+//            $condition['o_name']=array('like', '%' . trim($o_name) . '%');
+//            $this->assign('search_organize_name',$o_name);
+//        }
+//        if(!empty($_POST['o_provinceid'])){
+//            $o_provinceid=input('param.o_provinceid');
+//            $condition['o_provinceid']=$o_provinceid;
+//            $this->assign('o_provinceid',$o_provinceid);
+//        }
+//        if(!empty($_POST['o_cityid'])) {
+//            if ($_POST['dep'] == 2 || $_POST['dep'] == 3){
+//                $o_cityid = input('param.o_cityid');
+//                $condition['o_cityid'] =$o_cityid;
+//                $this->assign('o_cityid', $o_cityid);
+//            }
+//        }
+//        if(!empty($_POST['area_id'])){
+//            if ($_POST['dep'] == 3) {
+//                $area_id = input('param.area_id');
+//                $condition['o_areaid'] =$area_id;
+//                $this->assign('area_id', $area_id);
+//            }
+//        }
+        //$admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        $mood_list = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->paginate(15,false,['query' => request()->param()]);
+        $this->assign('page', $mood_list->render());
+        $this->assign('mood_list', $mood_list->items());
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -90,35 +71,13 @@ class Find extends AdminControl {
      * 获取分/子公司栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action)){
             $menu_array = array(
                 array(
                     'name' => 'index',
-                    'text' => '分/子（代理）公司管理',
-                    'url' => url('Admin/Company/index')
+                    'text' => '晒心情管理',
+                    'url' => url('Admin/Find/index')
                 )
             );
-        }else{
-            $menu_array = array(
-                array(
-                    'name' => 'index',
-                    'text' => '分/子（代理）公司管理',
-                    'url' => url('Admin/Company/index')
-                ),
-                array(
-                    'name' => 'add',
-                    'text' => '添加',
-                    'url' => url('Admin/Company/add')
-                )
-            );
-        }
-
-        if (request()->action() == 'edit') {
-            $oid=$_GET['organize_id'];
-            $menu_array[1] = array(
-                'name' => 'organize_edit', 'text' => '编辑', 'url' => url('Admin/Company/edit',array('organize_id'=>$oid))
-            );
-        }
         return $menu_array;
     }
     /**
