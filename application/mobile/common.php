@@ -1,7 +1,7 @@
 <?php
 
 
-function output_data($datas, $extend_data = array()) {
+/*function output_data($datas, $extend_data = array()) {
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     $data['result']=isset($datas['error'])?array():$datas;
@@ -21,7 +21,7 @@ function output_data($datas, $extend_data = array()) {
 function output_error($message, $extend_data = array()) {
     $datas = array('error' => $message);
     output_data($datas, $extend_data);
-}
+}*/
 
 function mobile_page($page_info) {
     //输出是否有下一页
