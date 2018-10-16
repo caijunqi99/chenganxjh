@@ -279,7 +279,6 @@
 
 
             $('.bang_submit').on('click', function() {
-                alert(user_token);
                 if (!Tools.IsAge($("#nianling").val())) {
                     $.alert("年龄不符合科学，请重新输入");
                 } else if (!Tools.IsEmail($("#email").val())) {
@@ -333,7 +332,9 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'])
+                                $.toast(response['result']['message'],'',function(){
+                                    historyback();
+                                })
                             }else{
                                 $.toast(response['message'])
                             }
