@@ -92,7 +92,7 @@
 
             maxLengths = function(event) {
                 if (event.target.value.length > 6) {
-                    $.toast('支付密码只能有六位数字')
+                    $.toast('支付密码只能有六位数字');
                     event.target.value = event.target.value.substring(0, 6);
                 }
             }
@@ -123,11 +123,11 @@
 
             $('.bang_submit').click('on', function() {
                 if ($('#pwd1').val() == '') {
-                    alert('请输入安全密码');
+                    $.toast('请输入安全密码');return false;
                 } else if ($('#pwd2').val() == '') {
-                    alert('请再一次输入安全密码');
+                    $.toast('请再一次输入安全密码');return false;
                 }  else if ($('#pwd2').val() != $('#pwd1').val()) {
-                    alert('两次密码不一致，请重新输入');
+                    $.toast('两次密码不一致，请重新输入');return false;
                 } else {
                     $.ajax({
                         type: "POST",
@@ -141,9 +141,13 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'])
+                                $.toast(response['result']['message'],'',function(){
+                                    historyback();
+                                })
                             } else {
-                                $.alert(response['message'])
+                                $.alert(response['message'],'',function(){
+                                    window.location.reload();
+                                })
                             }
                         }
                     });

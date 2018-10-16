@@ -110,9 +110,13 @@
                     dataType: "json",
                     success: function(response) {
                         if (response['code'] == 200) {
-                            $.toast('修改成功')
+                            $.toast('修改成功','',function(){
+                                historyback();
+                            })
                         } else {
-                            $.toast(response['message'])
+                            $.toast(response['message'],'',function(){
+                                window.location.reload();
+                            })
                         }
                     }
                 });
