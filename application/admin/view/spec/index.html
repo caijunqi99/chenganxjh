@@ -33,6 +33,7 @@
                 <td>{$spec.sp_id}</td>
                 <td>{$spec.sp_name}</td>
                 <td>{$spec.gc_name}</td>
+                <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action)){?>
                 <td>
                     <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
                     <a href="{:url('/admin/spec/spec_edit',['sp_id'=>$spec.sp_id])}">{$Think.lang.ds_edit}</a>
@@ -41,6 +42,7 @@
                     <a href="{:url('/admin/spec/spec_drop',['sp_id'=>$spec.sp_id])}">{$Think.lang.ds_del}</a>
                     <?php }?>
                 </td>
+                <?php }?>
             </tr>
             {/volist}
         </tbody>

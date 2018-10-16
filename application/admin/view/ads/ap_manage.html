@@ -122,6 +122,7 @@
         </tr>
         <?php } ?>
       </tbody>
+        <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
       <tfoot>
         <tr class="tfoot">
           <td><input type="checkbox" class="checkall" id="checkall"/></td>
@@ -131,6 +132,7 @@
           </td>
         </tr>
       </tfoot>
+        <?php }?>
     </table>
     {$page}
   </form>
