@@ -10,8 +10,9 @@
           <td class="vatop rowform onoff">
             <label for="rewrite_enabled_1"  class="cb-enable selected" title="{:lang('ds_yes')}>"><span>{:lang('ds_yes')}</span></label>
             <label for="rewrite_disabled_0" class="cb-disable" title="{:lang('ds_no')}"><span>{:lang('ds_no')}</span></label>
-            <input id="rewrite_enabled_1" name="verify_state"  value="1" type="radio">
-            <input id="rewrite_disabled_0" name="verify_state" value="0" type="radio"></td>
+            <input id="rewrite_enabled_1" name="verify_state"  value="1" type="radio" checked>
+            <input id="rewrite_disabled_0" name="verify_state" value="0" type="radio">
+          </td>
           <td class="vatop tips">
             {:lang('open_rewrite_tips')}
         </tr>
@@ -36,7 +37,7 @@ $(function(){
         ajaxpost('form1', '', '', 'onerror');
     });
     $('input[name="verify_state"]').click(function(){
-        if ($(this).val() == 1) {
+        if ($(this).val() == 1) {;
             $('tr[nctype="reason"]').hide();
         } else {
             $('tr[nctype="reason"]').show();

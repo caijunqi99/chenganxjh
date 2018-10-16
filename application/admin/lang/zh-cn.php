@@ -120,13 +120,13 @@ $lang['ds_revisitclass']           = '重温课堂管理';
 $lang['ds_binding']                = '待审核学生绑定';
 
 //商品
-$lang['ds_goods']                  = '商城管理';
+$lang['ds_shops']                  = '商城管理';
 $lang['ds_goodsclass']             = '商品分类';
 $lang['ds_brand']                  = '品牌管理';
-$lang['ds_goods_manage']           = '商品管理';
+$lang['ds_goods']                  = '商品管理';
 $lang['ds_type']                   = '类型管理';
 $lang['ds_spec']                   = '规格管理';
-$lang['ds_album']                  = '空间管理';
+$lang['ds_goodsalbum']             = '空间管理';
 //店铺
 $lang['ds_store']                  = '店铺';
 $lang['ds_store_manage']           = '店铺管理';
@@ -156,6 +156,7 @@ $lang['ds_article']                = '文章管理';
 $lang['ds_document']               = '会员协议';
 $lang['ds_navigation']             = '导航管理';
 $lang['ds_adv']                    = '广告管理';
+$lang['ds_ads']                    = '广告位管理';
 $lang['ds_recposition']            = '推荐位';
 $lang['ds_link']                   = '友情链接';
 //运营

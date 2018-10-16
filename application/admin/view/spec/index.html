@@ -22,7 +22,9 @@
                 <th>{$Think.lang.sp_id}</th>
                 <th>{$Think.lang.sp_name}</th>
                 <th>{$Think.lang.gc_name}</th>
-                <th>{$Think.lang.ds_handle}</th>
+                <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action)){?>
+                    <th>{$Think.lang.ds_handle}</th>
+                <?php }?>
             </tr>
         </thead>
         <tbody>
@@ -32,8 +34,12 @@
                 <td>{$spec.sp_name}</td>
                 <td>{$spec.gc_name}</td>
                 <td>
+                    <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
                     <a href="{:url('/admin/spec/spec_edit',['sp_id'=>$spec.sp_id])}">{$Think.lang.ds_edit}</a>
+                    <?php }?>
+                    <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
                     <a href="{:url('/admin/spec/spec_drop',['sp_id'=>$spec.sp_id])}">{$Think.lang.ds_del}</a>
+                    <?php }?>
                 </td>
             </tr>
             {/volist}

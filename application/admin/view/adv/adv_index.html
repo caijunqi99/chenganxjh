@@ -43,7 +43,9 @@
           <th>{$Think.lang.adv_ap_id}</th>
           <th class="align-center">{$Think.lang.adv_start_time}</th>
           <th class="align-center">{$Think.lang.adv_end_time}</th>
+            <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action) || in_array(4,$action)){?>
           <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php }?>
         </tr>
       </thead>
       <tbody>
@@ -61,10 +63,16 @@
           </td>
           <td class="align-center nowrap"><?php echo date('Y-m-d',$v['adv_start_date']); ?></td>
           <td class="align-center nowrap"><?php echo date('Y-m-d',$v['adv_end_date']); ?></td>
-          <td class="w72 align-center">
-              <a href="{:url('/Admin/Adv/adv_edit',['adv_id'=>$v.adv_id])}">{$Think.lang.adv_edit}</a>&nbsp;|&nbsp;
-              <a href="javascript:if(confirm('{$Think.lang.ds_ensure_del}'))window.location = '{:url('/Admin/Adv/adv_del',['adv_id'=>$v.adv_id])}';">{$Think.lang.ds_del}</a>
-          </td>
+            <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action) || in_array(4,$action)){?>
+            <td class="w72 align-center">
+                <?php if(session('admin_is_super') == 1 || in_array(3,$acion)){?>
+                <a href="{:url('/Admin/Adv/adv_edit',['adv_id'=>$v.adv_id])}">{$Think.lang.adv_edit}</a>&nbsp;|&nbsp;
+                <?php }?>
+                <?php if(session('admin_is_super') == 1 || in_array(2,$acion)){?>
+                  <a href="javascript:if(confirm('{$Think.lang.ds_ensure_del}'))window.location = '{:url('/Admin/Adv/adv_del',['adv_id'=>$v.adv_id])}';">{$Think.lang.ds_del}</a>
+                <?php }?>
+            </td>
+            <?php }?>
         </tr>
         <?php } ?>
         <?php }else { ?>

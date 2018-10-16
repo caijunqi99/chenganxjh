@@ -249,7 +249,7 @@ class Type extends Model{
         switch ($type) {
             case 'spec':
                 $order = !empty($order) ? $order : 'spec.sp_id asc, spec.sp_sort asc';
-                $result = db('typespec')->alias('type_spec')->field($field)->join('__SPEC__ spec', 'spec.sp_id = spec.sp_id')->where($param)->order($order)->select();
+                $result = db('typespec')->alias('type_spec')->field($field)->join('__SPEC__ spec', 'spec.sp_id = type_spec.sp_id')->where($param)->order($order)->select();
                 break;
             case 'attr':
                 $order = !empty($order) ? $order : 'attribute.attr_sort asc, attribute_value.attr_value_sort asc, attribute_value.attr_value_id asc';
