@@ -106,7 +106,7 @@
       </td>
       <td><span>{$Think.lang.currency}<?php echo $val['goods_price']; ?></span></td>
       <td><span><?php echo $storage_array[$val['goods_commonid']]['sum']; ?>{$Think.lang.piece}</span></td>
-      <td class="dscs-table-handle"><span><a href="{:url('/Home/Sellergoodsonline/index',['commonid'=>$val.goods_commonid])}" class="btn-blue"><i class="icon-edit"></i><p>{$Think.lang.ds_edit}</p></a></span>
+      <td class="dscs-table-handle"><span><a href="{:url('/Home/Sellergoodsonline/edit_goods',['commonid'=>$val.goods_commonid])}" class="btn-blue"><i class="icon-edit"></i><p>{$Think.lang.ds_edit}</p></a></span>
         <span><a href="javascript:void(0)" onclick="ajax_get_confirm('{$Think.lang.ds_ensure_del}', '{:url('/Home/Sellergoodsonline/drop_goods',['commonid'=>$val.goods_commonid])}');" class="btn-red"><i class="icon-trash"></i><p>{$Think.lang.ds_del}</p></a></span></td>
     </tr>
     <tr style="display:none;"><td colspan="20"><div class="dssc-goods-sku ps-container"></div></td></tr>

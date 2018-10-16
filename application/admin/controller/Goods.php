@@ -17,10 +17,18 @@ class Goods extends AdminControl
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/goods.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index()
     {
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         //待添加筛选条件
         $condition=array();
         $goods_name= input('goods_name');
@@ -99,6 +107,9 @@ class Goods extends AdminControl
      * 违规下架
      */
     public function goods_lockup() {
+        if(session('admin_is_super') !=1 && !in_array('16',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         if (request()->isPost()) {
             $commonids = $_POST['commonids'];
             $commonid_array = explode(',', $commonids);
@@ -124,6 +135,9 @@ class Goods extends AdminControl
      * 删除商品
      */
     public function goods_del() {
+        if(session('admin_is_super') !=1 && !in_array('2',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $common_id = intval(input('common_id'));
         if ($common_id <= 0) {
             $this->error(lang('ds_common_op_fail'));
@@ -136,7 +150,10 @@ class Goods extends AdminControl
      * 审核商品
      */
     public function goods_verify(){
-        if (\request()->isPost()) {
+        if(session('admin_is_super') !=1 && !in_array('15',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        if (request()->isPost()) {
             $commonids = $_POST['commonids'];
             $commonid_array = explode(',', $commonids);
             foreach ($commonid_array as $value) {

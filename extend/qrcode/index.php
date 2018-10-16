@@ -28,7 +28,7 @@ class PhpQRCode {
     //processing form input
     //remember to sanitize user input in real-life solution !!!
     private $errorCorrectionLevel = 'H';  // L M Q H
-    private $matrixPointSize = 10;    // 1 2 3 4 5 6 7 8 9 10
+    private $matrixPointSize = 8;    // 1 2 3 4 5 6 7 8 9 10
     private $date = 'xjh';
     private $pngTempDir = '';
     private $pngTempName = '';
