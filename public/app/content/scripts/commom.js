@@ -26,7 +26,6 @@ $(function() {
     // FastClick.attach(document.body);
 
 
-
 })
 
 //返回函数

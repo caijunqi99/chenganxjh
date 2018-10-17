@@ -514,3 +514,148 @@ a.quit_popup i {
     padding: 0 30px;
     line-height: 80px;
 }
+
+.goodslist li {
+    padding: 35px 0;
+    height: 130px;
+    border-bottom: 1px solid #eee;
+}
+
+.goodslist li a {
+    display: block;
+}
+
+.goods_img {
+    width: 128px;
+    height: 128px;
+    border: 2px solid #eee;
+    float: left;
+}
+
+.goods_item {
+    width: 560px;
+    height: 130px;
+    float: left;
+}
+
+.shoppingcart {
+    width: 100px;
+    height: 130px;
+    float: right;
+    -webkit-display: flex;
+    display: flex;
+    align-items: center;
+}
+
+.shoppingcart0 {
+    width: 100px;
+    height: 55px;
+    border-left: 2px solid #eee;
+    line-height: 55px;
+    text-align: right;
+}
+
+.shoppingcart0 i.icon-daohanggouwuche {
+    font-size: 40px;
+    color: #aeaeae;
+}
+
+.goods_info {
+    height: 130px;
+    -webkit-display: flex;
+    display: flex;
+    flex-direction: column;
+    padding-left: 22px;
+    justify-content: center;
+}
+
+.goods_info h3 {
+    font-size: 26px;
+    color: #242424;
+    line-height: 34px;
+    max-height: 68px;
+    overflow: hidden;
+}
+
+.goods_info p {
+    font-size: 24px;
+    color: #0cba9f;
+    line-height: 44px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.goods_info p span {
+    color: #aeaeae;
+    margin-left: 15px;
+}
+
+.goods_info p.goods_p2 {
+    font-size: 20px;
+    color: #242424;
+    line-height: 30px;
+}
+
+.spec_p {
+    font-size: 20px;
+    color: #242424;
+    margin-bottom: 30px;
+}
+
+.spec_list a {
+    background: #eee;
+    border: 1px solid #eee;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 20px;
+    color: #242424;
+    display: inline-block;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
+
+.spec_list a.active {
+    border-color: #2dd3b2;
+    color: #2dd3b2;
+    background: #d0f3ec;
+}
+
+.spec_box {
+    padding: 0 50px 20px;
+}
+
+.goodsnmb {
+    padding: 0 50px 30px;
+    -webkit-display: flex;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    height: 50px;
+}
+
+.goodsnmb .weui-count .weui-count__number {
+    font-size: 26px;
+    margin: 0 10px;
+}
+
+.goodsnmb .weui-count .weui-count__btn {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 24px;
+    transform: scale(1.1);
+}
+
+.myc_confirm_box {
+    padding: 0 50px 50px;
+}
+
+.myc_confirm {
+    height: 80px;
+    background: #2dd3b2;
+    font-size: 30px;
+    width: 100%;
+    color: #fff;
+    border-radius: 10px;
+}

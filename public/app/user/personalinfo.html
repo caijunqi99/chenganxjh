@@ -42,8 +42,9 @@ back
             <div class="container2">
                 <div class="bang_list userhead" style="position:relative;">
                     <div class="name_box user_head_txt">
-                        <label for="picture" class="picture_label">头像</label>
-                        <input type="file" placeholder="" id="picture" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />
+                        <label for="uploaderInput" class="picture_label">头像</label>
+                        <input type="file" placeholder="" id="uploaderInput" name="image[]" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />
+                        <!-- <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple> -->
                     </div>
                     <div class="input_box user_head_cont" style="float:right;">
                         <div class="user_head_box">
@@ -125,7 +126,7 @@ back
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
+    <!-- <script src="../content/plugins/jqweui/lib/fastclick.js"></script> -->
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.js"></script>
     <script src="../content/scripts/commom.js"></script>
@@ -239,17 +240,17 @@ back
             // 上传头像
             fileChange = function(event) {
                 var formData = new FormData(event.target.files['0']);
-                formData.append('file',event.target.files['0']);
-                formData.append('key',user_token);
-                formData.append('member_id',user_member_id);
+                formData.append('file', event.target.files['0']);
+                formData.append('key', user_token);
+                formData.append('member_id', user_member_id);
                 $.ajax({
-                    type:'post',
-                    url:api+'/Common/upload_avatar',
+                    type: 'post',
+                    url: api + '/Common/upload_avatar',
                     // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
-                    data:formData,
+                    data: formData,
                     contentType: false,
                     processData: false,
-                    success:function(response){
+                    success: function(response) {
                         if (response['code'] == 200) {
                             $.toast(response['result']['message']);
                             img_name = response['result']['avatar_url'];

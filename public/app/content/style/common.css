@@ -457,3 +457,11 @@
         font-size: 28px;
         padding: 15px 0 20px;
     }
+    
+    .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
+        font-size: 30px;
+    }
+    
+    .weui-popup__modal .modal-content {
+        padding-top: 3rem;
+    }
