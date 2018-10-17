@@ -39,7 +39,7 @@ class Login extends MobileMall
         if (empty($phone) || !in_array($client, $this->client_type_array)) {
             output_error($type.'失败!',array('type'=>input('post.log_type')));
         }
-        if (!preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)) {//根据会员名没找到时查手机号
+        if (!preg_match('/^1(3|5|6|7|8|4)[0-9]{9}$/', $phone)) {//根据会员名没找到时查手机号
             output_error('请输入正确的手机号码！',array('type'=>input('post.log_type')));
             
         }
@@ -94,7 +94,7 @@ class Login extends MobileMall
         }else{//登陆
             if ($password && $is_pass == 1){
                 if ($member_info['member_password'] != md5(trim($password))) {//密码对比
-                    output_error('密码填写错误！',array('type'=>input('post.log_type')));
+                    output_error('密码填写错误！');
                 }
             }            
         }
@@ -106,7 +106,13 @@ class Login extends MobileMall
             if ($token) {
                 $logindata = array();
                 $logindata['key']=$token;
-                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                if(!empty($member['member_avatar'])){
+                    $logindata['member_avatar'] = $member['member_avatar'];
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL.$member['member_avatar'];
+                }else{
+                    $logindata['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                }
                 $logindata['user_name'] = $member['member_name'];
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];

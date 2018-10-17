@@ -148,7 +148,6 @@ class Packagesbuy extends MobileMember
         }
         //加入学生学校班级信息
         if(is_array($childinfo))$order += $childinfo;        
-        
         $order['order_amount'] = $packageInfo['pkg_price'];        
         try {
             $model = Model('Packagesorder');
@@ -177,33 +176,60 @@ class Packagesbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
+        
+
+        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
-
-            $param['wxpay_appid'] = 'wxa1fbfdb142a2f2e1';
-            $param['wxpay_partnerid'] = '1486854912';
-
             $param['orderSn'] = $order_pay_info['pay_sn'];
-            $param['orderFee'] = (int)(100 * $order_pay_info['order_amount']);
+            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
             $api = new \wxpay_h5();
             $api->setConfigs($param);
-
-            $mweburl = $api->get_mweb_url($this);
+            
+            $mweburl = $api->get_payurl($this);
             output_data($mweburl);
-            Header("Location: $mweburl");
+            $url = $mweburl['mweb_url'];
+            Header("Location: $url");
             exit;
         }
-
+        
         //alipay and so on
-        $param['order_sn'] = $order_pay_info['pay_sn'];
-        $param['order_amount'] = $order_pay_info['order_amount'];
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $payment_api = new $this->payment_code();
-        $return = $payment_api->get_payform($param);
+        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
+        $param['orderSn'] = $order_pay_info['pay_sn'];
+        $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];
+        $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
+
+        
+        $payment_api = new $this->payment_code($param);
+        $return = $payment_api->getSubmitUrl($param);
         echo $return;
         exit;
+    }
+
+    public function notify_url(){
+        echo 'success';
+    }
+
+    public function order_status_check(){
+        $pay_sn = input('post.pay_sn');
+        if(!$pay_sn)output_error('订单号错误！');
+        $Order = model('Packagesorder');
+
+        $orderInfo = $Order->getOrderInfo(array('pay_sn'=>$pay_sn,'buyer_mobile'=>$this->member_info['member_mobile']));
+        if(!$orderInfo)output_error('没有此订单信息！');
+        if($this->payment_code == 'wxpay_h5'){
+            $payment = new $this->payment_code();
+        }else if($this->payment_code == 'alipay_app'){
+            $payment = new $this->payment_code();
+        }else{
+            output_error('支付类型错误！');
+        }
+        $Status = $payment->getOrderStateBysn($orderInfo['pay_sn']);
+        p($Status);exit;
+        output_data($this);
     }
 
 

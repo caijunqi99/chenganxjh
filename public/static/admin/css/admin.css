@@ -1003,11 +1003,40 @@ a.btn-add-nofloat {
 .ncap-type-spec-list label { font-size: 12px; vertical-align: top; display: inline-block; *display: inline/*IE7*/; width: 150px; margin-right: 10px; zoom: 1; }
 #submitBtn { display: inline-block; vertical-align: middle; margin: 16px 12px;}
 
+/*lnj*/
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
 
+* html>body .clearfix {
+    display: inline-block;
+    width: 100%;
+}
 
+* html .clearfix {
+    /* Hides from IE-mac \*/
+    height: 1%;
+    /* End hide from IE-mac */
+}
 
-
-
+.clear {
+    clear: both;
+}
+.foot_edits{border: 1px solid #ccc;padding:10px; }
+.foot_list > div{float: left;padding:10px; box-sizing: border-box;}
+.foot_item1 {width:20%;}
+.foot_item2 {width:45%;}
+.foot_item3 {width:35%;}
+.foot_list > div input{width: 100%;padding:10px; box-sizing: border-box;}
+.foot_list > div.foot_item textarea.foot_info{width: 100%;height: 60px; resize: none !important;padding:10px; box-sizing: border-box;}
+.foot_title{font-style: 16px;color: #666;text-align: center;line-height: 40px;}
+.foot_list.foot_t{padding:0;}
+.foot_list.foot_t>div{padding:0;}
+.footinput{}
 
 
 

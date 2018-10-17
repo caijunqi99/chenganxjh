@@ -21,7 +21,7 @@ class Packagesorder extends Model {
     }
 
     /**
-     * 取得学校列表(所有)
+     * 取得套餐订单列表(所有)
      * @param unknown $condition
      * @param string $page
      * @param string $field
@@ -56,9 +56,19 @@ class Packagesorder extends Model {
      * @param unknown_type $data
      * @param unknown_type $condition
      */
-    public function editOrder($data, $condition, $limit = '') {
-        $update = db('packagesorder')->where($condition)->limit($limit)->update($data);
+    public function editOrder($data, $condition) {
+        $update = db('packagesorder')->where($condition)->update($data);
         return $update;
+    }
+
+
+    /**
+     * 添加订单日志
+     */
+    public function addOrderLog($data) {
+        $data['log_role'] = str_replace(array('buyer', 'seller', 'system', 'admin'), array('买家', '商家', '系统', '管理员'), $data['log_role']);
+        $data['log_time'] = TIMESTAMP;
+        return db('orderlog')->insertGetId($data);
     }
 
 }

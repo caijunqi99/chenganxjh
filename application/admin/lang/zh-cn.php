@@ -78,6 +78,32 @@ $lang['company_phone']='手机号码不能为空';
 $lang['company_phoneerror']='请输入正确的手机号';
 $lang['company_area']='所在地区不能为空';
 
+//发现
+$lang['ds_find']='发现';
+$lang['ds_mood']='晒心情';
+$lang['ds_value']='心情内容';
+$lang['ds_image']='心情图片';
+$lang['mood_member']='会员账号';
+$lang['mood_role']='身份';
+$lang['mood_class']='绑定班级';
+$lang['mood_time']='发布时间';
+$lang['mood_deltime']='禁用时间';
+$lang['admin_index_status_on']='启用';
+$lang['admin_index_status_off']='禁用';
+$lang['admin_index_title']='提示';
+$lang['mood_status_close_before']='是否要启用该条记录';
+$lang['mood_status_close_late']='是否要禁用该条记录';
+$lang['mood_index_kl']='再考虑一下';
+$lang['mood_status_close_true']='确认禁用';
+$lang['mood_status_open_true']='确认启用';
+$lang['mood_index_qx']='已取消操作';
+$lang['mood_status_open_success']='启用成功';
+$lang['mood_status_open_error']='启用失败';
+$lang['mood_status_close_success']='禁用成功';
+$lang['mood_status_close_error']='禁用失败';
+
+
+
 //学校管理
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
@@ -123,13 +149,13 @@ $lang['ds_teachtype']            = '视频分类管理';
 $lang['ds_teachvideo']            = '视频管理';
 
 //商品
-$lang['ds_goods']                  = '商城管理';
+$lang['ds_shops']                  = '商城管理';
 $lang['ds_goodsclass']             = '商品分类';
 $lang['ds_brand']                  = '品牌管理';
-$lang['ds_goods_manage']           = '商品管理';
+$lang['ds_goods']                  = '商品管理';
 $lang['ds_type']                   = '类型管理';
 $lang['ds_spec']                   = '规格管理';
-$lang['ds_album']                  = '空间管理';
+$lang['ds_goodsalbum']             = '空间管理';
 //店铺
 $lang['ds_store']                  = '店铺';
 $lang['ds_store_manage']           = '店铺管理';
@@ -159,6 +185,7 @@ $lang['ds_article']                = '文章管理';
 $lang['ds_document']               = '会员协议';
 $lang['ds_navigation']             = '导航管理';
 $lang['ds_adv']                    = '广告管理';
+$lang['ds_ads']                    = '广告位管理';
 $lang['ds_recposition']            = '推荐位';
 $lang['ds_link']                   = '友情链接';
 //运营
@@ -495,5 +522,8 @@ $lang['icon_manage']     = '导航图标';
 $lang['ds_icon']     = '导航图标';
 $lang['icon_member']     = '个人中心';
 $lang['icon_find']     = '发现';
+
+$lang['ds_schoolbus']     = '校车管理';
+$lang['ds_schoolfood']     = '食谱管理';
 
 ?>

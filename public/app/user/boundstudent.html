@@ -41,6 +41,7 @@
     </header>
 
     <!-- 主要内容 -->
+    <div class="screen" id="screen"></div>
     <div class="main">
         <div class="container2">
             <div class="bang_list">
@@ -48,49 +49,49 @@
                     <label for="bang_name"><span class="redstar">*</span>姓名</label>
                 </div>
                 <div class="input_box">
-                    <input class="input_txt" id="bang_name" type="text" placeholder="请输入您的姓名">
+                    <input class="input_txt" id="bang_name"  type="text" placeholder="请输入您的姓名">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="sex" type="text" value="女">
+                    <input class="weui-input input_txt inputpointer" onfocus="this.blur()" id="sex" type="text" value="女">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="date" class="weui-label">生日</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="date" type="text" value="" placeholder="请选择生日">
+                    <input class="weui-input input_txt inputpointer" onfocus="this.blur()" id="date" type="text" value="" placeholder="请选择生日">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="city" class="weui-label"><span class="redstar">*</span>所在地</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="city" type="text" value="" placeholder="请选择地址">
+                    <input class="weui-input input_txt inputpointer" id="city" onfocus="this.blur()" type="text" value="" placeholder="请选择所在地">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="school" class="weui-label"><span class="redstar">*</span>就读学校</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="school" type="text" data-values="" value="" placeholder="请先选择所在地">
+                    <input class="weui-input input_txt inputpointer" onfocus="this.blur()" id="school" type="text" data-values="" value="" placeholder="请先选择就读学校">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="classes" class="weui-label"><span class="redstar">*</span>所在年级</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="classes" type="text" data-values="" value="" placeholder="请先选择所在学校">
+                    <input class="weui-input input_txt inputpointer" id="classes" onfocus="this.blur()" type="text" data-values="" value="" placeholder="请先选择所在年级">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
-                <div class="weui-cell__hd name_box"><label for="banji" class="weui-label"><span class="redstar">*</span>班级</label></div>
+                <div class="weui-cell__hd name_box"><label for="banji" class="weui-label"><span class="redstar">*</span>所在班级</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="banji" type="text" data-values="" value="" placeholder="请先选择所在年级">
+                    <input class="weui-input input_txt inputpointer" id="banji" onfocus="this.blur()" type="text" data-values="" value="" placeholder="请先选择所在班级">
                 </div>
             </div>
 
@@ -99,14 +100,14 @@
                     <label for="shibiema"><span class="redstar">*</span>班级识别码</label>
                 </div>
                 <div class="input_box">
-                    <input class="input_txt" id="shibiema" type="text" placeholder="请输入班级识别码">
+                    <input class="input_txt" id="shibiema"  type="text" placeholder="请输入班级识别码">
                 </div>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
                 <div class="weui-cell__bd">
-                    <a href="javascript:;" class="input_txt color_blue">2019/09/20 到期</a>
+                    <a href="javascript:;" class="input_txt color_blue">前往购买套餐</a>
                 </div>
             </div>
 
@@ -114,6 +115,7 @@
                 <input id="bang_submit" class="bang_submit" type="button" value="提 交" />
             </div>
         </div>
+    </div>
 
 
         <script src="../content/scripts/jquery.min.js"></script>
@@ -127,7 +129,6 @@
 
         <script>
             $(function() {
-
                 // 性别选择
                 $("#sex").picker({
                     title: "请选择您的性别",
@@ -143,9 +144,17 @@
                 });
 
                 // 所在地区选择
+                $("#city,#school,#classes,#banji").click(function() {
+                    $('#bang_name').blur();
+                    $('#shibiema').blur();
+                    $("#screen").addClass("show");
+                });
                 $("#city").cityPicker({
                     title: "请选择所在地",
+                    onChange: function(picker) {
+                    },
                     onClose: function(picker) {
+                        $("#screen").removeClass("show");
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/school.html',
@@ -157,9 +166,16 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                $("#school").select("update", {
-                                    items: response['result']
-                                })
+                                if(response['result'].length == 0){
+                                    $("#school").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#school").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
                             }
                         });
                     }
@@ -170,7 +186,10 @@
                 $("#school").select({
                     title: "请选择学校",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
                         schollID = p.data.values;
                         $.ajax({
                             type: "POST",
@@ -181,9 +200,16 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                $("#classes").select("update", {
-                                    items: response['result']
-                                })
+                                if(response['result'].length == 0){
+                                    $("#classes").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#classes").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
                             }
                         });
                     }
@@ -193,7 +219,10 @@
                 $("#classes").select({
                     title: "请选择所在年级",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/classData.html',
@@ -204,10 +233,15 @@
                             },
                             dataType: "json",
                             success: function(response) {
-                                console.log(response)
-                                $("#banji").select("update", {
-                                    items: response['result']
-                                })
+                                if(response['result'].length == 0){
+                                    $("#banji").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#banji").select("update", {
+                                        items: response['result']
+                                    })
+                                }
                             }
                         });
                     }
@@ -217,7 +251,10 @@
                 $("#banji").select({
                     title: "请选择所在班级",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
 
                     }
                 });
@@ -269,7 +306,9 @@
                         data: params,
                         dataType: "json",
                         success: function(response) {
-                            $.alert(response['message'])
+                            $.alert(response['message'],'',function(){
+                                historyback();
+                            })
                         }
                     });
 

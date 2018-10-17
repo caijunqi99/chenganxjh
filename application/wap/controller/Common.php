@@ -21,6 +21,7 @@ class Common extends MobileMall
             $v['icon_2'] = getIconImage($v['icon_2'],'icon_2');
             $v['icon_3'] = getIconImage($v['icon_3'],'icon_3');
         }
+        unset($v);
         if ($type==1) {
             output_data($navlist);
         }else{
@@ -197,10 +198,11 @@ class Common extends MobileMall
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
+//        output_data($_FILES["file"]["type"]);
         if(!empty($_FILES)){
-            if ((($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
+            if ((($_FILES["file"]["type"] == "image/*") || ($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
             {
-                if($_FILES["file"]["size"] < 80000){
+                if($_FILES["file"]["size"] < 8*1024*1024){
                     if ($_FILES["file"]["error"] > 0)
                     {
                         output_error($_FILES["file"]["error"]);
