@@ -145,12 +145,13 @@
 
                 // 所在地区选择
                 $("#city,#school,#classes,#banji").click(function() {
-                    $("#screen").removeClass("show");
 
                     $("#screen").addClass("show");
                 });
                 $("#city").cityPicker({
                     title: "请选择所在地",
+                    onChange: function(picker) {
+                    },
                     onClose: function(picker) {
                         $("#screen").removeClass("show");
                         $.ajax({
@@ -184,6 +185,8 @@
                 $("#school").select({
                     title: "请选择学校",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
                         schollID = p.data.values;
@@ -215,6 +218,8 @@
                 $("#classes").select({
                     title: "请选择所在年级",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
                         $.ajax({
@@ -245,6 +250,8 @@
                 $("#banji").select({
                     title: "请选择所在班级",
                     items: [{}],
+                    onChange: function(p, v, d) {
+                    },
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
 
