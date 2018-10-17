@@ -33,7 +33,6 @@ function CalculationTime($order_info,$packagetime){
     return $endTime;
 }
 function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
-    halt($datas);
     if(count($datas) == count($datas,1)){
         $datas2 = array(
             0=>$datas
