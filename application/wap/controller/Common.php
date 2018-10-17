@@ -17,6 +17,7 @@ class Common extends MobileMall
     public function navicon(){
         $type = intval(input('post.type',1));
         $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where('type',$type)->select();
+        halt($navlist);
         foreach($navlist as $k=>&$v){
             $v['icon_2'] = getIconImage($v['icon_2'],'icon_2');
             $v['icon_3'] = getIconImage($v['icon_3'],'icon_3');
