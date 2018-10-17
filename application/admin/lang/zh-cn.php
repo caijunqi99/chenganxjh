@@ -116,6 +116,12 @@ $lang['ds_monitor']                = '网络监控';
 $lang['ds_revisitclass']           = '重温课堂管理';
 $lang['ds_binding']                = '待审核学生绑定';
 
+//教孩管理
+$lang['ds_teachlist']                   = '教孩管理';
+$lang['ds_teachercertify']            = '教师认证申请';
+$lang['ds_teachtype']            = '视频分类管理';
+$lang['ds_teachvideo']            = '视频管理';
+
 //商品
 $lang['ds_goods']                  = '商城管理';
 $lang['ds_goodsclass']             = '商品分类';
