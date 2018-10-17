@@ -45,7 +45,7 @@
                         <label for="nickname">原始密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd1" maxlength="12" type="password" placeholder="请输入原始密码" value="" />
+                        <input class="input_txt" id="pwd1" maxlength="12" onfocus="this.blur()"  type="password" placeholder="请输入原始密码" value="" />
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@
                         <label for="nickname">新密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd2" maxlength="12"  type="password" placeholder="请输入新密码" value="" />
+                        <input class="input_txt" id="pwd2" maxlength="12" onfocus="this.blur()"  type="password" placeholder="请输入新密码" value="" />
                     </div>
                 </div>
                 <div class="bang_list">
@@ -62,7 +62,7 @@
                         <label for="nickname">确认新密码：</label>
                     </div>
                     <div class="input_box">
-                        <input class="input_txt" id="pwd3" maxlength="12" type="password" placeholder="请再一次输入新密码" value="" />
+                        <input class="input_txt" id="pwd3" maxlength="12" onfocus="this.blur()" type="password" placeholder="请再一次输入新密码" value="" />
                     </div>
                 </div>
 
@@ -84,17 +84,19 @@
     <script>
         $(function() {
             $('.bang_submit').on('click', function() {
+                alert(user_token);
                 if ($('#pwd1').val() == '') {
-                    alert('请输入原始密码');
+                    $.toast('请输入原始密码');return false;
                 } else if ($('#pwd2').val() == '') {
-                    alert('请输入新密码');
+                    $.toast('请输入新密码');return false;
                 } else if ($('#pwd2').val().length < 6 || $('#pwd2').val().length > 12 ) {
-                    alert('密码长度为6~12位');
+                    $.toast('密码长度为6~12位');return false;
                 } else if ($('#pwd3').val() == '') {
-                    alert('请再一次输入新密码')
+                    $.toast('请再一次输入新密码');return false;
                 } else if ($('#pwd3').val() != $('#pwd2').val()) {
-                    alert('两次密码输入不一致，请重新输入');
+                    $.toast('两次密码输入不一致，请重新输入');return false;
                 }
+
                 $.ajax({
                     type: "POST",
                     url: api + '/Member/editPwd.html',

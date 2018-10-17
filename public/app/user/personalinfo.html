@@ -36,6 +36,7 @@
     </header>
 
     <!-- 主要内容 -->
+    <div class="screen" id="screen"></div>
     <form id="form" action="POST" enctype="multipart/form-data">
 
         <div class="main">
@@ -61,7 +62,7 @@
                             <label for="nickname">昵称</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="nickname" type="text" placeholder="" value="" />
+                            <input class="input_txt" id="nickname" onfocus="this.blur()"  type="text" placeholder="" value="" />
                         </div>
                     </div>
 
@@ -84,7 +85,7 @@
                             <label for="nianling">年龄</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="nianling" type="number" placeholder="请输入年龄" value="" />
+                            <input class="input_txt" id="nianling" onfocus="this.blur()"  type="number" placeholder="请输入年龄" value="" />
                         </div>
                     </div>
                 </div>
@@ -111,7 +112,7 @@
                             <label for="email">邮箱</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="email" type="text" placeholder="请输入您的邮箱">
+                            <input class="input_txt" id="email" onfocus="this.blur()"  type="text" placeholder="请输入您的邮箱">
                         </div>
                     </div>
                 </div>
@@ -208,7 +209,9 @@
                     hangye = response['result']
                 }
             });
-
+            $("#shenfen,#sex,#city,#trade").click(function() {
+                $("#screen").addClass("show");
+            });
             // 身份选择
             $("#shenfen").picker({
                 title: "请选择您的身份",
@@ -217,7 +220,9 @@
                     values: ['家长', '教师', '其他']
                 }],
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 性别选择
@@ -228,7 +233,9 @@
                     values: ['男', '女', '保密']
                 }],
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 行业选择
@@ -236,7 +243,9 @@
                 title: "请选择行业",
                 items: hangye,
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 所在地区选择
@@ -245,6 +254,9 @@
                 items: [],
                 onChange: function(picker, values, displayValues) {
                     // $("h1:contains(选择所在地)").parents(".weui-picker-modal").height("16rem");
+                },
+                onClose: function(picker, values, displayValues) {
+                    $("#screen").removeClass("show");
                 }
             });
 
@@ -267,8 +279,7 @@
 
 
             $('.bang_submit').on('click', function() {
-
-
+                alert(user_token);
                 if (!Tools.IsAge($("#nianling").val())) {
                     $.alert("年龄不符合科学，请重新输入");
                 } else if (!Tools.IsEmail($("#email").val())) {
