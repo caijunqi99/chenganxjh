@@ -152,10 +152,10 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         // console.log(response)
-                        img_name = response['result']['member_avatar'];
+                        img_name = response['result'][0]['member_avatar'];
                         $('.user_img').attr('src', upload_url+img_name);
-                        $('#nickname').val(response['result']['member_nickname']);
-                        switch (response['result']['member_identity']) {
+                        $('#nickname').val(response['result'][0]['member_nickname']);
+                        switch (response['result'][0]['member_identity']) {
                             case 1:
                                 $('#shenfen').val('家长');
                                 break;
@@ -166,7 +166,7 @@
                                 $('#shenfen').val('其他');
                                 break;
                         }
-                        switch (response['result']['member_sex']) {
+                        switch (response['result'][0]['member_sex']) {
                             case 0:
                                 $('#sex').val('保密');
                                 break;
@@ -178,17 +178,17 @@
                                 break;
                         }
 
-                        $('#nianling').val(response['result']['member_age']);
-                        $('#email').val(response['result']['member_email']);
-                        $('#city').get(0).dataset.code = response['result']['member_provinceid'];
-                        $('#city').get(0).dataset.codes = response['result']['member_provinceid'] + ',' + response['result']['member_cityid'] + ',' + response['result']['member_areaid'];
-                        if(response['result']['member_provinceid'] == null){
+                        $('#nianling').val(response['result'][0]['member_age']);
+                        $('#email').val(response['result'][0]['member_email']);
+                        $('#city').get(0).dataset.code = response['result'][0]['member_provinceid'];
+                        $('#city').get(0).dataset.codes = response['result'][0]['member_provinceid'] + ',' + response['result'][0]['member_cityid'] + ',' + response['result'][0]['member_areaid'];
+                        if(response['result'][0]['member_provinceid'] == null){
                             $('#city').val('')
                         }else{
-                            $('#city').val(response['result']['province_name'] + ' ' + response['result']['city_name'] + ' ' + response['result']['area_name']);
+                            $('#city').val(response['result'][0]['province_name'] + ' ' + response['result'][0]['city_name'] + ' ' + response['result'][0]['area_name']);
                         }
-                        $('#trade').val(response['result']['job_name'])
-                        $('#trade').get(0).dataset.values = response['result']['member_jobid']
+                        $('#trade').val(response['result'][0]['job_name'])
+                        $('#trade').get(0).dataset.values = response['result'][0]['member_jobid']
                     };
                 }
             });
