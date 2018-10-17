@@ -145,6 +145,8 @@
 
                 // 所在地区选择
                 $("#city,#school,#classes,#banji").click(function() {
+                    $("#screen").removeClass("show");
+
                     $("#screen").addClass("show");
                 });
                 $("#city").cityPicker({
