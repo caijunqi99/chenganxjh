@@ -20,7 +20,7 @@ class Schoolbus extends AdminControl {
         $this->assign('action',$action);
     }
 
-    public function schoolbus_manage(){
+    public function schoolbus_manage1(){
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
@@ -37,6 +37,11 @@ class Schoolbus extends AdminControl {
         $this->assign('page', $Schoolbus->page_info->render());
         $this->setAdminCurItem('schoolbus_manage');
         return $this->fetch('bus');
+    }
+
+    public function schoolbus_manage(){
+        
+        return $this->fetch('bus_edit');   
     }
 
 
@@ -62,6 +67,7 @@ class Schoolbus extends AdminControl {
             $param['bus_repeat']     = input('post.bus_repeat');
             $param['up_time']        = time();
             p($param);exit;
+
             switch (input('actions')) {
                 case 'edit'://改
                     $param['bus_id'] = intval(input('param.bus_id'));
@@ -72,9 +78,11 @@ class Schoolbus extends AdminControl {
                     }
                     break; 
                 case 'del'://删
-                    $param['bus_id'] = intval(input('param.bus_id'));
-                    $param['is_del'] = 2;
-                    $result = $Schoolbus->schoolbus_update($param);
+                    $del=array(
+                        'bus_id' =>intval(input('param.bus_id')),
+                        'is_del' =>2
+                    );
+                    $result = $Schoolbus->schoolbus_update($del);
                     if ($result) {
                         $this->log(lang('bus_del_succ') . '[' . input('post.bus_card') . ']', null);
                         echo json_encode(['m' => true, 'ms' => lang('bus_del_succ')]);

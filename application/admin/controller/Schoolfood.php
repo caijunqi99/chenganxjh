@@ -49,24 +49,31 @@ class Schoolfood extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
-        p(input());exit;
         if (request()->isPost()) {
             $Schoolfood = Model('Schoolfood');
             $param =array();
-            $param['food_card']       = input('post.food_card');
-            $param['food_line_name']  = input('post.food_line_name');
-            $param['food_color']      = input('post.food_color');
-            $param['food_desc']       = input('post.food_desc');
-            $param['food_start']      = input('post.food_start');
-            $param['food_end']        = input('post.food_end');
-            $param['food_start_time'] = input('post.food_start_time');
-            $param['food_end_time']   = input('post.food_end_time');
-
-            
-            $param['food_line']       = input('post.food_line');
-            $param['food_repeat']     = input('post.food_repeat');
-            $param['up_time']        = time();
-            p($param);exit;
+            $input = input();
+            $food_class      = input('post.food_class');
+            $food_id      = input('post.food_id');
+            $foodContent = $input['food_content'];            
+            if($food_id){
+                $param['food_class']   = input('post.food_class');
+                $param['food_name']    = input('post.food_name');
+                $param['food_content'] = input('post.food_content');
+                $param['food_desc']    = input('post.food_desc');
+                $param['up_time']      = time();
+            }else{
+                foreach ($foodContent as $k => $v) {
+                    $param[$k] = array(
+                        'food_class'   => $food_class,
+                        'food_name'    => $v[0],
+                        'food_content' => $v[1],
+                        'food_desc'    => $v[2],
+                        'up_time'      => time(),
+                        'sc_id'        => 1
+                    );
+                }                                           
+            }
             switch (input('actions')) {
                 case 'edit'://改
                     $param['food_id'] = intval(input('param.food_id'));
@@ -77,9 +84,11 @@ class Schoolfood extends AdminControl {
                     }
                     break; 
                 case 'del'://删
-                    $param['food_id'] = intval(input('param.food_id'));
-                    $param['is_del'] = 2;
-                    $result = $Schoolfood->schoolfood_update($param);
+                    $del=array(
+                        'food_id' =>intval(input('param.food_id')),
+                        'is_del' =>2
+                    );
+                    $result = $Schoolfood->schoolfood_update($del);
                     if ($result) {
                         $this->log(lang('food_del_succ') . '[' . input('post.food_card') . ']', null);
                         echo json_encode(['m' => true, 'ms' => lang('food_del_succ')]);
@@ -99,24 +108,6 @@ class Schoolfood extends AdminControl {
     }
 
 
-
-
-    /**
-     *
-     * ajaxOp
-     */
-    public function ajax() {
-        switch ($_GET['branch']) {
-            case 'food_enabled':
-                $Schoolfood = Model('Schoolfood');
-                $param[trim($_GET['column'])] = intval($_GET['value']);
-                $param['food_id'] = intval($_GET['id']);
-                $Schoolfood->schoolfood_update($param);
-                echo 'true';
-                exit;
-                break;
-        }
-    }
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目

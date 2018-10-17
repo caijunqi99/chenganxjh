@@ -15,7 +15,7 @@ class Schoolfood extends Model {
      * @return bool 布尔类型的返回结果
      */
     public function schoolfood_add($param) {
-        return db('schoolfood')->insertGetId($param);
+        return db('schoolfood')->insertAll($param);
     }
 
 
