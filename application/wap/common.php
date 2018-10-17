@@ -41,6 +41,8 @@ function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') 
         }else{
             $datas2 = array();
         }
+    }else{
+        $datas2 = $datas;
     }
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
