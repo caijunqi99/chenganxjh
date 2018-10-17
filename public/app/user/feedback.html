@@ -43,7 +43,7 @@
                 <div class="weui-cells weui-cells_form">
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
-                            <textarea class="weui-textarea feedback_txt" onfocus="this.blur()"  id="sizeStatistics" placeholder="请输入文本" rows="10"></textarea>
+                            <textarea class="weui-textarea feedback_txt"   id="sizeStatistics" placeholder="请输入文本" rows="10"></textarea>
                             <div class="weui-textarea-counter keepwatch"><span id="currentSize">0</span>/400</div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
             <div class="container2">
                 <div class="bang_list">
                     <div class="input_box">
-                        <input class="input_txt" style="text-align:left;" id="phone" onfocus="this.blur()"  type="number" placeholder="输入手机号方便我们联系" value="" />
+                        <input class="input_txt" style="text-align:left;" id="phone"  type="number" placeholder="输入手机号方便我们联系" value="" />
                     </div>
                 </div>
             </div>
@@ -70,6 +70,7 @@
 
 
     <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/scripts/commom.js"></script>
@@ -101,7 +102,9 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        $.alert(response['message'])
+                        $.alert(response['message'],'',function(){
+                            historyback();
+                        })
                     }
                 });
             });
