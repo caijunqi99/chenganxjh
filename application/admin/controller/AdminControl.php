@@ -172,6 +172,7 @@ class AdminControl extends Controller {
         $data['admin_id'] = $admin_id;
         $data['ip'] = request()->ip();
         $data['url'] = request()->controller() . '&' . request()->action();
+        $data['admin_company_id'] = db('admin')->where('admin_id',$admin_id)->value('admin_company_id');
         return db('adminlog')->insertGetId($data);
     }
 
@@ -357,7 +358,7 @@ class AdminControl extends Controller {
                 return '浏览';
                 break;
             case 'DownMember'://5
-                return '查看成员';
+                return '所属下级';
                 break;
             case 'AssignAccount'://6
                 return '分配账号';
@@ -385,6 +386,12 @@ class AdminControl extends Controller {
                 break;
             case 'AddGrade'://14
                 return '年级管理';
+                break;
+            case 'Check'://15
+                return '审核';
+                break;
+            case 'Undercarriage'://16
+                return '违规下架';
                 break;
 
         }

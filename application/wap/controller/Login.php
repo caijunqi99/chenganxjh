@@ -94,7 +94,7 @@ class Login extends MobileMall
         }else{//登陆
             if ($password && $is_pass == 1){
                 if ($member_info['member_password'] != md5(trim($password))) {//密码对比
-                    output_error('密码填写错误！',array('type'=>input('post.log_type')));
+                    output_error('密码填写错误！');
                 }
             }            
         }

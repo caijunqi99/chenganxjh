@@ -1,7 +1,9 @@
 <?php
 
 function CalculationTime($order_info,$packagetime){
-    $nowTime = isset($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
+    $package_end_time = isset($packagetime['end_time'])?$packagetime['end_time']:'';
+    $nowTime = !empty($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
+    
     $pkg_length = $order_info['pkg_length'];    
     switch ($order_info['pkg_axis']) {
         case 'hour':
@@ -31,11 +33,23 @@ function CalculationTime($order_info,$packagetime){
     return $endTime;
 }
 function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
-    
+    if(count($datas) == count($datas,1)){
+        if(!empty($datas)){
+            $datas2 = array(
+                0=>$datas
+            );
+        }else{
+            $datas2 = array();
+        }
+    }else{
+        $datas2 = $datas;
+    }
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     if ($codd !=1) $data['code'] = '400';
-    $data['result']=isset($datas['error'])?array():($isAssoc == 'true'?(object)$datas:$datas);
+//    $data['result']=isset($datas['error'])?array():($isAssoc == 'true'?(object)$datas2:$datas2);
+    $data['result']=isset($datas['error'])?array():$datas2;
+
     $data['message'] = isset($datas['error'])?$datas['error']:'';
     if(!empty($extend_data)) {
         $data = array_merge($data, $extend_data);

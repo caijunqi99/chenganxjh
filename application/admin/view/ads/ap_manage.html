@@ -50,8 +50,12 @@
           <th class="align-center">{$Think.lang.ap_height}</th>
           <th class="align-center">{$Think.lang.ap_show_num}</th>
           <th class="align-center">{$Think.lang.ap_publish_num}</th>
+            <?php if(session('admin_is_super') == 1 || in_array(13,$action)){?>
           <th class="align-center">{$Think.lang.ap_is_use}</th>
-          <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php }?>
+            <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action) || in_array(5,$action)){?>
+            <th class="align-center">{$Think.lang.ds_handle}</th>
+            <?php }?>
         </tr>
       </thead>
       <tbody>
@@ -83,16 +87,33 @@
 					 }}
 					 echo $i;
 					?></td>
-          <td class="align-center yes-onoff"><?php if($v['is_use'] == '0'){ ?>
-            <a href="JavaScript:void(0);" class=" disabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="0" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
-            <?php }else { ?>
-            <a href="JavaScript:void(0);" class=" enabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="1" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
-            <?php } ?></td>
+          <td class="align-center yes-onoff">
+              <?php if(session('admin_is_super') == 1 || in_array(13,$action)){?>
+                  <?php if($v['is_use'] == '0'){ ?>
+                <a href="JavaScript:void(0);" class=" disabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="0" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+                <?php }else { ?>
+                <a href="JavaScript:void(0);" class=" enabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="1" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+                <?php } ?></td>
+            <?php }?>
+            <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action) || in_array(5,$action)){?>
           <td class="align-center">
-              <a href="{:url('/Admin/Adv/adv',['ap_id'=>$v.ap_id])}">管理广告</a> | 
-              <a href="{:url('/Admin/Adv/ap_edit',['ap_id'=>$v.ap_id])}">{$Think.lang.ds_edit}</a> |
-              <a href="{:url('/Admin/Adv/ap_del',['ap_id'=>$v.ap_id])}">{$Think.lang.ds_del}</a>
+              <?php if(session('admin_is_super') == 1 || in_array(5,$action)){?>
+              <a href="{:url('/Admin/Adv/adv',['ap_id'=>$v.ap_id])}">管理广告</a>
+              <?php if(session('admin_is_super') == 1 || in_array(3,$action) || in_array(2,$action)){?>
+              |
+              <?php }?>
+              <?php }?>
+              <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
+              <a href="{:url('/Admin/Ads/ap_edit',['ap_id'=>$v.ap_id])}">{$Think.lang.ds_edit}</a>
+              <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
+              |
+              <?php }?>
+                <?php }?>
+              <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
+              <a href="{:url('/Admin/Ads/ap_del',['ap_id'=>$v.ap_id])}">{$Think.lang.ds_del}</a>
+              <?php }?>
           </td>
+            <?php }?>
         </tr>
         <?php } ?>
         <?php }else { ?>
@@ -101,6 +122,7 @@
         </tr>
         <?php } ?>
       </tbody>
+        <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
       <tfoot>
         <tr class="tfoot">
           <td><input type="checkbox" class="checkall" id="checkall"/></td>
@@ -110,6 +132,7 @@
           </td>
         </tr>
       </tfoot>
+        <?php }?>
     </table>
     {$page}
   </form>

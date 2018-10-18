@@ -50,14 +50,16 @@ class Payment extends MobileMall
         return $this->fetch('payment_message');
     }
 
-    public function notify_url(){
-        $d = $this->xmlToArray(file_get_contents('php://input'));
-        $input = input();
+    public function notify_url($input,$other=''){
+        // $d = $this->xmlToArray(file_get_contents('php://input'));
+        // $input = input();
         $insert = array(
             'content'=>json_encode(array(
                 'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$this->payment_code,
                 'input' =>$input,
-                'data' =>$d
+                // 'data' =>$d,
+                'other'=>$other
             ))
         );
         db('testt')->insert($insert);
@@ -79,15 +81,15 @@ class Payment extends MobileMall
         $this->payment_code = 'alipay_app';
         $payment_api = $this->_get_payment_api();
 
-        $this->notify_url();
         $input = input();
         $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
         $Package = model('Packagesorder');
         $order_info = $Package->getOrderInfo($data);
         
+        $this->notify_url($input,$order_info);
 
-        if (!empty($order_info)) {
+        if (!empty($order_info) && $input) {
             $callback_info = $payment_api->verify_notify($input);
             
             if ($callback_info['trade_status'] == '1') {
@@ -122,32 +124,32 @@ class Payment extends MobileMall
     {
         $this->payment_code = 'wxpay_h5';
         $api = $this->_get_payment_api();
+        $input = $this->xmlToArray(file_get_contents('php://input'));
+        $Package = model('Packagesorder');
+        $data =array();
+        $data['pay_sn'] = $input['out_trade_no'];
+        $order_info = $Package->getOrderInfo($data);
+        $this->notify_url($input,$order_info);
         
-        $this->notify_url();
-        if (is_array($input) && !empty($input)) {
-            $Package = model('Packagesorder');
-            $data =array();
-            $data['pay_sn'] = $input['out_trade_no'];
-            $order_info = $Package->getOrderInfo($data);
-            if ($order_info && $input['result_code']=="SUCCESS") {
-                //验证订单
+        if ($order_info && $input['result_code']=="SUCCESS") {
+            //验证订单
+        
             
-                
-                //验证成功
-                $update = array(
-                    'out_pay_sn' => $input['transaction_id'],
-                    'payment_time' => strtotime($input['time_end']),
-                    'finnshed_time' => time(),
-                    'pd_amount' => 0, //预存款支付金额
-                    'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
-                    'order_state' => 40, //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
-                    'over_amount' => $input['total_fee']/100, //最终支付金额
-                );
-                $result = $this->_update_order($update, $order_info);
-                if ($result['code']) {
-                    echo 'success';
-                    exit;
-                }
+            //验证成功
+            $update = array(
+                'out_pay_sn' => $input['transaction_id'],
+                'payment_time' => strtotime($input['time_end']),
+                'finnshed_time' => time(),
+                'pd_amount' => 0, //预存款支付金额
+                'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
+                'order_state' => 40, //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                'over_amount' => $input['total_fee']/100, //最终支付金额
+            );
+            $result = $this->_update_order($update, $order_info);
+            
+            if ($result['code']) {
+                echo 'success';
+                exit;
             }
         }
         echo 'fail';
@@ -240,4 +242,4 @@ class Payment extends MobileMall
 
         return $result;
     }
-}
+}                  

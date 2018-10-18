@@ -457,12 +457,13 @@ class Order extends Model
             'pkg_type'=>$order_info['pkg_type']
         );
         $packagetime = $PkgTime->getOnePkg($condition);
+        $order_info['finnshed_time'] = empty($order_info['finnshed_time'])?time():$order_info['finnshed_time'];
         $end_time = CalculationTime($order_info,$packagetime);
         $pkgtype = $order_info['pkg_type']==1?'看孩':'回放';
         $pdata = array(
             'end_time' => $end_time,
             'up_time' => time(),
-        );       
+        );  
         try {
             $model_order->startTrans();
             if(!$packagetime){//第一次购买套餐
@@ -480,10 +481,12 @@ class Order extends Model
                 $PkgTime->pkg_update($pdata);
 
             }
+
             $condition = array();
             $condition['order_id'] = $order_info['order_id'];
-
+            $post['order_dieline']= $end_time;
             $update = $model_order->editOrder($post, $condition);
+            
             if (!$update) {
                  Exception('更新支付单状态失败');
             }

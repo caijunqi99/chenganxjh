@@ -10,12 +10,20 @@ class Goodsclass extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/goodsclass.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     /**
      * 分类管理
      */
     public function goods_class() {
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('goodsclass');
         if (request()->isPost()) {
             //删除
@@ -69,6 +77,9 @@ class Goodsclass extends AdminControl {
      * 商品分类添加
      */
     public function goods_class_add() {
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('goodsclass');
         if (!request()->isPost()) {
             //父类列表，只取到第二级
@@ -145,6 +156,9 @@ class Goodsclass extends AdminControl {
      * 编辑
      */
     public function goods_class_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('goodsclass');
         $gc_id = intval(input('param.gc_id'));
 
@@ -272,7 +286,9 @@ class Goodsclass extends AdminControl {
      * 删除分类
      */
     public function goods_class_del() {
-
+        if(session('admin_is_super') !=1 && !in_array('2',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('goodsclass');
         $gc_id = intval(input('param.gc_id'));
         if ($gc_id > 0) {
@@ -654,13 +670,20 @@ class Goodsclass extends AdminControl {
                 'url' => url('Admin/Goodsclass/goods_class')
             ),
         );
-        if (request()->action() == 'goods_class_add' || request()->action() == 'goods_class') {
+        if(session('admin_is_super') ==1 || in_array('1',$this->action)){
             $menu_array[] = array(
                 'name' => 'goods_class_add',
                 'text' => '新增',
                 'url' => url('Admin/Goodsclass/goods_class_add')
             );
         }
+        /*if (request()->action() == 'goods_class_add' || request()->action() == 'goods_class') {
+            $menu_array[] = array(
+                'name' => 'goods_class_add',
+                'text' => '新增',
+                'url' => url('Admin/Goodsclass/goods_class_add')
+            );
+        }*/
         if (request()->action() == 'goods_class_edit') {
             $menu_array[] = array(
                 'name' => 'goods_class_edit',
@@ -668,11 +691,11 @@ class Goodsclass extends AdminControl {
                 'url' => url('Admin/Goodsclass/goods_class_edit')
             );
         }
-        $menu_array[] = array(
+        /*$menu_array[] = array(
             'name' => 'tag',
             'text' => '标签',
             'url' => url('Admin/Goodsclass/tag')
-        );
+        );*/
         return $menu_array;
     }
 

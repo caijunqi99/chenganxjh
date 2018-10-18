@@ -27,7 +27,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>人个信息</p>
+                <p>个人信息</p>
             </div>
             <div class="head_r">
 
@@ -36,6 +36,7 @@
     </header>
 
     <!-- 主要内容 -->
+    <div class="screen" id="screen"></div>
     <form id="form" action="POST" enctype="multipart/form-data">
 
         <div class="main">
@@ -61,21 +62,21 @@
                             <label for="nickname">昵称</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="nickname" type="text" placeholder="" value="" />
+                            <input class="input_txt" id="nickname"  type="text" placeholder="" value="" />
                         </div>
                     </div>
 
                     <div class="weui-cell bang_list">
                         <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
                         <div class="weui-cell__bd">
-                            <input class="weui-input input_txt inputpointer" id="shenfen" type="text" value="家长" />
+                            <input class="weui-input input_txt inputpointer" id="shenfen" onfocus="this.blur()"  type="text" value="家长" />
                         </div>
                     </div>
 
                     <div class="weui-cell bang_list">
                         <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
                         <div class="weui-cell__bd">
-                            <input class="weui-input input_txt inputpointer" id="sex" type="text" value="男" />
+                            <input class="weui-input input_txt inputpointer" id="sex" onfocus="this.blur()" type="text" value="男" />
                         </div>
                     </div>
 
@@ -84,7 +85,7 @@
                             <label for="nianling">年龄</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="nianling" type="number" placeholder="请输入年龄" value="" />
+                            <input class="input_txt" id="nianling"  type="number" placeholder="请输入年龄" value="" />
                         </div>
                     </div>
                 </div>
@@ -95,14 +96,14 @@
                     <div class="weui-cell bang_list">
                         <div class="weui-cell__hd name_box"><label for="city" class="weui-label">所在地</label></div>
                         <div class="weui-cell__bd city_wrap">
-                            <input class="weui-input input_txt inputpointer" id="city" type="text" data-values="" value="" placeholder="请选择所在地">
+                            <input class="weui-input input_txt inputpointer" id="city" onfocus="this.blur()" type="text" data-values="" value="" placeholder="请选择所在地">
                         </div>
                     </div>
 
                     <div class="weui-cell bang_list">
                         <div class="weui-cell__hd name_box"><label for="trade" class="weui-label">行业</label></div>
                         <div class="weui-cell__bd">
-                            <input class="weui-input input_txt inputpointer" id="trade" type="text" data-values="" value="" placeholder="请选择行业" />
+                            <input class="weui-input input_txt inputpointer" id="trade" onfocus="this.blur()" type="text" data-values="" value="" placeholder="请选择行业" />
                         </div>
                     </div>
 
@@ -111,7 +112,7 @@
                             <label for="email">邮箱</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="email" type="text" placeholder="请输入您的邮箱">
+                            <input class="input_txt" id="email"   type="text" placeholder="请输入您的邮箱">
                         </div>
                     </div>
                 </div>
@@ -137,8 +138,6 @@
 
     <script>//头像赋值
 
-
-
         $(function() {
 
             // 获取个人信息
@@ -153,10 +152,10 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         // console.log(response)
-                        img_name = response['result']['member_avatar'];
+                        img_name = response['result'][0]['member_avatar'];
                         $('.user_img').attr('src', upload_url+img_name);
-                        $('#nickname').val(response['result']['member_nickname']);
-                        switch (response['result']['member_identity']) {
+                        $('#nickname').val(response['result'][0]['member_nickname']);
+                        switch (response['result'][0]['member_identity']) {
                             case 1:
                                 $('#shenfen').val('家长');
                                 break;
@@ -167,7 +166,7 @@
                                 $('#shenfen').val('其他');
                                 break;
                         }
-                        switch (response['result']['member_sex']) {
+                        switch (response['result'][0]['member_sex']) {
                             case 0:
                                 $('#sex').val('保密');
                                 break;
@@ -178,13 +177,18 @@
                                 $('#sex').val('女');
                                 break;
                         }
-                        $('#nianling').val(response['result']['member_age']);
-                        $('#email').val(response['result']['member_email']);
-                        $('#city').get(0).dataset.code = response['result']['member_provinceid'];
-                        $('#city').get(0).dataset.codes = response['result']['member_provinceid'] + ',' + response['result']['member_cityid'] + ',' + response['result']['member_areaid'];
-                        $('#city').val(response['result']['province_name'] + ' ' + response['result']['city_name'] + ' ' + response['result']['area_name']);
-                        $('#trade').val(response['result']['job_name'])
-                        $('#trade').get(0).dataset.values = response['result']['member_jobid']
+
+                        $('#nianling').val(response['result'][0]['member_age']);
+                        $('#email').val(response['result'][0]['member_email']);
+                        $('#city').get(0).dataset.code = response['result'][0]['member_provinceid'];
+                        $('#city').get(0).dataset.codes = response['result'][0]['member_provinceid'] + ',' + response['result'][0]['member_cityid'] + ',' + response['result'][0]['member_areaid'];
+                        if(response['result'][0]['member_provinceid'] == null || response['result'][0]['member_provinceid'] == 0){
+                            $('#city').val('')
+                        }else{
+                            $('#city').val(response['result'][0]['province_name'] + ' ' + response['result'][0]['city_name'] + ' ' + response['result'][0]['area_name']);
+                        }
+                        $('#trade').val(response['result'][0]['job_name'])
+                        $('#trade').get(0).dataset.values = response['result'][0]['member_jobid']
                     };
                 }
             });
@@ -205,7 +209,10 @@
                     hangye = response['result']
                 }
             });
-
+            $("#shenfen,#sex,#city,#trade").click(function() {
+                $('#nickname,#nianling,#email').blur();
+                $("#screen").addClass("show");
+            });
             // 身份选择
             $("#shenfen").picker({
                 title: "请选择您的身份",
@@ -214,7 +221,9 @@
                     values: ['家长', '教师', '其他']
                 }],
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 性别选择
@@ -225,7 +234,9 @@
                     values: ['男', '女', '保密']
                 }],
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 行业选择
@@ -233,7 +244,9 @@
                 title: "请选择行业",
                 items: hangye,
                 onChange: function(p, v, dv) {},
-                onClose: function(p, v, d) {}
+                onClose: function(p, v, d) {
+                    $("#screen").removeClass("show");
+                }
             });
 
             // 所在地区选择
@@ -242,6 +255,9 @@
                 items: [],
                 onChange: function(picker, values, displayValues) {
                     // $("h1:contains(选择所在地)").parents(".weui-picker-modal").height("16rem");
+                },
+                onClose: function(picker, values, displayValues) {
+                    $("#screen").removeClass("show");
                 }
             });
 
@@ -254,31 +270,6 @@
                     Android.uploadImage();
                 } else { //pc
                 };
-
-                /*var formData = new FormData(event.target.files['0']);
-                formData.append('file',event.target.files['0']);
-                formData.append('key',user_token);
-                formData.append('member_id',user_member_id);
-                $.ajax({
-                    type:'post',
-                    // url:api+'/Common/upload_avatar',
-                    url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
-                    data:formData,
-                    dataType: "json",
-                    contentType: false,
-                    processData: false,
-                    success:function(response){
-                        if (response['code'] == 200) {
-                            $.toast(response['result'][0]['message']);
-                            img_name = response['result'][0]['avatar_url'];
-                            img_url = upload_url+response['result'][0]['avatar_url'];
-                            $('.user_img').attr('src',img_url);
-                        }
-                    },
-                    error(error) {
-                        $.toast(error)
-                    }
-                });*/
             }
 
              fz_avatar = function(avatar_url){
@@ -289,14 +280,11 @@
 
 
             $('.bang_submit').on('click', function() {
-
-
                 if (!Tools.IsAge($("#nianling").val())) {
                     $.alert("年龄不符合科学，请重新输入");
                 } else if (!Tools.IsEmail($("#email").val())) {
                     $.alert("请输入正确的邮箱地址");
                 } else {
-
                     //修改个人信息
                     var params = {};
                     params['key'] = user_token;
@@ -327,9 +315,15 @@
                     }
                     params['member_email'] = $('#email').val();
                     params['member_avatar'] = img_name;
-                    params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
-                    params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
-                    params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
+                    if($('#city').val() ==''){
+                        params['member_provinceid'] = '';
+                        params['member_cityid'] = '';
+                        params['member_areaid'] = '';
+                    }else{
+                        params['member_provinceid'] = $('#city').get(0).dataset.codes.split(',')[0];
+                        params['member_cityid'] = $('#city').get(0).dataset.codes.split(',')[1];
+                        params['member_areaid'] = $('#city').get(0).dataset.codes.split(',')[2];
+                    }
                     params['member_jobid'] = $('#trade').get(0).dataset.values;
                     $.ajax({
                         type: "POST",
@@ -338,11 +332,19 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'])
+                                $.toast(response['result']['message'],'',function(){
+                                    historyback();
+                                })
+                            }else{
+                                $.toast(response['message'],'',function(){
+                                    window.location.reload();
+                                })
                             }
                         },
                         error(error) {
-                            $.toast(error)
+                            $.toast(error,'',function(){
+                                window.location.reload();
+                            })
                         }
                     });
                 }
@@ -366,13 +368,22 @@
 
             //判断是否是邮箱地址
             IsEmail: function(str) {
-                var myreg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-                return myreg.test(str);
+                if(str == ''){
+                    return true;
+                }else {
+                    var myreg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+                    return myreg.test(str);
+                }
             },
             //判断是否是邮箱地址
             IsAge: function(str) {
-                var myreg = /^([1-9]\d?|200)$/;
-                return myreg.test(str);
+                if(str == '' || str == 0){
+                    return true;
+                }else{
+                    var myreg = /^([1-9]\d?|200)$/;
+                    return myreg.test(str);
+                }
+
             }
         }
     </script>
