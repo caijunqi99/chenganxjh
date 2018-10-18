@@ -1,6 +1,10 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
-
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -21,24 +25,78 @@
 
         <div class="ncap-form-default">
             <div class="layui-form-item">
-                <label class="layui-form-label">输入框</label>
-                <div class="layui-input-block">
-                    <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.teacher_children}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">小时</div>
                 </div>
             </div>
-            <dl>
-                <dt>{$Think.lang.teacher_children}</dt>
-                <dd>
-                    <input id="site_name" name="site_name" value="{$list_config.site_name}" class="input-txt" type="text">
-                    <span class="err"></span>
-                    <p class="notic">{$Think.lang.web_name_notice}</p>
-                </dd>
-            </dl>
-
-            <dl>
-                <dt></dt>
-                <dd><a href="JavaScript:void(0);" class="btn" onclick="document.form1.submit()">确认提交</a></dd>
-            </dl>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.revisit_class}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">小时</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.teacher_children_video}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">小时</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.f_account_num}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="phone" lay-verify="required|number" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">个</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.teacher_pay_scale}</label>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.zb}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="price_min" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.pdls}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="price_max" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.sdls}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="price_max" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.js}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="price_max" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                </div>
+            </div>
+            <!--<dl>-->
+                <!--<dt></dt>-->
+                <!--<dd><a href="JavaScript:void(0);" class="btn" onclick="document.form1.submit()">确认提交</a></dd>-->
+            <!--</dl>-->
         </div>
     </form>
 

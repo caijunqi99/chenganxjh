@@ -207,6 +207,10 @@ $lang['revisit_class'] = '重温课堂（观看有效时间）';
 $lang['teacher_pay_scale'] = '教孩在线支付分成比例';
 $lang['teacher_children_video'] = '教孩上传视频录制时长设置';
 $lang['f_account_num'] = '副账号数量设置';
+$lang['zb'] = '总部';
+$lang['pdls'] = '省代理商';
+$lang['sdls'] = '市代理商';
+$lang['js'] = '教师';
 
 
 
