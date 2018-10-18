@@ -462,7 +462,7 @@ class Member extends MobileMember
         }
         $member_where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_paypwd,member_mobile')->where($member_where)->find();
+        $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
