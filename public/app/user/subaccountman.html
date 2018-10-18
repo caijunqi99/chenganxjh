@@ -252,11 +252,16 @@
                         },
                         dataType: "json",
                         success: function(response) {
-                            $.alert("添加成功！", "提示", function() {});
-                            list();
-                            $("#nickname").val("");
-                            $("#phone").val("");
-                            $.closePopup(); //关闭添加popup弹窗
+                         if(response['code'] == 400){
+                                layout();
+                         }else{
+                             $.alert("添加成功！", "提示", function() {});
+                             list();
+                             $("#nickname").val("");
+                             $("#phone").val("");
+                             $.closePopup(); //关闭添加popup弹窗
+                         }
+
                         }
                     });
                 }

@@ -286,6 +286,16 @@ class Member extends AdminControl {
                     exit;
                 }
                 break;
+            case 'check_member_mobile':
+                $model_admin = Model('member');
+                $condition['member_mobile'] = input('get.member_mobile');
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
             /**
              * 验证邮件是否重复
              */

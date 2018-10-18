@@ -21,7 +21,7 @@
  */
 $lang['member_index_is_admin']		= '该会员是管理员,不能删除';
 $lang['member_index_manage']		= '会员管理';
-$lang['member_index_name']			= '会员';
+$lang['member_index_name']			= '账号名称';
 $lang['member_index_email']			= '电子邮箱';
 $lang['member_index_true_name']		= '真实姓名';
 $lang['member_index_reg_time']		= '注册时间';
@@ -86,4 +86,9 @@ $lang['member_add_fail']			= '新增会员失败';
 $lang['member_add_name_exists']		= '会员名有重复，请您换一个';
 $lang['member_add_name_null']		= '会员名不能为空';
 $lang['member_add_name_length']     = '用户名必须在3-20字符之间';
+
+
+$lang['admin_add_admin_phone_not_exists']		= '该手机号码已存在';
+$lang['admin_edit_valid_phone']         	= '请您填写有效的手机号码';
+$lang['admin_add_phone_tip']			= '请输入手机号码';
 ?>
