@@ -463,13 +463,13 @@ class Member extends MobileMember
         $member_where = ' member_id = "'.$member_id.'"';
 
         $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
-        halt($member);
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
         $res = array();
         //查询当前会员绑定的孩子
         $member_student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.s_card')->where($member_where)->select();
+        halt($member_student);
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
                 $res += $v['s_card'];
