@@ -17,75 +17,125 @@ class Teacherchild
     }
     //教孩搜索栏菜单
     public function type(){
-        $list=array();
-        $list['left']=array(1=>'综合',2=>'最近上传',3=>'评分最高',4=>'评价最多',5=>'价格最高',6=>'价格最低');
-        $list['between']=array(7=>'查看免费');
-        $pkg = model('Schooltype');
-        $condition = array();
-        $pkges=$pkg->get_sctype_Lists($condition,'sc_id,sc_type','sc_id asc');
-        $ClassType = model('Classtype');
-        $Course = model('Course');
-        $conditiones = array();
-        $course = $Course->get_course_Lists($conditiones, 'co_id,co_type' ,'co_id asc');
-        foreach($pkges as $key=>$v){
-            $conditionss ='sc_id ='.$v['sc_id'] ;
-            $classes= $ClassType->get_classtype_Lists($conditionss, 'cl_id,cl_type');
-            $pkges[$key]['class']=$classes;
-            $pkges[$key]['course']=$course;
+        //所有分类
+        $model_type = model('Teachtype');
+        $tmp_list = $model_type->getTreeTypeList(4);
+        //一级分类
+        $parentType = db('teachtype')->where(array('gc_parent_id'=>0))->select();
+        //二级分类
+        foreach($parentType as $key=>$item){
+            foreach($tmp_list as $k=>$v){
+                if($v['gc_parent_id']==$item['gc_id'] && $v['deep']==2){
+                    $parentType[$key]['childTwo'][] = $v;
+                }
+            }
         }
-        $list['right']=$pkges;
-        $pkgess=$pkg->get_sctype_Lists($condition,'sc_id,sc_type','sc_id asc');
-        $conditions=array();
-        $class= $ClassType->get_classtype_Lists($conditions, 'cl_id,cl_type');
-        $super=array('sc_id'=>'0','sc_type'=>'精品','school'=>$pkgess,'class'=>$class,'course'=>$course);
-        array_unshift($list['right'],$super);
-        output_data($list);
+        //三级分类
+        foreach($parentType as $key=>$item){
+            foreach($item['childTwo'] as $k2=>$v2){
+                foreach($tmp_list as $k=>$v){
+                    if($v['gc_parent_id']==$v2['gc_id'] && $v['deep']==3){
+                        $item['childTwo'][$k2]['childThree'][] = $v;
+                    }
+                }
+            }
+            $parentType[$key]['childTwo'] =  $item['childTwo'];
+        }
+        //四级分类
+        foreach($parentType as $key=>$item){
+            foreach($item['childTwo'] as $k2=>$v2){
+                foreach($v2['childThree'] as $k3=>$v3){
+                    foreach($tmp_list as $k=>$v){
+                        if($v['gc_parent_id']==$v3['gc_id'] && $v['deep']==4){
+                            $v2['childThree'][$k3]['childFour'][] = $v;
+                        }
+                    }
+                }
+                $item['childTwo'][$k2]['childThree'] = $v2['childThree'];
+            }
+            $parentType[$key] =  $item;
+        }
+        $data = array();
+        $data['commend'] = "推荐";
+        $data['navigate'] = [
+            "subsume" => ["name"=>"综合","child"=>["综合","价格最高","价格最低"]],
+            'free' => ["name"=>"查看免费"],
+            'fees' => ["name"=>"查看付费"],
+            "select" => ['name'=>"筛选"]
+        ];
+        $data['categorize'] = $parentType;
+        //视频价格范围
+        $pkg = model('pkgs');
+        $conditions = array();
+        $conditions['pkg_type']= 3 ;
+        $pkg_list = $pkg->getPkgLists($conditions,'pkg_id,pkg_price','pkg_price asc');
+        $data['price'] = $pkg_list;
+        output_data($data);
     }
+
     //教孩列表页面
-    public function list(){
+    public function lists(){
         $teachchild = model('Teachchild');
         $condition = array();
-        $condition['t_audit']=2;
-        $condition['t_del']=1;
-        if(!empty($_POST['supreme'])) {
-            $condition['t_supreme']=1;
+
+        if(input('post.type')) {
+            $condition['t_type'] = input('post.type');
         }
-        if(!empty($_POST['scid'])) {
-            $condition['t_scid']=intval(input('post.scid'));
+        if(input('post.type2')){
+            $condition['t_type2'] = input('post.type2');
         }
-        if(!empty($_POST['classid'])) {
-            $condition['t_classid']=intval(input('post.classid'));
+        if(input('post.type3')){
+            $condition['t_type3'] = input('post.type3');
         }
-        if(!empty($_POST['courseid'])) {
-            $condition['t_courseid']=intval(input('post.courseid'));
+        if(input('post.type4')){
+            $condition['t_type4'] = input('post.type4');
         }
-        if(!empty($_POST['left'])) {
-            $order=intval(input('post.left'));
-            if($order==2){
-                $order='t_id desc';
-            }else if($order==5){
-                $order='t_price desc';
-            }else if($order==6){
-                $order='t_price asc';
-            }
-        }else{
-            $order='t_id desc';
+        if(input('post.recommend')&&input('post.recommend')==2){//推荐
+            $condition['t_recommend'] = input('post.recommend');
         }
-        if(!empty($_POST['between'])) {
+        if(input('post.subsume')&&input('post.subsume')==1){//综合
+            $order='t_maketime desc';
+        }
+        if(input('post.price_desc')){
+            $order='t_price desc,t_id desc';
+        }
+        if(input('post.price_asc')){
+            $order='t_price asc,t_id desc';
+        }
+        if(empty($order)){
+            $order = "t_id desc";
+        }
+        if(input('post.price_free')){
             $condition['t_price']=0;
         }
-        $list = $teachchild->getTeachchildList($condition,'t_id,t_picture,t_title,t_profile,t_price,t_userid', '' ,$order);
-        foreach ($list as $k=>$v){
-            $conditions=array();
-            $conditions['member_id']=$v['t_userid'];
-            $model_member = Model('member');
-            $res=$model_member->getMemberInfo($conditions);
-            $list[$k]['member_nickname'] = $res['member_nickname'];
+        if(input('post.price_fees')){
+            $condition['t_price'] = array('neq',0);
         }
+        $list = $teachchild->getTeachchildList($condition,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_price,t_userid,t_author', '' ,$order);
         if($list){
             output_data($list);
         }else{
-            output_error('暂无数据');
+            $list = [];
+            output_data($list);
         }
     }
+
+    //我的上传
+    public function myUpload(){
+        $teachchild = model('Teachchild');
+        $condition = array();
+        $condition['t_userid'] = 1;
+        if(input('post.status')){
+            if(input('post.status')==3){
+                $condition['t_audit'] = 3;
+            }elseif(input('post.status')==1){
+                $condition['t_audit'] = array('between',array(1,2));
+            }
+        }else{
+            $condition['t_audit'] = array('between',array(1,2));
+        }
+        $list = $teachchild->getTeachchildList($condition);
+        output_data($list);
+    }
+
 }
