@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="cont">
+       <!-- <div class="cont">
             <div class="container2">
                 <div class="bang_list">
                     <div class="input_box">
@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-        </div>
+        </div>-->
 
         <div class="bang_submit_box" style="padding-top: 200px;">
             <input class="bang_submit" id="show-alert" type="button" value="发 送" />
@@ -89,22 +89,25 @@
 
             // 验证提示
             $(document).on("click", "#show-alert", function() {
-                if ($('.input_txt').val() == '' || !Tools.IsPhoneNum($('.input_txt').val())) {
+                /*if ($('.input_txt').val() == '' || !Tools.IsPhoneNum($('.input_txt').val())) {
                     $.alert("请填写手机号！", "警告！");
-                }
+                }*/
                 $.ajax({
                     type: "POST",
                     url: api + '/Feedback/feedback_add.html',
                     data: {
                         key: user_token,
-                        feedback: $('#sizeStatistics').val(),
-                        member_mobile: $('.input_txt').val()
+                        feedback: $('#sizeStatistics').val()
                     },
                     dataType: "json",
                     success: function(response) {
-                        $.alert(response['message'],'',function(){
-                            historyback();
-                        })
+                        if(response['code'] == 400){
+                            layout();
+                        }else{
+                            $.alert(response['message'],'',function(){
+                                historyback();
+                            })
+                        }
                     }
                 });
             });

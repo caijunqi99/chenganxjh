@@ -7,7 +7,7 @@ $lang['ds_dashboard']              = '首页';
 $lang['ds_welcome']                = '欢迎界面';
 $lang['ds_aboutus']                = '关于我们';
 $lang['ds_setting']                = '系统配置';
-$lang['ds_base']                   = '通用设置/APP';
+$lang['ds_config']                   = '通用设置/APP';
 $lang['ds_sctype']                 = '学校类型配置';
 $lang['ds_classtype']                 = '年级配置';
 $lang['ds_course']                 = '课程配置';
@@ -123,8 +123,8 @@ $lang['school_desc'] = '备注';
 $lang['ds_addstudent'] = '添加学生';
 
 //会员
-$lang['ds_member']                 = '会员/家长管理';
-$lang['ds_member_manage']          = '会员管理';
+$lang['ds_member_manage']                 = '会员/家长管理';
+$lang['ds_member']          = '会员管理';
 $lang['ds_membergrade']            = '会员级别';
 $lang['ds_exppoints']              = '经验值管理';
 $lang['ds_notice']                 = '会员通知';
@@ -142,6 +142,12 @@ $lang['ds_camera']                 = '摄像头管理';
 $lang['ds_monitor']                = '网络监控';
 $lang['ds_revisitclass']           = '重温课堂管理';
 $lang['ds_binding']                = '待审核学生绑定';
+
+//教孩管理
+$lang['ds_teachlist']                   = '教孩管理';
+$lang['ds_teachercertify']            = '教师认证申请';
+$lang['ds_teachtype']            = '视频分类管理';
+$lang['ds_teachvideo']            = '视频管理';
 
 //商品
 $lang['ds_shops']                  = '商城管理';

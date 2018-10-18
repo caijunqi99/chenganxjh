@@ -497,6 +497,18 @@ class Order extends Model
             return ds_callback(false, $e->getMessage());
         }        
         $order_id = $order_info['order_id'];
+
+        //发送站内信
+        $model_message = Model('message');
+        $insert_arr = array();
+        $insert_arr['from_member_id'] = 0;
+        $insert_arr['member_id'] = $order_info['buyer_id'];
+        $insert_arr['to_member_name'] = $order_info['buyer_name'];
+        $insert_arr['message_title'] = $pkgtype.'套餐购买提醒';
+        $insert_arr['msg_content'] = '您于'.date('Y-m-d H:i',$post['finnshed_time']).'购买'.$pkgtype.'套餐，此套餐主副账号通用,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+        $insert_arr['message_type'] = 1;
+        $model_message->saveMessage($insert_arr);
+        
         // 支付成功发送买家消息 -----暂时不需要发送
         // $param = array();
         // $param['code'] = 'package_buy_success';

@@ -61,6 +61,7 @@ class Connect extends MobileMall
                 $log_array = array();                
                 $captcha = rand(100000, 999999);
                 $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d");
+
                 $sms_tpl = config('sms_tpl'); 
                                
                 switch ($log_type) {
@@ -101,8 +102,7 @@ class Connect extends MobileMall
                 }
                 if($state == 'true'){
                     $sms = new \sendmsg\Sms();
-
-                    $result = $sms->send($phone,$captcha,$tempId);
+                    $result = $sms->send($phone,$log_msg,$captcha);
                     if($result){
                         $log_array['log_phone']   = $phone;
                         $log_array['log_captcha'] = $captcha;

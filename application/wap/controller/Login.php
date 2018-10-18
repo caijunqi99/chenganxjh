@@ -36,18 +36,19 @@ class Login extends MobileMall
                 output_error('验证类型错误!');
                 break;
         }
+        $register  = false;
         if (empty($phone) || !in_array($client, $this->client_type_array)) {
-            output_error($type.'失败!',array('type'=>input('post.log_type')));
+            output_error($type.'失败!');
         }
         if (!preg_match('/^1(3|5|6|7|8|4)[0-9]{9}$/', $phone)) {//根据会员名没找到时查手机号
-            output_error('请输入正确的手机号码！',array('type'=>input('post.log_type')));
+            output_error('请输入正确的手机号码！');
             
         }
         $model_member = Model('member');
         $array = array();
         $array['member_mobile'] = $phone;     
         if ($is_pass==2) { // 验证码判断
-            if (empty($captcha))output_error('请输入正确的验证码',array('type'=>input('post.log_type')));
+            if (empty($captcha))output_error('请输入正确的验证码');
             $state = 'true';
             $condition = array();
             $condition['log_phone'] = $phone;
@@ -57,24 +58,26 @@ class Login extends MobileMall
             $sms_log = $model_sms_log->getSmsInfo($condition);
             // output_error($condition);
             if(empty($sms_log) || ($sms_log['add_time'] < TIMESTAMP-1800)) {//半小时内进行验证为有效
-                output_error('动态码错误或已过期，重新输入',array('type'=>input('post.log_type'),'t'=>1));
+                output_error('动态码错误或已过期，重新输入');
             }
         }
         if ($is_pass == 1) {
-            if(empty($password))output_error('非法登陆',array('type'=>input('post.log_type') ) );
+            if(empty($password))output_error('非法登陆');
         }
         $member_info = $model_member->getMemberInfo($array,'member_password,member_name,member_id');
         if (!$member_info) {//注册
             // $this->register($register_info)
+            $pass = getRandomString(8,null,'n');
             $member = array();
             $member['member_name'] = $phone;
-            $member['member_password'] = md5(trim($password));;
+            $member['member_password'] = md5(trim($pass));;
             $member['member_mobile'] = $phone;
             $member['member_email'] = '';
             $member['member_mobile_bind'] = 1;
             $result = $model_member->addMember($member);
+            $register  = true;
             if (!$result) {                
-                output_error('注册失败',array('type'=>input('post.log_type')));
+                output_error('注册失败');
             }else{
                 //添加会员积分--前期可以不使用
                 // if (config('points_isuse')) {
@@ -125,7 +128,14 @@ class Login extends MobileMall
                 // $logindata['student'] = $Student->getMemberStudentInfoById('m.member_id='.$member['member_id']);
 
                 // $logindata['sql'] = $Student->getLastSql();
-                
+                if ($register) {
+                    //发送随机密码
+                    //生成数字字符随机 密码
+                    $sms_tpl = config('sms_tpl');
+                    $tempId = $sms_tpl['sms_password_reset'];
+                    $sms = new \sendmsg\Sms();
+                    $send = $sms->send($member['member_mobile'],$pass,$tempId);
+                }
                 output_data($logindata);
             }else {
                 output_error('登录失败');

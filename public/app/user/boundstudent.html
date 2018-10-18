@@ -66,6 +66,14 @@
                     <input class="weui-input input_txt inputpointer" onfocus="this.blur()" id="date" type="text" value="" placeholder="请选择生日">
                 </div>
             </div>
+            <div class="bang_list">
+                <div class="name_box">
+                    <label for="bang_name"><span class="redstar">*</span>身份证号</label>
+                </div>
+                <div class="input_box">
+                    <input class="input_txt" id="s_card"  type="text" placeholder="请输入您的身份证号">
+                </div>
+            </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="city" class="weui-label"><span class="redstar">*</span>所在地</label></div>
@@ -286,6 +294,8 @@
             $("#bang_submit").click(function() {
                 if ($("#bang_name").val() == '') {
                     $.alert("请先填写孩子的姓名");return false;
+                } else if ($("#s_card").val() == '') {
+                    $.alert("请先填写身份证号");return false;
                 } else if ($("#city").val() == '') {
                     $.alert("请选择所在地");return false;
                 } else if ($("#school").val() == '') {
@@ -300,8 +310,8 @@
                     //ActionName：原生中对应的方法名；parameter：回传的参数
                     //json传递参数
                     var params = new Object();
-                    params['key'] = token;
-                    params['member_id'] = 2;
+                    params['key'] = user_token;
+                    params['member_id'] = user_member_id;
                     params["name"] = $('#bang_name').val();
                     switch ($('#sex').val()) {
                         case '男':
@@ -320,16 +330,21 @@
                     params['class'] = $('#banji').get(0).dataset.values;
                     // params['class'] = 15;
                     params['class_code'] = $('#shibiema').val();
-                    params['card'] = 10;
+                    params['card'] = $('#s_card').val();
                     $.ajax({
                         type: "POST",
                         url: api + '/Member/studentBind.html',
                         data: params,
                         dataType: "json",
                         success: function(response) {
-                            $.alert(response['message'],'',function(){
-                                historyback();
-                            })
+                            if(response['code'] == 400){
+                                layout();
+                            }else{
+                                $.alert(response['message'],'',function(){
+                                    historyback();
+                                })
+                            }
+
                         }
                     });
 
