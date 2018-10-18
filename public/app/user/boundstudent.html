@@ -310,8 +310,8 @@
                     //ActionName：原生中对应的方法名；parameter：回传的参数
                     //json传递参数
                     var params = new Object();
-                    params['key'] = token;
-                    params['member_id'] = 2;
+                    params['key'] = user_token;
+                    params['member_id'] = user_member_id;
                     params["name"] = $('#bang_name').val();
                     switch ($('#sex').val()) {
                         case '男':
