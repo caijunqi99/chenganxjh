@@ -101,6 +101,7 @@ $lang['mood_status_open_success']='启用成功';
 $lang['mood_status_open_error']='启用失败';
 $lang['mood_status_close_success']='禁用成功';
 $lang['mood_status_close_error']='禁用失败';
+$lang['mood_member']='会员';
 
 
 

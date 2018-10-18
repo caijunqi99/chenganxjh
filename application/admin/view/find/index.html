@@ -90,8 +90,8 @@
             <?php foreach($mood_list as $k => $v){ ?>
             <tr class="hover">
                 <td class="align-center w50"><?php echo $k+1;?></td>
-                <td class="align-center w50"><a href=""><?php echo $v['content'];?></a></td>
-                <td class="align-center w50"><img src="{$path}{$v.image}"></td>
+                <td class="align-center w50"><a href="javascript:dd({$v.id})"><?php echo $v['content'];?></a></td>
+                <td class="align-center w50"><img src="{$path}{$v.image.0}"></td>
                 <td class="align-center w50">
                     <?php if($v['del']==1){
                     echo '正常' ;
@@ -198,5 +198,17 @@
             });
         });
     }
-
+    function dd(id) {
+        var urls=ADMIN_URL+'find/view?id='+id;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '心情详情',
+            area: ['80%', '80%'],
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
+        });
+    }
 </script>
