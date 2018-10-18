@@ -460,7 +460,7 @@ class Member extends MobileMember
         if(empty($member_id)){
             output_error('缺少参数id');
         }
-        $member_where = ' s_ownerAccount = "'.$member_id.'"';
+        $member_where = ' member_mobile = "'.$member_id.'"';
 
         $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
         if(empty($member)){
@@ -468,7 +468,7 @@ class Member extends MobileMember
         }
         $res = array();
         //查询当前会员绑定的孩子
-        $member_student = db('student')->field('s_card,s_ownerAccount')->where($member_where)->select();
+        $member_student = db('student')->field('s_card,s_ownerAccount')->where(' s_ownerAccount = "'.$member_id.'"')->select();
 
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
