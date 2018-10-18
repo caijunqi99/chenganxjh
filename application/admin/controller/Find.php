@@ -32,6 +32,7 @@ class Find extends AdminControl {
      */
     public function index()
     {
+        $img_path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         //晒心情列表
         $where = array();
         //判断登陆角色
@@ -80,6 +81,7 @@ class Find extends AdminControl {
                 $list[$k]['student'] = '';
             }
         }
+        $this->assign('path',$img_path);
         $this->assign('page', $mood_list->render());
         $this->assign('mood_list', $list);
         $this->setAdminCurItem('index');
