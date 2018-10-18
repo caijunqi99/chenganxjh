@@ -460,7 +460,7 @@ class Member extends MobileMember
         if(empty($member_id)){
             output_error('缺少参数id');
         }
-        $member_where = ' member_id = "'.$member_id.'"';
+        $member_where = ' s_ownerAccount = "'.$member_id.'"';
 
         $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
         if(empty($member)){
@@ -468,19 +468,20 @@ class Member extends MobileMember
         }
         $res = array();
         //查询当前会员绑定的孩子
-        $member_student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.s_card')->where($member_where)->select();
-        halt($member_student);
+        $member_student = db('student')->field('s.s_card')->where($member_where)->select();
+
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
                 $res += $v['s_card'];
             }
         }
+        halt($res);
         $member_aboutname = trim(input('post.member_aboutname'));//关系名称
         $member_mobile = trim(input('post.member_mobile'));//手机号
         if(empty($member_aboutname) || empty($member_mobile)){
             output_error('传参数不正确');
         }
-        $member_mobile_where = ' member_mobile = "'.$member_mobile.'" ';
+        $member_mobile_where = ' m.member_mobile = "'.$member_mobile.'" ';
         $member_about = db('member')->where($member_mobile_where)->find();
         if(!empty($member_about)){
             $data = array(
