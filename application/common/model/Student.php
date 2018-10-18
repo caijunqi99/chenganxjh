@@ -53,6 +53,26 @@ class Student extends Model {
         return $result;
     }
 
+    /**
+     * 查看当前用户是否是孩子的家长
+     * @param  [type] $member_id [description]
+     * @return [type]            [description]
+     */
+    public function checkParentRelation($member_id,$s_id){
+
+        $result = db('student')
+        ->field('s_id,s_name')
+        ->where('s_id',$s_id)
+        ->whereor('s_ownerAccount',$member_id)
+        ->whereor('FIND_IN_SET('.$member_id.',s_viceAccount)')
+        ->find();
+        if($result){
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
+
     public function getOrderCommonInfo($condition = array(), $field = '*') {
         return db('ordercommon')->where($condition)->find();
     }
