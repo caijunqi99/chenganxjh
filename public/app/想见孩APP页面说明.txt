@@ -1,39 +1,39 @@
 
-我-绑定学生：views/user/boundstudent.html    完成
+我-绑定学生： http://vip.xiangjianhai.com:8001/app/user/boundstudent.html    完成
 
-个人信息：views/user/personalinfo.html      完成  
+个人信息： http://vip.xiangjianhai.com:8001/app/user/personalinfo.html      完成  
 
-副账户管理：views/user/subaccountman.html    完成
+副账户管理： http://vip.xiangjianhai.com:8001/app/user/subaccountman.html    完成
 
-我的订单-看孩订单：views/user/orderform1.html  完成
+我的订单-看孩订单： http://vip.xiangjianhai.com:8001/app/user/orderform1.html  完成
 
-我的收藏：views/user/mycollect.html  - 
+我的收藏： http://vip.xiangjianhai.com:8001/app/user/mycollect.html  - 
 
-选择套餐：views/user/chooselevel.html  -
+选择套餐： http://vip.xiangjianhai.com:8001/app/user/chooselevel.html  -
 
-安全密码：views/user/securepwd.html			1合并
-安全密码-设置成功：views/user/securepwdsuccess.html	1合并
-安全密码-修改登录密码：views/user/revisesecurepwd.html	alert弹窗需要修改。$.toast('请输入6位数字。')
+安全密码： http://vip.xiangjianhai.com:8001/app/user/securepwd.html			1合并
+安全密码-设置成功： http://vip.xiangjianhai.com:8001/app/user/securepwdsuccess.html	1合并
+安全密码-修改登录密码： http://vip.xiangjianhai.com:8001/app/user/revisesecurepwd.html	alert弹窗需要修改。$.toast('请输入6位数字。')
 
-意见反馈：views/user/feedback.html  完成
-
-
-
-发现-宝宝课堂：views/find/curriculum.html
-发现-宝宝食谱：views/find/cookbook.html
-发现-幼儿园介绍：views/find/kindergartenintroduce.html
-发现-校园简介：views/find/schoolintroduction.html
-发现-心情：views/find/mood.html
-发现-消息：views/find/mesages.html+
-发现-消息-详情：views/find/mesagesdetail.html+
+意见反馈： http://vip.xiangjianhai.com:8001/app/user/feedback.html  完成
 
 
-教孩-：views/teachchild/index.html 首页
-教孩-：views/teachchild/history.html 历史记录
-教孩-：views/teachchild/upload.html 上传视频
-教孩-：views/teachchild/datails.html 详情
 
-商城-：views/mall/index.html 首页
-商城-：views/mall/content.html 详情
-商城-：views/mall/cart.html 购物车
+发现-宝宝课堂： http://vip.xiangjianhai.com:8001/app/find/curriculum.html
+发现-宝宝食谱： http://vip.xiangjianhai.com:8001/app/find/cookbook.html
+发现-幼儿园介绍： http://vip.xiangjianhai.com:8001/app/find/kindergartenintroduce.html
+发现-校园简介： http://vip.xiangjianhai.com:8001/app/find/schoolintroduction.html
+发现-心情： http://vip.xiangjianhai.com:8001/app/find/mood.html
+发现-消息： http://vip.xiangjianhai.com:8001/app/find/mesages.html+
+发现-消息-详情： http://vip.xiangjianhai.com:8001/app/find/mesagesdetail.html+
+
+
+教孩-： http://vip.xiangjianhai.com:8001/app/teachchild/index.html 首页
+教孩-： http://vip.xiangjianhai.com:8001/app/teachchild/history.html 历史记录
+教孩-： http://vip.xiangjianhai.com:8001/app/teachchild/upload.html 上传视频
+教孩-： http://vip.xiangjianhai.com:8001/app/teachchild/datails.html 详情
+
+商城-： http://vip.xiangjianhai.com:8001/app/mall/index.html 首页
+商城-： http://vip.xiangjianhai.com:8001/app/mall/content.html 详情
+商城-： http://vip.xiangjianhai.com:8001/app/mall/cart.html 购物车
 

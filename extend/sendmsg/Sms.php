@@ -3,30 +3,58 @@
  * 手机短信类
  */
 namespace sendmsg;
-use sendmsg\sdk\REST;
+use sendmsg\sdk\SmsApi;
 class Sms
 {
     /*
     
      * 发送手机短信
      * @param unknown $mobile 手机号
-     * @param unknown $content 短信内容
+     * @param unknown $log_msg 短信内容
     */
-    public function send($mobile, $content,$tempId=198052)
+    public function send($mobile,$log_msg, $content='')
     {   
 
-        return $this->sendTemplateSMS($mobile, $content,$tempId);
+        return $this->SendSmsMessage($mobile,$log_msg, $content);
+    }
+
+    /**
+     * 253云通讯科技验证码发送
+     * @param [type] $mobile  [手机号]
+     * @param [type] $content [验证码]
+     * @param [type] $log_msg  [发送内容]
+     */
+    private function SendSmsMessage($mobile,$log_msg, $content){
+        $clapi  = new SmsApi();
+        //设置您要发送的内容：其中“【】”中括号为运营商签名符号，多签名内容前置添加提交
+        $result = $clapi->sendSMS($mobile,$log_msg );
+
+        if(!is_null(json_decode($result))){
+            
+            $output=json_decode($result,true);
+
+            if(isset($output['code'])  && $output['code']=='0'){
+                return true;
+                // echo '发送成功';
+            }else{
+                return false;
+                // echo $output['errorMsg'];
+            }
+        }else{
+
+                return false;
+                // echo $result; 
+        }
     }
 
     private function sendTemplateSMS($mobile,$datas,$tempId){
      // 初始化REST SDK
-     $rest = new REST();
+     $rest = new SmsApi();
 
      // 发送模板短信
      $datas=array($datas);
      
      $result = $rest->sendTemplateSMS($mobile,$datas,$tempId);
-
      if($result == NULL ) {
         return false;
          // echo "result error!";

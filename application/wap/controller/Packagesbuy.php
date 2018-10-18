@@ -88,7 +88,7 @@ class Packagesbuy extends MobileMember
      * @return [type] [description]
      */
     public function packages_time_reckon(){
-        output_data($this->payment_config);
+        output_data(array());
 
     }
 
@@ -146,6 +146,8 @@ class Packagesbuy extends MobileMember
         if (!$childinfo) {
             output_error('没有当前孩子信息！');
         }
+        $Relation = $Children->checkParentRelation($this->member_info['member_id'],$chind_id);
+        if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
         //加入学生学校班级信息
         if(is_array($childinfo))$order += $childinfo;        
         $order['order_amount'] = $packageInfo['pkg_price'];        
@@ -176,18 +178,15 @@ class Packagesbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
-        
+        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
+        $param['orderSn'] = $order_pay_info['pay_sn'];
 
-        
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
-            $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
-            $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
             $api = new \wxpay_h5();
             $api->setConfigs($param);
-            
             $mweburl = $api->get_payurl($this);
             output_data($mweburl);
             $url = $mweburl['mweb_url'];
@@ -197,14 +196,10 @@ class Packagesbuy extends MobileMember
         
         //alipay and so on
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
-        $param['orderSn'] = $order_pay_info['pay_sn'];
-        $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];
-        $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-
-        
+        $param['orderFee'] = $order_pay_info['order_amount'];//
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
+        output_data($mweburl);
         echo $return;
         exit;
     }

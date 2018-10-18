@@ -102,6 +102,8 @@ class REST {
                     <datas>".$data."</datas>
                   </TemplateSMS>";
         }
+        $this->showlog("response Time = ".date('Y-m-d H:i:s',time()).'**********************************************');
+
         $this->showlog("request body = ".$body);
         // 大写的sig参数 
         $sig =  strtoupper(md5($this->AccountSid . $this->AccountToken . $this->Batch));
@@ -114,7 +116,8 @@ class REST {
         $header = array("Accept:application/$this->BodyType","Content-Type:application/$this->BodyType;charset=utf-8","Authorization:$authen");
         // 发送请求
         $result = $this->curl_post($url,$body,$header);
-        $this->showlog("response body = ".$result);
+        $this->showlog("response body = ".$result."\n");
+
         if($this->BodyType=="json"){//JSON格式
            $datas=json_decode($result); 
         }else{ //xml格式

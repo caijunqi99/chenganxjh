@@ -41,7 +41,7 @@ class wxpay_h5
         $input->SetBody($this->config->orderInfo);
         $input->SetAttach($this->config->orderAttach);
         $input->SetOut_trade_no($this->config->orderSn);
-        $input->SetTotal_fee(1);
+        $input->SetTotal_fee($this->config->orderFee);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 3600));
         $input->SetGoods_tag('');

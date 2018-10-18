@@ -100,6 +100,7 @@ class Message extends Model
         $array['to_member_id'] = $param['member_id'];
         $array['to_member_name'] = isset($param['to_member_name']) ? $param['to_member_name'] : '';
         $array['message_body'] = trim($param['msg_content']);
+        $array['message_title'] = isset($param['message_title']) ? trim($param['message_title']) : '';
         $array['message_time'] = time();
         $array['message_update_time'] = time();
         $array['message_type'] = isset($param['message_type']) ? $param['message_type'] : '0';
@@ -210,14 +211,16 @@ class Message extends Model
             else {
                 $tmp_delid_str = ",{$to_member_id},";
             }
-            if ($tmp_delid_str == $v['to_member_id']) {//所有用户已经全部阅读过了可以删除
-                $where['message_id']=$v['message_id'];
-                db('message')->where($where)->delete();
-            }
-            else {
-                $where['message_id']=$v['message_id'];
-                db('message')->where($where)->update(array('del_member_id' => $tmp_delid_str));
-            }
+            $where['message_id']=$v['message_id'];
+            db('message')->where($where)->update(array('del_member_id' => $tmp_delid_str));
+            // if ($tmp_delid_str == $v['to_member_id']) {//所有用户已经全部阅读过了可以删除
+            //     $where['message_id']=$v['message_id'];
+            //     db('message')->where($where)->delete();
+            // }
+            // else {
+            //     $where['message_id']=$v['message_id'];
+            //     db('message')->where($where)->update(array('del_member_id' => $tmp_delid_str));
+            // }
         }
         return true;
     }
