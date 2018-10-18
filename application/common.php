@@ -212,7 +212,7 @@ function showDialog($message = '', $url = '', $alert_type = 'error', $extrajs = 
     }
     $modes = array('error' => 'alert', 'succ' => 'succ', 'notice' => 'notice', 'js' => 'js');
     $cover = $alert_type == 'error' ? 1 : 0;
-    $extra = 'parent.showDialog(\'' . $message . '\', \'' . $modes[$alert_type] . '\', null, ' . ($paramjs ? $paramjs : 'null') . ', ' . $cover . ', null, null, null, null, ' . (is_numeric($time) ? $time : 'null') . ', null);';
+    $extra = 'showDialog(\'' . $message . '\', \'' . $modes[$alert_type] . '\', null, ' . ($paramjs ? $paramjs : 'null') . ', ' . $cover . ', null, null, null, null, ' . (is_numeric($time) ? $time : 'null') . ', null);';
     $extra = '<script type="text/javascript" reload="1">' . $extra . '</script>';
     if ($extrajs != '' && substr(trim($extrajs), 0, 7) != '<script') {
         $extrajs = '<script type="text/javascript" reload="1">' . $extrajs . '</script>';
@@ -509,7 +509,7 @@ function readFileList($path, &$file_list, $ignore_dir = array())
  */
 function dsPriceFormat($price)
 {
-    $price_format = number_format($price, 2, '.', '');
+    $price_format = number_format($price, 4, '.', '');
     return $price_format;
 }
 
@@ -522,7 +522,7 @@ function dsPriceFormat($price)
 function dsPriceFormatForList($price)
 {
     if ($price >= 10000) {
-        return number_format(floor($price / 100) / 100, 2, '.', '') . lang('ten_thousand');
+        return number_format(floor($price / 100) / 100, 4, '.', '') . lang('ten_thousand');
     }
     else {
         return lang('currency') . $price;

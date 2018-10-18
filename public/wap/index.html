@@ -1,206 +1,757 @@
-
 <!doctype html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-touch-fullscreen" content="yes" />
-<meta name="format-detection" content="telephone=no"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="msapplication-tap-highlight" content="no" />
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
-<title>首页</title>
-<link rel="stylesheet" type="text/css" href="css/base.css">
-<link rel="stylesheet" type="text/css" href="css/index.css">
-<link rel="apple-touch-icon" href="images/touch-icon-iphone.png"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="fontsicon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="js/swiper/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="apple-touch-icon" href="images/touch-icon-iphone.png" />
+    <style>
+        .home_body {
+            padding-top: 2rem;
+        }
+        
+        .swiper-banner {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .swiper-banner .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        
+        .recommend_swiper {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .recommend_swiper .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        
+        .banner_box {
+            position: relative;
+        }
+        
+        .banner_box .swiper-pagination {
+            width: 100%;
+            bottom: .2rem;
+            z-index: 99;
+        }
+        
+        .swiper-pagination-bullet {
+            margin-right: .3rem;
+            background: #fff;
+            opacity: .8;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background: #DB4453;
+            opacity: 1;
+        }
+    </style>
 </head>
-<body>
-<div class="nctouch-home-top fixed-Width">
-  <header id="header" class="transparent">
-  	<div class="logo"></div>
-    <div class="header-wrap">
-      <a href="tmpl/search.html" class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword">请输入关键词</span> </a>
-    </div>
-    <div class="header-r"><a id="header-nav" href="tmpl/member/chat_list.html"><i class="message"></i>
+
+<body class="home_body">
+    <!-- <div class="nctouch-home-top fixed-Width">
+        <header id="header" class="transparent">
+            <div class="logo"></div>
+            <div class="header-wrap">
+                <a href="tmpl/search.html" class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword">请输入关键词</span> </a>
+            </div>
+            <div class="header-r"><a id="header-nav" href="tmpl/member/chat_list.html"><i class="message"></i>
       <p>消息</p>
       <sup></sup></a></div>
-  </header>
-  <div class="cohesive"></div>
-  <div class="adv_list" id="main-container1"></div>
-</div>
-<div class="nctouch-home-nav fixed-Width">
-  <ul>
-    <li><a href="tmpl/product_first_categroy.html"><span><i></i></span>
+        </header>
+        <div class="cohesive"></div>
+        <div class="adv_list" id="main-container1"></div>
+    </div> -->
+    <div class="nctouch-home-top fixed-Width">
+        <!-- <header id="header" class="transparent">
+            <div class="logo"></div>
+            <div class="header-wrap">
+                <a href="tmpl/search.html" class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword">请输入关键词</span> </a>
+            </div>
+            <div class="header-r"><a id="header-nav" href="tmpl/member/chat_list.html"><i class="message"></i>
+				<p>消息</p>
+				<sup></sup></a>
+            </div>
+        </header> -->
+        <!-- <div class="cohesive"></div> -->
+        <div class="mall_topnav_box">
+            商城
+            <div class="mall_topnav" id="mall_topnav">
+                <div class="mall_topnav0">
+                    <i class="icon iconfont icon-gengduo"></i>
+                    <div class="mall_topnav_cont" id="mall_topnav_cont">
+                        <div class="mall_topnav_cont0">
+                            <div class="jiao_box">
+                                <div class="jiao"></div>
+                            </div>
+                            <ul class="mall_topnav_list">
+                                <li>
+                                    <a href="javascript:;"><i class="icon iconfont icon-daohanggouwuche"></i>购物车</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"><i class="icon iconfont icon-wodeshoucang"></i>我的收藏</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"><i class="icon iconfont icon-dingdan"></i>我的订单</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"><i class="icon iconfont icon-dingwei"></i>收货地址</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 轮播 -->
+        <!-- <div class="adv_list" id="main-container1"></div> -->
+        <div class="banner_box">
+            <div class="swiper-container swiper-banner">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a href="javascript:;">
+                            <img src="./images/banner01.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="javascript:;">
+                            <img src="./images/banner02.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!-- <div class="nctouch-home-nav fixed-Width">
+        <ul>
+            <li><a href="tmpl/product_first_categroy.html"><span><i></i></span>
       <p>分类</p>
       </a></li>
-    <li><a href="tmpl/cart_list.html"><span><i></i></span>
+            <li><a href="tmpl/cart_list.html"><span><i></i></span>
       <p>购物车</p>
       </a></li>
-    <li><a href="tmpl/member/member.html"><span><i></i></span>
+            <li><a href="tmpl/member/member.html"><span><i></i></span>
       <p>我的商城</p>
       </a></li>
-    <li><a href="tmpl/member/signin.html"><span><i></i></span>
+            <li><a href="tmpl/member/signin.html"><span><i></i></span>
       <p>每日签到</p>
       </a></li>
-  </ul>
-</div>
-<div class="nctouch-home-layout" id="main-container2"></div>
-<div class="fix-block-r">
-	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i></i></a>
-</div>
-<footer id="footer" class="fixed-Width"></footer>
-<script type="text/html" id="adv_list">
-		<div class="swipe-wrap">
-			<% for (var i in adv_list) { %>
-		<% if (adv_list[i].adv_code) { %>
-			<div class="item">
-				<a href="<%= adv_code %>">
+        </ul>
+    </div> -->
+
+    <div class="nctouch-home-nav fixed-Width">
+        <div class="recommend_list">
+            <div class="swiper-container recommend_swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide hover" id="jobs1" onclick="setTab('jobs',1,5)">
+                        <div class="recommend_ite_img">
+                            <img src="images/new_goods.png" alt="">
+                        </div>
+                        <p class="recommend_name"><span>新品</span></p>
+                    </div>
+                    <div class="swiper-slide" id="jobs2" onclick="setTab('jobs',2,5)">
+                        <div class="recommend_ite_img">
+                            <img src="images/wristwatch.png" alt="">
+                        </div>
+                        <p class="recommend_name"><span>手表</span></p>
+                    </div>
+                    <div class="swiper-slide" id="jobs3" onclick="setTab('jobs',3,5)">
+                        <div class="recommend_ite_img">
+                            <img src="images/handdamage.png" alt="">
+                        </div>
+                        <p class="recommend_name"><span>手坏</span></p>
+                    </div>
+                    <div class="swiper-slide" id="jobs4" onclick="setTab('jobs',4,5)">
+                        <div class="recommend_ite_img">
+                            <img src="images/ornament.png" alt="">
+                        </div>
+                        <p class="recommend_name"><span>饰品</span></p>
+                    </div>
+                    <div class="swiper-slide" id="jobs5" onclick="setTab('jobs',5,5)">
+                        <div class="recommend_ite_img">
+                            <img src="images/new_goods.png" alt="">
+                        </div>
+                        <p class="recommend_name"><span>其他</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="nctouch-home-layout" id="main-container2"></div>-->
+    <!-- 返回顶部 -->
+    <div class="fix-block-r">
+        <a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i></i></a>
+    </div>
+    <!-- 商品列表 -->
+
+    <!-- 新品 -->
+    <div class="recommend_cont hover" id="recommend_jobs_1">
+        <div class="goodslistbox">
+            <div class="goodslist_t">
+                <img src="./images/good_big_img.jpg" alt="">
+            </div>
+            <div class="goodslist_b">
+                <ul class="goodslist_ul clearfix">
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手表 -->
+    <div class="recommend_cont" id="recommend_jobs_2" style="display:none;">
+        <div class="goodslistbox">
+            <div class="goodslist_t">
+                <img src="./images/good_big_img.jpg" alt="">
+            </div>
+            <div class="goodslist_b">
+                <ul class="goodslist_ul clearfix">
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>手表</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手环 -->
+    <div class="recommend_cont" id="recommend_jobs_3" style="display:none;">
+        <div class="goodslistbox">
+            <div class="goodslist_t">
+                <img src="./images/good_big_img.jpg" alt="">
+            </div>
+            <div class="goodslist_b">
+                <ul class="goodslist_ul clearfix">
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>手环</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 饰品 -->
+    <div class="recommend_cont" id="recommend_jobs_4" style="display:none;">
+        <div class="goodslistbox">
+            <div class="goodslist_t">
+                <img src="./images/good_big_img.jpg" alt="">
+            </div>
+            <div class="goodslist_b">
+                <ul class="goodslist_ul clearfix">
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>饰品</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 其他 -->
+    <div class="recommend_cont" id="recommend_jobs_5" style="display:none;">
+        <div class="goodslistbox">
+            <div class="goodslist_t">
+                <img src="./images/good_big_img.jpg" alt="">
+            </div>
+            <div class="goodslist_b">
+                <ul class="goodslist_ul clearfix">
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>饰品</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="goods_imgbox" style="background:url(./images/goods_img.png) no-repeat center;background-size:cover;">
+                                <img class="vhidden" src="./images/goods_img.png" alt="">
+                            </div>
+                            <div class="goods_txt">
+                                <h2>小天才儿童电话手表Z2y</h2>
+                                <p>GPS定位智能手表手环</p>
+                                <p class="last"><strong>￥1300.00</strong><span>￥1380.00</span></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <p class="underscore"><span>我也是有底线的</span></p>
+
+
+    <!-- <footer id="footer" class="fixed-Width"></footer> -->
+    <!-- <script type="text/html" id="adv_list">
+        <div class="swipe-wrap">
+            <% for (var i in adv_list) { %>
+                <% if (adv_list[i].adv_code) { %>
+                    <div class="item">
+                        <a href="<%= adv_code %>">
 					<img src="<%= adv_list[i].adv_code %>" alt="">
 				</a>
-			</div>
-	<% } %>
-			<% } %>
-		</div>
-</script> 
-<script type="text/html" id="home1">
-	<div class="nctouch-home-block">
-	<% if (adv_title) { %>
-		<div class="tit-bar"><%= adv_title %></div>
-	<% } %>
-		<div class="item-pic">
-			<a href="<%= adv_link %>">
+                    </div>
+                    <% } %>
+                        <% } %>
+        </div>
+        
+    </script> -->
+    <!-- <script type="text/html" id="home1">
+        <div class="nctouch-home-block">
+            <% if (adv_title) { %>
+                <div class="tit-bar">
+                    <%= adv_title %>
+                </div>
+                <% } %>
+                    <div class="item-pic">
+                        <a href="<%= adv_link %>">
 				<img src="<%= adv_code %>" alt="">
 			</a>
-		</div>
-	</div>
-</script> 
-<script type="text/html" id="home2">
-	<div class="nctouch-home-block">
-	<% if (title) { %>
-		<div class="tit-bar"><%= title %></div>
-	<% } %>
-		<ul class="item-pic-l1-r2">
-		<% for (var i in home2) { %>
-		<% if (home2[i].adv_code) { %>
-			<li>
-				<a href="<%=  home2[i].adv_link %>"><img src="<%= home2[i].adv_code %>" alt=""></a>
-			</li>
-		<% } %>
-			<% } %>
-			</ul>
-	</div>
-</script> 
-<script type="text/html" id="home3">
-	<div class="nctouch-home-block">
-	<% if (title) { %>
-		<div class="tit-bar"><%= title %></div>
-	<% } %>
-		<ul class="item-pic-list">
-		<% for (var i in home3) { %>
-		<% if (home3[i].adv_code) { %>
-			<li>
-				<a href="<%= home3[i].adv_link %>"><img src="<%= home3[i].adv_code %>" alt=""></a>
-			</li>
-		<% } %>
-			<% } %>
-		</ul>
-	</div>
-</script> 
-<script type="text/html" id="home4">
-	<div class="nctouch-home-block">
-	<% if (title) { %>
-		<div class="tit-bar"><%= title %></div>
-	<% } %>
-		<ul class="item-pic-l2-r1">
+                    </div>
+        </div>
+    </script>
+    <script type="text/html" id="home2">
+        <div class="nctouch-home-block">
+            <% if (title) { %>
+                <div class="tit-bar">
+                    <%= title %>
+                </div>
+                <% } %>
+                    <ul class="item-pic-l1-r2">
+                        <% for (var i in home2) { %>
+                            <% if (home2[i].adv_code) { %>
+                                <li>
+                                    <a href="<%=  home2[i].adv_link %>"><img src="<%= home2[i].adv_code %>" alt=""></a>
+                                </li>
+                                <% } %>
+                                    <% } %>
+                    </ul>
+        </div>
+    </script>
+    <script type="text/html" id="home3">
+        <div class="nctouch-home-block">
+            <% if (title) { %>
+                <div class="tit-bar">
+                    <%= title %>
+                </div>
+                <% } %>
+                    <ul class="item-pic-list">
+                        <% for (var i in home3) { %>
+                            <% if (home3[i].adv_code) { %>
+                                <li>
+                                    <a href="<%= home3[i].adv_link %>"><img src="<%= home3[i].adv_code %>" alt=""></a>
+                                </li>
+                                <% } %>
+                                    <% } %>
+                    </ul>
+        </div>
+    </script>
+    <script type="text/html" id="home4">
+        <div class="nctouch-home-block">
+            <% if (title) { %>
+                <div class="tit-bar">
+                    <%= title %>
+                </div>
+                <% } %>
+                    <ul class="item-pic-l2-r1">
 
-		<% for (var i in home4) { %>
-		<% if (home4[i].adv_code) { %>
-			<li>
-				<a href="<%=  home4[i].adv_link %>"><img src="<%= home4[i].adv_code %>" alt=""></a>
-			</li>
-		<% } %>
-			<% } %>
+                        <% for (var i in home4) { %>
+                            <% if (home4[i].adv_code) { %>
+                                <li>
+                                    <a href="<%=  home4[i].adv_link %>"><img src="<%= home4[i].adv_code %>" alt=""></a>
+                                </li>
+                                <% } %>
+                                    <% } %>
 
-		</ul>
-	</div>
-</script> 
-<script type="text/html" id="goods">
-	<div class="nctouch-home-block item-goods">
-		<div class="tit-bar">推荐商品</div>
-		<ul class="goods-list">
-		<% for (var i in goods) { %>
-			<li>
-				<a href="tmpl/product_detail.html?goods_id=<%= goods[i].goods_id %>">
-					<div class="goods-pic"><img src="<%= goods[i].goods_image %>" alt=""></div>
-					<dl class="goods-info">
-						<dt class="goods-name"><%= goods[i].goods_name %></dt>
-						<dd class="goods-price">￥<em><%= goods[i].goods_promotion_price %></em></dd>
-					</dl>
-				</a>
-			</li>
-		<% } %>
-		</ul>
-	</div>
-</script>
-<script type="text/html" id="goods1">
-	<div class="nctouch-home-block item-goods">
-	<% if (title) { %>
-		<div class="tit-bar"><%= title %></div>
-	<% } %>
-		<ul class="goods-list">
-		<% for (var i in item) { %>
-			<li>
-			<i><div>打折</div></i>
-			<a href="tmpl/product_detail.html?goods_id=<%= item[i].goods_id %>">
-			<div class="goods-pic"><img src="<%= item[i].goods_image %>" alt=""></div>
-					<dl class="goods-info">
-						<dt class="goods-name"><%= item[i].goods_name %></dt>
-						<dd class="goods-price">￥<em><%= item[i].goods_promotion_price %></em><i class="list-price">￥<%= item[i].goods_price %></i></dd>
-					</dl>
-			</a>
-				</li>
-			
-		<% } %>
-		</ul>
-	</div>
-</script>
-<script type="text/html" id="goods2">
-	<div class="nctouch-home-block item-goods">
-	<% if (title) { %>
-		<div class="tit-bar"><%= title %></div>
-	<% } %>
-		<ul class="goods-list">
-		<% for (var i in item) { %>
-			<li>
-			<i><div>抢购</div></i>
-			<a href="tmpl/product_detail.html?goods_id=<%= item[i].goods_id %>">
-			<div class="goods-pic"><img src="<%= item[i].goods_image %>" alt=""></div>
-					<dl class="goods-info">
-						<dt class="goods-name"><%= item[i].goods_name %></dt>
-						<dd class="goods-price">￥<em><%= item[i].goods_promotion_price %></em><i class="list-price">￥<%= item[i].goods_price %></i></dd>
-					</dl>
-			</a>
-				</li>
-			
-		<% } %>
-		</ul>
-	</div>
-</script> 
-<script type="text/javascript" src="js/config.js"></script>
-<script type="text/javascript" src="js/zepto.min.js"></script> 
-<script type="text/javascript" src="js/template.js"></script> 
-<script type="text/javascript" src="js/common.js"></script> 
-<script type="text/javascript" src="js/swipe.js"></script> 
-<script type="text/javascript" src="js/index.js"></script> 
-<script type="text/javascript" src="js/tmpl/footer.js"></script>
+                    </ul>
+        </div>
+    </script>
+    <script type="text/html" id="goods">
+        <div class="nctouch-home-block item-goods">
+            <div class="tit-bar">推荐商品</div>
+            <ul class="goods-list">
+                <% for (var i in goods) { %>
+                    <li>
+                        <a href="tmpl/product_detail.html?goods_id=<%= goods[i].goods_id %>">
+                            <div class="goods-pic"><img src="<%= goods[i].goods_image %>" alt=""></div>
+                            <dl class="goods-info">
+                                <dt class="goods-name"><%= goods[i].goods_name %></dt>
+                                <dd class="goods-price">￥<em><%= goods[i].goods_promotion_price %></em></dd>
+                            </dl>
+                        </a>
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+    </script>
+    <script type="text/html" id="goods1">
+        <div class="nctouch-home-block item-goods">
+            <% if (title) { %>
+                <div class="tit-bar">
+                    <%= title %>
+                </div>
+                <% } %>
+                    <ul class="goods-list">
+                        <% for (var i in item) { %>
+                            <li>
+                                <i><div>打折</div></i>
+                                <a href="tmpl/product_detail.html?goods_id=<%= item[i].goods_id %>">
+                                    <div class="goods-pic"><img src="<%= item[i].goods_image %>" alt=""></div>
+                                    <dl class="goods-info">
+                                        <dt class="goods-name"><%= item[i].goods_name %></dt>
+                                        <dd class="goods-price">￥<em><%= item[i].goods_promotion_price %></em><i class="list-price">￥<%= item[i].goods_price %></i></dd>
+                                    </dl>
+                                </a>
+                            </li>
 
-<script type="text/javascript" src="js/addtohomescreen.js"></script>
-<script>
-	addToHomescreen({
-		message:'如要把应用程式加至主屏幕,请点击%icon, 然后<strong>加至主屏幕</strong>'
-	});
-</script>
+                            <% } %>
+                    </ul>
+        </div>
+    </script>
+    <script type="text/html" id="goods2">
+        <div class="nctouch-home-block item-goods">
+            <% if (title) { %>
+                <div class="tit-bar">
+                    <%= title %>
+                </div>
+                <% } %>
+                    <ul class="goods-list">
+                        <% for (var i in item) { %>
+                            <li>
+                                <i><div>抢购</div></i>
+                                <a href="tmpl/product_detail.html?goods_id=<%= item[i].goods_id %>">
+                                    <div class="goods-pic"><img src="<%= item[i].goods_image %>" alt=""></div>
+                                    <dl class="goods-info">
+                                        <dt class="goods-name"><%= item[i].goods_name %></dt>
+                                        <dd class="goods-price">￥<em><%= item[i].goods_promotion_price %></em><i class="list-price">￥<%= item[i].goods_price %></i></dd>
+                                    </dl>
+                                </a>
+                            </li>
+
+                            <% } %>
+                    </ul>
+        </div>
+    </script> -->
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <!--<script type="text/javascript" src="js/template.js"></script>-->
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/swiper/js/swiper.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/tmpl/footer.js"></script>
+
+    <script type="text/javascript" src="js/addtohomescreen.js"></script>
+    <script>
+        addToHomescreen({
+            message: '如要把应用程式加至主屏幕,请点击%icon, 然后<strong>加至主屏幕</strong>'
+        });
+
+        $(function() {
+            // 首页顶部右侧菜单
+
+            $("#mall_topnav").click(function() {
+                if ($("#mall_topnav_cont").css("display") == "none") {
+                    $("#mall_topnav_cont").css("display", "block");
+                } else {
+                    $("#mall_topnav_cont").css("display", "none");
+                }
+            });
+
+            $(window).scroll(function() {
+                $("#mall_topnav_cont").css("display", "none");
+            });
+
+            // banner
+            var swiper = new Swiper('.swiper-banner', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                loop: $(".swiper-wrapper > div").length > 1 ? true : false,
+                autoplay: 5000,
+                autoplayDisableOnInteraction: false
+            });
+
+            // 商品推荐tab
+            var swiper1 = new Swiper('.recommend_swiper', {
+                slidesPerView: 4,
+                spaceBetween: 30
+            });
+
+        })
+
+        //推荐商品选项卡
+        function setTab(name, cursel, n) {
+            for (i = 1; i <= n; i++) {
+                var menu = $("#" + name + i)
+                var con = $("#" + "recommend_" + name + "_" + i)
+                if (i == cursel) {
+                    menu.addClass("hover");
+                    con.fadeIn();
+                } else {
+                    menu.removeClass("hover");
+                    con.hide();
+                }
+            }
+        }
+    </script>
 </body>
+
 </html>

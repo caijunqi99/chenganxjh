@@ -14,9 +14,17 @@ class Type extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/type.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $type_list = db('type')->paginate(10,false,['query' => request()->param()]);
         // 获取分页显示
         $page = $type_list->render();
@@ -31,6 +39,9 @@ class Type extends AdminControl {
      */
 
     public function type_add() {
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         if (!(request()->isPost())) {
             $type = [
                 'type_name' => '',
@@ -157,6 +168,9 @@ class Type extends AdminControl {
     }
 
     public function type_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $type_id = input('param.type_id');
         if (empty($type_id)) {
             $this->error(lang('empty_error'));
@@ -427,6 +441,9 @@ class Type extends AdminControl {
      */
 
     public function type_drop() {
+        if(session('admin_is_super') !=1 && !in_array('2',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $type_id = input('param.type_id');
         if (empty($type_id)) {
             $this->error(lang('empty_error'));
@@ -457,21 +474,26 @@ class Type extends AdminControl {
                 'url' => url('Admin/Type/index')
             ),
         );
+        if(session('admin_is_super') ==1 || in_array('1',$this->action)){
+            if (request()->action() == 'type_add' || request()->action() == 'index') {
+                $menu_array[] = array(
+                    'name' => 'type_add',
+                    'text' => '新增类型',
+                    'url' => url('Admin/Type/type_add')
+                );
+            }
+        }
+        if(session('admin_is_super') ==1 || in_array('3',$this->action)){
+            if (request()->action() == 'type_edit') {
+                $menu_array[] = array(
+                    'name' => 'type_edit',
+                    'text' => '编辑类型',
+                    'url' => url('Admin/Member/type_edit')
+                );
+            }
+        }
 
-        if (request()->action() == 'type_add' || request()->action() == 'index') {
-            $menu_array[] = array(
-                'name' => 'type_add',
-                'text' => '新增类型',
-                'url' => url('Admin/Type/type_add')
-            );
-        }
-        if (request()->action() == 'type_edit') {
-            $menu_array[] = array(
-                'name' => 'type_edit',
-                'text' => '编辑类型',
-                'url' => url('Admin/Member/type_edit')
-            );
-        }
+
         if (request()->action() == 'attr_edit') {
             $menu_array[] = array(
                 'name' => 'type_edit',

@@ -13,7 +13,7 @@ class wxpay_h5
             'wxpay_partnerid' => '',
             'wxpay_partnerkey' => '',
 
-            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify',
+            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify_h5.html',
 
             'orderSn' => date('YmdHis'),
             'orderInfo' => '',
@@ -47,7 +47,7 @@ class wxpay_h5
         $input->SetGoods_tag('');
         $input->SetSpbill_create_ip($Spbill_create_ip);
         $input->SetDevice_info('WEB');
-        $input->SetNotify_url(WAP_SITE_URL . '/Packagesbuy/notify_url');
+        $input->SetNotify_url($this->config->notifyUrl);
         $input->SetTrade_type("MWEB");
         switch ($_GET['apptype']) {
             case 'Android':
@@ -81,17 +81,17 @@ class wxpay_h5
                     $orderState['transaction_id'] =$result['transaction_id'];                    
                     $orderState['cash_fee']       = $result['cash_fee']/100;                    
                 }
-                $orderState['trade_state'] =$this->trade_state($result['trade_state']);
-            }else{
-
             }
+            $orderState['trade_state'] =$this->trade_state($result);
         }else{
             $orderState['error']='签名失败或者参数格式校验错误';
         }
 
         return $orderState;
     }
-    public function trade_state($type){
+    public function trade_state($result){
+        $type = $result['trade_state'];
+        if(isset($result['err_code']))$type=$result['err_code'];
         $paystate=array();
         switch ($type) {
             case 'SUCCESS':
@@ -121,6 +121,10 @@ class wxpay_h5
             case 'PAYERROR':
                 $paystate['pay_state']= '支付失败(其他原因，如银行返回失败)';
                 $paystate['state']= 7;
+                break;
+            case 'ORDERNOTEXIST':
+                $paystate['pay_state']= '支付失败(订单不存在)';
+                $paystate['state']= 8;
                 break;
         }
         $paystate['trade_state']= $type;

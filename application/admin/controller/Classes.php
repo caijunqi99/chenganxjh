@@ -148,7 +148,17 @@ class Classes extends AdminControl {
             $data['school_provinceid'] = $province_id['area_parent_id'];
             //学校识别码
             $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
-            $data['classCard'] = $schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
+            $classcard=$schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
+            $data['classCard'] =$classcard;
+            //生成二维码
+            import('qrcode.index',EXTEND_PATH);
+            $PhpQRCode = new \PhpQRCode();
+            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' . DS);
+            // 生成商品二维码
+            $PhpQRCode->set('date', $classcard);
+            $PhpQRCode->set('pngTempName', $classcard . '.png');
+            $qr=$PhpQRCode->init();
+            $data['qr']='/home/store/class/'.$qr;
             //验证数据  END
             $result = $model_classes->addClasses($data);
             if ($result) {

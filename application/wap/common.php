@@ -1,12 +1,55 @@
 <?php
 
-
-function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
+function CalculationTime($order_info,$packagetime){
+    $package_end_time = isset($packagetime['end_time'])?$packagetime['end_time']:'';
+    $nowTime = !empty($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
     
+    $pkg_length = $order_info['pkg_length'];    
+    switch ($order_info['pkg_axis']) {
+        case 'hour':
+            $endTime = strtotime("+{$pkg_length} hour",$nowTime);
+            break;
+        case 'day':
+            $endTime = strtotime("+{$pkg_length} day",$nowTime);
+            break;
+        case 'week':
+            $endTime = strtotime("+{$pkg_length} week",$nowTime);
+            break;
+        case 'mouth':
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'quarter':
+            $pkg_length*=3;
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'half':
+            $pkg_length*=6;
+            $endTime = strtotime("+{$pkg_length} month",$nowTime);
+            break;
+        case 'year':
+            $endTime = strtotime("+{$pkg_length} year",$nowTime);
+            break;
+    }
+    return $endTime;
+}
+function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
+    if(count($datas) == count($datas,1)){
+        if(!empty($datas)){
+            $datas2 = array(
+                0=>$datas
+            );
+        }else{
+            $datas2 = array();
+        }
+    }else{
+        $datas2 = $datas;
+    }
     $data = array();
     $data['code'] = isset($datas['error'])?'100':'200';
     if ($codd !=1) $data['code'] = '400';
-    $data['result']=isset($datas['error'])?array():($isAssoc == 'true'?(object)$datas:$datas);
+//    $data['result']=isset($datas['error'])?array():($isAssoc == 'true'?(object)$datas2:$datas2);
+    $data['result']=isset($datas['error'])?array():$datas2;
+
     $data['message'] = isset($datas['error'])?$datas['error']:'';
     if(!empty($extend_data)) {
         $data = array_merge($data, $extend_data);

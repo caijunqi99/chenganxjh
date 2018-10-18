@@ -9,10 +9,15 @@ class Mood extends Model {
     /**
      * 查询所有系统文章
      */
-    public function getList($where) {
-        return db('mood')->where($where)->order('id desc')->select();
+    public function getList($condition, $field = '*', $page = 0, $order = 'id desc', $limit = '') {
+        if($limit) {
+            return db('mood')->where($condition)->field($field)->order($order)->page($page)->limit($limit)->select();
+        }else{
+            $res= db('mood')->where($condition)->field($field)->order($order)->paginate($page,false,['query' => request()->param()]);
+            $this->page_info=$res;
+            return $res->items();
+        }
     }
-
     /**
      * 根据编号查询一条
      * 
@@ -32,14 +37,14 @@ class Mood extends Model {
     }
 
     /**
-     * 更新
-     * 
-     * @param unknown_type $param
+     * 编辑分子公司
+     * @param array $condition
+     * @param array $update
+     * @return boolean
      */
-    public function update1($param) {
-        return db('mood')->where('doc_id',$param['doc_id'])->update($param);
+    public function editMood($condition, $update) {
+        return db('mood')->where($condition)->update($update);
     }
-
     //指定日期几天前
     function getnum($time)
     {

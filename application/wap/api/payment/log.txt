@@ -1,0 +1,39 @@
+2018-10-13 16:52:18  {"trade_no":null}
+2018-10-13 16:52:48  {"trade_no":null}
+2018-10-13 16:53:36  {"trade_no":null}
+2018-10-13 16:55:06  {"trade_no":null}
+2018-10-13 16:55:23  {"out_trade_no":"530592762942823000"}
+2018-10-13 17:02:21  {"out_trade_no":"530592762942823000","trade_no":""}
+2018-10-13 17:19:12  {"out_trade_no":"530592762942823000","trade_no":""}
+2018-10-13 17:22:08  {"out_trade_no":"530592762942823000","trade_no":""}
+2018-10-13 17:25:28  {"out_trade_no":"530592762942823000","trade_no":""}
+2018-10-13 17:26:51  {"out_trade_no":"530592762942823000","trade_no":""}
+2018-10-13 17:27:25  {"out_trade_no":"530592762942823000"}
+2018-10-13 17:27:36  {"out_trade_no":"750592761451321000"}
+2018-10-13 17:27:54  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:28:34  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:30:08  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:52:38  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:54:23  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:54:24  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:54:25  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:54:58  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:54:58  response: stdClass::__set_state(array(
+   'alipay_trade_query_response' => 
+  stdClass::__set_state(array(
+     'code' => '40004',
+     'msg' => 'Business Failed',
+     'sub_code' => 'ACQ.TRADE_NOT_EXIST',
+     'sub_msg' => '交易不存在',
+     'buyer_pay_amount' => '0.00',
+     'invoice_amount' => '0.00',
+     'out_trade_no' => '720592696000891000',
+     'point_amount' => '0.00',
+     'receipt_amount' => '0.00',
+  )),
+   'sign' => 'daCvG2NvYV0PSMXKps4XI3AeUAsRcMrdWYFWOt/PBZL7og+XT5MJvee1fU9vkbyXYWiSpJWWvVEa1QqtwHuITsARwwR6cfkEjlkt1IFIdf0A6ZmkBdjMxeWzHJReXJ6O5fbp3fjbcy4f0+k6gzfcYvM6C0b8S+z6IPw+rJQi6R0Womq7lWFPqukyQRygmMnQgaLVaZ/1h7f3ZuqCZuPBc9Toef8VBeYvBgi/wYMgNE2zrjMH2uSA9X4tXnN43Kvk4O3tEZ8+ZonGfzMFT/MmT8IzUWS8XcuOdWmIX976k9rRxvGvQ9iH0PNRwFlL+2ioD4qEgPmniDZzoCROXFp+kA==',
+))
+2018-10-13 17:55:13  {"out_trade_no":"720592696000891000"}
+2018-10-13 17:58:57  {"out_trade_no":"720592696000891000"}
+2018-10-15 12:03:24  {"productCode":"QUICK_WAP_PAY","body":"240592920204092000","subject":"想见孩商品订单240592920204092000","out_trade_no":"240592920204092000-witching","total_amount":0.01,"timeout_express":"1m"}
+2018-10-15 12:03:24  response: '<form id=\'alipaysubmit\' name=\'alipaysubmit\' action=\'https://openapi.alipay.com/gateway.do?charset=UTF-8\' method=\'POST\'><input type=\'hidden\' name=\'biz_content\' value=\'{"productCode":"QUICK_WAP_PAY","body":"240592920204092000","subject":"想见孩商品订单240592920204092000","out_trade_no":"240592920204092000-witching","total_amount":0.01,"timeout_express":"1m"}\'/><input type=\'hidden\' name=\'app_id\' value=\'2018101261632999\'/><input type=\'hidden\' name=\'version\' value=\'1.0\'/><input type=\'hidden\' name=\'format\' value=\'json\'/><input type=\'hidden\' name=\'sign_type\' value=\'RSA2\'/><input type=\'hidden\' name=\'method\' value=\'alipay.trade.wap.pay\'/><input type=\'hidden\' name=\'timestamp\' value=\'2018-10-15 12:03:24\'/><input type=\'hidden\' name=\'alipay_sdk\' value=\'alipay-sdk-php-20161101\'/><input type=\'hidden\' name=\'notify_url\' value=\'http://vip.xiangjianhai.com:8001/index.php/Wap/payment/alipay_notify_app.html\'/><input type=\'hidden\' name=\'return_url\' value=\'http://vip.xiangjianhai.com:8001/app/user/chooselevel.html\'/><input type=\'hidden\' name=\'charset\' value=\'UTF-8\'/><input type=\'hidden\' name=\'sign\' value=\'YZWNcyYYirE5H1+ohIstVzn4at7H49Xpcfxvk+TBDdhntWv272+QFZYdTGbluFGz8NyiasJZrBlivEChQ3Heua4e5TWYAFTEIH8JTu4H6hhz/m0hACh6RknCXNZx2KYDANiMU2gQrnsh/+1t5VbhQRLV5vDGtYiAKvKhud5OLx6cuSHiFQsO7pu2XLdiykr12+g3V0fsnWZKr0oRExTz8D7zzbOtEB8ydMkfiewxRBNksGlGlFfem7V8ukz4ITOgR5RlbQzkeXAMVOZcGdbNMtOflmgnASv1F4a2IISaSDAqrwRfeEMjP5NX0XUWZRtuB9A5GvolHg22PGcIufamRQ==\'/><input type=\'submit\' value=\'ok\' style=\'display:none;\'\'></form><script>document.forms[\'alipaysubmit\'].submit();</script>'

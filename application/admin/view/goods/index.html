@@ -42,7 +42,13 @@
                 <th>{$Think.lang.goods_storage}</th>
                 <th>{$Think.lang.goods_state}</th>
                 <th>{$Think.lang.goods_verify}</th>
+                {if $Request.param.type == 'lockup' && (session('admin_is_super') == 1 || in_array(2,$action) || in_array(4,$action))}
                 <th>{$Think.lang.ds_handle}</th>
+                {elseif $Request.param.type == 'waitverify' && (session('admin_is_super') == 1 || in_array(15,$action) || in_array(4,$action))}
+                <th>{$Think.lang.ds_handle}</th>
+                {elseif session('admin_is_super') == 1 || in_array(16,$action) || in_array(4,$action)}
+                <th>{$Think.lang.ds_handle}</th>
+                {/if}
             </tr>
         </thead>
         <tbody>
@@ -61,18 +67,23 @@
                 <td>{$storage[$goods['goods_commonid']]['goods_storage']}</td>
                 <td>{if $goods.goods_state eq '0'}下架{elseif $goods.goods_state eq '10'}禁售{else}出售中{/if}</td>
                 <td>{if $goods.goods_verify eq '0'}未通过{elseif $goods.goods_verify eq '10'}审核中{else}通过{/if}</td>
-
                 <td>
-                    <a href="{:url('/home/goods/index',['goods_id' =>$storage[$goods['goods_commonid']][0]['goods_id']])}">查看</a>
-                     {if $Request.param.type == 'lockup'}
+                    <?php if(session('admin_is_super') == 1 || in_array('4',$action)){?>
+                        <a href="{:url('/home/goods/index',['goods_id' =>$storage[$goods['goods_commonid']][0]['goods_id']])}">查看</a>
+                    <?php }?>
+                    {if $Request.param.type == 'lockup' && (session('admin_is_super') == 1 || in_array(2,$action))}
                     |
                     <a href="{:url('goods/goods_del',['common_id'=>$goods['goods_commonid']])}">{:lang('ds_del')}</a>
-                    {elseif $Request.param.type == 'waitverify'}
-                     |
-                    <a href="javascript:void(0);" onclick="goods_verify({$goods['goods_commonid']});">{:lang('ds_verify')}</a>
+                    {elseif $Request.param.type == 'waitverify' && (session('admin_is_super') == 1 || in_array(15,$action))}
+                        {if $goods.goods_verify eq '10'}
+                         |
+                        <a href="javascript:void(0);" onclick="goods_verify({$goods['goods_commonid']});">{:lang('ds_verify')}</a>
+                        {/if}
                     {else /}
+                    {if session('admin_is_super') == 1 || in_array(16,$action)}
                     |
                     <a href="javascript:void(0);" onclick="goods_lockup({$goods['goods_commonid']});">违规下架</a>
+                    {/if}
                     {/if}
                 </td>
             </tr>
@@ -90,8 +101,6 @@
     {$page}
 </div>
 {include file="public/footer" /}
-
-<script src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script src="{:config('url_domain_root')}static/home/js/common.js"></script>
 <script>
     AJAX_URL = "{:url('/admin/Goods/ajax_goodslist')}";
