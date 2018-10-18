@@ -376,11 +376,6 @@ class Member extends MobileMember
         if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
             output_error('传的参数不完整');
         }
-        //判断该学生是否有绑定人
-        $student = db('student')->field('s_ownerAccount')->where(' s_card = "'.$card.'"')->find();
-        if(!empty($student) && !empty($student['s_ownerAccount'])){
-            output_error('该学生已有绑定人，请联系管理员');
-        }
         //判断识别码是否存在 并是不是这个班级的识别码
         $class = db('class')->field('classCard,classid')->where(' classid =  "'.$class_id.'"')->find();
         if(empty($class)){
@@ -389,7 +384,8 @@ class Member extends MobileMember
         if($class['classCard'] != $classCard){
             output_error('选择班级和填写的班级识别码不一致');
         }
-
+        //判断该学生是否有绑定人
+        $student = db('student')->field('s_ownerAccount')->where(' s_card = "'.$card.'"')->find();
         $data = array(
             's_ownerAccount' => $member_id,
             's_name' => $name,
@@ -404,14 +400,20 @@ class Member extends MobileMember
             's_card' => $card,
             'classCard' =>$classCard
         );
-
-    $student = db('student')->insert($data);
-
-    if($student){
-        output_data(array('message'=>'绑定成功'));
-    }else{
-        output_error('绑定失败');
-    }
+        if(!empty($student)){
+            if(!empty($student['s_ownerAccount'])){
+                output_error('该学生已有绑定人，请联系管理员');
+            }else{
+                $student = db('student')->where(' s_card = "'.$card.'"')->update($data);
+            }
+        }else{
+            $student = db('student')->insert($data);
+        }
+            if($student){
+                output_data(array('message'=>'绑定成功'));
+            }else{
+                output_error('绑定失败');
+            }
 
     }
 
@@ -460,67 +462,99 @@ class Member extends MobileMember
         }
         $member_where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_paypwd')->where($member_where)->find();
+        $member = db('member')->field('member_id,member_paypwd,member_mobile')->where($member_where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-        //查询该会员绑定的孩子
-        $member_student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.classCard,s.s_card')->where($member_where)->select();
-
+        $res = array();
+        //查询当前会员绑定的孩子
+        $member_student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.s_card')->where($member_where)->select();
+        if(!empty($member_student)){
+            foreach($member_student as $k=>$v){
+                $res += $v['s_card'];
+            }
+        }
         $member_aboutname = trim(input('post.member_aboutname'));//关系名称
         $member_mobile = trim(input('post.member_mobile'));//手机号
-
         if(empty($member_aboutname) || empty($member_mobile)){
             output_error('传参数不正确');
         }
         $member_mobile_where = ' member_mobile = "'.$member_mobile.'" ';
         $member_about = db('member')->where($member_mobile_where)->find();
-        $data = array(
-            'is_owner' => $member_id,
-            'member_aboutname' => $member_aboutname,
-            'member_mobile' => $member_mobile,
-            'member_add_time' =>time()
-        );
         if(!empty($member_about)){
+            $data = array(
+                'is_owner' => $member_id,
+                'member_aboutname' => $member_aboutname,
+                'member_add_time' =>time()
+            );
+            if($member['member_mobile'] == $member_mobile){
+                output_error('不能添加自己为副账号');
+            }
             if($member_about['is_owner'] != 0){
-                output_error('该手机号已有副账号，不能绑定');
+                output_error('该手机号为副账号，不能添加');
             }else{
                 //判断该手机号绑定的孩子
-                $student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.classCard,s.s_card')->where($member_mobile_where)->select();
-                if(!empty($student[0]['classCard'])){
-                    if(count($student) != 1){
-                        output_error('该手机号绑定有多个孩子，不能绑定');
+                $student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.s_card')->where($member_mobile_where)->select();
+                if(!empty($student)){
+                    if(count($student) > 1){
+                        output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
-                        if(!empty($member_student[0]['classCard'])){
-                            $is_bind = 0;
-                            foreach($member_student as $key=>$value){
-                                if($value['classCard'] == $student[0]['classCard'] && $value['s_card'] == $student[0]['s_card']){
-                                    $is_bind = 1;
-                                }
-                            }
-                            if($is_bind == 1){
-                                $res = db('member')->where($member_where)->update($data);
-                            }else{
-                                output_error('该手机号绑定孩子和会员绑定孩子不一致，不能绑定');
-                            }
+                        if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){
+                            db('member')->where($member_where)->update($data);
+                            output_data(array('message'=>'添加成功'));
                         }else{
-                            output_error('该手机号绑定孩子和会员绑定孩子不一致，不能绑定');
+                            output_error('该手机号绑定孩子和会员绑定孩子不一致，不能添加');
                         }
-
                     }
                 }else{
-                    $res = db('member')->where($member_where)->update($data);
+                     $result = db('member')->where($member_where)->update($data);
+                    if ($result) {
+                        $sms_tpl = config('sms_tpl');
+                        $tempId = $sms_tpl['sms_password_reset'];
+                        $sms = new \sendmsg\Sms();
+                        $send = $sms->send($member_mobile,$tempId);
+                        if($send){
+                            $msg='你已被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同观看想见孩平台';
+                            $this->log($msg . '[' . $member_mobile . ']', null);
+                            output_data(array('message'=>'添加成功'));
+                        }else{
+                            output_error('添加成功，短信发送失败，请联系平台管理员');
+                        }
+                    }else{
+                        output_error('添加失败，请联系平台管理员');
+                    }
                 }
             }
-
         }else{
-            $res = db('member')->insert($data);
+            //生成数字字符随机 密码
+            $pass = getRandomString(8,null,'n');
+            $password= md5(trim($pass));
+            $data = array(
+                'is_owner' => $member_id,
+                'member_aboutname' => $member_aboutname,
+                'member_mobile' => $member_mobile,
+                'member_name' => $member_mobile,
+                'member_password' => md5($password),
+                'member_add_time' =>time(),
+                'member_mobile_bind' =>1
+            );
+            $result = db('member')->insert($data);
+            if ($result) {
+                $sms_tpl = config('sms_tpl');
+                $tempId = $sms_tpl['sms_password_reset'];
+                $sms = new \sendmsg\Sms();
+                $send = $sms->send($member_mobile,$pass,$tempId);
+                if($send){
+                    $msg='你已被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同观看想见孩平台';
+                    $this->log($msg . '[' . $member_mobile . ']', null);
+                    output_data(array('message'=>'添加成功'));
+                }else{
+                    output_error('添加成功，短信发送失败，请联系平台管理员');
+                }
+            }else{
+                output_error('添加失败，请联系平台管理员');
+            }
         }
-
-        output_data(array('message'=>'绑定成功'));
-
-
-
     }
     /**
      * @desc 解绑

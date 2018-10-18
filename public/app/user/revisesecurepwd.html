@@ -113,6 +113,8 @@
                             $.toast('修改成功','',function(){
                                 historyback();
                             })
+                        }else if(response['code'] == 400){
+                            layout();
                         } else {
                             $.toast(response['message'])
                         }

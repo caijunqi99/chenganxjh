@@ -101,9 +101,13 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        $.alert(response['message'],'',function(){
-                            historyback();
-                        })
+                        if(response['code'] == 400){
+                            layout();
+                        }else{
+                            $.alert(response['message'],'',function(){
+                                historyback();
+                            })
+                        }
                     }
                 });
             });

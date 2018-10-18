@@ -53,6 +53,7 @@ class Schoolbus extends AdminControl {
         if (request()->isPost()) {
             $Schoolbus = Model('Schoolbus');
             $param =array();
+            $input = input();
             $param['bus_card']       = input('post.bus_card');
             $param['bus_line_name']  = input('post.bus_line_name');
             $param['bus_color']      = input('post.bus_color');
@@ -60,13 +61,20 @@ class Schoolbus extends AdminControl {
             $param['bus_start']      = input('post.bus_start');
             $param['bus_end']        = input('post.bus_end');
             $param['bus_start_time'] = input('post.bus_start_time');
-            $param['bus_end_time']   = input('post.bus_end_time');
-
-            
-            $param['bus_line']       = input('post.bus_line');
-            $param['bus_repeat']     = input('post.bus_repeat');
+            $param['bus_end_time']   = input('post.bus_end_time');            
             $param['up_time']        = time();
-            p($param);exit;
+
+            $bus_repeat ='';
+            foreach ($input['week'] as $key => $w) {
+                $bus_repeat .= $w['week'].',';
+            }
+            $param['bus_repeat'] = trim($bus_repeat,',');
+            $bus_line = array();
+            foreach ($input['bus_line'] as $k => $v) {
+                $bus_line[$k]['Station'] =$v[0];
+                $bus_line[$k]['ArrivalTime'] =$v[1];
+            }
+            $param['bus_line'] = json_encode($bus_line);
 
             switch (input('actions')) {
                 case 'edit'://改
@@ -89,6 +97,7 @@ class Schoolbus extends AdminControl {
                     }
                     break;               
                 default://增
+                    $param['sc_id']   = 1;          
                     $result = $Schoolbus->schoolbus_add($param);
                     if ($result) {
                         $this->log(lang('bus_add_succ') . '[' . input('post.bus_card') . ']', null);
@@ -102,24 +111,6 @@ class Schoolbus extends AdminControl {
     }
 
 
-
-
-    /**
-     *
-     * ajaxOp
-     */
-    public function ajax() {
-        switch ($_GET['branch']) {
-            case 'bus_enabled':
-                $Schoolbus = Model('Schoolbus');
-                $param[trim($_GET['column'])] = intval($_GET['value']);
-                $param['bus_id'] = intval($_GET['id']);
-                $Schoolbus->schoolbus_update($param);
-                echo 'true';
-                exit;
-                break;
-        }
-    }
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
