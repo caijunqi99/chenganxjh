@@ -122,8 +122,8 @@ $lang['school_desc'] = '备注';
 $lang['ds_addstudent'] = '添加学生';
 
 //会员
-$lang['ds_member']                 = '会员/家长管理';
-$lang['ds_member_manage']          = '会员管理';
+$lang['ds_member_manage']                 = '会员/家长管理';
+$lang['ds_member']          = '会员管理';
 $lang['ds_membergrade']            = '会员级别';
 $lang['ds_exppoints']              = '经验值管理';
 $lang['ds_notice']                 = '会员通知';
