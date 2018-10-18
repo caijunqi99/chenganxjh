@@ -30,17 +30,25 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">账号/手机号</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="account" placeholder="请输入账号/手机号" value="{$account}" autocomplete="off" class="layui-input">
+                        <input type="text"  name="account" placeholder="请输入账号/手机号" value="{$member_name}" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <select name="role">
+                        <select name="del">
                             <option value="0" >请选择</option>
-                            <option value="1" >正常</option>
-                            <option value="2" >禁用</option>
+                            <option value="1" <?php if($del==1){ ?>selected<?php } ?>>正常</option>
+                            <option value="2" <?php if($del==2){ ?>selected<?php } ?>>禁用</option>
                         </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="stime" name="stime" class="txt date" value="{$stime}">
+                        <label>~</label>
+                        <input type="text" id="etime" name="etime" class="txt date" value="{$etime}">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -82,8 +90,8 @@
             <?php foreach($mood_list as $k => $v){ ?>
             <tr class="hover">
                 <td class="align-center w50"><?php echo $k+1;?></td>
-                <td class="align-center w50"><?php echo $v['content'];?></td>
-                <td class="align-center w50"><img src="{$v.image}"></td>
+                <td class="align-center w50"><a href=""><?php echo $v['content'];?></a></td>
+                <td class="align-center w50"><img src="{$path}{$v.image}"></td>
                 <td class="align-center w50">
                     <?php if($v['del']==1){
                     echo '正常' ;
@@ -93,9 +101,9 @@
                 </td>
                 <td class="align-center w50"><?php echo $v['member_name'];?></td>
                 <td class="align-center w50"><?php if($v['member_identity']==1){ echo '家长'; }else if($v['member_identity']==2){ echo '教师'; }else{ echo '其他';}?></td>
-                <td class="align-center w50"><?php echo $v['content'];?></td>
-                <td class="align-center w50"><?php echo $v['content'];?></td>
-                <td class="align-center w150"><?php echo $v['content'];?></td>
+                <td class="align-center w50"><?php echo $v['student']['classname'];?></td>
+                <td class="align-center w50"><?php echo $v['student']['name'];?></td>
+                <td class="align-center w150"><?php echo $v['student']['s_region'];?></td>
                 <td class="align-center w50"><?php echo date('Y-m-d H:i:s',$v['pubtime']); ?></td>
                 <td class="align-center w50" style="color: #D39600"> <?php if($v['deltime']!=''){ echo date('Y-m-d H:i:s',$v['deltime']);} ?></td>
                 <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
@@ -131,7 +139,12 @@
     layui.use(['form'], function(){
         var form = layui.form;
     });
-
+    $(function () {
+        $.datepicker.regional["zh-CN"] = { closeText: "关闭", prevText: "&#x3c;上月", nextText: "下月&#x3e;", currentText: "今天", monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"], dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"], weekHeader: "周", dateFormat: "yy-mm-dd", firstDay: 1, isRTL: !1, showMonthAfterYear: !0, yearSuffix: "年" }
+        $.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+        $('#stime').datepicker({dateFormat: 'yy-mm-dd'});
+        $('#etime').datepicker({dateFormat: 'yy-mm-dd'});
+    });
 
     //关闭
     function close_status(id){
