@@ -144,6 +144,8 @@
                                 $.toast(response['result']['message'],'',function(){
                                     historyback();
                                 })
+                            }else if(response['code'] == 400){
+                                layout();
                             } else {
                                 $.alert(response['message'])
                             }
