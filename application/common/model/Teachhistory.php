@@ -19,7 +19,7 @@ class Teachhistory extends Model {
      * @param string $limit
      * @return array
      */
-    public function getTeachhistoryList($condition, $field = '*', $page = 0, $order = 't_id desc', $limit = '') {
+    public function getTeachhistoryList($condition, $field = '*', $page = 0, $order = 't_id asc', $limit = '') {
         if($limit) {
             return db('teachhistory')->where($condition)->field($field)->order($order)->page($page)->limit($limit)->select();
         }else{

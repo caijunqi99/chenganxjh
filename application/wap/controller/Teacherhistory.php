@@ -28,12 +28,17 @@ class Teacherhistory
         $condition['t_del']=1;
         $result=$teachhistory->getTeachhistoryList($condition);
         foreach($result as $k=>$v){
+            $result[$k]['date'] = date("Y-m-d",$v['t_maketime']);
             $videoinfo = db('teachchild')->where(array('t_id'=>$v['t_tid']))->find();
             $result[$k]['title'] = $videoinfo['t_title'];
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
+            $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
         }
-        output_data($result);
+        foreach($result as $key=>$item){
+            $data[$item['date']][] = $item;
+        }
+        output_data($data);
     }
 
     //添加观看历史记录
@@ -44,18 +49,17 @@ class Teacherhistory
         $condition=array();
         $condition['t_tid']=$tid;
         $condition['t_userid']=$member_id;
-        $condition['t_del']=1;
         $res=$teachhistory->getTeachhistoryInfo($condition);
+        $condition['t_maketime'] = time();
         if($res){
-            output_data(array('res'=>2,'message' => '今天已有历史记录'));
+            $result = $teachhistory->editTeachhistory(array('t_id'=>$res['t_id']),$condition);
         }else {
-            $condition['t_maketime'] = time();
             $result = $teachhistory->addTeachhistory($condition);
-            if ($result) {
-                output_data(array('res'=>1,'message' => '添加成功'));
-            } else {
-                output_error('添加失败');
-            }
+        }
+        if ($result) {
+            output_data(array('data'=>"添加成功"));
+        } else {
+            output_error('添加失败');
         }
     }
 
