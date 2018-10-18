@@ -508,14 +508,11 @@ class Member extends MobileMember
                     }
                 }else{
                      $result = db('member')->where($member_where)->update($data);
+                    $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                     if ($result) {
-                        $sms_tpl = config('sms_tpl');
-                        $tempId = $sms_tpl['sms_password_reset'];
                         $sms = new \sendmsg\Sms();
-                        $send = $sms->send($member_mobile,$tempId);
+                        $send = $sms->send($member_mobile,$log_msg);
                         if($send){
-                            $msg='你已被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同观看想见孩平台';
-                            $this->log($msg . '[' . $member_mobile . ']', null);
                             output_data(array('message'=>'添加成功'));
                         }else{
                             output_error('添加成功，短信发送失败，请联系平台管理员');
@@ -539,14 +536,13 @@ class Member extends MobileMember
                 'member_mobile_bind' =>1
             );
             $result = db('member')->insert($data);
+
+            $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
+            $log_msg .= '您的登陆账号为：'.$member_mobile.'<br/>密码为：'.$pass;
             if ($result) {
-                $sms_tpl = config('sms_tpl');
-                $tempId = $sms_tpl['sms_password_reset'];
                 $sms = new \sendmsg\Sms();
-                $send = $sms->send($member_mobile,$pass,$tempId);
+                $send = $sms->send($member_mobile,$log_msg);
                 if($send){
-                    $msg='你已被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同观看想见孩平台';
-                    $this->log($msg . '[' . $member_mobile . ']', null);
                     output_data(array('message'=>'添加成功'));
                 }else{
                     output_error('添加成功，短信发送失败，请联系平台管理员');
@@ -583,7 +579,7 @@ class Member extends MobileMember
 
         $jb_where = ' member_id = "'.$jb_id.'"';
 
-        $jb_account = db('member')->field('member_id,is_owner')->where($jb_where)->find();
+        $jb_account = db('member')->field('member_id,is_owner,member_mobile')->where($jb_where)->find();
         if(empty($jb_account)){
             output_error('副账号不存在，请联系管理员');
         }
@@ -597,17 +593,21 @@ class Member extends MobileMember
                 'member_aboutname' => ''
             );
             $res = db('member')->where($jb_where)->update($data);
-            if($res){
-                output_data(array('message'=>'解绑成功'));
+            $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $jb_account['member_mobile'] . ']'.'添加为副账号，可共同使用想见孩平台';
+            if ($res) {
+                $sms = new \sendmsg\Sms();
+                $send = $sms->send($jb_account['member_mobile'],$log_msg);
+                if($send){
+                    output_data(array('message'=>'添加成功'));
+                }else{
+                    output_error('添加成功，短信发送失败，请联系平台管理员');
+                }
             }else{
                 output_error('已解绑，无需重复操作');
             }
         }else{
             output_error('解绑失败，该账号不属于该会员，请联系管理员解除');
         }
-
-
-
 
     }
 
