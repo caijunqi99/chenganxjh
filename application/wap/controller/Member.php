@@ -468,7 +468,7 @@ class Member extends MobileMember
         }
         $res = array();
         //查询当前会员绑定的孩子
-        $member_student = db('student')->field('s.s_card')->where($member_where)->select();
+        $member_student = db('student')->field('s_card,s_ownerAccount')->where($member_where)->select();
 
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
