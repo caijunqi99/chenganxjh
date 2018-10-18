@@ -460,7 +460,7 @@ class Member extends MobileMember
         if(empty($member_id)){
             output_error('缺少参数id');
         }
-        $member_where = ' member_mobile = "'.$member_id.'"';
+        $member_where = ' member_id = "'.$member_id.'"';
 
         $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
         if(empty($member)){
@@ -481,7 +481,7 @@ class Member extends MobileMember
         if(empty($member_aboutname) || empty($member_mobile)){
             output_error('传参数不正确');
         }
-        $member_mobile_where = ' m.member_mobile = "'.$member_mobile.'" ';
+        $member_mobile_where = ' member_mobile = "'.$member_mobile.'" ';
         $member_about = db('member')->where($member_mobile_where)->find();
         if(!empty($member_about)){
             $data = array(
@@ -496,9 +496,9 @@ class Member extends MobileMember
                 output_error('该手机号为副账号，不能添加');
             }else{
                 //判断该手机号绑定的孩子
-                $student = db('member')->alias('m')->join('__STUDENT__ s','s.s_ownerAccount = m.member_id','LEFT')->field('m.member_id,s.s_card')->where($member_mobile_where)->select();
+                $student = db('student')->field('s_card')->where(' s_ownerAccount= "'.$member_about["member_id"].'"')->select();
                 if(!empty($student)){
-                    if(count($student) > 1){
+                    if(count($student) != 1){
                         output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
                         if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){
