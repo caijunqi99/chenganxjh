@@ -37,7 +37,7 @@ class Goods extends MobileMall
         $type = db('goodsclass')->field('gc_id,gc_name')->where('gc_show =1 AND gc_parent_id=0')->order('gc_sort asc')->select();
         if(!empty($type)){
             foreach ($type as $ke=>$va) {
-                $type[$ke]['link'] =BASE_SITE_URL. '/tmpl/product_list.html?b_id='.$va['gc_id'];
+                $type[$ke]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?b_id='.$va['gc_id'];
              }
         }
         //获取第一版广告位
@@ -46,10 +46,10 @@ class Goods extends MobileMall
             $gg_one['adv_code'] = $upload_file.$gg_one['adv_code'];
         }
         //获取商品
-        $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_image,goods_price,goods_marketprice')->order('goods_commend asc')->limit(0,4)->select();
+        $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_image,goods_price,goods_marketprice,store_id')->order('goods_commend asc')->limit(0,4)->select();
         if(!empty($goods)){
             foreach($goods as $key=>$val){
-                $goods[$key]['goods_image'] = $upload_file2.$val['goods_image'];
+                $goods[$key]['goods_image'] = $upload_file2.$val['store_id'].'/'.$val['goods_image'];
             }
         }
         $result[] =array('gg'=>$gg_one,'cp'=>$goods);
