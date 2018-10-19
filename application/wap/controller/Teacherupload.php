@@ -13,7 +13,7 @@ use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 
 
-class Teacherupload
+class Teacherupload extends MobileMember
 {
     public function _initialize()
     {
@@ -60,7 +60,8 @@ class Teacherupload
         if($videoData){
             $result=$teachchild->addTeachchild($condition);
             if($result){
-                output_data(array('message'=>'上传成功','data'=>$condition));
+                $data[] = array('message'=>'上传成功','data'=>$condition);
+                output_data($data);
             }else{
                 output_error('上传失败');
             }
