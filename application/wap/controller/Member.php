@@ -572,7 +572,7 @@ class Member extends MobileMember
             $result = db('member')->insert($data);
 
             $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台。      ';
-            $log_msg .= '【您的登陆账号为：'.$member_mobile.'密码为：'.$pass.'】';
+            $log_msg .= '【登陆账号为：'.$member_mobile.'密码为：'.$pass.'】';
             if ($result) {
                 $sms = new \sendmsg\Sms();
                 $send = $sms->send($member_mobile,$log_msg);

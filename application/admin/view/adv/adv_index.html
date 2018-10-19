@@ -81,6 +81,7 @@
         </tr>
         <?php } ?>
       </tbody>
+        <?php if(!empty($adv_info) && is_array($adv_info)){ ?>
         <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
       <tfoot>
         <tr class="tfoot">
@@ -91,6 +92,7 @@
             </td>
         </tr>
       </tfoot>
+        <?php }?>
         <?php }?>
     </table>
       <div class="pagination">{$page}</div>

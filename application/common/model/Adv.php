@@ -69,6 +69,7 @@ class Adv extends Model {
      * @return array 二维数组
      */
     public function getApList($condition = array(), $page = '', $orderby = 'ap_id desc') {
+        $condition['is_show'] = 1;
         if ($page) {
             $result = db('advposition')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
