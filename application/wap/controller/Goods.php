@@ -24,6 +24,7 @@ class Goods extends MobileMall
 
         $upload_file = UPLOAD_SITE_URL . DS . ATTACH_ADV.'/';
         $upload_file2 = UPLOAD_SITE_URL . DS . ATTACH_GOODS.'/';
+        $upload_file3 = UPLOAD_SITE_URL . DS . ATTACH_COMMON.'/';
 //        UPLOAD_SITE_URL
         //获取轮播图
         $banner = db('adv')->field('adv_title,adv_link,adv_code')->where('ap_id =16 AND adv_enabled=1 AND is_show=1')->order('adv_sort asc')->select();
@@ -47,6 +48,7 @@ class Goods extends MobileMall
         if(!empty($type)){
             foreach($type as $k=>$v){
                 $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?b_id='.$v['gc_id'];
+                $type[$k]['image'] =$upload_file3.'category-pic-' . $type_1[$k]['gc_id'] . '.jpg';
             }
         }
         //获取第一版广告位
