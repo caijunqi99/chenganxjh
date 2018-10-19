@@ -69,7 +69,7 @@ class Teachercertify extends Model {
     }
 
     /**
-     * 查询三条记录
+     * 查询单条记录
      *
      * @param int $id 学校类型id
      * @return array 一维数组
