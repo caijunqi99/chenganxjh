@@ -4,7 +4,7 @@ namespace app\wap\controller;
 use think\Lang;
 use process\Process;
 
-class Goods extends MobileMember
+class Goods extends MobileMall
 {
 
     public function _initialize()
@@ -20,10 +20,7 @@ class Goods extends MobileMember
      * @time 20181019
      */
     public function index(){
-        $token = input('post.key');
-        if(empty($token)){
-            output_error('缺少参数token');
-        }
+
         $upload_file = BASE_UPLOAD_PATH . DS . ATTACH_ADV;
         //获取轮播图
         $banner = db('adv')->field('adv_title,adv_link,adv_code')->where('ap_id =16 AND adv_enabled=1 AND is_show=1')->order('adv_sort asc')->select();
