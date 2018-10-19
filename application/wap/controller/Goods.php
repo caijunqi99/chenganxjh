@@ -47,7 +47,7 @@ class Goods extends MobileMall
         }
         if(!empty($type)){
             foreach($type as $k=>$v){
-                $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?b_id='.$v['gc_id'];
+                $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?gc_id='.$v['gc_id'];
                 $type[$k]['image'] =$upload_file3.'category-pic-' . $type_1[$k]['gc_id'] . '.jpg';
             }
         }
