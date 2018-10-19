@@ -60,8 +60,9 @@ class Goods extends MobileMall
         $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_jingle,goods_image,goods_price,goods_marketprice,store_id')->order('goods_commend asc')->limit(0,4)->select();
         if(!empty($goods)){
             foreach($goods as $key=>$val){
+                $goods_id = db('goods')->field('goods_id')->where('goods_commonid = "'.$val["goods_commonid"].'"')->find();
                 $goods[$key]['goods_image'] = $upload_file2.$val['store_id'].'/'.$val['goods_image'];
-                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$val['goods_commonid'];
+                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$goods_id['goods_id'];
             }
         }
         $result[] =array('gg'=>$gg_one,'cp'=>$goods);
