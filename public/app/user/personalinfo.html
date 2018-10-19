@@ -162,14 +162,14 @@
                             case 2:
                                 $('#shenfen').val('教师');
                                 break;
-                            case 3:
-                                $('#shenfen').val('其他');
-                                break;
+                            // case 3:
+                            //     $('#shenfen').val('其他');
+                            //     break;
                         }
                         switch (response['result'][0]['member_sex']) {
-                            case 0:
-                                $('#sex').val('保密');
-                                break;
+                            // case 0:
+                            //     $('#sex').val('保密');
+                            //     break;
                             case 1:
                                 $('#sex').val('男');
                                 break;
@@ -218,7 +218,7 @@
                 title: "请选择您的身份",
                 cols: [{
                     textAlign: 'center',
-                    values: ['家长', '教师', '其他']
+                    values: ['家长', '教师']
                 }],
                 onChange: function(p, v, dv) {},
                 onClose: function(p, v, d) {
@@ -231,7 +231,7 @@
                 title: "请选择您的性别",
                 cols: [{
                     textAlign: 'center',
-                    values: ['男', '女', '保密']
+                    values: ['男', '女']
                 }],
                 onChange: function(p, v, dv) {},
                 onClose: function(p, v, d) {
@@ -297,15 +297,15 @@
                         case '教师':
                             params['member_identity'] = 2;
                             break;
-                        case '其他':
+                        /*case '其他':
                             params['member_identity'] = 3;
-                            break;
+                            break;*/
                     }
                     params['member_age'] = $('#nianling').val();
                     switch ($('#sex').val()) {
-                        case '保密':
+                        /*case '保密':
                             params['member_sex'] = 0;
-                            break;
+                            break;*/
                         case '男':
                             params['member_sex'] = 1;
                             break;

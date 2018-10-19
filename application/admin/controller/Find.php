@@ -80,6 +80,7 @@ class Find extends AdminControl {
             }else{
                 $list[$k]['student'] = '';
             }
+            $list[$k]['image']=explode(',',$v['image']);
         }
         $this->assign('path',$img_path);
         $this->assign('page', $mood_list->render());
@@ -100,5 +101,22 @@ class Find extends AdminControl {
                 )
             );
         return $menu_array;
+    }
+    //心情详情页
+    public function view()
+    {
+        $where = array();
+        $where['id']=$_GET['id'];
+        $mood = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
+        $mood['image']=explode(',',$mood['image']);
+        $img_path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $contient=array();
+        $contient['v_mid']=$mood['id'];
+        $moodview=db('moodview')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.v_memberid', 'LEFT')->where($contient)->select();
+        $this->assign('moodview',$moodview);
+        $this->assign('path',$img_path);
+        $this->assign('mview', $mood);
+        $this->setAdminCurItem('view');
+        return $this->fetch();
     }
 }
