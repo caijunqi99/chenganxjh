@@ -38,11 +38,10 @@ class Goods extends MobileMall
              }
         }
         //获取第一版广告位
-        $gg = db('adv')->field('adv_title,adv_link,adv_code')->where('ap_id =17 AND adv_enabled=1 AND is_show=1')->order('adv_sort asc')->find();
-        if(!empty($gg)){
-            $gg['adv_code'] = $upload_file.$gg['adv_code'];
+        $gg_one = db('adv')->field('adv_title,adv_link,adv_code')->where('ap_id =17 AND adv_enabled=1 AND is_show=1')->order('adv_sort asc')->find();
+        if(!empty($gg_one)){
+            $gg_one['adv_code'] = $upload_file.$gg_one['adv_code'];
         }
-        $gg_one[] = $gg;
         //获取商品
         $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_image,goods_price,goods_marketprice')->order('goods_commend asc')->limit(0,4)->select();
         if(!empty($goods)){
