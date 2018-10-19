@@ -124,7 +124,7 @@ class Packagesbuy extends MobileMember
         }else{
             output_error('没有此套餐的信息！');
         }
-        $pay_sn = $this->_logic_buy_1->makePaySn($member_id);
+        $pay_sn = $this->_logic_buy_1->makePaySn($this->member_info['member_id']);
         $order = array();
         //生成基本订单信息
         $order['pay_sn'] = $pay_sn;
