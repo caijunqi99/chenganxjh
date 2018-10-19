@@ -13,7 +13,7 @@ class Schoolapply extends Model {
      * @return unknown
      */
     public function getSchoolapplyInfo($condition = array(), $extend = array(), $fields = '*', $school = '', $group = '') {
-        $school_info = db('school')->field($fields)->where($condition)->group($group)->order($school)->find();
+        $school_info = db('schoolapply')->field($fields)->where($condition)->group($group)->order($school)->find();
         if (empty($school_info)) {
             return array();
         }
@@ -56,8 +56,8 @@ class Schoolapply extends Model {
      * @param array $data
      * @return int 返回 insert_id
      */
-    public function addSchool($data) {
-        $insert = db('school')->insertGetId($data);
+    public function addSchoolapply($data) {
+        $insert = db('schoolapply')->insertGetId($data);
         return $insert;
     }
 

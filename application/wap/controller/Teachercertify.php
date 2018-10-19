@@ -87,8 +87,8 @@ class Teachercertify extends MobileMember
             output_error('会员id不能为空');
         }
         $teachchild = model('Teachercertify');
-        $teachinfo[] = $teachchild->getOneInfo(array('member_id'=>$member_id));
-        $teachinfo[0]['path'] = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $teachinfo = $teachchild->getOneInfo(array('member_id'=>$member_id));
+        $teachinfo['path'] = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         //地区范围
         $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
         $child = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>2))->select();
@@ -110,8 +110,8 @@ class Teachercertify extends MobileMember
             }
             $parent[$key]['childTwo'] = $item['childTwo'];
         }
-        $teachinfo[]['area'] = $parent;
-        output_data($teachinfo);
+        $teachinfo['area'] = $parent;
+        output_data([$teachinfo]);
     }
 
     /*
