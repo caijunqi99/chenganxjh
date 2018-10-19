@@ -61,7 +61,7 @@ class Goods extends MobileMall
         if(!empty($goods)){
             foreach($goods as $key=>$val){
                 $goods[$key]['goods_image'] = $upload_file2.$val['store_id'].'/'.$val['goods_image'];
-                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$v['goods_commonid'];
+                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$val['goods_commonid'];
             }
         }
         $result[] =array('gg'=>$gg_one,'cp'=>$goods);
