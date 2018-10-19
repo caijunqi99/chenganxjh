@@ -39,6 +39,7 @@ class Ads extends AdminControl {
             if ($search_name != '') {
                 $condition['ap_name'] = $search_name;
             }
+            $condition['is_show'] = 1;
             $ap_list = $adv->getApList($condition, '10', $orderby);
             $adv_list = $adv->getList();
             $this->assign('ap_list', $ap_list);
@@ -65,7 +66,7 @@ class Ads extends AdminControl {
             $ap = $adv->getOneAp($condition);
             $this->assign('ref_url', getReferer());
             $this->assign('ap', $ap);
-            $this->setAdminCurItem('ap_edit');
+            $this->setAdminCurItem('ap_manage');
             return $this->fetch('ap_form');
         } else {
             $adv = Model('adv');
@@ -140,7 +141,7 @@ class Ads extends AdminControl {
 
             if ($result) {
                 $this->log(lang('ap_add_succ') . '[' . input('post.ap_name') . ']', null);
-                $this->success(lang('ap_add_succ'), url('Admin/Adv/ap_manage'));
+                $this->success(lang('ap_add_succ'), url('Admin/Ads/ap_manage'));
             } else {
                 $this->error(lang('ap_add_fail'));
             }

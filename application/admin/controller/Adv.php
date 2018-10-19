@@ -32,12 +32,13 @@ class Adv extends AdminControl {
             if ($ap_id) {
                 $condition['ap_id'] = $ap_id;
             }
+            $condition['is_show'] = 1;
             $adv_info = $adv->getList($condition, 20, '', '');
             $this->assign('adv_info', $adv_info);
             $ap_list = $adv->getApList();
             $this->assign('ap_list', $ap_list);
             if ($ap_id) {
-                $ap = db('advposition')->where('ap_id', $ap_id)->find();
+                $ap = db('advposition')->where('ap_id = "'.$ap_id.'" AND is_show=1')->find();
                 $this->assign('ap_name', $ap['ap_name']);
             } else {
                 $this->assign('ap_name', '');

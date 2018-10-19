@@ -52,6 +52,7 @@ class Index extends BaseMall {
         //SEO 设置
         $seo = Model('seo')->type('index')->show();
         $this->_assign_seo($seo);
+//        halt($this->template_dir);
         return $this->fetch($this->template_dir . 'index');
     }
 

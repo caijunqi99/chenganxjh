@@ -124,7 +124,6 @@ class Sellergoodsadd extends BaseSeller
         // 获取类型相关数据
         $typeinfo = Model('type')->getAttribute($goods_class['type_id'], session('store_id'), $gc_id);
         list($spec_json, $spec_list, $attr_list, $brand_list) = $typeinfo;
-        halt($spec_list);
         $this->assign('sign_i', count($spec_list));
         $this->assign('spec_list', $spec_list);
         $this->assign('attr_list', $attr_list);
