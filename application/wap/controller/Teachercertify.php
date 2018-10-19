@@ -9,8 +9,7 @@
 namespace app\wap\controller;
 
 
-//class Teachercertify extends MobileMember
-class Teachercertify
+class Teachercertify extends MobileMember
 {
     public function _initialize()
     {
@@ -38,11 +37,6 @@ class Teachercertify
         $data['phone'] = input('post.phone');
         $data['createtime'] = time();
 
-        $teachchild = model('Teachercertify');
-        $id = input('post.id');
-//        if($id){
-//            $info = $teachchild->getOneInfo(array('member_id'=>$member_id,''));
-//        }
         if (empty($data['username'])) output_error('姓名不能为空');
         if (empty($data['phone'])) output_error('手机号不能为空');
         if (empty($_FILES['idcard_front']['name'])) output_error('身份证正面图不能为空');
@@ -67,7 +61,17 @@ class Teachercertify
             $data['certificate_fan'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
         }
         $this->image($data,$_FILES);
-        $result=$teachchild->addTeachchild($data);
+        $teachchild = model('Teachercertify');
+        $id = input('post.id');
+        if($id){
+            $info =db('teachercertify')->where(array('member_id'=>$member_id,'id'=>$id))->find();
+            if(empty($info)){
+                output_error('member_id和id不匹配');
+            }
+            $result=$teachchild->teacher_update(array('id'=>$id),$data);
+        }else{
+            $result=$teachchild->addTeachchild($data);
+        }
         if($result){
             output_data($data);
         }else{
