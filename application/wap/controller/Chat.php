@@ -112,12 +112,36 @@ class Chat extends MobileMember
         if (!$friendInfo) output_error('没有此账号！');
         $Area = model('Area');
         $areas=!empty($friendInfo['member_areaid'])?$Area->areaName($friendInfo['member_areaid']):$Area->areaName($friendInfo['member_provinceid']);
+
+        $Friendly = model('Friendly');
+        //查询双方关系
+        $myexits = array(
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friendInfo['member_id'] ,
+        );
+        $myexits = $Friendly->getOne($myexits);
+        $state = 1;
+        if($myexits)switch ($myexits['relation_state']) {
+            case '1'://已发送过好友申请
+                $state = 1;
+                break;
+            case '2'://双方已经是好友关系
+                $state = 2;
+                break;
+            case '3'://对方已忽略过我发送的好友申请
+                $state = 3;
+                break;
+            default://双方没有关系
+                $state = 4;
+                break;
+        }
         $output = array(
-            'member_id' => $friendInfo['member_id'],
+            'member_id'   => $friendInfo['member_id'],
             'member_name' => $friendInfo['member_name'],
-            'mobile' => $friendInfo['member_mobile'],
-            'avatar' => getMemberAvatarForID($friendInfo['member_id']),
-            'area' =>empty($areas)?'':$areas,
+            'mobile'      => $friendInfo['member_mobile'],
+            'avatar'      => getMemberAvatarForID($friendInfo['member_id']),
+            'area'        => empty($areas)?'':$areas,
+            'state'       => $state,
         );
         output_data($output);
     
@@ -144,7 +168,11 @@ class Chat extends MobileMember
         $myexits = $Friendly->getOne($myexits);
 
         if ($myexits) {
-            if($myexits['relation_state'] == 1)output_error('已发送好友申请!');
+            if($myexits['relation_state'] == 1){
+                $creat_time = $Friendly->friendly_set($myexits['id'],'creat_time',time());
+                if(!$creat_time)output_error('已发送过好友申请!');
+                output_data(array('state'=>TRUE,'msg'=>'已发送好友申请!'));
+            }
             if($myexits['relation_state'] == 2)output_error('双方已是好友关系!');
             if($myexits['relation_state'] == 3)output_error('对方已忽略申请!');
         }
@@ -154,24 +182,28 @@ class Chat extends MobileMember
             'friend_id' => $this->member_info['member_id'] ,
         );
         $frexits = $Friendly->getOne($frexits);
+        $state = 1;
         if($frexits){
             if($myexits['relation_state'] == 2)output_error('双方已是好友关系!');
+            if($myexits['relation_state'] == 1){
+                $state = 2;
+            }
         }
-        output_data($frexits);
-        
-        //
-        output_data($msgexits);
         $apply = array(
-            'member_id' => $this->member_info['member_id'] ,
-            'friend_id' => $friendInfo['member_id'] ,
-            'relation_state' =>  1,
-            'apply_remark' => !empty($apply_remark)?$apply_remark:'用户'.$this->member_info['member_name'].'申请成为你的好友',
-            'friend_remark' =>  !empty($friend_remark)?$friend_remark:$this->member_info['member_name'],
-            'creat_time' =>  time(),
-            'from_type' =>  $this->member_info['member_id'] 
-        );
+            'member_id'      => $this->member_info['member_id'] ,
+            'friend_id'      => $friendInfo['member_id'] ,
+            'relation_state' => $state,
+            'apply_remark'   => !empty($apply_remark)?$apply_remark:'用户'.$this->member_info['member_name'].'申请成为你的好友',
+            'friend_remark'  => !empty($friend_remark)?$friend_remark:$this->member_info['member_name'],
+            'creat_time'     => time(),
+            'from_type'      => $this->member_info['member_id'] 
+        );     
+        //如果查询的朋友已发送过申请，并且我也没有忽略  将直接成为好友 
+        if($state==2)$Friendly->friendly_set($frexits['id'],'relation_state',$state);
         $applyResult = $Friendly->friendly_add($apply);
+
         if(!$applyResult)output_error('申请失败，请检查网络！');
+
         output_data(array('state'=>TRUE,'msg'=>'已发送好友申请!'));
     }
 
@@ -179,6 +211,43 @@ class Chat extends MobileMember
      * 新朋友列表
      */
     public function NewFriendsList(){
+        $member_id = $this->member_info['member_id'];
+        $Friendly = model('Friendly');
+        $condition=array(
+            'friend_id' => $member_id,
+        );
+        $friendlist =$Friendly->get_friendly_Lists($condition);
+        $ids = array();
+        foreach ($friendlist as $key => $value) {
+            $ids[] =$value['member_id'];
+        }
+        $Member = model('Member');
+        $where =array(
+            'member_id' =>array('in',$ids)
+        );
+        $field ='member_id,member_name,member_mobile';
+        $memberList = $Member->getMemberList($where,$field);
+        $output =$this->mergeMember($friendlist,$memberList);
+        output_data($output);
+    }
+
+    public function mergeMember($friendlist,$memberList){
+        $output =array();
+        $left_menu=array_column($memberList, 'member_id');
+        foreach ($friendlist as $k => $v) {            
+            $key = array_search($v['member_id'], $left_menu);            
+            if($v['member_id'] == $memberList[$key]['member_id'])$output[$k]=array(
+                'member_id'     => $memberList[$key]['member_id'],
+                'member_name'   => $memberList[$key]['member_name'],
+                'member_mobile' => $memberList[$key]['member_mobile'],
+                'avatar'        => getMemberAvatarForID($memberList[$key]['member_id']),
+                'state'         => $v['relation_state'],
+                'creat_time'    => $v['creat_time'],
+                'friend_remark' => $v['friend_remark'],
+                'apply_remark'  => $v['apply_remark'],
+            );
+        }
+        return $output;
 
     }
 
@@ -186,6 +255,54 @@ class Chat extends MobileMember
      * 同意好友申请
      */
     public function AgreeMakeFriendly(){
+        $friend_member_id = input('post.member_id');
+        $Member = model('Member');
+        if(!$friend_member_id)output_error('好友账号不能为空！');
+        $Friendly = model('Friendly');
+
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $friend_member_id ,
+            'friend_id' => $this->member_info['member_id'] ,
+        );
+        $frexits = $Friendly->getOne($frexits);
+        $myexits = array(
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friend_member_id ,
+        );
+        $myexits = $Friendly->getOne($myexits);
+        if(!$frexits)output_error('未收到该账号的好友申请！');
+        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
+        if($myexits){
+            if($myexits['relation_state'] ==2 && $frexits['relation_state'] == 2)output_error('你们已经是好友关系啦！');
+        }
+        $friendInfo = $Member->getMemberInfo(array('member_id'=>$friend_member_id));
+        $time = time();
+        try {
+            $Friendly->startTrans();
+            //双方成为好友
+            $Friendly->friendly_set($frexits['id'],'relation_state',2);
+            $insert =array(
+                'member_id' => $this->member_info['member_id'] ,
+                'friend_id' => $friend_member_id,
+                'relation_state' => 2,
+                'apply_remark' => $frexits['apply_remark'],
+                'friend_remark' =>$friendInfo['member_name'] ,
+                'creat_time' => $time,
+                'from_type' => 2,
+                'up_time' => $time,
+            );
+            $Friendly->friendly_set($frexits['id'],'relation_state',2);
+            $Friendly->friendly_set($frexits['id'],'up_time',$time);
+            $Friendly->friendly_add($insert);
+            $Friendly->commit();
+            $msg = 'true';
+        } catch (Exception $e) {
+            $Friendly->rollback();
+            $msg =$e->getMessage();
+        }
+        if($msg != 'true')output_error($msg);
+        output_data(array('state'=>$msg));
 
     }
 
@@ -193,32 +310,148 @@ class Chat extends MobileMember
      * 忽略好友申请
      */
     public function NeglectFriendlyApply(){
+        $friend_member_id = input('post.member_id');
+        $Member = model('Member');
+        if(!$friend_member_id)output_error('好友账号不能为空！');
+        $Friendly = model('Friendly');
 
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $friend_member_id ,
+            'friend_id' => $this->member_info['member_id'] ,
+        );
+        $frexits = $Friendly->getOne($frexits);
+        if(!$frexits)output_error('未收到该账号的好友申请！');
+        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
+        if($frexits['relation_state']==2)output_error('你们已经是好友啦，如需忽略，请删除好友！');
+
+        $param =array(
+            'id'             =>$frexits['id'],
+            'relation_state' =>3,
+            'up_time'        =>time()
+        );
+        $result = $Friendly->friendly_update($param);
+        if(!$result)output_error('请求失败，请检查网络设置！');
+        output_data(array('state'=>'ture'));
     }
 
     /**
      * 修改好友备注
      */
     public function ModifyFriendNameRemarks(){
+        $friend_member_id = input('post.member_id');
+        $friend_remark = input('post.friend_remark');
+        $Member = model('Member');
+        if(!$friend_member_id)output_error('好友账号不能为空！');
+        if(!$friend_remark)output_error('备注名称不能为空！');
+        $Friendly = model('Friendly');
 
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friend_member_id,
+        );
+        $frexits = $Friendly->getOne($frexits);
+        if(!$frexits)output_error('你们还不是好友关系！');
+        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
+        if($frexits['relation_state']==1)output_error('你还未同意成为好友关系！');
+        if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'ture'));
+        $result = $Friendly->friendly_set($frexits['id'],'friend_remark',$friend_remark);
+        if(!$result)output_error('修改备注请求失败，请检查网络设置！');
+        output_data(array('state'=>'ture'));
     }
 
     /**
      * 删除好友关系
      */
     public function DeleteFriendlyRelationship(){
+        $friend_member_id = input('post.member_id');
+        $Member = model('Member');
+        if(!$friend_member_id)output_error('好友账号不能为空！');
+        $Friendly = model('Friendly');
 
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $friend_member_id ,
+            'friend_id' => $this->member_info['member_id'] ,
+        );
+        $frexits = $Friendly->getOne($frexits);
+        $myexits = array(
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friend_member_id ,
+        );
+        $myexits = $Friendly->getOne($myexits);
+        if(!$frexits || !$myexits)output_error('还未创建好友关系！');
+
+        if($frexits['relation_state']==2 && $myexits['relation_state'] == 2){
+            $del=array(
+                'id' =>array('in',[$frexits['id'],$myexits['id']]),
+            );
+            $result = $Friendly->friendly_delAll($del);
+            if(!$result)output_error('删除好友请求失败，请检查网络设置！');
+            output_data(array('state'=>'ture'));
+        }else{
+            output_error('还不是好友关系！');
+        }
     }
 
+    /**
+     * 查询未处理的好友申请数量
+     */
+    public function UntreatedMessageCount(){
+        $member_id = $this->member_info['member_id'];
+        $Friendly = model('Friendly');
+        $condition=array(
+            'friend_id' => $member_id,
+            'relation_state' => 1,
+        );
+        $friendlist =$Friendly->getFriendlyCount($condition);
+
+        output_data(array('count'=>$friendlist));
+    }
+
+    /**
+     * 获取所有好友列表
+     */
+    public function GetALLFriendList(){
+        $member_id = $this->member_info['member_id'];
+        $Friendly = model('Friendly');
+        $condition=array(
+            'member_id' => $member_id,
+            'relation_state' => 2,
+        );
+        $friendlist =$Friendly->get_friendly_Lists($condition);
+        if(!$friendlist)output_data(array());
+        $ids = array();
+        foreach ($friendlist as $key => $value) {
+            $ids[] =$value['friend_id'];
+        }
+        $Member = model('Member');
+        $where =array(
+            'member_id' =>array('in',$ids)
+        );
+        $field ='member_id,member_name,member_mobile';
+        $memberList = $Member->getMemberList($where,$field);
+
+        $output =array();
+        $left_menu=array_column($memberList, 'member_id');
+        foreach ($friendlist as $k => $v) {            
+            $key = array_search($v['friend_id'], $left_menu); 
+            if($v['friend_id'] == $memberList[$key]['member_id'])$output[$k]=array(
+                'member_id'     => $memberList[$key]['member_id'],
+                'member_name'   => $memberList[$key]['member_name'],
+                'member_mobile' => $memberList[$key]['member_mobile'],
+                'avatar'        => getMemberAvatarForID($memberList[$key]['member_id']),
+                'creat_time'    => $v['creat_time'],
+                'friend_remark' => $v['friend_remark'],
+            );
+        }
+        output_data($output);
+    }
 
     //群聊 ***********************************************************************************************
     
-    /**
-     * 好友列表
-     */
-    public function FriendsList(){
 
-    }
 
     /**
      * 创建群组方法（创建群组，并将用户加入该群组，用户将可以收到该群的消息，同一用户最多可加入 500 个群，每个群最大至 3000 人，App 内的群组数量没有限制.）
@@ -266,7 +499,7 @@ class Chat extends MobileMember
         $createMembers = $Group->chatgroup_addAll($groupMembers);
         if(!$createMembers)output_error('群员添加失败！');
         //设置群员数量
-        $Group->chatgroup_set('member_count',$memberCount);
+        $Group->chatgroup_set($groupId,'member_count',$memberCount);
         //往融云发送建群请求
         $RongCloud = new RongCloud();
         $result = $RongCloud->group()->create($UserIds, $groupId, $groupName);

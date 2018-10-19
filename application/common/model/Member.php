@@ -68,7 +68,7 @@ class Member extends Model
             return $member_list->items();
         }
         else {
-            return db('member')->where($condition)->order($order)->select();
+            return db('member')->where($condition)->field($field)->order($order)->select();
         }
     }
 

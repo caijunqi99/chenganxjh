@@ -24,11 +24,16 @@ class Friendly extends Model {
     }
 
 
-    public function friendly_set($key,$velue){
+    public function friendly_set($id,$key,$velue){
         return db('chatfrendly')->where('id', $id)->setField($key, $velue);
     }
+
+
+    public function getFriendlyCount($condition){
+        return db('chatfrendly')->where($condition)->count();
+    }
     /**
-     * 删除一个学校类型
+     * 删除一个
      *
      * @param array $param 参数内容
      * @return bool 布尔类型的返回结果
@@ -39,6 +44,15 @@ class Friendly extends Model {
     }
 
     /**
+     * 全部删除
+     * @param  [type] $where [description]
+     * @return [type]        [description]
+     */
+    public function friendly_delAll($where) {
+        return db('chatfrendly')->where($where)->delete();
+    }
+
+    /**
      * 更新学校类型记录
      *
      * @param array $param 更新内容
@@ -46,7 +60,7 @@ class Friendly extends Model {
      */
     public function friendly_update($param) {
         $id = (int) $param['id'];
-        return db('chatfrendly')->where('id', $param['id'])->update($param);
+        return db('chatfrendly')->where('id', $id)->update($param);
     }
 
     /**
@@ -85,7 +99,7 @@ class Friendly extends Model {
      * @param array $condition 查询条件
      * @return array 二维数组
      */
-    public function get_friendly_Lists($condition = array(),$field, $orderby = 'id asc') {
+    public function get_friendly_Lists($condition = array(),$field='', $orderby = 'id desc') {
             return db('chatfrendly')->field($field)->where($condition)->order($orderby)->select();
     }
 

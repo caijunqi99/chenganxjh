@@ -24,7 +24,7 @@ class Chatgroup extends Model {
     }
 
 
-    public function chatgroup_set($key,$velue){
+    public function chatgroup_set($group_id,$key,$velue){
         return db('chatgroup')->where('group_id', $group_id)->setField($key, $velue);
     }
     /**
