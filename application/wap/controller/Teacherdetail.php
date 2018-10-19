@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Teacherdetail
+class Teacherdetail extends MobileMember
 {
     public function _initialize()
     {
@@ -23,43 +23,17 @@ class Teacherdetail
         if(empty($tid)){
             output_error('t_id参数有误');
         }
-        $result['data'] = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
+        $result[]['data'] = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
         $conditions = array();
         $conditions['t_audit'] = 3;
         $conditions['t_del'] = 1;
-        $conditions['t_type'] = $result['data']['t_type'];
-        $conditions['t_id'] = array('neq',$result['data']['t_id']);
-        $result['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
-        if($result['data']) {
+        $conditions['t_type'] = $result[0]['data']['t_type'];
+        $conditions['t_id'] = array('neq',$result[0]['data']['t_id']);
+        $result[]['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
+        if($result) {
             output_data($result);
         }else{
             output_error('无此视频');
-        }
-    }
-    //收藏课件
-    public function collect(){
-        if(!empty($_POST)) {
-            $tid = intval(input('post.tid'));
-            $member_id = intval(input('post.member_id'));
-            $collect = model('Membercollect');
-            $condition = array();
-            $condition['member_id'] = $member_id;
-            $condition['collect_id'] = $tid;
-            $condition['type_id'] = 1;
-            $res=$collect->getMembercollectInfo($condition);
-            if($res){
-                output_data(array('res'=>2,'message' => '已经收藏'));
-            }else {
-                $condition['time'] = time();
-                $result = $collect->addMembercollect($condition);
-                if ($result) {
-                    output_data(array('res'=>1,'message' => '收藏成功'));
-                } else {
-                    output_error('收藏失败');
-                }
-            }
-        }else{
-            output_error('网络错误');
         }
     }
 
