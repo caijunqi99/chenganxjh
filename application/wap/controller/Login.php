@@ -134,6 +134,7 @@ class Login extends MobileMall
                     $sms_tpl = config('sms_tpl');
                     $tempId = $sms_tpl['sms_password_reset'];
                     $sms = new \sendmsg\Sms();
+                    $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
                     $send = $sms->send($member['member_mobile'],$pass,$tempId);
                 }
                 output_data($logindata);

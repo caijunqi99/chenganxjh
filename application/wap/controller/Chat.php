@@ -154,6 +154,9 @@ class Chat extends MobileMember
             'friend_id' => $this->member_info['member_id'] ,
         );
         $frexits = $Friendly->getOne($frexits);
+        if($frexits){
+            if($myexits['relation_state'] == 2)output_error('双方已是好友关系!');
+        }
         output_data($frexits);
         
         //
