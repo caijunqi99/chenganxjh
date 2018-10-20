@@ -300,7 +300,10 @@ $(function() {
                     getFreeVoucher($(this).attr("data-tid"))
                 });
                 $(".kefu").click(function() {
-                    window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+
+
+                    // window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+                    window.location.href = 'tel：400-000-000';
                 })
             }})
     }
