@@ -1,5 +1,5 @@
 <?php
-namespace Cloud\Methods;
+namespace cloud\Methods;
 class Wordfilter{
 
 	private $SendRequest;
