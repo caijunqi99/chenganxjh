@@ -1,7 +1,7 @@
 <?php
 namespace app\wap\controller;
 
-use Cloud\Core\RongCloud;
+// use Cloud\Core\RongCloud;
 
 class Chat extends MobileMember
 {
@@ -16,14 +16,12 @@ class Chat extends MobileMember
      */
     public function GetRongCloudToken(){
 
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $this->member_info['avator'] = getMemberAvatarForID($this->member_info['member_id']);
         // 获取 Token 方法
         $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
-            $CloudToken = $result['token'];
-            $CloudUserId = $result['userId'];
             output_data(array(
                 'CloudUserId' => $result['userId'],
                 'CloudToken'  => $result['token']
@@ -40,7 +38,7 @@ class Chat extends MobileMember
      * 刷新Token
      */
     public function RefreshRongCloudToken(){
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $this->member_info['avatar'] = getMemberAvatarForID($this->member_info['member_id']);
         $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
         $result = json_decode($result,TRUE);
@@ -58,7 +56,7 @@ class Chat extends MobileMember
      */
     public function CheckOnline(){        
         $userId = input('post.user_id');
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $result = $RongCloud->user()->checkOnline($userId);
         $result = json_decode($result,TRUE);
         output_data($result);
@@ -69,7 +67,7 @@ class Chat extends MobileMember
      */
     public function AddBlacklist(){
         $userId = input('post.user_id');
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $result = $RongCloud->user()->addBlacklist($this->member_info['member_id'],$userId);
         $result = json_decode($result,TRUE);
         output_data($result);
@@ -81,7 +79,7 @@ class Chat extends MobileMember
     public function QueryBlacklist(){
         $userId = input('post.user_id');
         if (!$userId) $userId = $this->member_info['member_id'];
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $result = $RongCloud->user()->queryBlacklist($userId);
         $result = json_decode($result,TRUE);
         output_data($result);
@@ -93,7 +91,7 @@ class Chat extends MobileMember
      */
     public function RemoveBlacklist(){
         $userId = input('post.user_id');
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $result = $RongCloud->user()->removeBlacklist($this->member_info['member_id'],$userId);
         $result = json_decode($result,TRUE);
         output_data($result);
@@ -501,7 +499,7 @@ class Chat extends MobileMember
         //设置群员数量
         $Group->chatgroup_set($groupId,'member_count',$memberCount);
         //往融云发送建群请求
-        $RongCloud = new RongCloud();
+        $RongCloud = new \Cloud\Core\RongCloud();
         $result = $RongCloud->group()->create($UserIds, $groupId, $groupName);
         $result = json_decode($result,TRUE);
 
@@ -513,6 +511,8 @@ class Chat extends MobileMember
      * 邀请人加入群聊
      */
     public function GroupChatMemberInvite(){
+        $input = input();
+        $members = $input['members'];
 
     }
 
