@@ -199,4 +199,19 @@ class Mood {
             output_error('回复失败');
         }
     }
+    /**
+     * 心情详情页
+    */
+    public function mooddetail(){
+        $where = array();
+        $where['id']=intval(input('post.id'));
+        $mood = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
+        $mood['image']=explode(',',$mood['image']);
+        $contient=array();
+        $contient['v_mid']=$mood['id'];
+        $moodview=db('moodview')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.v_memberid', 'LEFT')->where($contient)->select();
+        $list['mood']=$mood;
+        $list['view']=$moodview;
+        output_data($list);
+    }
 }
