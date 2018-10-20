@@ -132,12 +132,13 @@ class Chat extends MobileMember
                 break;
         }
         $output = array(
-            'member_id'   => $friendInfo['member_id'],
-            'member_name' => $friendInfo['member_name'],
-            'mobile'      => $friendInfo['member_mobile'],
-            'avatar'      => getMemberAvatarForID($friendInfo['member_id']),
-            'area'        => empty($areas)?'':$areas,
-            'state'       => $state,
+            'member_id'     => $friendInfo['member_id'],
+            'member_name'   => $friendInfo['member_name'],
+            'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
+            'mobile'        => $friendInfo['member_mobile'],
+            'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
+            'area'          => empty($areas)?'':$areas,
+            'state'         => $state,
         );
         output_data($output);
     
@@ -147,7 +148,7 @@ class Chat extends MobileMember
      * 添加好友 --申请   发送人消息 ，可直接设置备注
      * @return [type] [description]
      */
-    public function SendFriendlyMessage(){
+    public function SendFriendlyMessage(){ 
         $friend_mobile = input('post.mobile');
         $apply_remark = input('post.apply_remark');
         $friend_remark = input('post.friend_remark');
@@ -460,6 +461,12 @@ class Chat extends MobileMember
         $input = input();
         $group_owner_id  = isset($input['owner_id'])?(!empty($input['owner_id'])?$input['owner_id']:$this->member_info['member_id']):$this->member_info['member_id'];
         $groupName = isset($input['groupName'])?$input['groupName']:$this->member_info['member_name'].'建立的群聊';
+        //获取群员id
+        $members = $input['members'];
+
+        $memberCount = count($members);
+        if($memberCount<2)output_error('创建群组最少需要3个人！');
+        if($memberCount>3000)output_error('同一群组最多只能存在3000个人！');
         $time = time();
         $create = array(
             'createTime' => $time,
@@ -475,8 +482,7 @@ class Chat extends MobileMember
         //创建群聊
         $groupId = $Group->chatgroup_add($create);
         if (!$groupId) output_error('群组创建失败！');
-        $members = $input['members'];
-        $memberCount = count($members);
+
         $groupMembers = array();
         $memberIds = array();
         foreach ($variable as $k => $v) {
@@ -511,6 +517,9 @@ class Chat extends MobileMember
     public function GroupChatMemberInvite(){
         $input = input();
         $members = $input['members'];
+        $Group = model('Chatgroup');
+        $groupId = $input['group_id'];
+        $groupInfo = $Group->getOnePkg(array('group_id'=>$groupId,''))
 
     }
 
