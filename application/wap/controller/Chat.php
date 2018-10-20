@@ -519,7 +519,6 @@ class Chat extends MobileMember
         $members = $input['members'];
         $Group = model('Chatgroup');
         $groupId = $input['group_id'];
-        $groupInfo = $Group->getOnePkg(array('group_id'=>$groupId,''))
 
     }
 
