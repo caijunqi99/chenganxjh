@@ -29,6 +29,27 @@
 
         <table class="ds-default-table">
             <tbody>
+            <tr>
+                <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimg}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="file" name="video_file" id="video_file" /> </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimgfirst}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="file" name="video_filename" id="video_filename" /> </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="video_price">{$Think.lang.teacher_index_videoprice}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" id="video_price" name="video_price" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
                 <tr class="noborder">
                     <td colspan="2" class="required"><label for="video_name">{$Think.lang.teacher_index_videoname}:</label></td>
                 </tr>
@@ -80,20 +101,7 @@
                     <td class="vatop rowform"><input type="text" value="" id="video_desc" name="video_desc" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimg}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="file" name="video_file" id="video_file" /> </td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimgfirst}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="file" name="video_filename" id="video_filename" /> </td>
-                    <td class="vatop tips"></td>
-                </tr>
+
             </tbody>
             <tfoot>
                 <tr class="tfoot">
@@ -127,6 +135,9 @@
                 },
                 video_file: {
                     required: true
+                },
+                video_price: {
+                    required: true
                 }
             },
             messages: {
@@ -141,6 +152,9 @@
                 },
                 video_file: {
                     required: '{$Think.lang.school_add_file_null}'
+                },
+                video_price: {
+                    required: '{$Think.lang.school_add_price_null}'
                 }
             }
         });

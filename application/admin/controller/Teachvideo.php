@@ -244,23 +244,38 @@ class Teachvideo extends AdminControl {
         $teacher_id = input('param.t_id');
         $status = input('param.t_audit');
         $phone = input('param.phone');
+        $reason = input('param.reason')? input('param.reason') : "";
         if (empty($teacher_id)) {
             $this->error(lang('param_error'));
         }
-
         $model_teacher = model('Teachchild');
-        $result = $model_teacher->editTeachchild(array('t_id'=>$teacher_id),array('t_audit'=>$status));
+        $result = $model_teacher->editTeachchild(array('t_id'=>$teacher_id),array('t_audit'=>$status,'t_failreason'=>$reason));
         if ($result) {
             if($status==2){
-                //通过审核给用户发送短信提醒
-//                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
-//                    $phone = "15210356014";
-//                    $sms = new \sendmsg\Sms();
-//                    $sms->send($phone,'',"355812");
-//                }
-
+                //审核结果给用户发送短信提醒
+                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+                    if(empty($reason)){
+                        $content = '您的教孩视频审核未通过。请登录想见孩app重新上传!';
+                    }else{
+                        $content = '您的教孩视频审核未通过，失败原因是：'.$reason."。请登录想见孩app重新上传!";
+                    }
+                    $sms = new \sendmsg\sdk\SmsApi();
+                    $send = $sms->sendSMS($phone,$content);
+                    if(!$send){
+                        $this->error('给用户发送短信失败 ');
+                    }
+                }
                 $this->success(lang('teacher_index_noapass'), 'Teachvideo/index');
             }else{
+                //审核结果给用户发送短信提醒
+                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+                    $content = '尊敬的'.$phone.'，您的教孩视频已审核通过，感谢您的支持！ ';
+                    $sms = new \sendmsg\sdk\SmsApi();
+                    $send = $sms->sendSMS($phone,$content);
+                    if(!$send){
+                        $this->error('给用户发送短信失败 ');
+                    }
+                }
                 $this->success(lang('teacher_index_apass'), 'Teachvideo/index');
             }
         } else {
@@ -282,6 +297,7 @@ class Teachvideo extends AdminControl {
             $insert_array = array();
             $insert_array['t_title'] = input('post.video_name');
             $insert_array['t_desc'] = input('post.video_desc');
+            $insert_array['t_price'] = input('post.video_price');
             $insert_array['t_type'] = input('post.type1');
             $insert_array['t_type2'] = input('post.type2');
             $insert_array['t_type3'] = input('post.type3');
