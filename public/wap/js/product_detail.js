@@ -174,6 +174,12 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
+                        if (!e) {
+
+                            goLogin();
+                            return false
+                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                        }
                         var t = parseInt($(".buy-num").val());
                         if (!e) {
                             var o = decodeURIComponent(getCookie("goods_cart"));
@@ -300,7 +306,10 @@ $(function() {
                     getFreeVoucher($(this).attr("data-tid"))
                 });
                 $(".kefu").click(function() {
-                    window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+
+                    window.location.href = 'tel：400-000-000';
+                    // window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+
                 })
             }})
     }
