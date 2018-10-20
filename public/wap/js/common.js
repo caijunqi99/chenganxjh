@@ -36,7 +36,8 @@ function delCookie(e) {
 }
 function checkLogin(e) {
     if (e == 0) {
-        location.href = WapSiteUrl + "/tmpl/member/login.html";
+        // location.href = WapSiteUrl + "/tmpl/member/login.html";
+        goLogin();
         return false
     } else {
         return true
@@ -907,6 +908,15 @@ function layout(){
         window.webkit.messageHandlers.outClick.postMessage('back!!');
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
         Android.outClick();
+    } else { //pc
+    };
+}
+
+function goLogin(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.loginClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.loginClick();
     } else { //pc
     };
 }
