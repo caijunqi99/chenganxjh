@@ -29,9 +29,6 @@ class Chat extends MobileMember
         }else{
             output_error('token生成失败！');
         }
-        
-        
-
     }
 
     /**
