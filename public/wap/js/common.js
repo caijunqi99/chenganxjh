@@ -37,8 +37,10 @@ function delCookie(e) {
 function checkLogin(e) {
     if (e == 0) {
         location.href = WapSiteUrl + "/tmpl/member/login.html";
+        // alert('请登录');
         return false
     } else {
+        alert(e);
         return true
     }
 }
