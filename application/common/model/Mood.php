@@ -27,7 +27,14 @@ class Mood extends Model {
         return db('mood')->where('id',$id)->find();
     }
 
-
+    /**
+     * 添加分子公司
+     * @param array $insert
+     * @return boolean
+     */
+    public function addMood($insert) {
+        return db('mood')->insert($insert);
+    }
 
     /**
      * 编辑分子公司

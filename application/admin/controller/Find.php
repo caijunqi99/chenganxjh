@@ -82,6 +82,7 @@ class Find extends AdminControl {
             }
             $list[$k]['image']=explode(',',$v['image']);
         }
+
         $this->assign('path',$img_path);
         $this->assign('page', $mood_list->render());
         $this->assign('mood_list', $list);
