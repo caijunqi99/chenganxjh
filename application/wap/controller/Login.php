@@ -120,7 +120,7 @@ class Login extends MobileMall
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
-                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['is_owner'] = $member['is_owner'];                
                 $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
 
                 // $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
