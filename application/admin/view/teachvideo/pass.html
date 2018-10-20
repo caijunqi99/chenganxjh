@@ -23,6 +23,9 @@
                 <dt>{$Think.lang.teacher_index_videotype}：{$teachinfo.type}</dt>
             </dl>
             <dl>
+                <dt>{$Think.lang.teacher_index_videoprice}：{$teachinfo.t_price}</dt>
+            </dl>
+            <dl>
                 <dt>{$Think.lang.teacher_index_videodesc}：{$teachinfo.t_desc}</dt>
             </dl>
             <dl>
@@ -49,19 +52,26 @@
                 </dt>
             </dl>
             <dl>
-                <dt>说明：点击确认通过审核，由系统发送短信给被认证教师手机号进行审核通过的通知。</dt>
+                <dt>说明：点击审核通过或拒绝审核，系统会发送短信给上传账号进行审核结果的通知。</dt>
             </dl>
             <a href="javascript:dd({$teachinfo.t_id})" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
         </div>
     </form>
     <form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
         <input type="hidden" id="role" value="">
+        &nbsp;&nbsp;&nbsp;&nbsp;拒绝原因：<input type="text" value="" name="fail_reason" id="fail_reason" class="txt">
+        <input type="hidden" id="mit"  value="{:url('/admin/teachvideo/drop',['t_id'=>$teachinfo.t_id,'t_audit'=>2,'phone'=>$teachinfo.member_mobile,'reason'=>''])}">
         &nbsp;&nbsp;&nbsp;&nbsp;<a href="{:url('/admin/teachvideo/drop',['t_id'=>$teachinfo.t_id,'t_audit'=>3,'phone'=>$teachinfo.member_mobile])}" class="btn" id="submitBtn">审核通过</a>
-        <a href="{:url('/admin/teachvideo/drop',['t_id'=>$teachinfo.t_id,'t_audit'=>2])}" class="btn" id="">拒绝审核</a>
+        <a href="javascript:da()" class="btn" id="">拒绝审核</a>
 
     </form>
 </div>
 <script type="text/javascript">
+    function da(){
+        $a = $("#fail_reason").val();
+        var str = $("#mit").val()+   $("#fail_reason").val();
+        window.location.href=str;
+    }
     function dd(role){
         //多窗口模式，层叠置顶
         layer.open({

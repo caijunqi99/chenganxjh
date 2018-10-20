@@ -3,8 +3,7 @@
 namespace app\wap\controller;
 
 
-class Teacherbuy
-//class Teacherbuy extends MobileMember
+class Teacherbuy extends MobileMember
 {
     private $payment_code;
     private $payment_config;
