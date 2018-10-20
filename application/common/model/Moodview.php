@@ -27,7 +27,14 @@ class Moodview extends Model {
         return db('moodview')->where('doc_id',$id)->find();
     }
 
-
+    /**
+     * 添加心情回复
+     * @param array $insert
+     * @return boolean
+     */
+    public function addMood($insert) {
+        return db('moodview')->insert($insert);
+    }
     /**
      * 编辑分子公司
      * @param array $condition
