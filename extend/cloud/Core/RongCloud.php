@@ -6,16 +6,16 @@
  * 
  * v2.0.1
  */
-namespace Cloud\Core;
+namespace cloud\Core;
 
-use Cloud\Core\SendRequest;
-use Cloud\Methods\User;
-use Cloud\Methods\Message;
-use Cloud\Methods\Wordfilter;
-use Cloud\Methods\Group;
-use Cloud\Methods\Chatroom;
-use Cloud\Methods\Push;
-use Cloud\Methods\SMS;
+use cloud\Core\SendRequest;
+use cloud\Methods\User;
+use cloud\Methods\Message;
+use cloud\Methods\Wordfilter;
+use cloud\Methods\Group;
+use cloud\Methods\Chatroom;
+use cloud\Methods\Push;
+use cloud\Methods\SMS;
 class RongCloud
 {   
     /**

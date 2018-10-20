@@ -1,5 +1,5 @@
 <?php
-namespace Cloud\Core;
+namespace cloud\Core;
 
 
 class SendRequest

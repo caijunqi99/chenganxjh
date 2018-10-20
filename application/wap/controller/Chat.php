@@ -1,7 +1,6 @@
 <?php
 namespace app\wap\controller;
-
-use Cloud\RongCloud;
+use cloud\RongCloud;
 
 class Chat extends MobileMember
 {
@@ -16,7 +15,9 @@ class Chat extends MobileMember
      */
     public function GetRongCloudToken(){
 
-        $RongCloud = new \Cloud\RongCloud();
+        $RongCloud = new \cloud\RongCloud();
+        $RongCloud1 = new RongCloud();
+        
         $this->member_info['avator'] = getMemberAvatarForID($this->member_info['member_id']);
         // 获取 Token 方法
         $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
