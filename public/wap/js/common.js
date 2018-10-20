@@ -37,6 +37,7 @@ function delCookie(e) {
 function checkLogin(e) {
     if (e == 0) {
         location.href = WapSiteUrl + "/tmpl/member/login.html";
+        alert(location.href);
         return false
     } else {
         return true
