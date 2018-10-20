@@ -18,7 +18,7 @@
 <body>
 <header id="header" class="fixed">
   <div class="header-wrap">
-    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back"></i> </a> </div>
+    <div class="header-l"> <a href="javascript:;"  onClick="historyback()"> <i class="back"></i> </a> </div>
     <div class="header-title">
       <h1>购物车</h1>
     </div>
@@ -27,10 +27,10 @@
   <div class="nctouch-nav-layout">
     <div class="nctouch-nav-menu"> <span class="arrow"></span>
       <ul>
-        <li><a href="../index.html"><i class="home"></i>首页</a></li>
+        <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
         <li><a href="search.html"><i class="search"></i>搜索</a></li>
-        <li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>
-        <li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>
+        <!--<li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
+        <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
         <li><a href="member/member.html"><i class="member"></i>我的商城</a></li>
       </ul>
     </div>
@@ -172,8 +172,11 @@
 				<% } else { %>
 					<div class="nctouch-cart-bottom no-login">
 						<div class="cart-nologin-tip">结算购物车中的商品，需先登录商城</div>
-						<div class="cart-nologin-btn"><a href="../tmpl/member/login.html" class="btn">登录</a>
-							<a href="../tmpl/member/register.html" class="btn">注册</a>
+						<div class="cart-nologin-btn">
+							<!--<a href="../tmpl/member/login.html" class="btn">登录</a>-->
+							<a  href="javascript:;"  onClick="goLogin()" class="btn">登录</a>
+
+							<!--<a href="../tmpl/member/register.html" class="btn">注册</a>-->
 						</div>
 					</div>
 				<% } %>
