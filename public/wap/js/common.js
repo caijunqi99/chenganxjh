@@ -40,7 +40,6 @@ function checkLogin(e) {
         goLogin();
         return false
     } else {
-        alert(e);
         return true
     }
 }
