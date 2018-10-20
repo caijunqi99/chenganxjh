@@ -205,7 +205,7 @@ class Mood {
     public function mooddetail(){
         $where = array();
         $where['id']=intval(input('post.id'));
-        $mood = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
+        $mood = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
         $mood['image']=explode(',',$mood['image']);
         $contient=array();
         $contient['v_mid']=$mood['id'];
