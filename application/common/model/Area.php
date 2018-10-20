@@ -58,6 +58,10 @@ class Area extends Model
         return db('area')->where($condition)->field($fileds)->find();
     }
 
+    public function areaName($area_id){
+        return db('area')->where('area_id',$area_id)->value('area_mergename');
+    }
+
     /**
      * 获取一级地址（省级）名称数组
      *

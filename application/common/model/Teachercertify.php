@@ -67,6 +67,17 @@ class Teachercertify extends Model {
     public function getOneById($id) {
         return db('teachercertify')->where('id', $id)->find();
     }
+
+    /**
+     * 查询单条记录
+     *
+     * @param int $id 学校类型id
+     * @return array 一维数组
+     */
+    public function getOneInfo($where) {
+        return db('teachercertify')->where($where)->find();
+    }
+
 }
 
 ?>

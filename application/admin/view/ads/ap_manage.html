@@ -122,6 +122,7 @@
         </tr>
         <?php } ?>
       </tbody>
+        <?php if(!empty($ap_list) && is_array($ap_list)){ ?>
         <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
       <tfoot>
         <tr class="tfoot">
@@ -133,7 +134,9 @@
         </tr>
       </tfoot>
         <?php }?>
+        <?php }?>
     </table>
+
     {$page}
   </form>
 </div>

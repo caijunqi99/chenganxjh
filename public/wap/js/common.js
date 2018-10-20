@@ -887,3 +887,26 @@ function loadJs(e) {
     }
     document.getElementsByTagName("head")[0].appendChild(t)
 }
+
+
+//返回函数
+function historyback() {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        // window.webkit.messageHandlers.backClick();
+        // window.webkit.messageHandlers.backClick.postMessage();
+        window.webkit.messageHandlers.backClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.backToApp();
+    } else { //pc
+        window.history.back(-1);
+    };
+}
+
+function layout(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.outClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.outClick();
+    } else { //pc
+    };
+}
