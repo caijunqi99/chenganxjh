@@ -47,7 +47,7 @@ class Goods extends MobileMall
         }
         if(!empty($type)){
             foreach($type as $k=>$v){
-                $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?b_id='.$v['gc_id'];
+                $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?gc_id='.$v['gc_id'];
                 $type[$k]['image'] =$upload_file3.'category-pic-' . $type_1[$k]['gc_id'] . '.jpg';
             }
         }
@@ -60,8 +60,9 @@ class Goods extends MobileMall
         $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_jingle,goods_image,goods_price,goods_marketprice,store_id')->order('goods_commend asc')->limit(0,4)->select();
         if(!empty($goods)){
             foreach($goods as $key=>$val){
+                $goods_id = db('goods')->field('goods_id')->where('goods_commonid = "'.$val["goods_commonid"].'"')->find();
                 $goods[$key]['goods_image'] = $upload_file2.$val['store_id'].'/'.$val['goods_image'];
-                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$v['gc_id'];
+                $goods[$key]['link'] = BASE_SITE_URL.DIR_WAP. '/tmpl/product_detail.html?goods_id='.$goods_id['goods_id'];
             }
         }
         $result[] =array('gg'=>$gg_one,'cp'=>$goods);
