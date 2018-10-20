@@ -15,8 +15,8 @@ class Chat extends MobileMember
      */
     public function GetRongCloudToken(){
 
-        $RongCloud = new \cloud\RongCloud();
-        $RongCloud1 = new RongCloud();
+        // $RongCloud = new \cloud\RongCloud();
+        $RongCloud = new RongCloud();
         
         $this->member_info['avator'] = getMemberAvatarForID($this->member_info['member_id']);
         // 获取 Token 方法
