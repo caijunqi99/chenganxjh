@@ -18,7 +18,7 @@
 <body>
 <header id="header" class="fixed">
   <div class="header-wrap">
-    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back"></i></a></div>
+    <div class="header-l"><a href="javascript:;"  onClick="historyback()"><i class="back"></i></a></div>
     <div class="header-title">
       <h1>浏览记录</h1>
     </div>
@@ -67,7 +67,8 @@
 			<dt>暂无您的浏览记录</dt>
 			<dd>可以去看看哪些想要买的</dd>
 		</dl>
-		<a href="<%=WapSiteUrl%>" class="btn">随便逛逛</a>
+		<!--<a href="<%=WapSiteUrl%>" class="btn">随便逛逛</a>-->
+		<a href="javascript:;"  onClick="historyback()" class="btn">随便逛逛</a>
 	</div>
 <% } %>
 </script> 
