@@ -34,7 +34,7 @@ class wxpay_h5
     }
    
     public function get_payurl() {
-        require_once APP_PATH .'wap/api/payment/wxpay_html5/lib/WxPay.Api.php';
+        require_once APP_PATH .'wap/api/payment/wxpay_h5/lib/WxPay.Api.php';
         $Spbill_create_ip=$this->get_client_ip2();
         //统一下单
         $input = new WxPayUnifiedOrder();
@@ -67,7 +67,7 @@ class wxpay_h5
     }
 
     public function getOrderStateBysn($orderSn){
-        require_once APP_PATH .'wap/api/payment/wxpay_html5/lib/WxPay.Api.php';
+        require_once APP_PATH .'wap/api/payment/wxpay_h5/lib/WxPay.Api.php';
         
         $Query=new WxPayOrderQuery();
         $Query->SetOut_trade_no($orderSn);
