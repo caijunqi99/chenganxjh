@@ -20,7 +20,7 @@ class Memberorder extends MobileMember {
         $condition = $this->order_type_no(input('post.state_type'));
         $condition['buyer_id'] = $this->member_info['member_id'];
         //$order_list_array = $model_order->getNormalOrderList($condition, $this->pagesize, '*', 'order_id desc','', array('order_goods'));
-        $order_list_array = $model_order->getOrderList($condition, 5, '*', 'order_id desc', '', array('order_common', 'order_goods', 'store'));
+        $order_list_array = $model_order->getNormalOrderList($condition, 5, '*', 'order_id desc', '', array('order_common', 'order_goods', 'store'));
 
         $order_group_list = $order_pay_sn_array = array();
         foreach ($order_list_array as $value) {
