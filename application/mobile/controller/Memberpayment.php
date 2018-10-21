@@ -233,7 +233,6 @@ class Memberpayment extends MobileMember
         $param['order_sn'] = $order_pay_info['pay_sn'];
         $param['order_amount'] = $order_pay_info['api_pay_amount'];
         $param['order_type'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
-        halt($this->payment_code($param));
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->submit();
         echo $return;
