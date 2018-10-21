@@ -223,13 +223,13 @@ class Memberpayment extends MobileMember
             $param['orderFee'] = (int)(100 * $order_pay_info['api_pay_amount']);
             $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
-            $api = new wxpay_h5();
+            $api = new \wxpay_h5();
             $api->setConfigs($param);
             $mweburl = $api->get_mweb_url($this);
             Header("Location: $mweburl");
             exit;
         }
-
+        halt($this->payment_code($param));
         //alipay and so on
         $param['order_sn'] = $order_pay_info['pay_sn'];
         $param['order_amount'] = $order_pay_info['api_pay_amount'];
