@@ -42,7 +42,6 @@ class AlipayTradeService {
 		$this->alipay_public_key = $alipay_config['alipay_public_key'];
 		$this->charset = $alipay_config['charset'];
 		$this->signtype=$alipay_config['sign_type'];
-        halt($alipay_config);
 		if(empty($this->appid)||trim($this->appid)==""){
 			throw new Exception("appid should not be NULL!");
 		}

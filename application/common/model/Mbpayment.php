@@ -21,7 +21,7 @@ class Mbpayment extends Model {
      */
     public function getMbPaymentInfo($condition = array()) {
         $payment_info = $this->where($condition)->find();
-        halt($payment_info);
+//        halt($payment_info);
         if (!empty($payment_info['payment_config'])) {
             $payment_info['payment_config'] = unserialize($payment_info['payment_config']);
         }
