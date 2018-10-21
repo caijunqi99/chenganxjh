@@ -112,7 +112,7 @@ class Order extends Model {
         if (empty($list)){
             return array();
         }else{
-            foreach($list as $key=>$order_info){
+            foreach($list[0]['order_list'] as $key=>$order_info){
                 if (isset($order_info['order_state'])) {
                     $order_info['state_desc'] = orderState($order_info);
                 }
