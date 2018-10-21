@@ -1,6 +1,6 @@
 <?php
 
-class wxpay_h5
+class wxpay_html5
 {
     const DEBUG = 1;
 

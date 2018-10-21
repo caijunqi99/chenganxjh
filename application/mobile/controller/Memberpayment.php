@@ -217,13 +217,13 @@ class Memberpayment extends MobileMember
             exit;
         }
 
-        // wxpay_h5
+        // wxpay_html5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (int)(100 * $order_pay_info['api_pay_amount']);
             $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
-            $api = new \wxpay_h5();
+            $api = new \wxpay_html5();
             $api->setConfigs($param);
             $mweburl = $api->get_mweb_url($this);
             Header("Location: $mweburl");

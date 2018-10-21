@@ -181,7 +181,7 @@ class Packagesbuy extends MobileMember
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
         $param['orderSn'] = $order_pay_info['pay_sn'];
 
-        // 使用h5支付 wxpay_h5
+        // 使用h5支付 wxpay_html5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
