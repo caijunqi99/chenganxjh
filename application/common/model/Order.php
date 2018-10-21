@@ -106,13 +106,12 @@ class Order extends Model {
     public function getOrderList($condition, $page = '', $field = '*', $order = 'order_id desc', $limit = '', $extend = array(), $master = false) {
 
             $list_paginate = db('order')->field($field)->where($condition)->order($order)->paginate($page,false,['query' => request()->param()]);
-            $this->page_info = $list_paginate;
-            $list = $list_paginate->items();
 
-        if (empty($list)){
+
+        if (empty($list_paginate)){
             return array();
         }else{
-            foreach($list[0]['order_list'] as $key=>$order_info){
+            foreach($list_paginate[0]['order_list'] as $key=>$order_info){
                 if (isset($order_info['order_state'])) {
                     $order_info['state_desc'] = orderState($order_info);
                 }
@@ -146,7 +145,8 @@ class Order extends Model {
             }
         }
 
-
+        $this->page_info = $list_paginate;
+        $list = $list_paginate->items();
         return $list;
     }
 
