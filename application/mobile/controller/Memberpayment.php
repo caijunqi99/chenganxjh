@@ -193,7 +193,7 @@ class Memberpayment extends MobileMember
             $this->payment_code = 'wxpay_h5';
         }
         $param = $this->payment_config;
-        halt($param);
+
         // wxpay_jsapi
         if ($this->payment_code == 'wxpay_jsapi') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
