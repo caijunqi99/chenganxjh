@@ -105,6 +105,7 @@ class Order extends Model {
      */
     public function getOrderList($condition, $page = '', $field = '*', $order = 'order_id desc', $limit = '', $extend = array(), $master = false) {
 
+            halt($condition);
             $list_paginate = db('order')->field($field)->where($condition)->order($order)->paginate($page,false,['query' => request()->param()]);
             $this->page_info = $list_paginate;
             $list = $list_paginate->items();
