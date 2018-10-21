@@ -17,8 +17,9 @@ class Memberpayment extends MobileMember
 
         if (request()->action() != 'payment_list' && !input('param.payment_code')) {
             $payment_code = 'alipay';
-        }
-        else {
+        } else if ($this->payment_code == 'wxpay_jsapi' && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') == false) {
+            $this->payment_code = 'wxpay_h5';
+        } else {
             $payment_code = input('param.payment_code');
         }
         $model_mb_payment = Model('mbpayment');
