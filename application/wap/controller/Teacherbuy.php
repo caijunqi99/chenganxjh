@@ -162,7 +162,7 @@ class Teacherbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
-        // 使用h5支付 wxpay_html5
+        // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);

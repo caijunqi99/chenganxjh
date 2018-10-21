@@ -1,8 +1,8 @@
 <?php
 
-class wxpay_html5
+class wxpay_h5
 {
-    const DEBUG = 1;
+    const DEBUG = 0;
 
     protected $config;
 
