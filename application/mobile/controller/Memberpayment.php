@@ -193,7 +193,7 @@ class Memberpayment extends MobileMember
             $this->payment_code = 'wxpay_h5';
         }
         $param = $this->payment_config;
-
+        halt($param);
         // wxpay_jsapi
         if ($this->payment_code == 'wxpay_jsapi') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
@@ -384,7 +384,6 @@ class Memberpayment extends MobileMember
             $param['orderInfo'] = config('site_name') . '商品订单' . $pay_sn;
             $param['order_type'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
             $api = new \alipay_app();
-            halt($param);
             $api->get_payform($param);
             exit;
         }
