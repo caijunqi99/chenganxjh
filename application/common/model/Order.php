@@ -109,8 +109,43 @@ class Order extends Model {
             $this->page_info = $list_paginate;
             $list = $list_paginate->items();
 
-        if (empty($list))
+        if (empty($list)){
             return array();
+        }else{
+            foreach($list as $key=>$order_info){
+                if (isset($order_info['order_state'])) {
+                    $order_info['state_desc'] = orderState($order_info);
+                }
+                if (isset($order_info['payment_code'])) {
+                    $order_info['payment_name'] = orderPaymentName($order_info['payment_code']);
+                }
+
+                //追加返回订单扩展表信息
+                if (in_array('order_common', $extend)) {
+                    $order_info['extend_order_common'] = $this->getOrderCommonInfo(array('order_id' => $order_info['order_id']));
+                    $order_info['extend_order_common']['reciver_info'] = unserialize($order_info['extend_order_common']['reciver_info']);
+                    $order_info['extend_order_common']['invoice_info'] = unserialize($order_info['extend_order_common']['invoice_info']);
+                }
+
+                //追加返回店铺信息
+                if (in_array('store', $extend)) {
+                    $order_info['extend_store'] = Model('store')->getStoreInfo(array('store_id' => $order_info['store_id']));
+                }
+
+                //返回买家信息
+                if (in_array('member', $extend)) {
+                    $order_info['extend_member'] = Model('member')->getMemberInfoByID($order_info['buyer_id']);
+                }
+
+                //追加返回商品信息
+                if (in_array('order_goods', $extend)) {
+                    //取商品列表
+                    $order_goods_list = $this->getOrderGoodsList(array('order_id' => $order_info['order_id']));
+                    $order_info['extend_order_goods'] = $order_goods_list;
+                }
+            }
+        }
+
 
         return $list;
     }
