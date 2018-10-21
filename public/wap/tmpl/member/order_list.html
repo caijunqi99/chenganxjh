@@ -20,16 +20,18 @@
 <header id="header" class="fixed">
   <div class="header-wrap">
     <div class="header-l"><a href="member.html"><i class="back"></i></a></div>
-    <span class="header-tab"><a href="javascript:void(0);" class="cur">实物订单</a><a href="vr_order_list.html">虚拟订单</a></span>
+    <span class="header-tab"><a href="javascript:void(0);" class="cur">我的订单</a>
+		<!--<a href="vr_order_list.html">虚拟订单</a>-->
+	</span>
     <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more"></i><sup></sup></a> </div>
   </div>
   <div class="nctouch-nav-layout">
     <div class="nctouch-nav-menu"> <span class="arrow"></span>
       <ul>
-        <li><a href="../../index.html"><i class="home"></i>首页</a></li>
+        <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
         <li><a href="../search.html"><i class="search"></i>搜索</a></li>
-        <li><a href="../product_first_categroy.html"><i class="categroy"></i>分类</a></li>
-        <li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>
+        <!--<li><a href="../product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
+        <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
         <li><a href="../cart_list.html"><i class="cart"></i>购物车<sup></sup></a></li>
         <li><a href="../member/member.html"><i class="member"></i>我的商城</a></li>
       </ul>
@@ -222,7 +224,8 @@
 			<dt>您还没有相关的订单</dt>
 			<dd>可以去看看哪些想要买的</dd>
 		</dl>
-		<a href="<%=WapSiteUrl%>" class="btn">随便逛逛</a>
+		<!--<a href="<%=WapSiteUrl%>" class="btn">随便逛逛</a>-->
+		<a href="javascript:;"  onClick="historyback()" class="btn">随便逛逛</a>
 	</div>
 <%}%>
 </script> 
