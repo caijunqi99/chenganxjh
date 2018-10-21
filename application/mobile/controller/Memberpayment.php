@@ -17,11 +17,10 @@ class Memberpayment extends MobileMember
 
         if (request()->action() != 'payment_list' && !input('param.payment_code')) {
             $payment_code = 'alipay';
-        } else if ($this->payment_code == 'wxpay_jsapi' && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') == false) {
-            $this->payment_code = 'wxpay_h5';
         } else {
             $payment_code = input('param.payment_code');
         }
+
         $model_mb_payment = Model('mbpayment');
         $condition = array();
         $condition['payment_code'] = $payment_code;
@@ -32,6 +31,9 @@ class Memberpayment extends MobileMember
         else {
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
+            if ($this->payment_code == 'wxpay_jsapi' && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') == false) {
+                $this->payment_code = 'wxpay_h5';
+            }
 
             $inc_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
             halt($inc_file);
