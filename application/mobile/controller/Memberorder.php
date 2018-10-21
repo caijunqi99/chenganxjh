@@ -21,7 +21,7 @@ class Memberorder extends MobileMember {
         $condition['buyer_id'] = $this->member_info['member_id'];
         //$order_list_array = $model_order->getNormalOrderList($condition, $this->pagesize, '*', 'order_id desc','', array('order_goods'));
         $order_list_array = $model_order->getOrderList($condition, 5, '*', 'order_id desc', '', array('order_common', 'order_goods', 'store'));
-        halt($order_list_array);
+
         $order_group_list = $order_pay_sn_array = array();
         foreach ($order_list_array as $value) {
 
@@ -81,7 +81,7 @@ class Memberorder extends MobileMember {
             $value['pay_sn'] = strval($key);
             $new_order_group_list[] = $value;
         }
-
+        halt($new_order_group_list);
         output_data(array('order_group_list' => $new_order_group_list), mobile_page($model_order->page_info));
     }
 
