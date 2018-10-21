@@ -33,6 +33,7 @@ class Memberpayment extends MobileMember
             $this->payment_config = $mb_payment_info['payment_config'];
 
             $inc_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+            halt($inc_file);
             if (!is_file($inc_file)) {
                 output_error('支付接口出错，请联系管理员！');
             }
