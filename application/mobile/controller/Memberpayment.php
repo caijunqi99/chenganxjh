@@ -189,9 +189,9 @@ class Memberpayment extends MobileMember
     {
 
         /*处理h5支付和公众号支付的切换*/
-//        if ($this->payment_code == 'wxpay_jsapi' && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') == false) {
-//            $this->payment_code = 'wxpay_h5';
-//        }
+        if ($this->payment_code == 'wxpay_jsapi' && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') == false) {
+            $this->payment_code = 'wxpay_h5';
+        }
         $param = $this->payment_config;
 
         // wxpay_jsapi

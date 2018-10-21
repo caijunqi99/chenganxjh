@@ -2,7 +2,7 @@
 
 class wxpay_h5
 {
-    const DEBUG = 0;
+    const DEBUG = 1;
 
     protected $config;
 
