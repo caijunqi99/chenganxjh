@@ -10,10 +10,18 @@ class Arrangement extends Model {
      * 查询所有系统文章
      */
     public function getList($where) {
-        return db('food')->where($where)->order('id desc')->select();
+        return db('arrangement')->where($where)->order('id desc')->select();
     }
 
-
+    /**
+     * 新增学校类型
+     *
+     * @param array $param 参数内容
+     * @return bool 布尔类型的返回结果
+     */
+    public function arrangement_add($param) {
+        return db('arrangement')->insertGetId($param);
+    }
 
     /**
      * 查询本周课程
