@@ -35,8 +35,32 @@
         </p>
         <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
         <p>
-            <input type="button" value="+" onClick="addTextBoxs(this.form,this.parentNode); " />
-            <input type="button" value="-" onClick="removeTextBoxs(this.form)" />
+            <input type="button" value="+" onClick="addTextBoxyi(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxyi(this.form)" />
+        </p>
+        <label><h>星期：星期二</h>
+            <br>上午：<input type="text" name="mor_txt1" id="txt1" />/<input type="text" name="mor_starttime" id="starttime" />——<input type="text" name="mor_endtime" id="endtime" /></label>
+
+        <p>
+            <input type="button" value="+" onClick="addTextBoxers(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxers(this.form)" />
+        </p>
+        <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
+        <p>
+            <input type="button" value="+" onClick="addTextBoxerx(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxerx(this.form)" />
+        </p>
+        <label><h>星期：星期三</h>
+            <br>上午：<input type="text" name="mor_txt1" id="txt1" />/<input type="text" name="mor_starttime" id="starttime" />——<input type="text" name="mor_endtime" id="endtime" /></label>
+
+        <p>
+            <input type="button" value="+" onClick="addTextBoxsans(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxsans(this.form)" />
+        </p>
+        <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
+        <p>
+            <input type="button" value="+" onClick="addTextBoxsanx(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxsanx(this.form)" />
         </p>
         <table class="ds-default-table">
             <tbody>
@@ -113,18 +137,19 @@
             textNumber--;
         }
     }
-    function addTextBoxs(form, afterElement) {
+    var textNumbers = 1;
+    function addTextBoxyi(form, afterElement) {
 // Increment the textbox number
-        textNumber++;
+        textNumbers++;
 // Create the label
         var p = document.createElement("p");
-        p.id="txts"+textNumber;
+        p.id="txtyi"+textNumbers;
         var label = document.createElement("label");
 // Create the textbox
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","biaozhundaan"+textNumber);
-        textField.setAttribute("id","biaozhundaan"+textNumber);
+        textField.setAttribute("name","biaozhundaan"+textNumbers);
+        textField.setAttribute("id","biaozhundaan"+textNumbers);
 // Add the label's text
         label.appendChild(document.createTextNode("下午："));
 // Put the textbox inside(里面)的//把文本框放进去
@@ -135,8 +160,8 @@
 // Create the textbox
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","pingfengA"+textNumber);
-        textField.setAttribute("id","pingfengA"+textNumber);
+        textField.setAttribute("name","pingfengA"+textNumbers);
+        textField.setAttribute("id","pingfengA"+textNumbers);
 // Add the label's text
         label.appendChild(document.createTextNode("/"));
 // Put the textbox inside(里面)的//把文本框放进去
@@ -147,8 +172,8 @@
 // Create the textbox
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","fengshu"+textNumber);
-        textField.setAttribute("id","fengshu"+textNumber);
+        textField.setAttribute("name","fengshu"+textNumbers);
+        textField.setAttribute("id","fengshu"+textNumbers);
 // Add the label's text
         label.appendChild(document.createTextNode("——"));
 // Put the textbox inside(里面)的//把文本框放进去
@@ -159,11 +184,119 @@
         form.insertBefore(p,afterElement);
         return false;
     }
-    function removeTextBoxs(form) {
-        if (textNumber > 1) { // If there's more than one text box
+    function removeTextBoxyi(form) {
+        if (textNumbers > 1) { // If there's more than one text box
 // Remove the last one added
-            form.removeChild(document.getElementById("txts"+textNumber));
-            textNumber--;
+            form.removeChild(document.getElementById("txtyi"+textNumbers));
+            textNumbers--;
+        }
+    }
+    var textNumberers = 1;
+    function addTextBoxers(form, afterElement) {
+// Increment the textbox number
+        textNumberers++;
+// Create the label
+        var p = document.createElement("p");
+        p.id="txters"+textNumberers;
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","biaozhundaan"+textNumberers);
+        textField.setAttribute("id","biaozhundaan"+textNumberers);
+// Add the label's text
+        label.appendChild(document.createTextNode("上午："));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form fengshu
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","pingfengA"+textNumberers);
+        textField.setAttribute("id","pingfengA"+textNumberers);
+// Add the label's text
+        label.appendChild(document.createTextNode("/"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","fengshu"+textNumberers);
+        textField.setAttribute("id","fengshu"+textNumberers);
+// Add the label's text
+        label.appendChild(document.createTextNode("——"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+//
+        p.appendChild(label);
+        form.insertBefore(p,afterElement);
+        return false;
+    }
+    function removeTextBoxers(form) {
+        if (textNumberers > 1) { // If there's more than one text box
+// Remove the last one added
+            form.removeChild(document.getElementById("txters"+textNumberers));
+            textNumberers--;
+        }
+    }
+    var textNumbererx = 1;
+    function addTextBoxerx(form, afterElement) {
+// Increment the textbox number
+        textNumbererx++;
+// Create the label
+        var p = document.createElement("p");
+        p.id="txterx"+textNumbererx;
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","biaozhundaan"+textNumbererx);
+        textField.setAttribute("id","biaozhundaan"+textNumbererx);
+// Add the label's text
+        label.appendChild(document.createTextNode("下午："));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form fengshu
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","pingfengA"+textNumbererx);
+        textField.setAttribute("id","pingfengA"+textNumbererx);
+// Add the label's text
+        label.appendChild(document.createTextNode("/"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","fengshu"+textNumbererx);
+        textField.setAttribute("id","fengshu"+textNumbererx);
+// Add the label's text
+        label.appendChild(document.createTextNode("——"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+//
+        p.appendChild(label);
+        form.insertBefore(p,afterElement);
+        return false;
+    }
+    function removeTextBoxerx(form) {
+        if (textNumbererx > 1) { // If there's more than one text box
+// Remove the last one added
+            form.removeChild(document.getElementById("txterx"+textNumbererx));
+            textNumbererx--;
         }
     }
     //-->
