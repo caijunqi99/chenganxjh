@@ -174,6 +174,7 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
+                        alert(e);alert('bbb');return false;
                         if (!e) {
                             alert('aaa');
                             goLogin();
