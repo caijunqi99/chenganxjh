@@ -175,7 +175,7 @@ $(function() {
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
                         if (!e) {
-
+                            alert('aaa');
                             goLogin();
                             return false
                             // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
