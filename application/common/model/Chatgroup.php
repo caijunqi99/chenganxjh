@@ -38,6 +38,25 @@ class Chatgroup extends Model {
         return db('chatgroup')->where('group_id', $group_id)->delete();
     }
 
+
+    /**
+     * 删除群员
+     * @param  [type] $group_id [description]
+     * @return [type]           [description]
+     */
+    public function chatgroupMembers_del($condition) {
+        return db('chatgroupmember')->where($condition)->delete();
+    }
+
+    /**
+     * 获取数量
+     * @param  [type] $group_id [description]
+     * @return [type]           [description]
+     */
+    public function chatgroupMembers_count($condition) {
+        return db('chatgroupmember')->where($condition)->count();
+    }
+
     /**
      * 更新学校类型记录
      *
