@@ -42,7 +42,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -73,7 +73,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -100,7 +100,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -132,7 +132,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -159,7 +159,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -181,7 +181,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -213,7 +213,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -240,7 +240,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -272,7 +272,7 @@ class User{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     

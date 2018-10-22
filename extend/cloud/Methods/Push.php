@@ -30,7 +30,7 @@ class Push{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -55,7 +55,7 @@ class Push{
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     

@@ -179,11 +179,19 @@ class Chat extends MobileMember
                 $state = 4;
                 break;
         }
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $friend_member_id,
+            'friend_id' => $this->member_info['member_id'] ,
+        );
+        $frexits = $Friendly->getOne($frexits);
+
         $output = array(
             'member_id'     => $friendInfo['member_id'],
             'member_name'   => $friendInfo['member_name'],
+            'member_mobile' => $friendInfo['member_mobile'],
             'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
-            'member_mobile'        => $friendInfo['member_mobile'],
+            'apply_remark'  => $frexits['apply_remark'],
             'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
             'area'          => empty($areas)?'':$areas,
             'state'         => $state,
@@ -213,13 +221,15 @@ class Chat extends MobileMember
         $myexits = $Friendly->getOne($myexits);
 
         if ($myexits) {
-            if($myexits['relation_state'] == 1){
+            if($myexits['relation_state'] == 1 || $myexits['relation_state'] == 3){
                 $creat_time = $Friendly->friendly_set($myexits['id'],'creat_time',time());
+                //如果已经发过申请，并且未成为好友，将会重新发送
+                $Friendly->friendly_set($myexits['id'],'relation_state',1);
                 if(!$creat_time)output_error('已发送过好友申请!');
                 output_data(array('state'=>TRUE,'msg'=>'已发送好友申请!'));
             }
-            if($myexits['relation_state'] == 2)output_error('双方已是好友关系!');
-            if($myexits['relation_state'] == 3)output_error('对方已忽略申请!');
+            if($myexits['relation_state'] == 2)output_error('对方已是好友关系!');
+            // if($myexits['relation_state'] == 3)output_error('对方已忽略申请!');
         }
         //查询的朋友是否给我发送过好友申请
         $frexits = array(
@@ -229,7 +239,7 @@ class Chat extends MobileMember
         $frexits = $Friendly->getOne($frexits);
         $state = 1;
         if($frexits){
-            if($myexits['relation_state'] == 2)output_error('双方已是好友关系!');
+            if($myexits['relation_state'] == 2 && $frexits['relation_state'] == 2 )output_error('双方已是好友关系!');
             if($myexits['relation_state'] == 1){
                 $state = 2;
             }
@@ -760,10 +770,27 @@ class Chat extends MobileMember
         if($groupInfo['group_owner_id'] != $member_id) output_error('你不是群主，没有权限删除群员！');
         $groupMembers = $Group->get_chatgroupmember_List(array('group_id'=>$groupId));
         if(!$groupMembers)output_error('此群聊已删除！');
-        foreach ($groupMembers as $k => $v) {
-            # code...
+        $where =array(
+            'group_id' => $groupId,
+            'member_id' => array('in',$members)
+        );
+        $result = $Group->chatgroupMembers_del($where);
+        $RongCloud = new RongCloud();
+        $result = $RongCloud->group()->quit($members, $groupId);
+        $result = json_decode($result,TRUE);
+        if ($result['code']==200) {
+            $count = $Group->chatgroupMembers_count(array('group_id'=>$groupId));
+            if($count<2){
+                $Group->chatgroup_del($groupId);
+                $Group->chatgroupMembers_del(array('group_id'=>$groupId));
+                $RongCloud->group()->dismiss($member_id, $groupId);
+            }
+            output_data(array(
+                'state' => 'true'
+            ));
+        }else{
+            output_error('删除失败！');
         }
-        output_data($groupMembers);
     }
 
 
@@ -771,9 +798,69 @@ class Chat extends MobileMember
      * 退出群聊
      */
     public function LeaveGroupChat(){
+        $input = input();
+        $member_id = $this->member_info['member_id'];
+        $groupId = isset($input['group_id'])?$input['group_id']:0;
+        if($groupId==0)output_error('群ID错误！');
+        $Group = model('Chatgroup');
+        $RongCloud = new RongCloud();
+        $groupInfo = $Group->getOneById($groupId);
+        if(!$groupInfo)output_error('没有此群的信息，可能已经被群主解散！');
+        $is_exist = $Group->getChatmember(array('group_id'=>$groupId,'member_id'=>$member_id));
+        if(!$is_exist)output_error('非法请求，你并不在此群内！');
+        
+        $del = $Group->chatgroupMembers_del(array('group_id'=>$groupId,'member_id'=>$member_id));
+        output_data($groupInfo);
+        //如果是群主退群
+        if($del && $groupInfo['group_owner_id']==$member_id){
+            $mber = $Group->getChatmember(array('group_id'=>$groupId));
+            $Group->chatgroup_set($groupId,'group_owner_id',$mber['member_id']);
 
+        }
+        $result = $RongCloud->group()->quit([$member_id], $groupId);
+        $result = json_decode($result,TRUE);
+        if ($result['code']==200) {
+            $count = $Group->chatgroupMembers_count(array('group_id'=>$groupId));
+            if($count<2){
+                $Group->chatgroup_del($groupId);
+                $Group->chatgroupMembers_del(array('group_id'=>$groupId));
+                $RongCloud->group()->dismiss($member_id, $groupId);
+            }
+            output_data(array(
+                'state' => 'true'
+            ));
+        }else{
+            output_error('退出失败！');
+        }
     }
 
+
+    /**
+     * 解散群组
+     */
+    public function DismissChatGroup(){
+        $input = input();
+        $member_id = $this->member_info['member_id'];
+        $groupId = isset($input['group_id'])?$input['group_id']:0;
+        if($groupId==0)output_error('群ID错误！');
+        $Group = model('Chatgroup');
+        $RongCloud = new RongCloud();
+        $RongCloud->group()->dismiss($member_id, $groupId);
+        $groupInfo = $Group->getOneById($groupId);
+        if(!$groupInfo)output_error('没有此群的信息，可能已经被群主解散！');
+        $is_exist = $Group->getChatmember(array('group_id'=>$groupId,'member_id'=>$member_id));
+        if(!$is_exist)output_error('非法请求，你并不在此群内！');
+        if($groupInfo['group_owner_id'] !=$member_id)output_error('只有群主才能解散群！');
+        //删除群组
+        $Group->chatgroup_del($groupId);
+        //删除群员
+        $Group->chatgroupMembers_del(array('group_id'=>$groupId));
+        //删除融云群
+        $RongCloud->group()->dismiss($member_id, $groupId);
+        output_data(array(
+                'state' => 'true'
+            ));
+    }
     
 
 
