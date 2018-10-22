@@ -242,5 +242,4 @@ class Teacherbuy
         output_error('支付密码验证失败');
     }
 
-    
 }
