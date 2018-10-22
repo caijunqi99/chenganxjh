@@ -956,3 +956,9 @@ function member_url($name){
         window.location.href='../member/address_list.html';
     }
 }
+
+function fz_token($key,$member_id){
+
+    addCookie('key',$key);
+    addCookie('mermber_id',$member_id);
+}
