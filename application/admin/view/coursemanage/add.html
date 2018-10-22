@@ -26,12 +26,17 @@
 
 
     <form id="user_form" enctype="multipart/form-data" method="post">
-        <label>日期：<input type="text" name="date" id="date" />
+        <label><h>星期：星期一</h>
             <br>上午：<input type="text" name="mor_txt1" id="txt1" />/<input type="text" name="mor_starttime" id="starttime" />——<input type="text" name="mor_endtime" id="endtime" /></label>
-        <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
+
         <p>
             <input type="button" value="+" onClick="addTextBox(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBox(this.form)" />
+        </p>
+        <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
+        <p>
+            <input type="button" value="+" onClick="addTextBoxs(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBoxs(this.form)" />
         </p>
         <table class="ds-default-table">
             <tbody>
@@ -68,7 +73,7 @@
         textField.setAttribute("name","biaozhundaan"+textNumber);
         textField.setAttribute("id","biaozhundaan"+textNumber);
 // Add the label's text
-        label.appendChild(document.createTextNode("星期一："));
+        label.appendChild(document.createTextNode("上午："));
 // Put the textbox inside(里面)的//把文本框放进去
         label.appendChild(textField);
 // Add it all to the form fengshu
@@ -105,6 +110,59 @@
         if (textNumber > 1) { // If there's more than one text box
 // Remove the last one added
             form.removeChild(document.getElementById("txt"+textNumber));
+            textNumber--;
+        }
+    }
+    function addTextBoxs(form, afterElement) {
+// Increment the textbox number
+        textNumber++;
+// Create the label
+        var p = document.createElement("p");
+        p.id="txts"+textNumber;
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","biaozhundaan"+textNumber);
+        textField.setAttribute("id","biaozhundaan"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("下午："));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form fengshu
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","pingfengA"+textNumber);
+        textField.setAttribute("id","pingfengA"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("/"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","fengshu"+textNumber);
+        textField.setAttribute("id","fengshu"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("——"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+//
+        p.appendChild(label);
+        form.insertBefore(p,afterElement);
+        return false;
+    }
+    function removeTextBoxs(form) {
+        if (textNumber > 1) { // If there's more than one text box
+// Remove the last one added
+            form.removeChild(document.getElementById("txts"+textNumber));
             textNumber--;
         }
     }
