@@ -216,7 +216,11 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
-
+                        if (!e) {
+                            goLogin();
+                            return false
+                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                        }
                         var t = parseInt($(".buy-num").val());
 
                         if (!e) {
@@ -286,7 +290,8 @@ $(function() {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
                             if (!e) {
-                                window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                                goLogin();
                                 return false
                             }
                             var t = parseInt($(".buy-num").val()) || 0;
