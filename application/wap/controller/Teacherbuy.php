@@ -3,8 +3,7 @@
 namespace app\wap\controller;
 
 
-//class Teacherbuy extends MobileMember
-class Teacherbuy
+class Teacherbuy extends MobileMember
 {
     private $payment_code;
     private $payment_config;
@@ -119,6 +118,8 @@ class Teacherbuy
         $order = array();
         $order['student_id'] = $child_id;
         $order['buyer_id'] = $member_id;
+        $order['order_sn'] = "111";
+        $order['pay_sn'] = "111";
         $order['buyer_name'] = $memberinfo['member_name'];
         $order['buyer_mobile'] = $memberinfo['member_mobile'];
         $order['order_name'] = $teachInfo['t_title'];
