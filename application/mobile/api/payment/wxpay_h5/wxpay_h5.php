@@ -49,10 +49,10 @@ class wxpay_h5
         $sign = $this->sign($data);
         $data['sign'] = $sign;
 
-        halt($data);
+
 
         $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
-
+        halt($result);
         if ($result['return_code'] != 'SUCCESS') {
             exception($result['return_msg']);
         }
