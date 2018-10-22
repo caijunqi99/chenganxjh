@@ -109,7 +109,7 @@ class Chatgroup extends Model {
         return db('chatgroup')->where($condition)->find();
     }
 
-    public function getChatmember($condition = array()) {
+    public function getChatmember($condition = array(),$orderby = 'join_time asc') {
         return db('chatgroupmember')->where($condition)->find();
     }
     /**

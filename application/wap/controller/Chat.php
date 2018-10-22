@@ -813,6 +813,8 @@ class Chat extends MobileMember
         output_data($groupInfo);
         //如果是群主退群
         if($del && $groupInfo['group_owner_id']==$member_id){
+            $mber = $Group->getChatmember(array('group_id'=>$groupId));
+            $Group->chatgroup_set($groupId,'group_owner_id',$mber['member_id']);
 
         }
         $result = $RongCloud->group()->quit([$member_id], $groupId);
