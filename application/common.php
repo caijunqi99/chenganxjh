@@ -161,7 +161,7 @@ EOT;
     return $str;
 }
 
-function ds_json_encode($code, $message, $result = '')
+function ds_json_encode($code, $message, $result = array())
 {
     echo json_encode(array(
                          'code' => $code, 'message' => $message, 'result' => $result
