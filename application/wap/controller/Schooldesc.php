@@ -18,21 +18,17 @@ class Schooldesc {
         if (empty($member_id)||empty($school_id)) {
             output_error('参数有误');
         }
-
-        $logindata = db('school')->where(array('schoolid'=>$school_id))->select();
-
-//        $studentinfo = db('student')->where(array('s_ownerAccount'=>$member_id))->select();
-//        $studentinfo2 = db('student')->where(array('s_viceAccount'=>array('like', "%" . $member_id . "%")))->select();
-//        if($studentinfo2){
-//            $studentinfo = array_merge($studentinfo,$studentinfo2);
-//        }
-//        foreach ($studentinfo as $k=>$v){
-//            $schoolinfo = db('school')->where(array('schoolid'=>$v['s_schoolid']))->find();
-//            $logindata[$k] = $schoolinfo;
-//        }
-
-        if($logindata){
-            output_data($logindata);
+        $school=model('school');
+        $logindata = $school->getSchoolById($school_id);
+        $desc=model('Schooldesc');
+        $where=array();
+        $where['s_sid']=$school_id;
+        $data=$desc->getDescInfo($where);
+        $data['name']=$logindata['name'];
+        $data['region']=$logindata['region'];
+        $data['address']=$logindata['address'];
+        if($data){
+            output_data($data);
         }else{
             output_data(array());
         }
