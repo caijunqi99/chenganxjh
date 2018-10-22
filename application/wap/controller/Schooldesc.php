@@ -13,9 +13,15 @@ class Schooldesc {
      */
     public function detailinfo() {
 
-        $member_id  = intval(input('post.member_id'));
+//        $member_id  = intval(input('post.member_id'));
+//        if (empty($member_id)) {
+//            output_error('参数有误');
+//        }
+//        $student=model('student');
+//        $res=$student->getAllChilds($member_id);
+//        $school_id=$res['schoolid'];
         $school_id  = intval(input('post.school_id'));
-        if (empty($member_id)||empty($school_id)) {
+        if (empty($school_id)) {
             output_error('参数有误');
         }
         $school=model('school');
