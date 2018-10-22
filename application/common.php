@@ -101,6 +101,65 @@ var ue = UE.getEditor('{$name}',{
 EOT;
     return $str;
 }
+function buildEditors($params = array())
+{
+    $name = isset($params['name']) ? $params['name'] : null;
+    $theme = isset($params['theme']) ? $params['theme'] : 'normal';
+    $content = isset($params['content']) ? $params['content'] : null;
+    //http://fex.baidu.com/ueditor/#start-toolbar
+    /* 指定使用哪种主题 */
+    $themes = array(
+        'normal' => "[
+           'fullscreen', 'source', '|', 'undo', 'redo', '|',
+           'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+           'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+           'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+           'directionalityltr', 'directionalityrtl', 'indent', '|',
+           'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+           'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+           'emotion',  'map', 'gmap',  'insertcode', 'template',  '|',
+           'horizontal', 'date', 'time', 'spechars', '|',
+           'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+           'searchreplace', 'help', 'drafts', 'charts'
+       ]", 'simple' => " ['fullscreen', 'source', 'undo', 'redo', 'bold']",
+    );
+    switch ($theme) {
+        case 'simple':
+            $theme_config = $themes['simple'];
+            break;
+        case 'normal':
+            $theme_config = $themes['normal'];
+            break;
+        default:
+            $theme_config = $themes['normal'];
+            break;
+    }
+    /* 配置界面语言 */
+    switch (config('default_lang')) {
+        case 'zh-cn':
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/zh-cn/zh-cn.js';
+            break;
+        case 'en-us':
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/en/en.js';
+            break;
+        default:
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/zh-cn/zh-cn.js';
+            break;
+    }
+    //$include_js = '<script type="text/javascript" charset="utf-8" src="' . config('url_domain_root') . 'static/plugins/ueditor/ueditor.config.js"></script> <script type="text/javascript" charset="utf-8" src="' . config('url_domain_root') . 'static/plugins/ueditor/ueditor.all.min.js""> </script><script type="text/javascript" charset="utf-8" src="' . $lang . '"></script>';
+    $str = <<<EOT
+$include_js
+<script type="text/javascript">
+var ue = UE.getEditor('{$name}',{
+    toolbars:[{$theme_config}],
+        });
+      ue.ready(function() {
+       this.setContent('$content');
+})
+</script>
+EOT;
+    return $str;
+}
 
 function ds_json_encode($code, $message, $result = '')
 {
