@@ -1,0 +1,206 @@
+{include file="public/header" /}
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
+<script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>课程管理</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+        </ul>
+    </div>
+
+
+    <form id="user_form" enctype="multipart/form-data" method="post">
+        <label>日期：<input type="text" name="date" id="date" />
+            <br>上午：<input type="text" name="mor_txt1" id="txt1" />/<input type="text" name="mor_starttime" id="starttime" />——<input type="text" name="mor_endtime" id="endtime" /></label>
+        <label><br>下午：<input type="text" name="after_txt1" id="arter_txt1" />/<input type="text" name="after_starttime" id="arter_starttime" />——<input type="text" name="after_endtime" id="arter_endtime" /></label>
+        <p>
+            <input type="button" value="+" onClick="addTextBox(this.form,this.parentNode); " />
+            <input type="button" value="-" onClick="removeTextBox(this.form)" />
+        </p>
+        <table class="ds-default-table">
+            <tbody>
+
+                <tr>
+                    <td colspan="2" class="required"><label for="school_desc">{$Think.lang.school_index_desc}:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><input type="text" value="" id="school_desc" name="school_desc" class="txt"></td>
+                    <td class="vatop tips"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    <!--
+    var textNumber = 1;
+    function addTextBox(form, afterElement) {
+// Increment the textbox number
+        textNumber++;
+// Create the label
+        var p = document.createElement("p");
+        p.id="txt"+textNumber;
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","biaozhundaan"+textNumber);
+        textField.setAttribute("id","biaozhundaan"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("星期一："));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form fengshu
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","pingfengA"+textNumber);
+        textField.setAttribute("id","pingfengA"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("/"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+        p.appendChild(label);
+        var label = document.createElement("label");
+// Create the textbox
+        var textField = document.createElement("input");
+        textField.setAttribute("type","text");
+        textField.setAttribute("name","fengshu"+textNumber);
+        textField.setAttribute("id","fengshu"+textNumber);
+// Add the label's text
+        label.appendChild(document.createTextNode("——"));
+// Put the textbox inside(里面)的//把文本框放进去
+        label.appendChild(textField);
+// Add it all to the form
+//
+        p.appendChild(label);
+        form.insertBefore(p,afterElement);
+        return false;
+    }
+    function removeTextBox(form) {
+        if (textNumber > 1) { // If there's more than one text box
+// Remove the last one added
+            form.removeChild(document.getElementById("txt"+textNumber));
+            textNumber--;
+        }
+    }
+    //-->
+    $(function() {
+        //按钮先执行验证再提交表单
+        $("#submitBtn").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+        $.datepicker.regional["zh-CN"] = { closeText: "关闭", prevText: "&#x3c;上月", nextText: "下月&#x3e;", currentText: "今天", monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"], dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"], weekHeader: "周", dateFormat: "yy-mm-dd", firstDay: 1, isRTL: !1, showMonthAfterYear: !0, yearSuffix: "年" }
+        $.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+
+        $("#activity_start_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#activity_end_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $('#user_form').validate({
+
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().prev().find('td:first'));
+            },
+            rules: {
+                school_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20,
+                    remote: {
+                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
+                        type: 'get',
+                        data: {
+                            user_name: function() {
+                                return $('#school_name').val();
+                            },
+                            area_id: function () {
+                                return $('#area_id').val();
+                            }
+                        }
+                    }
+                },
+                school_phone:{
+                    required: true,
+                    minlength: 8,
+                    maxlength: 12
+                },
+                school_username:{
+                    required: true
+                },
+                school_address:{
+                    required: true
+                },
+                school_type:{
+                    required: true
+                },
+                school_dieline:{
+                    required: true
+                },
+                typeid:{
+                    required: true
+                }
+            },
+            messages: {
+                school_name: {
+                    required: '{$Think.lang.school_add_sname_null}',
+                    maxlength: '{$Think.lang.school_add_name_length}',
+                    minlength: '{$Think.lang.school_add_name_length}',
+                    remote: '{$Think.lang.school_add_name_exists}'
+                },
+                school_phone: {
+                    required: '{$Think.lang.school_add_phone_null}',
+                    maxlength: '{$Think.lang.school_add_phone_length}',
+                    minlength: '{$Think.lang.school_add_phone_length}',
+                },
+                school_username: {
+                    required: '{$Think.lang.school_add_name_null}',
+                },
+                school_address: {
+                    required: '{$Think.lang.school_add_address_null}',
+                },
+                school_type: {
+                    required: '{$Think.lang.school_add_type_null}',
+                },
+                school_dieline: {
+                    required: '{$Think.lang.school_dieline_null}',
+                },
+                typeid: {
+                    required: '{$Think.lang.school_add_area_null}',
+                }
+            }
+        });
+    });
+
+    $(function(){
+        $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
+    });
+
+    $(function() {
+        regionInit("region");
+    });
+</script>
