@@ -91,7 +91,7 @@
             <tr class="hover">
                 <td class="align-center w50"><?php echo $k+1;?></td>
                 <td class="align-center w50"><a href="javascript:dd({$v.id})"><?php echo $v['content'];?></a></td>
-                <td class="align-center w50"><img src="{$path}{$v.image.0}"></td>
+                <td class="align-center w50"><?php if($v['image'][0]!=''){ ?><img src="{$path}{$v.image.0}"><?php } ?></td>
                 <td class="align-center w50">
                     <?php if($v['del']==1){
                     echo '正常' ;

@@ -103,6 +103,18 @@ $lang['mood_status_close_success']='禁用成功';
 $lang['mood_status_close_error']='禁用失败';
 $lang['mood_member']='会员';
 
+//学校简介
+$lang['ds_schooldesc']='学校简介';
+$lang['desc_region']='学校所在地区';
+$lang['desc_address']='学校地址';
+$lang['desc_type']='学校性质';
+$lang['desc_stage']='办学阶段';
+$lang['desc_img']='学校形象照片';
+$lang['desc_scdesc']='学校介绍';
+$lang['desc_teacher']='师资力量';
+$lang['desc_public']='公立';
+$lang['desc_private']='私立';
+$lang['school_add_address_null']='学校地址不能为空';
 
 
 //学校管理
@@ -121,6 +133,7 @@ $lang['school_cratetime'] = '添加/修改时间';
 $lang['school_operation'] = '操作';
 $lang['school_desc'] = '备注';
 $lang['ds_addstudent'] = '添加学生';
+
 
 //会员
 $lang['ds_member_manage']                 = '会员/家长管理';
