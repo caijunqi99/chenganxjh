@@ -19,7 +19,7 @@ class Wordfilter{
 	public function add($word) {
     	try{
 			if (empty($word))
-				throw new Exception('Paramer "word" is required');
+				ds_json_encode('100','Paramer "word" is required');
 				
 	
     		$params = array (
@@ -28,11 +28,11 @@ class Wordfilter{
     		
     		$ret = $this->SendRequest->curl('/wordfilter/add.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -50,11 +50,11 @@ class Wordfilter{
     		
     		$ret = $this->SendRequest->curl('/wordfilter/list.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -68,7 +68,7 @@ class Wordfilter{
 	public function delete($word) {
     	try{
 			if (empty($word))
-				throw new Exception('Paramer "word" is required');
+				ds_json_encode('100','Paramer "word" is required');
 				
 	
     		$params = array (
@@ -77,11 +77,11 @@ class Wordfilter{
     		
     		$ret = $this->SendRequest->curl('/wordfilter/delete.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     

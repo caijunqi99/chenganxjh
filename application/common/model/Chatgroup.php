@@ -38,6 +38,25 @@ class Chatgroup extends Model {
         return db('chatgroup')->where('group_id', $group_id)->delete();
     }
 
+
+    /**
+     * 删除群员
+     * @param  [type] $group_id [description]
+     * @return [type]           [description]
+     */
+    public function chatgroupMembers_del($condition) {
+        return db('chatgroupmember')->where($condition)->delete();
+    }
+
+    /**
+     * 获取数量
+     * @param  [type] $group_id [description]
+     * @return [type]           [description]
+     */
+    public function chatgroupMembers_count($condition) {
+        return db('chatgroupmember')->where($condition)->count();
+    }
+
     /**
      * 更新学校类型记录
      *
@@ -56,13 +75,23 @@ class Chatgroup extends Model {
      * @param obj $page 分页对象
      * @return array 二维数组
      */
-    public function get_chatgroup_List($condition = array(), $page = '', $orderby = 'group_id asc') {
+    public function get_chatgroup_List($condition = array(),$field="*", $page = '', $orderby = 'group_id asc') {
         if ($page) {
-            $result = db('chatgroup')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
+            $result = db('chatgroup')->where($condition)->field($field)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
             return $result->items();
         } else {
-            return db('chatgroup')->where($condition)->order($orderby)->select();
+            return db('chatgroup')->where($condition)->field($field)->order($orderby)->select();
+        }
+    }
+
+        public function get_chatgroupmember_List($condition = array(),$field="*", $page = '', $orderby = 'id asc') {
+        if ($page) {
+            $result = db('chatgroupmember')->where($condition)->field($field)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
+            $this->page_info = $result;
+            return $result->items();
+        } else {
+            return db('chatgroupmember')->where($condition)->field($field)->order($orderby)->select();
         }
     }
 
@@ -78,6 +107,10 @@ class Chatgroup extends Model {
     }
     public function getOnePkg($condition = array()) {
         return db('chatgroup')->where($condition)->find();
+    }
+
+    public function getChatmember($condition = array(),$orderby = 'join_time asc') {
+        return db('chatgroupmember')->where($condition)->find();
     }
     /**
      * api获取学校类型列表

@@ -143,45 +143,37 @@
             $('.total_cont_btn').click(function(event) {
                 var pay = $("input[name='payment_code']:checked").val();
                 // api = 'http://w.xjh.com/index.php/Wap';
-                user_token = '4570a44f7d6512c8ec2e20507a80009a';
+                user_token = '216327ba4d1034e33ba3c325661e3222';
                 var chind_id = '1';
                 $.post(api+'/Teacherbuy/buyOrder',
                 {
                     'key': user_token,
                     'tid': "1",
                     'payment_code': pay,
+                    'member_id':2,
                     'student_id': "2"
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
-                    alert(data);
+                    
+                     data =$.parseJSON(data);
+                        var mbs = data.result[0];
                     if (pay == 'alipay_app') {
-                        layer.open({
-                          type: 1,
-                          title: '课程管理',
-                          shadeClose: true,
-                          shade: false,
-                          maxmin: false, //开启最大化最小化按钮
-                          // area: ['400px', '300px'],
-                          content: data
-                        });
-
-                        return ;
+                        if (mbs.result_code== 'SUCCESS') {
+                            window.location.href=mbs.mweb_url;
+                        }
                     }
                     if(pay=='wxpay_h5'){
-                        data =$.parseJSON(data);
-                        var mbs = data.result;
-
                         if (mbs.result_code== 'SUCCESS') {
-                            window.location.href=mbs.mweb_url;return ;
+                            window.location.href=mbs.mweb_url;
                         }
                     }
                 });
             });
         })
 
-        $.alert(window.location.href,'URL',function(){
+       /* $.alert(window.location.href,'URL',function(){
             
-        })
+        })*/
 
   // $.alert("AlphaGo 就是天网的前身，人类要完蛋了！", "警告！",function(){
   //       alert("看来真的药丸");
