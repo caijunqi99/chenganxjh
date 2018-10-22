@@ -1,7 +1,8 @@
 $(function() {
     var r = getCookie("key");
     if (!r) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+        // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+        goLogin();
     }
     $.getJSON(ApiUrl + "/Memberorder/order_info.html", {
         key: r,
