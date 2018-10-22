@@ -205,7 +205,6 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
-                        alert(e);return false;
                         if (!e) {
                             goLogin();
                             return false
