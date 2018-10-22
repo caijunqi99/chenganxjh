@@ -577,7 +577,10 @@ class Chat extends MobileMember
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
             output_data(array(
+                'groupId' =>$groupId,
+                'groupName' =>$groupName,
                 'state' => 'true'
+
             ));
         }else{
             output_error('修改失败！');
