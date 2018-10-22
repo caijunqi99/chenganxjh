@@ -358,6 +358,7 @@ class Teacherbuy extends MobileMember
     public function buyOrder(){
         $tid = input('post.tid');
         $child_id = input('post.student_id');
+        $member_id = input('post.member_id');
         if (!$child_id || !$tid) {
             output_error('缺少参数！');
         }
@@ -371,16 +372,17 @@ class Teacherbuy extends MobileMember
         if (!$childinfo) {
             output_error('没有当前孩子信息！');
         }
-
+        $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
         $order = array();
         //生成基本订单信息
         $order['student_id'] = $child_id;
-        $order['buyer_id'] = $this->member_info['member_id'];
-        $order['buyer_name'] = $this->member_info['member_name'];
-        $order['buyer_mobile'] = $this->member_info['member_mobile'];
+        $order['buyer_id'] = $member_id;
+        $order['buyer_name'] = $memberinfo['member_name'];
+        $order['buyer_mobile'] = $memberinfo['member_mobile'];
         $order['order_name'] = $teachInfo['t_title'];
         $order['order_amount'] = $teachInfo['t_price'];
-        //$order['pay_sn'] = '$pay_sn';
+        $order['pay_sn'] = '456456';
+        $order['order_sn'] = '123123';
         //$order['order_dieline'] = $teachInfo['t_title'];
         //$order['payment_time'] = $teachInfo['t_title'];
         //$order['finnshed_time'] = $teachInfo['t_title'];
@@ -389,7 +391,7 @@ class Teacherbuy extends MobileMember
         if ($order['payment_code'] == "") {
             $order['payment_code'] = "offline";
         }
-        $order['order_from'] = $this->member_info['client_type'];
+        //$order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
         //写入订单表
         $model = Model('Packagesorderteach');
