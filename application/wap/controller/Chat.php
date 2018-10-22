@@ -579,6 +579,7 @@ class Chat extends MobileMember
             output_data(array(
                 'groupId' =>$groupId,
                 'groupName' =>$groupName,
+                'groupImg' =>getChatGroupImg(),
                 'state' => 'true'
 
             ));
@@ -700,6 +701,10 @@ class Chat extends MobileMember
         );
         $field = 'group_id,groupImg,groupState,groupName,group_owner_id,member_count';
         $groupList = $Group->get_chatgroup_List($condition,$field);
+        if($groupList)foreach ($groupList as $k => &$v) {
+            if(empty($v['groupImg']))$v['groupImg']=getChatGroupImg();
+        }
+        unset($v);
         output_data($groupList);
     }
 
