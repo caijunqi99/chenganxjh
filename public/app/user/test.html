@@ -158,17 +158,9 @@
                      data =$.parseJSON(data);
                         var mbs = data.result[0];
                     if (pay == 'alipay_app') {
-                        layer.open({
-                          type: 1,
-                          title: '课程管理',
-                          shadeClose: true,
-                          shade: false,
-                          maxmin: false, //开启最大化最小化按钮
-                          // area: ['400px', '300px'],
-                          content: data
-                        });
-
-                        return ;
+                        if (mbs.result_code== 'SUCCESS') {
+                            window.location.href=mbs.mweb_url;
+                        }
                     }
                     if(pay=='wxpay_h5'){
                         if (mbs.result_code== 'SUCCESS') {
