@@ -3,7 +3,8 @@
 namespace app\wap\controller;
 
 
-class Teacherbuy extends MobileMember
+//class Teacherbuy extends MobileMember
+class Teacherbuy
 {
     private $payment_code;
     private $payment_config;
@@ -111,20 +112,17 @@ class Teacherbuy extends MobileMember
         if (!$childinfo) {
             output_error('没有当前孩子信息！');
         }
+        $model = Model('Packagesorderteach');
+        //会员信息
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
-        $order = array();
         //生成基本订单信息
+        $order = array();
         $order['student_id'] = $child_id;
         $order['buyer_id'] = $member_id;
         $order['buyer_name'] = $memberinfo['member_name'];
         $order['buyer_mobile'] = $memberinfo['member_mobile'];
         $order['order_name'] = $teachInfo['t_title'];
         $order['order_amount'] = $teachInfo['t_price'];
-        $order['pay_sn'] = '456456';
-        $order['order_sn'] = '123123';
-        //$order['order_dieline'] = $teachInfo['t_title'];
-        //$order['payment_time'] = $teachInfo['t_title'];
-        //$order['finnshed_time'] = $teachInfo['t_title'];
         $order['add_time'] = TIMESTAMP;
         $order['payment_code'] = $this->payment_code;
         if ($order['payment_code'] == "") {
@@ -132,27 +130,15 @@ class Teacherbuy extends MobileMember
         }
         //$order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
+
         //写入订单表
-        $model = Model('Packagesorderteach');
         $order_pay_id = $model->addOrder($order);
         $this->orderInfo = $order;
+        $this->orderInfo['order_sn'] = $model->makeOrderSn($order_pay_id);
+        $this->orderInfo['pay_sn'] = $model->makePaySn($member_id);
         $this->orderInfo['order_id'] = $order_pay_id;
-//        try {
-//
-//            $model->startTrans();
-//            //写入订单表
-//            $order_pay_id = $model->addOrder($order);
-//            echo $order_pay_id;die;
-//            $this->orderInfo = $order;
-//            $this->orderInfo['order_id'] = $order_pay_id;
-//            $model->commit();
-//
-//        } catch (Exception $e) {
-//            $model->rollback();
-//            return ds_callback(false, $e->getMessage());
-//        }
         //写入平台流水号
-        $model->editOrder(array('order_sn'=>$this->orderInfo['order_sn']), array('order_id'=>$order_pay_id));
+        $model->editOrder(array('order_sn'=>$this->orderInfo['order_sn'],"pay_sn"=>$this->orderInfo['pay_sn']), array('order_id'=>$order_pay_id));
         //app支付
         $this->_app_pay($this->orderInfo);        
     }
@@ -168,8 +154,8 @@ class Teacherbuy extends MobileMember
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
-            $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
-            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
+            $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
+            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
             $api = new \wxpay_h5();
             $api->setConfigs($param);
             
@@ -181,11 +167,11 @@ class Teacherbuy extends MobileMember
         }
         
         //alipay and so on
-        $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
+        $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+        $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
         $param['orderSn'] = $order_pay_info['pay_sn'];
-        $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];
-        $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
+        $param['orderFee'] = $order_pay_info['order_amount'];//$order_pay_info['order_amount'];
+        $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
 
         
         $payment_api = new $this->payment_code($param);
@@ -256,5 +242,4 @@ class Teacherbuy extends MobileMember
         output_error('支付密码验证失败');
     }
 
-    
 }
