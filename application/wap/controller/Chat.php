@@ -591,6 +591,22 @@ class Chat extends MobileMember
     }
 
     /**
+     * 获取群组信息
+     */
+    public function GetChatGroupInfo(){
+        $input = input();
+        $groupId = isset($input['group_id'])?$input['group_id']:0;
+        if($groupId==0)output_error('群ID错误！');
+        $Group = model('Chatgroup');
+        $groupInfo = $Group->getOneById($groupId);
+        if(!$groupInfo)output_error('没有此群的信息，可能已经被群主解散！');
+        if(empty($groupInfo['groupImg']))$groupInfo['groupImg']=getChatGroupImg();
+        if(empty($groupInfo['groupIntro']))$groupInfo['groupIntro']='';
+        if(empty($groupInfo['groupNotice']))$groupInfo['groupNotice']='';
+        output_data($groupInfo);
+    }
+
+    /**
      * 邀请人加入群聊
      */
     public function GroupChatMemberInvite(){
