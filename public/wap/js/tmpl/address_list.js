@@ -2,6 +2,7 @@ $(function() {
     var e = getCookie("key");
     if (!e) {
         location.href = "login.html"
+        goLogin();return false;
     }
     function s() {
         $.ajax({type: "post", url: ApiUrl + "/Memberaddress/address_list.html", data: {key: e}, dataType: "json", success: function(e) {
