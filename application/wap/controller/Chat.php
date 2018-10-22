@@ -521,7 +521,7 @@ class Chat extends MobileMember
         $groupName = isset($input['groupName'])?$input['groupName']:$this->member_info['member_name'].'建立的群聊';
         //获取群员id
         $members = $input['members'];
-        $members = explode(',', $members);
+        // $members = explode(',', $members);
         array_push($members, $this->member_info['member_id']);
         $Member = model('Member');
         $where =array(
@@ -595,7 +595,7 @@ class Chat extends MobileMember
         if($groupId==0)output_error('群ID错误！');
         //获取群员id
         $members = $input['members'];
-        $members = explode(',', $members);
+        // $members = explode(',', $members);
 
         $Group = model('Chatgroup');
         $groupInfo = $Group->getOneById($groupId);
@@ -761,7 +761,7 @@ class Chat extends MobileMember
         $groupId = isset($input['group_id'])?$input['group_id']:0;
         //获取群员id
         $members = $input['members'];
-        $members = explode(',', $members);
+        // $members = explode(',', $members);
 
         if($groupId==0)output_error('群ID错误！');
         $Group = model('Chatgroup');
