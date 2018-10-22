@@ -62,7 +62,6 @@ $(function() {
         if (d.cart_list.length == 0) {
             get_footer()
         }
-        alert(u);
         $("#cart-list-wp").html(u);
         $(".goto-settlement,.goto-shopping").parent().hide();
         $(".goods-del").click(function() {
