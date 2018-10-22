@@ -154,7 +154,9 @@
                     'student_id': "2"
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
-                    //alert(data);
+                    
+                     data =$.parseJSON(data);
+                        var mbs = data.result[0];
                     if (pay == 'alipay_app') {
                         layer.open({
                           type: 1,
@@ -169,20 +171,17 @@
                         return ;
                     }
                     if(pay=='wxpay_h5'){
-                        data =$.parseJSON(data);
-                        var mbs = data.result;
-
                         if (mbs.result_code== 'SUCCESS') {
-                            window.location.href=mbs.mweb_url;return ;
+                            window.location.href=mbs.mweb_url;
                         }
                     }
                 });
             });
         })
 
-        $.alert(window.location.href,'URL',function(){
+       /* $.alert(window.location.href,'URL',function(){
             
-        })
+        })*/
 
   // $.alert("AlphaGo 就是天网的前身，人类要完蛋了！", "警告！",function(){
   //       alert("看来真的药丸");
