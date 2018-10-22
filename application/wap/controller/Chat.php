@@ -191,7 +191,7 @@ class Chat extends MobileMember
             'member_name'   => $friendInfo['member_name'],
             'member_mobile' => $friendInfo['member_mobile'],
             'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
-            'apply_remark'  => $frexits['apply_remark'],
+            'apply_remark'  => empty($frexits['apply_remark'])?'':$frexits['apply_remark'],
             'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
             'area'          => empty($areas)?'':$areas,
             'state'         => $state,
@@ -387,7 +387,7 @@ class Chat extends MobileMember
         );
         $result = $Friendly->friendly_update($param);
         if(!$result)output_error('请求失败，请检查网络设置！');
-        output_data(array('state'=>'ture'));
+        output_data(array('state'=>'true'));
     }
 
     /**
@@ -410,10 +410,10 @@ class Chat extends MobileMember
         if(!$frexits)output_error('你们还不是好友关系！');
         if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
         if($frexits['relation_state']==1)output_error('你还未同意成为好友关系！');
-        if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'ture'));
+        if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'true'));
         $result = $Friendly->friendly_set($frexits['id'],'friend_remark',$friend_remark);
         if(!$result)output_error('修改备注请求失败，请检查网络设置！');
-        output_data(array('state'=>'ture'));
+        output_data(array('state'=>'true'));
     }
 
     /**
@@ -444,7 +444,7 @@ class Chat extends MobileMember
             );
             $result = $Friendly->friendly_delAll($del);
             if(!$result)output_error('删除好友请求失败，请检查网络设置！');
-            output_data(array('state'=>'ture'));
+            output_data(array('state'=>'true'));
         }else{
             output_error('还不是好友关系！');
         }
