@@ -97,7 +97,6 @@ $(function() {
     $("#order-list").on("click", ".check-payment",
     function() {
         var e = $(this).attr("data-paySn");
-        alert(e);
         toPay(e, "memberbuy", "pay");
         return false;
     });
