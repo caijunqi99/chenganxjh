@@ -56,6 +56,7 @@ $lang['school_add_desc_null']		= '简介不能为空';
 $lang['school_add_file_null']		= '视频不能为空';
 $lang['school_add_price_null']		= '价格不能为空,免费为0';
 $lang['ds_common_save_succ']		= '上传成功';
+$lang['ds_common_save_succs']		= '新增成功';
 $lang['ds_common_save_fail']		= '上传失败';
 $lang['ds_common_save_failreason']		= '失败原因';
 ?>

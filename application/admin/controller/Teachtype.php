@@ -6,7 +6,6 @@ use think\Lang;
 use think\Validate;
 
 class Teachtype extends AdminControl {
-//class Teachtype {
 
     public function _initialize() {
         parent::_initialize();
@@ -110,7 +109,9 @@ class Teachtype extends AdminControl {
             $insert_array['commis_rate'] = intval(input('post.commis_rate'));
             $insert_array['gc_sort'] = intval(input('post.gc_sort'));
             $insert_array['gc_virtual'] = intval(input('post.gc_virtual'));
-
+            $admininfo = $this->getAdminInfo();
+            $insert_array['option_id'] = $admininfo['admin_id'];
+            $insert_array['option_time'] = time();
             //验证数据  BEGIN
             $rule = [
                 ['gc_name', 'require', '分类标题为必填'],
@@ -133,7 +134,7 @@ class Teachtype extends AdminControl {
                     }
                 }
                 $this->log(lang('ds_add').lang('goods_class_index_class') . '[' . $_POST['gc_name'] . ']', 1);
-                $this->success(lang('ds_common_save_succ'), url('Admin/Teachtype/index'));
+                $this->success(lang('ds_common_save_succs'), url('Admin/Teachtype/index'));
             } else {
                 $this->log(lang('ds_add').lang('goods_class_index_class') . '[' . $_POST['gc_name'] . ']', 0);
                 $this->error(lang('ds_common_save_fail'));

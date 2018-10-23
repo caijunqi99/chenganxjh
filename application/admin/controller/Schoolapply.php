@@ -29,8 +29,9 @@ class Schoolapply extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+            $condition['admin_company_id'] = $admininfo['admin_company_id'];
         }
 
         $schoolname = input('param.schoolname');//学校名称
@@ -125,7 +126,7 @@ class Schoolapply extends AdminControl {
             $this->error(lang('param_error'));
         }
         $model_schoolapply = Model('schoolapply');
-        $data = array('status'=>2,'auditor'=>$admininfo['admin_id'],'auditortime'=>date("Y-m-d H:i:s",time()));
+        $data = array('status'=>2,'auditor'=>$admininfo['admin_id'],'auditortime'=>date("Y-m-d H:i:s",time()),'admin_company_id'=>$admininfo['admin_company_id']);
         $result = $model_schoolapply->editSchoolapply($data,array('applyid'=>$applyid));
         if ($result) {
             $this->success(lang('处理成功'), 'Schoolapply/index');

@@ -163,6 +163,8 @@ class Teachercertify extends AdminControl {
 //        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
 //            $this->error(lang('ds_assign_right'));
 //        }
+        $admininfo = $this->getAdminInfo();
+
         $teacher_id = input('param.teacher_id');
         $status = input('param.status');
         $phone = input('param.phone');
@@ -172,7 +174,7 @@ class Teachercertify extends AdminControl {
         }
 
         $model_teacher = model('Teachercertify');
-        $result = $model_teacher->teacher_update(array('status'=>$status,'failreason'=>$reason),array('id'=>$teacher_id));
+        $result = $model_teacher->teacher_update(array('status'=>$status,'failreason'=>$reason,'option_id'=>$admininfo['admin_id'],'option_time'=>time()),array('id'=>$teacher_id));
         if ($result) {
             if($status==2){
                 //审核结果给用户发送短信提醒
