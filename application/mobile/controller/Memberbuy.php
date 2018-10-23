@@ -326,7 +326,6 @@ class Memberbuy extends MobileMember
                }
             }
         }
-        output_data($payment_list);
         //显示预存款、支付密码、充值卡
         $pay['member_available_pd'] = $this->member_info['available_predeposit'];
         $pay['member_available_rcb'] = $this->member_info['available_rc_balance'];
