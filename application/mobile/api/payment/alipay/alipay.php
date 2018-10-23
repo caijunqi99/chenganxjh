@@ -46,13 +46,12 @@ class alipay
                 'alipay_public_key' =>$param['public_key'],
 
             );
-            halt($param);
             if (isset($param['order_sn'])) {
                 $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
                 $this->subject = $param['order_sn'];
                 $this->total_amount = $param['order_amount'];
                 $this->timeout_express = "1m";
-                $this->body = "";
+                $this->body = "想见孩产品";
             }
         }else{
             output_error('参数错误1！');

@@ -233,6 +233,7 @@ class Memberpayment extends MobileMember
             Header("Location: $mweburl");
             exit;
         }
+        halt($order_pay_info);
         //alipay and so on
         $param['order_sn'] = $order_pay_info['pay_sn'];
         $param['order_amount'] = $order_pay_info['api_pay_amount'];
