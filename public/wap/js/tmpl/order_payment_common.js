@@ -102,7 +102,6 @@ function toPay(a, e, p) {
 
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                alert(i);
                     if(i == "alipay" || i== "alipay_app"){
                         $("#" + i).parents("label").show();
                     }
@@ -177,10 +176,14 @@ function toPay(a, e, p) {
                         }
                     })
                 } else {
-                    // goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
-                    //app支付  langzhiyao
+                    if(payment_code == 'alipay' || payment_code == 'wxpay_jsapi'){
+                        goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                    }else{
+                        //app支付  langzhiyao
+                        goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
+                    }
 
-                    goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
+
                 }
             })
         }
