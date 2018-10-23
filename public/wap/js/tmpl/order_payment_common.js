@@ -102,19 +102,19 @@ function toPay(a, e, p) {
 
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                    if(i == "alipay" || i== "alipay_app"){
+                    if(i == "alipay" ){
                         $("#" + i).parents("label").show();
                     }
-                    if(i == "wxpay_jsapi" || i== "wxpay_app"){
+                    if(i == "wxpay_jsapi" ){
                         $("#" + i).parents("label").show();
                     }
-                    if ((i == "alipay" || i== "alipay_app") && r) {
+                    if (i == "alipay"  && r) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
                         }
                     }
-                    if ((i == "wxpay_jsapi" || i== "wxpay_app") && t) {
+                    if (i == "wxpay_jsapi"  && t) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
@@ -128,12 +128,6 @@ function toPay(a, e, p) {
             $("#wxpay_jsapi").click(function() {
                     payment_code = "wxpay_jsapi";
             });
-            /*$("#alipay_app").click(function() {
-                payment_code = "alipay_app";
-            });
-            $("#wxpay_app").click(function() {
-                payment_code = "wxpay_app";
-            });*/
             $("#toPay").click(function() {
                 if (payment_code == "") {
                     $.sDialog({
@@ -176,24 +170,12 @@ function toPay(a, e, p) {
                         }
                     })
                 } else {
-                    // if(payment_code == 'alipay' || payment_code == 'wxpay_jsapi'){
                         goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
-                    // }else{
-                        //app支付  langzhiyao
-                        // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
-                    // }
-
-
                 }
             })
         }
     })
 }
 function goToPayment(a, e) {
-    // location.href = ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
-    //app支付  郎志耀
-
     location.href = ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
-
-
 }
