@@ -128,12 +128,12 @@ function toPay(a, e, p) {
             $("#wxpay_jsapi").click(function() {
                     payment_code = "wxpay_jsapi";
             });
-            $("#alipay_app").click(function() {
+            /*$("#alipay_app").click(function() {
                 payment_code = "alipay_app";
             });
             $("#wxpay_app").click(function() {
                 payment_code = "wxpay_app";
-            });
+            });*/
             $("#toPay").click(function() {
                 if (payment_code == "") {
                     $.sDialog({
@@ -176,12 +176,12 @@ function toPay(a, e, p) {
                         }
                     })
                 } else {
-                    if(payment_code == 'alipay' || payment_code == 'wxpay_jsapi'){
+                    // if(payment_code == 'alipay' || payment_code == 'wxpay_jsapi'){
                         goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
-                    }else{
+                    // }else{
                         //app支付  langzhiyao
-                        goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
-                    }
+                        // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
+                    // }
 
 
                 }

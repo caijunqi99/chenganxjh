@@ -319,7 +319,7 @@ class Memberbuy extends MobileMember
                 unset($payment_list[$k]['payment_state_text']);
             }
         }
-        if(in_array($this->member_info['client_type'],array('ios','android'))){
+        /*if(in_array($this->member_info['client_type'],array('ios','android'))){
             foreach ($payment_list as $k => $value) {
                if(!strpos($payment_list[$k]['payment_code'],'app')){
                    unset($payment_list[$k]);
@@ -331,7 +331,7 @@ class Memberbuy extends MobileMember
                     unset($payment_list[$k]);
                 }
             }
-        }
+        }*/
         //显示预存款、支付密码、充值卡
         $pay['member_available_pd'] = $this->member_info['available_predeposit'];
         $pay['member_available_rcb'] = $this->member_info['available_rc_balance'];
