@@ -25,9 +25,9 @@ class Schoolfood extends Model {
      * @param array $param 参数内容
      * @return bool 布尔类型的返回结果
      */
-    public function schoolfood_del($bus_id) {
-        $bus_id = (int) $bus_id;
-        return db('schoolfood')->where('bus_id', $bus_id)->delete();
+    public function schoolfood_del($food_id) {
+        $food_id = (int) $food_id;
+        return db('schoolfood')->where('food_id', $food_id)->delete();
     }
 
     /**
@@ -40,8 +40,8 @@ class Schoolfood extends Model {
         if ($condition) {
             return db('schoolfood')->where($condition)->update($param);
         }else{
-            $bus_id = (int) $param['bus_id'];  
-            return db('schoolfood')->where('bus_id', $param['bus_id'])->update($param);  
+            $food_id = (int) $param['food_id'];  
+            return db('schoolfood')->where('food_id', $param['food_id'])->update($param);  
         }
         
         
@@ -54,7 +54,7 @@ class Schoolfood extends Model {
      * @param obj $page 分页对象
      * @return array 二维数组
      */
-    public function get_schoolfood_List($condition = array(), $page = '', $orderby = 'bus_id asc') {
+    public function get_schoolfood_List($condition = array(), $page = '', $orderby = 'food_id asc') {
         if ($page) {
             $result = db('schoolfood')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
@@ -72,7 +72,7 @@ class Schoolfood extends Model {
      * @return array 一维数组
      */
     public function getOneById($id) {
-        return db('schoolfood')->where('bus_id', $id)->find();
+        return db('schoolfood')->where('food_id', $id)->find();
     }
     public function getOnePkg($condition = array()) {
         return db('schoolfood')->where($condition)->find();
@@ -83,7 +83,7 @@ class Schoolfood extends Model {
      * @param array $condition 查询条件
      * @return array 二维数组
      */
-    public function get_schoolfood_Lists($condition = array(),$field, $orderby = 'bus_id asc') {
+    public function get_schoolfood_Lists($condition = array(),$field, $orderby = 'food_id asc') {
             return db('schoolfood')->field($field)->where($condition)->order($orderby)->select();
     }
 

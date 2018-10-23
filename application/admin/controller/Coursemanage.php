@@ -19,6 +19,12 @@ class Coursemanage extends AdminControl {
     }
 
     public function index() {
+//        $a = array("mor_txt1"=>"语文","mor_starttime1"=>"09:00","mor_endtime1"=>"09:50",
+//                   "after_txt1"=>"数学","after_starttime1"=>"15:00","after_endtime1"=>"16:00",
+//                   "mor_cls1"=>"语文","mor_cls_starttime1"=>"08:00","mor_cls_endtime1"=>"10:00",
+//                   "after_cls1"=>"体育","after_cls_starttime1"=>"15:00","after_cls_endtime1"=>"18:00");
+//        print_r($a);die;
+
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
@@ -95,6 +101,8 @@ class Coursemanage extends AdminControl {
             $after_course = input('post.after_txt1');
             $after_starttime = input('post.after_starttime');
             $after_endtime = input('post.after_endtime');
+
+            print_r($_POST);die;
             $content = array(
                 "上午"=>array(
                     array("time"=>$mor_starttime."-".$mor_endtime,"content"=>$mor_course)

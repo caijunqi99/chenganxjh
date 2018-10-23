@@ -835,12 +835,10 @@ class Chat extends MobileMember
         if(!$is_exist)output_error('非法请求，你并不在此群内！');
         
         $del = $Group->chatgroupMembers_del(array('group_id'=>$groupId,'member_id'=>$member_id));
-        output_data($groupInfo);
         //如果是群主退群
         if($del && $groupInfo['group_owner_id']==$member_id){
             $mber = $Group->getChatmember(array('group_id'=>$groupId));
-            $Group->chatgroup_set($groupId,'group_owner_id',$mber['member_id']);
-
+            if($mber)$Group->chatgroup_set($groupId,'group_owner_id',$mber['member_id']);
         }
         $result = $RongCloud->group()->quit([$member_id], $groupId);
         $result = json_decode($result,TRUE);
