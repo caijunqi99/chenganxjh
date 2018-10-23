@@ -102,20 +102,20 @@ function toPay(a, e, p) {
 
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-
-                    if(i == "alipay"){
+            //修改 APP支付方式显示  郎志耀
+                    if(i == "alipay" || i == "alipay_app"){
                         $("#" + i).parents("label").show();
                     }
-                    if(i == "wxpay_jsapi"){
+                    if(i == "wxpay_jsapi" || i == "wxpay_app"){
                         $("#" + i).parents("label").show();
                     }
-                    if (i == "alipay" && r) {
+                    if ((i == "alipay" || i == "alipay_app") && r) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
                         }
                     }
-                    if (i == "wxpay_jsapi" && t) {
+                    if ((i == "wxpay_jsapi" || i == "wxpay_app") && t) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
