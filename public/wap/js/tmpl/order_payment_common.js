@@ -10,6 +10,7 @@ function toPay(a, e, p) {
         },
         dataType: "json",
         success: function(p) {
+            alert(p.payment_list);
             checkLogin(p.login);
             if (p.code==100) {
                 $.sDialog({
@@ -90,7 +91,6 @@ function toPay(a, e, p) {
                 }
             });
             payment_code = "";
-            alert(p.result.pay_info.payment_list)
             if (!$.isEmptyObject(p.result.pay_info.payment_list)) {
                 var t = false;
                 var r = false;
@@ -100,7 +100,7 @@ function toPay(a, e, p) {
                 } else {
                     r = true
                 }
-                alert('aa')
+
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
 
