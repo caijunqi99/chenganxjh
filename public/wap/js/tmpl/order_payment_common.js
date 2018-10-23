@@ -90,6 +90,7 @@ function toPay(a, e, p) {
                 }
             });
             payment_code = "";
+            alert(p.result.pay_info.payment_list);
             if (!$.isEmptyObject(p.result.pay_info.payment_list)) {
                 var t = false;
                 var r = false;
@@ -101,7 +102,7 @@ function toPay(a, e, p) {
                 }
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                    alert(i);
+
                     if(i == "alipay"){
                         $("#" + i).parents("label").show();
                     }
