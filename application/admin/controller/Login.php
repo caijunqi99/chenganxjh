@@ -66,6 +66,8 @@ class Login extends Controller {
                         session('admin_name', $admin_info['admin_name']);
                         session('admin_gid', $admin_info['admin_gid']);
                         session('admin_is_super', $admin_info['admin_is_super']);
+                        session('admin_company_id', $admin_info['admin_company_id']);
+                        session('admin_school_id', $admin_info['admin_school_id']);
 
                         $this->success('登录成功', 'Admin/Index/index');
                     }else{

@@ -30,8 +30,9 @@ class Classes extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getClasslList($condition, $page = '', $field = '*', $class = 'classid asc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+    public function getClasslList($condition, $page = '', $field = '*', $class = 'classid desc', $limit = '', $extend = array(), $master = false) {
+        //$list_paginate = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('class')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         if($condition){
             //print_r($sql);die;
@@ -46,7 +47,8 @@ class Classes extends Model {
     }
 
     public function getAllClasses($condtion){
-        $result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        //$result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        $result = db('class')->where($condtion)->select();
         return $result;
     }
 
