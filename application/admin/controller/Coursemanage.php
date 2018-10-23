@@ -89,7 +89,6 @@ class Coursemanage extends AdminControl {
         } else {
             $schoolid = 8;
             //$schoolid = input('post.schoolid');
-            $date = input('post.date');
             $mor_course = input('post.mor_txt1');
             $mor_starttime = input('post.mor_starttime');
             $mor_endtime = input('post.mor_endtime');
@@ -107,10 +106,10 @@ class Coursemanage extends AdminControl {
 
             $data = array(
                 'schoolid' => $schoolid,
-                'date' => $date,
                 'content' => json_encode($content),
                 'addtime' => time()
             );
+            print_r($data);die;
             $model_arrangement = model('Arrangement');
             //验证数据  END
             $result = $model_arrangement->arrangement_add($data);
