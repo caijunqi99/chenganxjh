@@ -52,13 +52,14 @@ class wxpay_h5
 
 
         $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
-        halt($result);
+//        halt($result);
         if ($result['return_code'] != 'SUCCESS') {
             exception($result['return_msg']);
         }
 
         if ($result['result_code'] != 'SUCCESS') {
-            exception("[{$result['err_code']}]{$result['err_code_des']}");
+//            exception("[{$result['err_code']}]{$result['err_code_des']}");
+            exception($result['err_code_des']);
         }
 
         return $result['mweb_url'];
