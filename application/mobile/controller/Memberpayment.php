@@ -378,6 +378,8 @@ class Memberpayment extends MobileMember
             $param['orderAttach'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
             $api = new \wxpay_app();
             $api->get_payform($param);
+            $mweburl = $api->verify_notify($this);
+            Header("Location: $mweburl");
             exit;
         }
         //支付宝
