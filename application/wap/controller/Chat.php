@@ -112,11 +112,11 @@ class Chat extends MobileMember
         $Friendly = model('Friendly');
         //查询双方关系
         $myexits = array(
-            'member_id' => $this->member_info['member_id'] ,
-            'friend_id' => $friendInfo['member_id'] ,
+            'member_id' => $friendInfo['member_id']  ,
+            'friend_id' =>$this->member_info['member_id'] ,
         );
         $myexits = $Friendly->getOne($myexits);
-        $state = 1;
+        $state = 4;
         if($myexits)switch ($myexits['relation_state']) {
             case '1'://已发送过好友申请
                 $state = 1;
@@ -160,11 +160,11 @@ class Chat extends MobileMember
         $Friendly = model('Friendly');
         //查询双方关系
         $myexits = array(
-            'member_id' => $this->member_info['member_id'] ,
-            'friend_id' => $friendInfo['member_id'] ,
+            'member_id' => $friendInfo['member_id']  ,
+            'friend_id' =>$this->member_info['member_id'] ,
         );
         $myexits = $Friendly->getOne($myexits);
-        $state = 1;
+        $state = 4;
         if($myexits)switch ($myexits['relation_state']) {
             case '1'://已发送过好友申请
                 $state = 1;
