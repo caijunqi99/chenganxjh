@@ -101,11 +101,11 @@ function toPay(a, e, p) {
                 }
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-
-                    if(i == "alipay"){
+                    alert(i);
+                    if(i == "alipay" || i == "alipay_app"){
                         $("#" + i).parents("label").show();
                     }
-                    if(i == "wxpay_jsapi"){
+                    if(i == "wxpay_jsapi"  || i == "wxpay_app"){
                         $("#" + i).parents("label").show();
                     }
                     if (i == "alipay" && r) {
