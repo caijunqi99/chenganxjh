@@ -146,7 +146,7 @@ class Packagesbuy extends MobileMember
         if (!$childinfo) {
             output_error('没有当前孩子信息！');
         }
-//        $Relation = $Children->checkParentRelation($this->member_info['member_id'],$chind_id);
+        $Relation = $Children->checkParentRelation($this->member_info['member_id'],$chind_id);
 //        if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
         //加入学生学校班级信息
         if(is_array($childinfo))$order += $childinfo;        
