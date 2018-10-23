@@ -28,10 +28,10 @@ class alipay
                 'merchant_private_key' => $param['private_key'],
 
                 //异步通知地址
-                'notify_url' => MOBILE_SITE_URL . '/payment/alipay_notify_app.html',
+                'notify_url' => MOBILE_SITE_URL . '/payment/notify',
 
                 //同步跳转
-                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url.html',
+                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url',
 
                 //编码格式
                 'charset' => "UTF-8",
@@ -44,7 +44,7 @@ class alipay
 
                 //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
                 'alipay_public_key' =>$param['public_key'],
-                //商户应用公钥
+                //支付宝应用公钥
                 'merchant_public_key' =>"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPXfE+mKzBC+NBgN68OORr2WtqHzhkNgbrqlfW4ClwHgRO/YABz2e7iHD4SFcFidFEUvKp7eQPWr39IwNOQ8tBYMzdIHTgebzuI36RaGO0ojEokm5QyIBNnutWuJVQ7AWD3gexqivn+Aoh0WA0pnXq7vI348EvkrQFRVkLDbMpd/FzwYQ8q4HCM/ffVnAN7gZ/kYLOuvc3LypwTkXZOUlZYvzCVg1d9nPxBXj5zxXV/lXDzPyIswX/99yONixC+RA2OCRmeiskEYaSrXN+WY8i7aBrFvLnHQ7IppYGWlhdhjc6YovrUnVR/7mY2ThkMsns9/o24tEUSljT8I/gGGoQIDAQAB"
 
 
@@ -57,7 +57,7 @@ class alipay
                 $this->body = "想见孩产品";
             }
         }else{
-            output_error('参数错误1！');
+            output_error('参数错误！');
         }
     }
 
