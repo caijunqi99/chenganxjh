@@ -100,8 +100,12 @@ class Student extends AdminControl {
 
         //全部学校
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition_school['admin_company_id'] = $admin['admin_company_id'];
+            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_school['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
+            }
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
