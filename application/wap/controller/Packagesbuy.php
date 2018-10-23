@@ -183,7 +183,7 @@ class Packagesbuy extends MobileMember
 
         // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
-            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
+            $param['orderFee'] = 1;//(100 * $order_pay_info['order_amount']);
             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
             $api = new \wxpay_h5();
             $api->setConfigs($param);
@@ -196,7 +196,7 @@ class Packagesbuy extends MobileMember
         
         //alipay and so on
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $param['orderFee'] = $order_pay_info['order_amount'];//
+        $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];//
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
         output_data($mweburl);
