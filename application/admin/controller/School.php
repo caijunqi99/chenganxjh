@@ -25,9 +25,15 @@ class School extends AdminControl {
         $model_school = model('School');
         $condition = array();
         $admininfo = $this->getAdminInfo();
+
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+            if(!empty($admininfo['admin_school_id'])){
+                $condition['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+            }
+//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
         //$data = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where(array('s.isdel'=>1,'a.admin_company_id'=>$a))->select();
         $schoolname = input('param.schoolname');//学校名称
@@ -136,6 +142,7 @@ class School extends AdminControl {
                 'dieline' => input('post.school_dieline'),
                 'desc' => input('post.school_desc'),
                 'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $admininfo['admin_company_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
             $city_id = db('area')->where('area_id',input('post.area_id'))->find();
@@ -188,6 +195,7 @@ class School extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
+            $schoolInfo = db('school')->where('schoolid',$school_id)->find();
             $model_class = model('Classes');
             $data = array(
                 'schoolid' => $school_id,
@@ -195,6 +203,7 @@ class School extends AdminControl {
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $schoolInfo['admin_company_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
             $schoolinfo = $model_school->find(array("schoolid"=>$school_id));
@@ -203,8 +212,16 @@ class School extends AdminControl {
             $data['school_areaid'] = $schoolinfo['areaid'];
             $data['school_region'] = $schoolinfo['region'];
             //学校识别码
-            $schoolInfo = db('school')->where('schoolid',$school_id)->find();
             $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
+            //生成二维码
+            import('qrcode.index',EXTEND_PATH);
+            $PhpQRCode = new \PhpQRCode();
+            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' . DS);
+            // 生成商品二维码
+            $PhpQRCode->set('date', $data['classCard']);
+            $PhpQRCode->set('pngTempName', $data['classCard'] . '.png');
+            $qr=$PhpQRCode->init();
+            $data['qr']='/home/store/class/'.$qr;
             //验证数据  END
             $result = $model_class->addClasses($data);
             if ($result) {
@@ -356,18 +373,21 @@ class School extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
-            $model_admin = Model('admin');
-            $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = 5;
-            $param['admin_password'] = md5($_POST['admin_password']);
-            $param['create_uid'] = $admin_id;
-            $rs = $model_admin->addAdmin($param);
-            if ($rs) {
-                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
-            } else {
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
-            }
+        $model_admin = Model('admin');
+        $param['admin_name'] = $_POST['admin_name'];
+        $param['admin_school_id'] = $_POST['role'];
+        $param['admin_company_id'] = $_POST['admin_company_id'];
+        $param['admin_gid'] = 5;
+        $param['admin_password'] = md5($_POST['admin_password']);
+        $param['create_uid'] = $admin_id;
+        $param['admin_status'] = 1;
+        $rs = $model_admin->addAdmin($param);
+        if ($rs) {
+            $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
+            echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
+        } else {
+            echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
+        }
 
     }
 

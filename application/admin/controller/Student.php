@@ -27,8 +27,13 @@ class Student extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+            if(!empty($admininfo['admin_school_id'])){
+                $condition['s_schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+            }
         }
         $studentname = input('param.studentname');//学生名字
         if ($studentname) {
@@ -96,7 +101,7 @@ class Student extends AdminControl {
         //全部学校
         if($admininfo['admin_id']!=1){
             $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition_school['a.admin_company_id'] = $admin['admin_company_id'];
+            $condition_school['admin_company_id'] = $admin['admin_company_id'];
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
@@ -143,6 +148,7 @@ class Student extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
+            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
             $model_student = model('Student');
             $data = array(
                 's_name' => input('post.student_name'),
@@ -156,6 +162,7 @@ class Student extends AdminControl {
                 's_region' => input('post.area_info'),
                 's_remark' => input('post.student_desc'),
                 'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $schoolInfo['admin_company_id'],
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
             $city_id = db('area')->where('area_id',input('post.area_id'))->find();
@@ -256,7 +263,7 @@ class Student extends AdminControl {
                 $condition['classid'] = input('param.class_name');
                 $condition['classCard'] = input('param.classunique');
                 $list = $classes->getClassInfo($condition);
-                if (empty($list)) {
+                if (!empty($list)) {
                     echo 'true';
                     exit;
                 } else {

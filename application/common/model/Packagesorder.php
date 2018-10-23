@@ -31,7 +31,8 @@ class Packagesorder extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getOrderList($condition, $page = '', $field = '*', $class = 'order_id asc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('packagesorder')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        //$list_paginate = db('packagesorder')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('packagesorder')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
