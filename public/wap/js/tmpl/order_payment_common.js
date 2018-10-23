@@ -101,7 +101,7 @@ function toPay(a, e, p) {
                 }
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-
+                    alert(i);
                     if(i == "alipay"){
                         $("#" + i).parents("label").show();
                     }
