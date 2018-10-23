@@ -1,6 +1,8 @@
 var key = getCookie("key");
 var password, rcb_pay, pd_pay, payment_code;
 function toPay(a, e, p) {
+
+    alert(ApiUrl + "/" + e + "/" + p+".html");
     $.ajax({
         type: "post",
         url: ApiUrl + "/" + e + "/" + p+".html",
@@ -101,11 +103,11 @@ function toPay(a, e, p) {
                 }
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                    alert(i);
-                    if(i == "alipay" || i == "alipay_app"){
+
+                    if(i == "alipay"){
                         $("#" + i).parents("label").show();
                     }
-                    if(i == "wxpay_jsapi"  || i == "wxpay_app"){
+                    if(i == "wxpay_jsapi"){
                         $("#" + i).parents("label").show();
                     }
                     if (i == "alipay" && r) {
