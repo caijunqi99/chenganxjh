@@ -90,7 +90,6 @@ function toPay(a, e, p) {
                 }
             });
             payment_code = "";
-            alert(p.result.pay_info.payment_list);
             if (!$.isEmptyObject(p.result.pay_info.payment_list)) {
                 var t = false;
                 var r = false;
