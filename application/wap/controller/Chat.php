@@ -738,6 +738,7 @@ class Chat extends MobileMember
         $MemberList = $Group->get_chatgroupmember_List(array('group_id'=>$groupId));
         if($MemberList)foreach ($MemberList as $k => &$v) {
             $v['member_avatar']  = getMemberAvatarForID($v['member_id']);
+            $v['group_owner_id']  = $groupInfo['group_owner_id'];
         }
         unset($v);
         output_data($MemberList);
