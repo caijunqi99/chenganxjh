@@ -129,6 +129,12 @@ function toPay(a, e, p) {
             $("#wxpay_jsapi").click(function() {
                     payment_code = "wxpay_jsapi";
             });
+            $("#alipay_app").click(function() {
+                payment_code = "alipay_app";
+            });
+            $("#wxpay_app").click(function() {
+                payment_code = "wxpay_app";
+            });
             $("#toPay").click(function() {
                 if (payment_code == "") {
                     $.sDialog({
