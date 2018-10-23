@@ -46,6 +46,7 @@ class alipay
                 'alipay_public_key' =>$param['public_key'],
 
             );
+            halt($param);
             if (isset($param['order_sn'])) {
                 $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
                 $this->subject = $param['order_sn'];
@@ -53,6 +54,8 @@ class alipay
                 $this->timeout_express = "1m";
                 $this->body = "";
             }
+        }else{
+            output_error('参数错误1！');
         }
     }
 
@@ -67,7 +70,7 @@ class alipay
 
         $payResponse = new AlipayTradeService($this->alipay_config);
 
-        halt($payRequestBuilder);
+
         $result = $payResponse->wapPay($payRequestBuilder, $this->alipay_config['return_url'], $this->alipay_config['notify_url']);
 
         return;
