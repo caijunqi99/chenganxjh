@@ -387,7 +387,8 @@ class Memberpayment extends MobileMember
             $param['orderInfo'] = config('site_name') . '商品订单' . $pay_sn;
             $param['order_type'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
             $api = new \alipay_app();
-            $api->get_payform($param);
+            $return = $api->get_payform($param);
+            echo $return;
             exit;
         }
     }
