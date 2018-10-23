@@ -173,9 +173,7 @@ class Payment extends MobileMall
         if (is_file($inc_file)) {
             require($inc_file);
         }
-        var_dump($inc_file);
         $payment_api = new $this->payment_code($payment_config);
-        halt($payment_api);
         return $payment_api;
     }
 
