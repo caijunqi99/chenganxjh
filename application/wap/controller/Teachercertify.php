@@ -41,8 +41,8 @@ class Teachercertify extends MobileMember
         if (empty($data['phone'])) output_error('手机号不能为空');
         if (empty($_FILES['idcard_front']['name'])) output_error('身份证正面图不能为空');
         if (empty($_FILES['idcard_back']['name'])) output_error('身份证反面图不能为空');
-        if (empty($_FILES['certificate_front']['name'])) output_error('资格证正面图不能为空');
-        if (empty($_FILES['certificate_back']['name'])) output_error('资格证反面图');
+        if (empty($_FILES['certificate_front']['name'])) output_error('资格证不能为空');
+//        if (empty($_FILES['certificate_back']['name'])) output_error('资格证反面图');
 
         //身份证正面图
         if($_FILES['idcard_front']['name']){
@@ -57,9 +57,9 @@ class Teachercertify extends MobileMember
             $data['certificate'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
         }
         //资格证反面图
-        if($_FILES['certificate_back']['name']){
-            $data['certificate_fan'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
-        }
+//        if($_FILES['certificate_back']['name']){
+//            $data['certificate_fan'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
+//        }
         $this->image($data,$_FILES);
         $teachchild = model('Teachercertify');
         $id = input('post.id');
@@ -89,28 +89,40 @@ class Teachercertify extends MobileMember
         $teachchild = model('Teachercertify');
         $teachinfo = $teachchild->getOneInfo(array('member_id'=>$member_id));
         $teachinfo['path'] = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        if(!empty($teachinfo['provinceid'])){
+            $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
+            $teachinfo['provincename'] = $parent['area_name'];
+        }
+        if(!empty($teachinfo['cityid'])){
+            $child = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['cityid']))->find();
+            $teachinfo['cityname'] = $child['area_name'];
+        }
+        if(!empty($teachinfo['areaid'])){
+            $child3 = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['areaid']))->find();
+            $teachinfo['areaname'] = $child3['area_name'];
+        }
         //地区范围
-        $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
-        $child = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>2))->select();
-        $child3 = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>3))->select();
-        foreach($parent as $key=>$val){
-            foreach($child as $k=>$v){
-                if($v['area_parent_id']==$val['area_id']){
-                    $parent[$key]['childTwo'][] = $v;
-                }
-            }
-        }
-        foreach($parent as $key=>$item){
-            foreach($item['childTwo'] as $k2=>$v2){
-                foreach($child3 as $k3=>$v3){
-                    if($v3['area_parent_id']==$v2['area_id']){
-                        $item['childTwo'][$k2]['childThree'][] = $v3;
-                    }
-                }
-            }
-            $parent[$key]['childTwo'] = $item['childTwo'];
-        }
-        $teachinfo['area'] = $parent;
+//        $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
+//        $child = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>2))->select();
+//        $child3 = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>3))->select();
+//        foreach($parent as $key=>$val){
+//            foreach($child as $k=>$v){
+//                if($v['area_parent_id']==$val['area_id']){
+//                    $parent[$key]['childTwo'][] = $v;
+//                }
+//            }
+//        }
+//        foreach($parent as $key=>$item){
+//            foreach($item['childTwo'] as $k2=>$v2){
+//                foreach($child3 as $k3=>$v3){
+//                    if($v3['area_parent_id']==$v2['area_id']){
+//                        $item['childTwo'][$k2]['childThree'][] = $v3;
+//                    }
+//                }
+//            }
+//            $parent[$key]['childTwo'] = $item['childTwo'];
+//        }
+        //$teachinfo['area'] = $parent;
         output_data([$teachinfo]);
     }
 
