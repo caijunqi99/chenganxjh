@@ -96,9 +96,9 @@ class Teacherbuy extends MobileMember
      */
     public function buyOrder(){
         $tid = input('post.tid');
-        $child_id = input('post.student_id');
+        //$child_id = input('post.student_id');
         $member_id = input('post.member_id');
-        if (!$child_id || !$tid) {
+        if ( !$tid) {
             output_error('缺少参数！');
         }
         $teachchild = model('Teachchild');
@@ -106,17 +106,17 @@ class Teacherbuy extends MobileMember
         if(empty($teachInfo)){
             output_error('无此视频的信息！');
         }
-        $Children = model('Student');
-        $childinfo=$Children->getChildrenInfoById($child_id);
-        if (!$childinfo) {
-            output_error('没有当前孩子信息！');
-        }
+//        $Children = model('Student');
+//        $childinfo=$Children->getChildrenInfoById($child_id);
+//        if (!$childinfo) {
+//            output_error('没有当前孩子信息！');
+//        }
         $model = Model('Packagesorderteach');
         //会员信息
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
         //生成基本订单信息
         $order = array();
-        $order['student_id'] = $child_id;
+//        $order['student_id'] = $child_id;
         $order['buyer_id'] = $member_id;
         $order['order_sn'] = "111";
         $order['pay_sn'] = "111";
@@ -125,6 +125,7 @@ class Teacherbuy extends MobileMember
         $order['order_name'] = $teachInfo['t_title'];
         $order['order_amount'] = $teachInfo['t_price'];
         $order['add_time'] = TIMESTAMP;
+        $order['order_tid'] = $tid;
         $order['payment_code'] = $this->payment_code;
         if ($order['payment_code'] == "") {
             $order['payment_code'] = "offline";
@@ -157,9 +158,10 @@ class Teacherbuy extends MobileMember
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5.html';
             $api = new \wxpay_h5();
             $api->setConfigs($param);
-            
+
             $mweburl = $api->get_payurl($this);
             output_data($mweburl);
             $url = $mweburl['mweb_url'];
@@ -173,6 +175,7 @@ class Teacherbuy extends MobileMember
         $param['orderSn'] = $order_pay_info['pay_sn'];
         $param['orderFee'] = $order_pay_info['order_amount'];//$order_pay_info['order_amount'];
         $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+        $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5.html';
 
         
         $payment_api = new $this->payment_code($param);

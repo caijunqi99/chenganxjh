@@ -241,6 +241,8 @@ class Teachvideo extends AdminControl {
 //        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
 //            $this->error(lang('ds_assign_right'));
 //        }
+        $admininfo = $this->getAdminInfo();
+
         $teacher_id = input('param.t_id');
         $status = input('param.t_audit');
         $phone = input('param.phone');
@@ -249,7 +251,7 @@ class Teachvideo extends AdminControl {
             $this->error(lang('param_error'));
         }
         $model_teacher = model('Teachchild');
-        $result = $model_teacher->editTeachchild(array('t_id'=>$teacher_id),array('t_audit'=>$status,'t_failreason'=>$reason));
+        $result = $model_teacher->editTeachchild(array('t_id'=>$teacher_id),array('t_audit'=>$status,'t_failreason'=>$reason,'option_id'=>$admininfo['admin_id'],'option_time'=>time()));
         if ($result) {
             if($status==2){
                 //审核结果给用户发送短信提醒

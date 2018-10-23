@@ -9,7 +9,8 @@
 namespace app\wap\controller;
 
 
-class Teacherchild extends MobileMember
+//class Teacherchild extends MobileMember
+class Teacherchild
 {
     public function _initialize()
     {
@@ -137,6 +138,30 @@ class Teacherchild extends MobileMember
         }
         $list = $teachchild->getTeachchildList($condition);
         output_data($list);
+    }
+
+    //我的视频/我的订单
+    public function myVideos(){
+        $member_id = input('post.member_id');
+        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->select();
+        foreach($result as $k=>$v){
+            $result[$k]['date'] = date("Y-m-d",$v['add_time']);
+            if(date("Y-m-d",time()) == date("Y-m-d",$v['add_time'])){
+                $result[$k]['date'] = "今天";
+            }
+            $videoinfo = db('teachchild')->where(array('t_id'=>$v['order_tid']))->find();
+            $result[$k]['title'] = $videoinfo['t_title'];
+            $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
+            $result[$k]['videourl'] = $videoinfo['t_url'];
+            $result[$k]['author'] = $videoinfo['t_author'];
+            $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
+            $result[$k]['payment_time'] = date("Y-m-d H:i:s",$v['payment_time']);
+        }
+        foreach($result as $key=>$item){
+            $data[$item['date']][] = $item;
+        }
+        $data = isset($data)?[$data]:[];
+        output_data($data);
     }
 
 }

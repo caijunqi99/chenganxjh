@@ -46,6 +46,8 @@ class AdminControl extends Controller {
             'admin_name' => session('admin_name'),
             'admin_gid' => session('admin_gid'),
             'admin_is_super' => session('admin_is_super'),
+            'admin_company_id' => session('admin_company_id'),
+            'admin_school_id' => session('admin_school_id')
         );
         if (empty($admin_info['admin_id']) || empty($admin_info['admin_name']) || !isset($admin_info['admin_gid']) || !isset($admin_info['admin_is_super'])) {
             session(null);
