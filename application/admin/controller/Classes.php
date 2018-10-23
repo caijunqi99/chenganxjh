@@ -252,7 +252,7 @@ class Classes extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
-            $schoolInfo = db('school')->where('schoolid',$school_id)->find();
+            $classinfo = db('class')->where('classid',$class_id)->find();
             $model_student = model('Student');
             $data = array(
                 's_name' => input('post.student_name'),
@@ -261,10 +261,9 @@ class Classes extends AdminControl {
                 's_card' => input('post.student_idcard'),
                 's_remark' => input('post.student_desc'),
                 'option_id' => $admininfo['admin_id'],
-                'admin_company_id' => $schoolInfo['admin_company_id'],
+                'admin_company_id' => $classinfo['admin_company_id'],
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
-            $classinfo = db('class')->where('classid',$class_id)->find();
             $data['s_provinceid'] = $classinfo['school_provinceid'];
             $data['s_cityid'] = $classinfo['school_cityid'];
             $data['s_areaid'] = $classinfo['school_areaid'];
