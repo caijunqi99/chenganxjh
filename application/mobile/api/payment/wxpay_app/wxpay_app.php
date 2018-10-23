@@ -18,28 +18,15 @@ class wxpay_app {
         $input->SetTotal_fee($param['orderFee']);
         $input->SetNotify_url(MOBILE_SITE_URL . '/payment/wx_notify_app');
         $input->SetTrade_type('APP');
+
         $wxpay = new \WxPayApi();
         $order = $wxpay->unifiedOrder($input);
+
         if ($order['return_code'] == 'SUCCESS') {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
                 $order['sign'] = $this->sign_again($order);
-//                output_data($order);
-
-                $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $order);
-//        halt($result);
-                if ($result['return_code'] != 'SUCCESS') {
-                    exception($result['return_msg']);
-                }
-
-                if ($result['result_code'] != 'SUCCESS') {
-                    exception("[{$result['err_code']}]{$result['err_code_des']}");
-                }
-
-                return $result['mweb_url'];
-
-
-
+                output_data($order);
                 //return json(['code'=>200,'result'=>$order]);
             } else {
                 output_error($order['err_code_des']);
