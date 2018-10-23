@@ -44,9 +44,6 @@ class alipay
 
                 //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
                 'alipay_public_key' =>$param['public_key'],
-                //支付宝应用公钥
-                'merchant_public_key' =>"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPXfE+mKzBC+NBgN68OORr2WtqHzhkNgbrqlfW4ClwHgRO/YABz2e7iHD4SFcFidFEUvKp7eQPWr39IwNOQ8tBYMzdIHTgebzuI36RaGO0ojEokm5QyIBNnutWuJVQ7AWD3gexqivn+Aoh0WA0pnXq7vI348EvkrQFRVkLDbMpd/FzwYQ8q4HCM/ffVnAN7gZ/kYLOuvc3LypwTkXZOUlZYvzCVg1d9nPxBXj5zxXV/lXDzPyIswX/99yONixC+RA2OCRmeiskEYaSrXN+WY8i7aBrFvLnHQ7IppYGWlhdhjc6YovrUnVR/7mY2ThkMsns9/o24tEUSljT8I/gGGoQIDAQAB"
-
 
             );
             if (isset($param['order_sn'])) {
@@ -87,6 +84,7 @@ class alipay
         $arr = $_GET;
         $alipaySevice = new AlipayTradeService($this->alipay_config);
         $result = $alipaySevice->check($arr);
+        halt($result);
         trace('result' . $result, 'debug');
         if ($result) {
             return true;
@@ -100,6 +98,7 @@ class alipay
             $alipaySevice = new AlipayTradeService($this->alipay_config);
             $alipaySevice->writeLog(var_export($_POST, true));
             $result = $alipaySevice->check($arr);
+            halt($result);
             if ($result) {
                 if ($arr['trade_status'] == 'TRADE_FINISHED' || $arr['trade_status'] == 'TRADE_SUCCESS') {
                     return array(
