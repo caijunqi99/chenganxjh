@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Logout extends MobileMember
+class Logout extends MobileHome
 {
     public function _initialize()
     {
