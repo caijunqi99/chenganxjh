@@ -48,7 +48,7 @@ class alipay
             );
             if (isset($param['order_sn'])) {
                 $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
-                $this->subject = $param['order_sn'];
+                $this->subject = $param['subject'];
                 $this->total_amount = $param['order_amount'];
                 $this->timeout_express = "1m";
                 $this->body = "想见孩产品";
