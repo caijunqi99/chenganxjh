@@ -1,8 +1,6 @@
 var key = getCookie("key");
 var password, rcb_pay, pd_pay, payment_code;
 function toPay(a, e, p) {
-
-    alert(ApiUrl + "/" + e + "/" + p+".html");
     $.ajax({
         type: "post",
         url: ApiUrl + "/" + e + "/" + p+".html",
@@ -92,6 +90,7 @@ function toPay(a, e, p) {
                 }
             });
             payment_code = "";
+            alert(p.result.pay_info.payment_list);
             if (!$.isEmptyObject(p.result.pay_info.payment_list)) {
                 var t = false;
                 var r = false;
@@ -101,6 +100,7 @@ function toPay(a, e, p) {
                 } else {
                     r = true
                 }
+
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
 
