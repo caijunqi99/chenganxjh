@@ -1,6 +1,7 @@
 var key = getCookie("key");
 var password, rcb_pay, pd_pay, payment_code;
 function toPay(a, e, p) {
+    alert(ApiUrl + "/" + e + "/" + p+".html");
     $.ajax({
         type: "post",
         url: ApiUrl + "/" + e + "/" + p+".html",
