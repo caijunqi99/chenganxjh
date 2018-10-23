@@ -24,7 +24,22 @@ class wxpay_app {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
                 $order['sign'] = $this->sign_again($order);
-                output_data($order);
+//                output_data($order);
+
+                $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $order);
+//        halt($result);
+                if ($result['return_code'] != 'SUCCESS') {
+                    exception($result['return_msg']);
+                }
+
+                if ($result['result_code'] != 'SUCCESS') {
+                    exception("[{$result['err_code']}]{$result['err_code_des']}");
+                }
+
+                return $result['mweb_url'];
+
+
+
                 //return json(['code'=>200,'result'=>$order]);
             } else {
                 output_error($order['err_code_des']);
