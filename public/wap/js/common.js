@@ -920,3 +920,45 @@ function goLogin(){
     } else { //pc
     };
 }
+
+function common_url($name){
+    var e = getCookie('key');
+    if(!e){
+        goLogin();return false;
+    }
+    if($name == 'search'){
+        window.location.href='search.html';
+    }else if($name == 'cart'){
+        window.location.href='cart_list.html';
+    }else if($name == 'favorite'){
+        window.location.href='member/favorites.html';
+    }else if($name == 'order'){
+        window.location.href='member/order_list.html';
+    }else if($name == 'address'){
+        window.location.href='member/address_list.html';
+    }
+}
+
+function member_url($name){
+    var e = getCookie('key');
+    if(!e){
+        goLogin();return false;
+    }
+    if($name == 'search'){
+        window.location.href='../search.html';
+    }else if($name == 'cart'){
+        window.location.href='../cart_list.html';
+    }else if($name == 'favorite'){
+        window.location.href='../member/favorites.html';
+    }else if($name == 'order'){
+        window.location.href='../member/order_list.html';
+    }else if($name == 'address'){
+        window.location.href='../member/address_list.html';
+    }
+}
+
+function fz_token($key,$member_id){
+
+    addCookie('key',$key);
+    addCookie('mermber_id',$member_id);
+}

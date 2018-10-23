@@ -21,5 +21,27 @@ class Students extends MobileMember{
 
     }
 
+    /**
+     * 获取学校 校车信息
+     */
+    public function GetSchoolBusInfo(){
+        $childId = input('post.child_id');
+        $Student = model('Student');
+        $childInfo = $Student->getChildrenInfoById($childId);
+        $Bus = model('Schoolbus');
+        $condition = array(
+            
+        );
+        $businfo = $Bus->get_schoolbus_List($condition);
+
+    }
+
+    /**
+     * 获取学校 食谱信息
+     */
+    public function GetSchoolFoodInfo(){
+
+    }
+
 
 }

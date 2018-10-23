@@ -19,21 +19,28 @@
 <body>
 <header id="header" class="fixed">
   <div class="header-wrap">
-    <div class="header-l"><a href="member.html"><i class="back"></i></a></div>
-    <span class="header-tab"><a href="javascript:void(0);" class="cur">我的订单</a>
-		<!--<a href="vr_order_list.html">虚拟订单</a>-->
-	</span>
+    <div class="header-l"><a href="javascript:;"  onClick="historyback()"><i class="back"></i></a></div>
+    <!--<span class="header-tab"><a href="javascript:void(0);" class="cur">实物订单</a>
+		&lt;!&ndash;<a href="vr_order_list.html">虚拟订单</a>&ndash;&gt;
+	</span>-->
+	  <div class="header-title">
+		  <h1>我的订单</h1>
+	  </div>
     <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more"></i><sup></sup></a> </div>
   </div>
   <div class="nctouch-nav-layout">
     <div class="nctouch-nav-menu"> <span class="arrow"></span>
       <ul>
-        <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
-        <li><a href="../search.html"><i class="search"></i>搜索</a></li>
-        <!--<li><a href="../product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
-        <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
-        <li><a href="../cart_list.html"><i class="cart"></i>购物车<sup></sup></a></li>
-        <li><a href="../member/member.html"><i class="member"></i>我的商城</a></li>
+		  <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
+		  <li><a href="javascript:;" onclick="member_url('search')"><i class="search"></i>搜索</a></li>
+		  <!--<li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
+		  <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
+		  <li><a href="javascript:;" onclick="member_url('cart')"><i class="cart"></i>购物车<sup></sup></a></li>
+		  <!--<li><a href="member/member.html"><i class="member"></i>我的商城</a></li>-->
+		  <li><a href="javascript:;" onclick="member_url('favorite')"><i class="favorite"></i>我的收藏</a></li>
+		  <!--<li><a href="javascript:;" onclick="member_url('order')"><i class="order"></i>我的订单</a></li>-->
+		  <li><a href="javascript:;" onclick="member_url('address')"><i class="address"></i>收货地址</a></li>
+
       </ul>
     </div>
   </div>

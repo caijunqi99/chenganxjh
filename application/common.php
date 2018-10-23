@@ -161,7 +161,7 @@ EOT;
     return $str;
 }
 
-function ds_json_encode($code, $message, $result = '')
+function ds_json_encode($code, $message, $result = array())
 {
     echo json_encode(array(
                          'code' => $code, 'message' => $message, 'result' => $result
@@ -821,6 +821,12 @@ function defaultGoodsImage($key)
     return ATTACH_COMMON . '/' . $file;
 }
 
+
+function getChatGroupImg(){
+    $file = 'default_chatgroup_image.png';
+    return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/'  . $file;
+}
+
 /**
  * 取得用户头像图片
  *
@@ -896,6 +902,8 @@ function getMemberAvatarHttps($member_avatar)
         return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }
 }
+
+
 
 /**
  * 取得店铺标志

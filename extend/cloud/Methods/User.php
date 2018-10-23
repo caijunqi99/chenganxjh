@@ -21,13 +21,13 @@ class User{
 	public function getToken($userId, $name, $portraitUri) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 			if (empty($name))
-				throw new Exception('Paramer "name" is required');
+				ds_json_encode('100','Paramer "name" is required');
 				
 			if (empty($portraitUri))
-				throw new Exception('Paramer "portraitUri" is required');
+				ds_json_encode('100','Paramer "portraitUri" is required');
 				
 	
     		$params = array (
@@ -38,11 +38,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/getToken.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -58,7 +58,7 @@ class User{
 	public function refresh($userId, $name = '', $portraitUri = '') {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 	
     		$params = array (
@@ -69,11 +69,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/refresh.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -87,7 +87,7 @@ class User{
 	public function checkOnline($userId) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 	
     		$params = array (
@@ -96,11 +96,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/checkOnline.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -115,10 +115,10 @@ class User{
 	public function block($userId, $minute) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 			if (empty($minute))
-				throw new Exception('Paramer "minute" is required');
+				ds_json_encode('100','Paramer "minute" is required');
 				
 	
     		$params = array (
@@ -128,11 +128,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/block.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -146,7 +146,7 @@ class User{
 	public function unBlock($userId) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 	
     		$params = array (
@@ -155,11 +155,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/unblock.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -177,11 +177,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/block/query.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -196,10 +196,10 @@ class User{
 	public function addBlacklist($userId, $blackUserId) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 			if (empty($blackUserId))
-				throw new Exception('Paramer "blackUserId" is required');
+				ds_json_encode('100','Paramer "blackUserId" is required');
 				
 	
     		$params = array (
@@ -209,11 +209,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/blacklist/add.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -227,7 +227,7 @@ class User{
 	public function queryBlacklist($userId) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 	
     		$params = array (
@@ -236,11 +236,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/blacklist/query.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
@@ -255,10 +255,10 @@ class User{
 	public function removeBlacklist($userId, $blackUserId) {
     	try{
 			if (empty($userId))
-				throw new Exception('Paramer "userId" is required');
+				ds_json_encode('100','Paramer "userId" is required');
 				
 			if (empty($blackUserId))
-				throw new Exception('Paramer "blackUserId" is required');
+				ds_json_encode('100','Paramer "blackUserId" is required');
 				
 	
     		$params = array (
@@ -268,11 +268,11 @@ class User{
     		
     		$ret = $this->SendRequest->curl('/user/blacklist/remove.json',$params,'urlencoded','im','POST');
     		if(empty($ret))
-    			throw new Exception('bad request');
+    			ds_json_encode('100','bad request');
     		return $ret;
     		
     	}catch (Exception $e) {
-    		print_r($e->getMessage());
+    		ds_json_encode('100',$e->getMessage());
     	}
    }
     
