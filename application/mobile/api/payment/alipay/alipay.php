@@ -47,9 +47,9 @@ class alipay
 
             );
             if (isset($param['order_sn'])) {
-                $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
-                $this->subject = $param['subject'];
-                $this->total_amount = $param['order_amount'];
+                $this->out_trade_no = $param['orderSn'] . '-' . $param['orderAttach'];
+                $this->subject = $param['orderInfo'];
+                $this->total_amount = $param['orderFee'];
                 $this->timeout_express = "1m";
                 $this->body = "想见孩产品";
             }
@@ -84,7 +84,6 @@ class alipay
         $arr = $_GET;
         $alipaySevice = new AlipayTradeService($this->alipay_config);
         $result = $alipaySevice->check($arr);
-        halt($result);
         trace('result' . $result, 'debug');
         if ($result) {
             return true;
@@ -98,7 +97,6 @@ class alipay
             $alipaySevice = new AlipayTradeService($this->alipay_config);
             $alipaySevice->writeLog(var_export($_POST, true));
             $result = $alipaySevice->check($arr);
-            halt($result);
             if ($result) {
                 if ($arr['trade_status'] == 'TRADE_FINISHED' || $arr['trade_status'] == 'TRADE_SUCCESS') {
                     return array(
