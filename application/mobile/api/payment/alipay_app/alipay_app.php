@@ -32,7 +32,8 @@ class alipay_app {
 //htmlspecialchars是为了输出到页面时防止被浏览器将关键参数html转义，实际打印到日志以及http传输不会有这个问题
 //        echo htmlspecialchars($response); //就是orderString 可以直接给客户端请求，无需再做处理。
 
-        output_data(array('content'=>$response));
+        echo htmlspecialchars($response);
+//        output_data(array('content'=>$response));
     }
 
     function verify_notify($param) {
