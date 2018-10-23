@@ -10,6 +10,7 @@ function toPay(a, e, p) {
         },
         dataType: "json",
         success: function(p) {
+            alert(p)
             checkLogin(p.login);
             if (p.code==100) {
                 $.sDialog({
