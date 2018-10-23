@@ -30,17 +30,32 @@ class Students extends MobileMember{
         $childInfo = $Student->getChildrenInfoById($childId);
         $Bus = model('Schoolbus');
         $condition = array(
-            
+            'sc_id' => $childInfo['schoolid'],
+            'is_del' => 1
         );
         $businfo = $Bus->get_schoolbus_List($condition);
-
+        foreach ($businfo as $k => &$v) {
+            $v['bus_line']=json_decode($v['bus_line']);
+        }
+        unset($v);
+        output_data($businfo);
     }
 
     /**
      * 获取学校 食谱信息
      */
     public function GetSchoolFoodInfo(){
-
+        $childId = input('post.child_id');
+        $Student = model('Student');
+        $childInfo = $Student->getChildrenInfoById($childId);
+        $Food = model('Schoolfood');
+        $condition = array(
+            'sc_id' => $childInfo['schoolid'],
+            'is_del' => 1
+        );
+        $businfo = $Food->get_schoolfood_List($condition);
+        
+        output_data($businfo);
     }
 
 
