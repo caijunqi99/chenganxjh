@@ -18,10 +18,10 @@ class wxpay_app {
         $input->SetTotal_fee($param['orderFee']);
         $input->SetNotify_url(MOBILE_SITE_URL . '/payment/wx_notify_app');
         $input->SetTrade_type('APP');
-
+        var_dump($input);
         $wxpay = new \WxPayApi();
         $order = $wxpay->unifiedOrder($input);
-
+        halt($order);
         if ($order['return_code'] == 'SUCCESS') {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
