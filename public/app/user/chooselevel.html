@@ -143,8 +143,8 @@
             $('.total_cont_btn').click(function(event) {
                 var pay = $("input[name='payment_code']:checked").val();
                 // api = 'http://w.xjh.com/index.php/Wap';
-                user_token = '216327ba4d1034e33ba3c325661e3222';
-                var chind_id = '1';
+                user_token = user_token;
+                var chind_id = user_member_id;
                 $.post(api+'/Packagesbuy/buy_step1',
                 {
                     'key': user_token,
