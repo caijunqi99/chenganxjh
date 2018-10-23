@@ -97,7 +97,6 @@ class Payment extends MobileMall
             $externalSn = $result['transaction_id'];
             $updateSuccess = $this->_update_order($internalSn, $externalSn);
 
-            echo $updateSuccess;exit;
             if (!$updateSuccess) {
                 // @todo
                 // 直接退出 等待下次通知
