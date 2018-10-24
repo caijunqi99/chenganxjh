@@ -94,7 +94,7 @@ class Payment extends MobileMall
         $api->setConfigs($params);
 
         list($result, $output) = $api->notify();
-
+        halt($result);
         if ($result) {
             $internalSn = $result['out_trade_no'] . '_' . $result['attach'];
             $externalSn = $result['transaction_id'];
