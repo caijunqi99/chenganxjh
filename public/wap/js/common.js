@@ -920,7 +920,7 @@ function goLogin(){
     } else { //pc
     };
 }
-
+addCookie('ago','app');
 function common_url($name){
     var e = getCookie('key');
     if(!e){
