@@ -217,16 +217,6 @@ class AlipayTradeService {
 	function check($arr){
 		$aop = new AopClient();
 		$aop->alipayrsaPublicKey = $this->alipay_public_key;
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$this->signtype,
-//                'data' =>$arr,
-//                'other'=>$_POST
-            ))
-        );
-        db('testt')->insert($insert);
 		$result = $aop->rsaCheckV1($arr, $this->alipay_public_key, $this->signtype);
 		return $result;
 	}
