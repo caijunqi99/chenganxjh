@@ -99,16 +99,6 @@ class alipay
     public function getNotifyInfo()
     {
         $arr = $_POST;
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$arr,
-//                'data' =>input(),
-//                'other'=>$order_info
-            ))
-        );
-        db('testt')->insert($insert);
             $alipaySevice = new AlipayTradeService($this->alipay_config);
             $alipaySevice->writeLog(var_export($_POST, true));
             $result = $alipaySevice->check($arr);
