@@ -230,7 +230,6 @@ class Memberpayment extends MobileMember
             $api = new \wxpay_h5();
             $api->setConfigs($param);
             $mweburl = $api->get_mweb_url($this);
-            halt($mweburl);
             Header("Location: $mweburl");
             exit;
         }
