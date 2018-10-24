@@ -1,5 +1,5 @@
 {include file="public/header" /}
-<script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection3.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
@@ -26,97 +26,182 @@
 
 
     <form id="user_form" enctype="multipart/form-data" method="post">
+        <table class="ds-default-table">
+            <tbody>
+        <!--<tr class="noborder">-->
+            <!--<td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_schoolregion}:</label></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<td id="region">-->
+                <!--<input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">-->
+                <!--<input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />-->
+                <!--<input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />-->
+                <!--<select name="typeid" id="typeid">-->
+                    <!--<option value="">请选择分类</option>-->
+                    <!--{volist name="region_list" id="region"}-->
+                    <!--<option value="{$region.area_id}">{$region.area_name}</option>-->
+                    <!--{/volist}-->
+                <!--</select>-->
+
+            <!--</td>-->
+        <!--</tr>-->
+        <!--<tr class="noborder">-->
+            <!--<td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>-->
+            <!--<td class="vatop tips"></td>-->
+        <!--</tr>-->
+        <!--<tr class="noborder">-->
+            <!--<td id="school_list">-->
+                <!--<select name="school_name" class="querySelect">-->
+                    <!--<option value="">{$Think.lang.school_index_chosename}</option>-->
+
+                <!--</select>-->
+            <!--</td>-->
+            <!--<td class="vatop tips"></td>-->
+        <!--</tr>-->
+        <input type="hidden" value="{$schoolid}" name="schoolid" id="schoolid">
+        <tr class="noborder">
+            <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+            <td class="vatop tips"></td>
+        </tr>
+        <tr class="noborder">
+            <td id="type_list">
+                <select name="school_type" class="querySelect" id="school_type" onchange="find_classname($(this))">
+                    <option value="">{$Think.lang.school_index_chosetype}</option>
+                    {volist name="schooltype" id="types"}
+                    <option value="{$types.typeid}">{$types.typename}</option>
+                    {/volist}
+                </select>
+            </td>
+            <td class="vatop tips"></td>
+        </tr>
+        <tr class="noborder">
+            <td colspan="2" class="required"><label>请选择班级:</label></td>
+            <td class="vatop tips"></td>
+        </tr>
+        <tr class="noborder">
+            <td id="class_list">
+                <select name="class_name" class="querySelect">
+                    <option value="">{$Think.lang.school_index_choseclass}</option>
+
+                </select>
+            </td>
+            <td class="vatop tips"></td>
+        </tr>
+        </tbody>
+            </table>
         <label><h>周一</h>
             <br>上午：
             <input type="text" name="mor_txt[]" id="mor_txt1" placeholder="请输入课程名称"/>:
             <input type="text" name="mor_startTime[]" id="mor_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>
             --
             <input type="text" name="mor_endTime[]" id="mor_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
-
-
         <p>
             <input type="button" value="+" onClick="addTextBox(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBox(this.form)" />
-
-
         </p>
-        <!--<label><br>下午：<input type="text" name="after_txt1" id="after_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_starttime1" id="after_starttime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_endtime1" id="after_endtime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_txt[]" id="after_txt1" placeholder="请输入课程名称"/>:
+            <input type="text" name="after_startTime[]" id="after_startTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>
+            --
+            <input type="text" name="after_endTime[]" id="after_endTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxyi(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxyi(this.form)" />
         </p>
         <label><h>周二</h>
-            <br>上午：<input type="text" name="mor_cls1" id="mor_cls1" placeholder="请输入课程名称"/>: <input type="text" name="mor_cls_starttime1" id="mor_cls_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_cls_endtime1" id="mor_cls_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_cls[]" id="mor_cls1" placeholder="请输入课程名称"/>: 
+            <input type="text" name="mor_cls_startTime[]" id="mor_cls_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+            <input type="text" name="mor_cls_endTime[]" id="mor_cls_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxers(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxers(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_cls1" id="after_cls1" placeholder="请输入课程名称"/>: <input type="text" name="after_cls_starttime1" id="after_cls_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_cls_endtime1" id="after_cls_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_cls[]" id="after_cls1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_cls_startTime[]" id="after_cls_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_cls_endTime[]" id="after_cls_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxerx(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxerx(this.form)" />
         </p>
         <label><h>周三</h>
-            <br>上午：<input type="text" name="mor_wes_txt1" id="mor_wes_txt1" placeholder="请输入课程名称"/>: <input type="text" name="mor_wes_starttime1" id="mor_wes_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_wes_endtime1" id="mor_wes_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_wes_txt[]" id="mor_wes_txt1" placeholder="请输入课程名称"/>: 
+            <input type="text" name="mor_wes_startTime[]" id="mor_wes_startTime" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+            <input type="text" name="mor_wes_endTime[]" id="mor_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxsans(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsans(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_wes_txt1" id="after_wes_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_wes_starttime1" id="after_wes_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_wes_endtime1" id="after_wes_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_wes_txt[]" id="after_wes_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_wes_startTime[]" id="after_wes_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="after_wes_endTime[]" id="after_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxsanx(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsanx(this.form)" />
         </p>
         <label><h>周四</h>
-            <br>上午：<input type="text" name="mor_tus_txt1" id="mor_tus_txt1" placeholder="请输入课程名称"/>: <input type="text" name="mor_tus_starttime1" id="mor_tus_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_tus_endtime1" id="mor_tus_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_tus_txt[]" id="mor_tus_txt1" placeholder="请输入课程名称"/>: 
+            <input type="text" name="mor_tus_startTime[]" id="mor_tus_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+            <input type="text" name="mor_tus_endTime[]" id="mor_tus_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxsis(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsis(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_tus_txt1" id="after_tus_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_tus_starttime1" id="after_tus_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_tus_endtime1" id="after_tus_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_tus_txt[]" id="after_tus_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_tus_startTime[]" id="after_tus_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="after_tus_endTime[]" id="after_tus_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxsix(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsix(this.form)" />
         </p>
         <label><h>周五</h>
-        <br>上午：<input type="text" name="mor_fri_txt1" id="mor_fri_txt1" placeholder="请输入课程名称"/>: <input type="text" name="mor_fri_starttime1" id="mor_fri_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_fri_endtime1" id="mor_fri_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <br>上午：<input type="text" name="mor_fri_txt[]" id="mor_fri_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="mor_fri_startTime[]" id="mor_fri_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="mor_fri_endTime[]" id="mor_fri_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxwus(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxwus(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_fri_txt1" id="after_fri_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_fri_starttime1" id="after_fri_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_fri_endtime1" id="after_fri_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_fri_txt[]" id="after_fri_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_fri_startTime[]" id="after_fri_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="after_fri_endTime[]" id="after_fri_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxwux(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxwux(this.form)" />
         </p>
         <label><h>周六</h>
-            <br>上午：<input type="text" name="mor_fes_txt1" id="mor_fes_txt1" placeholder="请输入课程名称"/>: <input type="text" name="mor_fes_starttime1" id="mor_fes_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_fes_endtime1" id="mor_fes_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_fes_txt[]" id="mor_fes_txt1" placeholder="请输入课程名称"/>: 
+            <input type="text" name="mor_fes_startTime[]" id="mor_fes_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+            <input type="text" name="mor_fes_endTime[]" id="mor_fes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxlius(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxlius(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_fes_txt1" id="after_fes_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_fes_starttime1" id="after_fes_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_fes_endtime1" id="after_fes_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_fes_txt[]" id="after_fes_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_fes_startTime[]" id="after_fes_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="after_fes_endTime[]" id="after_fes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxliux(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxliux(this.form)" />
         </p>
         <label><h>周日</h>
-            <br>上午：<input type="text" name="mor_sun_txt1" id="mor_sun_txt1" placeholder="请输入课程名称"/>: <input type="text" name="mor_sun_starttime1" id="mor_sun_starttime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="mor_sun_endtime1" id="mor_sun_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_sun_txt[]" id="mor_sun_txt1" placeholder="请输入课程名称"/>: 
+            <input type="text" name="mor_sun_startTime[]" id="mor_sun_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+            <input type="text" name="mor_sun_endTime[]" id="mor_sun_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
 
         <p>
             <input type="button" value="+" onClick="addTextBoxris(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxris(this.form)" />
         </p>
-        <label><br>下午：<input type="text" name="after_sun_txt1" id="after_sun_txt1" placeholder="请输入课程名称"/>: <input type="text" name="after_sun_starttime1" id="arter_starttime" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;<input type="text" name="after_sun_endtime1" id="after_sun_endtime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <label><br>下午：<input type="text" name="after_sun_txt[]" id="after_sun_txt1" placeholder="请输入课程名称"/>: 
+        <input type="text" name="after_sun_startTime[]" id="arter_startTime" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
+        <input type="text" name="after_sun_endTime[]" id="after_sun_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxrix(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxrix(this.form)" />
-        </p>-->
+        </p>
         <table class="ds-default-table">
             <tbody>
 
@@ -124,7 +209,7 @@
                     <td colspan="2" class="required"><label for="school_desc">{$Think.lang.school_index_desc}:</label></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_desc" name="school_desc" class="txt"></td>
+                    <td class="vatop rowform"><input type="text" value="" id="desc" name="desc" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
             </tbody>
@@ -137,6 +222,31 @@
     </form>
 </div>
 <script type="text/javascript">
+    function find_classname(_sef) {
+        var ty_id = $(_sef).val();
+        var sc_id = $("#schoolid").val();
+        if(ty_id) {
+            var url = SITE_URL + 'index.php/Admin/Student/fand_classname';
+            $.post(url, {'ty_id': ty_id,'sc_id':sc_id}, function (data) {
+                data = $.parseJSON(data);
+                var classname_length = data.length;
+                var classname_list = data;
+                if (data) {
+                    var select = '<select name="class_name" id="class_name" class="querySelect"><option>请选择班级</option>';
+                    if (classname_length > 0) {
+                        for (var i = 0; i < classname_length; i++) {
+                            select += "<option value='" + classname_list[i].classid + "'>" + classname_list[i].classname + "</option>";
+                        }
+                    }
+                    select += '</select>';
+                    $("#class_list").html(select);
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    }
+
     var textNumber = 1;
     function addTextBox(form, afterElement) {
         textNumber++;
@@ -155,7 +265,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        //textField.setAttribute("name","mor_starttime"+textNumber);
+        //textField.setAttribute("name","mor_startTime"+textNumber);
         textField.setAttribute("name","mor_startTime[]");
         textField.setAttribute("id","mor_startTime"+textNumber);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
@@ -166,7 +276,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_endTime"+textNumber);
+        textField.setAttribute("name","mor_endTime[]");
         textField.setAttribute("id","mor_endTime"+textNumber);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
@@ -193,7 +303,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_txt"+textNumbers);
+        textField.setAttribute("name","after_txt[]");
         textField.setAttribute("id","after_txt"+textNumbers);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -202,8 +312,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_starttime"+textNumbers);
-        textField.setAttribute("id","after_starttime"+textNumbers);
+        textField.setAttribute("name","after_startTime[]");
+        textField.setAttribute("id","after_startTime"+textNumbers);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -212,8 +322,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_endtime"+textNumbers);
-        textField.setAttribute("id","after_endtime"+textNumbers);
+        textField.setAttribute("name","after_endTime[]");
+        textField.setAttribute("id","after_endTime"+textNumbers);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -237,7 +347,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_cls"+textNumberers);
+        textField.setAttribute("name","mor_cls[]");
         textField.setAttribute("id","mor_cls"+textNumberers);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -246,8 +356,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_cls_starttime"+textNumberers);
-        textField.setAttribute("id","mor_cls_starttime"+textNumberers);
+        textField.setAttribute("name","mor_cls_startTime[]");
+        textField.setAttribute("id","mor_cls_startTime"+textNumberers);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -256,8 +366,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_cls_endtime"+textNumberers);
-        textField.setAttribute("id","mor_cls_endtime"+textNumberers);
+        textField.setAttribute("name","mor_cls_endTime[]");
+        textField.setAttribute("id","mor_cls_endTime"+textNumberers);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -281,7 +391,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_cls"+textNumbererx);
+        textField.setAttribute("name","after_cls[]");
         textField.setAttribute("id","after_cls"+textNumbererx);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -290,8 +400,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_cls_starttime"+textNumbererx);
-        textField.setAttribute("id","after_cls_starttime"+textNumbererx);
+        textField.setAttribute("name","after_cls_startTime[]");
+        textField.setAttribute("id","after_cls_startTime"+textNumbererx);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -300,8 +410,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_cls_endtime"+textNumbererx);
-        textField.setAttribute("id","after_cls_endtime"+textNumbererx);
+        textField.setAttribute("name","after_cls_endTime[]");
+        textField.setAttribute("id","after_cls_endTime"+textNumbererx);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -325,7 +435,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_wes_txt"+textNumbersans);
+        textField.setAttribute("name","mor_wes_txt[]");
         textField.setAttribute("id","mor_wes_txt"+textNumbersans);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -334,8 +444,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_wes_starttime"+textNumbersans);
-        textField.setAttribute("id","mor_wes_starttime"+textNumbersans);
+        textField.setAttribute("name","mor_wes_startTime[]");
+        textField.setAttribute("id","mor_wes_startTime"+textNumbersans);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -344,8 +454,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_wes_endtime"+textNumbersans);
-        textField.setAttribute("id","mor_wes_endtime"+textNumbersans);
+        textField.setAttribute("name","mor_wes_endTime[]");
+        textField.setAttribute("id","mor_wes_endTime"+textNumbersans);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -369,7 +479,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_wes_txt"+textNumbersanx);
+        textField.setAttribute("name","after_wes_txt[]");
         textField.setAttribute("id","after_wes_txt"+textNumbersanx);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -378,8 +488,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_wes_starttime"+textNumbersanx);
-        textField.setAttribute("id","after_wes_starttime"+textNumbersanx);
+        textField.setAttribute("name","after_wes_startTime[]");
+        textField.setAttribute("id","after_wes_startTime"+textNumbersanx);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -388,8 +498,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_wes_endtime"+textNumbersanx);
-        textField.setAttribute("id","after_wes_endtime"+textNumbersanx);
+        textField.setAttribute("name","after_wes_endTime[]");
+        textField.setAttribute("id","after_wes_endTime"+textNumbersanx);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -413,7 +523,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_tus_txt"+textNumbersis);
+        textField.setAttribute("name","mor_tus_txt[]");
         textField.setAttribute("id","mor_tus_txt"+textNumbersis);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -422,8 +532,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_tus_starttime"+textNumbersis);
-        textField.setAttribute("id","mor_tus_starttime"+textNumbersis);
+        textField.setAttribute("name","mor_tus_startTime[]");
+        textField.setAttribute("id","mor_tus_startTime"+textNumbersis);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -432,8 +542,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_tus_endtime"+textNumbersis);
-        textField.setAttribute("id","mor_tus_endtime"+textNumbersis);
+        textField.setAttribute("name","mor_tus_endTime[]");
+        textField.setAttribute("id","mor_tus_endTime"+textNumbersis);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -457,7 +567,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_tus_txt"+textNumbersix);
+        textField.setAttribute("name","after_tus_txt[]");
         textField.setAttribute("id","after_tus_txt"+textNumbersix);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -466,8 +576,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_tus_starttime"+textNumbersix);
-        textField.setAttribute("id","after_tus_starttime"+textNumbersix);
+        textField.setAttribute("name","after_tus_startTime[]");
+        textField.setAttribute("id","after_tus_startTime"+textNumbersix);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -476,8 +586,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_tus_endtime"+textNumbersix);
-        textField.setAttribute("id","after_tus_endtime"+textNumbersix);
+        textField.setAttribute("name","after_tus_endTime[]");
+        textField.setAttribute("id","after_tus_endTime"+textNumbersix);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -501,7 +611,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fri_txt"+textNumberwus);
+        textField.setAttribute("name","mor_fri_txt[]");
         textField.setAttribute("id","mor_fri_txt"+textNumberwus);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -510,8 +620,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fri_starttime"+textNumberwus);
-        textField.setAttribute("id","mor_fri_starttime"+textNumberwus);
+        textField.setAttribute("name","mor_fri_startTime[]");
+        textField.setAttribute("id","mor_fri_startTime"+textNumberwus);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -520,8 +630,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fri_endtime"+textNumberwus);
-        textField.setAttribute("id","mor_fri_endtime"+textNumberwus);
+        textField.setAttribute("name","mor_fri_endTime[]");
+        textField.setAttribute("id","mor_fri_endTime"+textNumberwus);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -545,7 +655,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fri_txt"+textNumberwux);
+        textField.setAttribute("name","after_fri_txt[]");
         textField.setAttribute("id","after_fri_txt"+textNumberwux);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -554,8 +664,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fri_starttime"+textNumberwux);
-        textField.setAttribute("id","after_fri_starttime"+textNumberwux);
+        textField.setAttribute("name","after_fri_startTime[]");
+        textField.setAttribute("id","after_fri_startTime"+textNumberwux);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -564,8 +674,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fri_endtime"+textNumberwux);
-        textField.setAttribute("id","after_fri_endtime"+textNumberwux);
+        textField.setAttribute("name","after_fri_endTime[]");
+        textField.setAttribute("id","after_fri_endTime"+textNumberwux);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -589,7 +699,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fes_txt"+textNumberlius);
+        textField.setAttribute("name","mor_fes_txt[]");
         textField.setAttribute("id","mor_fes_txt"+textNumberlius);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -598,8 +708,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fes_starttime"+textNumberlius);
-        textField.setAttribute("id","mor_fes_starttime"+textNumberlius);
+        textField.setAttribute("name","mor_fes_startTime[]");
+        textField.setAttribute("id","mor_fes_startTime"+textNumberlius);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -608,8 +718,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_fes_endtime"+textNumberlius);
-        textField.setAttribute("id","mor_fes_endtime"+textNumberlius);
+        textField.setAttribute("name","mor_fes_endTime[]");
+        textField.setAttribute("id","mor_fes_endTime"+textNumberlius);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -633,7 +743,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fes_txt"+textNumberliux);
+        textField.setAttribute("name","after_fes_txt[]");
         textField.setAttribute("id","after_fes_txt"+textNumberliux);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -642,8 +752,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fes_starttime"+textNumberliux);
-        textField.setAttribute("id","after_fes_starttime"+textNumberliux);
+        textField.setAttribute("name","after_fes_startTime[]");
+        textField.setAttribute("id","after_fes_startTime"+textNumberliux);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -652,8 +762,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_fes_endtime"+textNumberliux);
-        textField.setAttribute("id","after_fes_endtime"+textNumberliux);
+        textField.setAttribute("name","after_fes_endTime[]");
+        textField.setAttribute("id","after_fes_endTime"+textNumberliux);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -677,7 +787,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_sun_txt"+textNumberris);
+        textField.setAttribute("name","mor_sun_txt[]");
         textField.setAttribute("id","mor_sun_txt"+textNumberris);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("上午："));
@@ -686,8 +796,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_sun_starttime"+textNumberris);
-        textField.setAttribute("id","mor_sun_starttime"+textNumberris);
+        textField.setAttribute("name","mor_sun_startTime[]");
+        textField.setAttribute("id","mor_sun_startTime"+textNumberris);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -696,8 +806,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","mor_sun_endtime"+textNumberris);
-        textField.setAttribute("id","mor_sun_endtime"+textNumberris);
+        textField.setAttribute("name","mor_sun_endTime[]");
+        textField.setAttribute("id","mor_sun_endTime"+textNumberris);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -721,7 +831,7 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_sun_txt"+textNumberrix);
+        textField.setAttribute("name","after_sun_txt[]");
         textField.setAttribute("id","after_sun_txt"+textNumberrix);
         textField.setAttribute("placeholder","请输入课程名称");
         label.appendChild(document.createTextNode("下午："));
@@ -730,8 +840,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_sun_starttime"+textNumberrix);
-        textField.setAttribute("id","after_sun_starttime"+textNumberrix);
+        textField.setAttribute("name","after_sun_startTime[]");
+        textField.setAttribute("id","after_sun_startTime"+textNumberrix);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入上课时间");
         label.appendChild(document.createTextNode(": "));
@@ -740,8 +850,8 @@
         var label = document.createElement("label");
         var textField = document.createElement("input");
         textField.setAttribute("type","text");
-        textField.setAttribute("name","after_sun_endtime"+textNumberrix);
-        textField.setAttribute("id","after_sun_endtime"+textNumberrix);
+        textField.setAttribute("name","after_sun_endTime[]");
+        textField.setAttribute("id","after_sun_endTime"+textNumberrix);
         textField.setAttribute("onchange","javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};");
         textField.setAttribute("placeholder","请输入下课时间");
         label.appendChild(document.createTextNode("--"));
@@ -848,7 +958,13 @@
     $(function(){
         $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
     });
-
+    $(function(){
+        $("#region_choose").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+    });
     $(function() {
         regionInit("region");
     });

@@ -1297,15 +1297,15 @@ function F($name, $value = null, $path = 'cache', $ext = '.php')
  * @param  string $mode 写入模式，如果是追加，可传入“append”
  * @return bool
  */
-function write_file($filepath, $data, $mode = null)
+function write_file($filepath, $data, $mode = null,$type=false)
 {
     if (!is_array($data) && !is_scalar($data)) {
         return false;
     }
-
-    $data = var_export($data, true);
-
-    $data = "<?php defined('DSMALL') or exit('Access Invalid!'); return " . $data . ";";
+    if (!$type) {
+        $data = var_export($data, true);
+        $data = "<?php defined('DSMALL') or exit('Access Invalid!'); return " . $data . ";";    
+    }
     $mode = $mode == 'append' ? FILE_APPEND : null;
     if (false === file_put_contents($filepath, ($data), $mode)) {
         return false;
@@ -1315,6 +1315,20 @@ function write_file($filepath, $data, $mode = null)
     }
 }
 
+/**
+ * 写入支付文件
+ * @param  [string] $data     内容
+ * @param  [string] $payment  [写入支付文件名称]
+ * @param  [string] $filename [写入文件名称，为空则以时间命名]
+ * @return [bool]           
+ */
+function write_payment($data, $payment,$filename=''){
+    $path = './uploads/payment/'.$payment.'/'.date('Y-m-d').'_'.$filename.'.log';;
+    $dir = dirname($path);
+    if (!is_dir($dir))mkdir($dir);
+    $result = write_file($path, $data.PHP_EOL, $mode = 'append',$type=true);
+    return $result;
+}
 /**
  * 循环创建目录
  *

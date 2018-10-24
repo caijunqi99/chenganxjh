@@ -38,6 +38,7 @@ class alipay_app {
 
 
             $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+            write_payment(json_encode($result),'alipay_app');
 
             return ;
         }else{

@@ -63,6 +63,8 @@ class wxpay_h5
         $input->SetScene_info(json_encode($ecene));
         $input->SetProduct_id($this->config->orderSn);
         $result = WxPayApi::unifiedOrder($input);
+        write_payment(json_encode($return),'wxpay_h5');
+
         return $result;
     }
 
