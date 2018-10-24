@@ -196,7 +196,7 @@ class Packagesbuy extends MobileMember
         
         //alipay and so on
         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $param['orderFee'] = 0.01;//$order_pay_info['order_amount'];//
+        $param['orderFee'] = 0.0100;//$order_pay_info['order_amount'];//
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
         output_data($mweburl);

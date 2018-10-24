@@ -46,10 +46,10 @@ class alipay
                 'alipay_public_key' =>$param['public_key'],
 
             );
-            if (isset($param['orderSn'])) {
-                $this->out_trade_no = $param['orderSn'] . '-' . $param['orderAttach'];
-                $this->subject = $param['orderInfo'];
-                $this->total_amount = $param['orderFee'];
+            if (isset($param['order_sn'])) {
+                $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
+                $this->subject = $param['order_sn'];
+                $this->total_amount = $param['order_amount'];
                 $this->timeout_express = "1m";
                 $this->body = "想见孩产品";
             }
@@ -69,7 +69,7 @@ class alipay
 
         $payResponse = new AlipayTradeService($this->alipay_config);
 
-        halt($this->alipay_config);
+        halt($payRequestBuilder);
 
         $result = $payResponse->wapPay($payRequestBuilder, $this->alipay_config['return_url'], $this->alipay_config['notify_url']);
 
