@@ -67,30 +67,21 @@ class Payment extends MobileMall
 
         if (!empty($order_info)) {
             $callback_info = $payment_api->getNotifyInfo();
-
-            if ($callback_info) {
-                $insert = array(
-                    'content'=>json_encode(array(
-                        'InsertTime'=>date('Y-m-d H:i:s',time()),
-                        'PaymentCode'=>$this->payment_code,
-                        'input' =>$callback_info,
+            $insert = array(
+                'content'=>json_encode(array(
+                    'InsertTime'=>date('Y-m-d H:i:s',time()),
+                    'PaymentCode'=>$this->payment_code,
+                    'input' =>$callback_info,
 //                'data' =>input(),
 //                'other'=>$order_info
-                    ))
-                );
-                db('testt')->insert($insert);
+                ))
+            );
+            db('testt')->insert($insert);
+            if ($callback_info) {
+
                 //验证成功
                 $result = $this->_update_order($callback_info['out_trade_no'], $callback_info['trade_no']);
-                $insert = array(
-                    'content'=>json_encode(array(
-                        'InsertTime'=>date('Y-m-d H:i:s',time()),
-                        'PaymentCode'=>$this->payment_code,
-                        'input' =>$result,
-//                'data' =>input(),
-//                'other'=>$order_info
-                    ))
-                );
-                db('testt')->insert($insert);
+
                 if ($result['code']) {
                     echo 'success';
                     die;
