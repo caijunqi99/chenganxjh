@@ -46,10 +46,10 @@ class alipay
                 'alipay_public_key' =>$param['public_key'],
 
             );
-            if (isset($param['order_sn'])) {
-                $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
-                $this->subject = $param['order_sn'];
-                $this->total_amount = $param['order_amount'];
+            if (isset($param['orderSn'])) {
+                $this->out_trade_no = $param['orderSn'] . '-' . $param['orderAttach'];
+                $this->subject = $param['orderInfo'];
+                $this->total_amount = $param['orderFee'];
                 $this->timeout_express = "1m";
                 $this->body = "想见孩产品";
             }
