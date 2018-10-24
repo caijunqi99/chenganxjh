@@ -16,6 +16,8 @@ class alipay
     private $body = "";
     //超时事件
     private $timeout_express = "";
+    //打开APP
+    private $app_pay = "";
 
     public function __construct($param=array())
     {
@@ -52,6 +54,7 @@ class alipay
                 $this->total_amount = $param['orderFee'];
                 $this->timeout_express = "1m";
                 $this->body = "想见孩产品";
+                $this->app_pay = 'Y';
             }
         }else{
             output_error('参数错误！');
@@ -66,6 +69,7 @@ class alipay
         $payRequestBuilder->setOutTradeNo($this->out_trade_no);
         $payRequestBuilder->setTotalAmount($this->total_amount);
         $payRequestBuilder->setTimeExpress($this->timeout_express);
+        $payRequestBuilder->setTimeExpress($this->app_pay);
 
         $payResponse = new AlipayTradeService($this->alipay_config);
 
