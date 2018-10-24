@@ -36,7 +36,7 @@ class alipay_app {
 
             $payResponse = new AlipayTradeService($config);
 
-            halt($payRequestBuilder);
+
             $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
 
             return ;

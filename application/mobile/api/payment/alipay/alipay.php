@@ -30,10 +30,10 @@ class alipay
                 'merchant_private_key' => $param['private_key'],
 
                 //异步通知地址
-                'notify_url' => MOBILE_SITE_URL . '/payment/notify',
+                'notify_url' => MOBILE_SITE_URL . '/payment/notify.html',
 
                 //同步跳转
-                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url',
+                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url.html',
 
                 //编码格式
                 'charset' => "UTF-8",

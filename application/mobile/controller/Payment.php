@@ -205,13 +205,13 @@ class Payment extends MobileMall
         $model_order = model('order');
         $logic_payment = model('payment', 'logic');
 
-        $tmp = explode('_', $out_trade_no);
+        $tmp = explode('-', $out_trade_no);
         $out_trade_no = $tmp[0];
         if (!empty($tmp[1])) {
             $order_type = $tmp[1];
         }
         else {
-            $order_pay_info = Model('order')->getOrderPayInfo(array('pay_sn' => $out_trade_no));
+            $order_pay_info = $model_order->getOrderPayInfo(array('pay_sn' => $out_trade_no));
             if (empty($order_pay_info)) {
                 $order_type = 'v';
             }
