@@ -926,6 +926,7 @@ function common_url($name){
     if(!e){
         goLogin();return false;
     }
+    setCookie('ago',$name);
     if($name == 'search'){
         window.location.href='search.html';
     }else if($name == 'cart'){
@@ -944,6 +945,7 @@ function member_url($name){
     if(!e){
         goLogin();return false;
     }
+    setCookie('ago',$name);
     if($name == 'search'){
         window.location.href='../search.html';
     }else if($name == 'cart'){
@@ -963,8 +965,9 @@ function fz_token($key,$member_id){
     addCookie('mermber_id',$member_id);
 }
 
-function ago_back(ago= 0){
-    if(ago == 0){
+function ago_back(){
+    var ago = getCookie('ago');
+    if(ago == 'app'){
         historyback();
     }else{
         window.history.back(-1);

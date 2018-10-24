@@ -3,7 +3,7 @@
 namespace app\mobile\controller;
 
 
-class Memberbuy extends MobileMall
+class Memberbuy extends MobileMember
 {
     public function _initialize()
     {
