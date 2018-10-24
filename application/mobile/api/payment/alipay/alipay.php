@@ -69,7 +69,7 @@ class alipay
 
         $payResponse = new AlipayTradeService($this->alipay_config);
 
-        halt($this->alipay_config);
+        halt($payRequestBuilder);
 
         $result = $payResponse->wapPay($payRequestBuilder, $this->alipay_config['return_url'], $this->alipay_config['notify_url']);
 
