@@ -52,7 +52,7 @@ class Arrangement extends Model {
      * @param unknown_type $id
      */
     public function getOneById($id) {
-        return db('food')->where('doc_id',$id)->find();
+        return db('arrangement')->where('id',$id)->find();
     }
 
     /**
