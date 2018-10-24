@@ -39,13 +39,13 @@ class Payment extends MobileMall
             else {
                 //验证失败
                 $this->assign('result', 'fail');
-                $this->assign('message', '支付失败');
+                $this->assign('message', '支付配置参数错误');
             }
         }
         else {
             //验证失败
             $this->assign('result', 'fail');
-            $this->assign('message', '支付失败');
+            $this->assign('message', '支付失败,订单金额与订单号错误！！');
         }
         return $this->fetch('payment_message');
     }
