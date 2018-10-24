@@ -1,6 +1,5 @@
 <?php
 namespace sendmsg\sdk;
-header("Content-type:text/html; charset=UTF-8");
 /* *
  * 类名：ChuanglanSmsApi
  * 功能：创蓝接口请求类
@@ -33,8 +32,8 @@ class SmsApi{
     * @param log 日志内容
     */
     public function showlog($log){
-    	$Handle = fopen(LOGFILENAME.date('Y-m-d').'log.txt', 'a');
-      	fwrite($Handle,$log."\n");  
+    	$Handle = fopen(self::LOGFILENAME.date('Y-m-d').'log.txt', 'a');
+      	fwrite($Handle,$log.PHP_EOL);  
     }
 
 	/**
@@ -58,7 +57,7 @@ class SmsApi{
 		$this->showlog("response Time = ".date('Y-m-d H:i:s',time()).'**********************************************');
         $this->showlog("request body = ".$msg);
         $this->showlog("request url = ".self::API_SEND_URL);
-        $this->showlog("response body = ".$result."\n");
+        $this->showlog("response body = ".$result.PHP_EOL);
 		
 		return $result;
 	}

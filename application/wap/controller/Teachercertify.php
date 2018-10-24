@@ -88,7 +88,7 @@ class Teachercertify extends MobileMember
         }
         $teachchild = model('Teachercertify');
         $teachinfo = $teachchild->getOneInfo(array('member_id'=>$member_id));
-        $teachinfo['path'] = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
             $teachinfo['provincename'] = $parent['area_name'];
@@ -100,6 +100,15 @@ class Teachercertify extends MobileMember
         if(!empty($teachinfo['areaid'])){
             $child3 = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['areaid']))->find();
             $teachinfo['areaname'] = $child3['area_name'];
+        }
+        if(!empty($teachinfo['cardimg'])){
+            $teachinfo['cardimg'] = $path.$teachinfo['cardimg'];
+        }
+        if(!empty($teachinfo['cardimg_fan'])){
+            $teachinfo['cardimg_fan'] = $path.$teachinfo['cardimg_fan'];
+        }
+        if(!empty($teachinfo['certificate'])){
+            $teachinfo['certificate'] = $path.$teachinfo['certificate'];
         }
         //地区范围
 //        $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
@@ -123,7 +132,8 @@ class Teachercertify extends MobileMember
 //            $parent[$key]['childTwo'] = $item['childTwo'];
 //        }
         //$teachinfo['area'] = $parent;
-        output_data([$teachinfo]);
+        $teachinfo = !empty($teachinfo)?[$teachinfo]:$teachinfo;
+        output_data($teachinfo);
     }
 
     /*

@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
+use think\Model;
 use think\Validate;
 
 class Coursemanage extends AdminControl {
@@ -19,12 +20,6 @@ class Coursemanage extends AdminControl {
     }
 
     public function index() {
-//        $a = array("mor_txt1"=>"语文","mor_starttime1"=>"09:00","mor_endtime1"=>"09:50",
-//                   "after_txt1"=>"数学","after_starttime1"=>"15:00","after_endtime1"=>"16:00",
-//                   "mor_cls1"=>"语文","mor_cls_starttime1"=>"08:00","mor_cls_endtime1"=>"10:00",
-//                   "after_cls1"=>"体育","after_cls_starttime1"=>"15:00","after_cls_endtime1"=>"18:00");
-//        print_r($a);die;
-
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
@@ -70,54 +65,162 @@ class Coursemanage extends AdminControl {
         }
         $condition['isdel'] = 1;
         $course_list = $model_arrangement->getList($condition);
+        $model_schooltype = model('Schooltype');
+        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
+        $school = db('class')->field("classid,classname")->select();
         foreach($course_list as $key=>$value){
-            if(!empty($value['content'])){
-                $course_list[$key]['content'] = json_decode($value['content'],true);
+            foreach($schooltype as $k=>$v){
+                if($value['type']==$v['sc_id']){
+                    $course_list[$key]['type'] = $v['sc_type'];
+                }
+            }
+            foreach($school as $k2=>$v2){
+                if($value['classid']==$v2['classid']){
+                    $course_list[$key]['schoolname'] = $v2['classname'];
+                }
             }
         }
-        //print_r($course_list);die;
+
         $this->assign('course_list', $course_list);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
 
     public function add() {
+        $schoolid = 6;
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
-            //类型
+            //地区信息
+//            $region_list = db('area')->where('area_parent_id','0')->select();
+//            $this->assign('region_list', $region_list);
+//            $address = array(
+//                'true_name' => '',
+//                'area_id' => '',
+//                'city_id' => '',
+//                'address' => '',
+//                'tel_phone' => '',
+//                'mob_phone' => '',
+//                'is_default' => '',
+//                'area_info'=>''
+//            );
+//            $this->assign('address', $address);
+            //学校类型
+            $schoolInfo = db('school')->where(array('schoolid'=>$schoolid))->find();
+            $type = explode(',',$schoolInfo['typeid']);
             $model_schooltype = model('Schooltype');
-            $schoolType = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-            $this->assign('schoolType', $schoolType);
+            $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
+            foreach($type as $key=>$val){
+               foreach($schooltype as $k=>$v){
+                    if($val==$v['sc_id']){
+                        $types[$key]['typeid'] = $val;
+                        $types[$key]['typename'] = $v['sc_type'];
+                    }
+               }
+            }
+            $this->assign('schooltype', $types);
+            $this->assign('schoolid', $schoolid);
             $this->setAdminCurItem('add');
             return $this->fetch();
         } else {
-            $schoolid = 8;
-            //$schoolid = input('post.schoolid');
-            $mor_course = input('post.mor_txt1');
-            $mor_starttime = input('post.mor_starttime');
-            $mor_endtime = input('post.mor_endtime');
-            $after_course = input('post.after_txt1');
-            $after_starttime = input('post.after_starttime');
-            $after_endtime = input('post.after_endtime');
-
-            print_r($_POST);die;
-            $content = array(
-                "上午"=>array(
-                    array("time"=>$mor_starttime."-".$mor_endtime,"content"=>$mor_course)
-                ),
-                "下午"=>array(
-                    array("time"=>$after_starttime."-".$after_endtime,"content"=>$after_course)
-                )
-            );
-
+            $data = $_POST;
+            foreach($data['mor_txt'] as $k=>$v){
+                if($data['mor_txt'][0]!=""){
+                    $content['Monday']['morning'][$k]['content'] = $data['mor_txt'][$k];
+                    $content['Monday']['morning'][$k]['time'] = $data['mor_startTime'][$k]."-".$data['mor_endTime'][$k];
+                }
+            }
+            foreach($data['after_txt'] as $k=>$v){
+                if($data['after_txt'][0]!=""){
+                    $content['Monday']['afternoon'][$k]['content'] = $data['after_txt'][$k];
+                    $content['Monday']['afternoon'][$k]['time'] = $data['after_startTime'][$k]."-".$data['after_endTime'][$k];
+                }
+            }
+            foreach($data['mor_cls'] as $k=>$v){
+                if($data['mor_cls'][0]!=""){
+                    $content['Tuesday']['morning'][$k]['content'] = $data['mor_cls'][$k];
+                    $content['Tuesday']['morning'][$k]['time'] = $data['mor_cls_startTime'][$k]."-".$data['mor_cls_endTime'][$k];
+                }
+            }
+            foreach($data['after_cls'] as $k=>$v){
+                if($data['after_cls'][0]!=""){
+                    $content['Tuesday']['afternoon'][$k]['content'] = $data['after_cls'][$k];
+                    $content['Tuesday']['afternoon'][$k]['time'] = $data['after_cls_startTime'][$k]."-".$data['after_cls_endTime'][$k];
+                }
+            }
+            foreach($data['mor_wes_txt'] as $k=>$v){
+                if($data['mor_wes_txt'][0]!=""){
+                    $content['Wednesday']['morning'][$k]['content'] = $data['mor_wes_txt'][$k];
+                    $content['Wednesday']['morning'][$k]['time'] = $data['mor_wes_startTime'][$k]."-".$data['mor_wes_endTime'][$k];
+                }
+            }
+            foreach($data['after_wes_txt'] as $k=>$v){
+                if($data['after_wes_txt'][0]!=""){
+                    $content['Wednesday']['afternoon'][$k]['content'] = $data['after_wes_txt'][$k];
+                    $content['Wednesday']['afternoon'][$k]['time'] = $data['after_wes_startTime'][$k]."-".$data['after_wes_endTime'][$k];
+                }
+            }
+            foreach($data['mor_tus_txt'] as $k=>$v){
+                if($data['mor_tus_txt'][0]!=""){
+                    $content['Thursday']['morning'][$k]['content'] = $data['mor_tus_txt'][$k];
+                    $content['Thursday']['morning'][$k]['time'] = $data['mor_tus_startTime'][$k]."-".$data['mor_tus_endTime'][$k];
+                }
+            }
+            foreach($data['after_tus_txt'] as $k=>$v){
+                if($data['after_tus_txt'][0]!=""){
+                    $content['Thursday']['afternoon'][$k]['content'] = $data['after_tus_txt'][$k];
+                    $content['Thursday']['afternoon'][$k]['time'] = $data['after_tus_startTime'][$k]."-".$data['after_tus_endTime'][$k];
+                }
+            }
+            foreach($data['mor_fri_txt'] as $k=>$v){
+                if($data['mor_fri_txt'][0]!=""){
+                    $content['Friday']['morning'][$k]['content'] = $data['mor_fri_txt'][$k];
+                    $content['Friday']['morning'][$k]['time'] = $data['mor_fri_startTime'][$k]."-".$data['mor_fri_endTime'][$k];
+                }
+            }
+            foreach($data['after_fri_txt'] as $k=>$v){
+                if($data['after_fri_txt'][0]!=""){
+                    $content['Friday']['afternoon'][$k]['content'] = $data['after_fri_txt'][$k];
+                    $content['Friday']['afternoon'][$k]['time'] = $data['after_fri_startTime'][$k]."-".$data['after_fri_endTime'][$k];
+                }
+            }
+            foreach($data['mor_fes_txt'] as $k=>$v){
+                if($data['mor_fes_txt'][0]!=""){
+                    $content['Saturday']['morning'][$k]['content'] = $data['mor_fes_txt'][$k];
+                    $content['Saturday']['morning'][$k]['time'] = $data['mor_fes_startTime'][$k]."-".$data['mor_fes_endTime'][$k];
+                }
+            }
+            foreach($data['after_fes_txt'] as $k=>$v){
+                if($data['after_fes_txt'][0]!=""){
+                    $content['Saturday']['afternoon'][$k]['content'] = $data['after_fes_txt'][$k];
+                    $content['Saturday']['afternoon'][$k]['time'] = $data['after_fes_startTime'][$k]."-".$data['after_fes_endTime'][$k];
+                }
+            }
+            foreach($data['mor_sun_txt'] as $k=>$v){
+                if($data['mor_sun_txt'][0]!=""){
+                    $content['Sunday']['morning'][$k]['content'] = $data['mor_sun_txt'][$k];
+                    $content['Sunday']['morning'][$k]['time'] = $data['mor_sun_startTime'][$k]."-".$data['mor_sun_endTime'][$k];
+                }
+            }
+            foreach($data['after_sun_txt'] as $k=>$v){
+                if($data['after_sun_txt'][0]!=""){
+                    $content['Sunday']['afternoon'][$k]['content'] = $data['after_sun_txt'][$k];
+                    $content['Sunday']['afternoon'][$k]['time'] = $data['after_sun_startTime'][$k]."-".$data['after_sun_endTime'][$k];
+                }
+            }
+            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
+            $admininfo = $this->getAdminInfo();
             $data = array(
-                'schoolid' => $schoolid,
+                'schoolid' => $_POST['schoolid'],
+                'classid' => input('post.class_name'),
+                'type' => input('post.school_type'),
                 'content' => json_encode($content),
+                'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $schoolInfo['admin_company_id'],
+                'desc' => input('post.desc'),
                 'addtime' => time()
             );
-            print_r($data);die;
             $model_arrangement = model('Arrangement');
             //验证数据  END
             $result = $model_arrangement->arrangement_add($data);
@@ -262,27 +365,15 @@ class Coursemanage extends AdminControl {
             $this->error('删除失败');
         }
     }
-    /**
-     * 管理员添加
-     */
-    public function admin_add() {
-        if(session('admin_is_super') !=1 && !in_array(6,$this->action )){
-            $this->error(lang('ds_assign_right'));
-        }
-        $admin_id = $this->admin_info['admin_id'];
-            $model_admin = Model('admin');
-            $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = 5;
-            $param['admin_password'] = md5($_POST['admin_password']);
-            $param['create_uid'] = $admin_id;
-            $rs = $model_admin->addAdmin($param);
-            if ($rs) {
-                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
-            } else {
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
-            }
 
+    public function course(){
+        $course_id = input('param.course_id');
+        $model = Model('Arrangement');
+        $course = $model->getOneById($course_id);
+        $course['content'] = json_decode($course['content'],true);
+        $this->assign('course', $course);
+        $this->setAdminCurItem('course');
+        return $this->fetch();
     }
 
     /**
