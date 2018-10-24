@@ -968,8 +968,10 @@ function fz_token($key,$member_id){
 function ago_back(){
     var ago = getCookie('ago');
 
-    if(ago == 'app'){
+    if(ago == ''){
         historyback();
+    }else{
+        window.history.back(-1);
     }
 
 }
