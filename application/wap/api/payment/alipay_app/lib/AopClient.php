@@ -607,16 +607,6 @@ class AopClient {
 
 		if ("RSA2" == $signType) {
 			$result = (bool)openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
-            $insert = array(
-                'content'=>json_encode(array(
-                    'InsertTime'=>date('Y-m-d H:i:s',time()),
-                    'PaymentCode'=>$this->payment_code,
-                    'input' =>$result,
-                    'data' =>$data,
-                    'other'=>$res
-                ))
-            );
-            db('testt')->insert($insert);
 		} else {
 			$result = (bool)openssl_verify($data, base64_decode($sign), $res);
 		}

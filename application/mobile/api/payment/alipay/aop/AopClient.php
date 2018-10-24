@@ -613,8 +613,8 @@ class AopClient {
                     'InsertTime'=>date('Y-m-d H:i:s',time()),
                     'PaymentCode'=>$this->payment_code,
                     'input' =>$result,
-                'data' =>$data,
-                'other'=>$res
+                    'data' =>$data,
+                    'other'=>$res
                 ))
             );
             db('testt')->insert($insert);

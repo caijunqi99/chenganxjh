@@ -40,6 +40,7 @@ class AlipayTradeService {
 		$this->appid = $alipay_config['app_id'];
 		$this->private_key = $alipay_config['merchant_private_key'];
 		$this->alipay_public_key = $alipay_config['alipay_public_key'];
+		$this->merchant_public_key = $alipay_config['merchant_public_key'];
 		$this->charset = $alipay_config['charset'];
 		$this->signtype=$alipay_config['sign_type'];
 		if(empty($this->appid)||trim($this->appid)==""){
@@ -94,7 +95,7 @@ class AlipayTradeService {
 		$aop->gatewayUrl = $this->gateway_url;
 		$aop->appId = $this->appid;
 		$aop->rsaPrivateKey =  $this->private_key;
-		$aop->alipayrsaPublicKey = $this->alipay_public_key;
+		$aop->alipayrsaPublicKey = $this->merchant_public_key;
 		$aop->apiVersion ="1.0";
 		$aop->postCharset = $this->charset;
 		$aop->format= $this->format;
@@ -216,7 +217,7 @@ class AlipayTradeService {
 	 */
 	function check($arr){
 		$aop = new AopClient();
-		$aop->alipayrsaPublicKey = $this->alipay_public_key;
+		$aop->alipayrsaPublicKey = $this->merchant_public_key;
 		$result = $aop->rsaCheckV1($arr, $this->alipay_public_key, $this->signtype);
 		return $result;
 	}
