@@ -605,18 +605,19 @@ class AopClient {
 
 		//调用openssl内置方法验签，返回bool值
 
-		if ("RSA2" == $signType) {
-			$result = (bool)openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
-            $insert = array(
-                'content'=>json_encode(array(
-                    'InsertTime'=>date('Y-m-d H:i:s',time()),
-                    'PaymentCode'=>$this->payment_code,
-                    'input' =>$this->$result,
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$this->payment_code,
+                'input' =>$signType,
 //                'data' =>$arr,
 //                'other'=>$_POST
-                ))
-            );
-            db('testt')->insert($insert);
+            ))
+        );
+        db('testt')->insert($insert);
+		if ("RSA2" == $signType) {
+			$result = (bool)openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
+
 		} else {
 			$result = (bool)openssl_verify($data, base64_decode($sign), $res);
 		}

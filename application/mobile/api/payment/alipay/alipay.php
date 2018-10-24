@@ -102,7 +102,6 @@ class alipay
             $alipaySevice = new AlipayTradeService($this->alipay_config);
             $alipaySevice->writeLog(var_export($_POST, true));
             $result = $alipaySevice->check($arr);
-
             if ($result) {
                 if ($arr['trade_status'] == 'TRADE_FINISHED' || $arr['trade_status'] == 'TRADE_SUCCESS') {
                     return array(
