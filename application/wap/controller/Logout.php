@@ -22,8 +22,8 @@ class Logout extends MobileHome
         $input =input();
         $uid = $input['uid'];
         $model_mb_user_token = Model('mbusertoken');
-
-        if($this->member_info['member_id'] == $uid) {
+        
+        if($uid) {
             $condition = array();
             $condition['member_id'] = $this->member_info['member_id'];
             $model_mb_user_token->delMbUserToken($condition);
