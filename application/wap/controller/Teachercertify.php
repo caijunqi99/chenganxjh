@@ -132,7 +132,8 @@ class Teachercertify extends MobileMember
 //            $parent[$key]['childTwo'] = $item['childTwo'];
 //        }
         //$teachinfo['area'] = $parent;
-        output_data([$teachinfo]);
+        $teachinfo = !empty($teachinfo)?[$teachinfo]:$teachinfo;
+        output_data($teachinfo);
     }
 
     /*
