@@ -236,7 +236,7 @@ class Memberpayment extends MobileMember
         //alipay and so on
         $param['orderSn'] = $order_pay_info['pay_sn'];
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
-        $param['orderFee'] = $order_pay_info['api_pay_amount'];
+        $param['orderFee'] = round($order_pay_info['api_pay_amount'],2);
         $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->submit();
