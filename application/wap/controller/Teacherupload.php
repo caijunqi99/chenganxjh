@@ -40,6 +40,9 @@ class Teacherupload extends MobileMember
         $condition['t_type2'] = trim(input('post.type2'));
         $condition['t_type3'] = trim(input('post.type3'));
         $condition['t_type4'] = trim(input('post.type4'));
+        $condition['t_url'] = input('post.url') ? input('post.url'):"";
+        $condition['t_videoimg'] = input('post.pic') ? input('post.pic'):"";
+        $condition['t_timelength'] = input('post.time') ? input('post.time'):"";
         $condition['t_userid']=$member_id;
         $condition['t_maketime'] = time();
         $condition['t_audit'] = 1;
@@ -49,13 +52,15 @@ class Teacherupload extends MobileMember
         if (empty($condition['t_title'])) output_error('标题不能为空');
         if (empty($condition['t_profile'])) output_error('简介不能为空');
         if (empty($condition['t_price'])) output_error('价格不能为空');
-        if (!isset($_FILES['video_file'])) output_error('视频不能为空');
+        //if (!isset($_FILES['video_file'])) output_error('视频不能为空');
 
         //上传视频
-        $videoData = $this->video($_FILES);
-        $condition['t_url'] = $videoData['path'];//视频路径
-        $condition['t_videoimg'] = $videoData['pic'];//默认封面图
-        $condition['t_timelength'] = $videoData['time'];//视频时长
+        if(isset($_FILES['video_file'])){
+            $videoData = $this->video($_FILES);
+            $condition['t_url'] = $videoData['path'];//视频路径
+            $condition['t_videoimg'] = $videoData['pic'];//默认封面图
+            $condition['t_timelength'] = $videoData['time'];//视频时长
+        }
 
         if($videoData){
             $result=$teachchild->addTeachchild($condition);
