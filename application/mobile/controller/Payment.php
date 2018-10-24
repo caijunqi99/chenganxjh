@@ -221,6 +221,16 @@ class Payment extends MobileMall
                 $order_type = 'r';
             }
         }
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$this->payment_code,
+                'input' =>$tmp,
+//                'data' =>input(),
+//                'other'=>$order_info
+            ))
+        );
+        db('testt')->insert($insert);
 
         $paymentCode = $this->payment_code;
 
@@ -235,16 +245,7 @@ class Payment extends MobileMall
             }
             $order_list = $result['data']['order_list'];
             $result = $logic_payment->updateRealOrder($out_trade_no, $paymentCode, $order_list, $trade_no);
-            $insert = array(
-                'content'=>json_encode(array(
-                    'InsertTime'=>date('Y-m-d H:i:s',time()),
-                    'PaymentCode'=>$this->payment_code,
-                    'input' =>$result,
-//                'data' =>input(),
-//                'other'=>$order_info
-                ))
-            );
-            db('testt')->insert($insert);
+
             $api_pay_amount = 0;
             if (!empty($order_list)) {
                 foreach ($order_list as $order_info) {
