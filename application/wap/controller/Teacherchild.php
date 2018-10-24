@@ -9,8 +9,7 @@
 namespace app\wap\controller;
 
 
-//class Teacherchild extends MobileMember
-class Teacherchild
+class Teacherchild extends MobileMember
 {
     public function _initialize()
     {
