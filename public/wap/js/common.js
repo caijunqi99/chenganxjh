@@ -921,6 +921,7 @@ function goLogin(){
     };
 }
 addCookie('ago','app');
+
 function common_url($name){
     var e = getCookie('key');
     if(!e){
@@ -930,13 +931,13 @@ function common_url($name){
     if($name == 'search'){
         window.location.href='search.html';
     }else if($name == 'cart'){
-        window.location.href='cart_list.html';
+        window.location.href='cart_list.html?ago=1';
     }else if($name == 'favorite'){
-        window.location.href='member/favorites.html';
+        window.location.href='member/favorites.html?ago=1';
     }else if($name == 'order'){
-        window.location.href='member/order_list.html';
+        window.location.href='member/order_list.html?ago=1';
     }else if($name == 'address'){
-        window.location.href='member/address_list.html';
+        window.location.href='member/address_list.html?ago=1';
     }
 }
 
@@ -949,13 +950,13 @@ function member_url($name){
     if($name == 'search'){
         window.location.href='../search.html';
     }else if($name == 'cart'){
-        window.location.href='../cart_list.html';
+        window.location.href='../cart_list.html?ago=1';
     }else if($name == 'favorite'){
-        window.location.href='../member/favorites.html';
+        window.location.href='../member/favorites.html?ago=1';
     }else if($name == 'order'){
-        window.location.href='../member/order_list.html';
+        window.location.href='../member/order_list.html?ago=1';
     }else if($name == 'address'){
-        window.location.href='../member/address_list.html';
+        window.location.href='../member/address_list.html?ago=1';
     }
 }
 
@@ -965,9 +966,10 @@ function fz_token($key,$member_id){
     addCookie('mermber_id',$member_id);
 }
 
-function ago_back(){
-    var ago = getCookie('ago');
-    if(ago == 'app'){
+function ago_back(ago){
+    // var ago = getCookie('ago');
+
+    if(ago != 1){
         historyback();
     }else{
         window.history.back(-1);
