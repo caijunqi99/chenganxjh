@@ -68,6 +68,7 @@ class alipay
         $payRequestBuilder->setTimeExpress($this->timeout_express);
 
         $payResponse = new AlipayTradeService($this->alipay_config);
+var_dump($this->body);
 
         halt($payRequestBuilder);
 
