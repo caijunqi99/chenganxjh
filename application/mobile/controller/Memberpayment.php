@@ -234,9 +234,10 @@ class Memberpayment extends MobileMember
             exit;
         }
         //alipay and so on
-        $param['order_sn'] = $order_pay_info['pay_sn'];
-        $param['order_amount'] = $order_pay_info['api_pay_amount'];
-        $param['order_type'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
+        $param['orderSn'] = $order_pay_info['pay_sn'];
+        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
+        $param['orderFee'] = 0.0100;//$order_pay_info['api_pay_amount'];
+        $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->submit();
         echo $return;
