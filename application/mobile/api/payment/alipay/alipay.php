@@ -46,6 +46,7 @@ class alipay
                 'alipay_public_key' =>$param['public_key'],
 
             );
+            halt($param);
             if (isset($param['orderSn'])) {
                 $this->out_trade_no = $param['orderSn'] . '-' . $param['orderAttach'];
                 $this->subject = $param['orderInfo'];
@@ -69,7 +70,7 @@ class alipay
 
         $payResponse = new AlipayTradeService($this->alipay_config);
 
-        halt($this->alipay_config);
+
 
         $result = $payResponse->wapPay($payRequestBuilder, $this->alipay_config['return_url'], $this->alipay_config['notify_url']);
 
