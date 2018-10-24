@@ -81,7 +81,6 @@ class Memberorder extends MobileMember {
             $value['pay_sn'] = strval($key);
             $new_order_group_list[] = $value;
         }
-        halt($order_group_list[$value['pay_sn']]['order_list']);
 
         output_data(array('order_group_list' => $new_order_group_list), mobile_page($model_order->page_info));
     }
