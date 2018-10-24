@@ -67,16 +67,6 @@ class Payment extends MobileMall
 
         if (!empty($order_info)) {
             $callback_info = $payment_api->getNotifyInfo();
-            $insert = array(
-                'content'=>json_encode(array(
-                    'InsertTime'=>date('Y-m-d H:i:s',time()),
-                    'PaymentCode'=>$this->payment_code,
-                    'input' =>$callback_info,
-//                'data' =>input(),
-//                'other'=>$order_info
-                ))
-            );
-            db('testt')->insert($insert);
             if ($callback_info) {
 
                 //验证成功
