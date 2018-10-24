@@ -17,72 +17,6 @@
     </div>
 
     <!--<form method="get" name="formSearch" id="formSearch" class="layui-form">-->
-    <form method="get" name="formSearch" id="formSearch">
-        <table class="search-form">
-            <tbody>
-               <tr>
-                   <td> <label>{$Think.lang.school_name}：</label></td>
-                   <td><input type="text" name="schoolname" value="{$Think.get.schoolname}"></td>
-                   <!--<td><input type="text" class="layui-input" name="schoolname" value="{$Think.get.schoolname}"></td>-->
-
-                   <td> <select name="school_type" lay-verify="type" class="select">
-                            <option value="">{$Think.lang.school_index_type}</option>
-                            {volist name="schoolType" id="type"}
-                            <option value="{$type.sc_id}" {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if}>{$type.sc_type}</option>
-                            {/volist}
-                        </select></td>
-
-
-                   <td>  <label for="school_region">{$Think.lang.school_index_region}：</label></td>
-
-
-                   <td id="region">
-                        <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                        <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                        <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                        {notempty name="address.area_id"}
-                        <span>{$address.area_info}</span>
-                        <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                        <select style="display:none;">
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}" {if condition='$Think.get.area_id eq $region.area_id'}selected='selected'{/if}>{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {else}
-                        <select>
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {/notempty}
-                   </td>
-                   <!--<td>-->
-                       <!--<select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">-->
-                       <!--<option value="0" selected>请选择省</option>-->
-                           <!--{volist name="region_list" id="region"}-->
-                       <!--<option value="{$region.area_id}" {if condition='$Think.get.province eq $region.area_id'}selected='selected'{/if}>{$region.area_name}</option>-->
-                       <!--{/volist}-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                       <!--<select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">-->
-                       <!--<option value="0">请选择市</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                        <!--<select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">-->
-                        <!--<option value="0">请选择区</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
-                     <td class="layui-inline">   <input type="submit" class="submit" value="搜索">
-                        <a href="{:url('School/member')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
-                        </td>
-               </tr>
-            </tbody>
-        </table>
-    </form>
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -96,10 +30,9 @@
         <thead>
         <tr class="thead">
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
-            <th class="align-center">{$Think.lang.school_index_type}</th>
+            <th class="align-center">{$Think.lang.school_index_classtype}</th>
             <th class="align-center">{$Think.lang.school_index_classname}</th>
-            <th class="align-center">{$Think.lang.school_index_date}</th>
-            <th class="align-center">{$Think.lang.school_index_courder}</th>
+            <!--<th class="align-center">{$Think.lang.school_index_courder}</th>-->
             <!--<th class="align-center">{$Think.lang.school_index_phone}</th>-->
             <!--<th class="align-center">{$Think.lang.school_index_username}</th>-->
             <th class="align-center">{$Think.lang.school_index_desc}</th>
@@ -113,32 +46,31 @@
         <?php foreach($course_list as $k => $v){ ?>
         <tr class="hover member">
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
-            <td class="align-center"><?php echo $v['name']; ?></td>
-            <td class="align-center"><?php echo $v['schoolid']; ?></td>
-            <td class="align-center"><?php echo $v['date']; ?></td>
-            <td class="align-center">
-                <?php foreach($v['content'] as $key=>$val){ ?>
-                    <?php echo $key; ?>
-                    <?php foreach($val as $ke=>$item){ ?>
-                        <?php echo $item['time']; ?><?php echo $item['content']; ?>
-                    <?php } ?><br>
-                <?php } ?>
-            </td>
+            <td class="align-center"><?php echo $v['type']; ?></td>
+            <td class="align-center"><?php echo $v['schoolname']; ?></td>
+            <!--<td class="align-center">-->
+                <!--<?php foreach($v['content'] as $key=>$val){ ?>-->
+                    <!--<?php echo $key; ?>-->
+                    <!--<?php foreach($val as $ke=>$item){ ?>-->
+                        <!--<?php echo $item['time']; ?><?php echo $item['content']; ?>-->
+                    <!--<?php } ?><br>-->
+                <!--<?php } ?>-->
+            <!--</td>-->
             <!--<td class="align-center"><?php echo $v['common_phone']; ?></td>-->
             <!--<td class="align-center"><?php echo $v['username']; ?></td>-->
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['addtime']); ?></td>
             <td class="align-center">
                 <?php if(session('admin_is_super') ==1 || in_array('4',$action)){ ?>
-                <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
+                <a href="javascript:dd({$v.id})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
                 <?php } ?>
-                <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
-                <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
-                location.href='{:url('/admin/school/drop',['school_id'=>$v.schoolid])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
-                <?php } ?>
+                <!--<?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>-->
+                <!--<a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))-->
+                <!--location.href='{:url('/admin/school/drop',['school_id'=>$v.schoolid])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>-->
+                <!--<?php } ?>-->
             </td>
         </tr>
         <?php } ?>
@@ -165,7 +97,7 @@
 </div>
 <script type="text/javascript">
     function dd(id) {
-        var urls=ADMIN_URL+'schoolinfo/index?school_id='+id;
+        var urls=ADMIN_URL+'coursemanage/course?course_id='+id;
         //多窗口模式，层叠置顶
         layer.open({
             type: 2
