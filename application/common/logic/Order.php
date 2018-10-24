@@ -349,16 +349,6 @@ class Order extends Model
     public function changeOrderReceivePay($order_list, $role, $user = '', $post = array())
     {
         $model_order = Model('order');
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$order_list,
-//                'data' =>input(),
-//                'other'=>$order_info
-            ))
-        );
-        db('testt')->insert($insert);
         try {
             $model_order->startTrans();
 

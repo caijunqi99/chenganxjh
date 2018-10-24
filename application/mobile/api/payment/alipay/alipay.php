@@ -103,16 +103,6 @@ class alipay
             $alipaySevice->writeLog(var_export($_POST, true));
             $result = $alipaySevice->check($arr);
 
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$this->payment_code,
-                'input' =>$result,
-                'data' =>$arr,
-                'other'=>$_POST
-            ))
-        );
-        db('testt')->insert($insert);
             if ($result) {
                 if ($arr['trade_status'] == 'TRADE_FINISHED' || $arr['trade_status'] == 'TRADE_SUCCESS') {
                     return array(

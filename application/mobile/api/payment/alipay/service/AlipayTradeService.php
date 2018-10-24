@@ -217,6 +217,7 @@ class AlipayTradeService {
 	function check($arr){
 		$aop = new AopClient();
 		$aop->alipayrsaPublicKey = $this->alipay_public_key;
+
 		$result = $aop->rsaCheckV1($arr, $this->alipay_public_key, $this->signtype);
 		return $result;
 	}
