@@ -61,16 +61,16 @@ class Teachercertify extends MobileMember
 //            $data['certificate_fan'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
 //        }
         $this->image($data,$_FILES);
-        $teachchild = model('Teachercertify');
+        $teachercertify_model = model('Teachercertify');
         $id = input('post.id');
         if($id){
             $info =db('teachercertify')->where(array('member_id'=>$member_id,'id'=>$id))->find();
             if(empty($info)){
                 output_error('member_id和id不匹配');
             }
-            $result=$teachchild->teacher_update(array('id'=>$id),$data);
+            $result = $teachercertify_model->teacher_update(array('id'=>$id),$data);
         }else{
-            $result=$teachchild->addTeachchild($data);
+            $result = $teachercertify_model->teacher_add($data);
         }
         if($result){
             output_data($data);
