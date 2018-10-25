@@ -79,16 +79,16 @@ class Teacherhome extends MobileMall
         $teachchild = model('Teachchild');
         $condition = array();
 
-        if(input('post.type')) {
+        if(!empty(input('post.type'))) {
             $condition['t_type'] = input('post.type');
         }
-        if(input('post.type2')){
+        if(!empty(input('post.type2'))){
             $condition['t_type2'] = input('post.type2');
         }
-        if(input('post.type3')){
+        if(!empty(input('post.type3'))){
             $condition['t_type3'] = input('post.type3');
         }
-        if(input('post.type4')){
+        if(!empty(input('post.type4'))){
             $condition['t_type4'] = input('post.type4');
         }
         if(input('post.recommend')&&input('post.recommend')==2){//推荐
@@ -97,19 +97,19 @@ class Teacherhome extends MobileMall
         if(input('post.subsume')&&input('post.subsume')==1){//综合
             $order='t_maketime desc';
         }
-        if(input('post.price_desc')){
+        if(!empty(input('post.price_desc'))){
             $order='t_price desc,t_id desc';
         }
-        if(input('post.price_asc')){
+        if(!empty(input('post.price_asc'))){
             $order='t_price asc,t_id desc';
         }
         if(empty($order)){
             $order = "t_id desc";
         }
-        if(input('post.price_free')){
+        if(!empty(input('post.price_free'))){
             $condition['t_price']=0;
         }
-        if(input('post.price_fees')){
+        if(!empty(input('post.price_fees'))){
             $condition['t_price'] = array('neq',0);
         }
         $list = $teachchild->getTeachchildList($condition,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_price,t_userid,t_author', '' ,$order);
