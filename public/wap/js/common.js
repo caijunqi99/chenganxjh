@@ -920,14 +920,12 @@ function goLogin(){
     } else { //pc
     };
 }
-addCookie('ago','app');
 
 function common_url($name){
     var e = getCookie('key');
     if(!e){
         goLogin();return false;
     }
-    setCookie('ago',$name);
     if($name == 'search'){
         window.location.href='search.html';
     }else if($name == 'cart'){
@@ -946,7 +944,6 @@ function member_url($name){
     if(!e){
         goLogin();return false;
     }
-    setCookie('ago',$name);
     if($name == 'search'){
         window.location.href='../search.html';
     }else if($name == 'cart'){
@@ -966,10 +963,13 @@ function fz_token($key,$member_id){
     addCookie('mermber_id',$member_id);
 }
 
-function ago_back(ago){
-    // var ago = getCookie('ago');
+function ago_back(ago=0){
+    alert(input('get.ago'));return false;
+    if(input('get.ago')){
+       ago = input('get.ago');
+    }
 
-    if(ago != 1){
+    if(ago == 0){
         historyback();
     }else{
         window.history.back(-1);
