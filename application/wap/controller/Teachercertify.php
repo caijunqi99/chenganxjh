@@ -9,8 +9,7 @@
 namespace app\wap\controller;
 
 
-//class Teachercertify extends MobileMember
-class Teachercertify
+class Teachercertify extends MobileMember
 {
     public function _initialize()
     {
@@ -94,6 +93,12 @@ class Teachercertify
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
             $teachinfo['provincename'] = $parent['area_name'];
+        }
+        if(!empty($teachinfo['createtime'])){
+            $teachinfo['createtime'] = date("Y-m-d H:i:s",$teachinfo['createtime']);
+        }
+        if(!empty($teachinfo['option_time'])){
+            $teachinfo['option_time'] = date("Y-m-d H:i:s",$teachinfo['option_time']);
         }
         if(!empty($teachinfo['cityid'])){
             $child = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['cityid']))->find();
