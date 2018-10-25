@@ -249,4 +249,135 @@ class TeacherPayment extends MobileMall
 
         return $result;
     }
+
+    /*
+     * 教孩视频支付成功 给教师，市代，省代，总后台分成
+     * 分成比例在后台设置 config表-》code=teacher_pay_scale
+     * 如果没有市代，市代应得的分成给总后台
+     * 如果没有省代，省代应得的分成给总后台
+     * 教师分成金额存储member表，代理商分成金额存储company表
+     * 每次分成，金额增加日志存pdlog表
+     *
+     * */
+    public function money(){
+        $price = "50.00";//支付金额
+        $video_id = "4";//视频id
+
+        //分成比例
+        $proportion = db('config')->where(array('code'=>"teacher_pay_scale"))->find();
+        $proportion['value'] = json_decode($proportion['value'],true);
+        //教师分成金额
+        $teacher_price = sprintf('%.4f', $price*$proportion['value']['teacher']/100);
+        $video = db("teachchild")->where(array('t_id'=>$video_id))->find();
+        $teacher_id = $video['t_userid'];
+        $member_model = Model("Member");
+        $member = $member_model->getMemberInfoByID($teacher_id);
+        $teacher_new_price = sprintf('%.4f', $member['available_predeposit']+$teacher_price);
+        $teacher = $member_model->editMember(array('member_id'=>$teacher_id),array('available_predeposit'=>$teacher_new_price));
+        if(empty($teacher)){
+            output_error('教师分成失败');
+        }
+        $log_model = Model("Pdlog");
+        $teacher_data = [
+            "lg_member_id" => $teacher_id,
+            "lg_member_name" => $member['member_mobile'],
+            "lg_type" => "share_payment",
+            "lg_av_amount" => $teacher_price,
+            "lg_add_time" => time(),
+            "lg_desc" => "教孩视频，用户支付成功给教师分成。"
+        ];
+        $log_model->addLog($teacher_data);
+        //市代理商分成金额
+        $city_price = sprintf('%.4f', $price*$proportion['value']['city_agent']/100);
+        $teachercertify = db("teachercertify")->where(array("member_id"=>$teacher_id))->find();
+        $company_model = Model("Company");
+        $city_agent = $company_model->getOrganizeInfo(array('o_provinceid'=>$teachercertify['provinceid'],'o_cityid'=>$teachercertify['cityid']));
+        if($city_agent){
+            $city_new_price = $city_agent['total_count'] + $city_price;
+            $city = $company_model->editOrganize(array("o_id"=>$city_agent['o_id']),array("total_count"=>$city_new_price));
+            if(empty($city)){
+                output_error('市代分成失败');
+            }
+            $city_data = [
+                "lg_member_id" => $city_agent['o_id'],
+                "lg_member_name" => $city_agent['o_name'],
+                "lg_type" => "share_city_payment",
+                "lg_av_amount" => $city_price,
+                "lg_add_time" => time(),
+                "lg_desc" => "教孩视频，用户支付成功给市代理商分成。"
+            ];
+            $log_model->addLog($city_data);
+        }else{
+            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $city_new_price = $admininfo['admin_total_count'] + $city_price;
+            $admin_model = Model("Admin");
+            $admin = $admin_model->updateAdmin(array("admin_total_count"=>$city_new_price),$admininfo['admin_id']);
+            if(empty($admin)){
+                output_error('没有市代，相应分成给总后台，分成失败');
+            }
+            $city_data = [
+                "lg_member_id" => $admininfo['admin_id'],
+                "lg_member_name" => $admininfo['admin_name'],
+                "lg_type" => "admin_other_city_payment",
+                "lg_av_amount" => $city_price,
+                "lg_add_time" => time(),
+                "lg_desc" => "教孩视频，用户支付成功,没有市代给总后台分成。"
+            ];
+            $log_model->addLog($city_data);
+        }
+        //省代理商分成金额
+        $province_price = sprintf('%.4f', $price*$proportion['value']['province_agent']/100);
+        $province_agent = $company_model->getOrganizeInfo(array('o_provinceid'=>$teachercertify['provinceid'],"o_cityid"=>0));
+        if($province_agent){
+            $province_new_price = $province_agent['total_count'] + $province_price;
+            $province = $company_model->editOrganize(array("o_id"=>$province_agent['o_id']),array("total_count"=>$province_new_price));
+            if(empty($province)){
+                output_error('省代分成失败');
+            }
+            $province_data = [
+                "lg_member_id" => $province_agent['o_id'],
+                "lg_member_name" => $province_agent['o_name'],
+                "lg_type" => "share_province_payment",
+                "lg_av_amount" => $province_price,
+                "lg_add_time" => time(),
+                "lg_desc" => "教孩视频，用户支付成功给省代理商分成。"
+            ];
+            $log_model->addLog($province_data);
+        }else{
+            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $province_new_price = $admininfo['admin_total_count'] + $province_price;
+            $admin_model = Model("Admin");
+            $admin = $admin_model->updateAdmin(array("admin_total_count"=>$province_new_price),$admininfo['admin_id']);
+            if(empty($admin)){
+                output_error('没有省代，相应分成给总后台，分成失败');
+            }
+            $province_data = [
+                "lg_member_id" => $admininfo['admin_id'],
+                "lg_member_name" => $admininfo['admin_name'],
+                "lg_type" => "admin_other_province_payment",
+                "lg_av_amount" => $province_price,
+                "lg_add_time" => time(),
+                "lg_desc" => "教孩视频，用户支付成功,没有省代给总后台分成。"
+            ];
+            $log_model->addLog($province_data);
+        }
+        //总后台分成金额
+        $admin_price = sprintf('%.4f', $price*$proportion['value']['zb']/100);
+        $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+        $admin_new_price = $admininfo['admin_total_count'] + $admin_price;
+        $admin_model = Model("Admin");
+        $admin = $admin_model->updateAdmin(array("admin_total_count"=>$admin_new_price),$admininfo['admin_id']);
+        if(empty($admin)){
+            output_error('没有省代，相应分成给总后台，分成失败');
+        }
+        $admin_data = [
+            "lg_member_id" => $admininfo['admin_id'],
+            "lg_member_name" => $admininfo['admin_name'],
+            "lg_type" => "admin_payment",
+            "lg_av_amount" => $admin_price,
+            "lg_add_time" => time(),
+            "lg_desc" => "教孩视频，用户支付成功,给总后台分成。"
+        ];
+        $log_model->addLog($admin_data);
+    }
 }                  
