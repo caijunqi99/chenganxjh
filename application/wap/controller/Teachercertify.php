@@ -95,10 +95,10 @@ class Teachercertify extends MobileMember
             $teachinfo['provincename'] = $parent['area_name'];
         }
         if(!empty($teachinfo['createtime'])){
-            $teachinfo['createtime'] = date("Y-m-d H:i:s",$teachinfo['createtime']);
+            $teachinfo['createtime'] = date("H:i",$teachinfo['createtime']);
         }
         if(!empty($teachinfo['option_time'])){
-            $teachinfo['option_time'] = date("Y-m-d H:i:s",$teachinfo['option_time']);
+            $teachinfo['option_time'] = date("H:i",$teachinfo['option_time']);
         }
         if(!empty($teachinfo['cityid'])){
             $child = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['cityid']))->find();
