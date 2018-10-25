@@ -62,7 +62,7 @@ class wxpay_h5
             exception($result['err_code_des']);
         }
 
-        return $result['mweb_url'].'&redirect_url='.urlencode('http://vip.xiangjianhai.com:8001');
+        return $result['mweb_url'].'&redirect_url='.urlencode('vip.xiangjianhai.com');
     }
 
     public function notify()
