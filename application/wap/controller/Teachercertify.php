@@ -164,7 +164,7 @@ class Teachercertify extends MobileMember
             output_error('身份证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
         }
         //检查资格证是否在允许上传的类型
-        if(!in_array($type["certificate_front"]["type"],$tp) || !in_array($type["certificate_back"]["type"],$tp))
+        if(!in_array($type["certificate_front"]["type"],$tp))
         {
             output_error('资格证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
         }
