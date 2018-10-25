@@ -205,6 +205,7 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
+                        alert(e);
                         if (!e) {
                             goLogin();
                             return false
@@ -275,6 +276,7 @@ $(function() {
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
+                            alert(e);
                             if (!e) {
                                 goLogin();
                                 return false
