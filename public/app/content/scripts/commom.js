@@ -54,9 +54,9 @@ function layout(){
 
 function send_mood(){
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.sendMood.postMessage('back!!');
+        window.webkit.messageHandlers.sendClick.postMessage('back!!');
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.sendMood();
+        Android.sendClick();
     } else { //pc
     };
 }
