@@ -165,7 +165,7 @@ class Common extends AdminControl
             if($excel[1]['A'] == '摄像头名称（最好能体现出具体的地方）' && $excel[1]['B'] == '绑定班级/区域' && $excel[1]['C'] == '是否公共区域' && $excel[1]['D'] == '所属学校名称' && $excel[1]['E'] == '所在地区' && $excel[1]['F'] == 'sn' && $excel[1]['G'] == 'key' && $excel[1]['H'] == '代理商/分公司' && $excel[1]['I'] == '备注' ){
                 foreach($excel as $k=>$v){
                     if($k >1 && count($v) == 9 && $v['D'] == $school_info['name'] && !empty($v['F']) && !empty($v['G'])){
-                        $result = db('camera')->where(" `sn`='".$v["F"]."' OR `key`='".$v["G"]."'")->find();
+                        $result = db('camera')->where("`key`='".$v["G"]."'")->find();
                         if($result){
                             unset($v);
                         }else{
