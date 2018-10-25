@@ -963,17 +963,20 @@ function fz_token($key,$member_id){
     addCookie('mermber_id',$member_id);
 }
 
-function ago_back(ago=0){
-     ago = '<?php echo input("get.ago");?>';
+function ago_back(ago=''){
+     ago = GetQueryString(ago);
     alert(ago);return false;
-   /* if(input('get.ago')){
-       ago = input('get.ago');
-    }*/
 
-    if(ago == 0){
+    if(!ago){
         historyback();
     }else{
         window.history.back(-1);
     }
 
+}
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
 }
