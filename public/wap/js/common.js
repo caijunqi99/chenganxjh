@@ -964,10 +964,11 @@ function fz_token($key,$member_id){
 }
 
 function ago_back(ago=0){
-    alert(input('get.ago'));return false;
-    if(input('get.ago')){
+     ago = '<?php echo input("get.ago");?>';
+    alert(ago);return false;
+   /* if(input('get.ago')){
        ago = input('get.ago');
-    }
+    }*/
 
     if(ago == 0){
         historyback();
