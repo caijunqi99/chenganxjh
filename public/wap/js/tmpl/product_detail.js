@@ -274,12 +274,13 @@ $(function() {
                     });
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
-                            alert('aaa');
                             var e = getCookie("key");
                             if (!e) {
+                                alert('bbb');
                                 goLogin();
                                 return false
                             }else{
+                                alert('aaa');
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {
                                     $.sDialog({
@@ -318,6 +319,7 @@ $(function() {
                                     data: o,
                                     dataType: "json",
                                     success: function(e) {
+                                        alert('cccc');
                                         if (e.code==100) {
                                             $.sDialog({
                                                 skin: "red",
@@ -334,9 +336,10 @@ $(function() {
                         })
                     } else {
                         $("#buy-now").click(function() {
-                            alert('bbb');
                             var e = getCookie("key");
+                            alert(e);
                             if (!e) {
+                                alert('bbb');
                                 goLogin();
                                 return false
                                 // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
