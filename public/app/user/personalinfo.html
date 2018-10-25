@@ -10,8 +10,8 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
@@ -36,20 +36,7 @@
     </header>
 
     <!-- 主要内容 -->
-<<<<<<< HEAD
-    <div class="main">
-        <div class="cont margt30">
-            <div class="container2">
-                <div class="bang_list userhead" style="position:relative;">
-                    <div class="name_box user_head_txt">
-                        <label for="uploaderInput" class="picture_label">头像</label>
-                        <input type="file" placeholder="" id="uploaderInput" name="image[]" onchange="fileChange(event)" style="visibility:hidden;width: 0;height: 0;" />
-                        <!-- <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple> -->
-                    </div>
-                    <div class="input_box user_head_cont" style="float:right;">
-                        <div class="user_head_box">
-                            <img src="../content/images/user/user_head.jpg" alt="" class="user_img">
-=======
+
     <div class="screen" id="screen"></div>
     <form id="form" action="POST" enctype="multipart/form-data">
 
@@ -65,7 +52,6 @@
                             <div class="user_head_box">
                                 <img src="../content/images/user/user_head.jpg" alt="" class="user_img">
                             </div>
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
                         </div>
                     </div>
                 </div>
@@ -144,15 +130,9 @@
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
-<<<<<<< HEAD
-    <!-- <script src="../content/plugins/jqweui/lib/fastclick.js"></script> -->
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/plugins/jqweui/js/city-picker.js"></script>
-=======
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
     <script src="../content/plugins/cslCamera.js"></script>
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
 
@@ -282,26 +262,7 @@
             });
 
             // 上传头像
-<<<<<<< HEAD
-            fileChange = function(event) {
-                var formData = new FormData(event.target.files['0']);
-                formData.append('file', event.target.files['0']);
-                formData.append('key', user_token);
-                formData.append('member_id', user_member_id);
-                $.ajax({
-                    type: 'post',
-                    url: api + '/Common/upload_avatar',
-                    // url:'http://w.xjh.com/index.php/Wap/Common/upload_avatar',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (response['code'] == 200) {
-                            $.toast(response['result']['message']);
-                            img_name = response['result']['avatar_url'];
-                        }
-=======
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
+
 
             fileChange = function() {
                 if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
@@ -337,15 +298,9 @@
                         case '教师':
                             params['member_identity'] = 2;
                             break;
-                        /*case '其他':
-                            params['member_identity'] = 3;
-                            break;*/
                     }
                     params['member_age'] = $('#nianling').val();
                     switch ($('#sex').val()) {
-                        /*case '保密':
-                            params['member_sex'] = 0;
-                            break;*/
                         case '男':
                             params['member_sex'] = 1;
                             break;
