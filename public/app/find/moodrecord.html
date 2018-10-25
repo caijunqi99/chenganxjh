@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-发现-心情</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../content/scripts/mobile-util.js"></script>
+</head>
+
+<body>
+    <header class="head">
+        <div class="head0">
+            <div class="menu_bar_box">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                    <i class="icon iconfont icon-jiantou3"></i>
+                </a>
+            </div>
+            <div class="head_title">
+                <p>心情记录</p>
+            </div>
+            <div class="head_r">
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="main">
+        <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"></div>
+        <div class="container2">
+            <ul class="moodrecord_list" id="moodrecord_list">
+                <li>
+                    <a href="javascript:;">
+                        <div class="date today">
+                            <span>今天</span>
+                        </div>
+                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/camera_icon.png) no-repeat center;"></div>
+                        <div class="txtbox">
+                            <p class="mr_p_today">记录心情，每天开始</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="./mooddetail.html">
+                        <div class="date">
+                            <span>10月</span>23
+                        </div>
+                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
+                        <div class="txtbox">
+                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="./mooddetail.html">
+                        <div class="date">
+                            <span>10月</span>22
+                        </div>
+                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
+                        <div class="txtbox">
+                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="./mooddetail.html">
+                        <div class="date">
+                            <span>10月</span>21
+                        </div>
+                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
+                        <div class="txtbox">
+                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- <p class="end_p"><span>到底了</span></p> -->
+            <div class="weui-loadmore">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips">正在加载</span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script>
+        $(function() {
+            var loading = false;
+            $(document.body).infinite().on("infinite", function() {
+                if (loading) return;
+                loading = true;
+                setTimeout(function() {
+                    $("#moodrecord_list").append('<li>' +
+                        '<a href="./mooddetail.html">' +
+                        '<div class="date">' +
+                        '<span>10月</span>21' +
+                        '</div>' +
+                        '<div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>' +
+                        '<div class="txtbox">' +
+                        '<p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>' +
+                        '</div>' +
+                        '</a>' +
+                        '</li>');
+                    loading = false;
+                }, 2000);
+            });
+        })
+    </script>
+</body>
+
+</html>

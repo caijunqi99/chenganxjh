@@ -10,15 +10,13 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body class="infobody" ontouchstart>
+<body class="infobody">
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
@@ -29,9 +27,7 @@
             <div class="head_title">
                 <p>宝宝课堂</p>
             </div>
-            <div class="head_r">
-
-            </div>
+            <div class="head_r"></div>
         </div>
     </header>
 
@@ -39,210 +35,589 @@
     <div class="main">
         <div class="cont margt30">
             <ul class="week_bar clearfix">
-                <li>
+                <li id="jobs1" onclick="setTab1('jobs',1,3)">
                     <a href="javascript:;">上一周</a>
                 </li>
-                <li class="active">
+                <li id="jobs2" onclick="setTab1('jobs',2,3)" class="active">
                     <a href="javascript:;">当前周</a>
                 </li>
-                <li>
+                <li id="jobs3" onclick="setTab1('jobs',3,3)">
                     <a href="javascript:;">下一周</a>
                 </li>
             </ul>
         </div>
+        <div id="courses_jobs_1" class="text_demand" style="display:none;">
+            <div class="cont">
+                <ul class="week_list">
+                    <li class="active">
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周一（2018-09-24）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周二（2018-09-25）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周三（2018-09-26）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周四（2018-09-27）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周五（2018-09-28）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-        <div class="cont">
-            <ul class="week_list">
-                <li class="active">
-                    <a class="week_class_bar" href="javascript:;">今日（2018-09-24）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
-                    <div class="week_class_cont">
-                        <div class="week_class_txt">
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
-                                </dd>
-                            </dl>
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
-                                </dd>
-                            </dl>
+        </div>
+        <div id="courses_jobs_2" class="text_demand">
+            <div class="cont">
+                <ul class="week_list">
+                    <li class="active">
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">今日（2018-09-24）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <a class="week_class_bar" href="javascript:;">周二（2018-09-25）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
-                    <div class="week_class_cont">
-                        <div class="week_class_txt">
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
-                                </dd>
-                            </dl>
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
-                                </dd>
-                            </dl>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周二（2018-09-25）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <a class="week_class_bar" href="javascript:;">周三（2018-09-26）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
-                    <div class="week_class_cont">
-                        <div class="week_class_txt">
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
-                                </dd>
-                            </dl>
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
-                                </dd>
-                            </dl>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周三（2018-09-26）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <a class="week_class_bar" href="javascript:;">周四（2018-09-27）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
-                    <div class="week_class_cont">
-                        <div class="week_class_txt">
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
-                                </dd>
-                            </dl>
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
-                                </dd>
-                            </dl>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周四（2018-09-27）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <a class="week_class_bar" href="javascript:;">周五（2018-09-28）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
-                    <div class="week_class_cont">
-                        <div class="week_class_txt">
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
-                                </dd>
-                            </dl>
-                            <dl class="classplan">
-                                <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
-                                </dd>
-                                <dd>
-                                    <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
-                                </dd>
-                            </dl>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周五（2018-09-28）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="courses_jobs_3" class="text_demand" style="display:none;">
+            <div class="cont">
+                <ul class="week_list">
+                    <li class="active">
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周一（2018-09-24）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周二（2018-09-25）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周三（2018-09-26）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周四（2018-09-27）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="week_class_bar" onclick="cuttle($(this))" href="javascript:;">周五（2018-09-28）<i class="icon iconfont icon-jiantou linkpointer"></i></a>
+                        <div class="week_class_cont">
+                            <div class="week_class_txt">
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>上午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>08:30-09:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>09:30-10:15 英语课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>10:30-11:00 活动课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>11:10-11:45 美术课</a>
+                                    </dd>
+                                </dl>
+                                <dl class="classplan">
+                                    <dt><i class="icon iconfont icon-custom-clock"></i>下午</dt>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>13:30-14:15 奥数课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>14:30-15:15 语文课</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;"><span class="dot">●</span>15:30-16:15 英语课</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
         </div>
 
-
     </div>
-
-
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
+
     <script>
-        $(function() {
-            $(".week_class_bar").click(function() {
-                $(this).parent("li").siblings().find(".week_class_cont").slideUp();
-                $(this).parent("li").find(".week_class_cont").slideDown();
-                $(this).parent("li").siblings().removeClass("active");
-                $(this).parent("li").addClass("active");
-            });
-        })
+        $.ajax({
+            type: "POST",
+            url: api + "arrangement/index?key=1234",
+            data: {
+                school_id: 6
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            }
+        });
+
+        // 上周，本周，下周切换
+        function setTab1(name, cursel, n) {
+            for (i = 1; i <= n; i++) {
+                var menu = $("#" + name + i)
+                var con = $("#" + "courses_" + name + "_" + i)
+                if (i == cursel) {
+                    menu.addClass("active");
+                    con.fadeIn();
+                } else {
+                    menu.removeClass("active");
+                    con.hide();
+                }
+            }
+        }
+
+        // 折叠
+        function cuttle(obj) {
+            obj.parent("li").siblings().find(".week_class_cont").slideUp(200);
+            obj.parent("li").find(".week_class_cont").slideDown(200);
+            obj.parent("li").siblings().removeClass("active");
+            obj.parent("li").addClass("active");
+        }
     </script>
 </body>
 

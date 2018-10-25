@@ -14,15 +14,66 @@
 	flex: 1;
 	top: 0;
 }
-.goBack i{
+.goBack .icon{
+	float: left;
+	display: inline-block;
+	width: 50%;
+	height: 74px;
 	font-size: 30px;
 	color: #fff;
+}
+.goBack p{
+	float: right;
+	display: inline-block;
+	width: auto;
+	height: 74px;
+	font-size: 26px;
+	color: #fff;
+	text-align: right;
+	text-align: right;
 }
 .video_wrap{
 	width: 100%;
 }
 .video_wrap video{
-	width: 100%;
+	width: 750px;
+	height: auto;
+	margin: 0 auto
+}
+.video-js{
+	width: 750px;
+	display: block;
+	vertical-align: top;
+	box-sizing: border-box;
+	color: #fff;
+	background-color: #000;
+	position: relative;
+	padding: 0;
+	font-size: 20px !important;
+	line-height: 1;
+	font-weight: normal;
+	font-style: normal;
+	font-family: Arial, Helvetica, sans-serif;
+	word-break: initial;
+}
+.video-js .vjs-big-play-button {
+    font-size: 3em;
+    line-height: 1.5em;
+    height: 1.5em;
+    width: 3em;
+    display: block;
+    position: absolute;
+    top: 50% !important;
+    left: 50% !important;
+    padding: 0;
+    cursor: pointer;
+    opacity: 1;
+    border: 0.06666em solid #fff;
+    background-color: #2B333F;
+    background-color: rgba(43, 51, 63, 0.7);
+    border-radius: 0.3em;
+    transition: all 0.4s;
+    transform: translate(-50%, -50%);
 }
 .related{
 	display: flex;
@@ -57,7 +108,7 @@
 	height: 150px;
 }
 .related2 button{
-	width: 124px;
+	width: 180px;
 	height: 42px;
 	font-size: 26px;
 	background: #4ec3bb;
@@ -72,7 +123,7 @@
 	line-height: 92px;
 }
 .related_list_li{
-	margin-bottom: 22px; 
+	margin-bottom: 22px;
 }
 .img_wrap{
 	width: 146px;

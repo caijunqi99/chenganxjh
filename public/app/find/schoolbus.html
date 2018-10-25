@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-发现-校车</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../content/scripts/mobile-util.js"></script>
+</head>
+
+<body class="mdbody">
+    <header class="head">
+        <div class="head0">
+            <div class="menu_bar_box">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                    <i class="icon iconfont icon-jiantou3"></i>
+                </a>
+            </div>
+            <div class="head_title">
+                <p>校车</p>
+            </div>
+            <div class="head_r"></div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="main">
+        <div class="container3">
+            <div class="schoolbus_cont">
+                <img class="schoolbus_img" src="../content/images/find/schoolbus_img.png" alt="">
+                <div id="schoolbus_list_box">
+                    <!-- 上学校车 -->
+                    <!-- <div class="schoolbus_list">
+                        <h2 class="line_way_title">
+                            通州
+                            <i class="icon iconfont icon-single_arrow"></i> 建设街
+                            <span class="gotoschool_type">上学</span>
+                        </h2>
+                        <div class="bus_line">
+                            <div class="bus_line_t">
+                                <div class="bus_line_tl">
+                                    <ul class="bus_line_ul bus_line_time">
+                                        <li>06:28</li>
+                                        <li>08:20</li>
+                                    </ul>
+                                </div>
+                                <div class="bus_line_tr">
+                                    <ul class="bus_line_ul bus_line_name">
+                                        <li><span class="bus_icon"></span>
+                                            <p>通州</p>
+                                        </li>
+                                        <li><span class="bus_icon"></span>
+                                            <p>建设街</p>
+                                        </li>
+                                    </ul>
+                                    <a href="javascript:;" class="completeroute" onclick="wayOpen($(this))">完整路线</a>
+                                </div>
+                            </div>
+                            <div class="bus_line_b">
+                                <div class="bus_info">
+                                    <p class="bus_info_p1">监督投诉：12646464<span class="platenumber">京ABN254</span></p>
+                                    <p class="bus_info_p1">敬请提前候车，看见车了向司机招手示意，上车主动系好安全带</p>
+                                </div>
+                                <ul class="bus_line_ul channel">
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>06:28</div>
+                                            <div>通州</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>06:40</div>
+                                            <div>三元桥</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>06:50</div>
+                                            <div>良乡</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>07:00</div>
+                                            <div>保福寺</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>07:20</div>
+                                            <div>花龙</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="bus_icon"></span>
+                                        <div class="channel_cont">
+                                            <div>07:28</div>
+                                            <div>建设街</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="packup_box">
+                                    <a href="javascript:;" class="packup_btn" onclick="wayClose($(this))">
+                                        收起 <i class="icon iconfont icon-07jiantouxiangshang"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div> -->
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <script>
+        $.ajax({
+            type: "POST",
+            url: api + "/Students/GetSchoolBusInfo.html",
+            data: {
+                key: user_token,
+                child_id: 10
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response["result"]);
+                $("#schoolbus_list_box").html(HTML(response["result"]));
+            }
+        });
+
+        // 校车路线模板
+        function HTML(data) {
+            var template = '';
+            var template2 = '';
+            for (i = 0; i < data.length; i++) {
+                template2 = '';
+                for (j = 0; j < data[i]["bus_line"].length; j++) {
+                    template2 += '<li>' +
+                        '<span class="bus_icon"></span>' +
+                        '<div class="channel_cont">' +
+                        '<div>' + data[i]["bus_line"][j]["ArrivalTime"] + '</div>' +
+                        '<div>' + data[i]["bus_line"][j]["Station"] + '</div>' +
+                        '</div>' +
+                        '</li>';
+                }
+
+                template += '<div class="schoolbus_list">' +
+                    '<h2 class="line_way_title">' + data[i]["bus_start"] +
+                    '<i class="icon iconfont icon-single_arrow"></i>' + data[i]["bus_end"] +
+                    '<span class="gotoschool_type">' + data[i]["bus_line_name"] + '</span>' +
+                    '</h2>' +
+                    '<div class="bus_line">' +
+                    '<div class="bus_line_t">' +
+                    '<div class="bus_line_tl">' +
+                    '<ul class="bus_line_ul bus_line_time">' +
+                    '<li>' + data[i]["bus_start_time"] + '</li>' +
+                    '<li>' + data[i]["bus_end_time"] + '</li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '<div class="bus_line_tr">' +
+                    '<ul class="bus_line_ul bus_line_name">' +
+                    '<li><span class="bus_icon"></span>' +
+                    '<p>' + data[i]["bus_start"] + '</p>' +
+                    '</li>' +
+                    '<li><span class="bus_icon"></span>' +
+                    '<p>' + data[i]["bus_end"] + '</p>' +
+                    '</li>' +
+                    '</ul>' +
+                    '<a href="javascript:;" class="completeroute" onclick="wayOpen($(this))">完整路线</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="bus_line_b">' +
+                    '<div class="bus_info">' +
+                    '<p class="bus_info_p1">监督投诉：12646464<span class="platenumber">' + data[i]["bus_card"] + '</span></p>' +
+                    '<p class="bus_info_p1">敬请提前候车，看见车了向司机招手示意，上车主动系好安全带</p>' +
+                    '</div>' +
+                    '<ul class="bus_line_ul channel">' + template2 +
+                    '</ul>' +
+                    '<div class="packup_box">' +
+                    '<a href="javascript:;" class="packup_btn" onclick="wayClose($(this))">' +
+                    '收起 <i class="icon iconfont icon-07jiantouxiangshang"></i>' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+            }
+
+            return template;
+
+        }
+
+        // 完整路线打开关闭 start
+        function wayOpen(Othis) {
+            var _this_line_b = Othis.parents(".bus_line").find(".bus_line_b");
+            Othis.fadeOut(200);
+            if (_this_line_b.css("display") == "none") {
+                _this_line_b.slideDown(200);
+            }
+        }
+
+        function wayClose(Othis) {
+            var _that_line_t = Othis.parents(".bus_line").find(".bus_line_t");
+            var _that_line_b = Othis.parents(".bus_line_b");
+            _that_line_t.find(".completeroute").fadeIn(200);
+            _that_line_b.slideUp(200);
+        }
+        // 完整路线打开关闭 end
+    </script>
+</body>
+
+</html>

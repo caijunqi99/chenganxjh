@@ -85,6 +85,26 @@ a:active {
     margin-right: 10px;
 }
 
+.sort_tabs_top{
+    width: 100%;
+    height: 70px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sort_tabs_top .action {
+    padding-bottom: 10px;
+    color: #4ec3bb;
+    border-bottom: 2px solid #4ec3bb;
+}
+
+.sort_tabs_top li {
+    float: left;
+    width: 25%;
+    height: 100%;
+    line-height: 80px;
+    font-size: 30px;
+    text-align: center;
+}
 
 /*选项卡*/
 
@@ -124,6 +144,35 @@ a:active {
     text-align: right;
 }
 
+.sort_block{
+    width: 750px;
+    height: 109px;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 100px;
+    margin: 0 auto;
+}
+
+.sort_block span .action{
+    background: #4ec3bb !important;
+    color: #fff;
+}
+
+.sort_block span{
+    width: 20%;
+    text-align: center;
+}
+
+.sort_block span i{
+    width: 80%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    display: inline-block;
+    background: #f0f0f0;
+    border-radius: 10px;
+    font-size: 26px;
+}
+
 .filter {
     width: 100%;
     height: 75px;
@@ -147,6 +196,10 @@ a:active {
 .filter .float_right span {
     padding-left: 20px;
     border-left: 1px solid #d7d7d7;
+}
+
+.filter .float_right_action{
+    color: #6bbfc1 !important;
 }
 
 .filter .float_right_action span {
@@ -211,6 +264,17 @@ a:active {
 
 .filter_span_wrap {
     border-bottom: 18px;
+    border-bottom: 18px;
+    display: inline-block;
+    width: 225px;
+    vertical-align: top;
+    margin-top: 20px;
+    border-right: 1px solid #eeeeee;
+    height: 600px;
+}
+
+.filter_span_wrap:nth-of-child(3){
+    border: none
 }
 
 .filter_span_wrap .action {
@@ -226,11 +290,31 @@ a:active {
     text-align: center;
 }
 
+.filter_confirm{
+    width: 750px;
+    height: 85px;
+    background: #fff;
+}
+
+.filter_confirm span{
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    line-height: 85px;
+    height: 100%;
+    font-size: 30px;
+    background: #f1f1f1;
+}
+
+.filter_confirm span:nth-child(2){
+    background: #4ec3bb;
+    color: #fff;
+}
 
 /*内容部分*/
 
 .main_content {
-    margin-top: 11px;
+    margin-top: 20px;
 }
 
 .content_wrap {
