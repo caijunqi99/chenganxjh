@@ -923,6 +923,7 @@ function goLogin(){
 
 function common_url($name){
     var e = getCookie('key');
+    alert(e);
     if(!e){
         goLogin();return false;
     }
