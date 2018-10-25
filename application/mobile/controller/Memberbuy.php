@@ -2,8 +2,8 @@
 
 namespace app\mobile\controller;
 
-
-class Memberbuy extends MobileMember
+use think\Controller;
+class Memberbuy extends Controller
 {
     public function _initialize()
     {
