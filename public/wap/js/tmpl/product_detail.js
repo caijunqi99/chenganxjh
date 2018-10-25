@@ -205,7 +205,6 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
-                        alert(e);
                         if (!e) {
                             goLogin();
                             return false
@@ -276,7 +275,6 @@ $(function() {
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            alert(e);
                             if (!e) {
                                 goLogin();
                                 return false
@@ -335,7 +333,7 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            alert(e);
+
                             if (!e) {
                                 goLogin();
                                 return false
@@ -417,6 +415,9 @@ $(function() {
                         });
                 $(".kefu").click(function() {
                     window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+                })
+                $(".cart").click(function() {
+                    window.location.href = WapSiteUrl + "/tmpl/cart_list.html"
                 })
             }
         })
