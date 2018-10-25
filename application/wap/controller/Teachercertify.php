@@ -69,7 +69,7 @@ class Teachercertify extends MobileMember
             if(empty($info)){
                 output_error('member_id和id不匹配');
             }
-            $result = $teachercertify_model->teacher_update(array('id'=>$id),$data);
+            $result = $teachercertify_model->teacher_update($data,array('id'=>$id));
         }else{
             $result = $teachercertify_model->teacher_add($data);
         }

@@ -286,6 +286,27 @@ class Teachvideo extends AdminControl {
     }
 
     /*
+     * 设置推荐视频
+     * */
+    public function recom() {
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $t_id = input('param.t_id');
+        $recommend = input('param.t_recommend');
+        if (empty($t_id)) {
+            $this->error(lang('param_error'));
+        }
+        $model_teachchild = Model('Teachchild');
+        $result = $model_teachchild->editTeachchild(array('t_id'=>$t_id),array('t_recommend'=>$recommend));
+        if ($result) {
+            $this->success("推荐设置成功", 'Teachvideo/index');
+        } else {
+            $this->error('推荐设置失败');
+        }
+    }
+
+    /*
      * 上传视频
      * */
     public function add() {

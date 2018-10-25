@@ -59,6 +59,7 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['collect_id'] = $tid;
         $condition['type_id'] = 1;
+        $condition['isdel'] = 1;
         $collect = model('Membercollect');
         $res = $collect->getMembercollectInfo($condition);
         $condition['time'] = time();

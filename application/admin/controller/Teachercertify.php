@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
+use think\Model;
 use think\Validate;
 
 class Teachercertify extends AdminControl {
@@ -177,6 +178,8 @@ class Teachercertify extends AdminControl {
         $result = $model_teacher->teacher_update(array('status'=>$status,'failreason'=>$reason,'option_id'=>$admininfo['admin_id'],'option_time'=>time()),array('id'=>$teacher_id));
         if ($result) {
             if($status==2){
+                $member_model = Model("Member");
+                $member_model->editMember(array('member_id'=>$teacher_id),array("member_identity"=>2));
                 //审核结果给用户发送短信提醒
                 if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
                     if(empty($reason)){
