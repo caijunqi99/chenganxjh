@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 $(function() {
 
     var headerClone = $('#header').clone();
@@ -59,12 +58,7 @@ $(function() {
 
 });
 
-//v4 返利
-var uid = window.location.href.split("#V3");
-var fragment = uid[1];
-if (fragment) {
-    if (fragment.indexOf("V3") == 0) { document.cookie = 'uid=0'; } else { document.cookie = 'uid=' + uid[1]; }
-=======
+
 $(function() {
 
     var headerClone = $('#header').clone();
@@ -131,5 +125,4 @@ var uid = window.location.href.split("#V3");
 var fragment = uid[1];
 if (fragment) {
     if (fragment.indexOf("V3") == 0) { document.cookie = 'uid=0'; } else { document.cookie = 'uid=' + uid[1]; }
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
 }
