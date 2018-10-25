@@ -965,8 +965,6 @@ function fz_token($key,$member_id){
 
 function ago_back(ago=''){
      ago = GetQueryString(ago);
-    alert(ago);return false;
-
     if(!ago){
         historyback();
     }else{
