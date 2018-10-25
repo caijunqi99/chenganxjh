@@ -519,7 +519,6 @@ a.quit_popup i {
     line-height: 80px;
 }
 
-<<<<<<< HEAD
 .goodslist li {
     padding: 35px 0;
     height: 130px;
@@ -663,7 +662,7 @@ a.quit_popup i {
     width: 100%;
     color: #fff;
     border-radius: 10px;
-=======
+}
 .orderforms_list3>li {
     margin-bottom: 20px;
     background: #fff;
@@ -1073,5 +1072,4 @@ a.repayments_btn {
     background: #4ec3bb;
     font-size: 28px;
     color: #fff;
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
 }
