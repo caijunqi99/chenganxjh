@@ -27,41 +27,11 @@ class Coursemanage extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
-        }
-        //$data = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where(array('s.isdel'=>1,'a.admin_company_id'=>$a))->select();
-        $schoolname = input('param.schoolname');//学校名称
-        if ($schoolname) {
-            $condition['name'] = array('like', "%" . $schoolname . "%");
-        }
-        $schoolphone = input('param.schoolphone');//电话
-        if ($schoolphone) {
-            $condition['common_phone'] = array('like', "%" . $schoolphone . "%");
-        }
-        $schoolusername = input('param.schoolusername');//联系/负责人
-        if ($schoolusername) {
-            $condition['username'] = array('like', "%" . $schoolusername . "%");
-        }
-        $school_type = input('param.school_type');//学校类型
-        if ($school_type) {
-            $condition['typeid'] = $school_type;
-        }
-        $area_id = input('param.area_id');//地区
-        if($area_id){
-            $region_info = db('area')->where('area_id',$area_id)->find();
-            if($region_info['area_deep']==1){
-                $condition['provinceid'] = $area_id;
-            }elseif($region_info['area_deep']==2){
-                $condition['cityid'] = $area_id;
+            if(!empty($admininfo['admin_school_id'])){
+                $condition['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['areaid'] = $area_id;
+                $condition['admin_company_id'] = $admininfo['admin_company_id'];
             }
-        }
-        $query_start_time = input('param.query_start_time');
-        $query_end_time = input('param.query_end_time');
-        if ($query_start_time || $query_end_time) {
-            $condition['createtime'] = array('between', array($query_start_time, $query_end_time));
         }
         $condition['isdel'] = 1;
         $course_list = $model_arrangement->getList($condition);
@@ -80,14 +50,23 @@ class Coursemanage extends AdminControl {
                 }
             }
         }
-
         $this->assign('course_list', $course_list);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
 
     public function add() {
-        $schoolid = 6;
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $schoolid = $admininfo['admin_school_id'];
+            }
+        }else{
+            $schoolid = 6;
+        }
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
