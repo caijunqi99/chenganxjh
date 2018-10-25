@@ -90,28 +90,21 @@
         </tbody>
             </table>
         <label><h>周一</h>
-            <br>上午：
-            <input type="text" name="mor_txt[]" id="mor_txt1" placeholder="请输入课程名称"/>:
-            <input type="text" name="mor_startTime[]" id="mor_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>
-            --
-            <input type="text" name="mor_endTime[]" id="mor_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <br>上午：<input type="text" name="mor_txt[]" id="mor_txt1" placeholder="请输入课程名称"/>:
+            <input type="text" name="mor_startTime[]" id="mor_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>--<input type="text" name="mor_endTime[]" id="mor_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBox(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBox(this.form)" />
         </p>
         <label><br>下午：<input type="text" name="after_txt[]" id="after_txt1" placeholder="请输入课程名称"/>:
-            <input type="text" name="after_startTime[]" id="after_startTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>
-            --
-            <input type="text" name="after_endTime[]" id="after_endTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+            <input type="text" name="after_startTime[]" id="after_startTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>--<input type="text" name="after_endTime[]" id="after_endTime1"  onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxyi(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxyi(this.form)" />
         </p>
         <label><h>周二</h>
             <br>上午：<input type="text" name="mor_cls[]" id="mor_cls1" placeholder="请输入课程名称"/>: 
-            <input type="text" name="mor_cls_startTime[]" id="mor_cls_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
-            <input type="text" name="mor_cls_endTime[]" id="mor_cls_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
-
+            <input type="text" name="mor_cls_startTime[]" id="mor_cls_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>--<input type="text" name="mor_cls_endTime[]" id="mor_cls_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxers(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxers(this.form)" />
@@ -124,16 +117,13 @@
         </p>
         <label><h>周三</h>
             <br>上午：<input type="text" name="mor_wes_txt[]" id="mor_wes_txt1" placeholder="请输入课程名称"/>: 
-            <input type="text" name="mor_wes_startTime[]" id="mor_wes_startTime" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
-            <input type="text" name="mor_wes_endTime[]" id="mor_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
-
+            <input type="text" name="mor_wes_startTime[]" id="mor_wes_startTime" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>--<input type="text" name="mor_wes_endTime[]" id="mor_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxsans(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsans(this.form)" />
         </p>
         <label><br>下午：<input type="text" name="after_wes_txt[]" id="after_wes_txt1" placeholder="请输入课程名称"/>: 
-        <input type="text" name="after_wes_startTime[]" id="after_wes_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>&#45;&#45;
-        <input type="text" name="after_wes_endTime[]" id="after_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
+        <input type="text" name="after_wes_startTime[]" id="after_wes_startTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入上课时间"/>--<input type="text" name="after_wes_endTime[]" id="after_wes_endTime1" onchange="javascript:if(!/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-5]{1}$/.test(this.value)){alert('时间格式不正确,正确的格式为 00:00');this.value=''};" placeholder="请输入下课时间"/></label>
         <p>
             <input type="button" value="+" onClick="addTextBoxsanx(this.form,this.parentNode); " />
             <input type="button" value="-" onClick="removeTextBoxsanx(this.form)" />
@@ -232,7 +222,7 @@
                 var classname_length = data.length;
                 var classname_list = data;
                 if (data) {
-                    var select = '<select name="class_name" id="class_name" class="querySelect"><option>请选择班级</option>';
+                    var select = '<select name="class_name" id="class_name" class="querySelect"><option value="">请选择班级</option>';
                     if (classname_length > 0) {
                         for (var i = 0; i < classname_length; i++) {
                             select += "<option value='" + classname_list[i].classid + "'>" + classname_list[i].classname + "</option>";
@@ -886,78 +876,37 @@
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules: {
-                school_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20,
-                    remote: {
-                        url: "{:url('Admin/school/ajax',['branch'=>'check_user_name'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#school_name').val();
-                            },
-                            area_id: function () {
-                                return $('#area_id').val();
-                            }
-                        }
-                    }
-                },
-                school_phone:{
-                    required: true,
-                    minlength: 8,
-                    maxlength: 12
-                },
-                school_username:{
-                    required: true
-                },
-                school_address:{
-                    required: true
-                },
                 school_type:{
                     required: true
                 },
-                school_dieline:{
-                    required: true
-                },
-                typeid:{
-                    required: true
+                class_name: {
+                    required: true,
+                    remote: {
+                        url: "{:url('Admin/Coursemanage/ajax',['branch'=>'check_class_name'])}",
+                        type: 'get',
+                        data: {
+                            schoolid: function() {
+                                return $('#schoolid').val();
+                            },
+                            class_name: function () {
+                                return $('#class_name').val();
+                            }
+                        }
+                    }
                 }
             },
             messages: {
-                school_name: {
-                    required: '{$Think.lang.school_add_sname_null}',
-                    maxlength: '{$Think.lang.school_add_name_length}',
-                    minlength: '{$Think.lang.school_add_name_length}',
-                    remote: '{$Think.lang.school_add_name_exists}'
-                },
-                school_phone: {
-                    required: '{$Think.lang.school_add_phone_null}',
-                    maxlength: '{$Think.lang.school_add_phone_length}',
-                    minlength: '{$Think.lang.school_add_phone_length}',
-                },
-                school_username: {
-                    required: '{$Think.lang.school_add_name_null}',
-                },
-                school_address: {
-                    required: '{$Think.lang.school_add_address_null}',
-                },
                 school_type: {
-                    required: '{$Think.lang.school_add_type_null}',
+                    required: '{$Think.lang.school_index_chosetype}'
                 },
-                school_dieline: {
-                    required: '{$Think.lang.school_dieline_null}',
-                },
-                typeid: {
-                    required: '{$Think.lang.school_add_area_null}',
+                class_name: {
+                    required: '{$Think.lang.school_index_choseclass}',
+                    remote: '{$Think.lang.school_course_class}'
                 }
             }
         });
     });
 
-    $(function(){
-        $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
-    });
     $(function(){
         $("#region_choose").click(function() {
             if ($("#user_form").valid()) {

@@ -167,4 +167,5 @@ $lang['school_add_type_null']		= '类型不能为空';
 $lang['school_birthday_null']		= '生日不能为空';
 $lang['school_studentcard_null']		= '身份证号不能为空';
 $lang['school_studentcode']		= '班级识别码不正确';
+$lang['school_course_class']		= '此班级已经添加过课程，无需重复添加。如有变动去修改';
 ?>

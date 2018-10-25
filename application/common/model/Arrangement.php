@@ -55,6 +55,10 @@ class Arrangement extends Model {
         return db('arrangement')->where('id',$id)->find();
     }
 
+    public function getOneInfo($condition) {
+        return db('arrangement')->where($condition)->find();
+    }
+
     /**
      * 根据标识码查询一条
      * 
@@ -69,8 +73,8 @@ class Arrangement extends Model {
      * 
      * @param unknown_type $param
      */
-    public function update1($param) {
-        return db('food')->where('doc_id',$param['doc_id'])->update($param);
+    public function update1($param,$id) {
+        return db('arrangement')->where('id',$id)->update($param);
     }
 }
 

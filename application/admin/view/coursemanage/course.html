@@ -16,12 +16,16 @@
             <td class="align-center"><?php foreach($course['content']['Monday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
@@ -30,12 +34,16 @@
             <td class="align-center"><?php foreach($course['content']['Tuesday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
@@ -44,12 +52,16 @@
             <td class="align-center"><?php foreach($course['content']['Wednesday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
@@ -58,12 +70,16 @@
             <td class="align-center"><?php foreach($course['content']['Thursday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
@@ -72,12 +88,16 @@
             <td class="align-center"><?php foreach($course['content']['Friday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
@@ -86,29 +106,35 @@
             <td class="align-center"><?php foreach($course['content']['Saturday'] as $key=>$val){
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
                 }
                 } ?></td>
         </tr>
         <tr>
             <td class="align-center">周日</td>
             <td class="align-center"><?php foreach($course['content']['Sunday'] as $key=>$val){
-
                 if($key == "morning"){
                 echo "上午：";
-                }
-                if($key == "afternoon"){
-                echo "下午：";
-                }
                 foreach($val as $k=>$v){
-                echo $v['time']."&nbsp;&nbsp;&nbsp;".$v['content']."<br>";
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
                 }
-
+                } ?>
+                <br>
+                <?php if($key == "afternoon"){
+                    echo "下午：";
+                    foreach($val as $k=>$v){
+                echo $v['time']."&nbsp;".$v['content']."&nbsp;&nbsp;&nbsp;";
+                }
+                }
                 } ?></td>
         </tr>
     </table>
