@@ -275,7 +275,7 @@ $(function() {
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            if (!e) {
+                            if (!e || e == 'null') {
                                 goLogin();
                                 return false
                             }else{
@@ -334,7 +334,6 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            alert(e);
                             if (!e || e == 'null') {
                                 alert('bbb');
                                 goLogin();
