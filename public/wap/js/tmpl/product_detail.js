@@ -335,6 +335,7 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
+                            alert(e);
                             if (!e) {
                                 goLogin();
                                 return false
