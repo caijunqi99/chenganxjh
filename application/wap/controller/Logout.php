@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Logout extends MobileMember
+class Logout extends MobileHome
 {
     public function _initialize()
     {
@@ -19,20 +19,17 @@ class Logout extends MobileMember
      * 注销
      */
     public function index(){
-        if(empty(input('post.uid')) || !in_array(input('post.client'), $this->client_type_array)) {
-            output_error('参数错误1');
-        }
-
+        $input =input();
+        $uid = $input['uid'];
         $model_mb_user_token = Model('mbusertoken');
-
-        if($this->member_info['member_id'] == trim(input('post.uid'))) {
+        
+        if($uid) {
             $condition = array();
             $condition['member_id'] = $this->member_info['member_id'];
-            $condition['client_type'] = input('post.client');
             $model_mb_user_token->delMbUserToken($condition);
-            output_data(array('state'=>true));
+            output_data(array('state'=>'true'));
         } else {
-            output_error('参数错误2');
+            output_error('参数错误1');
         }
     }
 }

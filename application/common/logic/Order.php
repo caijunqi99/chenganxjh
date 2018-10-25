@@ -349,7 +349,6 @@ class Order extends Model
     public function changeOrderReceivePay($order_list, $role, $user = '', $post = array())
     {
         $model_order = Model('order');
-
         try {
             $model_order->startTrans();
 
@@ -412,23 +411,23 @@ class Order extends Model
                 continue;
             $order_id = $order_info['order_id'];
             // 支付成功发送买家消息
-            $param = array();
-            $param['code'] = 'order_payment_success';
-            $param['member_id'] = $order_info['buyer_id'];
-            $param['param'] = array(
-                'order_sn' => $order_info['order_sn'],
-                'order_url' => url('memberorder/show_order', array('order_id' => $order_info['order_id']))
-            );
-             \mall\queue\QueueClient::push('sendMemberMsg', $param);
+//            $param = array();
+//            $param['code'] = 'order_payment_success';
+//            $param['member_id'] = $order_info['buyer_id'];
+//            $param['param'] = array(
+//                'order_sn' => $order_info['order_sn'],
+//                'order_url' => url('memberorder/show_order', array('order_id' => $order_info['order_id']))
+//            );
+//             \mall\queue\QueueClient::push('sendMemberMsg', $param);
 
             // 支付成功发送店铺消息
-            $param = array();
-            $param['code'] = 'new_order';
-            $param['store_id'] = $order_info['store_id'];
-            $param['param'] = array(
-                'order_sn' => $order_info['order_sn']
-            );
-             \mall\queue\QueueClient::push('sendStoreMsg', $param);
+//            $param = array();
+//            $param['code'] = 'new_order';
+//            $param['store_id'] = $order_info['store_id'];
+//            $param['param'] = array(
+//                'order_sn' => $order_info['order_sn']
+//            );
+//             \mall\queue\QueueClient::push('sendStoreMsg', $param);
 
             //添加订单日志
             $data = array();
@@ -439,6 +438,103 @@ class Order extends Model
             $data['log_orderstate'] = ORDER_STATE_PAY;
             $model_order->addOrderLog($data);
         }
+
+        return ds_callback(true, '操作成功');
+    }
+
+
+
+    public function changePackageOrder($order_info, $role, $user = '', $post = array())
+    {
+        $model_order = Model('Packagesorder');
+        
+        
+        $PkgTime = model('Packagetime');
+        $condition=array(
+            'member_id'=>$order_info['buyer_id'],
+            's_id'=>$order_info['s_id'],
+            'pkg_type'=>$order_info['pkg_type']
+        );
+        $packagetime = $PkgTime->getOnePkg($condition);
+        $order_info['finnshed_time'] = empty($order_info['finnshed_time'])?time():$order_info['finnshed_time'];
+        $end_time = CalculationTime($order_info,$packagetime);
+        $pkgtype = $order_info['pkg_type']==1?'看孩':'回放';
+        $pdata = array(
+            'end_time' => $end_time,
+            'up_time' => time(),
+        );  
+        try {
+            $model_order->startTrans();
+            if(!$packagetime){//第一次购买套餐
+                $pdata['member_id'] = $order_info['buyer_id'];
+                $pdata['member_name'] = $order_info['buyer_name'];
+                $pdata['s_id'] = $order_info['s_id'];
+                $pdata['s_name'] = $order_info['s_name'];
+                $pdata['pkg_type'] = $order_info['pkg_type'];
+                $pdata['start_time'] = $post['finnshed_time'];
+                $pdata['up_desc'] = date('Y-m-d H:i',$post['finnshed_time']).'第一次购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+                $PkgTime->pkg_add($pdata);
+            }else{ //更新套餐时间
+                $pdata['up_desc'] = $packagetime['up_desc'].'&'.date('Y-m-d H:i',$post['finnshed_time']).'购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+                $pdata['id'] =$packagetime['id'];
+                $PkgTime->pkg_update($pdata);
+
+            }
+
+            $condition = array();
+            $condition['order_id'] = $order_info['order_id'];
+            $post['order_dieline']= $end_time;
+            $update = $model_order->editOrder($post, $condition);
+            
+            if (!$update) {
+                 Exception('更新支付单状态失败');
+            }
+
+            $model_order->commit();
+        } catch (Exception $e) {
+            $model_order->rollback();
+            return ds_callback(false, $e->getMessage());
+        }        
+        $order_id = $order_info['order_id'];
+
+        //发送站内信
+        $model_message = Model('message');
+        $insert_arr = array();
+        $insert_arr['from_member_id'] = 0;
+        $insert_arr['member_id'] = $order_info['buyer_id'];
+        $insert_arr['to_member_name'] = $order_info['buyer_name'];
+        $insert_arr['message_title'] = $pkgtype.'套餐购买提醒';
+        $insert_arr['msg_content'] = '您于'.date('Y-m-d H:i',$post['finnshed_time']).'购买'.$pkgtype.'套餐，此套餐主副账号通用,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+        $insert_arr['message_type'] = 1;
+        $model_message->saveMessage($insert_arr);
+        
+        // 支付成功发送买家消息 -----暂时不需要发送
+        // $param = array();
+        // $param['code'] = 'package_buy_success';
+        // $param['member_id'] = $order_info['buyer_id'];
+        // $param['param'] = array(
+        //     'order_sn' => $order_info['order_sn'],
+        //     'order_url' => url('memberorder/show_order', array('order_id' => $order_info['order_id']))
+        // );
+        //  \mall\queue\QueueClient::push('sendMemberMsg', $param);
+
+        // // 支付成功发送店铺消息
+        // $param = array();
+        // $param['code'] = 'new_order';
+        // $param['store_id'] = $order_info['store_id'];
+        // $param['param'] = array(
+        //     'order_sn' => $order_info['order_sn']
+        // );
+        //  \mall\queue\QueueClient::push('sendStoreMsg', $param);
+
+        //添加订单日志
+        $data = array();
+        $data['order_id'] = $order_id;
+        $data['log_role'] = $role;
+        $data['log_user'] = $user;
+        $data['log_msg'] = $order_info['buyer_name'].'-购买【'.$pkgtype.'】套餐 ( 支付平台交易号 : ' . $post['out_pay_sn'] . ' )';
+        $data['log_orderstate'] = ORDER_STATE_SUCCESS;
+        $model_order->addOrderLog($data);
 
         return ds_callback(true, '操作成功');
     }

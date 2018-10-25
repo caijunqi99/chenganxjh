@@ -1,12 +1,24 @@
     @charset "utf-8";
     /*head*/
     
+    .fl {
+        float: left;
+    }
+    
+    .fr {
+        float: right;
+    }
+    
     .infobody {
         background: #f7f7f7;
     }
     
     .margb30 {
         margin-bottom: 30px;
+    }
+    
+    .margt20 {
+        margin-top: 20px;
     }
     
     .margt30 {
@@ -27,6 +39,10 @@
     
     .paddb120 {
         padding-bottom: 120px;
+    }
+    
+    .paddt20 {
+        padding-top: 20px;
     }
     
     .paddt30 {
@@ -184,6 +200,11 @@
     .cont {
         background: #fff;
         margin-bottom: 30px;
+    }
+    
+    .cont2 {
+        background: #fff;
+        margin-bottom: 20px;
     }
     
     .visibility_hide {
@@ -458,10 +479,44 @@
         padding: 15px 0 20px;
     }
     
+<<<<<<< HEAD
     .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
         font-size: 30px;
     }
     
     .weui-popup__modal .modal-content {
         padding-top: 3rem;
+=======
+    .screen {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        display: none;
+        -webkit-opacity: 0;
+        opacity: 0;
+        -webkit-transition: .3s;
+        -moz-transition: .3s;
+        -ms-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
+    }
+    
+    .screen.show {
+        display: block;
+        -webkit-opacity: 1;
+        opacity: 1;
+    }
+    
+    .weui-loading {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .weui-loadmore {
+        font-size: 20px;
+>>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
     }

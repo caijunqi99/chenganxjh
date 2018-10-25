@@ -16,6 +16,8 @@ class alipay
     private $body = "";
     //超时事件
     private $timeout_express = "";
+    //打开APP
+    private $app_pay = "";
 
     public function __construct($param=array())
     {
@@ -28,10 +30,10 @@ class alipay
                 'merchant_private_key' => $param['private_key'],
 
                 //异步通知地址
-                'notify_url' => MOBILE_SITE_URL . '/payment/notify',
+                'notify_url' => MOBILE_SITE_URL . '/payment/notify.html',
 
                 //同步跳转
-                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url',
+                'return_url' => MOBILE_SITE_URL . '/payment/alipay_return_url.html',
 
                 //编码格式
                 'charset' => "UTF-8",
@@ -44,15 +46,21 @@ class alipay
 
                 //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
                 'alipay_public_key' =>$param['public_key'],
+                //商户公钥
+                'merchant_public_key' =>"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPXfE+mKzBC+NBgN68OORr2WtqHzhkNgbrqlfW4ClwHgRO/YABz2e7iHD4SFcFidFEUvKp7eQPWr39IwNOQ8tBYMzdIHTgebzuI36RaGO0ojEokm5QyIBNnutWuJVQ7AWD3gexqivn+Aoh0WA0pnXq7vI348EvkrQFRVkLDbMpd/FzwYQ8q4HCM/ffVnAN7gZ/kYLOuvc3LypwTkXZOUlZYvzCVg1d9nPxBXj5zxXV/lXDzPyIswX/99yONixC+RA2OCRmeiskEYaSrXN+WY8i7aBrFvLnHQ7IppYGWlhdhjc6YovrUnVR/7mY2ThkMsns9/o24tEUSljT8I/gGGoQIDAQAB"
+
 
             );
-            if (isset($param['order_sn'])) {
-                $this->out_trade_no = $param['order_sn'] . '-' . $param['order_type'];
-                $this->subject = $param['order_sn'];
-                $this->total_amount = $param['order_amount'];
+            if (isset($param['orderSn'])) {
+                $this->out_trade_no = $param['orderSn'] . '-' . $param['orderAttach'];
+                $this->subject = $param['orderInfo'];
+                $this->total_amount = $param['orderFee'];
                 $this->timeout_express = "1m";
-                $this->body = "";
+                $this->body = "想见孩产品";
+                $this->app_pay = 'Y';
             }
+        }else{
+            output_error('参数错误！');
         }
     }
 
@@ -64,8 +72,12 @@ class alipay
         $payRequestBuilder->setOutTradeNo($this->out_trade_no);
         $payRequestBuilder->setTotalAmount($this->total_amount);
         $payRequestBuilder->setTimeExpress($this->timeout_express);
+        $payRequestBuilder->setTimeExpress($this->app_pay);
 
         $payResponse = new AlipayTradeService($this->alipay_config);
+
+//        halt($payRequestBuilder);
+
         $result = $payResponse->wapPay($payRequestBuilder, $this->alipay_config['return_url'], $this->alipay_config['notify_url']);
 
         return;

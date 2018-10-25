@@ -49,17 +49,20 @@ class wxpay_h5
         $sign = $this->sign($data);
         $data['sign'] = $sign;
 
-        $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
 
+
+        $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
+//        halt($result);
         if ($result['return_code'] != 'SUCCESS') {
             exception($result['return_msg']);
         }
 
         if ($result['result_code'] != 'SUCCESS') {
-            exception("[{$result['err_code']}]{$result['err_code_des']}");
+//            exception("[{$result['err_code']}]{$result['err_code_des']}");
+            exception($result['err_code_des']);
         }
 
-        return $result['mweb_url'];
+        return $result['mweb_url'].'&redirect_url='.urlencode('vip.xiangjianhai.com://');
     }
 
     public function notify()

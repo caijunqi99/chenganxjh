@@ -36,18 +36,19 @@ class Login extends MobileMall
                 output_error('验证类型错误!');
                 break;
         }
+        $register  = false;
         if (empty($phone) || !in_array($client, $this->client_type_array)) {
-            output_error($type.'失败!',array('type'=>input('post.log_type')));
+            output_error($type.'失败!');
         }
-        if (!preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)) {//根据会员名没找到时查手机号
-            output_error('请输入正确的手机号码！',array('type'=>input('post.log_type')));
+        if (!preg_match('/^1(3|5|6|7|8|4)[0-9]{9}$/', $phone)) {//根据会员名没找到时查手机号
+            output_error('请输入正确的手机号码！');
             
         }
         $model_member = Model('member');
         $array = array();
         $array['member_mobile'] = $phone;     
         if ($is_pass==2) { // 验证码判断
-            if (empty($captcha))output_error('请输入正确的验证码',array('type'=>input('post.log_type')));
+            if (empty($captcha))output_error('请输入正确的验证码');
             $state = 'true';
             $condition = array();
             $condition['log_phone'] = $phone;
@@ -57,24 +58,26 @@ class Login extends MobileMall
             $sms_log = $model_sms_log->getSmsInfo($condition);
             // output_error($condition);
             if(empty($sms_log) || ($sms_log['add_time'] < TIMESTAMP-1800)) {//半小时内进行验证为有效
-                output_error('动态码错误或已过期，重新输入',array('type'=>input('post.log_type'),'t'=>1));
+                output_error('动态码错误或已过期，重新输入');
             }
         }
         if ($is_pass == 1) {
-            if(empty($password))output_error('非法登陆',array('type'=>input('post.log_type') ) );
+            if(empty($password))output_error('非法登陆');
         }
         $member_info = $model_member->getMemberInfo($array,'member_password,member_name,member_id');
         if (!$member_info) {//注册
             // $this->register($register_info)
+            $pass = getRandomString(8,null,'n');
             $member = array();
             $member['member_name'] = $phone;
-            $member['member_password'] = md5(trim($password));;
+            $member['member_password'] = md5(trim($pass));;
             $member['member_mobile'] = $phone;
             $member['member_email'] = '';
             $member['member_mobile_bind'] = 1;
             $result = $model_member->addMember($member);
+            $register  = true;
             if (!$result) {                
-                output_error('注册失败',array('type'=>input('post.log_type')));
+                output_error('注册失败');
             }else{
                 //添加会员积分--前期可以不使用
                 // if (config('points_isuse')) {
@@ -94,7 +97,7 @@ class Login extends MobileMall
         }else{//登陆
             if ($password && $is_pass == 1){
                 if ($member_info['member_password'] != md5(trim($password))) {//密码对比
-                    output_error('密码填写错误！',array('type'=>input('post.log_type')));
+                    output_error('密码填写错误！');
                 }
             }            
         }
@@ -106,12 +109,18 @@ class Login extends MobileMall
             if ($token) {
                 $logindata = array();
                 $logindata['key']=$token;
-                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                if(!empty($member['member_avatar'])){
+                    $logindata['member_avatar'] = $member['member_avatar'];
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL.$member['member_avatar'];
+                }else{
+                    $logindata['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                    $logindata['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                }
                 $logindata['user_name'] = $member['member_name'];
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
-                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['is_owner'] = $member['is_owner'];                
                 $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
 
                 // $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
@@ -119,7 +128,15 @@ class Login extends MobileMall
                 // $logindata['student'] = $Student->getMemberStudentInfoById('m.member_id='.$member['member_id']);
 
                 // $logindata['sql'] = $Student->getLastSql();
-                
+                if ($register) {
+                    //发送随机密码
+                    //生成数字字符随机 密码
+                    $sms_tpl = config('sms_tpl');
+                    $tempId = $sms_tpl['sms_password_reset'];
+                    $sms = new \sendmsg\Sms();
+                    $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                    $send = $sms->send($member['member_mobile'],$pass,$tempId);
+                }
                 output_data($logindata);
             }else {
                 output_error('登录失败');

@@ -17,6 +17,60 @@ class Config extends AdminControl {
         $this->assign('action',$action);
     }
 
+    /**
+     * @desc APP设置
+     * @author langzhiyao
+     * @time 20181018
+     */
+    public function index(){
+
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $model_config = model('config');
+        if (!request()->isPost()) {
+            $list_config = rkcache('config', true);
+            $list_config['teacher_pay_scale'] = json_decode($list_config['teacher_pay_scale']);
+
+//            halt($list_config['teacher_pay_scale']->province_agent);
+            $this->assign('list_config', $list_config);
+            /* 设置卖家当前栏目 */
+            $this->setAdminCurItem('index');
+            return $this->fetch();
+        } else {
+
+            $p_s_t = floatval(input('post.province_agent'))+floatval(input('post.city_agent'))+floatval(input('post.teacher'));
+            if($p_s_t >= 100){
+                //分配错误
+                $this->error('教孩在线支付分成比例已超出100%，请重新分配');
+            }
+            $hq = 100-$p_s_t;
+            $scale = array(
+                'zb'=>$hq,
+                'province_agent' =>floatval(input('post.province_agent')),
+                'city_agent' =>floatval(input('post.city_agent')),
+                'teacher' =>floatval(input('post.teacher')),
+            );
+            $update_array['teacher_children'] = input('post.teacher_children');
+            $update_array['revisit_class'] = input('post.revisit_class');
+            $update_array['teacher_children_video'] = input('post.teacher_children_video');
+            $update_array['f_account_num'] = input('post.f_account_num');
+            $update_array['teacher_pay_scale'] = json_encode($scale);
+            $result = $model_config->updateConfig($update_array);
+            if ($result) {
+                dkcache('config');
+                $this->log(lang('ds_edit').lang('web_set'),1);
+                $this->success(lang('ds_common_save_succ'), 'Config/index');
+            }else{
+                $this->log(lang('ds_edit').lang('web_set'),0);
+            }
+        }
+    }
+
+    /**
+     * @return mixed
+     * @desc 站点设置
+     */
     public function base() {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
@@ -146,21 +200,30 @@ class Config extends AdminControl {
         }
     }
 
+
+
+
+
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'base',
-                'text' => '站点设置',
-                'url' => url('Admin/Config/base')
+                'name' => 'index',
+                'text' => '时长/分成/副账号设置',
+                'url' => url('Admin/Config/index')
             ),
-            array(
-                'name' => 'dump',
-                'text' => '防灌水设置',
-                'url' => url('Admin/Config/dump')
-            ),
+//            array(
+//                'name' => 'base',
+//                'text' => '站点设置',
+//                'url' => url('Admin/Config/base')
+//            ),
+//            array(
+//                'name' => 'dump',
+//                'text' => '防灌水设置',
+//                'url' => url('Admin/Config/dump')
+//            ),
         );
         return $menu_array;
     }

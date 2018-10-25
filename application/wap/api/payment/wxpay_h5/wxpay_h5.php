@@ -13,7 +13,7 @@ class wxpay_h5
             'wxpay_partnerid' => '',
             'wxpay_partnerkey' => '',
 
-            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify',
+            'notifyUrl' => WAP_SITE_URL . '/payment/wx_notify_h5.html',
 
             'orderSn' => date('YmdHis'),
             'orderInfo' => '',
@@ -33,6 +33,108 @@ class wxpay_h5
         }
     }
 
+    public function get_payurl() {
+        require_once APP_PATH .'wap/api/payment/wxpay_h5/lib/WxPay.Api.php';
+        $Spbill_create_ip=$this->get_client_ip2();
+        //统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody($this->config->orderInfo);
+        $input->SetAttach($this->config->orderAttach);
+        $input->SetOut_trade_no($this->config->orderSn);
+        $input->SetTotal_fee($this->config->orderFee);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 3600));
+        $input->SetGoods_tag('');
+        $input->SetSpbill_create_ip($Spbill_create_ip);
+        $input->SetDevice_info('WEB');
+        $input->SetNotify_url($this->config->notifyUrl);
+        $input->SetTrade_type("MWEB");
+        switch ($_GET['apptype']) {
+            case 'Android':
+                $ecene='{"h5_info": {"type":"Android","app_name": "'.config('site_name').'","package_name": ""}}';
+                break;
+            case 'IOS':
+                $ecene='{"h5_info": {"type":"IOS","app_name": "'.config('site_name').'","bundle_id": "com.ulinkbank.ussshop"}}';
+                break;
+            default:
+                $ecene='{"h5_info": {"type":"Wap","wap_url": "'.APP_SITE_URL.'","wap_name": "'.config('site_name').'"}}';
+                break;
+        }
+        $input->SetScene_info(json_encode($ecene));
+        $input->SetProduct_id($this->config->orderSn);
+        $result = WxPayApi::unifiedOrder($input);
+        write_payment(json_encode($return),'wxpay_h5');
+
+        return $result;
+    }
+
+    public function getOrderStateBysn($orderSn){
+        require_once APP_PATH .'wap/api/payment/wxpay_h5/lib/WxPay.Api.php';
+
+        $Query=new WxPayOrderQuery();
+        $Query->SetOut_trade_no($orderSn);
+        $result = WxPayApi::orderQuery($Query);
+        $orderState=array();
+        if ($result['return_code']=='SUCCESS') {
+            if ($result['result_code'] == 'SUCCESS') {
+                if ($result['trade_state'] == 'SUCCESS') {//支付成功
+                    $orderState['attach']         =$result['attach'];
+                    $orderState['out_trade_no']   =$result['out_trade_no'];
+                    $orderState['transaction_id'] =$result['transaction_id'];
+                    $orderState['cash_fee']       = $result['cash_fee']/100;
+                }
+            }
+            $orderState['trade_state'] =$this->trade_state($result);
+        }else{
+            $orderState['error']='签名失败或者参数格式校验错误';
+        }
+
+        return $orderState;
+    }
+    public function trade_state($result){
+        $type = $result['trade_state'];
+        if(isset($result['err_code']))$type=$result['err_code'];
+        $paystate=array();
+        switch ($type) {
+            case 'SUCCESS':
+                $paystate['pay_state']= '支付成功';
+                $paystate['state']= 1;
+                break;
+            case 'REFUND':
+                $paystate['pay_state']= '转入退款';
+                $paystate['state']= 2;
+                break;
+            case 'CLOSED':
+                $paystate['pay_state']= '已关闭';
+                $paystate['state']= 3;
+                break;
+            case 'REVOKED':
+                $paystate['pay_state']= '已撤销（刷卡支付）';
+                $paystate['state']= 4;
+                break;
+            case 'NOTPAY':
+                $paystate['pay_state']= '订单未支付';
+                $paystate['state']= 5;
+                break;
+            case 'USERPAYING':
+                $paystate['pay_state']= '用户支付中';
+                $paystate['state']= 6;
+                break;
+            case 'PAYERROR':
+                $paystate['pay_state']= '支付失败(其他原因，如银行返回失败)';
+                $paystate['state']= 7;
+                break;
+            case 'ORDERNOTEXIST':
+                $paystate['pay_state']= '支付失败(订单不存在)';
+                $paystate['state']= 8;
+                break;
+        }
+        $paystate['trade_state']= $type;
+        return $paystate;
+    }
+
+
+
     /*mweb_url*/
     public function get_mweb_url(){
         $data = array();
@@ -48,9 +150,9 @@ class wxpay_h5
         $data['trade_type']       = 'MWEB';
         $data['scene_info']       = $this->config->sceneInfo;
         $sign                     = $this->sign($data);
-        $data['sign']             = $sign;        
+        $data['sign']             = $sign;
         $result = $this->postXml('https://api.mch.weixin.qq.com/pay/unifiedorder', $data);
-        p($result);
+
 
         if ($result['return_code'] != 'SUCCESS') {
             exception($result['return_msg']);
@@ -181,5 +283,24 @@ class wxpay_h5
     public function xmlToArray($xml)
     {
         return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+    }
+
+    public function get_client_ip2(){
+        static $ip  =   NULL;
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $arr    =   explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $pos    =   array_search('unknown',$arr);
+            if(false !== $pos) unset($arr[$pos]);
+            $ip     =   trim($arr[0]);
+        }elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip     =   $_SERVER['HTTP_CLIENT_IP'];
+        }elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ip     =   $_SERVER['REMOTE_ADDR'];
+        }
+
+        // IP地址合法验证
+        $long = sprintf("%u",ip2long($ip));
+        $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
+        return $ip[0]  ;
     }
 }

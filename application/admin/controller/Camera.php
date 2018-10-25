@@ -195,7 +195,7 @@ class Camera extends AdminControl
                 exit(json_encode(array('code'=>1,'msg'=>'没有符合的数据，请重新上传')));
             }
             foreach($excel as $key=>$value){
-                $res = db('camera')->field('id,sn,key')->where(" `sn` = '".$value["F"]."' OR `key` = '".$value["G"]."'")->find();
+                $res = db('camera')->field('id,sn,key')->where(" `key` = '".$value["G"]."'")->find();
 
                 if($value['C'] == '是'){$value['C'] =1;}else{$value['C'] = 2;}
 

@@ -1,3 +1,0 @@
-request body = {'to':'18514070310','templateId':'338580','appId':'8a48b5515350d1e201536dfe7cc62f90','datas':['380508',]}
-request url = https://app.cloopen.com:8883/2013-12-26/Accounts/aaf98f895350b68801535ead1e8e1796/SMS/TemplateSMS?sig=8DAA2A68CB8342A86655E173F7FEFF73
-response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"d418356d3fdb4a1c900987ff0b08ca85","dateCreated":"20181008090746"}}

@@ -128,7 +128,19 @@
                 student_idcard: {
                     required: true,
                     minlength: 15,
-                    maxlength: 18
+                    maxlength: 18,
+                    remote: {
+                        url: "{:url('Admin/classes/ajax',['branch'=>'check_user_cards'])}",
+                        type: 'get',
+                        data: {
+                            student_idcard: function() {
+                                return $('#student_idcard').val();
+                            },
+                            class_name: function () {
+                                return $('#class_id').val();
+                            }
+                        }
+                    }
                 },
                 student_birthday: {
                     required: true
@@ -144,7 +156,8 @@
                 student_idcard: {
                     required: '{$Think.lang.school_idcard_null}',
                     maxlength: '{$Think.lang.school_idcard_length}',
-                    minlength: '{$Think.lang.school_idcard_length}'
+                    minlength: '{$Think.lang.school_idcard_length}',
+                    remote: '{$Think.lang.class_add_cards_exists}'
                 },
                 student_birthday: {
                     required: '{$Think.lang.school_birthday_null}'

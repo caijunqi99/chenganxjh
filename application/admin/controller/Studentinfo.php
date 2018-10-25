@@ -48,7 +48,9 @@ class Studentinfo extends AdminControl {
         $studentInfo = $model_student->getStudentInfo($condition);
         //主账号
         $member = db('member')->where(['member_id'=>$studentInfo['s_ownerAccount']])->select();
-        $member[0]['member_add_time']=date('Y-m-d H:i:s',$member[0]['member_add_time']);
+        if(!empty($member)){
+            $member[0]['member_add_time']=date('Y-m-d H:i:s',$member[0]['member_add_time']);
+        }
         //副账户
         if(!empty($studentInfo['s_viceAccount'])){
             $viceAccountids = explode(',',$studentInfo['s_viceAccount']);
@@ -77,8 +79,8 @@ class Studentinfo extends AdminControl {
 //            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
 //            $condition['a.admin_company_id'] = $admin['admin_company_id'];
 //        }
-        $condition['student_id'] = $student_id;
-        $condition['order_type'] = 1;
+        $condition['s_id'] = $student_id;
+        $condition['pkg_type'] = 1;
         $lookOrder = $model_packagesorder->getOrderList($condition,10);
         $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
@@ -92,8 +94,8 @@ class Studentinfo extends AdminControl {
         $model_packagesorder = model('Packagesorder');
 
         $condition = array();
-        $condition['student_id'] = $student_id;
-        $condition['order_type'] = 2;
+        $condition['s_id'] = $student_id;
+        $condition['pkg_type'] = 2;
         $lookOrder = $model_packagesorder->getOrderList($condition,10);
         $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
@@ -103,11 +105,11 @@ class Studentinfo extends AdminControl {
 
     //教孩订单
     public function teachorder() {
-        $student_id = input('param.student_id');
+        //$student_id = input('param.student_id');
         $model_packagesorder = model('Packagesorderteach');
 
         $condition = array();
-        $condition['student_id'] = $student_id;
+        //$condition['student_id'] = $student_id;
         $lookOrder = $model_packagesorder->getOrderList($condition,10);
         $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);

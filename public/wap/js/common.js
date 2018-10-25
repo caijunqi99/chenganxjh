@@ -36,7 +36,8 @@ function delCookie(e) {
 }
 function checkLogin(e) {
     if (e == 0) {
-        location.href = WapSiteUrl + "/tmpl/member/login.html";
+        // location.href = WapSiteUrl + "/tmpl/member/login.html";
+        goLogin();
         return false
     } else {
         return true
@@ -886,4 +887,92 @@ function loadJs(e) {
         document.getElementsByTagName("head")[0].removeChild(script_id)
     }
     document.getElementsByTagName("head")[0].appendChild(t)
+}
+
+
+//返回函数
+function historyback() {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        // window.webkit.messageHandlers.backClick();
+        // window.webkit.messageHandlers.backClick.postMessage();
+        window.webkit.messageHandlers.backClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.backToApp();
+    } else { //pc
+        window.history.back(-1);
+    };
+}
+
+function layout(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.outClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.outClick();
+    } else { //pc
+    };
+}
+
+function goLogin(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.loginClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.loginClick();
+    } else { //pc
+    };
+}
+
+function common_url($name){
+    var e = getCookie('key');
+    if(!e || e == 'null'){
+        goLogin();return false;
+    }else{
+        if($name == 'search'){
+            window.location.href='search.html';
+        }else if($name == 'cart'){
+            window.location.href='cart_list.html?ago=1';
+        }else if($name == 'favorite'){
+            window.location.href='member/favorites.html?ago=1';
+        }else if($name == 'order'){
+            window.location.href='member/order_list.html?ago=1';
+        }else if($name == 'address'){
+            window.location.href='member/address_list.html?ago=1';
+        }
+    }
+
+}
+
+function member_url($name){
+    var e = getCookie('key');
+    if(!e || e == 'null'){
+        goLogin();return false;
+    }else{
+        if($name == 'search'){
+            window.location.href='../search.html';
+        }else if($name == 'cart'){
+            window.location.href='../cart_list.html?ago=1';
+        }else if($name == 'favorite'){
+            window.location.href='../member/favorites.html?ago=1';
+        }else if($name == 'order'){
+            window.location.href='../member/order_list.html?ago=1';
+        }else if($name == 'address'){
+            window.location.href='../member/address_list.html?ago=1';
+        }
+    }
+
+}
+
+function ago_back(ago=null){
+     ago = GetQueryString('ago');
+    if(ago==null){
+        historyback();
+    }else{
+        window.history.back(-1);
+    }
+
+}
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
 }

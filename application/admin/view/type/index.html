@@ -18,7 +18,9 @@
                 <th>{$Think.lang.type_id}</th>
                 <th>{$Think.lang.type_name}</th>
                 <th>{$Think.lang.gc_name}</th>
+                <?php if(session('admin_is_super') == 1  || in_array(3,$action) || in_array(2,$action)){?>
                 <th>{$Think.lang.ds_handle}</th>
+                <?php }?>
             </tr>
         </thead>
         <tbody>
@@ -27,10 +29,16 @@
                 <td>{$type.type_id}</td>
                 <td>{$type.type_name}</td>
                 <td>{$type.class_name}</td>
+                <?php if(session('admin_is_super') == 1  || in_array(3,$action) || in_array(2,$action)){?>
                 <td>
-                    <a href="{:url('/admin/type/type_edit',['type_id'=>$type.type_id])}">{$Think.lang.ds_edit}</a>
-                    <a href="{:url('/admin/type/type_drop',['type_id'=>$type.type_id])}">{$Think.lang.ds_del}</a>
+                    <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
+                        <a href="{:url('/admin/type/type_edit',['type_id'=>$type.type_id])}">{$Think.lang.ds_edit}</a>
+                    <?php }?>
+                    <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
+                        <a href="{:url('/admin/type/type_drop',['type_id'=>$type.type_id])}">{$Think.lang.ds_del}</a>
+                    <?php }?>
                 </td>
+                <?php }?>
             </tr>
             {/volist}
         </tbody>

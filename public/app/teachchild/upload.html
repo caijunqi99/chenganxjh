@@ -3,23 +3,22 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>想见孩-历史记录</title>
+    <title>想见孩-上传视频课件</title>
     <meta name="author" content="想见孩" />
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/upload.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body ontouchstart>
+<body>
 
     <div class="body_content">
         <header class="head">
@@ -52,46 +51,96 @@
                     <input class="input_txt" id="bang_name" type="text" placeholder="为课程起一个标题吧">
                 </div>
             </div>
-            <div class="bang_list">
+            <div class="weui-cell bang_list">
                 <div class="name_box">
-                    <label for="video_img">视频缩略图</label>
+                    <label for="aboutValue">课程简介</label>
                 </div>
                 <div class="input_box">
-                    <input class="input_txt" id="video_img" type="file" style="display:none;" />
-                    <label class="addvideo_img" for="video_img" style="width:70px;height: 70px;border-radius:10px;text-align: center;line-height: 70px;border:1px solid #ccc;float: right;margin-top:10px;margin-right: 15px;">
-                        <i class="icon iconfont icon-jiahao" style="font-size:40px;"></i>
-                    </label>
+                    <a href="javascript:;" class="open-popup" data-target="#about">
+                        <input class="input_txt" readonly="readonly" id="aboutValue" type="text" placeholder="介绍一下你的课程吧">
+                    </a>
                 </div>
             </div>
-            <div class="weui-cell bang_list" style="border-bottom:none;">
-                <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">课程简介</label></div>
-
-            </div>
-            <div class="container3" style="padding:0 23px;">
-                <div class="weui-cell" style="border-bottom:1px solid #ededed;">
-                    <div class="weui-cell__bd">
-                        <textarea class="weui-textarea feedback_txt" id="sizeStatistics" placeholder="请输入文本" rows="5" style="background:none;font-size: 28px;"></textarea>
-                        <div class="weui-textarea-counter keepwatch" style="font-size: 24px;"><span id="currentSize">0</span>/400</div>
+            <div id="about" class="weui-popup__container">
+                <div class="weui-popup__overlay"></div>
+                <div class="weui-popup__modal">
+                    <div class="body_content">
+                        <header class="head">
+                            <div class="head0">
+                                <div class="menu_bar_box">
+                                    <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                                        <i class="icon iconfont icon-jiantou3 close-popup"></i>
+                                    </a>
+                                </div>
+                                <div class="head_title">
+                                    <p>课程简介</p>
+                                </div>
+                                <div class="head_r">
+                                    <p class='close-popup' onclick="popupClose(event)">确认</p>
+                                </div>
+                            </div>
+                        </header>
+                    </div>
+                    <div class="container3" style="padding:0 23px;">
+                        <div class="weui-cell" style="border-bottom:1px solid #ededed;">
+                            <div class="weui-cell__bd">
+                                <textarea class="weui-textarea feedback_txt" id="sizeStatistics" placeholder="请输入文本" rows="5" style="background:none;font-size: 28px;"></textarea>
+                                <div class="weui-textarea-counter keepwatch" style="font-size: 24px;"><span id="currentSize">0</span>/400</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="bang_list">
+                <div class="name_box">
+                    <label for="zuozhe">作者</label>
+                </div>
+                <div class="input_box">
+                    <input class="input_txt" id="zuozhe" type="text" placeholder="作者姓名">
+                </div>
+            </div>
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="category" class="weui-label">类别</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="category" type="text" placeholder="请选择" value="" />
+                </div>
+            </div>
+            <div class="weui-cell bang_list">
+                <div class="weui-cell__hd name_box"><label for="price" class="weui-label">价格</label></div>
+                <div class="weui-cell__bd">
+                    <a href="javascript:;" class="open-popup" data-target="#priceBottom">
+                        <input class="weui-input input_txt" id="price" readonly="readonly" type="text" placeholder="请选择" value="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="priceBottom" class="weui-popup__container popup-bottom">
 
-            </div>
-            <div class="weui-cell bang_list">
-                <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">适用年级</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="nianji" type="text" placeholder="请选择" value="" />
+            <div class="weui-popup__overlay"></div>
+
+            <div class="weui-popup__modal">
+                <div class="body_content">
+                    <header class="head">
+                        <div class="head0">
+                            <div class="menu_bar_box">
+                                <i class="close-popup price_close">取消</i>
+                            </div>
+                            <div class="head_title">
+                                <p>价格</p>
+                            </div>
+                            <div class="head_r">
+                                <p class='close-popup price_ok' onclick="pricePopupClose(event)">确认</p>
+                            </div>
+                        </div>
+                    </header>
                 </div>
-            </div>
-            <div class="weui-cell bang_list">
-                <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">所属科目</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="kemu" type="text" placeholder="请选择" value="" />
-                </div>
-            </div>
-            <div class="weui-cell bang_list">
-                <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">价格</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="price" type="text" placeholder="请选择" value="" />
+                <div class="price_boot_wrap">
+                    <p>￥ 6.00</p>
+                    <p>￥ 12.00</p>
+                    <p>￥ 18.00</p>
+                    <p>￥ 24.00</p>
+                    <p>￥ 30.00</p>
+                    <input type="number" min="1" name="" value="" placeholder="自定义价格">
                 </div>
             </div>
         </div>
@@ -104,9 +153,8 @@
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/plugins/jqweui/js/city-picker.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+    <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/teachchild/upload.js"></script>
     <script>

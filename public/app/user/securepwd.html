@@ -10,8 +10,8 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
@@ -19,7 +19,7 @@
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body class="infobody" ontouchstart>
+<body class="infobody">
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
@@ -47,7 +47,7 @@
                             <label for="nickname">设置6位安全密码：</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="pwd1" onkeyup="maxLengths(event)" type="text" placeholder="请输入安全密码" value="" />
+                            <input class="input_txt" id="pwd1"  onkeyup="maxLengths(event)" type="password" placeholder="请输入安全密码" value="" />
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@
                             <label for="nickname">确认安全密码：</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="pwd2" onkeyup="maxLengths(event)" type="text" placeholder="请再一次输入安全密码" value="" />
+                            <input class="input_txt" id="pwd2"   onkeyup="maxLengths(event)" type="password" placeholder="请再一次输入安全密码" value="" />
                         </div>
                     </div>
 
@@ -82,8 +82,12 @@
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
+<<<<<<< HEAD
     <!-- <script src="../content/plugins/jqweui/lib/fastclick.js"></script> -->
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+=======
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+>>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/regular.js"></script>
@@ -92,7 +96,7 @@
 
             maxLengths = function(event) {
                 if (event.target.value.length > 6) {
-                    $.toast('支付密码只能有六位数字')
+                    $.toast('支付密码只能有六位数字');
                     event.target.value = event.target.value.substring(0, 6);
                 }
             }
@@ -123,9 +127,11 @@
 
             $('.bang_submit').click('on', function() {
                 if ($('#pwd1').val() == '') {
-                    alert('请输入安全密码')
+                    $.toast('请输入安全密码');return false;
                 } else if ($('#pwd2').val() == '') {
-                    alert('请再一次输入安全密码')
+                    $.toast('请再一次输入安全密码');return false;
+                }  else if ($('#pwd2').val() != $('#pwd1').val()) {
+                    $.toast('两次密码不一致，请重新输入');return false;
                 } else {
                     $.ajax({
                         type: "POST",
@@ -139,7 +145,11 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'])
+                                $.toast(response['result']['message'],'',function(){
+                                    historyback();
+                                })
+                            }else if(response['code'] == 400){
+                                layout();
                             } else {
                                 $.alert(response['message'])
                             }

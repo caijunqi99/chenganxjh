@@ -1,107 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh">
 
-	<head>
-		<meta charset="UTF-8" />
-		<title>想见孩-详情</title>
-		<meta name="author" content="想见孩" />
-		<meta name="copyright" content="想见孩" />
-		<meta name="description" content="想见孩" />
-		<meta id="viewport" name="viewport" content="width=750" />
-		<link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
-		<link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-		<link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-		<link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
-		<link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
-		<link rel="stylesheet" href="../content/style/common.css" type="text/css" />
-		<link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
-		<link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
-		<link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
-		<script src="../content/scripts/mobile-util.js"></script>
-	</head>
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-详情</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
+    <!-- <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script> -->
+    <script src="../content/scripts/mobile-util.js"></script>
+</head>
 
-	<body ontouchstart>
-		<header class="details_header">
-			<div class="goBack body_content">
-				<a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
-					<i class="icon iconfont icon-jiantou3"></i>
-				</a>
-			</div>
-		</header>
+<body>
+    <header class="details_header">
+        <div class="goBack body_content">
+            <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                <i class="icon iconfont icon-jiantou3"></i>
+            </a>
+            <p class="collectBtn" onclick="collectVideo()">收藏</p>
+        </div>
+    </header>
 
-		<div class="video_wrap">
-			<video
-			src="video.mp4"
-			poster="../../content/images/teachchild/banner.jpg"　　
-			preload="auto"
-			x-webkit-airplay="allow"
-			x5-video-player-type="h5"
-			x5-video-player-fullscreen="true"
-			x5-video-orientation="portraint"
-			webkit-playsinline="true"
-			playsinline="true"
-			>
-		</div>
+    <div id="related">
+    </div>
 
-		<div class="related_wrap body_content">
-			<div class="related">
-				<div class="related1">
-					<h2 class="title">小蝌蚪找妈妈</h2>
-					<p class="content">一只小蝌蚪的全新冒险，最终找到妈妈</p>
-				</div>
-				<div class="related2">
-					<button type="button" name="button">收藏</button>
-				</div>
-			</div>
-			<div class="related_list">
-				<p class="title_more">更多课程</p>
-				<ul>
-					<li class="related_list_li clearBoth">
-						<div class="img_wrap float_left">
-							<img src="../content/images/teachchild/list_img.jpg" alt="">
-						</div>
-						<div class="content_wrap float_left">
-							<p class="title">安徒生童话</p>
-							<p class="content">睡前每天一章小故事</p>
-						</div>
-					</li>
-					<li class="related_list_li clearBoth">
-						<div class="img_wrap float_left">
-							<img src="../content/images/teachchild/list_img.jpg" alt="">
-						</div>
-						<div class="content_wrap float_left">
-							<p class="title">安徒生童话</p>
-							<p class="content">睡前每天一章小故事</p>
-						</div>
-					</li>
-					<li class="related_list_li clearBoth">
-						<div class="img_wrap float_left">
-							<img src="../content/images/teachchild/list_img.jpg" alt="">
-						</div>
-						<div class="content_wrap float_left">
-							<p class="title">安徒生童话</p>
-							<p class="content">睡前每天一章小故事</p>
-						</div>
-					</li>
-					<li class="related_list_li clearBoth">
-						<div class="img_wrap float_left">
-							<img src="../content/images/teachchild/list_img.jpg" alt="">
-						</div>
-						<div class="content_wrap float_left">
-							<p class="title">安徒生童话</p>
-							<p class="content">睡前每天一章小故事</p>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
+</body>
 
-	</body>
-
-	<script src="../content/scripts/jquery.min.js"></script>
-	<script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-	<script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-	<script src="../content/plugins/layer/layer.js"></script>
-	<script src="../content/scripts/teachchild/details.js"></script>
+<script src="../content/scripts/jquery.min.js"></script>
+<script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+<script src="../content/scripts/juqery.cookie.js"></script>
+<script src="../content/scripts/API.js"></script>
+<script src="https://vjs.zencdn.net/7.2.3/video.js"></script>
+<script src="../content/scripts/teachchild/details.js"></script>
 
 </html>

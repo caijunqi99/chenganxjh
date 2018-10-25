@@ -37,7 +37,7 @@ class Connect extends MobileMall
         $state = '发送失败';
         $phone = input('post.mobile');
         
-        if (preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+        if (preg_match('/^1(3|5|7|8|4|6)[0-9]{9}$/i', $phone)){
             $model_member = Model('member');
             $member = $model_member->getMemberInfo(array('member_mobile'=> $phone));
 
@@ -61,6 +61,7 @@ class Connect extends MobileMall
                 $log_array = array();                
                 $captcha = rand(100000, 999999);
                 $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d");
+
                 $sms_tpl = config('sms_tpl'); 
                                
                 switch ($log_type) {
@@ -101,8 +102,7 @@ class Connect extends MobileMall
                 }
                 if($state == 'true'){
                     $sms = new \sendmsg\Sms();
-
-                    $result = $sms->send($phone,$captcha,$tempId);
+                    $result = $sms->send($phone,$log_msg,$captcha);
                     if($result){
                         $log_array['log_phone']   = $phone;
                         $log_array['log_captcha'] = $captcha;
@@ -141,7 +141,7 @@ class Connect extends MobileMall
                 $log_type=3;
                 break;       
         }
-        if (preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+        if (preg_match('/^1(3|5|7|8|4|6)[0-9]{9}$/i', $phone)){
             $state = 'true';
             $condition = array();
             $condition['log_phone'] = $phone;

@@ -112,7 +112,71 @@ class Order extends Model {
         if (empty($list))
             return array();
 
-        return $list;
+
+        $order_list = array();
+        foreach ($list as $order) {
+            if (isset($order['order_state'])) {
+                $order['state_desc'] = orderState($order);
+            }
+            if (isset($order['payment_code'])) {
+                $order['payment_name'] = orderPaymentName($order['payment_code']);
+            }
+            if (!empty($extend))
+                $order_list[$order['order_id']] = $order;
+        }
+        if (empty($order_list))
+            $order_list = $list;
+
+        //追加返回订单扩展表信息
+        if (in_array('order_common', $extend)) {
+            $order_common_list = $this->getOrderCommonList(array('order_id' => array('in', array_keys($order_list))));
+            foreach ($order_common_list as $value) {
+                $order_list[$value['order_id']]['extend_order_common'] = $value;
+                $order_list[$value['order_id']]['extend_order_common']['reciver_info'] = @unserialize($value['reciver_info']);
+                $order_list[$value['order_id']]['extend_order_common']['invoice_info'] = @unserialize($value['invoice_info']);
+            }
+        }
+        //追加返回店铺信息
+        if (in_array('store', $extend)) {
+            $store_id_array = array();
+            foreach ($order_list as $value) {
+                if (!in_array($value['store_id'], $store_id_array))
+                    $store_id_array[] = $value['store_id'];
+            }
+            $store_list = db('store')->where('store_id', 'in', array_values($store_id_array))->select();
+            $store_new_list = array();
+            foreach ($store_list as $store) {
+                $store_new_list[$store['store_id']] = $store;
+            }
+            foreach ($order_list as $order_id => $order) {
+                $order_list[$order_id]['extend_store'] = isset($store_new_list[$order['store_id']])?$store_new_list[$order['store_id']]:'';
+            }
+        }
+
+        //追加返回买家信息
+        if (in_array('member', $extend)) {
+            foreach ($order_list as $order_id => $order) {
+                $order_list[$order_id]['extend_member'] = Model('member')->getMemberInfoByID($order['buyer_id']);
+            }
+        }
+
+
+        //追加返回商品信息
+        if (in_array('order_goods', $extend)) {
+            //取商品列表
+            $order_goods_list = db('ordergoods')->where('order_id', 'in', array_keys($order_list))->select();
+
+            if (!empty($order_goods_list)) {
+                foreach ($order_goods_list as $value) {
+
+                    $order_list[$value['order_id']]['extend_order_goods'][] = $value;
+                }
+            } else {
+                $order_list[$value['order_id']]['extend_order_goods']= array();
+            }
+        }
+
+        return $order_list;
     }
 
     /**

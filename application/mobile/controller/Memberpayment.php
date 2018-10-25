@@ -17,10 +17,10 @@ class Memberpayment extends MobileMember
 
         if (request()->action() != 'payment_list' && !input('param.payment_code')) {
             $payment_code = 'alipay';
-        }
-        else {
+        } else {
             $payment_code = input('param.payment_code');
         }
+
         $model_mb_payment = Model('mbpayment');
         $condition = array();
         $condition['payment_code'] = $payment_code;
@@ -32,7 +32,9 @@ class Memberpayment extends MobileMember
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
 
+
             $inc_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+
             if (!is_file($inc_file)) {
                 output_error('支付接口出错，请联系管理员！');
             }
@@ -223,17 +225,19 @@ class Memberpayment extends MobileMember
             $param['orderFee'] = (int)(100 * $order_pay_info['api_pay_amount']);
             $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
+            $wxpay_h5_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+            require_once ($wxpay_h5_file);
             $api = new \wxpay_h5();
             $api->setConfigs($param);
             $mweburl = $api->get_mweb_url($this);
             Header("Location: $mweburl");
             exit;
         }
-
         //alipay and so on
-        $param['order_sn'] = $order_pay_info['pay_sn'];
-        $param['order_amount'] = $order_pay_info['api_pay_amount'];
-        $param['order_type'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
+        $param['orderSn'] = $order_pay_info['pay_sn'];
+        $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
+        $param['orderFee'] = round($order_pay_info['api_pay_amount'],2);
+        $param['orderAttach'] = ($order_pay_info['order_type'] == 'real_order' ? 'r' : 'v');
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->submit();
         echo $return;
@@ -385,6 +389,7 @@ class Memberpayment extends MobileMember
             $param['order_type'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
             $api = new \alipay_app();
             $api->get_payform($param);
+
             exit;
         }
     }

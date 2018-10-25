@@ -247,57 +247,6 @@ class Company extends AdminControl {
             $this->error('删除失败');
         }
     }
-    /**
-     * 子公司列表导出
-     */
-//    public function export_step1()
-//    {
-//        if(session('admin_is_super') !=1 && !in_array(7,$this->action)){
-//            $this->error(lang('ds_assign_right'));
-//        }
-//        $dataResult = array();
-//        //$headTitle = "分/子公司列表";
-//        $title = "分/子公司列表";
-//        //$headtitle= "<tr style='height:50px;border-style:none;><th border=\"0\" style='height:60px;width:270px;font-size:22px;' colspan='11' >{$headTitle}</th></tr>";
-//        $titlename = "<tr><th style='width:70px;' >序号</th><th style='width:170px;' >公司名称</th><th style='width:70px;'>公司角色</th><th style='width:150px;'>地区</th><th style='width:170px;'>详细地址</th><th style='width:100px;'>电话</th><th style='width:70px;'>负责人</th><th style='width:170px;'>合同截止日期</th><th style='width:170px;'>创建时间</th><th style='width:70px;'>备注</th></tr>";
-//        $filename = $title.".xls";
-//        $model_organize = Model('company');
-//        $condition = array();
-//        $condition['o_del']=1;
-//        if (!empty($_GET['o_name'])) {
-//            $o_name=$_GET['o_name'];
-//            $condition['o_name']=array('like', '%' . trim($o_name) . '%');
-//            $this->assign('search_organize_name',$o_name);
-//        }
-//        if(!empty($_GET['o_provinceid'])){
-//            $o_provinceid=input('param.o_provinceid');
-//            $condition['o_provinceid']=$o_provinceid;
-//            $this->assign('o_provinceid',$o_provinceid);
-//        }
-//        if(!empty($_GET['o_cityid'])) {
-//                $o_cityid = input('param.o_cityid');
-//                $condition['o_cityid'] =$o_cityid;
-//                $this->assign('o_cityid', $o_cityid);
-//        }
-//        if(!empty($_GET['area_id'])){
-//                $area_id = input('param.area_id');
-//                $condition['o_areaid'] =$area_id;
-//                $this->assign('area_id', $area_id);
-//        }
-//        $dataResult = $model_organize->getOrganizeList($condition, "o_id,o_name,o_role,o_area,o_address,o_phone,o_leading,o_enddate,o_createtime,o_remark");
-//        foreach($dataResult as $key=>$v){
-//            if($v['o_role']==1){
-//                $dataResult[$key]['o_role']='总公司';
-//            }else if($v['o_role']==2){
-//                $dataResult[$key]['o_role']='省级代理';
-//            }else if($v['o_role']==3){
-//                $dataResult[$key]['o_role']='市级代理';
-//            }else{
-//                $dataResult[$key]['o_role']='特约代理';
-//            }
-//        }
-//        $this->excelData($dataResult,$titlename,$headtitle,$filename);
-//    }
     public function export_step1() {
 
         if(session('admin_is_super') !=1 && !in_array(7,$this->action )){
@@ -344,29 +293,6 @@ class Company extends AdminControl {
 
 
     }
-
-//    public function excelData($datas,$titlename,$title,$filename){
-//        $str = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\"\r\nxmlns:x=\"urn:schemas-microsoft-com:office:excel\"\r\nxmlns=\"http://www.w3.org/TR/REC-html40\">\r\n<head>\r\n<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\r\n</head>\r\n<body>";
-//        $str .= $title;
-//        $str .="<table border=1><head>".$titlename."</head>";
-//        foreach ($datas as $key=> $rt )
-//        {
-//            $str .= "<tr>";
-//            foreach ( $rt as $k => $v )
-//            {
-//                $str .= "<td>{$v}</td>";
-//            }
-//            $str .= "</tr>\n";
-//        }
-//        header( "Content-Type: application/vnd.ms-excel; name='excel'" );
-//        header( "Content-type: application/octet-stream" );
-//        header( "Content-Disposition: attachment; filename=".$filename );
-//        header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-//        header( "Pragma: no-cache" );
-//        header( "Expires: 0" );
-//        exit( $str );
-//
-//    }
     /**
      * 生成excel
      *

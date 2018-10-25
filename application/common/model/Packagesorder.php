@@ -21,7 +21,7 @@ class Packagesorder extends Model {
     }
 
     /**
-     * 取得学校列表(所有)
+     * 取得套餐订单列表(所有)
      * @param unknown $condition
      * @param string $page
      * @param string $field
@@ -31,7 +31,8 @@ class Packagesorder extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getOrderList($condition, $page = '', $field = '*', $class = 'order_id asc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('packagesorder')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        //$list_paginate = db('packagesorder')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('packagesorder')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
@@ -56,9 +57,19 @@ class Packagesorder extends Model {
      * @param unknown_type $data
      * @param unknown_type $condition
      */
-    public function editOrder($data, $condition, $limit = '') {
-        $update = db('packagesorder')->where($condition)->limit($limit)->update($data);
+    public function editOrder($data, $condition) {
+        $update = db('packagesorder')->where($condition)->update($data);
         return $update;
+    }
+
+
+    /**
+     * 添加订单日志
+     */
+    public function addOrderLog($data) {
+        $data['log_role'] = str_replace(array('buyer', 'seller', 'system', 'admin'), array('买家', '商家', '系统', '管理员'), $data['log_role']);
+        $data['log_time'] = TIMESTAMP;
+        return db('orderlog')->insertGetId($data);
     }
 
 }

@@ -28,9 +28,9 @@ class Feedback extends MobileMember
         $param['ftime'] = TIMESTAMP;
         $param['member_id'] = $this->member_info['member_id'];
         $param['member_name'] = $this->member_info['member_name'];
-        $param['member_mobile'] = input('member_mobile');
+//        $param['member_mobile'] = input('member_mobile');
         if(empty($param['content']))output_error('反馈内容不能为空');
-        if(empty($param['member_mobile']))output_error('手机号码不能为空');
+//        if(empty($param['member_mobile']))output_error('手机号码不能为空');
         $result = $model_mb_feedback->addMbFeedback($param);
 
         if ($result) {

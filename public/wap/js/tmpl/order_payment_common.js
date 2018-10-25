@@ -99,22 +99,22 @@ function toPay(a, e, p) {
                 } else {
                     r = true
                 }
+
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-
-                    if(i == "alipay"){
+                    if(i == "alipay" ){
                         $("#" + i).parents("label").show();
                     }
-                    if(i == "wxpay_jsapi"){
+                    if(i == "wxpay_jsapi" ){
                         $("#" + i).parents("label").show();
                     }
-                    if (i == "alipay" && r) {
+                    if (i == "alipay"  && r) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
                         }
                     }
-                    if (i == "wxpay_jsapi" && t) {
+                    if (i == "wxpay_jsapi"  && t) {
                         if (payment_code == "") {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
@@ -170,7 +170,7 @@ function toPay(a, e, p) {
                         }
                     })
                 } else {
-                    goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                        goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
                 }
             })
         }

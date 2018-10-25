@@ -36,8 +36,10 @@
           <th>{$Think.lang.goods_class_index_name}</th>
           <th>{$Think.lang.goods_class_add_type}</th>
           <th>{$Think.lang.goods_class_add_commis_rate}</th>
-          <th></th>
-          <th>{$Think.lang.ds_handle}</th>
+          <!--<th></th>-->
+          <?php if(session('admin_is_super') == 1 || in_array(3,$action) || in_array(2,$action)){?>
+                <th>{$Think.lang.ds_handle}</th>
+          <?php }?>
         </tr>
       </thead>
       <tbody>
@@ -53,15 +55,24 @@
           <td class="w48 sort"><span title="{$Think.lang.ds_editable}" ajax_branch="goods_class_sort" datatype="number" fieldid="<?php echo $v['gc_id'];?>" fieldname="gc_sort" nc_type="inline_edit" class="editable "><?php echo $v['gc_sort'];?></span></td>
           <td class="w50pre name">
           <span title="{$Think.lang.ds_editable}" required="1" fieldid="<?php echo $v['gc_id'];?>" ajax_branch="goods_class_name" fieldname="gc_name" nc_type="inline_edit" class="editable "><?php echo $v['gc_name'];?></span>
-          <a class="btn-add-nofloat marginleft" href="{:url('/Admin/Goodsclass/goods_class_add',['gc_parent_id'=>$v.gc_id])}"><span>{$Think.lang.ds_add_sub_class}</span></a>
+              <?php if(session('admin_is_super') == 1 || in_array(1,$action)){?>
+              <a class="btn-add-nofloat marginleft" href="{:url('/Admin/Goodsclass/goods_class_add',['gc_parent_id'=>$v.gc_id])}"><span>{$Think.lang.ds_add_sub_class}</span></a>
+              <?php }?>
           </td>
           <td><?php echo $v['type_name'];?></td>
           <td><?php echo $v['commis_rate'];?> %</td>
-          <td><?php if ($v['gc_virtual'] == 1) {?>虚拟<?php }?></td>
+          <!--<td><?php if ($v['gc_virtual'] == 1) {?>虚拟<?php }?></td>-->
           <td class="w96">
-              <a href="{:url('/Admin/Goodsclass/nav_edit',['gc_id'=>$v.gc_id])}">设置</a> | 
-              <a href="{:url('/Admin/Goodsclass/goods_class_edit',['gc_id'=>$v.gc_id])}">{$Think.lang.ds_edit}</a> | 
-              <a href="javascript:if(confirm('{$Think.lang.goods_class_index_ensure_del}'))window.location = '{:url('/Admin/Goodsclass/goods_class_del',['gc_id'=>$v.gc_id])}';">{$Think.lang.ds_del}</a>
+              <!--<a href="{:url('/Admin/Goodsclass/nav_edit',['gc_id'=>$v.gc_id])}">设置</a> | -->
+              <?php if(session('admin_is_super') == 1 || in_array(3,$action)){?>
+                <a href="{:url('/Admin/Goodsclass/goods_class_edit',['gc_id'=>$v.gc_id])}">{$Think.lang.ds_edit}</a>
+                  <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
+                  |
+                  <?php }?>
+              <?php }?>
+              <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
+                <a href="javascript:if(confirm('{$Think.lang.goods_class_index_ensure_del}'))window.location = '{:url('/Admin/Goodsclass/goods_class_del',['gc_id'=>$v.gc_id])}';">{$Think.lang.ds_del}</a>
+              <?php }?>
           </td>
         </tr>
         <?php } ?>
@@ -72,6 +83,7 @@
         <?php } ?>
       </tbody>
       <?php if(!empty($class_list) && is_array($class_list)){ ?>
+        <?php if(session('admin_is_super') == 1 || in_array(2,$action)){?>
       <tfoot>
         <tr class="tfoot">
           <td><input type="checkbox" class="checkall" id="checkall_2"></td>
@@ -81,6 +93,7 @@
             </td>
         </tr>
       </tfoot>
+        <?php }?>
       <?php } ?>
     </table>
   </form>

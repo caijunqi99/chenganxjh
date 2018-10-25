@@ -16,11 +16,18 @@ class Common extends MobileMall
 
     public function navicon(){
         $type = intval(input('post.type',1));
-        $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where('type',$type)->select();
+//        $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where('type',$type)->select();
+        $condition = array(
+            'type'=>$type,
+            'is_show'=>2
+        );
+        $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where($condition)->select();
+
         foreach($navlist as $k=>&$v){
             $v['icon_2'] = getIconImage($v['icon_2'],'icon_2');
             $v['icon_3'] = getIconImage($v['icon_3'],'icon_3');
         }
+        unset($v);
         if ($type==1) {
             output_data($navlist);
         }else{
@@ -197,10 +204,11 @@ class Common extends MobileMall
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
+//        output_data($_FILES["file"]["type"]);
         if(!empty($_FILES)){
-            if ((($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
+            if ((($_FILES["file"]["type"] == "image/*") || ($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")))
             {
-                if($_FILES["file"]["size"] < 80000){
+                if($_FILES["file"]["size"] < 8*1024*1024){
                     if ($_FILES["file"]["error"] > 0)
                     {
                         output_error($_FILES["file"]["error"]);
@@ -211,18 +219,20 @@ class Common extends MobileMall
                             $file_object= request()->file('file');
                             $base_url=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/';
                             $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
-                            $file_name='avatar_'.$member_id.'_new'.".$ext";
-                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif'])->move($base_url,$file_name);
+                            $file_name='avatar_'.$member_id.'_'.time().rand(1000,9999).".$ext";
+                            $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$file_name);
                             if (!$info) {
                                 output_error($file_object->getError());
                             }
                         } else {
                             output_error('上传失败，请尝试更换图片格式或小图片');
                         }
-                        $name_dir=BASE_UPLOAD_PATH . '/' . ATTACH_AVATAR . '/' . $info->getFilename();
+                        $name_dir= '/' . ATTACH_AVATAR . '/' . $info->getFilename();
                         $imageinfo=getimagesize($name_dir);
                         $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
-                        output_data(array('message'=>'修改成功','avatar_url'=>$file_dir));
+//                        halt($file_dir);
+                        $result[] = array('message'=>'修改成功','avatar_url'=>$name_dir);
+                        output_data($result);
                     }
                 }else{
                     output_error('图片上传大小不允许超过8M，请重新上传');

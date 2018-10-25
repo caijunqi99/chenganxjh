@@ -39,8 +39,9 @@ class School extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid asc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+    public function getSchoolList($condition, $page = '', $field = '*', $school = 'schoolid desc', $limit = '', $extend = array(), $master = false) {
+        //$list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('school')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         if($condition['typeid']){
             $where = "FIND_IN_SET({$condition['typeid']},typeid) AND isdel = 1";
             if($condition['name']){
@@ -53,11 +54,16 @@ class School extends Model {
             }elseif($condition['areaid']){
                 $where .= " AND areaid=".$condition['areaid'];
             }
-            if($condition['a.admin_company_id']){
-                $where .= " AND a.admin_company_id=".$condition['a.admin_company_id'];
+            if($condition['admin_company_id']){
+                //$where .= " AND a.admin_company_id=".$condition['a.admin_company_id'];
+                $where .= " AND admin_company_id=".$condition['admin_company_id'];
+            }
+            if($condition['schoolid']){
+                $where .= " AND schoolid=".$condition['schoolid'];
             }
             //$sql = "SELECT * FROM x_school s LEFT JOIN x_admin a ON a.admin_id=s.option_id WHERE $where  ORDER BY schoolid asc LIMIT 0,15";
-            $list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($where)->order($school)->paginate($page,false,['query' => request()->param()]);
+            //$list_paginate = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($where)->order($school)->paginate($page,false,['query' => request()->param()]);
+            $list_paginate = db('school')->field($field)->where($where)->order($school)->paginate($page,false,['query' => request()->param()]);
         }
 
         $this->page_info = $list_paginate;
@@ -69,7 +75,8 @@ class School extends Model {
     }
 
     public function getAllAchool($condtion){
-        $result = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        //$result = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
+        $result = db('school')->where($condtion)->select();
         //print_r(db('school')->getLastSql());die;
         return $result;
     }

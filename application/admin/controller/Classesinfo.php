@@ -20,12 +20,20 @@ class Classesinfo extends AdminControl {
         $model_class = Model('Classes');
         $class_array = $model_class->getClassInfo(array("classid"=>$class_id));
         $this->assign('class_array', $class_array);
-        //学校类型
-        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-        $this->assign('schooltype', $schooltype);
         //学校名称
         $schoolname = db('school')->where('schoolid',$class_array['schoolid'])->find();
         $this->assign('schoolname', $schoolname['name']);
+        //学校类型
+        $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+        $typeids = explode(',',$schoolname['typeid']);
+        foreach ($schooltype as $k=>$v){
+            foreach ($typeids as $key=>$item){
+                if($item ==$v['sc_id']){
+                    $type[$item] = $v['sc_type'];
+                }
+            }
+        }
+        $this->assign('schooltype', $type);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }

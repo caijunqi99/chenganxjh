@@ -10,152 +10,202 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body class="infobody" ontouchstart>
+<body class="moodbody">
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
             <div class="head_title">
-                <p>心情</p>
+                <p>晒心情</p>
             </div>
-            <div class="head_r">
-
+            <div class="head_r" style="width:130px;">
+                <a href="./moodrecord.html">心情记录</a>
             </div>
         </div>
     </header>
 
     <!-- 主要内容 -->
     <div class="main">
-        <div class="margt30">
-            <div class="container2">
-                <ul class="mood_list">
-                    <li>
-                        <div class="head_picbox">
-                            <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+        <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"> </div>
+        <div class="mood_listbox" id="mood_listbox">
+            <div class="mood_list cont">
+                <div class="head_picbox">
+                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
+                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+                    </div>
+                    <div class="head_pic">
+                        <p class="name">小虎牙</p>
+                        <p class="time">10-15 10:23</p>
+                    </div>
+                </div>
+                <div class="mood_txt">
+                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
+                </div>
+                <div class="mood_imgbox">
+                    <ul class="mood_imglist clearfix">
+                        <!-- 可以多个 -->
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <p class="head_pic">小虎牙</p>
-                        </div>
-                        <div class="mood_txt">
-                            <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                        </div>
-                        <div class="mood_imgbox">
-                            <ul class="mood_imglist clearfix">
-                                <!-- 可以多个 -->
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="thumbs">
-                            <div class="thumbs_l">
-                                <i class="icon iconfont icon-xin"></i> <span>99</span>
+                        </li>
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <div class="thumbs_r">三分钟前</div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="head_picbox">
-                            <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+                        </li>
+                    </ul>
+                </div>
+                <div class="thumbs">
+                    <div class="thumbs_l">
+                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
+                    </div>
+                    <div class="thumbs_r">22条评论</div>
+                </div>
+            </div>
+
+            <div class="mood_list cont">
+                <div class="head_picbox">
+                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
+                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+                    </div>
+                    <div class="head_pic">
+                        <p class="name">小虎牙</p>
+                        <p class="time">10-15 10:23</p>
+                    </div>
+                </div>
+                <div class="mood_txt">
+                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
+                </div>
+                <div class="mood_imgbox">
+                    <ul class="mood_imglist clearfix">
+                        <!-- 可以多个 -->
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <p class="head_pic">小虎牙</p>
-                        </div>
-                        <div class="mood_txt">
-                            <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                        </div>
-                        <div class="mood_imgbox">
-                            <ul class="mood_imglist clearfix">
-                                <!-- 可以多个 -->
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="thumbs">
-                            <div class="thumbs_l">
-                                <i class="icon iconfont icon-xin"></i> <span>99</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="thumbs">
+                    <div class="thumbs_l">
+                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
+                    </div>
+                    <div class="thumbs_r">22条评论</div>
+                </div>
+            </div>
+
+            <div class="mood_list cont">
+                <div class="head_picbox">
+                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
+                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+                    </div>
+                    <div class="head_pic">
+                        <p class="name">小虎牙</p>
+                        <p class="time">10-15 10:23</p>
+                    </div>
+                </div>
+                <div class="mood_txt">
+                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
+                </div>
+                <div class="mood_imgbox">
+                    <ul class="mood_imglist clearfix">
+                        <!-- 可以多个 -->
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <div class="thumbs_r">三分钟前</div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="head_picbox">
-                            <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
+                        </li>
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <p class="head_pic">小虎牙</p>
-                        </div>
-                        <div class="mood_txt">
-                            <p class="mood_p">儿子又得了一个小红花真棒儿子又得了一个小红花真棒儿子又得了一个小红花真棒儿子又得了一个小红花真棒儿子又得了一个小红花真棒儿子又得了一个小红花真棒~</p>
-                        </div>
-                        <div class="mood_imgbox">
-                            <ul class="mood_imglist clearfix">
-                                <!-- 可以多个 -->
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="moodimg" style="background:url(../content/images/find/mood_img.jpg) no-repeat center;background-size:cover;">
-                                        <img src="../content/images/find/mood_img.jpg" class="v_hiden" alt="">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="thumbs">
-                            <div class="thumbs_l">
-                                <i class="icon iconfont icon-xin"></i> <span>99</span>
+                        </li>
+                        <li>
+                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
+                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
                             </div>
-                            <div class="thumbs_r">三分钟前</div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="thumbs">
+                    <div class="thumbs_l">
+                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
+                    </div>
+                    <div class="thumbs_r">22条评论</div>
+                </div>
             </div>
         </div>
 
+        <div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
     </div>
 
+    <a href="javascript:;" class="addmood_btn">
+        <i class="icon iconfont icon-bianji"></i>
+    </a>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $(function() {
-
-        })
+        var loading = false;
+        $(document.body).infinite().on("infinite", function() {
+            if (loading) return;
+            loading = true;
+            setTimeout(function() {
+                $("#mood_listbox").append('<div class="mood_list cont">' +
+                    '<div class="head_picbox">' +
+                    '<div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">' +
+                    '<img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">' +
+                    '</div>' +
+                    '<div class="head_pic">' +
+                    '<p class="name">小虎牙</p>' +
+                    '<p class="time">10-15 10:23</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="mood_txt">' +
+                    '<p class="mood_p">儿子又得了一个小红花真棒~</p>' +
+                    '</div>' +
+                    '<div class="mood_imgbox">' +
+                    '<ul class="mood_imglist clearfix">' +
+                    '<!-- 可以多个 -->' +
+                    '<li>' +
+                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
+                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
+                    '</div>' +
+                    '</li>' +
+                    '<li>' +
+                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
+                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
+                    '</div>' +
+                    '</li>' +
+                    '<li>' +
+                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
+                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
+                    '</div>' +
+                    '</li>' +
+                    '</ul>' +
+                    '</div>');
+                loading = false;
+            }, 2000);
+        });
     </script>
 </body>
 

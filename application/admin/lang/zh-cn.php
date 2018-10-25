@@ -7,7 +7,7 @@ $lang['ds_dashboard']              = '首页';
 $lang['ds_welcome']                = '欢迎界面';
 $lang['ds_aboutus']                = '关于我们';
 $lang['ds_setting']                = '系统配置';
-$lang['ds_base']                   = '通用设置/APP';
+$lang['ds_config']                   = '通用设置/APP';
 $lang['ds_sctype']                 = '学校类型配置';
 $lang['ds_classtype']                 = '年级配置';
 $lang['ds_course']                 = '课程配置';
@@ -78,11 +78,51 @@ $lang['company_phone']='手机号码不能为空';
 $lang['company_phoneerror']='请输入正确的手机号';
 $lang['company_area']='所在地区不能为空';
 
+//发现
+$lang['ds_find']='发现';
+$lang['ds_mood']='晒心情';
+$lang['ds_value']='心情内容';
+$lang['ds_image']='心情图片';
+$lang['mood_member']='会员账号';
+$lang['mood_role']='身份';
+$lang['mood_class']='绑定班级';
+$lang['mood_time']='发布时间';
+$lang['mood_deltime']='禁用时间';
+$lang['admin_index_status_on']='启用';
+$lang['admin_index_status_off']='禁用';
+$lang['admin_index_title']='提示';
+$lang['mood_status_close_before']='是否要启用该条记录';
+$lang['mood_status_close_late']='是否要禁用该条记录';
+$lang['mood_index_kl']='再考虑一下';
+$lang['mood_status_close_true']='确认禁用';
+$lang['mood_status_open_true']='确认启用';
+$lang['mood_index_qx']='已取消操作';
+$lang['mood_status_open_success']='启用成功';
+$lang['mood_status_open_error']='启用失败';
+$lang['mood_status_close_success']='禁用成功';
+$lang['mood_status_close_error']='禁用失败';
+$lang['mood_member']='会员';
+
+//学校简介
+$lang['ds_schooldesc']='学校简介';
+$lang['desc_region']='学校所在地区';
+$lang['desc_address']='学校地址';
+$lang['desc_type']='学校性质';
+$lang['desc_stage']='办学阶段';
+$lang['desc_img']='学校形象照片';
+$lang['desc_scdesc']='学校介绍';
+$lang['desc_teacher']='师资力量';
+$lang['desc_public']='公立';
+$lang['desc_private']='私立';
+$lang['school_add_address_null']='学校地址不能为空';
+
+
 //学校管理
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
 $lang['ds_student'] = '学生管理';
 $lang['ds_schoolapply'] = '学校申请审核';
+$lang['ds_coursemanage'] = '课程管理';
 $lang['school_time'] = '更新时间';
 $lang['school_province'] = '省';
 $lang['school_city'] = '市';
@@ -95,9 +135,10 @@ $lang['school_operation'] = '操作';
 $lang['school_desc'] = '备注';
 $lang['ds_addstudent'] = '添加学生';
 
+
 //会员
-$lang['ds_member']                 = '会员/家长管理';
-$lang['ds_member_manage']          = '会员管理';
+$lang['ds_member_manage']                 = '会员/家长管理';
+$lang['ds_member']          = '会员管理';
 $lang['ds_membergrade']            = '会员级别';
 $lang['ds_exppoints']              = '经验值管理';
 $lang['ds_notice']                 = '会员通知';
@@ -116,14 +157,20 @@ $lang['ds_monitor']                = '网络监控';
 $lang['ds_revisitclass']           = '重温课堂管理';
 $lang['ds_binding']                = '待审核学生绑定';
 
+//教孩管理
+$lang['ds_teachlist']                   = '教孩管理';
+$lang['ds_teachercertify']            = '教师认证申请';
+$lang['ds_teachtype']            = '视频分类管理';
+$lang['ds_teachvideo']            = '视频管理';
+
 //商品
-$lang['ds_goods']                  = '商城管理';
+$lang['ds_shops']                  = '商城管理';
 $lang['ds_goodsclass']             = '商品分类';
 $lang['ds_brand']                  = '品牌管理';
-$lang['ds_goods_manage']           = '商品管理';
+$lang['ds_goods']                  = '商品管理';
 $lang['ds_type']                   = '类型管理';
 $lang['ds_spec']                   = '规格管理';
-$lang['ds_album']                  = '空间管理';
+$lang['ds_goodsalbum']             = '空间管理';
 //店铺
 $lang['ds_store']                  = '店铺';
 $lang['ds_store_manage']           = '店铺管理';
@@ -134,7 +181,7 @@ $lang['ds_storejoin']              = '开店首页';
 $lang['ds_ownshop']                = '自营店铺';
 //交易
 $lang['ds_trade']                  = '订单管理';
-$lang['ds_order']                  = '实物订单';
+$lang['ds_order']                  = '商品订单列表';
 $lang['ds_vrsorder']                = '看孩订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
 $lang['ds_teach']           = '教孩订单';
@@ -153,6 +200,7 @@ $lang['ds_article']                = '文章管理';
 $lang['ds_document']               = '会员协议';
 $lang['ds_navigation']             = '导航管理';
 $lang['ds_adv']                    = '广告管理';
+$lang['ds_ads']                    = '广告位管理';
 $lang['ds_recposition']            = '推荐位';
 $lang['ds_link']                   = '友情链接';
 //运营
@@ -489,5 +537,8 @@ $lang['icon_manage']     = '导航图标';
 $lang['ds_icon']     = '导航图标';
 $lang['icon_member']     = '个人中心';
 $lang['icon_find']     = '发现';
+
+$lang['ds_schoolbus']     = '校车管理';
+$lang['ds_schoolfood']     = '食谱管理';
 
 ?>

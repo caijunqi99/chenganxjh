@@ -46,6 +46,8 @@ class AdminControl extends Controller {
             'admin_name' => session('admin_name'),
             'admin_gid' => session('admin_gid'),
             'admin_is_super' => session('admin_is_super'),
+            'admin_company_id' => session('admin_company_id'),
+            'admin_school_id' => session('admin_school_id')
         );
         if (empty($admin_info['admin_id']) || empty($admin_info['admin_name']) || !isset($admin_info['admin_gid']) || !isset($admin_info['admin_is_super'])) {
             session(null);
@@ -96,7 +98,7 @@ class AdminControl extends Controller {
         }
 
         //以下几项不需要验证   langzhiyao修改不需要验证的控制器：Organizes  Schoolinfo 过滤
-        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Studentinfo','Mlselection');
+        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Classesinfo','Studentinfo','Mlselection');
         if (in_array($act,$tmp)) return true;
         if (in_array($act,$permission) || in_array("$act.$op",$permission)){
             return true;
@@ -172,6 +174,7 @@ class AdminControl extends Controller {
         $data['admin_id'] = $admin_id;
         $data['ip'] = request()->ip();
         $data['url'] = request()->controller() . '&' . request()->action();
+        $data['admin_company_id'] = db('admin')->where('admin_id',$admin_id)->value('admin_company_id');
         return db('adminlog')->insertGetId($data);
     }
 
@@ -357,7 +360,7 @@ class AdminControl extends Controller {
                 return '浏览';
                 break;
             case 'DownMember'://5
-                return '查看成员';
+                return '所属下级';
                 break;
             case 'AssignAccount'://6
                 return '分配账号';
@@ -385,6 +388,12 @@ class AdminControl extends Controller {
                 break;
             case 'AddGrade'://14
                 return '年级管理';
+                break;
+            case 'Check'://15
+                return '审核';
+                break;
+            case 'Undercarriage'://16
+                return '违规下架';
                 break;
 
         }

@@ -143,6 +143,23 @@ class Admin extends AdminControl {
                     exit('true');
                 }
                 break;
+            case 'find_mood_name':
+                $mood_admin = Model('mood');
+                $where = array();
+                $where['id']=intval(input('get.id'));
+                $update_array = array();
+                $del=input('get.del');
+                $update_array['del']=$del;
+                if($del==2){
+                    $update_array['deltime']=time();
+                }
+                $list = $mood_admin->editMood($where,$update_array);
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
             case 'check_admin_phone':
                 $model_admin = Model('admin');
                 $condition['admin_phone'] = input('get.admin_phone');

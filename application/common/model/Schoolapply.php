@@ -13,7 +13,7 @@ class Schoolapply extends Model {
      * @return unknown
      */
     public function getSchoolapplyInfo($condition = array(), $extend = array(), $fields = '*', $school = '', $group = '') {
-        $school_info = db('school')->field($fields)->where($condition)->group($group)->order($school)->find();
+        $school_info = db('schoolapply')->field($fields)->where($condition)->group($group)->order($school)->find();
         if (empty($school_info)) {
             return array();
         }
@@ -35,7 +35,8 @@ class Schoolapply extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getSchoolapplyList($condition, $page = '', $field = '*', $school = 'applyid asc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('schoolapply')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.auditor ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        //$list_paginate = db('schoolapply')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.auditor ','LEFT')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('schoolapply')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         //$sql =  db('school')->getlastsql();
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
@@ -56,8 +57,8 @@ class Schoolapply extends Model {
      * @param array $data
      * @return int 返回 insert_id
      */
-    public function addSchool($data) {
-        $insert = db('school')->insertGetId($data);
+    public function addSchoolapply($data) {
+        $insert = db('schoolapply')->insertGetId($data);
         return $insert;
     }
 

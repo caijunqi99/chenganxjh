@@ -18,9 +18,17 @@ class Spec extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/spec.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         $spec_list = db('spec')->paginate(10,false,['query' => request()->param()]);
         // 获取分页显示
         $page = $spec_list->render();
@@ -31,6 +39,9 @@ class Spec extends AdminControl {
     }
 
     public function spec_add() {
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         if (!(request()->isPost())) {
             $spec = [
                 'sp_name' => '',
@@ -72,6 +83,9 @@ class Spec extends AdminControl {
     }
 
     public function spec_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         //注：pathinfo地址参数不能通过get方法获取，查看“获取PARAM变量”
         $sp_id = input('param.sp_id');
         if (empty($sp_id)) {
@@ -114,6 +128,9 @@ class Spec extends AdminControl {
     }
 
     public function spec_drop() {
+        if(session('admin_is_super') !=1 && !in_array('2',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
         //注：pathinfo地址参数不能通过get方法获取，查看“获取PARAM变量”
         $sp_id = input('param.sp_id');
         if (empty($sp_id)) {
@@ -137,21 +154,26 @@ class Spec extends AdminControl {
                 'url' => url('Admin/Spec/index')
             ),
         );
+        if(session('admin_is_super') ==1 || in_array('1',$this->action)){
+            if (request()->action() == 'spec_add' || request()->action() == 'index') {
+                $menu_array[] = array(
+                    'name' => 'spec_add',
+                    'text' => '新增规格',
+                    'url' => url('Admin/Spec/spec_add')
+                );
+            }
+        }
+        if(session('admin_is_super') ==1 || in_array('3',$this->action)){
+            if (request()->action() == 'spec_edit') {
+                $menu_array[] = array(
+                    'name' => 'spec_edit',
+                    'text' => '编辑规格',
+                    'url' => url('Admin/Spec/spec_edit')
+                );
+            }
+        }
 
-        if (request()->action() == 'spec_add' || request()->action() == 'index') {
-            $menu_array[] = array(
-                'name' => 'spec_add',
-                'text' => '新增规格',
-                'url' => url('Admin/Spec/spec_add')
-            );
-        }
-        if (request()->action() == 'spec_edit') {
-            $menu_array[] = array(
-                'name' => 'spec_edit',
-                'text' => '编辑规格',
-                'url' => url('Admin/Spec/spec_edit')
-            );
-        }
+
         return $menu_array;
     }
 }

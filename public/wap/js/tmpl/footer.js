@@ -8,14 +8,15 @@ $(function() {
     }
     e += '<a href="javascript:void(0);" class="gotop">返回顶部</a>' + "</div>" + "</div>";
     
-    str = '<div class="footer-nav"><ul>';
+    /*str = '<div class="footer-nav"><ul>';
     str += '<li class="current"><a href="' + WapSiteUrl + '/index.html"><i class="ico-1"></i><span>首页</span></a></li>';
     str += '<li><a href="' + WapSiteUrl + '/tmpl/product_first_categroy.html"><i class="ico-2"></i><span>分类</span></a></li>';
     str += '<li><a href="' + WapSiteUrl + '/tmpl/store_nearby.html"><i class="ico-3"></i><span>附近店铺</span></a></li>';
     str += '<li><a href="' + WapSiteUrl + '/tmpl/cart_list.html"><i class="ico-4"></i><span>购物车</span></a></li>';
     str += '<li><a href="' + WapSiteUrl + '/tmpl/member/member.html"><i class="ico-5"></i><span>我的</span></a></li></ul></div>';
-    $("#footer").html(str);
-    
+    $("#footer").html(str);*/
+    $("#footer").html('');
+
     //$("#footer").html(e);
     $("#logoutbtn").click(function() {
         var a = getCookie("username");

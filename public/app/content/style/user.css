@@ -18,14 +18,18 @@
 .user_head_box {
     width: 74px;
     height: 74px;
+    line-height: 74px;
+    text-align: center;
     float: right;
     margin-right: 40px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 10px #aaa;
 }
 
 .user_head_box img {
+    width: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -221,7 +225,7 @@
     display: block;
     position: absolute;
     left: 10px;
-    top: 10px;
+    top: 0px;
     background: #4ec3bb;
     line-height: 30px;
     color: #fff;
@@ -381,7 +385,7 @@
 }
 
 .payment_mode_box {
-    padding: 30px 0 0;
+    padding: 30px 0;
 }
 
 .payment_mode_box .weui-cell__bd {
@@ -515,6 +519,7 @@ a.quit_popup i {
     line-height: 80px;
 }
 
+<<<<<<< HEAD
 .goodslist li {
     padding: 35px 0;
     height: 130px;
@@ -658,4 +663,415 @@ a.quit_popup i {
     width: 100%;
     color: #fff;
     border-radius: 10px;
+=======
+.orderforms_list3>li {
+    margin-bottom: 20px;
+    background: #fff;
+}
+
+.orderforms_list3>li>a {
+    display: block;
+    padding: 30px 40px;
+}
+
+.orderforms_l {
+    width: 292px;
+    height: 156px;
+    float: left;
+}
+
+.orderforms_r {
+    width: 350px;
+    height: 156px;
+    float: right;
+    -webkit-display: flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.orderforms_r2 {
+    -webkit-display: flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.orderforms_type {
+    height: 30px;
+    font-size: 26px;
+    color: #ccc;
+}
+
+.orderforms_type .nopay {
+    color: #4ec3bb;
+}
+
+.orderforms_h2 {
+    height: 46px;
+    font-size: 30px;
+    color: #242424;
+    line-height: 46px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 100px;
+    position: relative;
+}
+
+.orderforms_h2 span.nopay {
+    color: #4ec3bb;
+}
+
+.orderforms_h2 span {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    z-index: 9;
+}
+
+.orderforms_p {
+    font-size: 20px;
+    color: #aeaeae;
+    line-height: 34px;
+}
+
+.orderforms_p5 {
+    font-size: 20px;
+    color: #aeaeae;
+    line-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 80px;
+    position: relative;
+}
+
+.orderforms_p5 span {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    z-index: 9;
+    font-size: 30px;
+    color: #242424;
+}
+
+.orderforms_h22 {
+    height: 70px;
+    line-height: 70px;
+}
+
+.orderforms_h22 span {
+    color: #ccc;
+}
+
+.pay_info {
+    padding: 30px 0;
+}
+
+.pay_dingdan {
+    font-size: 28px;
+    color: #242424;
+    line-height: 60px;
+}
+
+.pay_dingdan span {
+    color: #4ec3bb;
+    font-size: 40px;
+    padding-left: 10px;
+}
+
+.pay_detail {
+    font-size: 28px;
+    color: #242424;
+    line-height: 60px;
+    margin-bottom: 10px;
+}
+
+.pay_detail span {
+    color: #aeaeae;
+    font-size: 26px;
+    padding-left: 10px;
+}
+
+.pay_remarks {
+    font-size: 20px;
+    color: #ff8383;
+    line-height: 40px;
+}
+
+.pay_btn_box {
+    padding: 80px 0 30px;
+    text-align: center;
+}
+
+.pay_btn {
+    width: 400px;
+    height: 70px;
+    background: #27c8b3;
+    font-size: 28px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.pay_finish {
+    height: 310px;
+}
+
+.paysuccess {
+    background: url(../images/user/pay_success_bg.png) no-repeat center 114px;
+}
+
+.payfail {
+    background: url(../images/user/pay_fail_bg.png) no-repeat center 114px;
+}
+
+.pay_p1 {
+    font-size: 32px;
+    color: #4ccbb8;
+    line-height: 60px;
+    text-align: center;
+}
+
+.payfail_p1 {
+    font-size: 32px;
+    color: #aeaeae;
+    line-height: 60px;
+    text-align: center;
+}
+
+.pay_p2 {
+    font-size: 20px;
+    color: #aeaeae;
+    line-height: 50px;
+    text-align: center;
+}
+
+.pay_finish_btnbox {
+    padding-top: 100px;
+}
+
+a.pay_finish_btn {
+    width: 214px;
+    height: 54px;
+    display: block;
+    margin: 0 auto;
+    background: #4ccbb8;
+    font-size: 24px;
+    color: #fff;
+    line-height: 54px;
+    text-align: center;
+    border-radius: 30px;
+}
+
+a.repayments_btn {
+    width: 214px;
+    height: 60px;
+    line-height: 60px;
+    display: block;
+    margin: 0 auto;
+    background: #ff6060;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.course_view_link {
+    height: 100%;
+    display: block;
+    position: relative;
+}
+
+.course_view_icon {
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    font-size: 20px;
+    color: #fff;
+    position: absolute;
+    right: 46px;
+    bottom: 20px;
+    z-index: 9;
+}
+
+.course_view_icon i {
+    font-size: 26px;
+    margin-left: 10px;
+    position: relative;
+    top: 4px;
+}
+
+.rcr_ul {
+    padding: 15px 40px;
+    background: #fff;
+}
+
+.rcr_ul li {
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}
+
+.rcr_ul li:last-child {
+    border-bottom: none;
+}
+
+.rcr_date {
+    padding: 20px 40px;
+    line-height: 30px;
+    font-size: 28px;
+    color: #aeaeae;
+}
+
+.rcr_p1 {
+    font-size: 30px;
+    color: #242424;
+    line-height: 48px;
+    margin-bottom: 5px;
+}
+
+.rcr_p1 a {
+    float: right;
+    font-size: 24px;
+    color: #aeaeae;
+    padding: 5px 30px;
+    border-radius: 10px;
+    position: relative;
+    top: 15px;
+}
+
+.rcr_p2 {
+    font-size: 24px;
+    color: #aeaeae;
+    line-height: 40px;
+    margin-bottom: 10px;
+}
+
+.rcr_p1 a.notfree {
+    font-size: 24px;
+    color: #fff;
+    background: #4ec3bb;
+}
+
+.rcr_list_box {
+    margin-bottom: 100px;
+}
+
+.classesname_box {
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.classesname {
+    font-size: 30px;
+    color: #242424;
+    line-height: 50px;
+}
+
+.starttime {
+    border-bottom: 2px solid #eee;
+}
+
+.endtime .weui-label,
+.starttime .weui-label {
+    font-size: 30px;
+    color: #333;
+    line-height: 100px;
+}
+
+.starttime .weui-input,
+.endtime .weui-input {
+    font-size: 28px;
+    color: #666;
+    text-align: right;
+}
+
+.endtime .weui-label i.icon-dingshinaozhong,
+.starttime .weui-label i.icon-dingshinaozhong {
+    font-size: 40px;
+    color: #4ec3bb;
+    margin-right: 15px;
+}
+
+.filter_submit_box {
+    padding-top: 200px;
+    text-align: center;
+}
+
+.filter_submit {
+    width: 276px;
+    height: 68px;
+    border-radius: 10px;
+    background: #4ec3bb;
+    font-size: 28px;
+    color: #fff;
+}
+
+.leaveword_title_box {
+    border-bottom: 2px solid #eee;
+    padding: 10px 0;
+}
+
+.leaveword_title {
+    font-size: 28px;
+    color: #242424;
+    line-height: 80px;
+}
+
+.apply_btns_box {
+    padding: 100px 0 30px;
+    text-align: center;
+}
+
+.apply_submit {
+    width: 330px;
+    height: 65px;
+    border-radius: 40px;
+    background: #4ec3bb;
+    font-size: 28px;
+    color: #fff;
+}
+
+.schoolapply_info {
+    padding: 30px 0;
+}
+
+.schoolapply_p1 {
+    line-height: 100px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.schoolapply_p1 i {
+    font-size: 100px;
+    color: #4ec3bb;
+}
+
+.schoolapply_p2 {
+    font-size: 28px;
+    color: #242424;
+    text-align: center;
+    line-height: 50px;
+}
+
+.applyed_status {
+    color: #27c8b3;
+}
+
+.apply_btns_box {
+    text-align: center;
+}
+
+.setpwd_btns_box {
+    text-align: center;
+    padding-top: 300px;
+}
+
+.setpwd_btns {
+    width: 670px;
+    height: 65px;
+    border-radius: 10px;
+    background: #4ec3bb;
+    font-size: 28px;
+    color: #fff;
+>>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
 }

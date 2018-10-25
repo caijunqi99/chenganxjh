@@ -26,8 +26,13 @@ class Classes extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            //$condition['a.admin_company_id'] = $admin['admin_company_id'];
+            if(!empty($admininfo['admin_school_id'])){
+                $condition['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+            }
         }
         $classname = input('param.school_index_classname');//学校名称
         if ($classname) {
@@ -85,8 +90,12 @@ class Classes extends AdminControl {
         }
         //全部学校
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition_school['a.admin_company_id'] = $admin['admin_company_id'];
+            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_school['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
+            }
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
@@ -131,6 +140,7 @@ class Classes extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
+            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
             $model_classes = model('Classes');
             $data = array(
                 'school_areaid' => input('post.area_id'),
@@ -140,6 +150,7 @@ class Classes extends AdminControl {
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $schoolInfo['admin_company_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
             $city_id = db('area')->where('area_id',input('post.area_id'))->find();
@@ -147,8 +158,17 @@ class Classes extends AdminControl {
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['school_provinceid'] = $province_id['area_parent_id'];
             //学校识别码
-            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
-            $data['classCard'] = $schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
+            $classcard=$schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
+            $data['classCard'] =$classcard;
+            //生成二维码
+            import('qrcode.index',EXTEND_PATH);
+            $PhpQRCode = new \PhpQRCode();
+            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' . DS);
+            // 生成商品二维码
+            $PhpQRCode->set('date', $classcard);
+            $PhpQRCode->set('pngTempName', $classcard . '.png');
+            $qr=$PhpQRCode->init();
+            $data['qr']='/home/store/class/'.$qr;
             //验证数据  END
             $result = $model_classes->addClasses($data);
             if ($result) {
@@ -213,8 +233,8 @@ class Classes extends AdminControl {
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['school_provinceid'] = $province_id['area_parent_id'];
             //学校识别码
-            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
-            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
+//            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
+//            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
             //验证数据  END
             $result = $model_class->editClass($data,array('classid'=>$class_id));
             if ($result) {
@@ -236,6 +256,7 @@ class Classes extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
+            $classinfo = db('class')->where('classid',$class_id)->find();
             $model_student = model('Student');
             $data = array(
                 's_name' => input('post.student_name'),
@@ -244,9 +265,9 @@ class Classes extends AdminControl {
                 's_card' => input('post.student_idcard'),
                 's_remark' => input('post.student_desc'),
                 'option_id' => $admininfo['admin_id'],
+                'admin_company_id' => $classinfo['admin_company_id'],
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
-            $classinfo = db('class')->where('classid',$class_id)->find();
             $data['s_provinceid'] = $classinfo['school_provinceid'];
             $data['s_cityid'] = $classinfo['school_cityid'];
             $data['s_areaid'] = $classinfo['school_areaid'];
@@ -272,13 +293,31 @@ class Classes extends AdminControl {
 
         switch ($branch) {
             /**
-             * 验证学校名是否重复
+             * 验证班级名是否重复
              */
             case 'check_user_name':
-                $school_member = Model('school');
-                $condition['name'] = input('param.school_name');
-                $condition['schoolid'] = array('neq', intval(input('get.school_id')));
-                $list = $school_member->getSchoolInfo($condition);
+                $model_class = Model('classes');
+                $condition['classname'] = input('param.class_name');
+                $condition['schoolid'] = input('param.school_id');
+                $condition['isdel'] = 1;
+                $list = $model_class->getClassInfo($condition);
+                if (empty($list)) {
+                    echo 'true';
+                    exit;
+                } else {
+                    echo 'false';
+                    exit;
+                }
+                break;
+            /**
+             * 验证身份证是否重复（同一班级）
+             */
+            case 'check_user_cards':
+                $model_student = model('Student');
+                $condition['s_card'] = input('param.student_idcard');
+                $condition['s_classid'] = input('param.class_name');
+                $condition['s_del'] = 1;
+                $list = $model_student->getStudentInfo($condition);
                 if (empty($list)) {
                     echo 'true';
                     exit;

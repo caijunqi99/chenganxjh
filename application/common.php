@@ -5,6 +5,26 @@ require __DIR__ . '/common_global.php';
 /* 商品相关调用 */
 require __DIR__ . '/common_goods.php';
 
+/**
+ * 生成随机数字字符串组合
+ * @param  integer $len   [description]
+ * @param  [type]  $chars [description]
+ * @return [type]         [description]
+ */
+function getRandomString($len=6, $chars=null,$t = 'n'){
+    if (is_null($chars)){
+        $chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789";
+    }  
+    mt_srand(10000000*(double)microtime());
+    for ($i = 0, $str = '', $lc = strlen($chars)-1; $i < $len; $i++){
+        $str .= $chars[mt_rand(0, $lc)];  
+    }
+    if ($t=='u') return strtoupper($str);
+    if ($t=='l') return strtolower($str);
+    return $str;
+}
+
+
 /*
  * 更换数组的键值 为了应对 ->key
  */
@@ -81,8 +101,67 @@ var ue = UE.getEditor('{$name}',{
 EOT;
     return $str;
 }
+function buildEditors($params = array())
+{
+    $name = isset($params['name']) ? $params['name'] : null;
+    $theme = isset($params['theme']) ? $params['theme'] : 'normal';
+    $content = isset($params['content']) ? $params['content'] : null;
+    //http://fex.baidu.com/ueditor/#start-toolbar
+    /* 指定使用哪种主题 */
+    $themes = array(
+        'normal' => "[
+           'fullscreen', 'source', '|', 'undo', 'redo', '|',
+           'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+           'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+           'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+           'directionalityltr', 'directionalityrtl', 'indent', '|',
+           'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+           'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+           'emotion',  'map', 'gmap',  'insertcode', 'template',  '|',
+           'horizontal', 'date', 'time', 'spechars', '|',
+           'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+           'searchreplace', 'help', 'drafts', 'charts'
+       ]", 'simple' => " ['fullscreen', 'source', 'undo', 'redo', 'bold']",
+    );
+    switch ($theme) {
+        case 'simple':
+            $theme_config = $themes['simple'];
+            break;
+        case 'normal':
+            $theme_config = $themes['normal'];
+            break;
+        default:
+            $theme_config = $themes['normal'];
+            break;
+    }
+    /* 配置界面语言 */
+    switch (config('default_lang')) {
+        case 'zh-cn':
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/zh-cn/zh-cn.js';
+            break;
+        case 'en-us':
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/en/en.js';
+            break;
+        default:
+            $lang = config('url_domain_root') . 'static/plugins/ueditor/lang/zh-cn/zh-cn.js';
+            break;
+    }
+    //$include_js = '<script type="text/javascript" charset="utf-8" src="' . config('url_domain_root') . 'static/plugins/ueditor/ueditor.config.js"></script> <script type="text/javascript" charset="utf-8" src="' . config('url_domain_root') . 'static/plugins/ueditor/ueditor.all.min.js""> </script><script type="text/javascript" charset="utf-8" src="' . $lang . '"></script>';
+    $str = <<<EOT
+$include_js
+<script type="text/javascript">
+var ue = UE.getEditor('{$name}',{
+    toolbars:[{$theme_config}],
+        });
+      ue.ready(function() {
+       this.setContent('$content');
+})
+</script>
+EOT;
+    return $str;
+}
 
-function ds_json_encode($code, $message, $result = '')
+function ds_json_encode($code, $message, $result = array())
 {
     echo json_encode(array(
                          'code' => $code, 'message' => $message, 'result' => $result
@@ -212,7 +291,7 @@ function showDialog($message = '', $url = '', $alert_type = 'error', $extrajs = 
     }
     $modes = array('error' => 'alert', 'succ' => 'succ', 'notice' => 'notice', 'js' => 'js');
     $cover = $alert_type == 'error' ? 1 : 0;
-    $extra = 'parent.showDialog(\'' . $message . '\', \'' . $modes[$alert_type] . '\', null, ' . ($paramjs ? $paramjs : 'null') . ', ' . $cover . ', null, null, null, null, ' . (is_numeric($time) ? $time : 'null') . ', null);';
+    $extra = 'showDialog(\'' . $message . '\', \'' . $modes[$alert_type] . '\', null, ' . ($paramjs ? $paramjs : 'null') . ', ' . $cover . ', null, null, null, null, ' . (is_numeric($time) ? $time : 'null') . ', null);';
     $extra = '<script type="text/javascript" reload="1">' . $extra . '</script>';
     if ($extrajs != '' && substr(trim($extrajs), 0, 7) != '<script') {
         $extrajs = '<script type="text/javascript" reload="1">' . $extrajs . '</script>';
@@ -509,7 +588,7 @@ function readFileList($path, &$file_list, $ignore_dir = array())
  */
 function dsPriceFormat($price)
 {
-    $price_format = number_format($price, 2, '.', '');
+    $price_format = number_format($price, 4, '.', '');
     return $price_format;
 }
 
@@ -522,7 +601,7 @@ function dsPriceFormat($price)
 function dsPriceFormatForList($price)
 {
     if ($price >= 10000) {
-        return number_format(floor($price / 100) / 100, 2, '.', '') . lang('ten_thousand');
+        return number_format(floor($price / 100) / 100, 4, '.', '') . lang('ten_thousand');
     }
     else {
         return lang('currency') . $price;
@@ -742,6 +821,12 @@ function defaultGoodsImage($key)
     return ATTACH_COMMON . '/' . $file;
 }
 
+
+function getChatGroupImg(){
+    $file = 'default_chatgroup_image.png';
+    return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/'  . $file;
+}
+
 /**
  * 取得用户头像图片
  *
@@ -817,6 +902,8 @@ function getMemberAvatarHttps($member_avatar)
         return UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
     }
 }
+
+
 
 /**
  * 取得店铺标志
@@ -1210,15 +1297,15 @@ function F($name, $value = null, $path = 'cache', $ext = '.php')
  * @param  string $mode 写入模式，如果是追加，可传入“append”
  * @return bool
  */
-function write_file($filepath, $data, $mode = null)
+function write_file($filepath, $data, $mode = null,$type=false)
 {
     if (!is_array($data) && !is_scalar($data)) {
         return false;
     }
-
-    $data = var_export($data, true);
-
-    $data = "<?php defined('DSMALL') or exit('Access Invalid!'); return " . $data . ";";
+    if (!$type) {
+        $data = var_export($data, true);
+        $data = "<?php defined('DSMALL') or exit('Access Invalid!'); return " . $data . ";";    
+    }
     $mode = $mode == 'append' ? FILE_APPEND : null;
     if (false === file_put_contents($filepath, ($data), $mode)) {
         return false;
@@ -1228,6 +1315,20 @@ function write_file($filepath, $data, $mode = null)
     }
 }
 
+/**
+ * 写入支付文件
+ * @param  [string] $data     内容
+ * @param  [string] $payment  [写入支付文件名称]
+ * @param  [string] $filename [写入文件名称，为空则以时间命名]
+ * @return [bool]           
+ */
+function write_payment($data, $payment,$filename=''){
+    $path = './uploads/payment/'.$payment.'/'.date('Y-m-d').'_'.$filename.'.log';;
+    $dir = dirname($path);
+    if (!is_dir($dir))mkdir($dir);
+    $result = write_file($path, $data.PHP_EOL, $mode = 'append',$type=true);
+    return $result;
+}
 /**
  * 循环创建目录
  *

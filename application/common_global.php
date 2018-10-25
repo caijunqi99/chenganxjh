@@ -8,6 +8,8 @@ define('MD5_KEY', 'a2382918dbb49c8643f19bc3ab90ecf9');
  */
 define('CHARSET','UTF-8');
 
+define('HTTP_URL','101.201.75.83:8080/?');
+
 define('BASE_SITE_URL', $config['url_domain_root']);
 define('UPLOAD_SITE_URL',BASE_SITE_URL.'uploads');
 define('BASE_UPLOAD_PATH',ROOT_PATH.'/public/uploads');
@@ -54,6 +56,7 @@ define('ATTACH_VOUCHER',ATTACH_PATH.'/voucher');
 define('ATTACH_STORE_JOININ',ATTACH_PATH.'/store_joinin');
 define('ATTACH_REC_POSITION',ATTACH_PATH.'/rec_position');
 define('ATTACH_MOBILE','mobile');
+define('ATTACH_WAP','wap');
 define('ATTACH_NAVICON',ATTACH_MOBILE.'/navicon');
 define('ATTACH_CIRCLE','circle');
 define('ATTACH_CMS','cms');

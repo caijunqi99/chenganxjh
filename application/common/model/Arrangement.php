@@ -10,10 +10,18 @@ class Arrangement extends Model {
      * 查询所有系统文章
      */
     public function getList($where) {
-        return db('food')->where($where)->order('id desc')->select();
+        return db('arrangement')->where($where)->order('id desc')->select();
     }
 
-
+    /**
+     * 新增学校类型
+     *
+     * @param array $param 参数内容
+     * @return bool 布尔类型的返回结果
+     */
+    public function arrangement_add($param) {
+        return db('arrangement')->insertGetId($param);
+    }
 
     /**
      * 查询本周课程
@@ -44,7 +52,11 @@ class Arrangement extends Model {
      * @param unknown_type $id
      */
     public function getOneById($id) {
-        return db('food')->where('doc_id',$id)->find();
+        return db('arrangement')->where('id',$id)->find();
+    }
+
+    public function getOneInfo($condition) {
+        return db('arrangement')->where($condition)->find();
     }
 
     /**
@@ -61,8 +73,8 @@ class Arrangement extends Model {
      * 
      * @param unknown_type $param
      */
-    public function update1($param) {
-        return db('food')->where('doc_id',$param['doc_id'])->update($param);
+    public function update1($param,$id) {
+        return db('arrangement')->where('id',$id)->update($param);
     }
 }
 

@@ -129,13 +129,14 @@
                 <a href="{:url('/admin/school/edit',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
-                <a href="{:url('/admin/school/drop',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+                <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
+                location.href='{:url('/admin/school/drop',['school_id'=>$v.schoolid])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('10',$action)){ ?>
                 <a href="{:url('/admin/school/addclass',['school_id'=>$v.schoolid])}" class="layui-btn layui-btn-xs">{$Think.lang.school_class_add}</a>
                 <?php } ?>
                 <?php if(session('admin_is_super') ==1 || in_array('6',$action)){ ?>
-                <a href="javascript:jia({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_organize_assign}</a>
+                <a href="javascript:jia({$v.schoolid},{$v.admin_company_id})" class="layui-btn layui-btn-xs">{$Think.lang.ds_organize_assign}</a>
                 <?php } ?>
             </td>
         </tr>
@@ -163,7 +164,6 @@
 </div>
 
 <form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
-    <input type="hidden" id="role" value="">
     <div  class="ncap-form-default">
         <dl>
             <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_username}</dt>
@@ -189,7 +189,8 @@
                 <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
             </dd>
         </dl>
-        <input type="hidden" name="gid" value="{$role}">
+        <input type="hidden" name="role" id="role" value="{$role}">
+        <input type="hidden" name="admin_company_id" id="admin_company_id" value="">
         <dl>
             <dd>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
         </dl>
@@ -402,8 +403,9 @@
 
         });
     }
-function jia(role){
+function jia(role,admin_company_id){
             $('#role').val(role);
+            $('#admin_company_id').val(admin_company_id);
             //var urls=ADMIN_URL+'organizes/admin?role_id='+id;
             //多窗口模式，层叠置顶
             layer.open({
@@ -433,11 +435,13 @@ function jia(role){
                 //$('.layui-layer-close1').click();
                 var admin_name = $("#admin_name").val();
                 var admin_password = $("#admin_password").val();
+                var role=$("#role").val();
+                var admin_company_id=$("#admin_company_id").val();
                 $.ajax({
                     url: "{:url('/Admin/school/admin_add')}",
                     type: 'POST',
                     dataType: 'json',
-                    data: {'admin_name': admin_name,'admin_password':admin_password},
+                    data: {'admin_name': admin_name,'admin_password':admin_password,'role':role,'admin_company_id':admin_company_id},
                     success:function(sb){
                         if (sb.m) {
                             layer.msg(sb.ms, {icon: 16,time: 500},function(){

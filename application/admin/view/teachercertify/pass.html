@@ -1,0 +1,133 @@
+{include file="public/header" /}
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection_list.js"></script>
+<script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>教师认证申请</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data" name="form1" action="">
+        <div class="ncap-form-default">
+            <dl>
+                <dt>{$Think.lang.teacher_index_user}：{$teachinfo.member_mobile} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {$Think.lang.teacher_index_phone}：{$teachinfo.phone}
+                    </dt>
+            </dl>
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_sex}：{if condition="$teachinfo.sex eq 1"}-->
+                    <!--男-->
+                    <!--{/if}-->
+                    <!--{if condition="$teachinfo.sex eq 2"}-->
+                    <!--女-->
+                    <!--{/if}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                    <!--{$Think.lang.teacher_index_birthday}：{$teachinfo.birthday}-->
+                <!--</dt>-->
+            <!--</dl>-->
+            <dl>
+                <dt>
+                    {$Think.lang.teacher_index_region}：{$teachinfo.region}</dt>
+            </dl>
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_school}：{$teachinfo.affiliat}</dt>-->
+            <!--</dl>-->
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_address}：{$teachinfo.address}</dt>-->
+            <!--</dl>-->
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_job}：{$teachinfo.job}</dt>-->
+            <!--</dl>-->
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_email}：{$teachinfo.email}</dt>-->
+            <!--</dl>-->
+            <dl>
+                <dt>{$Think.lang.teacher_index_regiest}：<?php echo  date("Y-m-d H:i:s",$teachinfo['member_add_time']) ?><br>
+                    {$Think.lang.teacher_index_certime}：<?php echo date("Y-m-d H:i:s",$teachinfo['createtime']) ?></dt>
+            </dl>
+         <dl>
+             <dt>-----------------------实名认证信息-----------------------</dt>
+         </dl>
+
+            <dl>
+            <dt>{$Think.lang.teacher_index_phone}：
+                {if condition="$teachinfo.phone"}
+                已认证
+                {else}
+                未认证
+                {/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.phone}</dt>
+        </dl>
+            <dl>
+                <dt>{$Think.lang.teacher_index_name}：
+                    {if condition="$teachinfo.username"}
+                    已认证
+                    {else}
+                    未认证
+                    {/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.username}</dt>
+            </dl>
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.teacher_index_idcard}：-->
+                    <!--{if condition="$teachinfo.idcard"}-->
+                    <!--已认证-->
+                    <!--{else}-->
+                    <!--未认证-->
+                    <!--{/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.idcard}</dt>-->
+            <!--</dl>-->
+            <dl>
+                <dt>{$Think.lang.teacher_index_certificateid}：{if condition="$teachinfo.certificate"}
+                    已认证
+                    {else}
+                    未认证
+                    {/if}</dt>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.teacher_index_cardimg}：<img src="<?php echo $path.$teachinfo['cardimg']; ?>" alt="" width="80px" height="40px">
+                                                                <img src="<?php echo $path.$teachinfo['cardimg_fan']; ?>" alt="" width="80px" height="40px"></dt>
+            </dl>
+            <dl>
+                <dt>{$Think.lang.teacher_index_certificate}：<img src="<?php echo $path.$teachinfo['certificate']; ?>" alt="" width="80px" height="40px">
+                    <img src="<?php echo $path.$teachinfo['certificate_fan']; ?>" alt="" width="80px" height="40px"></dt>
+            </dl>
+            <dl>
+                <a href="javascript:dd({$teachinfo.id})" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
+            </dl>
+            <dl>说明：点击审核通过或拒绝审核，系统会发送短信给被认证教师进行审核结果的通知。</dl>
+        </div>
+    </form>
+
+    <form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
+        &nbsp;&nbsp;&nbsp;&nbsp;拒绝原因：<input type="text" value="" name="fail_reason" id="fail_reason" class="txt">
+        <input type="hidden" id="role" value="">
+        <input type="hidden" id="mit"  value="{:url('/admin/teachercertify/drop',['teacher_id'=>$teachinfo.id,'status'=>2,'phone'=>$teachinfo.phone,'reason'=>''])}">
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="{:url('/admin/teachercertify/drop',['teacher_id'=>$teachinfo.id,'status'=>3,'phone'=>$teachinfo.phone])}" class="btn" id="submitBtn">审核通过</a><a href="javascript:da()" class="btn" id="">拒绝审核</a>
+
+    </form>
+
+</div>
+<script type="text/javascript">
+    function da(){
+        $a = $("#fail_reason").val();
+        var str = $("#mit").val()+   $("#fail_reason").val();
+        window.location.href=str;
+    }
+
+    function dd(role){
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 1,
+            title: '审核',
+            area: ['300px', '150px'],
+            fixed: false, //不固定
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: $("#courForm")
+        });
+    }
+</script>

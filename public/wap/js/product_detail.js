@@ -174,8 +174,13 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
+                        if (!e || e == 'null') {
+                            goLogin();
+                            return false
+                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                        }
                         var t = parseInt($(".buy-num").val());
-                        if (!e) {
+                        if (!e || e == 'null') {
                             var o = decodeURIComponent(getCookie("goods_cart"));
                             if (o == null) {
                                 o = ""
@@ -225,9 +230,11 @@ $(function() {
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            if (!e) {
-                                window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                            if (!e || e == 'null') {
+                                goLogin();
                                 return false
+
+                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
                             }
                             var t = parseInt($(".buy-num").val()) || 0;
                             if (t < 1) {
@@ -257,8 +264,10 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            if (!e) {
-                                window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                            if (!e || e == 'null') {
+                                goLogin();return false
+                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {
@@ -298,7 +307,10 @@ $(function() {
                     getFreeVoucher($(this).attr("data-tid"))
                 });
                 $(".kefu").click(function() {
-                    window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+
+                    window.location.href = 'tel：400-000-000';
+                    // window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+
                 })
             }})
     }

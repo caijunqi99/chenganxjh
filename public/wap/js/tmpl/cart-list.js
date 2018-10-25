@@ -10,6 +10,7 @@ $(function() {
     });
     var t = getCookie("key");
     if (!t) {
+        goLogin();return false;
         var a = decodeURIComponent(getCookie("goods_cart"));
         if (a != null) {
             var e = a.split("|")

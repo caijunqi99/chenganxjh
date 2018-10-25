@@ -605,6 +605,7 @@ class AopClient {
 
 		//调用openssl内置方法验签，返回bool值
 
+
 		if ("RSA2" == $signType) {
 			$result = (bool)openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
 		} else {

@@ -18,7 +18,7 @@
 <body>
 <header id="header" class="transparent">
   <div class="header-wrap">
-    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back"></i> </a> </div>
+    <div class="header-l"> <a href="javascript:;"  onClick="ago_back()"> <i class="back"></i> </a> </div>
     <ul class="header-nav">
       <li class="cur"><a href="javascript:void(0);">商品</a></li>
       <li><a href="javascript:void(0);" id="goodsBody">详情</a></li>
@@ -29,12 +29,15 @@
   <div class="nctouch-nav-layout">
     <div class="nctouch-nav-menu"> <span class="arrow"></span>
       <ul>
-        <li><a href="../index.html"><i class="home"></i>首页</a></li>
-        <li><a href="search.html"><i class="search"></i>搜索</a></li>
-        <li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>
-        <li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>
-        <li><a href="cart_list.html"><i class="cart"></i>购物车<sup></sup></a></li>
-        <li><a href="member/member.html"><i class="member"></i>我的商城</a></li>
+		  <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
+		  <li><a href="javascript:;" onclick="common_url('search')"><i class="search"></i>搜索</a></li>
+		  <!--<li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
+		  <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
+		  <li><a href="javascript:;" onclick="common_url('cart')"><i class="cart"></i>购物车<sup></sup></a></li>
+		  <!--<li><a href="member/member.html"><i class="member"></i>我的商城</a></li>-->
+		  <li><a href="javascript:;" onclick="common_url('favorite')"><i class="favorite"></i>我的收藏</a></li>
+		  <li><a href="javascript:;" onclick="common_url('order')"><i class="order"></i>我的订单</a></li>
+		  <li><a href="javascript:;" onclick="common_url('address')"><i class="address"></i>收货地址</a></li>
       </ul>
     </div>
   </div>
@@ -62,7 +65,7 @@
 	</div>
 <div class="goods-detail-cnt">
 	<div class="goods-detail-name">
-		<dl> 
+		<dl>
 			<dt><%if(goods_info.is_virtual == '1'){%><span>虚拟</span><%}%><% if (goods_info.is_presell == '1') { %><span>预售</span><% } %><% if (goods_info.is_fcode == '1') { %><span>F码</span><% } %><%=goods_info.goods_name%></dt>
 			<dd><%=goods_info.goods_jingle%></dd>
 		</dl>
@@ -114,7 +117,7 @@
 			<dl class="goods-detail-sale">
 				<dt>
 					<i>满即送</i>
-				</dt>				
+				</dt>
 				<% if (mansong_info != null && mansong_info.rules) { for (var i =0;i<mansong_info.rules.length;i++){ %>
 				<dd class="mansong-rule">
 						单笔订单满<em><%=mansong_info.rules[i].price%></em>元
@@ -138,7 +141,7 @@
 					<a href="?goods_id=<%= v.gift_goodsid %>"><%= v.gift_goodsname %></a>
 					<em>&#215; <%= v.gift_amount %></em>
 				</dd>
-				<% } %>	
+				<% } %>
 			</dl>
 			<% } %>
 		</div>
@@ -225,7 +228,7 @@
 			<% }} %>
 		</div>
 	</div>
-	<div class="goods-detail-store">
+	<!--<div class="goods-detail-store">
 		<a href="store.html?store_id=<%= store_info.store_id %>">
 			<div class="store-name"><i class="icon-store"></i><%= store_info.store_name %>
 			<% if (store_info.is_own_shop == '1') {%>
@@ -263,12 +266,12 @@
 				</li>
 			<%}%>
 		</ul>
-	</div>
+	</div>-->
 	<div class="goods-detail-bottom"><a href="javascript:void(0);" id="goodsBody1">点击查看商品详情</a></div>
 	<div class="goods-detail-foot">
 		<div class="otreh-handle">
 			<a href="javascript:void(0);" class="kefu"><i></i><p>客服</p></a>
-			<a href="../tmpl/cart_list.html" class="cart"><i></i><p>购物车</p><span id="cart_count"></span></a>
+			<a href="javascript:void(0);" class="cart"><i></i><p>购物车</p><span id="cart_count"></span></a>
 		</div>
 	<div class="buy-handle <%if(!goods_hair_info.if_store || goods_info.goods_storage == 0){%>no-buy<%}%>">
 		<% if (goods_info.cart == '1') { %>
@@ -277,7 +280,7 @@
 		<a href="javascript:void(0);" class="<%if(goods_hair_info.if_store){%>animation-up<%}%> buy-now">立即购买</a>
 	</div>
 </div>
-</script> 
+</script>
 <script type="text/html" id="product_detail_sepc">
 <div class="nctouch-bottom-mask-bg"></div>
 <div class="nctouch-bottom-mask-block">
@@ -375,8 +378,8 @@
 		<a href="javascript:void(0);" class="kefu">
 			<i></i>
 			<p>客服</p>
-		</a> 
-		<a href="../tmpl/cart_list.html" class="cart">
+		</a>
+		<a href="javascript:void(0);" class="cart">
 			<i></i>
 			<p>购物车</p>
 			<span id="cart_count1"></span>
@@ -389,7 +392,7 @@
 		<a href="javascript:void(0);" class="buy-now" id="buy-now">立即购买</a>
 	</div>
 </div>
-</script> 
+</script>
 <script type="text/html" id="voucher_script">
 <% if (voucher) { %>
 	<div class="nctouch-bottom-mask-bg"></div>
@@ -432,14 +435,14 @@
 </li>
 <% } %>
 </script>
-<script type="text/javascript" src="../js/zepto.min.js"></script> 
-<script type="text/javascript" src="../js/config.js"></script> 
-<script type="text/javascript" src="../js/template.js"></script> 
-<script type="text/javascript" src="../js/swipe.js"></script> 
-<script type="text/javascript" src="../js/common.js"></script> 
-<script type="text/javascript" src="../js/iscroll.js"></script> 
-<script type="text/javascript" src="../js/simple-plugin.js"></script> 
-<script type="text/javascript" src="../js/tmpl/footer.js"></script> 
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/swipe.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/iscroll.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script>
+<script type="text/javascript" src="../js/tmpl/footer.js"></script>
 <script type="text/javascript" src="../js/fly/requestAnimationFrame.js"></script>
 <script type="text/javascript" src="../js/fly/zepto.fly.min.js"></script>
 <script type="text/javascript" src="../js/tmpl/product_detail.js"></script>

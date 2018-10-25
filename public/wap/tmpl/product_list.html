@@ -19,20 +19,25 @@
 <body>
 <header id="header" class="nctouch-product-header fixed">
   <div class="header-wrap">
-    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back"></i> </a> </div>
+    <div class="header-l"> <a href="javascript:;"  onClick="ago_back()"> <i class="back"></i> </a> </div>
     <div class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword">请输入关键词</span> </div>
-    <div class="header-r"> <a href="../tmpl/product_first_categroy.html" class="categroy"><i></i>
+    <div class="header-r">
+		<!--<a href="../tmpl/product_first_categroy.html" class="categroy"><i></i>-->
       </a> <a id="header-nav" href="javascript:void(0);"><i class="more"></i><sup></sup></a> </div>
   </div>
   <div class="nctouch-nav-layout">
     <div class="nctouch-nav-menu"> <span class="arrow"></span>
       <ul>
-        <li><a href="../index.html"><i class="home"></i>首页</a></li>
-        <li><a href="search.html"><i class="search"></i>搜索</a></li>
-        <li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>
-        <li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>
-        <li><a href="cart_list.html"><i class="cart"></i>购物车<sup></sup></a></li>
-        <li><a href="member/member.html"><i class="member"></i>我的商城</a></li>
+        <li><a href="javascript:;"  onClick="historyback()"><i class="home"></i>首页</a></li>
+        <li><a href="javascript:;" onclick="common_url('search')"><i class="search"></i>搜索</a></li>
+        <!--<li><a href="product_first_categroy.html"><i class="categroy"></i>分类</a></li>-->
+        <!--<li><a href="javascript:void(0);"><i class="message"></i>消息<sup></sup></a></li>-->
+        <li><a href="javascript:;" onclick="common_url('cart')"><i class="cart"></i>购物车<sup></sup></a></li>
+        <!--<li><a href="member/member.html"><i class="member"></i>我的商城</a></li>-->
+		  <li><a href="javascript:;" onclick="common_url('favorite')"><i class="favorite"></i>我的收藏</a></li>
+		  <li><a href="javascript:;" onclick="common_url('order')"><i class="order"></i>我的订单</a></li>
+		  <li><a href="javascript:;" onclick="common_url('address')"><i class="address"></i>收货地址</a></li>
+
       </ul>
     </div>
   </div>
@@ -68,10 +73,10 @@
     <div class="nctouch-main-layout-a secreen-layout" id="list-items-scroll" style="top: 2rem;"><div></div></div>
   </div>
 </div>
-<div class="fix-block-r">
+<!--<div class="fix-block-r">
 	<a href="member/views_list.html" class="browse-btn"><i></i></a>
 	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i></i></a>
-</div>
+</div>-->
 <footer id="footer" class="bottom"></footer>
 <script type="text/html" id="search_items">
 <div>
@@ -83,7 +88,7 @@
 			<span class="inp-balck"><input nctype="price" type="text" id="price_to" pattern="[0-9]*" class="inp" placeholder="最高价"/></span>
 		</dd>
 	</dl>
-	<dl>
+	<!--<dl>
 		<dt>商品所在地</dt>
 		<dd><span class="inp-balck add"><select id="area_id">
 					<option value="">不限</option>
@@ -103,11 +108,11 @@
 			<a href="javascript:void(0);" nctype="items" id="xianshi">限时折扣</a>
 			<a href="javascript:void(0);" nctype="items" id="virtual">虚拟</a>
 		</dd>
-	</dl>
+	</dl>-->
 	<dl>
 		<dt>店铺类型</dt>
 		<dd>
-			<a href="javascript:void(0);" nctype="items" id="own_shop" class="">平台自营</a>
+			<a href="javascript:void(0);" nctype="items" id="own_shop" class="current">平台自营</a>
 		</dd>
 	</dl>
 
@@ -166,7 +171,7 @@
 							<% } %>
 							</a>
 						</dd>
-						<dd class="goods-assist">
+						<!--<dd class="goods-assist">
 							<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id;%>">
 								<span class="goods-sold">销量
 									<em><%=goods_list[i].goods_salenum;%></em>
@@ -186,7 +191,7 @@
 							%>
 								<div class="sotre-creidt-layout" style="display: none;"></div>
 							</div>
-						</dd>
+						</dd>-->
 					</dl>
 			</li>
 			<%}%>
@@ -202,7 +207,7 @@
 					<dt>没有找到任何相关信息</dt>
 					<dd>选择或搜索其它商品分类/名称...</dd>
 				</dl>
-			<a href="javascript:history.go(-1)" class="btn">重新选择</a>
+			<a  href="javascript:;"  onClick="historyback()" class="btn">重新选择</a>
 		</div>
 	<%
 	   }
@@ -213,5 +218,5 @@
 <script type="text/javascript" src="../js/template.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
 <script type="text/javascript" src="../js/tmpl/product_list.js"></script>
-<script type="text/javascript" src="../js/tmpl/footer.js"></script>
+<!--<script type="text/javascript" src="../js/tmpl/footer.js"></script>-->
 </html>

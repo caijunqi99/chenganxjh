@@ -55,4 +55,10 @@ class Teachhistory extends Model {
         return db('teachhistory')->where($condition)->update($update);
     }
 
+    //单个删除
+    public function delTeachhistory($where) {
+        //return db('teachhistory')->where($where)->delete();
+        return db('teachhistory')->where($condition)->update($update);
+    }
+
 }

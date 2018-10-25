@@ -39,13 +39,13 @@ class Payment extends MobileMall
             else {
                 //验证失败
                 $this->assign('result', 'fail');
-                $this->assign('message', '支付失败');
+                $this->assign('message', '支付配置参数错误');
             }
         }
         else {
             //验证失败
             $this->assign('result', 'fail');
-            $this->assign('message', '支付失败');
+            $this->assign('message', '支付失败,订单金额与订单号错误！！');
         }
         return $this->fetch('payment_message');
     }
@@ -64,11 +64,14 @@ class Payment extends MobileMall
         $data['order_amount'] = input('param.total_amount');
         $order_model = model('order');
         $order_info = $order_model->getOrderInfo($data);
+
         if (!empty($order_info)) {
             $callback_info = $payment_api->getNotifyInfo();
             if ($callback_info) {
+
                 //验证成功
                 $result = $this->_update_order($callback_info['out_trade_no'], $callback_info['trade_no']);
+
                 if ($result['code']) {
                     echo 'success';
                     die;
@@ -91,7 +94,6 @@ class Payment extends MobileMall
         $api->setConfigs($params);
 
         list($result, $output) = $api->notify();
-
         if ($result) {
             $internalSn = $result['out_trade_no'] . '_' . $result['attach'];
             $externalSn = $result['transaction_id'];
@@ -173,9 +175,7 @@ class Payment extends MobileMall
         if (is_file($inc_file)) {
             require($inc_file);
         }
-
         $payment_api = new $this->payment_code($payment_config);
-
         return $payment_api;
     }
 
@@ -207,13 +207,13 @@ class Payment extends MobileMall
         $model_order = model('order');
         $logic_payment = model('payment', 'logic');
 
-        $tmp = explode('_', $out_trade_no);
+        $tmp = explode('-', $out_trade_no);
         $out_trade_no = $tmp[0];
         if (!empty($tmp[1])) {
             $order_type = $tmp[1];
         }
         else {
-            $order_pay_info = Model('order')->getOrderPayInfo(array('pay_sn' => $out_trade_no));
+            $order_pay_info = $model_order->getOrderPayInfo(array('pay_sn' => $out_trade_no));
             if (empty($order_pay_info)) {
                 $order_type = 'v';
             }
@@ -221,6 +221,7 @@ class Payment extends MobileMall
                 $order_type = 'r';
             }
         }
+
 
         $paymentCode = $this->payment_code;
 

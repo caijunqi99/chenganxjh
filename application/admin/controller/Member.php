@@ -238,12 +238,12 @@ class Member extends AdminControl {
             $user=array();
             $user['member_password'] = md5(trim($pass));
             $result=$Member->editMember(array('member_id'=>$member_id),$user);
-
+            $sendmsg = '【'.config('site_name').'】申请重置密码，您的新密码为：'.$pass.'，此密码为随机生成，系统将不会记录您的密码，请登陆之后自行修改。';
             if ($result) {
                 $sms_tpl = config('sms_tpl');
                 $tempId = $sms_tpl['sms_password_reset'];
                 $sms = new \sendmsg\Sms();
-                $send = $sms->send($memberInfo['member_mobile'],$pass,$tempId);
+                $send = $sms->send($memberInfo['member_mobile'],$sendmsg);
                 if($send){
                     $sign = true;
                     $msg='密码重置成功';
@@ -284,6 +284,16 @@ class Member extends AdminControl {
                 } else {
                     echo 'false';
                     exit;
+                }
+                break;
+            case 'check_member_mobile':
+                $model_admin = Model('member');
+                $condition['member_mobile'] = input('get.member_mobile');
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
                 }
                 break;
             /**

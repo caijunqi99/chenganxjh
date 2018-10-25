@@ -66,18 +66,20 @@
         <?php if(!empty($order_list) && is_array($order_list)){ ?>
         <?php foreach($order_list as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $k+1; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <td class="align-center"><?php echo $v['buyer_name']; ?></td>
             <td class="align-center"><?php echo $v['student_name']; ?></td>
             <td class="align-center"><?php echo $v['order_name']; ?></td>
             <td class="align-center"><?php echo $v['length']; ?></td>
             <td class="align-center"><?php echo $v['order_amount']; ?></td>
-            <td class="align-center"><?php if($v['order_state']==10){echo "待支付";}
+            <td class="align-center"><?php if($v['order_state']==10){echo "待付款";}
             elseif($v['order_state']==20){echo "已付款";}
             elseif($v['order_state']==30){echo "已发货";}
             elseif($v['order_state']==40){echo "已收货";}
             elseif($v['order_state']==0){echo "已取消";}?></td>
-            <td class="align-center"><?php echo $v['payment_code']; ?></td>
+            <td class="align-center"><?php foreach($payment as $key=>$item){
+                if($item['payment_code']==$v['payment_code']){echo $item['payment_name'];}
+                }  ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['order_dieline']); ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['add_time']); ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['payment_time']); ?></td>
