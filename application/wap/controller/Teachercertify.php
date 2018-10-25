@@ -95,10 +95,10 @@ class Teachercertify extends MobileMember
             $teachinfo['provincename'] = $parent['area_name'];
         }
         if(!empty($teachinfo['createtime'])){
-            $teachinfo['createtime'] = date("Y-m-d H:i:s",$teachinfo['createtime']);
+            $teachinfo['createtime'] = date("H:i",$teachinfo['createtime']);
         }
         if(!empty($teachinfo['option_time'])){
-            $teachinfo['option_time'] = date("Y-m-d H:i:s",$teachinfo['option_time']);
+            $teachinfo['option_time'] = date("H:i",$teachinfo['option_time']);
         }
         if(!empty($teachinfo['cityid'])){
             $child = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['cityid']))->find();
@@ -157,17 +157,17 @@ class Teachercertify extends MobileMember
             mkdir($uploadimg_path."home/teacher/",0777,true);
         }
         //允许上传的文件格式
-        //$tp = array("image/gif","image/jpeg","image/jpg","image/png");
+        $tp = array("image/gif","image/jpeg","image/jpg","image/png","image/*");
         //检查身份证是否在允许上传的类型
-//        if(!in_array($type["idcard_front"]["type"],$tp) || !in_array($type["idcard_back"]["type"],$tp))
-//        {
-//            output_error('身份证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
-//        }
+        if(!in_array($type["idcard_front"]["type"],$tp) || !in_array($type["idcard_back"]["type"],$tp))
+        {
+            output_error('身份证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
+        }
         //检查资格证是否在允许上传的类型
-//        if(!in_array($type["certificate_front"]["type"],$tp) || !in_array($type["certificate_back"]["type"],$tp))
-//        {
-//            output_error('资格证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
-//        }
+        if(!in_array($type["certificate_front"]["type"],$tp))
+        {
+            output_error('资格证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
+        }
 
         if(!empty($type['idcard_front']['name'])){
             move_uploaded_file($type['idcard_front']["tmp_name"], $uploadimg_path . $picture['cardimg']);

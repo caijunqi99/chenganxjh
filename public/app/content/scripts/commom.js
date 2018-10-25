@@ -49,3 +49,14 @@ function layout(){
     } else { //pc
     };
 }
+
+//赛心情发生
+
+function send_mood(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.sendMood.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.sendMood();
+    } else { //pc
+    };
+}
