@@ -9,7 +9,8 @@ $(function() {
         return decodeURIComponent(t)
     });
     var t = getCookie("key");
-    if (!t || t == 'null') {
+    if (!t) {
+        goLogin();return false;
         var a = decodeURIComponent(getCookie("goods_cart"));
         if (a != null) {
             var e = a.split("|")
