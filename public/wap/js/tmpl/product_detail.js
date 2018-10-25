@@ -335,7 +335,6 @@ $(function() {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
                             if (!e || e == 'null') {
-                                alert('bbb');
                                 goLogin();
                                 return false
                                 // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
