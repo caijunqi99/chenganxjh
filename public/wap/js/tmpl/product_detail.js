@@ -333,11 +333,10 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-
                             if (!e) {
-                                goLogin();
-                                return false
-                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                                // goLogin();
+                                // return false
+                                window.location.href = WapSiteUrl + "/tmpl/member/login.html"
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {
