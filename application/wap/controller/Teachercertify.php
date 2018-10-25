@@ -9,7 +9,8 @@
 namespace app\wap\controller;
 
 
-class Teachercertify extends MobileMember
+//class Teachercertify extends MobileMember
+class Teachercertify
 {
     public function _initialize()
     {
@@ -46,20 +47,21 @@ class Teachercertify extends MobileMember
 
         //身份证正面图
         if($_FILES['idcard_front']['name']){
-            $data['cardimg'] = "home/idcard/".date("YmdHis",time())."_".time().".png";
+            $data['cardimg'] = "home/idcard/idcardz_".date("YmdHis",time())."_".time().".png";
         }
         //身份证反面图
         if($_FILES['idcard_back']['name']){
-            $data['cardimg_fan'] = "home/idcard/".date("YmdHis",time())."_".time().".png";
+            $data['cardimg_fan'] = "home/idcard/idcardf_".date("YmdHis",time())."_".time().".png";
         }
         //资格证正面图
         if($_FILES['certificate_front']['name']){
-            $data['certificate'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
+            $data['certificate'] = "home/teacher/teacherz_".date("YmdHis",time())."_".time().".png";
         }
         //资格证反面图
 //        if($_FILES['certificate_back']['name']){
 //            $data['certificate_fan'] = "home/teacher/".date("YmdHis",time())."_".time().".png";
 //        }
+        //print_r($_FILES);die;
         $this->image($data,$_FILES);
         $teachercertify_model = model('Teachercertify');
         $id = input('post.id');
@@ -87,7 +89,7 @@ class Teachercertify extends MobileMember
             output_error('会员id不能为空');
         }
         $teachchild = model('Teachercertify');
-        $teachinfo = $teachchild->getOneInfo(array('member_id'=>$member_id));
+        $teachinfo = db('teachercertify')->where(array('member_id'=>$member_id))->order('id',desc)->limit(1)->find();
         $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
@@ -161,37 +163,15 @@ class Teachercertify extends MobileMember
 //        {
 //            output_error('资格证格式不正确,请检查是否符合 gif，jpeg，jpg，png');
 //        }
+
         if(!empty($type['idcard_front']['name'])){
-            $upload = move_uploaded_file($type['idcard_front']["tmp_name"], $uploadimg_path . $picture['cardimg']);
-            if($upload){
-                return $upload;
-            }else{
-                output_error('上传身份证正面图失败');
-            }
+            move_uploaded_file($type['idcard_front']["tmp_name"], $uploadimg_path . $picture['cardimg']);
         }
         if(!empty($type['idcard_back']['name'])){
-            $upload = move_uploaded_file($type['idcard_back']["tmp_name"], $uploadimg_path . $picture['cardimg_fan']);
-            if($upload){
-                return $upload;
-            }else{
-                output_error('上传身份证反面图失败');
-            }
+            move_uploaded_file($type['idcard_back']["tmp_name"], $uploadimg_path . $picture['cardimg_fan']);
         }
         if(!empty($type['certificate_front']['name'])){
-            $upload = move_uploaded_file($type['certificate_front']["tmp_name"], $uploadimg_path . $picture['certificate']);
-            if($upload){
-                return $upload;
-            }else{
-                output_error('上传资格证正面图失败');
-            }
-        }
-        if(!empty($type['certificate_back']['name'])){
-            $upload = move_uploaded_file($type['certificate_back']["tmp_name"], $uploadimg_path . $picture['certificate_fan']);
-            if($upload){
-                return $upload;
-            }else{
-                output_error('上传资格证反面图失败');
-            }
+            move_uploaded_file($type['certificate_front']["tmp_name"], $uploadimg_path . $picture['certificate']);
         }
     }
 
