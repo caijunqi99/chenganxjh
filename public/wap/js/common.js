@@ -925,19 +925,22 @@ function common_url($name){
     var e = getCookie('key');
     alert(e);
     if(!e){
+        alert('aaa');
         goLogin();return false;
+    }else{
+        if($name == 'search'){
+            window.location.href='search.html';
+        }else if($name == 'cart'){
+            window.location.href='cart_list.html?ago=1';
+        }else if($name == 'favorite'){
+            window.location.href='member/favorites.html?ago=1';
+        }else if($name == 'order'){
+            window.location.href='member/order_list.html?ago=1';
+        }else if($name == 'address'){
+            window.location.href='member/address_list.html?ago=1';
+        }
     }
-    if($name == 'search'){
-        window.location.href='search.html';
-    }else if($name == 'cart'){
-        window.location.href='cart_list.html?ago=1';
-    }else if($name == 'favorite'){
-        window.location.href='member/favorites.html?ago=1';
-    }else if($name == 'order'){
-        window.location.href='member/order_list.html?ago=1';
-    }else if($name == 'address'){
-        window.location.href='member/address_list.html?ago=1';
-    }
+
 }
 
 function member_url($name){
