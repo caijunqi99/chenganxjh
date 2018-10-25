@@ -274,69 +274,72 @@ $(function() {
                     });
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
+                            alert('aaa');
                             var e = getCookie("key");
                             if (!e) {
                                 goLogin();
                                 return false
-                            }
-                            var t = parseInt($(".buy-num").val()) || 0;
-                            if (t < 1) {
-                                $.sDialog({
-                                    skin: "red",
-                                    content: "参数错误！",
-                                    okBtn: false,
-                                    cancelBtn: false
-                                });
-                                return
-                            }
-                            if (t > l.goods_info.goods_storage) {
-                                $.sDialog({
-                                    skin: "red",
-                                    content: "库存不足！",
-                                    okBtn: false,
-                                    cancelBtn: false
-                                });
-                                return
-                            }
-                            if (l.goods_info.buyLimitation > 0 && t > l.goods_info.buyLimitation) {
-                                $.sDialog({
-                                    skin: "red",
-                                    content: "超过限购数量！",
-                                    okBtn: false,
-                                    cancelBtn: false
-                                });
-                                return
-                            }
-                            var o = {};
-                            o.key = e;
-                            o.cart_id = r;
-                            o.quantity = t;
-                            $.ajax({
-                                type: "post",
-                                url: ApiUrl + "/Membervrbuy/buy_step1.html",
-                                data: o,
-                                dataType: "json",
-                                success: function(e) {
-                                    if (e.code==100) {
-                                        $.sDialog({
-                                            skin: "red",
-                                            content: e.message,
-                                            okBtn: false,
-                                            cancelBtn: false
-                                        })
-                                    } else {
-                                        location.href = WapSiteUrl + "/tmpl/order/vr_buy_step1.html?goods_id=" + r + "&quantity=" + t
-                                    }
+                            }else{
+                                var t = parseInt($(".buy-num").val()) || 0;
+                                if (t < 1) {
+                                    $.sDialog({
+                                        skin: "red",
+                                        content: "参数错误！",
+                                        okBtn: false,
+                                        cancelBtn: false
+                                    });
+                                    return
                                 }
-                            })
+                                if (t > l.goods_info.goods_storage) {
+                                    $.sDialog({
+                                        skin: "red",
+                                        content: "库存不足！",
+                                        okBtn: false,
+                                        cancelBtn: false
+                                    });
+                                    return
+                                }
+                                if (l.goods_info.buyLimitation > 0 && t > l.goods_info.buyLimitation) {
+                                    $.sDialog({
+                                        skin: "red",
+                                        content: "超过限购数量！",
+                                        okBtn: false,
+                                        cancelBtn: false
+                                    });
+                                    return
+                                }
+                                var o = {};
+                                o.key = e;
+                                o.cart_id = r;
+                                o.quantity = t;
+                                $.ajax({
+                                    type: "post",
+                                    url: ApiUrl + "/Membervrbuy/buy_step1.html",
+                                    data: o,
+                                    dataType: "json",
+                                    success: function(e) {
+                                        if (e.code==100) {
+                                            $.sDialog({
+                                                skin: "red",
+                                                content: e.message,
+                                                okBtn: false,
+                                                cancelBtn: false
+                                            })
+                                        } else {
+                                            location.href = WapSiteUrl + "/tmpl/order/vr_buy_step1.html?goods_id=" + r + "&quantity=" + t
+                                        }
+                                    }
+                                })
+                            }
                         })
                     } else {
                         $("#buy-now").click(function() {
+                            alert('bbb');
                             var e = getCookie("key");
                             if (!e) {
-                                // goLogin();
-                                // return false
-                                window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                                goLogin();
+                                return false
+                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {
