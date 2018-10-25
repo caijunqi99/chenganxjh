@@ -9,8 +9,7 @@
 namespace app\wap\controller;
 
 
-//class Teachercertify extends MobileMember
-class Teachercertify
+class Teachercertify extends MobileMember
 {
     public function _initialize()
     {
