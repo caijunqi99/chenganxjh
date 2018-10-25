@@ -204,17 +204,11 @@
                 Oschool.select({
                     title: "请选择学校",
                     items: [{}],
-<<<<<<< HEAD
-                    onOpen: function() {
-                        alert(1);
-                        Oschool.select("close");
-=======
                     onChange: function(p, v, d) {
                     },
                     onOpen: function(){
                         $('#bang_name,#shibiema').blur();
                         $("#screen").addClass("show");
->>>>>>> 34b7331cbcf9bc5d4a19cb790a4d2017819f4e9e
                     },
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
