@@ -965,9 +965,9 @@ function fz_token($key,$member_id){
     addCookie('mermber_id',$member_id);
 }
 
-function ago_back(ago='null'){
+function ago_back(ago=null){
      ago = GetQueryString('ago');
-    if(ago =='null'){
+    if(ago==null){
         historyback();
     }else{
         window.history.back(-1);
