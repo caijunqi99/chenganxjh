@@ -1,6 +1,6 @@
 $(function() {
     var r = getCookie("key");
-    if (!r) {
+    if (!r || r == 'null') {
         // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
         goLogin();
     }

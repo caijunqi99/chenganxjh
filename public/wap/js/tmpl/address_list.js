@@ -1,6 +1,6 @@
 $(function() {
     var e = getCookie("key");
-    if (!e) {
+    if (!e || e == 'null') {
         // location.href = "login.html"
         goLogin();return false;
     }

@@ -174,13 +174,13 @@ $(function() {
                     });
                     $("#add-cart").click(function() {
                         var e = getCookie("key");
-                        if (!e) {
+                        if (!e || e == 'null') {
                             goLogin();
                             return false
                             // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
                         }
                         var t = parseInt($(".buy-num").val());
-                        if (!e) {
+                        if (!e || e == 'null') {
                             var o = decodeURIComponent(getCookie("goods_cart"));
                             if (o == null) {
                                 o = ""
@@ -230,7 +230,7 @@ $(function() {
                     if (l.goods_info.is_virtual == "1") {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            if (!e) {
+                            if (!e || e == 'null') {
                                 goLogin();
                                 return false
 
@@ -264,7 +264,7 @@ $(function() {
                     } else {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
-                            if (!e) {
+                            if (!e || e == 'null') {
                                 goLogin();return false
                                 // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
 
