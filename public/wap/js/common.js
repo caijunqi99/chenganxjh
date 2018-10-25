@@ -923,9 +923,7 @@ function goLogin(){
 
 function common_url($name){
     var e = getCookie('key');
-    alert(e);
-    if(!e){
-        alert('aaa');
+    if(!e || e == 'null'){
         goLogin();return false;
     }else{
         if($name == 'search'){
@@ -945,7 +943,7 @@ function common_url($name){
 
 function member_url($name){
     var e = getCookie('key');
-    if(!e){
+    if(!e || e == 'null'){
         goLogin();return false;
     }
     if($name == 'search'){
@@ -969,7 +967,7 @@ function fz_token($key,$member_id){
 
 function ago_back(ago=''){
      ago = GetQueryString(ago);
-    if(!ago){
+    if(!ago || e == 'null'){
         historyback();
     }else{
         window.history.back(-1);
