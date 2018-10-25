@@ -4,7 +4,8 @@ namespace app\wap\controller;
 
 use think\captcha\Captcha;
 
-class Arrangement extends MobileMember
+//class Arrangement extends MobileMember
+class Arrangement
 {
 
     /**
@@ -64,6 +65,31 @@ class Arrangement extends MobileMember
                 }
             }
         }
+        if(!empty($data['content']['Monday'])){
+            $argc[] = $data['content']['Monday'];
+        }
+        if(!empty($data['content']['Tuesday'])){
+            $argc[] = $data['content']['Tuesday'];
+        }
+        if(!empty($data['content']['Wednesday'])){
+            $argc[] = $data['content']['Wednesday'];
+        }
+        if(!empty($data['content']['Thursday'])){
+            $argc[] = $data['content']['Thursday'];
+        }
+        if($data['content']['Friday']){
+            $argc[] = $data['content']['Friday'];
+        }
+        if($data['content']['Saturday']){
+            $argc[] = $data['content']['Saturday'];
+        }
+        if($data['content']['Sunday']){
+            $argc[] = $data['content']['Sunday'];
+        }
+        if(!empty($argc)){
+            $data['content'] = $argc;
+        }
+        $data = !empty($data)?[$data]:[];
         if($data){
             output_data($data);
         }else{
