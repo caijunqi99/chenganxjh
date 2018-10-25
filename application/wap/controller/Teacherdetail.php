@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Teacherdetail extends MobileMember
+class Teacherdetail extends MobileMall
 {
     public function _initialize()
     {
