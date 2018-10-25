@@ -62,16 +62,12 @@ class Teacherupload extends MobileMember
             $condition['t_timelength'] = $videoData['time'];//视频时长
         }
 
-        if($videoData){
-            $result=$teachchild->addTeachchild($condition);
-            if($result){
-                $data[] = array('message'=>'上传成功','data'=>$condition);
-                output_data($data);
-            }else{
-                output_error('上传失败');
-            }
+        $result=$teachchild->addTeachchild($condition);
+        if($result){
+            $data[] = array('message'=>'上传成功','data'=>$condition);
+            output_data($data);
         }else{
-            output_error('上传视频失败');
+            output_error('上传失败');
         }
 
     }
