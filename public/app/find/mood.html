@@ -176,8 +176,8 @@
                success: function (response) {
                    var data = response.result;
                    if(response['code'] == 200){
-                       var ml = '';
                        for(var i=0; i<response.result.length;i++) {
+                           var ml = '';
                             ml +='<div class="mood_list cont">' +
                                 '<div class="head_picbox">' +
                                 '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
@@ -203,9 +203,8 @@
                                 }
                             }
                             ml += '</ul></div>';
-
+                           $("#mood_listbox").append(ml);
                        }
-                       $("#mood_listbox").append(ml);
                    }else if(response['code'] == '400'){
                        $.alert(response['message'],function(){
                            goLogin();
