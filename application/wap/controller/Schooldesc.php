@@ -2,9 +2,11 @@
 
 namespace app\wap\controller;
 
+use app\mobile\controller\MobileMember;
 use think\captcha\Captcha;
 
-class Schooldesc {
+class Schooldesc extends MobileMember
+{
 
 
     /**
