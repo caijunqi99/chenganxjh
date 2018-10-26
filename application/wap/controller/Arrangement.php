@@ -22,9 +22,9 @@ class Arrangement extends MobileMember
         if(!empty($data['content'])){
             $data['content']= json_decode($data['content'],true);
         }
+        $week = date('w');
         //本周日期
         if($weektype==2){
-            $week = date('w');
             $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 1-$week .' days' ));
             $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 2-$week .' days' ));
             $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 3-$week .' days' ));
@@ -95,6 +95,29 @@ class Arrangement extends MobileMember
         }else{
             output_data(array());
         }
+
+    }
+
+    /**
+     * 获取下周一到下周日的数组日期
+     * @param $date
+     * @return array
+     */
+    function getNextWeekOf($date)
+    {
+        $dates = array();
+        $time = strtotime($date . ' 12:00:00');
+        $w = date('w', $time);
+
+        if ($w == 0) {
+            $nextMonday = 1;
+        } else {
+            $nextMonday = 7 - $w + 1;
+        }
+        for ($i = $nextMonday; $i < $nextMonday + 7; $i++) {
+            $dates[] = date('Y-m-d', $time + 3600 * 24 * $i);
+        }
+        return $dates;
 
     }
 
