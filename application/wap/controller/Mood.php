@@ -77,7 +77,7 @@ class Mood extends MobileMember{
             }
         }
 
-        $data = array_merge($mood_list,$ar);
+        $data[] = array_merge($mood_list,$ar);
         output_data($data);
     }
     /**

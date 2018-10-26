@@ -176,6 +176,8 @@
                success: function (response) {
                    var data = response.result;
                    if(response['code'] == 200){
+
+                       alert(response.result.length);
                        for(var i=0; i<response.result.length;i++) {
                            var ml = '';
                             ml +='<div class="mood_list cont">' +
