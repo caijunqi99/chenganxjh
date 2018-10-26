@@ -174,7 +174,6 @@
                },
                dataType: "json",
                success: function (response) {
-                   console.log(response);
                    var data = response.result;
                    if(response['code'] == 200){
                        for(var i=0; i<response.result.length;i++) {
@@ -219,12 +218,13 @@
 
 
 
-        var loading = false;
+       /* var loading = false;
         $(document.body).infinite().on("infinite", function() {
+
+            alert('aaa');
             if (loading) return;
             loading = true;
             setTimeout(function() {
-                alert('aaa');
                 var start = 1;
                 $.ajax({
                     type:'POST',
@@ -281,7 +281,7 @@
                 });
                 loading = false;
             }, 2000);
-        });
+        });*/
     </script>
 </body>
 
