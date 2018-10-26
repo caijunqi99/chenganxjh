@@ -32,6 +32,10 @@ class Schooldesc extends MobileMember
         $where=array();
         $where['s_sid']=$school_id;
         $data=$desc->getDescInfo($where);
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        if(!empty($data['s_img'])){
+            $data['s_img'] = $path.$data['s_img'];
+        }
         $data['name']=$logindata['name'];
         $data['region']=$logindata['region'];
         $data['address']=$logindata['address'];
