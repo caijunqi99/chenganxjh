@@ -67,3 +67,9 @@ function GetQueryString(name)
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
+
+//刷新页面
+
+function reLoad(){
+    location.reload()
+}
