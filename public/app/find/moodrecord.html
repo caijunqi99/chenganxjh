@@ -69,19 +69,20 @@
                     },
                     dataType: "json",
                     success: function (response) {
-                        var data = response.result[0].mood;
+                        var data = response.result.mood;
                         if(response['code'] == 200){
                             if(data.length >0){
                                 for(var i=0; i<data.length;i++) {
+                                    // var img_url = upload_url+'/'+data[i].image[0];
                                     var ml = '';
                                     ml += '<li>\n' +
-                                        '                    <a href="./mooddetail.html">\n' +
+                                        '                    <a href="./mooddetail.html?id='+data[i].id+'">\n' +
                                         '                        <div class="date">\n' +
-                                        '                            <span>10月</span>23\n' +
+                                        '                            <span>'+data[i].month+'月</span>'+data[i].day+'\n' +
                                         '                        </div>\n' +
                                         '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
                                         '                        <div class="txtbox">\n' +
-                                        '                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>\n' +
+                                        '                            <p class="mr_p">'+data[i].content+'</p>\n' +
                                         '                        </div>\n' +
                                         '                    </a>\n' +
                                         '                </li>';
@@ -122,21 +123,21 @@
                         },
                         dataType: "json",
                         success: function (response) {
-                            var data = response.result[0].mood;
-                            if(response.result[1].page_count >start) {
+                            var data = response.result.mood;
+                            if(response.result.page_count.page_count >start) {
                                 start = start + 1;
                                 if (response['code'] == 200) {
                                     if (data.length > 0) {
                                         for (var i = 0; i < data.length; i++) {
                                             var ml = '';
                                             ml += '<li>\n' +
-                                                '                    <a href="./mooddetail.html">\n' +
+                                                '                    <a href="./mooddetail.html?id='+data[i].id+'">\n' +
                                                 '                        <div class="date">\n' +
-                                                '                            <span>10月</span>23\n' +
+                                                '                            <span>'+data[i].month+'月</span>'+data[i].day+'\n' +
                                                 '                        </div>\n' +
                                                 '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
                                                 '                        <div class="txtbox">\n' +
-                                                '                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>\n' +
+                                                '                            <p class="mr_p">'+data[i].content+'</p>\n' +
                                                 '                        </div>\n' +
                                                 '                    </a>\n' +
                                                 '                </li>';
