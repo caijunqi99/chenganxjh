@@ -220,8 +220,6 @@
 
         var loading = false;
         $(document.body).infinite().on("infinite", function() {
-
-            alert('aaa');
             if (loading) return;
             loading = true;
             setTimeout(function() {
@@ -239,34 +237,36 @@
                         if(response.result[1].page_count >start){
                             start++;
                             if(response['code'] == 200){
-                                for(var i=0; i<data.length;i++) {
-                                    var ml = '';
-                                    ml +='<div class="mood_list cont">' +
-                                        '<div class="head_picbox">' +
-                                        '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
-                                        '</div>' +
-                                        '<div class="head_pic">' +
-                                        '<p class="name">'+data[i].member_nickname+'</p>' +
-                                        '<p class="time">'+data[i].pubtime+'</p>' +
-                                        '</div>' +
-                                        '</div>' +
-                                        '<div class="mood_txt">' +
-                                        '<p class="mood_p">'+data[i].content+'</p>' +
-                                        '</div>' +
-                                        '<div class="mood_imgbox">' +
-                                        '<ul class="mood_imglist clearfix">';
-                                    if(data[i].image[0] != ''){
-                                        for(var a=0;a<data[i].image.length;a++){
-                                            var img_url = upload_url+'/'+data[i].image[a];
-                                            ml +=  '<li>' +
-                                                '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
-                                                '<img src="'+img_url+'" class="v_hiden" alt="">' +
-                                                '</div>' +
-                                                '</li>';
+                                if(data[0] != ''){
+                                    for(var i=0; i<data.length;i++) {
+                                        var ml = '';
+                                        ml +='<div class="mood_list cont">' +
+                                            '<div class="head_picbox">' +
+                                            '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
+                                            '</div>' +
+                                            '<div class="head_pic">' +
+                                            '<p class="name">'+data[i].member_nickname+'</p>' +
+                                            '<p class="time">'+data[i].pubtime+'</p>' +
+                                            '</div>' +
+                                            '</div>' +
+                                            '<div class="mood_txt">' +
+                                            '<p class="mood_p">'+data[i].content+'</p>' +
+                                            '</div>' +
+                                            '<div class="mood_imgbox">' +
+                                            '<ul class="mood_imglist clearfix">';
+                                        if(data[i].image[0] != ''){
+                                            for(var a=0;a<data[i].image.length;a++){
+                                                var img_url = upload_url+'/'+data[i].image[a];
+                                                ml +=  '<li>' +
+                                                    '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
+                                                    '<img src="'+img_url+'" class="v_hiden" alt="">' +
+                                                    '</div>' +
+                                                    '</li>';
+                                            }
                                         }
+                                        ml += '</ul></div>';
+                                        $("#mood_listbox").append(ml);
                                     }
-                                    ml += '</ul></div>';
-                                    $("#mood_listbox").append(ml);
                                 }
                             }else if(response['code'] == '400'){
                                 $.alert(response['message'],function(){

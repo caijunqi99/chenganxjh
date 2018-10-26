@@ -54,7 +54,7 @@ class Mood extends MobileMember{
         $where = array();
         $where['m.del']=1;
         $start = 0;
-        $page_num = 10;
+        $page_num = 5;
         if(input('post.start')){
             $start =$page_num*intval(input('post.start'));
         }
