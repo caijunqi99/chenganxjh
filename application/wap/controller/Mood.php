@@ -130,7 +130,7 @@ class Mood {
             mkdir($uploadimg_path."home/moodimg/",0777,true);
         }
         //允许上传的文件格式
-        $tp = array("image/gif","image/jpeg","image/jpg","image/png");
+        $tp = array("image/gif","image/jpeg","image/jpg","image/png","image/*");
         //检查上传文件是否在允许上传的类型
         if(!in_array($data["file"]["type"],$tp))
         {
