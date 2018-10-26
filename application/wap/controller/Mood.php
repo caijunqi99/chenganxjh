@@ -213,9 +213,9 @@ class Mood extends MobileMember{
         $res=$moodview->addMood($arr);
         if($res){
             $model_mood = Model('mood');
-            $res=$model_mood->getOneById($mid);
+            $result=$model_mood->getOneById($mid);
             $where['id']=$memberid;
-            $update['click']=$res['click']+1;
+            $update['click']=$result['click']+1;
             $model_mood->editMood($where,$update);
             output_data(array('message' => '回复成功'));
         }else{
