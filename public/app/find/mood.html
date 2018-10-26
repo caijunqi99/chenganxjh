@@ -176,8 +176,6 @@
                success: function (response) {
                    var data = response.result[0];
                    if(response['code'] == 200){
-
-                       alert(data);
                        for(var i=0; i<data.length;i++) {
                            var ml = '';
                             ml +='<div class="mood_list cont">' +
@@ -205,7 +203,6 @@
                                 }
                             }
                             ml += '</ul></div>';
-                            alert('aaa');
                            $("#mood_listbox").append(ml);
                        }
                    }else if(response['code'] == '400'){
@@ -221,7 +218,7 @@
 
 
 
-       /* var loading = false;
+        var loading = false;
         $(document.body).infinite().on("infinite", function() {
 
             alert('aaa');
@@ -238,12 +235,11 @@
                     },
                     dataType: "json",
                     success: function (response) {
-                        var data = response.result;
-                        if(data.page_count >start){
+                        var data = response.result[0];
+                        if(response.result[1].page_count >start){
                             start++;
                             if(response['code'] == 200){
-                                for(var i=0; i<response.result.length;i++) {
-                                    console.log(data[i].image.length);
+                                for(var i=0; i<data.length;i++) {
                                     var ml = '';
                                     ml +='<div class="mood_list cont">' +
                                         '<div class="head_picbox">' +
@@ -284,7 +280,7 @@
                 });
                 loading = false;
             }, 2000);
-        });*/
+        });
     </script>
 </body>
 
