@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:history.go(-1);" class="back_btn">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -39,52 +39,11 @@
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"></div>
         <div class="container2">
             <ul class="moodrecord_list" id="moodrecord_list">
-                <li>
-                    <a href="javascript:;">
-                        <div class="date today">
-                            <span>今天</span>
-                        </div>
-                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/camera_icon.png) no-repeat center;"></div>
-                        <div class="txtbox">
-                            <p class="mr_p_today">记录心情，每天开始</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="./mooddetail.html">
-                        <div class="date">
-                            <span>10月</span>23
-                        </div>
-                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
-                        <div class="txtbox">
-                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="./mooddetail.html">
-                        <div class="date">
-                            <span>10月</span>22
-                        </div>
-                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
-                        <div class="txtbox">
-                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="./mooddetail.html">
-                        <div class="date">
-                            <span>10月</span>21
-                        </div>
-                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>
-                        <div class="txtbox">
-                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好今天秋游孩子高兴的合不拢嘴真好</p>
-                        </div>
-                    </a>
-                </li>
+
             </ul>
-            <!-- <p class="end_p"><span>到底了</span></p> -->
+            <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+                <span class="weui-over">没有更多信息了</span>
+            </div>
             <div class="weui-loadmore">
                 <i class="weui-loading"></i>
                 <span class="weui-loadmore__tips">正在加载</span>
@@ -101,22 +60,107 @@
     <script src="../content/scripts/commom.js"></script>
     <script>
         $(function() {
+                $.ajax({
+                    type:'POST',
+                    url:api+'/Mood/mood.html',
+                    data: {
+                        key:user_token,
+                        member_id:user_member_id
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        var data = response.result[0].mood;
+                        if(response['code'] == 200){
+                            if(data.length >0){
+                                for(var i=0; i<data.length;i++) {
+                                    var ml = '';
+                                    ml += '<li>\n' +
+                                        '                    <a href="./mooddetail.html">\n' +
+                                        '                        <div class="date">\n' +
+                                        '                            <span>10月</span>23\n' +
+                                        '                        </div>\n' +
+                                        '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
+                                        '                        <div class="txtbox">\n' +
+                                        '                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>\n' +
+                                        '                        </div>\n' +
+                                        '                    </a>\n' +
+                                        '                </li>';
+                                    $("#moodrecord_list").append(ml);
+                                }
+                            }else{
+                                $('.weui-footer').show();
+                                $('.weui-loadmore').hide();
+                                $(document.body).destroyInfinite()
+                            }
+                        }else if(response['code'] == '400'){
+                            $.alert(response['message'],function(){
+                                goLogin();
+                            });
+                        }else{
+                            $.alert(response['message']);
+                        }
+                    }
+                })
+
+
+
+
+
             var loading = false;
+            var start = 1;
             $(document.body).infinite().on("infinite", function() {
                 if (loading) return;
                 loading = true;
                 setTimeout(function() {
-                    $("#moodrecord_list").append('<li>' +
-                        '<a href="./mooddetail.html">' +
-                        '<div class="date">' +
-                        '<span>10月</span>21' +
-                        '</div>' +
-                        '<div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>' +
-                        '<div class="txtbox">' +
-                        '<p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>' +
-                        '</div>' +
-                        '</a>' +
-                        '</li>');
+                    $.ajax({
+                        type:'POST',
+                        url:api+'/Mood/mood.html',
+                        data: {
+                            key:user_token,
+                            member_id:user_member_id,
+                            start:start
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            var data = response.result[0].mood;
+                            if(response.result[1].page_count >start) {
+                                start = start + 1;
+                                if (response['code'] == 200) {
+                                    if (data.length > 0) {
+                                        for (var i = 0; i < data.length; i++) {
+                                            var ml = '';
+                                            ml += '<li>\n' +
+                                                '                    <a href="./mooddetail.html">\n' +
+                                                '                        <div class="date">\n' +
+                                                '                            <span>10月</span>23\n' +
+                                                '                        </div>\n' +
+                                                '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
+                                                '                        <div class="txtbox">\n' +
+                                                '                            <p class="mr_p">今天秋游孩子高兴的合不拢嘴真好</p>\n' +
+                                                '                        </div>\n' +
+                                                '                    </a>\n' +
+                                                '                </li>';
+                                            $("#moodrecord_list").append(ml);
+                                        }
+                                    } else {
+                                        $('.weui-footer').show();
+                                        $('.weui-loadmore').hide();
+                                        $(document.body).destroyInfinite()
+                                    }
+                                } else if (response['code'] == '400') {
+                                    $.alert(response['message'], function () {
+                                        goLogin();
+                                    });
+                                } else {
+                                    $.alert(response['message']);
+                                }
+                            }else{
+                                $('.weui-footer').show();
+                                $('.weui-loadmore').hide();
+                                $(document.body).destroyInfinite()
+                            }
+                        }
+                    });
                     loading = false;
                 }, 2000);
             });

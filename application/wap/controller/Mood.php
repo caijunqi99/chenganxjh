@@ -20,13 +20,21 @@ class Mood extends MobileMember{
         $condition=array();
         $condition['member_id']=$member_id;
         $condition['del']=1;
-        $data = $model_mood->getList($condition);
+        $start = 0;
+        $page_num = 5;
+        if(input('post.start')){
+            $start =$page_num*intval(input('post.start'));
+        }
+        $data = $model_mood->where($condition)->limit($start,$page_num)->order('id DESC')->select();
 
+        $mood_count = db('mood')->where($condition)->count();
+        $page_count = ceil(intval($mood_count)/intval($page_num));
+        $ar = array('page_count'=>$page_count);
 
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
         if($memberinfo['member_nickname']==''){
-            $xing = substr($memberinfo['member_name'],3,4);
-            $logindata['member_nickname']=str_replace($xing,'****',$memberinfo['member_name']);
+            $xing = substr($memberinfo['member_mobile'],3,4);
+            $logindata['member_nickname']=str_replace($xing,'****',$memberinfo['member_mobile']);
         }else {
             $logindata['member_nickname'] = $memberinfo['member_nickname'];
         }
@@ -39,6 +47,7 @@ class Mood extends MobileMember{
         }
 
         $logindata['mood'] = $data;
+        $logindata['page_count'] =$ar;
 
         if($logindata){
             output_data($logindata);
