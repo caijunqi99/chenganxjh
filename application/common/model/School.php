@@ -74,9 +74,9 @@ class School extends Model {
         return $list;
     }
 
-    public function getAllAchool($condtion){
+    public function getAllAchool($condtion,$field ='*'){
         //$result = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
-        $result = db('school')->where($condtion)->select();
+        $result = db('school')->where($condtion)->field($field)->select();
         //print_r(db('school')->getLastSql());die;
         return $result;
     }

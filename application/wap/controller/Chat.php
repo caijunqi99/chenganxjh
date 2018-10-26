@@ -438,16 +438,12 @@ class Chat extends MobileMember
         $myexits = $Friendly->getOne($myexits);
         if(!$frexits || !$myexits)output_error('还未创建好友关系！');
 
-        if($frexits['relation_state']==2 && $myexits['relation_state'] == 2){
-            $del=array(
-                'id' =>array('in',[$frexits['id'],$myexits['id']]),
-            );
-            $result = $Friendly->friendly_delAll($del);
-            if(!$result)output_error('删除好友请求失败，请检查网络设置！');
-            output_data(array('state'=>'true'));
-        }else{
-            output_error('还不是好友关系！');
-        }
+        $del=array(
+            'id' =>array('in',[$frexits['id'],$myexits['id']]),
+        );
+        $result = $Friendly->friendly_delAll($del);
+        if(!$result)output_error('删除好友请求失败，请检查网络设置！');
+        output_data(array('state'=>'true'));
     }
 
     /**
