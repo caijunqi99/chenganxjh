@@ -53,7 +53,12 @@ class Mood extends MobileMember{
     public function  moodlist(){
         $where = array();
         $where['m.del']=1;
-        $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->order('id desc')->select();
+        $start = 0;
+        $page_num = 5;
+        if(input('post.start')){
+            $start =$page_num*intval(input('post.start'));
+        }
+        $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->limit($start,$page_num)->order('id desc')->select();
         foreach($mood_list as $k=>$v){
             $mood_list[$k]['image']=explode(',',$v['image']);
             $mood_list[$k]['pubtime'] = date("Y-m-d H:i",$v['pubtime']);
