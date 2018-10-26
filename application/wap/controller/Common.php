@@ -91,10 +91,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function school(){
-        /*$token = trim(input('post.key'));
+        $token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }*/
+        }
         $province = intval(input('post.province'));
         $city = intval(input('post.city'));
         $area = intval(input('post.area'));
@@ -108,7 +108,6 @@ class Common extends MobileMall
                     $where .= ' AND areaid = "'.$area.'"';
                 }
             }
-            halt($where);
             $school = db('school')->field('name as title,schoolid as value')->where($where)->select();
         }
 
