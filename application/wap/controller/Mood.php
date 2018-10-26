@@ -53,16 +53,23 @@ class Mood extends MobileMember{
     public function  moodlist(){
         $where = array();
         $where['m.del']=1;
-        $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->order('id desc')->select();
+        $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->order('id desc')->select();
         foreach($mood_list as $k=>$v){
             $mood_list[$k]['image']=explode(',',$v['image']);
             $mood_list[$k]['pubtime'] = date("Y-m-d H:i",$v['pubtime']);
             if($v['member_nickname']==''){
-                $xing = substr($v['member_name'],3,4);
-                $mood_list[$k]['member_nickname']=str_replace($xing,'****',$v['member_name']);
+                $xing = substr($v['member_mobile'],3,4);
+                $mood_list[$k]['member_nickname']=str_replace($xing,'****',$v['member_mobile']);
+            }
+            if(!empty($mood_list[$k]['member_avatar'])){
+                $mood_list[$k]['rel_member_avatar'] = UPLOAD_SITE_URL.$mood_list[$k]['member_avatar'];
+            }else{
+                $mood_list[$k]['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                $mood_list[$k]['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
             }
         }
-        output_data($mood_list);
+        output_data(array('sss'=>111));
+//        output_data($mood_list);
     }
     /**
      * 添加心情
