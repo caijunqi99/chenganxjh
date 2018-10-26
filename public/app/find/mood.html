@@ -39,7 +39,7 @@
     <div class="main">
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"> </div>
         <div class="mood_listbox" id="mood_listbox">
-            <div class="mood_list cont">
+            <!--<div class="mood_list cont">
                 <div class="head_picbox">
                     <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
                         <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="mood_imgbox">
                     <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
+                        &lt;!&ndash; 可以多个 &ndash;&gt;
                         <li>
                             <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
                                 <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
@@ -90,7 +90,7 @@
                 </div>
                 <div class="mood_imgbox">
                     <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
+                        &lt;!&ndash; 可以多个 &ndash;&gt;
                         <li>
                             <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
                                 <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
@@ -121,7 +121,7 @@
                 </div>
                 <div class="mood_imgbox">
                     <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
+                        &lt;!&ndash; 可以多个 &ndash;&gt;
                         <li>
                             <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
                                 <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
@@ -146,7 +146,7 @@
                     </div>
                     <div class="thumbs_r">22条评论</div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <div class="weui-loadmore">
@@ -165,6 +165,55 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        $(function(){
+           $.ajax({
+               type:'POST',
+               url:api+'/Mood/moodlist',
+               data: {
+                   key:user_token
+               },
+               dataType: "json",
+               success: function (response) {
+                   var data = response.result;
+                   if(response['code'] == 200){
+                       for(var i=1; i<response.result.length;i++) {
+                           var ml = '';
+                            ml +='<div class="mood_list cont">' +
+                                '<div class="head_picbox">' +
+                                '<div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">' +
+                                '<img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">' +
+                                '</div>' +
+                                '<div class="head_pic">' +
+                                '<p class="name">'+data[i].member_nickname+'</p>' +
+                                '<p class="time">'+data[i].pubtime+'</p>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="mood_txt">' +
+                                '<p class="mood_p">'+data[i].content+'</p>' +
+                                '</div>' +
+                                '<div class="mood_imgbox">' +
+                                '<ul class="mood_imglist clearfix">';
+                            if(data.image){
+                               ml +=  '<li>' +
+                                   '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
+                                   '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
+                                   '</div>' +
+                                   '</li>';
+                            }
+                            ml += '</ul></div>';
+                           $("#mood_listbox").append(ml);
+                       }
+                   }else{
+                       /*$.alert(response['message'],function(){
+                           goLogin();
+                       });*/
+                   }
+               }
+           })
+        });
+
+
+
         var loading = false;
         $(document.body).infinite().on("infinite", function() {
             if (loading) return;
