@@ -2,6 +2,7 @@
 
 namespace app\wap\controller;
 
+use think\Model;
 
 class Teacherbuy extends MobileMember
 {
@@ -45,12 +46,13 @@ class Teacherbuy extends MobileMember
             output_error('t_id参数有误');
         }
         $teachInfo = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
-        if(emmpty($teachInfo)){
+
+        if(empty($teachInfo)){
             output_error('暂无数据');
         }
-        $time = db('config')->where(array('code'=>"teacher_children"))->find();
-        $teachInfo['time_line'] = $time['value'];
-
+        $config_model = Model("Config");
+        $info_times = $config_model->getRowConfig("teacher_children");
+        $teachInfo['time_line'] = !empty($info_times['value'])?$info_times['value']:24;
         $payment_list = model('mbpayment')->getMbPaymentOpenList();
         if (!empty($payment_list)) {
             foreach ($payment_list as $k => $value) {
