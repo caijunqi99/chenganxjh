@@ -22,6 +22,7 @@ class Gettoken
         //ak、sk信息
         $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
         $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
+        $bucket='avatar';
         // 初始化签权对象
         $auth = new Auth($accessKey, $secretKey);
         //生成上传token
