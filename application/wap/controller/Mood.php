@@ -60,7 +60,7 @@ class Mood extends MobileMember{
         }
         $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->limit($start,$page_num)->order('id desc')->select();
         $mood_count = db('mood')->count();
-        $page_count = ceil(int($mood_count)/int($page_num));
+        $page_count = ceil(intval($mood_count)/intval($page_num));
         $ar = array('page_count'=>$page_count);
         foreach($mood_list as $k=>$v){
             $mood_list[$k]['image']=explode(',',$v['image']);
