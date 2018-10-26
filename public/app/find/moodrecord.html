@@ -39,7 +39,17 @@
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"></div>
         <div class="container2">
             <ul class="moodrecord_list" id="moodrecord_list">
-
+                <li>
+                    <a href="javascript:;" onclick="send_mood();">
+                        <div class="date today">
+                            <span>今天</span>
+                        </div>
+                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/camera_icon.png) no-repeat center;"></div>
+                        <div class="txtbox">
+                            <p class="mr_p_today">记录心情，每天开始</p>
+                        </div>
+                    </a>
+                </li>
             </ul>
             <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
                 <span class="weui-over">没有更多信息了</span>
@@ -73,19 +83,23 @@
                         if(response['code'] == 200){
                             if(data.length >0){
                                 for(var i=0; i<data.length;i++) {
-                                    // var img_url = upload_url+'/'+data[i].image[0];
                                     var ml = '';
                                     ml += '<li>\n' +
-                                        '                    <a href="./mooddetail.html?id='+data[i].id+'">\n' +
-                                        '                        <div class="date">\n' +
-                                        '                            <span>'+data[i].month+'月</span>'+data[i].day+'\n' +
-                                        '                        </div>\n' +
-                                        '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
-                                        '                        <div class="txtbox">\n' +
-                                        '                            <p class="mr_p">'+data[i].content+'</p>\n' +
-                                        '                        </div>\n' +
-                                        '                    </a>\n' +
-                                        '                </li>';
+                                        '<a href="./mooddetail.html?id='+data[i].id+'">\n' +
+                                        '<div class="date">\n' +
+                                        '<span>'+data[i].month+'月</span>'+data[i].day+'\n' +
+                                        ' </div>\n';
+                                    if(data[i].image[0] != ''){
+                                        var img_url = upload_url+'/'+data[i].image[0];
+                                        ml += '<div class="imgbox" style="width: 160px;height:180px;background:#eee url('+img_url+') no-repeat center;background-size:cover;"></div>\n' ;
+                                    }else{
+                                        ml += ' <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' ;
+                                    }
+                                    ml +=  '  <div class="txtbox">\n' +
+                                        ' <p class="mr_p">'+data[i].content+'</p>\n' +
+                                        '  </div>\n' +
+                                        ' </a>\n' +
+                                        ' </li>';
                                     $("#moodrecord_list").append(ml);
                                 }
                             }else{
@@ -102,11 +116,6 @@
                         }
                     }
                 })
-
-
-
-
-
             var loading = false;
             var start = 1;
             $(document.body).infinite().on("infinite", function() {
@@ -131,16 +140,21 @@
                                         for (var i = 0; i < data.length; i++) {
                                             var ml = '';
                                             ml += '<li>\n' +
-                                                '                    <a href="./mooddetail.html?id='+data[i].id+'">\n' +
-                                                '                        <div class="date">\n' +
-                                                '                            <span>'+data[i].month+'月</span>'+data[i].day+'\n' +
-                                                '                        </div>\n' +
-                                                '                        <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' +
-                                                '                        <div class="txtbox">\n' +
-                                                '                            <p class="mr_p">'+data[i].content+'</p>\n' +
-                                                '                        </div>\n' +
-                                                '                    </a>\n' +
-                                                '                </li>';
+                                                '<a href="./mooddetail.html?id='+data[i].id+'">\n' +
+                                                '<div class="date">\n' +
+                                                '<span>'+data[i].month+'月</span>'+data[i].day+'\n' +
+                                                ' </div>\n';
+                                            if(data[i].image[0] != ''){
+                                                var img_url = upload_url+'/'+data[i].image[0];
+                                                ml += '<div class="imgbox" style="width: 160px;height:180px;background:#eee url('+img_url+') no-repeat center;background-size:cover;"></div>\n' ;
+                                            }else{
+                                                ml += ' <div class="imgbox" style="width: 160px;height:180px;background:#eee url(../content/images/find/mr_img.jpg) no-repeat center;background-size:cover;"></div>\n' ;
+                                            }
+                                            ml +=  '  <div class="txtbox">\n' +
+                                                ' <p class="mr_p">'+data[i].content+'</p>\n' +
+                                                '  </div>\n' +
+                                                ' </a>\n' +
+                                                ' </li>';
                                             $("#moodrecord_list").append(ml);
                                         }
                                     } else {
