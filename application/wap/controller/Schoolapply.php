@@ -56,28 +56,29 @@ class Schoolapply extends MobileMember
         $schoolapply = model('Schoolapply');
         $schoolinfo = $schoolapply->getSchoolapplyInfo(array('member_id'=>$member_id));
         //地区范围
-        $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
-        $child = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>2))->select();
-        $child3 = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>3))->select();
-        foreach($parent as $key=>$val){
-            foreach($child as $k=>$v){
-                if($v['area_parent_id']==$val['area_id']){
-                    $parent[$key]['childTwo'][] = $v;
-                }
-            }
-        }
-        foreach($parent as $key=>$item){
-            foreach($item['childTwo'] as $k2=>$v2){
-                foreach($child3 as $k3=>$v3){
-                    if($v3['area_parent_id']==$v2['area_id']){
-                        $item['childTwo'][$k2]['childThree'][] = $v3;
-                    }
-                }
-            }
-            $parent[$key]['childTwo'] = $item['childTwo'];
-        }
-        $schoolinfo['area'] = $parent;
-        output_data([$schoolinfo]);
+//        $parent = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>1))->select();
+//        $child = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>2))->select();
+//        $child3 = db('area')->field("area_id,area_parent_id,area_name,area_deep")->where(array('area_deep'=>3))->select();
+//        foreach($parent as $key=>$val){
+//            foreach($child as $k=>$v){
+//                if($v['area_parent_id']==$val['area_id']){
+//                    $parent[$key]['childTwo'][] = $v;
+//                }
+//            }
+//        }
+//        foreach($parent as $key=>$item){
+//            foreach($item['childTwo'] as $k2=>$v2){
+//                foreach($child3 as $k3=>$v3){
+//                    if($v3['area_parent_id']==$v2['area_id']){
+//                        $item['childTwo'][$k2]['childThree'][] = $v3;
+//                    }
+//                }
+//            }
+//            $parent[$key]['childTwo'] = $item['childTwo'];
+//        }
+//        $schoolinfo['area'] = $parent;
+        $schoolinfo = !empty($schoolinfo)?$schoolinfo:[];
+        output_data($schoolinfo);
     }
 
 }
