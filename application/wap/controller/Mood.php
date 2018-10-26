@@ -68,8 +68,7 @@ class Mood extends MobileMember{
                 $mood_list[$k]['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
             }
         }
-        output_data(array('sss'=>111));
-//        output_data($mood_list);
+        output_data($mood_list);
     }
     /**
      * 添加心情
