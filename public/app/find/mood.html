@@ -174,11 +174,11 @@
                },
                dataType: "json",
                success: function (response) {
-                   var data = response.result;
+                   var data = response.result[0];
                    if(response['code'] == 200){
 
-                       alert(response.result.length);
-                       for(var i=0; i<response.result.length;i++) {
+                       alert(data);
+                       for(var i=0; i<data.length;i++) {
                            var ml = '';
                             ml +='<div class="mood_list cont">' +
                                 '<div class="head_picbox">' +
