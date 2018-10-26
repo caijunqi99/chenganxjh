@@ -221,7 +221,7 @@ class Mood extends MobileMember{
     */
     public function mooddetail(){
         $where = array();
-        $where['id']=intval(input('post.id'));
+        $where['id']=intval(input('get.id'));
         $mood = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
         $mood['image']=explode(',',$mood['image']);
         if($mood['member_nickname']==''){

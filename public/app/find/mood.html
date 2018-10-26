@@ -149,6 +149,9 @@
             </div>-->
         </div>
 
+        <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+            <span class="weui-over">已经到底了</span>
+        </div>
         <div class="weui-loadmore">
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
@@ -203,6 +206,12 @@
                                 }
                             }
                             ml += '</ul></div>';
+                            ml +='<div class="thumbs">\n' +
+                                '                    <div class="thumbs_l">\n' +
+                                '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
+                                '                    </div>\n' +
+                                '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
+                                '                </div>';
                            $("#mood_listbox").append(ml);
                        }
                    }else if(response['code'] == '400'){
@@ -219,11 +228,11 @@
 
 
         var loading = false;
+        var start = 1;
         $(document.body).infinite().on("infinite", function() {
             if (loading) return;
             loading = true;
             setTimeout(function() {
-                var start = 1;
                 $.ajax({
                     type:'POST',
                     url:api+'/Mood/moodlist',
@@ -235,7 +244,7 @@
                     success: function (response) {
                         var data = response.result[0];
                         if(response.result[1].page_count >start){
-                            start++;
+                            start = start+1;
                             if(response['code'] == 200){
                                 if(data[0] != ''){
                                     for(var i=0; i<data.length;i++) {
@@ -265,6 +274,12 @@
                                             }
                                         }
                                         ml += '</ul></div>';
+                                        ml +='<div class="thumbs">\n' +
+                                            '                    <div class="thumbs_l">\n' +
+                                            '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
+                                            '                    </div>\n' +
+                                            '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
+                                            '                </div>';
                                         $("#mood_listbox").append(ml);
                                     }
                                 }
@@ -275,6 +290,10 @@
                             }else{
                                 $.alert(response['message']);
                             }
+                        }else{
+                           $('.weui-footer').show();
+                           $('.weui-loadmore').hide();
+                            $(document.body).destroyInfinite()
                         }
                     }
                 });
