@@ -31,11 +31,11 @@
             </div>
             <div class="head_r" style="width:130px;">
                 <!-- 自己的动态详情显示删除 -->
-                <a href="javascript:;" class="md_del_btn" style="display:none;">删除</a>
+                <a href="javascript:;" class="md_del_btn" >删除</a>
                 <!-- 别人的动态详情 显示举报 -->
-                <a href="javascript:;" class="md_jubao_btn">
+                <!--<a href="javascript:;" class="md_jubao_btn">
                     <i class="icon iconfont icon-gengduo"></i>
-                </a>
+                </a>-->
             </div>
         </div>
     </header>
@@ -93,6 +93,7 @@
 
     <div class="commentary_box">
         <input class="commentary_input" type="text" value="" placeholder="写评论..." />
+        <button style="width: 160px;height: 55px;background-color: #4fc4bc;margin-left: 15px;font-size: 22px;color: #fff;border: none;border-radius: 10px;">发送</button>
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
@@ -117,6 +118,21 @@
                     //取消操作
                 });
             });
+        var id = GetQueryString('id');
+        if(id != ''){
+            $.ajax({
+                type:'POST',
+                url:api+'/mood/mooddetail.html',
+                data:{id:id},
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                }
+            })
+        }else{
+            $.alert('该内容不存在');
+        }
+
         })
     </script>
 </body>
