@@ -96,7 +96,7 @@ class Mood {
         if(!empty($_FILES['file']['name'][0])) {
             foreach ($_FILES['file']['name'] as $key => $value) {
                 $file1 = array();
-                $file1["file"]['name'] = "home/moodimg/".date("YmdHis",time())."_".time().".".end(explode('.', $value));
+                $file1["file"]['name'] = "home/moodimg/".($key+1).date("YmdHis",time())."_".time().".".end(explode('.', $value));
                 $file1["file"]['type'] = $_FILES['file']["type"][$key];
                 $file1["file"]['tmp_name'] = $_FILES['file']["tmp_name"][$key];
                 $file1["file"]['error'] = $_FILES['file']["error"][$key];
