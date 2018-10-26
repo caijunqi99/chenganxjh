@@ -4,8 +4,7 @@ namespace app\wap\controller;
 
 use think\captcha\Captcha;
 
-//class Arrangement extends MobileMember
-class Arrangement
+class Arrangement extends MobileMember
 {
 
     /**
