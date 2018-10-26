@@ -31,7 +31,7 @@
             </div>
             <div class="head_r" style="width:130px;">
                 <!-- 自己的动态详情显示删除 -->
-                <a href="javascript:;" class="md_del_btn" style="display: none">删除</a>
+                <a href="javascript:;" class="md_del_btn" style="display: none;">删除</a>
                 <!-- 别人的动态详情 显示举报 -->
                 <!--<a href="javascript:;" class="md_jubao_btn">
                     <i class="icon iconfont icon-gengduo"></i>
@@ -68,53 +68,11 @@
     <script src="../content/scripts/commom.js"></script>
     <script>
         $(function() {
-            // 删除
-            $(".md_del_btn").click(function() {
-                $.alert("删除动态？", "提示", function() {
-                    $.toast("删除成功！")
-                });
-            });
-
-            // 举报
-            $(".md_jubao_btn").click(function() {
-                $.confirm("您确定要举报吗?", "举报", function() {
-                    $.toast("举报成功!");
-                }, function() {
-                    //取消操作
-                });
-            });
             var id = GetQueryString('id');
             if(id != ''){
-                $('.send').click(function(){
-                    var content = $('input[name=content]').val();
-                    if(content == ''){
-                        $.toast('请输入评论内容');return false;
-                    }
-                    $.ajax({
-                        type:'POST',
-                        url:api+'/mood/moodview.html',
-                        data:{
-                            key:user_token,
-                            memberid:user_member_id,
-                            mid:id,
-                            content:content
-                        },
-                        dataTyep: "json",
-                        success: function(response){
-                            if(response['code'] == 200){
-                                $.toast(response.result[0].message,function(){
-                                    window.location.reload();
-                                });
-                            }else{
-                                $.toast(response['message']);
-                            }
-                        }
-                    })
-
-                });
                 $.ajax({
                     type:'POST',
-                    url:api+'/mood/mooddetail.html',
+                    url:api+'/Mood/mooddetail.html',
                     data:{
                         key:user_token,
                         id:id
@@ -141,12 +99,12 @@
                             '                <p class="mood_p">'+mood.content+'</p>\n' +
                             '            </div>\n' +
                             '            <div class="dynamic_box">\n';
-                            if(mood.image[0] != ''){
-                                for(var i=0;i<mood.image.length;i++){
-                                    var img_url = upload_url +'/'+mood.image[i];
-                                    mood_html +='<img class="dynamic_img" src="'+img_url+'" alt="">\n' ;
-                                }
+                        if(mood.image[0] != ''){
+                            for(var i=0;i<mood.image.length;i++){
+                                var img_url = upload_url +'/'+mood.image[i];
+                                mood_html +='<img class="dynamic_img" src="'+img_url+'" alt="">\n' ;
                             }
+                        }
                         mood_html += '</div>';
                         $('.mood_detail').html(mood_html);
                         $('.commentary_h2 span').html(view.length);
@@ -167,6 +125,68 @@
 
                     }
                 })
+                // 删除
+                $(".md_del_btn").click(function() {
+                    $.confirm("您确定要删除吗?", "删除", function() {
+                        $.ajax({
+                            type:'POST',
+                            url:api+'/mood/mooddel.html',
+                            data:{
+                                member_id:user_member_id,
+                                key:user_token,
+                                id:id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response['code'] == 200){
+                                    $.toast(response.result[0].message,function(){
+                                        location.href='moodlist.html';
+                                    });
+                                }else{
+                                    $.toast(response['message']);
+                                }
+                            }
+                        })
+                    }, function() {
+                        //取消操作
+                    });
+                });
+                // 举报
+                $(".md_jubao_btn").click(function() {
+                    $.confirm("您确定要举报吗?", "举报", function() {
+                        $.toast("举报成功!");
+                    }, function() {
+                        //取消操作
+                    });
+                });
+                $('.send').click(function(){
+                    var content = $('input[name=content]').val();
+                    if(content == ''){
+                        $.toast('请输入评论内容');return false;
+                    }
+                    $.ajax({
+                        type:'POST',
+                        url:api+'/mood/moodview.html',
+                        data:{
+                            key:user_token,
+                            memberid:user_member_id,
+                            mid:id,
+                            content:content
+                        },
+                        dataTyep: "json",
+                        success: function(response){
+                            if(response['code'] == 200){
+                                $.toast(response.result[0].message,function(){
+                                    location.reload();
+                                });
+                            }else{
+                                $.toast(response['message']);
+                            }
+                        }
+                    })
+
+                });
+
             }else{
                 $.toast('该内容不存在');
             }
