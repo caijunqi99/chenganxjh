@@ -222,22 +222,34 @@ class Mood extends MobileMember{
     public function mooddetail(){
         $where = array();
         $where['id']=intval(input('post.id'));
-        $mood = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
+        $mood = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->find();
         $mood['image']=explode(',',$mood['image']);
         if($mood['member_nickname']==''){
-            $xing = substr($mood['member_name'],3,4);
-            $mood['member_nickname']=str_replace($xing,'****',$mood['member_name']);
+            $xing = substr($mood['member_mobile'],3,4);
+            $mood['member_nickname']=str_replace($xing,'****',$mood['member_mobile']);
+            if(!empty($mood['member_avatar'])){
+                $mood['rel_member_avatar'] = UPLOAD_SITE_URL.$mood['member_avatar'];
+            }else{
+                $mood['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                $mood['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+            }
         }
         $mood['pubtime']=date("Y-m-d H:i:s",$mood['pubtime']);
         $contient=array();
         $contient['v_mid']=$mood['id'];
-        $moodview=db('moodview')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name')->join('__MEMBER__ b', 'b.member_id = m.v_memberid', 'LEFT')->where($contient)->select();
+        $moodview=db('moodview')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.v_memberid', 'LEFT')->where($contient)->select();
         foreach($moodview as $key=>$v){
             if($v['member_nickname']==''){
-                $xing = substr($v['member_name'],3,4);
-                $moodview[$key]['member_nickname']=str_replace($xing,'****',$v['member_name']);
+                $xing = substr($v['member_mobile'],3,4);
+                $moodview[$key]['member_nickname']=str_replace($xing,'****',$v['member_mobile']);
             }
             $moodview[$key]['v_pubtime']=date("Y-m-d H:i:s",$v['v_pubtime']);
+            if(!empty($v['member_avatar'])){
+                $moodview[$key]['rel_member_avatar'] = UPLOAD_SITE_URL.$v['member_avatar'];
+            }else{
+                $moodview[$key]['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                $moodview[$key]['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+            }
         }
         $list['mood']=$mood;
         $list['view']=$moodview;

@@ -43,22 +43,7 @@
     <!-- 主要内容 -->
     <div class="main">
         <div class="mood_detail cont">
-            <div class="head_picbox">
-                <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                    <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                </div>
-                <div class="head_pic">
-                    <p class="name">小虎牙</p>
-                    <p class="time">10-15 10:23</p>
-                </div>
-            </div>
-            <div class="mood_txt">
-                <p class="mood_p">儿子又得了一个小红花真棒~</p>
-            </div>
-            <div class="dynamic_box">
-                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">
-                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">
-            </div>
+
         </div>
 
         <!-- 评论区 -->
@@ -123,10 +108,30 @@
             $.ajax({
                 type:'POST',
                 url:api+'/mood/mooddetail.html',
-                data:{id:id},
+                data:{
+                    key:user_token,
+                    id:id
+                },
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
+                    var mood = response.result.mood;
+                    $('.mood_detail').html('<div class="head_picbox">\n' +
+                        '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
+                        '                    <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">\n' +
+                        '                </div>\n' +
+                        '                <div class="head_pic">\n' +
+                        '                    <p class="name">小虎牙</p>\n' +
+                        '                    <p class="time">10-15 10:23</p>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <div class="mood_txt">\n' +
+                        '                <p class="mood_p">儿子又得了一个小红花真棒~</p>\n' +
+                        '            </div>\n' +
+                        '            <div class="dynamic_box">\n' +
+                        '                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">\n' +
+                        '                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">\n' +
+                        '            </div>')
                 }
             })
         }else{
