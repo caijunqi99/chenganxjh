@@ -91,10 +91,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function school(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $province = intval(input('post.province'));
         $city = intval(input('post.city'));
         $area = intval(input('post.area'));
@@ -120,10 +120,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function grade(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $school_id = intval(input('post.school_id'));
         if(empty($school_id)){
             output_error('缺少参数school_id');
@@ -155,10 +155,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function classData(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $school_id = intval(input('post.school_id'));
         if(empty($school_id)){
             output_error('缺少参数school_id');
