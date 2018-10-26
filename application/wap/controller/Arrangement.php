@@ -13,8 +13,7 @@ class Arrangement extends MobileMember
     public function index() {
         $school_id  = intval(input('post.school_id'));
         $class_id  = intval(input('post.class_id'));
-        $last  = intval(input('post.last'));
-        $next  = intval(input('post.next'));
+        $weektype  = intval(input('post.weektype'));
         if (empty($school_id)) {
             output_error('参数有误');
         }
@@ -24,16 +23,18 @@ class Arrangement extends MobileMember
             $data['content']= json_decode($data['content'],true);
         }
         //本周日期
-        $week = date('w');
-        $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 1-$week .' days' ));
-        $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 2-$week .' days' ));
-        $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 3-$week .' days' ));
-        $weeks['Thursday'] = date('Y-m-d',strtotime( '+'. 4-$week .' days' ));
-        $weeks['Friday'] = date('Y-m-d',strtotime( '+'. 5-$week .' days' ));
-        $weeks['Saturday'] = date('Y-m-d',strtotime( '+'. 6-$week .' days' ));
-        $weeks['Sunday'] = date('Y-m-d',strtotime( '+'. 7-$week .' days' ));
+        if($weektype==2){
+            $week = date('w');
+            $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 1-$week .' days' ));
+            $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 2-$week .' days' ));
+            $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 3-$week .' days' ));
+            $weeks['Thursday'] = date('Y-m-d',strtotime( '+'. 4-$week .' days' ));
+            $weeks['Friday'] = date('Y-m-d',strtotime( '+'. 5-$week .' days' ));
+            $weeks['Saturday'] = date('Y-m-d',strtotime( '+'. 6-$week .' days' ));
+            $weeks['Sunday'] = date('Y-m-d',strtotime( '+'. 7-$week .' days' ));
+        }
         //上周日期
-        if($last){
+        if($weektype==1){
             $weeks['Monday'] = date('Y-m-d',strtotime( '-'. 6-$week .' days' ));
             $weeks['Tuesday'] = date('Y-m-d',strtotime( '-'. 5-$week .' days' ));
             $weeks['Wednesday'] = date('Y-m-d',strtotime( '-'. 4-$week .' days' ));
@@ -43,7 +44,7 @@ class Arrangement extends MobileMember
             $weeks['Sunday'] = date('Y-m-d',strtotime( '-'. 0-$week .' days' ));
         }
         //下周日期
-        if($next){
+        if($weektype==3){
             $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 8-$week .' days' ));
             $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 9-$week .' days' ));
             $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 10-$week .' days' ));
