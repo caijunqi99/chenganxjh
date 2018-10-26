@@ -961,8 +961,9 @@ function member_url($name){
 
 }
 
-function ago_back(ago=null){
+function ago_back(){
      ago = GetQueryString('ago');
+     alert(ago);
     if(ago==null){
         historyback();
     }else{
