@@ -165,15 +165,9 @@
                 $("#city").cityPicker({
                     title: "请选择所在地",
                     onChange: function(picker) {
-                        $("#school").select("update", {
-                            items: [{}]
-                        })
-                        $("#classes").select("update", {
-                            items: [{}]
-                        })
-                        $("#banji").select("update", {
-                            items: [{}]
-                        })
+                        $("#school").val('');
+                        $("#classes").val('');
+                        $("#banji").val('');
                     },
                     onOpen: function(){
                         $('#bang_name,#shibiema').blur();
@@ -214,12 +208,8 @@
                     title: "请选择学校",
                     items: [{}],
                     onChange: function(p, v, d) {
-                        $("#classes").select("update", {
-                            items: [{}]
-                        })
-                        $("#banji").select("update", {
-                            items: [{}]
-                        })
+                        $("#classes").val('');
+                        $("#banji").val('');
                     },
                     onOpen: function(){
                         $('#bang_name,#shibiema').blur();
@@ -257,9 +247,7 @@
                     title: "请选择所在年级",
                     items: [{}],
                     onChange: function(p, v, d) {
-                        $("#banji").select("update", {
-                            items: [{}]
-                        })
+                        $("#banji").val('');
                     },
                     onOpen: function(){
                         $('#bang_name,#shibiema').blur();
