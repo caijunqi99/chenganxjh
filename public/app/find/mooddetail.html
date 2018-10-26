@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:history.go(-1);" class="back_btn" onClick="historyback()">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="head_r" style="width:130px;">
                 <!-- 自己的动态详情显示删除 -->
-                <a href="javascript:;" class="md_del_btn" >删除</a>
+                <a href="javascript:;" class="md_del_btn" style="display: none">删除</a>
                 <!-- 别人的动态详情 显示举报 -->
                 <!--<a href="javascript:;" class="md_jubao_btn">
                     <i class="icon iconfont icon-gengduo"></i>
@@ -48,37 +48,17 @@
 
         <!-- 评论区 -->
         <div class="commentary_cont">
-            <h2 class="commentary_h2">评论<span>12</span></h2>
+            <h2 class="commentary_h2">评论<span></span></h2>
             <!-- 如果没有评论请为下面的div添加class="no_cont" -->
             <div class="commentary_text">
-                <div class="head_picbox commentarylist">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">2018-10-15 10:23</p>
-                        <p class="commentary_p">这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？</p>
-                    </div>
-                </div>
 
-                <div class="head_picbox commentarylist">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">2018-10-15 10:23</p>
-                        <p class="commentary_p">这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？这是哪里？</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
     <div class="commentary_box">
-        <input class="commentary_input" type="text" value="" placeholder="写评论..." />
-        <button style="width: 160px;height: 55px;background-color: #4fc4bc;margin-left: 15px;font-size: 22px;color: #fff;border: none;border-radius: 10px;">发送</button>
+        <input class="commentary_input" type="text" value="" name="content" placeholder="写评论..." />
+        <button class="send" style="width: 160px;height: 55px;background-color: #4fc4bc;margin-left: 15px;font-size: 22px;color: #fff;border: none;border-radius: 10px;">发送</button>
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
@@ -103,41 +83,93 @@
                     //取消操作
                 });
             });
-        var id = GetQueryString('id');
-        if(id != ''){
-            $.ajax({
-                type:'POST',
-                url:api+'/mood/mooddetail.html',
-                data:{
-                    key:user_token,
-                    id:id
-                },
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    var mood = response.result.mood;
-                    $('.mood_detail').html('<div class="head_picbox">\n' +
-                        '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
-                        '                    <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">\n' +
-                        '                </div>\n' +
-                        '                <div class="head_pic">\n' +
-                        '                    <p class="name">小虎牙</p>\n' +
-                        '                    <p class="time">10-15 10:23</p>\n' +
-                        '                </div>\n' +
-                        '            </div>\n' +
-                        '            <div class="mood_txt">\n' +
-                        '                <p class="mood_p">儿子又得了一个小红花真棒~</p>\n' +
-                        '            </div>\n' +
-                        '            <div class="dynamic_box">\n' +
-                        '                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">\n' +
-                        '                <img class="dynamic_img" src="../content/images/find/dynamic_img.jpg" alt="">\n' +
-                        '            </div>')
-                }
-            })
-        }else{
-            $.alert('该内容不存在');
-        }
+            var id = GetQueryString('id');
+            if(id != ''){
+                $('.send').click(function(){
+                    var content = $('input[name=content]').val();
+                    if(content == ''){
+                        $.toast('请输入评论内容');return false;
+                    }
+                    $.ajax({
+                        type:'POST',
+                        url:api+'/mood/moodview.html',
+                        data:{
+                            key:user_token,
+                            memberid:user_member_id,
+                            mid:id,
+                            content:content
+                        },
+                        dataTyep: "json",
+                        success: function(response){
+                            if(response['code'] == 200){
+                                $.toast(response.result[0].message,function(){
+                                    window.location.reload();
+                                });
+                            }else{
+                                $.toast(response['message']);
+                            }
+                        }
+                    })
 
+                });
+                $.ajax({
+                    type:'POST',
+                    url:api+'/mood/mooddetail.html',
+                    data:{
+                        key:user_token,
+                        id:id
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        var mood = response.result.mood;
+                        if(mood.member_id == user_member_id){
+                            $('.md_del_btn').show();
+                        }
+                        var view = response.result.view;
+                        var mood_html = '';
+                        var view_html = '';
+                        mood_html += '<div class="head_picbox">\n' +
+                            '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
+                            '                </div>\n' +
+                            '                <div class="head_pic">\n' +
+                            '                    <p class="name">'+mood.member_nickname+'</p>\n' +
+                            '                    <p class="time">'+mood.pubtime+'</p>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="mood_txt">\n' +
+                            '                <p class="mood_p">'+mood.content+'</p>\n' +
+                            '            </div>\n' +
+                            '            <div class="dynamic_box">\n';
+                            if(mood.image[0] != ''){
+                                for(var i=0;i<mood.image.length;i++){
+                                    var img_url = upload_url +'/'+mood.image[i];
+                                    mood_html +='<img class="dynamic_img" src="'+img_url+'" alt="">\n' ;
+                                }
+                            }
+                        mood_html += '</div>';
+                        $('.mood_detail').html(mood_html);
+                        $('.commentary_h2 span').html(view.length);
+                        if(view != ''){
+                            for(var e=0;e<view.length;e++){
+                                view_html += '<div class="head_picbox commentarylist">\n' +
+                                    '                    <div class="head_piccont" style="background:url('+view[e].rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
+                                    '                    </div>\n' +
+                                    '                    <div class="head_pic">\n' +
+                                    '                        <p class="name">'+view[e].member_nickname+'</p>\n' +
+                                    '                        <p class="time">'+view[e].v_pubtime+'</p>\n' +
+                                    '                        <p class="commentary_p">'+view[e].v_content+'</p>\n' +
+                                    '                    </div>\n' +
+                                    '                </div>';
+                            }
+                            $('.commentary_text').html(view_html);
+                        }
+
+                    }
+                })
+            }else{
+                $.toast('该内容不存在');
+            }
         })
     </script>
 </body>

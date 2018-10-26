@@ -205,11 +205,12 @@ class Mood extends MobileMember{
             output_error('回复内容不能为空');
         }
         $moodview = Model('moodview');
-        $content=array();
-        $content['v_mid']=$mid;
-        $content['v_content']=$content;
-        $content['v_memberid']=$memberid;
-        $res=$moodview->addMood($content);
+        $arr=array();
+        $arr['v_mid']=$mid;
+        $arr['v_content']=$content;
+        $arr['v_memberid']=$memberid;
+        $arr['v_pubtime']=time();
+        $res=$moodview->addMood($arr);
         if($res){
             output_data(array('message' => '回复成功'));
         }else{
