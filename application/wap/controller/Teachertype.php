@@ -9,8 +9,9 @@
 namespace app\wap\controller;
 
 
-//class Teachertype extends MobileMall
-class Teachertype
+use app\mobile\controller\MobileMall;
+
+class Teachertype extends MobileMall
 {
     public function _initialize()
     {
@@ -34,40 +35,47 @@ class Teachertype
                     $newData[$key]['sub'][$k]['name'] = $v['gc_name'];
                 }
             }
-            $newData[$key]['sub'] = array_values($newData[$key]['sub']);
+            if($newData[$key]['sub']){
+                $newData[$key]['sub'] = array_values($newData[$key]['sub']);
+            }
         }
 
         //三级分类
         foreach($newData as $key=>$item){
             foreach($item['sub'] as $k2=>$v2){
                 foreach($tmp_list as $k=>$v){
-                    print_r($v);
-                    print_r($v2);
                     if($v['gc_parent_id']==$v2['code']){
-                        print_r($v);die;
-                        $item['sub'][$k2]['sub'][] = $v;
+                        $item['sub'][$k2]['sub'][$k]['code'] = $v['gc_id'];
+                        $item['sub'][$k2]['sub'][$k]['name'] = $v['gc_name'];
                     }
                 }
+                if($item['sub'][$k2]['sub']){
+                    $item['sub'][$k2]['sub'] = array_values($item['sub'][$k2]['sub']);
+                }
             }
-            //print_r($item);die;
             $newData[$key]['sub'] =  $item['sub'];
         }
-        print_r(json_encode($newData));die;
         //四级分类
-        foreach($parentType as $key=>$item){
-            foreach($item['childTwo'] as $k2=>$v2){
-                foreach($v2['childThree'] as $k3=>$v3){
+        foreach($newData as $key=>$item){
+            foreach($item['sub'] as $k2=>$v2){
+                foreach($v2['sub'] as $k3=>$v3){
                     foreach($tmp_list as $k=>$v){
-                        if($v['gc_parent_id']==$v3['gc_id'] && $v['deep']==4){
-                            $v2['childThree'][$k3]['childFour'][] = $v;
+                        if($v['gc_parent_id']==$v3['code'] && $v['deep']==4){
+                            $v2['sub'][$k3]['sub'][$k]['code'] = $v['gc_id'];
+                            $v2['sub'][$k3]['sub'][$k]['name'] = $v['gc_name'];
                         }
                     }
+                    if($v2['sub'][$k3]['sub']){
+                        $v2['sub'][$k3]['sub'] = array_values($v2['sub'][$k3]['sub']);
+                    }
                 }
-                $item['childTwo'][$k2]['childThree'] = $v2['childThree'];
+                if($v2['sub']){
+                    $item['sub'][$k2]['sub'] = $v2['sub'];
+                }
             }
-            $parentType[$key] =  $item;
+            $newData[$key] =  $item;
         }
-        output_data($parentType);
+        output_data($newData);
     }
 
 }
