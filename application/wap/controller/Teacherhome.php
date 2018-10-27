@@ -50,11 +50,13 @@ class Teacherhome extends MobileMall
                             $v2['childThree'][$k3]['childFour'][] = $v;
                         }
                     }
+                    if($v2['childThree'][$k3]['childFour']){
+                        $item['type'] = 4;
+                    }
                 }
                 $item['childTwo'][$k2]['childThree'] = $v2['childThree'];
             }
             $parentType[$key] =  $item;
-            $parentType[$key]['type'] = 4;
         }
         $data = array();
         $data['navigate'] = [
