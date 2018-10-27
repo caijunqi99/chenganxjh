@@ -17,10 +17,13 @@ class Chat extends MobileMember
 
         // $RongCloud = new \cloud\RongCloud();
         $RongCloud = new RongCloud();
-        
-        $this->member_info['avator'] = getMemberAvatarForID($this->member_info['member_id']);
+        if(!empty($this->member_info['member_avatar'])){
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL.$this->member_info['member_avatar'];
+        }else{
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+        }
         // 获取 Token 方法
-        $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
+        $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
             output_data(array(
@@ -37,8 +40,12 @@ class Chat extends MobileMember
      */
     public function RefreshRongCloudToken(){
         $RongCloud = new RongCloud();
-        $this->member_info['avatar'] = getMemberAvatarForID($this->member_info['member_id']);
-        $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
+        if(!empty($this->member_info['member_avatar'])){
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL.$this->member_info['member_avatar'];
+        }else{
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+        }
+        $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
             output_data(array('state'=>TRUE));
