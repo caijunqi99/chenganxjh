@@ -79,7 +79,6 @@
                     },
                     dataType: "json",
                     success: function (response) {
-                        console.log(response);
                         var mood = response.result.mood;
                         if(mood.member_id == user_member_id){
                             $('.md_del_btn').show();
