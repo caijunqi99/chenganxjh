@@ -17,19 +17,17 @@ class Vlink extends BaseController {
     public function GetSchoolList(){
     	$input = input();
     	$School = model('School');
+    	$Class = model('Classes');
     	$areaid =$input['areaid'];
     	$level  =$input['level'];
-    	if ($areaid == 0 && $level > 3) {//获取班级列表
+    	if ($level > 3) {//获取班级列表
     		$condition = array(
 	    		'res_group_id' => $areaid,
 	    		'isdel'  => 1,
 	    	);
-    		$schoolList = $School->getAllAchool($condition,$field);
-
-
+    		$schoolList = $Class->getAllAchool($condition,$field);
     	}
     	output_data($input);
-
     	$condition = array(
     		'areaid' => $areaid,
     		'isdel'  => 1,
@@ -38,7 +36,5 @@ class Vlink extends BaseController {
     	$schoolList = $School->getAllAchool($condition,$field);
     	output_data($schoolList);
     }
-
-   
 
 }
