@@ -304,6 +304,7 @@
     color: #6b6b6b;
     padding: 30px 30px 30px 40px;
     position: relative;
+    text-align: center;
 }
 
 .schooladdress .icon {
@@ -1115,7 +1116,7 @@ a.lookall {
 .mesage_text {
     padding: 10px 20px;
     background: #fff;
-    height: 50px;
+    height: 60px;
     overflow: hidden;
 }
 

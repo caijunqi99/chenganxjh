@@ -35,7 +35,7 @@
 发现-心情动态详情：views/find/mooddetail.html*
 发现-校车：views/find/schoolbus.html*~
 发现-商学院：views/find/businesscollege.html*
-发现-消息：views/find/mesages.html*
+发现-消息：views/find/mesages.html*~
 发现-消息-详情：views/find/mesagesdetail.html  此页去掉了
 
 学校申请：/user/schoolapply.html*
