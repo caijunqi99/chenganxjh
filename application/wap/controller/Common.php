@@ -81,6 +81,7 @@ class Common extends MobileMall
             output_error('缺少参数token');
         }
         $where = '1=1';
+        $where .= ' is_del = 1';
         $industry = db('industry')->field('name as title,id as value')->where($where)->select();
         output_data($industry);
     }
@@ -108,6 +109,7 @@ class Common extends MobileMall
                     $where .= ' AND areaid = "'.$area.'"';
                 }
             }
+            $where .= ' is_del = 1';
             $school = db('school')->field('name as title,schoolid as value')->where($where)->select();
         }
 
@@ -138,7 +140,7 @@ class Common extends MobileMall
         if(!empty($school['typeid'])){
             $type = explode(',',$school['typeid']);
             foreach($type as $key=>$value){
-                $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'"')->find();
+                $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'" AND sc_enabled=1')->find();
                 $arr[$key]['value'] = $name['sc_id'];
                 $arr[$key]['title'] = $name['sc_type'];
             }
@@ -174,11 +176,11 @@ class Common extends MobileMall
         if(empty($school)){
             output_error('该学校不存在或已被删除，请联系管理员');
         }
-        $grade =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$grade_id.'"')->find();
+        $grade =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$grade_id.'"  AND sc_enabled=1')->find();
         if(empty($grade)){
             output_error('该年级不存在或已被删除，请联系管理员');
         }
-        $class = db('class')->field('classid as value,classname as title')->where('schoolid = "'.$school_id.'" AND typeid = "'.$grade_id.'"')->select();
+        $class = db('class')->field('classid as value,classname as title')->where('schoolid = "'.$school_id.'" AND typeid = "'.$grade_id.'" AND isdel=1')->select();
         output_data($class);
 
 
