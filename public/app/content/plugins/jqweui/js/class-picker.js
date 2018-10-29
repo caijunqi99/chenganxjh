@@ -3,135 +3,18 @@
 
     // 获取四级分类菜单
     // 异步该为同步，确保数据的即时加载
-    // $.ajax({
-    //     url: api + '/teachertype/index',
-    //     type: 'POST',
-    //     dataType: 'json',
-    //     async: false,
-    //     success: function(response){
-    //         console.log(response);
-    //     }
-    // })
-
-
-    $.rawCitiesData = [{
-            "code":2,
-            "name":"父母课堂",
-            "sub":[{
-                    "code":9,
-                    "name":"英文",
-                },
-                {
-                    "code":10,
-                    "name":"故事"
-                },
-                {
-                    "code":11,
-                    "name":"动画"
-                },
-                {
-                    "code":12,
-                    "name":"早教"
-                },
-                {
-                    "code":13,
-                    "name":"识字"
-                }
-            ]
-        },
-        {
-            "code":3,
-            "name":"宝宝试听",
-            "sub":[
-                {
-                    "code":14,
-                    "name":"英文"
-                },
-                {
-                    "code":15,
-                    "name":"故事"
-                },
-                {
-                    "code":16,
-                    "name":"动画"
-                },
-                {
-                    "code":17,
-                    "name":"早教"
-                },
-                {
-                    "code":18,
-                    "name":"识字"
-                }
-            ]
-        },
-        {
-            "code":4,
-            "name":"精品课堂",
-            "sub":[
-                {
-                    "code":19,
-                    "name":"精品"
-                },
-                {
-                    "code":20,
-                    "name":"幼儿园"
-                },
-                {
-                    "code":21,
-                    "name":"小学",
-                    "sub":[
-                        {
-                            "code":24,
-                            "name":"一年级"
-                        },
-                        {
-                            "code":25,
-                            "name":"二年级",
-                            "sub":[
-                                {
-                                    "code":30,
-                                    "name":"数学"
-                                },
-                                {
-                                    "code":31,
-                                    "name":"语文"
-                                },
-                                {
-                                    "code":32,
-                                    "name":"英语"
-                                }
-                            ]
-                        },
-                        {
-                            "code":26,
-                            "name":"三年级"
-                        },
-                        {
-                            "code":27,
-                            "name":"四年级"
-                        },
-                        {
-                            "code":28,
-                            "name":"五年级"
-                        },
-                        {
-                            "code":29,
-                            "name":"六年级"
-                        }
-                    ]
-                },
-                {
-                    "code":22,
-                    "name":"初中"
-                },
-                {
-                    "code":23,
-                    "name":"高中"
-                }
-            ]
+    var data = '';
+    $.ajax({
+        url: api + '/teachertype/index',
+        type: 'POST',
+        dataType: 'json',
+        async: false,
+        success: function(response){
+            data = response['result'];
         }
-    ];
+    })
+
+    $.rawCitiesData = data;
 
 }($);
 // jshint ignore: end
