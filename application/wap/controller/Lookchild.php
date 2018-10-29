@@ -39,7 +39,7 @@ class Lookchild
                 $url='http://101.201.75.83:8050/?msgid=115&accountid=2025&authkey=webuser&deviceid=365';
                 $html = json_decode(file_get_contents($url),true);
                 foreach($html['device']['channels'] as $k=> $v){
-                    $html['device']['channels'][$k]['statul']=$html['device']['online'];
+                    $html['device']['channels'][$k]['status']=$html['device']['online'];
                 }
                 $data['camera']=$html['device']['channels'];
                 $user['ip']="101.201.75.83";
