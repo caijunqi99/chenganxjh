@@ -91,7 +91,6 @@ class TeacherPayment extends MobileMall
 
         if (!empty($order_info) && $input) {
             $callback_info = $payment_api->verify_notify($input);
-            
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
                 $update = array(
@@ -105,17 +104,16 @@ class TeacherPayment extends MobileMall
                     'order_dieline' => $this->time()
                 );
 
-                $result = $this->_update_order($update, $order_info);
-
-                if ($result['code']) {
-                    echo 'success';
-                    exit;
+                $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+                if ($result) {
+                    $this->money($callback_info['total_fee'],$order_info['order_tid']);
+                    echo 'SUCCESS';die;
                 }
             }
         }
         //验证失败
-        echo "fail";
-        exit;
+        echo "fail";exit;
+
     }
 
     /**
