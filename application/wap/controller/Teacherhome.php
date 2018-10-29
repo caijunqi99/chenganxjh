@@ -85,14 +85,14 @@ class Teacherhome extends MobileMall
         if(!empty(input('post.type'))) {
             $condition['t_type'] = input('post.type');
         }
+        if(!empty(input('post.type1'))){
+            $condition['t_type2'] = input('post.type1');
+        }
         if(!empty(input('post.type2'))){
-            $condition['t_type2'] = input('post.type2');
+            $condition['t_type3'] = input('post.type2');
         }
         if(!empty(input('post.type3'))){
-            $condition['t_type3'] = input('post.type3');
-        }
-        if(!empty(input('post.type4'))){
-            $condition['t_type4'] = input('post.type4');
+            $condition['t_type4'] = input('post.type3');
         }
         if(input('post.recommend')&&input('post.recommend')==2){//推荐
             $condition['t_recommend'] = input('post.recommend');
