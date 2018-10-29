@@ -67,10 +67,19 @@
                         </div>
                     </div>
 
-                    <div class="weui-cell bang_list">
+                    <!--<div class="weui-cell bang_list">
                         <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
                         <div class="weui-cell__bd">
                             <input class="weui-input input_txt inputpointer" id="shenfen" onfocus="this.blur()"  type="text" value="家长" />
+                        </div>
+                    </div>-->
+
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nickname">身份</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="shenfen" disabled="disabled" type="text" placeholder="" value="家长" />
                         </div>
                     </div>
 
@@ -204,12 +213,12 @@
                     hangye = response['result']
                 }
             });
-            $("#shenfen,#sex,#city,#trade").click(function() {
+            $("#sex,#city,#trade").click(function() {
                 $('#nickname,#nianling,#email').blur();
                 $("#screen").addClass("show");
             });
             // 身份选择
-            $("#shenfen").picker({
+            /*$("#shenfen").picker({
                 title: "请选择您的身份",
                 cols: [{
                     textAlign: 'center',
@@ -219,7 +228,7 @@
                 onClose: function(p, v, d) {
                     $("#screen").removeClass("show");
                 }
-            });
+            });*/
 
             // 性别选择
             $("#sex").picker({
