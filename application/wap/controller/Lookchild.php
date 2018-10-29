@@ -15,13 +15,15 @@ class Lookchild
     public function index(){
         $member_id = intval(input('post.member_id'));
         if(empty($member_id)){
-            $data='请登录';
+            $data=array();
+            $data['name']='请登录';
             output_data($data);
         }else{
             $student=model('student');
             $result=$student->getAllChilds($member_id);
             if(empty($result)){
-                $data='请绑定学生';
+                $data=array();
+                $data['name']='请绑定学生';
                 output_data($data);
             }else {
                 foreach($result as $v){
