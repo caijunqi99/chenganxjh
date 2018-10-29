@@ -321,6 +321,7 @@ class Teachvideo extends AdminControl {
             $insert_array['t_title'] = input('post.video_name');
             $insert_array['t_desc'] = input('post.video_desc');
             $insert_array['t_price'] = input('post.video_price');
+            $insert_array['t_author'] = input('post.video_author');
             $insert_array['t_type'] = input('post.type1');
             $insert_array['t_type2'] = input('post.type2');
             $insert_array['t_type3'] = input('post.type3');
