@@ -283,7 +283,9 @@
             }
 
             $('.bang_submit').on('click', function() {
-                if (!Tools.IsAge($("#nianling").val())) {
+                if($('#nickname').val() == ''){
+                    $.toast("请输入昵称",'forbidden');return false;
+                }else if (!Tools.IsAge($("#nianling").val())) {
                     $.toast("年龄不符合科学，请重新输入",'forbidden');return false;
                 } else if (!Tools.IsEmail($("#email").val())) {
                     $.toast("请输入正确的邮箱地址",'forbidden');return false;
