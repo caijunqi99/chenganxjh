@@ -36,8 +36,8 @@ class alipay_app {
 
             $payResponse = new AlipayTradeService($config);
 
-            if($param['notifyUrl']){
-                $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$param['notifyUrl']);
+            if($param['notifyUrl'] && $param['return_url']){
+                $result=$payResponse->wapPay($payRequestBuilder,$param['return_url'],$param['notifyUrl']);
             }else{
                 $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
             }
