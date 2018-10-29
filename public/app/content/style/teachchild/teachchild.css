@@ -85,7 +85,7 @@ a:active {
     margin-right: 10px;
 }
 
-.sort_tabs_top{
+.sort_tabs_top {
     width: 100%;
     height: 70px;
     border-bottom: 1px solid #f0f0f0;
@@ -105,6 +105,7 @@ a:active {
     font-size: 30px;
     text-align: center;
 }
+
 
 /*选项卡*/
 
@@ -144,7 +145,7 @@ a:active {
     text-align: right;
 }
 
-.sort_block{
+.sort_block {
     width: 750px;
     height: 109px;
     border-bottom: 1px solid #f0f0f0;
@@ -152,17 +153,17 @@ a:active {
     margin: 0 auto;
 }
 
-.sort_block span .action{
+.sort_block span .action {
     background: #4ec3bb !important;
     color: #fff;
 }
 
-.sort_block span{
+.sort_block span {
     width: 20%;
     text-align: center;
 }
 
-.sort_block span i{
+.sort_block span i {
     width: 80%;
     height: 50px;
     text-align: center;
@@ -198,7 +199,7 @@ a:active {
     border-left: 1px solid #d7d7d7;
 }
 
-.filter .float_right_action{
+.filter .float_right_action {
     color: #6bbfc1 !important;
 }
 
@@ -252,6 +253,7 @@ a:active {
     height: auto;
     display: none;
     background: #fff;
+    padding-bottom: 80px;
 }
 
 .filter_filter p {
@@ -273,7 +275,7 @@ a:active {
     height: 600px;
 }
 
-.filter_span_wrap:nth-of-child(3){
+.filter_span_wrap:nth-of-child(3) {
     border: none
 }
 
@@ -290,13 +292,13 @@ a:active {
     text-align: center;
 }
 
-.filter_confirm{
+.filter_confirm {
     width: 750px;
     height: 85px;
     background: #fff;
 }
 
-.filter_confirm span{
+.filter_confirm span {
     display: inline-block;
     width: 50%;
     text-align: center;
@@ -306,10 +308,11 @@ a:active {
     background: #f1f1f1;
 }
 
-.filter_confirm span:nth-child(2){
+.filter_confirm span:nth-child(2) {
     background: #4ec3bb;
     color: #fff;
 }
+
 
 /*内容部分*/
 

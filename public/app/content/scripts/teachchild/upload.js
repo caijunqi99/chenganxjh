@@ -87,12 +87,6 @@ $(function() {
         })
     }
 
-    // 播放视频
-    var Video = document.getElementsByClassName("back")[0];
-    PlayVideo = function(el) {
-        $('.back').get(0).play();
-        $(el).hide();
-    }
 
     // 监听视频播放完时的操作
     Video.addEventListener('ended', function() {
