@@ -93,10 +93,10 @@ class Schoolapply extends MobileMember
         }
         $result = db('Schoolapply')->where('member_id = "'.$member_id.'"')->field('status')->find();
         if($result){
-            $url =APP_SITE_URL+'/user/schoolapply.html';
+            $url =APP_SITE_URL.'/user/schoolapply.html';
             output_data(array('status'=>1,'url'=>$url));
         }else{
-            $url =APP_SITE_URL+'/user/schoolapply.html';
+            $url =APP_SITE_URL.'/user/schoolapply.html';
             output_data(array('status'=>2,'url'=>$url));
         }
 
