@@ -63,7 +63,6 @@ class Membermessage extends MobileMember
                 $message_array[$k] = $v;
             }
         }
-        halt($message_array);
         output_data($message_array);
     }
 
