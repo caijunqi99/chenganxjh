@@ -48,7 +48,6 @@ class Membermessage extends MobileMember
             'no_del_member_id' => $this->member_info['member_id']
         );
         $message_array = $model_message->listMessage($condition, 100);
-        halt($message_array);
         if (!empty($message_array) && is_array($message_array)) {
             foreach ($message_array as $k => $v) {
                 $v['message_open'] = '0';
@@ -64,6 +63,7 @@ class Membermessage extends MobileMember
                 $message_array[$k] = $v;
             }
         }
+        halt($message_array);
         output_data($message_array);
     }
 
