@@ -15,15 +15,15 @@ class Lookchild
     public function index(){
         $member_id = intval(input('post.member_id'));
         if(empty($member_id)){
-            $data=array();
             $data['name']='请登录';
+            $data = !empty($data)?[$data]:$data;
             output_data($data);
         }else{
             $student=model('student');
             $result=$student->getAllChilds($member_id);
             if(empty($result)){
-                $data=array();
                 $data['name']='请绑定学生';
+                $data = !empty($data)?[$data]:$data;
                 output_data($data);
             }else {
                 foreach($result as $v){
@@ -43,10 +43,11 @@ class Lookchild
                 }
                 $data['camera']=$html['device']['channels'];
                 $user['ip']="101.201.75.83";
-                $user['port']='8050';
+                $user['port']='9001';
                 $user['username']='test';
                 $user['pwd']='123456';
                 $data['logo']=$user;
+                $data = !empty($data)?[$data]:$data;
                 output_data($data);
                 }
         }
