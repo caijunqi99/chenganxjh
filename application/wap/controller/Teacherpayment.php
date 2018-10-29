@@ -148,14 +148,11 @@ class TeacherPayment extends MobileMall
             $result = $this->_update_order($update, $order_info);
             
             if ($result['code']) {
-                echo 'success';
-                exit;
+                $this->money($input['total_fee']/100,$order_info['order_tid']);
+                output_data(array("data"=>"success"));
             }
         }
-        echo 'fail';
-        exit;
-
-
+        output_error('fail');
     }
 
     //视频有效期
@@ -259,10 +256,7 @@ class TeacherPayment extends MobileMall
      * 每次分成，金额增加日志存pdlog表
      *
      * */
-    public function money(){
-        $price = "50.00";//支付金额
-        $video_id = "4";//视频id
-
+    public function money($price,$video_id){
         //分成比例
         $proportion = db('config')->where(array('code'=>"teacher_pay_scale"))->find();
         $proportion['value'] = json_decode($proportion['value'],true);

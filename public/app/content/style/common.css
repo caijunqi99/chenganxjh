@@ -518,3 +518,11 @@
     .weui-loadmore {
         font-size: 20px;
     }
+
+    .no_data {
+        padding-top: 200px;
+        font-size: 28px;
+        color: #ccc;
+        line-height: 100px;
+        text-align: center;
+    }

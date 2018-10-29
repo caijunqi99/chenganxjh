@@ -57,6 +57,8 @@ class Membermessage extends MobileMember
                         $v['message_open'] = '1';
                     }
                 }
+                $message_array[$k]['message_time'] = date('Y-m-d',$v['message_time']);
+                $message_array[$k]['message_update_time'] = date('Y-m-d',$v['message_update_time']);
                 $v['from_member_name'] = '系统消息';
                 $message_array[$k] = $v;
             }
