@@ -70,6 +70,7 @@ class Login extends MobileMall
             $pass = getRandomString(8,null,'n');
             $member = array();
             $member['member_name'] = $phone;
+            $member['member_nickname'] = $phone;
             $member['member_password'] = md5(trim($pass));;
             $member['member_mobile'] = $phone;
             $member['member_email'] = '';
