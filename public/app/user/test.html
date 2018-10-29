@@ -143,13 +143,12 @@
                 var pay = $("input[name='payment_code']:checked").val();
                  //api = 'http://www.chenganxjh.com/index.php/Wap';
                 user_token = '74db5c057bf603370584ee935bd5e461';
-                var chind_id = '1';
                 $.post(api+'/Teacherbuy/buyOrder',
                 {
                     'key': user_token,
-                    'tid': "1",
+                    'tid': "22",
                     'payment_code': pay,
-                    'member_id':25,
+                    'member_id':10018,
                     'student_id': "10"
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
