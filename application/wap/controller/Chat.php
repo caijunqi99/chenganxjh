@@ -32,7 +32,7 @@ class Chat extends MobileMember
                 'CloudToken'  => $result['token']
             ));
         }else{
-            output_error('token生成失败！');
+            output_error($result['errorMessage']);
         }
     }
 
