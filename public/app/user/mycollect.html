@@ -22,7 +22,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -40,9 +40,8 @@
         <div class="cont margt30">
             <div class="container2">
                 <div class="orderforms_cont clear">
-                    <ul class="collect_list">
-
-                    </ul>
+                    <p class="no_data" id="no_data"><span>———— 暂无收藏 ————</span></p>
+                    <ul class="collect_list"></ul>
                 </div>
             </div>
         </div>
@@ -68,8 +67,13 @@
             },
             dataType: "json",
             success: function(response) {
-                console.log(response);
-                $(".collect_list").html(HTML(response['result']))
+                console.log(response["result"]);
+                if (response["result"].length > 0) {
+                    $("#no_data").hide();
+                    $(".collect_list").html(HTML(response['result']))
+                } else {
+                    $("#no_data").show();
+                }
             }
         });
 
@@ -79,20 +83,20 @@
             var template = '';
             for (var i = 0; i < data.length; i++) {
                 var freeState = '';
-                if (data[i]['goods_price'] == '') {
+                if (data[i]['t_price'] == '') {
                     freeState = '免费'
                 } else {
-                    freeState = data[i]['goods_price'];
+                    freeState = data[i]['t_price'];
                 }
-
+                var img_url = upload_url+'/'+data[i]['t_picture'];
                 template += '<li>' +
                     '<a href="javascript:;">' +
                     '<span class="pay_type pay_free">' + freeState + '</span>' +
-                    '<div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>' +
+                    '<div class="collect_img" style="background: url('+img_url+') no-repeat center;background-size:cover;"></div>' +
                     '<dl class="collect_txt">' +
-                    '<dt>一起学唐诗</dt>' +
-                    '<dd class="bolds">作者：好看的猫</dd>' +
-                    '<dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>' +
+                    '<dt>'+data[i]['t_title']+'</dt>' +
+                    '<dd class="bolds">作者：'+data[i]['member_nickname']+'</dd>' +
+                    '<dd>'+data[i]['t_profile']+'</dd>' +
                     '</dl>' +
                     '</a>' +
                     '</li>'
