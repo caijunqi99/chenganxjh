@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
+                <button class="layui-btn" data-type="reload" id="submitBtn">{$Think.lang.look_camera_search}</button>
             </div>
 
         </div>
@@ -314,5 +314,42 @@
         });
     });
 
+    $("#submitBtn").click(function() {
+            var province = $("#province").val();
+            if(province==0){
+                alert("请先选择省份！");
+            }else {
+                var city=$("#city").val();
+                if(city==0) {
+                    alert("请先选择市！");
+                }else{
+                    var area=$("#area").val();
+                    if(area==0){
+                        alert("请先选择县区！");
+                    }else{
+                        var school=$("#school").val();
+                        if(school==0){
+                            alert("请先选择学校！")
+                        }else{
+                            var grade=$("#grade").val();
+                            var classid=$("#class").val();
+                            $.ajax({
+                                url: "{:url('/Admin/monitor/monitor')}",
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'classid':classid},
+                                success:function(sb){
+                                    if (sb.m) {
+                                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                                            window.location.href="{:url('/Admin/Company/index')}";
+                                        });
 
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+    });
 </script>

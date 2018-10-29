@@ -31,21 +31,27 @@ class Lookchild
                 }
                 $data['name']=$res;
                 $sid  = input('post.sid');
-//                if(empty($sid)) {
-//                    $data['student'] = $result[0];
-//                }else{
-//                    $data['student']=$student->getChildrenInfoByIdes($sid);
-//                }
-                $url='http://101.201.75.83:8050/?msgid=115&accountid=2025&authkey=webuser&deviceid=365';
+                if(empty($sid)) {
+                    $schoolid = $result[0]['schoolid'];
+                    $classid=$result[0]['classid'];
+                }else{
+                    $str=$student->getChildrenInfoByIdes($sid);
+                    $schoolid=$str['schoolid'];
+                    $classid=$str['classid'];
+                }
+                $urls='http://101.201.75.83:8050/?msgid=110&authkey=webuser&username=bjc&pswd=e10adc3949ba59ab';
+                $res = json_decode(file_get_contents($urls),true);
+                $accountid=$res['accountid'];
+                $user['ip']=$res['vlinkerip'];
+                $user['port']=$res['vlinkerport'];
+                $user['username']=$res['username'];
+                $user['pwd']='123456';
+                $url='http://101.201.75.83:8050/?msgid=115&accountid='.$accountid.'&authkey=webuser&deviceid=365';
                 $html = json_decode(file_get_contents($url),true);
                 foreach($html['device']['channels'] as $k=> $v){
                     $html['device']['channels'][$k]['status']=$html['device']['online'];
                 }
                 $data['camera']=$html['device']['channels'];
-                $user['ip']="101.201.75.83";
-                $user['port']='9001';
-                $user['username']='test';
-                $user['pwd']='123456';
                 $data['logo']=$user;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);
