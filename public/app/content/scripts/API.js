@@ -5,5 +5,5 @@ var upload_url = 'http://vip.xiangjianhai.com:8001/uploads';
 
 var user_token = $.cookie('token');
 var user_member_id = $.cookie('member_id');
-   // var user_token = '8d2445468160ce3c30227d9b39b0df6f';
+   // var user_token = 'c028d76142e29644bb06ec7ccd7090ac';
    // var user_member_id = 10017;
