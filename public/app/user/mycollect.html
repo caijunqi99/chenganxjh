@@ -16,32 +16,18 @@
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
-    <style>
-        .modal-content {
-            background: #fff;
-        }
-        
-        .toolbar-inner {
-            background: #fff;
-        }
-        
-        .goods_item2 {
-            height: 130px;
-            padding: 0 40px 30px;
-        }
-    </style>
 </head>
 
 <body>
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+                <a href="javascript:;" class="back_btn" onClick="historyback()">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
             <div class="head_title">
-                <p>我的收藏</p>
+                <p>我的收藏-课件</p>
             </div>
             <div class="head_r">
 
@@ -53,148 +39,17 @@
     <div class="main">
         <div class="cont margt30">
             <div class="container2">
-                <ul class="orderforms_nav collectbar clearfix">
-                    <li id="jobs1" onclick="setTab('jobs',1,2)" class="active">
-                        <a href="javascript:;">课件</a>
-                    </li>
-                    <li id="jobs2" onclick="setTab('jobs',2,2)">
-                        <a href="javascript:;">商城</a>
-                    </li>
-                </ul>
-                <div class="orderforms_cont clear hover" id="order_jobs_1">
+                <div class="orderforms_cont clear">
                     <ul class="collect_list">
-                        <li>
-                            <a href="javascript:;">
-                                <span class="pay_type pay_free">免费32323</span>
-                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
-                                <dl class="collect_txt">
-                                    <dt>一起学唐诗</dt>
-                                    <dd class="bolds">作者：好看的猫</dd>
-                                    <dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>
-                                </dl>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span class="pay_type">￥100.00</span>
-                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
-                                <dl class="collect_txt">
-                                    <dt>一起学唐诗</dt>
-                                    <dd class="bolds">作者：好看的猫</dd>
-                                    <dd>唐诗宋词经典语录快速学习</dd>
-                                </dl>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>
-                                <dl class="collect_txt">
-                                    <dt>一起学唐诗</dt>
-                                    <dd class="bolds">作者：好看的猫</dd>
-                                    <dd>唐诗宋词经典语录快速学习</dd>
-                                </dl>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="orderforms_cont clear" id="order_jobs_2" style="display: none;">
-                    <ul class="goodslist">
-                        <li>
-                            <div class="goods_item">
-                                <a href="javascript:;">
-                                    <div class="goods_img">
-                                        <img src="../content/images/mall/goods_img.jpg" width="128" height="128" alt="">
-                                    </div>
-                                    <div class="goods_info">
-                                        <h3>小天才电话手表Z5 学生多功能<br/>防水儿童4G</h3>
-                                        <p>￥1300.00<span>x1</span></p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="shoppingcart">
-                                <a href="javascript:;" class="open-popup" data-target="#addshoppingcar">
-                                    <div class="shoppingcart0">
-                                        <i class="icon iconfont icon-daohanggouwuche"></i>
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="goods_item">
-                                <a href="javascript:;">
-                                    <div class="goods_img">
-                                        <img src="../content/images/mall/goods_img.jpg" width="128" height="128" alt="">
-                                    </div>
-                                    <div class="goods_info">
-                                        <h3>小天才电话手表Z5 学生多功能防水儿童4G</h3>
-                                        <p>￥1300.00<span>x1</span></p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="shoppingcart">
-                                <a href="javascript:;" class="open-popup" data-target="#addshoppingcar">
-                                    <div class="shoppingcart0">
-                                        <i class="icon iconfont icon-daohanggouwuche"></i>
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
+
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="addshoppingcar" class='weui-popup__container popup-bottom'>
-        <div class="weui-popup__overlay"></div>
-        <div class="weui-popup__modal">
-            <div class="toolbar">
-                <div class="toolbar-inner">
-                    <a href="javascript:;" class="picker-button close-popup">关闭</a>
-                    <!-- <h1 class="title">加入购物车</h1> -->
-                </div>
-            </div>
-            <div class="modal-content">
-                <div class="container4">
-                    <div class="goods_item2">
-                        <div class="goods_img">
-                            <img src="../content/images/mall/goods_img.jpg" width="128" height="128" alt="">
-                        </div>
-                        <div class="goods_info">
-                            <p>￥1300.00</p>
-                            <p class="goods_p2">商品编号：7705464</p>
-                        </div>
-                    </div>
-
-                    <div class="spec_box">
-                        <p class="spec_p">颜色</p>
-                        <div class="spec_list clearfix">
-                            <a href="javascript:;" class="active">[4G网络]青绿色</a>
-                            <a href="javascript:;">[4G网络]青绿色</a>
-                        </div>
-                    </div>
-
-                    <div class="goodsnmb">
-                        <div class="goodsnmb_title">
-                            数量
-                        </div>
-                        <div class="weui-count">
-                            <a class="weui-count__btn weui-count__decrease"></a>
-                            <input class="weui-count__number" type="number" value="1" />
-                            <a class="weui-count__btn weui-count__increase"></a>
-                        </div>
-                    </div>
-
-                    <div class="myc_confirm_box">
-                        <input type="button" value="确认" class="myc_confirm" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
@@ -207,75 +62,27 @@
             type: "POST",
             url: api + "/Member/collect.html",
             data: {
-                key: user_token,
-                member_id: user_member_id,
+                key: token,
+                member_id: 2,
                 type_id: 1
             },
             dataType: "json",
             success: function(response) {
                 console.log(response);
-                $("#order_jobs_1 .collect_list").html(HTML(response['result']));
+                $(".collect_list").html(HTML(response['result']))
             }
         });
 
-        function setTab(name, cursel, n) {
-            for (i = 1; i <= n; i++) {
-                var menu = $("#" + name + i);
-                var con = $("#" + "order_" + name + "_" + i);
-                if (i == cursel) {
-                    menu.addClass("active");
-                    con.fadeIn();
-                    if (cursel == 1) {
-                        $.ajax({
-                            type: "POST",
-                            url: api + "/Member/collect.html",
-                            data: {
-                                key: user_token,
-                                member_id: user_member_id,
-                                type_id: 1
-                            },
-                            dataType: "json",
-                            success: function(response) {
-                                if (response['code'] == 200) {
-                                    $("#order_jobs_1 .collect_list").html(HTML(response['result']));
-                                } else {}
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            type: "POST",
-                            url: api + "/Member/collect.html",
-                            data: {
-                                key: user_token,
-                                member_id: user_member_id,
-                                type_id: 2
-                            },
-                            dataType: "json",
-                            success: function(response) {
-                                console.log(response);
-                                if (response['code'] == 200) {
-                                    $("#order_jobs_2 .goodslist").html(HTML2(response['result']))
-                                } else {}
-                            }
-                        });
-                    }
-                } else {
-                    menu.removeClass("active");
-                    con.hide();
-                }
-            }
-        }
 
-
-        // 课程html模板
+        // html模板
         function HTML(data) {
             var template = '';
-            var freeState = '';
             for (var i = 0; i < data.length; i++) {
-                if (data[i]['t_price'] == 0) {
+                var freeState = '';
+                if (data[i]['goods_price'] == '') {
                     freeState = '免费'
                 } else {
-                    freeState = data[i]['t_price'];
+                    freeState = data[i]['goods_price'];
                 }
 
                 template += '<li>' +
@@ -283,78 +90,15 @@
                     '<span class="pay_type pay_free">' + freeState + '</span>' +
                     '<div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>' +
                     '<dl class="collect_txt">' +
-                    '<dt>' + data[i]['t_title'] + '</dt>' +
-                    '<dd class="bolds">作者：' + data[i]['member_nickname'] + '</dd>' +
-                    '<dd>' + data[i]['t_profile'] + '</dd>' +
+                    '<dt>一起学唐诗</dt>' +
+                    '<dd class="bolds">作者：好看的猫</dd>' +
+                    '<dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>' +
                     '</dl>' +
                     '</a>' +
                     '</li>'
             }
             return template;
         }
-
-        // 商品html模板
-        function HTML2(data) {
-            var template = '';
-            var freeState = '';
-            for (var i = 0; i < data.length; i++) {
-                if (data[i]['t_price'] == 0) {
-                    freeState = '免费'
-                } else {
-                    freeState = data[i]['t_price'];
-                }
-
-                template += '<li>' +
-                    '<div class="goods_item">' +
-                    '<a href="javascript:;">' +
-                    '<div class="goods_img">' +
-                    '<img src="' + data[i]['goods_image'] + '" width="128" height="128" alt="">' +
-                    '</div>' +
-                    '<div class="goods_info">' +
-                    '<h3>' + data[i]['goods_name'] +
-                    '<p>￥' + data[i]['goods_price'] + '<span>x' + data[i]['evaluation_count'] + '</span></p>' +
-                    '</div>' +
-                    '</a>' +
-                    '</div>' +
-                    '<div class="shoppingcart">' +
-                    '<a href="javascript:;" class="open-popup" data-target="#addshoppingcar">' +
-                    '<div class="shoppingcart0">' +
-                    '<i class="icon iconfont icon-daohanggouwuche"></i>' +
-                    '</div>' +
-                    '</a>' +
-                    '</div>' +
-                    '</li>'
-            }
-            return template;
-        }
-
-        // 商品颜色规格选择
-        $(".spec_list > a").click(function() {
-            $(this).siblings().removeClass("active").end().addClass("active");
-        });
-
-        // 购物车数量调整 start
-        var MAX = 99,
-            MIN = 1;
-        $('.weui-count__decrease').click(function(e) {
-            var $input = $(e.currentTarget).parent().find('.weui-count__number');
-            var number = parseInt($input.val() || "0") - 1
-            if (number < MIN) number = MIN;
-            $input.val(number)
-        })
-        $('.weui-count__increase').click(function(e) {
-            var $input = $(e.currentTarget).parent().find('.weui-count__number');
-            var number = parseInt($input.val() || "0") + 1
-            if (number > MAX) number = MAX;
-            $input.val(number)
-        })
-
-        // 购物车数量调整 end
-
-        // 点击确认按钮关闭popup
-        $(".myc_confirm").click(function() {
-            $.closePopup();
-        });
     </script>
 </body>
 
