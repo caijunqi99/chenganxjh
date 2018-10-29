@@ -85,5 +85,22 @@ class Schoolapply extends MobileMember
         $schoolinfo = !empty($schoolinfo)?$schoolinfo:[];
         output_data($schoolinfo);
     }
+    //申请学校状态
+    public function status(){
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('会员id不能为空');
+        }
+        $result = db('Schoolapply')->where('member_id = "'.$member_id.'"')->field('status')->find();
+        if($result){
+            $url =APP_SITE_URL+'/user/schoolapply.html';
+            output_data(array('status'=>1,'url'=>$url));
+        }else{
+            $url =APP_SITE_URL+'/user/schoolapply.html';
+            output_data(array('status'=>2,'url'=>$url));
+        }
+
+
+    }
 
 }

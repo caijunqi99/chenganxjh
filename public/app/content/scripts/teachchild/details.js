@@ -10,7 +10,7 @@ $(function(){
 		dataType: 'json',
 		data: {
 			key: user_token,
-			t_id: 19
+			t_id: GetPar("id")
 		},
 		success: function(response){
 			$('#related').html(HTML(response['result']))
@@ -36,7 +36,7 @@ $(function(){
 			data: {
 				key: user_token,
 				member_id: user_member_id,
-				tid: 19
+				tid: GetPar("id")
 			},
 			success: function(response){
 				if(response['code'] == 200){
@@ -46,6 +46,14 @@ $(function(){
 				};
 			}
 		})
+	}
+
+	// 封装获取ID方法
+	function GetPar(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r != null) return decodeURIComponent(r[2]);
+		return null;
 	}
 
 	// 收藏视频
