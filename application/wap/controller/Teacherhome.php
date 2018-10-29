@@ -115,6 +115,7 @@ class Teacherhome extends MobileMall
         if(!empty(input('post.price_fees'))){
             $condition['t_price'] = array('neq',0);
         }
+        $condition['t_audit'] = 3;
         $list = $teachchild->getTeachchildList($condition,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_price,t_userid,t_author', '' ,$order);
         if($list){
             output_data($list);
