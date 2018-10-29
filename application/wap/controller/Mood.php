@@ -3,6 +3,7 @@
 namespace app\wap\controller;
 
 
+
 class Mood extends MobileMember{
     public function _initialize()
     {
