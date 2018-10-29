@@ -2,7 +2,7 @@
 
 namespace app\wap\controller;
 
-class Mood {
+class Mood extends MobileMember{
 
     /**
      * app用户自己的心情列表
