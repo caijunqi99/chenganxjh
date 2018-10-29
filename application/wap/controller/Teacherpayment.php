@@ -82,8 +82,6 @@ class TeacherPayment extends MobileMall
         $payment_api = $this->_get_payment_api();
 
         $input = input();
-$input = '{"gmt_create":"2018-10-15 10:34:35","charset":"UTF-8","seller_email":"13233620354@163.com","subject":"\u60f3\u89c1\u5b69\u5546\u54c1\u8ba2\u5355170592914866556000","sign":"bENN8mCAi0iKRsFg/NkZi1D7ISB0PDzaV4G6JY3D5lvppi7N83aRErdZbH58B79FdHv7WX93cdRLMBB1W27f+ysMRvFCPR/gKv3xbHV6UFrDltcspd9URWo+yG23qRZ9+aJ3lXhyuf+MemwPBcWffELOu4u/DfB5Xz3F8TOIVaG3wgJypaosnJlMLlwsG5WjgU6PbhxLkgcCE/5SPYZObQwXnlSlsNyzQdyxZLv5UJRhUp3EskgS6kcoEZ/xg/71oksIQzh2HYpb1qkOncOqusex/pRnf1ddqkI2vN22TWiqhCDtWo97qCoWQcxztHiLro0MWCHbQ2k2rnMiK9Jatg==","body":"170592914866556000","buyer_id":"2088212166283029","invoice_amount":"0.01","notify_id":"2018101500222103436083020596364545","fund_bill_list":"[{\"amount\":\"0.01\",\"fundChannel\":\"ALIPAYACCOUNT\"}]","notify_type":"trade_status_sync","trade_status":"TRADE_SUCCESS","receipt_amount":"0.01","buyer_pay_amount":"0.01","app_id":"2018101261632999","sign_type":"RSA2","seller_id":"2088721688184564","gmt_payment":"2018-10-15 10:34:36","notify_time":"2018-10-15 10:34:36","version":"1.0","out_trade_no":"400594160555058018-teachchild","total_amount":"0.01","trade_no":"2018101522001483020555213185","auth_app_id":"2018101261632999","buyer_logon_id":"che***@163.com","point_amount":"0.00"}';
-        $input = json_decode($input,true);
         $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
         $Package = model('Packagesorderteach');
@@ -93,7 +91,6 @@ $input = '{"gmt_create":"2018-10-15 10:34:35","charset":"UTF-8","seller_email":"
 
         if (!empty($order_info) && $input) {
             $callback_info = $payment_api->verify_notify($input);
-            print_r($callback_info);die;
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
                 $update = array(
