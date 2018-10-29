@@ -386,7 +386,7 @@
 				function GetKejian(params){
 					$.ajax({
 						type: "POST",
-						url: api + '//Teacherhome/lists',
+						url: api + '/Teacherhome/lists',
 						dataType: "json",
 						data: params,
 						success: function(response){
@@ -467,7 +467,7 @@
 						if(data[i]['t_picture'] == ''){
 							img = data[i]['t_videoimg'];
 						}else {
-							img = data[i]['t_picture'];
+							img = upload_url +'/'+data[i]['t_picture'];
 						}
 						template += '<div class="content_wrap">'+
 							'<div class="img_wrap">'+
