@@ -145,14 +145,13 @@ class TeacherPayment extends MobileMall
                 'over_amount' => $input['total_fee']/100, //最终支付金额
                 'order_dieline' => $this->time()
             );
-            $result = $this->_update_order($update, $order_info);
-            
-            if ($result['code']) {
+            $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+            if ($result) {
                 $this->money($input['total_fee']/100,$order_info['order_tid']);
-                output_data(array("data"=>"success"));
+                echo 'SUCCESS';die;
             }
         }
-        output_error('fail');
+        echo 'fail';die;
     }
 
     //视频有效期
@@ -225,28 +224,6 @@ class TeacherPayment extends MobileMall
         return $payment_info['payment_config'];
     }
 
-    /**
-     * 更新订单状态
-     */
-    private function _update_order($input, $orderInfo)
-    {
-        $model_order = model('Packagesorder');
-        $logic_payment = model('payment', 'logic');
-        $paymentCode = $this->payment_code;
-        if ($orderInfo) {
-            $result = $logic_payment->updatePackageOrder($input, $orderInfo, $paymentCode);
-
-            
-            $log_buyer_id = $orderInfo['buyer_id'];
-            $log_buyer_name = $orderInfo['buyer_name'];
-            $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
-
-        }
-
-
-        return $result;
-    }
-
     /*
      * 教孩视频支付成功 给教师，市代，省代，总后台分成
      * 分成比例在后台设置 config表-》code=teacher_pay_scale
@@ -287,8 +264,8 @@ class TeacherPayment extends MobileMall
         $company_model = Model("Company");
         $city_agent = $company_model->getOrganizeInfo(array('o_provinceid'=>$teachercertify['provinceid'],'o_cityid'=>$teachercertify['cityid']));
         if($city_agent){
-            $city_new_price = $city_agent['total_count'] + $city_price;
-            $city = $company_model->editOrganize(array("o_id"=>$city_agent['o_id']),array("total_count"=>$city_new_price));
+            $city_new_price = $city_agent['total_amount'] + $city_price;
+            $city = $company_model->editOrganize(array("o_id"=>$city_agent['o_id']),array("total_amount"=>$city_new_price));
             if(empty($city)){
                 output_error('市代分成失败');
             }
@@ -302,7 +279,7 @@ class TeacherPayment extends MobileMall
             ];
             $log_model->addLog($city_data);
         }else{
-            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
             $city_new_price = $admininfo['admin_total_count'] + $city_price;
             $admin_model = Model("Admin");
             $admin = $admin_model->updateAdmin(array("admin_total_count"=>$city_new_price),$admininfo['admin_id']);
@@ -338,7 +315,7 @@ class TeacherPayment extends MobileMall
             ];
             $log_model->addLog($province_data);
         }else{
-            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
             $province_new_price = $admininfo['admin_total_count'] + $province_price;
             $admin_model = Model("Admin");
             $admin = $admin_model->updateAdmin(array("admin_total_count"=>$province_new_price),$admininfo['admin_id']);
@@ -357,7 +334,7 @@ class TeacherPayment extends MobileMall
         }
         //总后台分成金额
         $admin_price = sprintf('%.4f', $price*$proportion['value']['zb']/100);
-        $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+        $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
         $admin_new_price = $admininfo['admin_total_count'] + $admin_price;
         $admin_model = Model("Admin");
         $admin = $admin_model->updateAdmin(array("admin_total_count"=>$admin_new_price),$admininfo['admin_id']);
