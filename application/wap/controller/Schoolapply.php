@@ -26,6 +26,12 @@ class Schoolapply extends MobileMember
         if(empty($memberInfo)){
             output_error('无此会员');
         }
+        $schoolapply = model('Schoolapply');
+        //判断是否申请过
+        $res = $schoolapply ->where('member_id = "'.$member_id.'"')->find();
+        if($res){
+           output_error('该会员已经申请过，无法重复申请');
+        }
         $data = array();
         $data['member_id'] = $member_id;
         $data['provinceid'] = trim(input('post.provinceid'));
@@ -37,7 +43,6 @@ class Schoolapply extends MobileMember
         $data['phone'] = input('post.phone');
         $data['message'] = input('post.message');
         $data['createtime'] = time();
-        $schoolapply = model('Schoolapply');
         $result = $schoolapply->addSchoolapply($data);
 
         if ($result) {
@@ -79,6 +84,23 @@ class Schoolapply extends MobileMember
 //        $schoolinfo['area'] = $parent;
         $schoolinfo = !empty($schoolinfo)?$schoolinfo:[];
         output_data($schoolinfo);
+    }
+    //申请学校状态
+    public function status(){
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('会员id不能为空');
+        }
+        $result = db('Schoolapply')->where('member_id = "'.$member_id.'"')->field('status')->find();
+        if($result){
+            $url =APP_SITE_URL+'/user/schoolapply.html';
+            output_data(array('status'=>1,'url'=>$url));
+        }else{
+            $url =APP_SITE_URL+'/user/schoolapply.html';
+            output_data(array('status'=>2,'url'=>$url));
+        }
+
+
     }
 
 }
