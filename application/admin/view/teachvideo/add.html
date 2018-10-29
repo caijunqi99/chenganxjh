@@ -43,9 +43,17 @@
                 <td class="vatop rowform"><input type="file" name="video_filename" id="video_filename" /> </td>
                 <td class="vatop tips"></td>
             </tr>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label for="video_name">作者:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" id="video_author" name="video_author" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
             <tr>
                 <td colspan="2" class="required"><label for="video_price">{$Think.lang.teacher_index_videoprice}:</label></td>
             </tr>
+
             <tr class="noborder">
                 <td class="vatop rowform"><input type="text" value="" id="video_price" name="video_price" class="txt"></td>
                 <td class="vatop tips"></td>
@@ -138,6 +146,9 @@
                 },
                 video_price: {
                     required: true
+                },
+                video_author: {
+                    required: true
                 }
             },
             messages: {
@@ -155,6 +166,9 @@
                 },
                 video_price: {
                     required: '{$Think.lang.school_add_price_null}'
+                },
+                video_author: {
+                    required: '作者不能为空，可随意起名'
                 }
             }
         });

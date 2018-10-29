@@ -151,11 +151,11 @@ class Teacherbuy extends MobileMember
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
-            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5.html';
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5';
             $api = new \wxpay_h5();
             $api->setConfigs($param);
-
             $mweburl = $api->get_payurl($this);
+
             output_data($mweburl);
             $url = $mweburl['mweb_url'];
             Header("Location: $url");
