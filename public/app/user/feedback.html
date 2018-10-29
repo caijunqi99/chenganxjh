@@ -89,11 +89,15 @@
                     dataType: "json",
                     success: function(response) {
                         if(response['code'] == 400){
-                            layout();
-                        }else{
-                            $.alert(response['message'],'',function(){
+                            $.toast(response['message'],'forbidden',function(){
+                                layout();
+                            })
+                        }else if(response['code'] == 200){
+                            $.toast(response.result[0]['message'],'',function(){
                                 historyback();
                             })
+                        }else{
+                            $.toast(response['message'],'forbidden')
                         }
                     }
                 });
