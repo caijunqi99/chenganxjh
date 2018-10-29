@@ -168,7 +168,7 @@ class Teacherbuy extends MobileMember
         $param['orderSn'] = $order_pay_info['pay_sn'];
         $param['orderFee'] = $order_pay_info['order_amount'];
         $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
-        $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5';
+        $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/alipay_notify_app';
         $param['return_url'] = APP_SITE_URL . '/user/test.html';
 
         
