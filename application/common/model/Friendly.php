@@ -99,7 +99,7 @@ class Friendly extends Model {
      * @param array $condition 查询条件
      * @return array 二维数组
      */
-    public function get_friendly_Lists($condition = array(),$field='', $orderby = 'id desc') {
+    public function get_friendly_Lists($condition = array(),$field='*', $orderby = 'id desc') {
             return db('chatfrendly')->field($field)->where($condition)->order($orderby)->select();
     }
 
