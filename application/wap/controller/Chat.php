@@ -22,7 +22,7 @@ class Chat extends MobileMember
         }else{
             $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
-        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name']
+        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name'];
         // 获取 Token 方法
         $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
