@@ -10,15 +10,16 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/upload.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body>
+<body ontouchstart>
 
     <div class="body_content">
         <header class="head">
@@ -37,8 +38,9 @@
         </header>
 
         <div class="upload_video">
-            <img class="back" src="../content/images/teachchild/video.jpg" alt="">
-            <img class="ply" src="../content/images/teachchild/video_ply.png" alt="">
+            <video class="back" src="http://pgj4a41j8.bkt.clouddn.com/5a802948d494d4d9d91f0dab1e27cd7d.mp4" autoplay poster="../content/images/teachchild/video.jpg"></video>
+            <!-- <img class="" src="../content/images/teachchild/video.jpg" alt=""> -->
+            <img class="ply" onclick="PlayVideo(this)" src="../content/images/teachchild/video_ply.png" alt="">
         </div>
 
         <!-- 表单 -->
@@ -102,7 +104,13 @@
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label for="category" class="weui-label">类别</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input input_txt inputpointer" id="category" type="text" placeholder="请选择" value="" />
+                    <input class="weui-input input_txt inputpointer" id="category" type="text" placeholder="请选择类别" value="" />
+                </div>
+            </div>
+            <div class="weui-cell bang_list isKemu" style="display: none">
+                <div class="weui-cell__hd name_box"><label for="category" class="weui-label">科目</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_txt inputpointer" id="kemu" type="text" placeholder="请选择科目" value="" />
                 </div>
             </div>
             <div class="weui-cell bang_list">
@@ -115,9 +123,9 @@
             </div>
         </div>
         <div id="priceBottom" class="weui-popup__container popup-bottom">
-
+        
             <div class="weui-popup__overlay"></div>
-
+        
             <div class="weui-popup__modal">
                 <div class="body_content">
                     <header class="head">
@@ -143,19 +151,22 @@
                     <input type="number" min="1" name="" value="" placeholder="自定义价格">
                 </div>
             </div>
-        </div>
+            </div>
 
         <div class="operating">
-            <p><button type="button" name="button">确认上传</button></p>
-            <p><button type="button" name="button">删除并退出</button></p>
+            <p><button type="button" name="button" onclick="isUpload(0)">确认上传</button></p>
+            <p><button type="button" name="button" onclick="isUpload(1)">删除并退出</button></p>
         </div>
 
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
-    <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
+    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
+    <script src="../content/plugins/jqweui/js/class-picker.js"></script>
     <script src="../content/scripts/teachchild/upload.js"></script>
     <script>
         $(function() {
@@ -168,11 +179,6 @@
                 }
                 $("#currentSize").html(size);
             })
-
-            // 验证提示
-            $(document).on("click", "#show-alert", function() {
-                $.alert("请填写手机号！", "警告！");
-            });
         })
     </script>
 </body>
