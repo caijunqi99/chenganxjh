@@ -48,7 +48,7 @@ class Lookchild
                 $user['username']=$res['username'];
                 $user['pwd']='123456';
                 //$url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$schoolid;
-                $url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid=85';
+                $url='http://101.201.75.83:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid=85';
                 $html = json_decode(file_get_contents($url),true);
 //                $urlcl='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$classid;
 //                $htmlcl = json_decode(file_get_contents($urlcl),true);
