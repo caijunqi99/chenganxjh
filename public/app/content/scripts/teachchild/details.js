@@ -15,6 +15,9 @@ $(function() {
         success: function(response) {
             $('#related').html(HTML(response['result']))
             // myPlayer = videojs('my-player');
+            if(user_token){
+                $('#video_screen').hide();
+            }
         }
     })
 
@@ -26,6 +29,11 @@ $(function() {
     //         }
     //     })
     // }, 1000)
+
+    if(user_token){
+       $('#video_screen').hide();
+    }
+
 
     // 添加观看记录
     function addHistory() {
@@ -58,6 +66,9 @@ $(function() {
 
     // 收藏视频
     collectVideo = function(event) {
+        if(!user_token){
+         $.toast('请前往登陆','forbidden');return false;
+        }
         $.ajax({
             url: api + '/teachercollect/collect',
             type: 'POST',
@@ -65,7 +76,7 @@ $(function() {
             data: {
                 key: user_token,
                 member_id: user_member_id,
-                tid: $('#my-player').get(0).dataset.id
+                tid: $('#my-player').attr('data-id')
             },
             success: function(response) {
                 if (response['code'] == 200) {
@@ -83,8 +94,9 @@ $(function() {
         var List = '';
         var price = '';
         for (var i = 0; i < data[1]['lists'].length; i++) {
+            var v_url = http_url+"app/teachchild/details.html?id="+ data[1]['lists'][i]['t_id'];
             List += '<li class="related_list_li clearBoth">' +
-                '<a href="details.html?id=' + data[1]['lists'][i]['t_id'] + '" >' +
+                '<a href="javascript:;" onclick="videoClick('+v_url+')" >' +
                 '<div class="img_wrap float_left">' +
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
@@ -99,18 +111,7 @@ $(function() {
         } else {
             price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
         }
-        //  '<div class="video_wrap">'+
-        // 	'<video'+
-        // 	' id="my-player"'+
-        // 	' class="video-js"'+
-        // 	' data-id="'+ data[0]['data']['t_id'] +'"'+
-        // 	' controls'+
-        // 	' preload="auto"'+
-        // 	// ' src="'+ data[0]['data']['t_url'] +'"'+
-        // 	' poster="'+ data[0]['data']['t_videoimg'] +'">'+
-        // 	'<source src="'+ data[0]['data']['t_url'] +'" type="video/mp4" />'+
-        // '</div>'+
-        template = '<div class="related_wrap body_content">' +
+        template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
             '<div class="related">' +
             '<div class="related1">' +
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
