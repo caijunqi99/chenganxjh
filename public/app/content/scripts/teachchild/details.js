@@ -16,7 +16,10 @@ $(function() {
             $('#related').html(HTML(response['result']))
             // myPlayer = videojs('my-player');
             if(user_token){
-                $('#video_screen').hide();
+                if(response.result[0]['data'].t_price == 0){
+                    $('#video_screen').hide();
+                }
+
             }
         }
     })
@@ -94,9 +97,8 @@ $(function() {
         var List = '';
         var price = '';
         for (var i = 0; i < data[1]['lists'].length; i++) {
-            var v_url = http_url+"app/teachchild/details.html?id="+ data[1]['lists'][i]['t_id'];
             List += '<li class="related_list_li clearBoth">' +
-                '<a href="javascript:;" onclick="videoClick('+v_url+')" >' +
+                '<a href="javascript:;" onclick="videoClick('+data[1]['lists'][i]['t_id']+');" >' +
                 '<div class="img_wrap float_left">' +
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
@@ -130,3 +132,13 @@ $(function() {
     }
 
 })
+//教孩视频详情
+function videoClick(id){
+    var url = http_url+"app/teachchild/details.html?id="+id;
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.videoClick.postMessage(url);
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.videoClick();
+    } else { //pc
+    };
+}

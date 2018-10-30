@@ -497,7 +497,11 @@
 
     // 判断是否免费
     $("#video_screen").click(function() {
-        $.toast("请前往购买", 'forbidden');
+        if(!user_token){
+            $.toast("请前往登陆", 'forbidden');
+        }else{
+            $.toast("请前往购买", 'forbidden');
+        }
     });
 </script>
 

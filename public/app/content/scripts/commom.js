@@ -74,12 +74,3 @@ function reLoad(){
     location.reload()
 }
 
-//教孩视频详情
-function videoClick(){
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.videoClick.postMessage('http://www.baidu.com');
-    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.videoClick();
-    } else { //pc
-    };
-}
