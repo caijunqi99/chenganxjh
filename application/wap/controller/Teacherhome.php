@@ -81,7 +81,7 @@ class Teacherhome extends MobileMall
     public function lists(){
         $teachchild = model('Teachchild');
 
-        $page = !empty(input('post.page')) ? input('post.page'): 0;
+        $page = !empty(input('post.page')) ? input('post.page'): 1;
         $where = "t_audit=3";
         if(!empty(input('post.type'))) {
             $where .= " and t_type=".input('post.type');
