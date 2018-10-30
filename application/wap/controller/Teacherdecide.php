@@ -9,8 +9,7 @@
 namespace app\wap\controller;
 
 
-//class Teacherdecide extends MobileMember
-class Teacherdecide
+class Teacherdecide extends MobileMember
 {
     public function _initialize()
     {
@@ -23,24 +22,30 @@ class Teacherdecide
         if(empty($video_id)){
             output_error('video_id参数有误');
         }
-        $video_id = intval(input('post.video_id'));
-        if(empty($video_id)){
-            output_error('video_id参数有误');
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('member_id参数有误');
         }
-        $teachchild = model('Teachchild');
-
-        $result[]['data'] = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
-        $conditions = array();
-        $conditions['t_audit'] = 3;
-        $conditions['t_del'] = 1;
-        $conditions['t_type'] = $result[0]['data']['t_type'];
-        $conditions['t_id'] = array('neq',$result[0]['data']['t_id']);
-        $result[]['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
-        if($result) {
-            output_data($result);
+        //是否收藏
+        $collectinfo = db("membercollect")->where(array('member_id'=>$member_id,'collect_id'=>$video_id,'type_id'=>1,'isdel'=>1))->find();
+        if(!empty($collectinfo)){
+            $data['collect'] = 1;
         }else{
-            output_error('无此视频');
+            $data['collect'] = 0;
         }
+        //是否购买
+        $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$video_id,'order_state'=>20))->order('order_id desc')->limit(1)->find();
+
+        if(!empty($orderinfo)){
+            if($orderinfo['order_dieline']>time()){
+                $data['buy'] = 1;
+            }else{
+                $data['buy'] = 0;
+            }
+        }else{
+            $data['buy'] = 0;
+        }
+        output_data($data);
     }
 
 }
