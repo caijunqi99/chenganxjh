@@ -121,6 +121,12 @@ class Teacherhome extends MobileMall
             $order .= "t_id desc";
         }
         $list = $teachchild->getPageTeachildList($where ,$order,$page);
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        foreach($list as $k=>$v){
+            if($v['t_picture']!=""){
+                $list[$k]['t_picture'] = $path.$v['t_picture'];
+            }
+        }
         if($list){
             output_data($list);
         }else{
