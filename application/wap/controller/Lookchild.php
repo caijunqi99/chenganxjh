@@ -7,7 +7,7 @@
  */
 
 namespace app\wap\controller;
-
+use vomont\Vomont;
 
 class Lookchild
 {
@@ -32,26 +32,31 @@ class Lookchild
                 $data['name']=$res;
                 $sid  = input('post.sid');
                 if(empty($sid)) {
-                    $schoolid = $result[0]['schoolid'];
-                    $classid=$result[0]['classid'];
+                    $schoolid = $result[0]['res_group_id'];
+                    $classid=$result[0]['clres_group_id'];
                 }else{
                     $str=$student->getChildrenInfoByIdes($sid);
-                    $schoolid=$str['schoolid'];
-                    $classid=$str['classid'];
+                    $schoolid=$str['res_group_id'];
+                    $classid=$str['clres_group_id'];
                 }
-                $urls='http://101.201.75.83:8050/?msgid=110&authkey=webuser&username=bjc&pswd=e10adc3949ba59ab';
+                $urls='http://117.78.26.155:8050/?msgid=110&authkey=webuser&username=test&pswd=e10adc3949ba59ab';
                 $res = json_decode(file_get_contents($urls),true);
                 $accountid=$res['accountid'];
                 $user['ip']=$res['vlinkerip'];
                 $user['port']=$res['vlinkerport'];
                 $user['username']=$res['username'];
                 $user['pwd']='123456';
-                $url='http://101.201.75.83:8050/?msgid=115&accountid='.$accountid.'&authkey=webuser&deviceid=365';
+                $url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$schoolid;
                 $html = json_decode(file_get_contents($url),true);
-                foreach($html['device']['channels'] as $k=> $v){
-                    $html['device']['channels'][$k]['status']=$html['device']['online'];
+                $urlcl='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$classid;
+                $htmlcl = json_decode(file_get_contents($urlcl),true);
+                foreach($htmlcl['resources'] as $v){
+                    $html['resources'][]=$v;
                 }
-                $data['camera']=$html['device']['channels'];
+                foreach($html['resources'] as $k=> $v){
+                    $html['resources'][$k]['status']=$v['online'];
+                }
+                $data['camera']=$html['resources'];
                 $data['logo']=$user;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);
