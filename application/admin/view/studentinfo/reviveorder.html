@@ -16,8 +16,9 @@
         <tr class="thead">
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th class="align-center">{$Think.lang.school_index_order}</th>
-            <th class="align-center">{$Think.lang.school_index_sing}</th>
+            <!--<th class="align-center">{$Think.lang.school_index_sing}</th>-->
             <th class="align-center">{$Think.lang.school_index_price}</th>
+            <th class="align-center">状态</th>
             <th class="align-center">{$Think.lang.school_order_dieline}</th>
             <th class="align-center">{$Think.lang.school_order_createtime}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
@@ -26,13 +27,18 @@
         <?php if(!empty($lookOrder) && is_array($lookOrder)){ ?>
         <?php foreach($lookOrder as $k => $v){ ?>
         <tr class="hover member">
-            <td class="align-center"><?php echo $v['order_id']; ?></td>
-            <td class="align-center"><?php echo $v['order_name']; ?></td>
-            <td class="align-center"><?php echo $v['length']; ?></td>
+            <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
+            <td class="align-center"><?php echo $v['pkg_name']; ?></td>
+            <!--<td class="align-center"><?php echo $v['length']; ?></td>-->
             <td class="align-center"><?php echo $v['order_amount']; ?></td>
-            <td class="align-center"><?php echo $v['order_dieline']; ?></td>
-            <td class="align-center"><?php echo $v['finnshed_time']; ?></td>
-            <td class="align-center"><?php echo $v['order_desc']; ?></td>
+            <td class="align-center"><?php if($v['order_state']==10){echo "待付款";}
+            elseif($v['order_state']==20){echo "已付款";}
+            elseif($v['order_state']==30){echo "已发货";}
+            elseif($v['order_state']==40){echo "已收货";}
+            elseif($v['order_state']==0){echo "已取消";}?></td>
+            <td class="align-center"><?php if($v['order_dieline']!=""){echo date("Y-m-d H:i:s",$v['order_dieline']);} ?></td>
+            <td class="align-center"><?php if($v['payment_time']==0){echo "";}else{echo date("Y-m-d H:i:s",$v['payment_time']);} ?></td>
+            <td class="align-center"><?php echo $v['pkg_desc']; ?></td>
         </tr>
         <?php } ?>
         <?php }else { ?>
