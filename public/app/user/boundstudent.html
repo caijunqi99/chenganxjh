@@ -144,6 +144,7 @@
                         values: ['男', '女']
                     }],
                     onClose: function() {
+                        $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
                     },
                 });
@@ -152,6 +153,7 @@
                 $("#date").calendar({
                     onChange: function(p, values, displayValues) {},
                     onClose: function(p, values, displayValues) {
+                        $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
                     },
                 });
@@ -300,19 +302,19 @@
             //绑定学生的提交操作
             $("#bang_submit").click(function() {
                 if ($("#bang_name").val() == '') {
-                    $.alert("请先填写孩子的姓名");return false;
+                    $.toast("请先填写孩子的姓名",'forbidden');return false;
                 } else if ($("#s_card").val() == '') {
-                    $.alert("请先填写身份证号");return false;
+                    $.toast("请先填写身份证号",'forbidden');return false;
                 } else if ($("#city").val() == '') {
-                    $.alert("请选择所在地");return false;
+                    $.toast("请选择所在地",'forbidden');return false;
                 } else if ($("#school").val() == '') {
-                    $.alert("请选择孩子就读学校");return false;
+                    $.toast("请选择孩子就读学校",'forbidden');return false;
                 } else if ($("#classes").val() == '') {
-                    $.alert("请选择孩子所在年级");return false;
+                    $.toast("请选择孩子所在年级",'forbidden');return false;
                 } else if ($("#banji").val() == '') {
-                    $.alert("请选择孩子的班级");return false;
+                    $.toast("请选择孩子的班级",'forbidden');return false;
                 } else if ($("#shibiema").val() == '') {
-                    $.alert("请填写班级识别码");return false;
+                    $.toast("请填写班级识别码",'forbidden');return false;
                 } else {
                     //ActionName：原生中对应的方法名；parameter：回传的参数
                     //json传递参数
@@ -349,11 +351,11 @@
                                     layout();
                                 });
                             }else if(response['code'] == 200){
-                                $.toast(response.result[0]['message'],'',function(){
+                                $.toast('绑定成功','',function(){
                                     historyback();
                                 })
                             }else{
-                                $.toast(response['message'],'forbidden');
+                                $.toast(response['message'],'forbidden');return false;
                             }
                         }
                     });
