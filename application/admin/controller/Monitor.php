@@ -34,7 +34,9 @@ class Monitor extends AdminControl
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
-
+        if($_POST){
+            print_r($_POST);exit;
+        }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
     }

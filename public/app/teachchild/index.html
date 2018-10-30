@@ -21,14 +21,14 @@
 	<body>
 		<ul class="sort_tabs_top"></ul>
 		<div class="sort_block clearBoth" style="display: none"></div>
-		<ul class="sort_tabs" style="display: none"></ul>
+		<!-- <ul class="sort_tabs" style="display: none"></ul> -->
 		<ul class="filter" style="display: none">
 			<div class="filter_top">
 				<div class="body_content clearBoth">
 					<li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
 					<li class="float_left" onclick="sortPrice(0)">查看免费</li>
 					<li class="float_left" onclick="sortPrice(1)">查看付费</li>
-					<li class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></li>
+					<p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
 				</div>
 			</div>
 			<div class="filter_sort">
@@ -163,6 +163,7 @@
 				// 筛选下拉列表
 				$('.filterFilter').on('click', function(event){
 					$('.filter_sort').hide();
+					$('.filterSort').removeClass('float_right_action');
 					var select = event.target.dataset.select;
 					if(select == 'false'){
 						$('.filter_filter').show();

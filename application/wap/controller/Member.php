@@ -291,7 +291,6 @@ class Member extends MobileMember
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-
         output_data($member);
 
     }
