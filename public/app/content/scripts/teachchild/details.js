@@ -14,18 +14,18 @@ $(function() {
         },
         success: function(response) {
             $('#related').html(HTML(response['result']))
-            myPlayer = videojs('my-player');
+            // myPlayer = videojs('my-player');
         }
     })
 
-    setTimeout(function() {
-        myPlayer.on('timeupdate', function(event) {
-            Time++;
-            if (Time == 2) {
-                addHistory();
-            }
-        })
-    }, 1000)
+    // setTimeout(function() {
+    //     myPlayer.on('timeupdate', function(event) {
+    //         Time++;
+    //         if (Time == 2) {
+    //             addHistory();
+    //         }
+    //     })
+    // }, 1000)
 
     // 添加观看记录
     function addHistory() {

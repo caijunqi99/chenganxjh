@@ -57,7 +57,7 @@ class Goods extends MobileMall
             $gg_one['adv_code'] = $upload_file.$gg_one['adv_code'];
         }
         //获取商品
-        $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_jingle,goods_image,goods_price,goods_marketprice,store_id')->order('goods_commend asc')->limit(0,4)->select();
+        $goods = db('goodscommon')->field('goods_commonid,goods_name,goods_jingle,goods_image,goods_price,goods_marketprice,store_id')->order('goods_commend desc')->limit(0,4)->select();
         if(!empty($goods)){
             foreach($goods as $key=>$val){
                 $goods_id = db('goods')->field('goods_id')->where('goods_commonid = "'.$val["goods_commonid"].'"')->find();
