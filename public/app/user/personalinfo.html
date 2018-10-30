@@ -178,7 +178,7 @@
                         $('#email').val(response['result'][0]['member_email']);
                         $('#city').get(0).dataset.code = response['result'][0]['member_provinceid'];
                         $('#city').get(0).dataset.codes = response['result'][0]['member_provinceid'] + ',' + response['result'][0]['member_cityid'] + ',' + response['result'][0]['member_areaid'];
-                        if(response['result'][0]['member_provinceid'] == null || response['result'][0]['member_provinceid'] == 0){
+                        if(response['result'][0]['province_name'] == null || response['result'][0]['member_provinceid'] == 0){
                             $('#city').val('');
                         }else{
                             $('#city').val(response['result'][0]['province_name'] + ' ' + response['result'][0]['city_name'] + ' ' + response['result'][0]['area_name']);
