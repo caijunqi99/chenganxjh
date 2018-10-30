@@ -363,7 +363,7 @@ class Member extends MobileMember
 
         $name = trim(input('post.name'));//姓名
         $sex = intval(input('post.sex'));//性别
-        $birthday = strtotime(trim(input('post.birthday')));//出生日期
+        $birthday = trim(input('post.birthday'));//出生日期
         $province_id = intval(input('post.province'));//省ID
         $city_id = intval(input('post.city'));//市ID
         $area_id = intval(input('post.area'));//区ID

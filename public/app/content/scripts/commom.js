@@ -73,3 +73,4 @@ function GetQueryString(name)
 function reLoad(){
     location.reload()
 }
+
