@@ -108,7 +108,6 @@ class Common extends MobileMall
                     $where .= ' AND areaid = "'.$area.'"';
                 }
             }
-            $where .= ' is_del = 1';
             $school = db('school')->field('name as title,schoolid as value')->where($where)->select();
         }
 
