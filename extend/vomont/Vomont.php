@@ -26,14 +26,14 @@ class Vomont
         $this->authkey  = SDKConfig::KEY;
         $this->username = SDKConfig::VomontUsername;
         $this->pswd     = SDKConfig::VomontPswd;
-        $this->SDK      = new CommandSDK();
     }
 
     /**
      * 登录认证请求
      */
     public function SetLogin(){
-        $msgid = $this->SDK::Login;
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::Login;
         $login = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&username={$this->username}&pswd={$this->pswd}");
         $login = json_decode($login,TRUE);
         $arrayName = array('accountid','companyname','encodekey','signature');
@@ -44,6 +44,9 @@ class Vomont
         $this->aipurl = 'http://'.$login['vlinkerip'].':'.$login['vlinkerport'].'/?';
         return TRUE;
     }
+
+
+
     
 
 
