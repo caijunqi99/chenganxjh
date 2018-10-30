@@ -3,6 +3,7 @@
 namespace app\vlinker\controller;
 
 use think\Lang;
+use vomont\Vomont;//调用物盟SDK
 
 class Vlink extends BaseController {
 
@@ -11,6 +12,16 @@ class Vlink extends BaseController {
         Lang::load(APP_PATH . 'wumeng/lang/zh-cn/index.lang.php');
     }
 
+    public function abcde(){
+    	$vlink = new Vomont();
+    	$aaa= $vlink->testa();
+    	$bbb= $vlink->testb();
+
+    	p($aaa);
+    	echo '-----'.PHP_EOL;
+    	p($bbb);
+
+    }
     /**
      * 添加学校
      */
