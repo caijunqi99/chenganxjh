@@ -20,12 +20,7 @@
     <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
     <!-- <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script> -->
     <script src="../content/scripts/mobile-util.js"></script>
-    <style>
-        .details_header {
-            height: 60px;
-            line-height: 60px;
-        }
-    </style>
+
 </head>
 
 <body ontouchstart>
@@ -38,8 +33,10 @@
         </div>
     </header>
     <div class="video_box">
-        <div class="video_screen" id="video_screen"></div>
-        <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
+        <div class="video_box_inner">
+            <div class="video_screen" id="video_screen"></div>
+            <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
+        </div>
     </div>
     <div id="related">
     </div>
