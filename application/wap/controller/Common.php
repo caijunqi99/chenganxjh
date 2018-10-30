@@ -137,10 +137,9 @@ class Common extends MobileMall
         $arr = '';
         if(!empty($school['typeid'])){
             $type = explode(',',$school['typeid']);
-            halt($type);
             foreach($type as $key=>$value){
                 $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'" AND sc_enabled=1')->find();
-                if(!$name){
+                if(!empty($name)){
                     $arr[$key]['value'] = $name['sc_id'];
                     $arr[$key]['title'] = $name['sc_type'];
                 }
