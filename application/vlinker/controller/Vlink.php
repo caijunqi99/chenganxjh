@@ -99,7 +99,16 @@ class Vlink extends BaseController {
      */
     public function addSchoolNotify(){
     	$input = input();
-		output_data($input);
+    	$schoolid = $input['changeid'];
+    	$groupres = $input['resid']['groupres'];
+    	$res_group_id = $groupres['id'];
+    	$School = model('School');
+    	$addres = $School->school_set($schoolid,'res_group_id',$res_group_id);
+		if ($addres) {
+			output_data($addres);
+		}else{
+			output_error('增加学校资源失败');
+		}
 
     }
 
@@ -108,7 +117,16 @@ class Vlink extends BaseController {
      */
     public function addClassNotify(){
     	$input = input();
-		output_data($input);
+		$classid = $input['changeid'];
+    	$groupres = $input['resid']['groupres'];
+    	$res_group_id = $groupres['id'];
+    	$Class = model('Classes');
+    	$addres = $Class->class_set($classid,'res_group_id',$res_group_id);
+		if ($addres) {
+			output_data($addres);
+		}else{
+			output_error('增加班级资源失败');
+		}
 
     }
 

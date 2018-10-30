@@ -169,8 +169,8 @@ class Chat extends MobileMember
         $Friendly = model('Friendly');
         //查询双方关系
         $myexits = array(
-            'member_id' => $friendInfo['member_id']  ,
-            'friend_id' =>$this->member_info['member_id'] ,
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friendInfo['member_id'] ,
         );
         $myexits = $Friendly->getOne($myexits);
         $state = 4;
@@ -337,28 +337,34 @@ class Chat extends MobileMember
         $myexits = $Friendly->getOne($myexits);
         if(!$frexits)output_error('未收到该账号的好友申请！');
         if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
+        $oreday = false;
         if($myexits){
             if($myexits['relation_state'] ==2 && $frexits['relation_state'] == 2)output_error('你们已经是好友关系啦！');
+            $oreday = true;
         }
         $friendInfo = $Member->getMemberInfo(array('member_id'=>$friend_member_id));
         $time = time();
         try {
             $Friendly->startTrans();
             //双方成为好友
-            $Friendly->friendly_set($frexits['id'],'relation_state',2);
-            $insert =array(
-                'member_id' => $this->member_info['member_id'] ,
-                'friend_id' => $friend_member_id,
-                'relation_state' => 2,
-                'apply_remark' => $frexits['apply_remark'],
-                'friend_remark' =>$friendInfo['member_name'] ,
-                'creat_time' => $time,
-                'from_type' => $friend_member_id,
-                'up_time' => $time,
-            );
+            if ($oreday) { // 已存在申请，直接成为好友
+                $Friendly->friendly_set($myexits['id'],'relation_state',2);
+                $Friendly->friendly_set($myexits['id'],'up_time',$time);
+            }else{
+                $insert =array(
+                    'member_id' => $this->member_info['member_id'] ,
+                    'friend_id' => $friend_member_id,
+                    'relation_state' => 2,
+                    'apply_remark' => $frexits['apply_remark'],
+                    'friend_remark' =>$friendInfo['member_name'] ,
+                    'creat_time' => $time,
+                    'from_type' => $friend_member_id,
+                    'up_time' => $time,
+                );
+                $Friendly->friendly_add($insert);
+            }
             $Friendly->friendly_set($frexits['id'],'relation_state',2);
             $Friendly->friendly_set($frexits['id'],'up_time',$time);
-            $Friendly->friendly_add($insert);
             $Friendly->commit();
             $msg = 'true';
         } catch (Exception $e) {
