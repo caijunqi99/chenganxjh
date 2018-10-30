@@ -21,14 +21,14 @@
 	<body>
 		<ul class="sort_tabs_top"></ul>
 		<div class="sort_block clearBoth" style="display: none"></div>
-		<ul class="sort_tabs" style="display: none"></ul>
+		<!-- <ul class="sort_tabs" style="display: none"></ul> -->
 		<ul class="filter" style="display: none">
 			<div class="filter_top">
 				<div class="body_content clearBoth">
 					<li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
 					<li class="float_left" onclick="sortPrice(0)">查看免费</li>
 					<li class="float_left" onclick="sortPrice(1)">查看付费</li>
-					<li class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></li>
+					<p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
 				</div>
 			</div>
 			<div class="filter_sort">
@@ -163,6 +163,7 @@
 				// 筛选下拉列表
 				$('.filterFilter').on('click', function(event){
 					$('.filter_sort').hide();
+					$('.filterSort').removeClass('float_right_action');
 					var select = event.target.dataset.select;
 					if(select == 'false'){
 						$('.filter_filter').show();
@@ -178,6 +179,10 @@
 									stage[i].className = '';
 								}
 								this.className = 'action';
+								$('.grade').html('');
+								$('.subject').html('');
+								$('.grade span').removeClass('action');
+								$('.subject span').removeClass('action');
 								var parentID = this.dataset.parentid;
 								var ID = this.dataset.id;
 								filterParams['key'] = user_token;
@@ -207,6 +212,8 @@
 				gradeListAction = function(parentID, ID, el, topID){
 					$('.grade span').removeClass('action');
 					$(el).addClass('action');
+					$('.subject').html('');
+					$('.subject span').removeClass('action');
 					filterParams['type2'] = ID;
 					for(var i = 0; i < Index['result'][0]['categorize'].length; i++){
 						if(topID == Index['result'][0]['categorize'][i]['gc_id']){
@@ -295,6 +302,7 @@
 					var top = Index['result'][0]['categorize'];
 					var filtsort = Index['result'][0]['navigate']['subsume']['child'];
 					if(ID == 0){
+						hideFilterBox();
 						$('.sort_block').hide();
 						$('.sort_tabs').hide();
 						$('.filter').hide();
@@ -304,6 +312,7 @@
 						}
 						GetKejian(params)
 					}else if(ID == 2 || ID == 3){
+						hideFilterBox();
 						$('.sort_block').show();
 						$('.sort_tabs').hide();
 						$('.filter').hide();
@@ -329,7 +338,7 @@
 								var params = {
 									key: user_token,
 									type: ID,
-									type2: top[i]['childTwo'][0]['gc_id'],
+									type1: top[i]['childTwo'][0]['gc_id'],
 									subsume: 1
 								}
 								GetKejian(params);
@@ -337,6 +346,22 @@
 								$('.stage').html(stageList(top[i]['childTwo']))
 							}
 						}
+					}
+				}
+
+				// 隐藏筛选框
+				function hideFilterBox(){
+					$('.filterFilter').removeClass('float_right_action');
+					$('.filter_filter').hide();
+					$('.stage span').removeClass('action');
+					$('.grade span').removeClass('action');
+					$('.subject span').removeClass('action');
+					$('.stage').html('');
+					$('.grade').html('');
+					$('.subject').html('');
+					var KEY = Object.keys(filterParams);
+					for(var i = 0; i < KEY.length; i++){
+						filterParams[KEY[i]] = '';
 					}
 				}
 

@@ -478,7 +478,7 @@
         font-size: 28px;
         padding: 15px 0 20px;
     }
-
+    
     .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
         font-size: 30px;
     }
@@ -486,6 +486,7 @@
     .weui-popup__modal .modal-content {
         padding-top: 3rem;
     }
+    
     .screen {
         width: 100%;
         height: 100%;
@@ -517,4 +518,12 @@
     
     .weui-loadmore {
         font-size: 20px;
+    }
+    
+    .no_data {
+        padding-top: 200px;
+        font-size: 28px;
+        color: #ccc;
+        line-height: 100px;
+        text-align: center;
     }

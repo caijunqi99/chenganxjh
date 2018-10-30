@@ -19,7 +19,7 @@
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body ontouchstart>
+<body>
 
     <div class="body_content">
         <header class="head">
@@ -124,9 +124,7 @@
                 </div>
             </div>
             <div id="priceBottom" class="weui-popup__container popup-bottom">
-
                 <div class="weui-popup__overlay"></div>
-
                 <div class="weui-popup__modal">
                     <div class="body_content">
                         <header class="head">
@@ -144,12 +142,11 @@
                         </header>
                     </div>
                     <div class="price_boot_wrap">
-                        <p>￥ 6.00</p>
-                        <p>￥ 12.00</p>
-                        <p>￥ 18.00</p>
-                        <p>￥ 24.00</p>
-                        <p>￥ 30.00</p>
-                        <input type="number" min="1" name="" value="" placeholder="自定义价格">
+                        <div class="http_price_wrap">
+
+                        </div>
+                        <!-- <p>自定义价格</p> -->
+                        <input id="zidingyiinput" type="text" min="1" name="" value="" placeholder="自定义价格">
                     </div>
                 </div>
             </div>
@@ -164,7 +161,6 @@
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
