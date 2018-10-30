@@ -15,7 +15,8 @@ $(function() {
         success: function(response) {
             $('#related').html(HTML(response['result']));
             // myPlayer = videojs('my-player');
-            if(user_token){
+            alert(user_token);
+            if(user_token != '' && user_token != null){
                 if(response.result[0]['data'].t_price == 0){
                     $('#video_screen').hide();
                 }else{
