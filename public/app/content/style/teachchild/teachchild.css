@@ -211,6 +211,22 @@ a:active {
     color: #6bbfc1 !important;
 }
 
+.filter .action span{
+    color: #6bbfc1 !important;
+}
+
+.filter .action i{
+    color: #6bbfc1 !important;
+}
+
+.filterFilter{
+    font-size: 26px
+}
+
+.filterFilter i{
+    font-size: 30px
+}
+
 .filter_sort {
     position: absolute;
     top: 75px;

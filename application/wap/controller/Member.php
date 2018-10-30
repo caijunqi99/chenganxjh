@@ -291,16 +291,7 @@ class Member extends MobileMember
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-
-        if(!empty($member['member_paypwd'])){
-            $url =APP_SITE_URL.'/user/securepwdsuccess.html';
-            output_data(array('status'=>1,'url'=>$url));
-        }else{
-            $url =APP_SITE_URL.'/user/securepwd.html';
-            output_data(array('status'=>2,'url'=>$url));
-        }
-
-
+        output_data($member);
 
     }
     /**
