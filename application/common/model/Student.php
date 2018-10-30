@@ -39,7 +39,7 @@ class Student extends Model {
         $list_paginate = db('student')->alias('s')
             ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
             ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
-            ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id')
+            ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id as clres_group_id')
             ->where('s_id',$chind_id)
             ->find();
         return $list_paginate;
@@ -55,7 +55,7 @@ class Student extends Model {
         $result = db('student')->alias('s')
         ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
         ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
-        ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id')
+        ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id as clres_group_id')
         ->where('s_ownerAccount',$member_id)
         ->whereor('FIND_IN_SET('.$member_id.',s_viceAccount)')
         ->select();
