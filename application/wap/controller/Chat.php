@@ -417,7 +417,6 @@ class Chat extends MobileMember
         );
         $frexits = $Friendly->getOne($frexits);
         if(!$frexits)output_error('你们还不是好友关系！');
-        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
         if($frexits['relation_state']==1)output_error('你还未同意成为好友关系！');
         if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'true'));
         $result = $Friendly->friendly_set($frexits['id'],'friend_remark',$friend_remark);
