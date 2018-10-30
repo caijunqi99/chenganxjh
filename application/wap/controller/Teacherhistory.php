@@ -26,7 +26,8 @@ class Teacherhistory extends MobileMember
         $condition=array();
         $condition['t_userid']=$member_id;
         $condition['t_del']=1;
-        $result=$teachhistory->getTeachhistoryList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $result=$teachhistory->getTeachhistoryList($condition,'',$page,'t_id desc',10);
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['t_maketime']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['t_maketime'])){

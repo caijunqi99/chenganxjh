@@ -27,7 +27,8 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['isdel'] = 1;
         $condition['type_id'] = 1;
-        $result = $collect->getMembercollectList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $result = $collect->getMembercollectList($condition,'',$page,'id desc',10);
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['time'])){

@@ -18,9 +18,13 @@ class Teacherchild extends MobileMember
 
     //我的上传
     public function myUpload(){
+        $member_id = input('post.member_id');
+        if(empty($member_id)){
+            output_error('member_id参数有误');
+        }
         $teachchild = model('Teachchild');
         $condition = array();
-        $condition['t_userid'] = 1;
+        $condition['t_userid'] = $member_id;
         if(input('post.status')){
             if(input('post.status')==3){
                 $condition['t_audit'] = 3;
@@ -30,14 +34,17 @@ class Teacherchild extends MobileMember
         }else{
             $condition['t_audit'] = array('between',array(1,2));
         }
-        $list = $teachchild->getTeachchildList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $list = $teachchild->getTeachchildList($condition,'',$page,'t_id desc',10);
         output_data($list);
     }
 
     //我的视频/我的订单
     public function myVideos(){
         $member_id = input('post.member_id');
-        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->select();
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $start = ($page-1)*10;
+        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->limit($start,10)->select();
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['add_time'])){
