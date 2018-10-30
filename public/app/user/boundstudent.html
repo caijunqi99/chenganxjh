@@ -143,6 +143,10 @@
                         textAlign: 'center',
                         values: ['男', '女']
                     }],
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
                     onClose: function() {
                         $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
@@ -152,6 +156,10 @@
                 //生日选择
                 $("#date").calendar({
                     onChange: function(p, values, displayValues) {},
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
                     onClose: function(p, values, displayValues) {
                         $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
@@ -172,7 +180,7 @@
                         $("#banji").val('');
                     },
                     onOpen: function(){
-                        $('#bang_name,#shibiema').blur();
+                        $('#bang_name,#s_card,#shibiema').blur();
                         $("#screen").addClass("show");
                     },
                     onClose: function(picker) {
@@ -214,7 +222,7 @@
                         $("#banji").val('');
                     },
                     onOpen: function(){
-                        $('#bang_name,#shibiema').blur();
+                        $('#bang_name,#s_card,#shibiema').blur();
                         $("#screen").addClass("show");
                     },
                     onClose: function(p, v, d) {
@@ -252,7 +260,7 @@
                         $("#banji").val('');
                     },
                     onOpen: function(){
-                        $('#bang_name,#shibiema').blur();
+                        $('#bang_name,#s_card,#shibiema').blur();
                         $("#screen").addClass("show");
                     },
                     onClose: function(p, v, d) {
@@ -288,7 +296,7 @@
                     onChange: function(p, v, d) {
                     },
                     onOpen: function(){
-                        $('#bang_name,#shibiema').blur();
+                        $('#bang_name,#s_card,#shibiema').blur();
                         $("#screen").addClass("show");
                     },
                     onClose: function(p, v, d) {
