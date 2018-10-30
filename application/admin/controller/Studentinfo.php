@@ -48,20 +48,13 @@ class Studentinfo extends AdminControl {
         $studentInfo = $model_student->getStudentInfo($condition);
         //主账号
         $member = db('member')->where(['member_id'=>$studentInfo['s_ownerAccount']])->select();
-        if(!empty($member)){
-            $member[0]['member_add_time']=date('Y-m-d H:i:s',$member[0]['member_add_time']);
-        }
-        //副账户
-        if(!empty($studentInfo['s_viceAccount'])){
-            $viceAccountids = explode(',',$studentInfo['s_viceAccount']);
-            foreach ($viceAccountids as $key=>$item){
-                $member_vice = db('member')->where(['member_id'=>$item])->find();
-                $viceAccount[$key]['member_id'] = $member_vice['member_id'];
-                $viceAccount[$key]['member_name'] = $member_vice['member_name'];
-                $viceAccount[$key]['member_desc'] = $member_vice['member_desc'];
-                $viceAccount[$key]['member_add_time'] = date('Y-m-d H:i:s',$member_vice['member_add_time']);
+        //副账号
+        $member_fu = db('member')->where(['is_owner'=>$member[0]['member_id']])->select();
+        $member = array_merge($member,$member_fu);
+        foreach($member as $k=>$v){
+            if($v['member_add_time']!=""){
+                $member[$k]['member_add_time'] = date("Y-m-d H:i:s",$v['member_add_time']);
             }
-            $member = array_merge($member,$viceAccount);
         }
         $this->assign('member', $member);
         $this->setAdminCurItem('lists');
@@ -152,21 +145,21 @@ class Studentinfo extends AdminControl {
                 'text' => '看孩订单',
                 'url' => url('Admin/Studentinfo/order',array('student_id'=>$student_id))
             ),
-            array(
-                'name' => 'teachorder',
-                'text' => '教孩订单',
-                'url' => url('Admin/Studentinfo/teachorder',array('student_id'=>$student_id))
-            ),
+//            array(
+//                'name' => 'teachorder',
+//                'text' => '教孩订单',
+//                'url' => url('Admin/Studentinfo/teachorder',array('student_id'=>$student_id))
+//            ),
             array(
                 'name' => 'reviveorder',
                 'text' => '重温课堂订单',
                 'url' => url('Admin/Studentinfo/reviveorder',array('student_id'=>$student_id))
             ),
-            array(
-                'name' => 'shopping',
-                'text' => '商城订单',
-                'url' => url('Admin/Studentinfo/shopping',array('student_id'=>$student_id))
-            )
+//            array(
+//                'name' => 'shopping',
+//                'text' => '商城订单',
+//                'url' => url('Admin/Studentinfo/shopping',array('student_id'=>$student_id))
+//            )
 //            array(
 //                'name' => 'order',
 //                'text' => '已购套餐',
