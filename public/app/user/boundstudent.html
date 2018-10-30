@@ -213,8 +213,7 @@
                 // 学校就读选择
 
                 var schollID = '';
-                var Oschool = $("#school");
-                Oschool.select({
+                $("#school").select({
                     title: "请选择学校",
                     items: [{}],
                     onChange: function(p, v, d) {
@@ -228,6 +227,7 @@
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
                         schollID = p.data.values;
+                        alert(schollID);
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/grade.html',
