@@ -139,8 +139,10 @@ class Common extends MobileMall
             $type = explode(',',$school['typeid']);
             foreach($type as $key=>$value){
                 $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'" AND sc_enabled=1')->find();
-                $arr[$key]['value'] = $name['sc_id'];
-                $arr[$key]['title'] = $name['sc_type'];
+                if(!$name){
+                    $arr[$key]['value'] = $name['sc_id'];
+                    $arr[$key]['title'] = $name['sc_type'];
+                }
             }
         }
 

@@ -227,7 +227,6 @@
                     onClose: function(p, v, d) {
                         $("#screen").removeClass("show");
                         schollID = p.data.values;
-                        alert(schollID);
                         $.ajax({
                             type: "POST",
                             url: api + '/Common/grade.html',
