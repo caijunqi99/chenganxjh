@@ -471,7 +471,7 @@ class Member extends MobileMember
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-        $res = array();
+
         //查询当前会员绑定的孩子
         $member_student = db('student')->field('s_card,s_ownerAccount')->where(' s_ownerAccount = "'.$member_id.'"')->select();
         //查询绑定手机号是否存在
@@ -483,6 +483,7 @@ class Member extends MobileMember
         if($member_about['is_owner'] != 0){
             output_error('该手机号为副账号，不能添加');
         }
+        $res = array();
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
                 $res[] = $v['s_card'];
@@ -503,7 +504,7 @@ class Member extends MobileMember
                         output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
                         if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){
-                            $result= db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                            $result= db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                             $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                             if ($result) {
                                 $sms = new \sendmsg\Sms();
@@ -521,7 +522,7 @@ class Member extends MobileMember
                         }
                     }
                 }else{
-                    $result = db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                    $result = db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                     $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                     if ($result) {
                         $sms = new \sendmsg\Sms();
@@ -539,7 +540,7 @@ class Member extends MobileMember
                 if(!empty($student)){
                     output_error('该手机号绑定有多个孩子，不能添加');
                 }else{
-                    $result = db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                    $result = db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                     $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                     if ($result) {
                         $sms = new \sendmsg\Sms();
