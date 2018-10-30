@@ -39,20 +39,22 @@ class Lookchild
                     $schoolid=$str['res_group_id'];
                     $classid=$str['clres_group_id'];
                 }
-                $urls='http://117.78.26.155:8050/?msgid=110&authkey=webuser&username=test&pswd=e10adc3949ba59ab';
+                //$urls='http://117.78.26.155:8050/?msgid=110&authkey=webuser&username=test&pswd=e10adc3949ba59ab';
+                $urls='http://101.201.75.83:8050/?msgid=110&authkey=webuser&username=bjc&pswd=e10adc3949ba59ab';
                 $res = json_decode(file_get_contents($urls),true);
                 $accountid=$res['accountid'];
                 $user['ip']=$res['vlinkerip'];
                 $user['port']=$res['vlinkerport'];
                 $user['username']=$res['username'];
                 $user['pwd']='123456';
-                $url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$schoolid;
+                //$url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$schoolid;
+                $url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid=85';
                 $html = json_decode(file_get_contents($url),true);
-                $urlcl='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$classid;
-                $htmlcl = json_decode(file_get_contents($urlcl),true);
-                foreach($htmlcl['resources'] as $v){
-                    $html['resources'][]=$v;
-                }
+//                $urlcl='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$classid;
+//                $htmlcl = json_decode(file_get_contents($urlcl),true);
+//                foreach($htmlcl['resources'] as $v){
+//                    $html['resources'][]=$v;
+//                }
                 foreach($html['resources'] as $k=> $v){
                     $html['resources'][$k]['status']=$v['online'];
                 }
