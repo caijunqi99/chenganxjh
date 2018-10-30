@@ -92,7 +92,7 @@
 
             maxLengths = function(event) {
                 if (event.target.value.length > 6) {
-                    $.toast('支付密码只能有六位数字');
+                    $.toast('支付密码只能有六位数字','forbidden');
                     event.target.value = event.target.value.substring(0, 6);
                 }
             }
@@ -111,7 +111,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    if (response['result']['member_paypwd'] == '') {
+                    if (response.result[0]['member_paypwd'] == '') {
                         $(".shezhi_cont").removeClass("hidden");
                         $(".xiugaipwd").addClass("hidden");
                     } else {
@@ -123,11 +123,11 @@
 
             $('.bang_submit').click('on', function() {
                 if ($('#pwd1').val() == '') {
-                    $.toast('请输入安全密码');return false;
+                    $.toast('请输入安全密码','forbidden');return false;
                 } else if ($('#pwd2').val() == '') {
-                    $.toast('请再一次输入安全密码');return false;
+                    $.toast('请再一次输入安全密码','forbidden');return false;
                 }  else if ($('#pwd2').val() != $('#pwd1').val()) {
-                    $.toast('两次密码不一致，请重新输入');return false;
+                    $.toast('两次密码不一致，请重新输入','forbidden');return false;
                 } else {
                     $.ajax({
                         type: "POST",
@@ -141,13 +141,15 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'],'',function(){
+                                $.toast('修改成功','',function(){
                                     historyback();
                                 })
                             }else if(response['code'] == 400){
-                                layout();
+                                $.toast(response['message'],'forbidden',function(){
+                                    layout();
+                                })
                             } else {
-                                $.alert(response['message'])
+                                $.toast(response['message'],'forbidden');return false;
                             }
                         }
                     });
