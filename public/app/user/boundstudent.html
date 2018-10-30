@@ -144,6 +144,7 @@
                         values: ['男', '女']
                     }],
                     onClose: function() {
+                        $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
                     },
                 });
@@ -152,6 +153,7 @@
                 $("#date").calendar({
                     onChange: function(p, values, displayValues) {},
                     onClose: function(p, values, displayValues) {
+                        $('#bang_name,#shibiema').blur();
                         $("#screen").removeClass("show");
                     },
                 });
