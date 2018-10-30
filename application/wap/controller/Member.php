@@ -485,7 +485,7 @@ class Member extends MobileMember
         }
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
-                $res += $v['s_card'];
+                $res[] = $v['s_card'];
             }
         }
 
