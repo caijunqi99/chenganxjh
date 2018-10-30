@@ -4,13 +4,16 @@
  */
 namespace vomont;
 
-use vomont\Core\VomontTestA;
-use vomont\Lib\VomontTestB;
+use vomont\Core\SDKConfig;
+use vomont\Core\CommandSDK;
 class Vomont
 {   
-
-
-    private $appid;
+    private $http;
+    private $aipurl;
+    protected $authkey;
+    protected $username;
+    protected $pswd;
+    public $SDK = null;
 
     /**
      * 参数初始化
@@ -18,22 +21,36 @@ class Vomont
      * @param $appSecret
      * @param string $format
      */
-    public function __construct($format = 'json') {
-
-        $this->appid='aaaa';
+    public function __construct() {
+        $this->http     = SDKConfig::HTTP_URL;
+        $this->authkey  = SDKConfig::KEY;
+        $this->username = SDKConfig::VomontUsername;
+        $this->pswd     = SDKConfig::VomontPswd;
     }
+
+    /**
+     * 登录认证请求
+     */
+    public function SetLogin(){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::Login;
+        $login = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&username={$this->username}&pswd={$this->pswd}");
+        $login = json_decode($login,TRUE);
+        $arrayName = array('accountid','companyname','encodekey','signature');
+        foreach ($login as $k => $v) {
+            if(in_array($k, $arrayName))$this->$k = $v;
+        }
+        //app使用的ip
+        $this->aipurl = 'http://'.$login['vlinkerip'].':'.$login['vlinkerport'].'/?';
+        return TRUE;
+    }
+
+
+
     
-    public function test(){
-        return $this->appid;
-    }
 
-    public function testa(){
-        $testa = new VomontTestA();
-        return $testa->testa();
-    }
-    public function testb(){
-        $testb = new VomontTestB();
-        return $testb->testb();
-    }
+
+
+
     
 }

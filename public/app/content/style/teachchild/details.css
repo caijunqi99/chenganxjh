@@ -3,14 +3,14 @@
     height: 74px;
     line-height: 74px;
     position: fixed;
-    background-color: rgba(0, 0, 0, 0);
+    /* background-color: rgba(0, 0, 0, 0);
     background: -webkit-linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
     /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+    /* background: -o-linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)); */
     /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+    /* background: -moz-linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)); */
     /* Firefox 3.6 - 15 */
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+    /* background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)); */
     /* 标准的语法 */
     z-index: 100;
 }
@@ -184,4 +184,33 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+}
+
+
+/**/
+
+.video_box {
+    padding-top: 70px;
+}
+
+.video_box_inner {
+    position: relative;
+}
+
+.video_screen {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9999999;
+}
+
+.details_header .collectBtn {
+    color: #666;
+}
+
+.details_header .icon-jiantou3 {
+    color: #666;
 }
