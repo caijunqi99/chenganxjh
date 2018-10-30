@@ -81,7 +81,6 @@ class Common extends MobileMall
             output_error('缺少参数token');
         }
         $where = '1=1';
-        $where .= ' is_del = 1';
         $industry = db('industry')->field('name as title,id as value')->where($where)->select();
         output_data($industry);
     }
