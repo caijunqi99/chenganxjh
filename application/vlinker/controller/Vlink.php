@@ -11,19 +11,15 @@ class Vlink extends BaseController {
         parent::_initialize();
         Lang::load(APP_PATH . 'wumeng/lang/zh-cn/index.lang.php');
     }
-
+    
     public function abcde(){
     	$vlink = new Vomont();
-    	$aaa= $vlink->testa();
-    	$bbb= $vlink->testb();
-
-    	p($aaa);
-    	echo '-----'.PHP_EOL;
-    	p($bbb);
+    	$Login= $vlink->SetLogin();
+    	p($vlink);
 
     }
     /**
-     * 添加学校
+     * 添加学校--获取学校列表
      */
     public function addSchool(){
     	$input = input();
@@ -39,7 +35,7 @@ class Vlink extends BaseController {
     }
 
     /**
-     * 编辑学校
+     * 编辑学校--获取学校列表
      * @return [type] [description]
      */
     public function editSchool(){
@@ -57,7 +53,7 @@ class Vlink extends BaseController {
     }
 
     /**
-     * 添加班级
+     * 添加班级--获取班级列表
      */
     public function addClass(){
     	$input = input();
@@ -68,7 +64,7 @@ class Vlink extends BaseController {
     }
 
     /**
-     * 编辑班级
+     * 编辑班级--获取班级列表
      * @return [type] [description]
      */
     public function editClass(){

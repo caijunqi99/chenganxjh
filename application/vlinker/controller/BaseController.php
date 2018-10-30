@@ -1,7 +1,6 @@
 <?php
 
 namespace app\vlinker\Controller;
-use app\vlinker\Core\CommandSDK;
 use think\Controller;
 class BaseController extends Controller
 {
@@ -15,9 +14,10 @@ class BaseController extends Controller
     protected $sdk = null;
     protected $vmid= null;
 
-    public function __construct()
+    public function _initialize()
     {
-        parent::__construct();
+        parent::_initialize();
+        
         
 
     }
