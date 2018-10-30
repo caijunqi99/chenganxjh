@@ -178,6 +178,10 @@
 									stage[i].className = '';
 								}
 								this.className = 'action';
+								$('.grade').html('');
+								$('.subject').html('');
+								$('.grade span').removeClass('action');
+								$('.subject span').removeClass('action');
 								var parentID = this.dataset.parentid;
 								var ID = this.dataset.id;
 								filterParams['key'] = user_token;
@@ -207,6 +211,8 @@
 				gradeListAction = function(parentID, ID, el, topID){
 					$('.grade span').removeClass('action');
 					$(el).addClass('action');
+					$('.subject').html('');
+					$('.subject span').removeClass('action');
 					filterParams['type2'] = ID;
 					for(var i = 0; i < Index['result'][0]['categorize'].length; i++){
 						if(topID == Index['result'][0]['categorize'][i]['gc_id']){
@@ -295,6 +301,7 @@
 					var top = Index['result'][0]['categorize'];
 					var filtsort = Index['result'][0]['navigate']['subsume']['child'];
 					if(ID == 0){
+						hideFilterBox();
 						$('.sort_block').hide();
 						$('.sort_tabs').hide();
 						$('.filter').hide();
@@ -304,6 +311,7 @@
 						}
 						GetKejian(params)
 					}else if(ID == 2 || ID == 3){
+						hideFilterBox();
 						$('.sort_block').show();
 						$('.sort_tabs').hide();
 						$('.filter').hide();
@@ -329,7 +337,7 @@
 								var params = {
 									key: user_token,
 									type: ID,
-									type2: top[i]['childTwo'][0]['gc_id'],
+									type1: top[i]['childTwo'][0]['gc_id'],
 									subsume: 1
 								}
 								GetKejian(params);
@@ -337,6 +345,22 @@
 								$('.stage').html(stageList(top[i]['childTwo']))
 							}
 						}
+					}
+				}
+
+				// 隐藏筛选框
+				function hideFilterBox(){
+					$('.filterFilter').removeClass('float_right_action');
+					$('.filter_filter').hide();
+					$('.stage span').removeClass('action');
+					$('.grade span').removeClass('action');
+					$('.subject span').removeClass('action');
+					$('.stage').html('');
+					$('.grade').html('');
+					$('.subject').html('');
+					var KEY = Object.keys(filterParams);
+					for(var i = 0; i < KEY.length; i++){
+						filterParams[KEY[i]] = '';
 					}
 				}
 

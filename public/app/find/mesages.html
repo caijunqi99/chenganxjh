@@ -38,77 +38,18 @@
         <div class="margt30">
             <div class="container3">
                 <ul class="mesage_list" id="mesage_list">
-                    <li class="open">
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
-                        <div class="mesage_text">
-                            <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
-                        </div>
-                    </li>
-                    <li>
+                    <li onclick="msg_switch($(this))">
                         <h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>
                         <div class="mesage_text">
                             <p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>
                         </div>
                     </li>
                 </ul>
-                <div class="weui-loadmore">
+                <!-- 滚动加载 -->
+                <!-- <div class="weui-loadmore">
                     <i class="weui-loading"></i>
                     <span class="weui-loadmore__tips">正在加载</span>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -117,29 +58,57 @@
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+    <script src="../content/scripts/juqery.cookie.js"></script>
+    <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $(function() {
-            $(".mesage_list>li").click(function() {
-                $(this).addClass("open");
-                $(this).siblings().removeClass("open");
-            });
-        })
-
-        var loading = false;
-        $(document.body).infinite().on("infinite", function() {
-            if (loading) return;
-            loading = true;
-            setTimeout(function() {
-                $("#mesage_list").append('<li>' +
-                    '<h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>' +
-                    '<div class="mesage_text">' +
-                    '<p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>' +
-                    '</div>' +
-                    '</li>');
-                loading = false;
-            }, 2000);
+        $.ajax({
+            type: "POST",
+            url: api + "/Membermessage/systemmsg.html",
+            data: {
+                key: user_token
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response["result"]);
+                $("#mesage_list").html(HTML(response["result"]));
+            }
         });
+
+        function HTML(data) {
+            var template = "";
+            for (i = 0; i < data.length; i++) {
+                template += '<li onclick="msg_switch($(this))">' +
+                    '<h3 class="mesage_title">' + data[i].from_member_name + '<span class="date">' + data[i]["message_time"] + '</span></h3>' +
+                    '<div class="mesage_text">' +
+                    '<p class="mesage_text_p">' + data[i]["message_body"] + '</p>' +
+                    '</div>' +
+                    '</li>';
+            }
+            return template;
+        }
+
+        // 消息展开关闭
+        function msg_switch(obj) {
+            obj.addClass("open");
+            obj.siblings().removeClass("open");
+        }
+
+        // 滚动加载
+        // var loading = false;
+        // $(document.body).infinite().on("infinite", function() {
+        //     if (loading) return;
+        //     loading = true;
+        //     setTimeout(function() {
+        //         $("#mesage_list").append('<li>' +
+        //             '<h3 class="mesage_title">提现成功<span class="date">2018年6月1日</span></h3>' +
+        //             '<div class="mesage_text">' +
+        //             '<p class="mesage_text_p">10点10分提现100元成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功提现成功</p>' +
+        //             '</div>' +
+        //             '</li>');
+        //         loading = false;
+        //     }, 2000);
+        // });
     </script>
 </body>
 

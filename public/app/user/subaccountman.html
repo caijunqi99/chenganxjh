@@ -164,7 +164,7 @@
             // 打开添加副账户popup
             $("#open_popup").click(function() {
                 if ($('.subacc_list').length >= 5) {
-                    $.alert('只能添加5个副帐号，已不能再添加了！')
+                    $.toast('只能添加5个副帐号，已不能再添加了！','forbidden');return false;
                 } else {
                     $("#full").popup();
                 }
@@ -173,9 +173,9 @@
             //提交添加的副帐户
             $(document).on("click", ".close-popup_add", function() {
                 if (Tools.IsNull($('#nickname').val())) {
-                    $.alert('请输入亲属关系');
+                    $.toast('请输入亲属关系','forbidden');return false;
                 } else if (!Tools.IsPhoneNum($('#phone').val()) || Tools.IsNull($('#phone').val())) {
-                    $.alert('请输入正确的电话号码')
+                    $.toast('请输入您的手机号','forbidden');return false;
                 } else {
                     // 添加副帐号
                     $.ajax({
@@ -190,13 +190,17 @@
                         dataType: "json",
                         success: function(response) {
                          if(response['code'] == 400){
-                                layout();
-                         }else{
+                             $.toast(response['message'],'forbidden',function(){
+                                 layout();
+                             })
+                         }else if(response['code'] == 200){
                              $.alert("添加成功！", "提示", function() {});
                              list();
                              $("#nickname").val("");
                              $("#phone").val("");
                              $.closePopup(); //关闭添加popup弹窗
+                         }else{
+                             $.toast(response['message'],'forbidden');return false;
                          }
 
                         }

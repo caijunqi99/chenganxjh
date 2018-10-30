@@ -304,6 +304,7 @@
     color: #6b6b6b;
     padding: 30px 30px 30px 40px;
     position: relative;
+    text-align: center;
 }
 
 .schooladdress .icon {
@@ -1089,7 +1090,7 @@ a.lookall {
     font-size: 28px;
     color: #4f4f4f;
     padding: 10px 20px 0;
-    padding-right: 180px;
+    padding-right: 190px;
     position: relative;
     line-height: 60px;
     white-space: nowrap;
@@ -1102,7 +1103,7 @@ a.lookall {
 .mesage_title .date {
     font-size: 24px;
     color: #aaaeae;
-    width: 170px;
+    width: 190px;
     height: 60px;
     line-height: 60px;
     display: block;
@@ -1115,7 +1116,7 @@ a.lookall {
 .mesage_text {
     padding: 10px 20px;
     background: #fff;
-    height: 50px;
+    height: 60px;
     overflow: hidden;
 }
 

@@ -12,29 +12,125 @@ class Vlink extends BaseController {
     }
 
     /**
-     * 获取学校列表
+     * 添加学校
      */
-    public function GetSchoolList(){
+    public function addSchool(){
     	$input = input();
     	$School = model('School');
-    	$Class = model('Classes');
-    	$areaid =$input['areaid'];
-    	$level  =$input['level'];
-    	if ($level > 3) {//获取班级列表
-    		$condition = array(
-	    		'res_group_id' => $areaid,
-	    		'isdel'  => 1,
-	    	);
-    		$schoolList = $Class->getAllAchool($condition,$field);
-    	}
-    	output_data($input);
+    	$areaid = $input['areaid'];
     	$condition = array(
     		'areaid' => $areaid,
     		'isdel'  => 1,
     	);
-    	$field = 'schoolid as res_group_id,name as res_group_name';
+	    $field = 'schoolid as res_group_id,name as res_group_name,areaid';
     	$schoolList = $School->getAllAchool($condition,$field);
     	output_data($schoolList);
     }
 
+    /**
+     * 编辑学校
+     * @return [type] [description]
+     */
+    public function editSchool(){
+    	$input = input();
+    	$School = model('School');
+    	$areaid = $input['areaid'];
+    	$field = 'schoolid as res_group_id,name as res_group_name,areaid';
+    	$schoolInfo = $School->getSchoolInfo(array('isdel'=>1,'res_group_id'=>$areaid),$field);
+    	$condition = array(
+    		'areaid' => empty($schoolInfo)?$areaid:$schoolInfo['areaid'],
+    		'isdel'  => 1,
+    	);
+    	$schoolList = $School->getAllAchool($condition,$field);
+    	output_data($schoolList);
+    }
+
+    /**
+     * 添加班级
+     */
+    public function addClass(){
+    	$input = input();
+    	$Class = model('Classes');
+    	$areaid = $input['areaid'];
+		$classList = $Class->getClassInfoBySchool($areaid);
+		output_data($classList);
+    }
+
+    /**
+     * 编辑班级
+     * @return [type] [description]
+     */
+    public function editClass(){
+    	$input = input();
+    	$Class = model('Classes');
+    	$areaid = $input['areaid'];
+    	$field = 'schoolid,classid,classname';
+    	$classInfo = $Class->getClassInfo(array('isdel'=>1,'res_group_id'=>$areaid),array(),$field);
+    	$areaid = empty($classInfo)?$areaid:$classInfo['schoolid'];
+		$classList = $Class->getClassInfoBySchool($areaid);
+		output_data($classList);
+    }
+
+    /**
+     * 学校资源替换 -- 对应资源id替换
+     * @return [type] [description]
+     */
+    public function editSchoolNotify(){
+    	$input = input();
+    	$resid = $input['resid'];//流媒体资源id
+    	//已替换的班级id
+    	$schoolid = $input['changeid'];
+    	$School = model('School');
+    	$areaid = $input['areaid'];
+    	$field = '*';
+    	$classInfo = $School->getSchoolInfo(array('res_group_id'=>$resid),$field);
+    	$delresid = $School->school_set($classInfo['schoolid'],'res_group_id',0);
+    	$addresid = $School->school_set($schoolid,'res_group_id',$resid);
+    	if ($delresid && $addresid) {
+    		output_data(array('state'=>'true'));
+    	}else{
+    		output_error('false');
+    	}
+
+    }
+
+    /**
+     * 学校资源增加 对应
+     */
+    public function addSchoolNotify(){
+    	$input = input();
+		output_data($input);
+
+    }
+
+    /**
+     * 班级资源增加 对应
+     */
+    public function addClassNotify(){
+    	$input = input();
+		output_data($input);
+
+    }
+
+    /**
+     * 班级资源替换--对应id替换
+     * @return [type] [description]
+     */
+    public function editClassNotify(){
+    	$input = input();
+    	$resid = $input['resid'];//流媒体资源id
+    	//已替换的班级id
+    	$classid = $input['changeid'];
+    	$Class = model('Classes');
+    	$areaid = $input['areaid'];
+    	$field = 'schoolid,classid,classname';
+    	$classInfo = $Class->getClassInfo(array('res_group_id'=>$resid),array(),$field);
+    	$delresid = $Class->class_set($classInfo['classid'],'res_group_id',0);
+    	$addresid = $Class->class_set($classid,'res_group_id',$resid);
+    	if ($delresid && $addresid) {
+    		output_data(array('state'=>'true'));
+    	}else{
+    		output_error('false');
+    	}
+    }
 }

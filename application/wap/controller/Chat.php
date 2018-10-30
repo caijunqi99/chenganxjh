@@ -22,7 +22,7 @@ class Chat extends MobileMember
         }else{
             $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
-        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name']
+        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name'];
         // 获取 Token 方法
         $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
@@ -32,7 +32,7 @@ class Chat extends MobileMember
                 'CloudToken'  => $result['token']
             ));
         }else{
-            output_error('token生成失败！');
+            output_error($result['errorMessage']);
         }
     }
 
@@ -46,6 +46,7 @@ class Chat extends MobileMember
         }else{
             $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
+        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name'];
         $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
@@ -416,7 +417,6 @@ class Chat extends MobileMember
         );
         $frexits = $Friendly->getOne($frexits);
         if(!$frexits)output_error('你们还不是好友关系！');
-        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
         if($frexits['relation_state']==1)output_error('你还未同意成为好友关系！');
         if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'true'));
         $result = $Friendly->friendly_set($frexits['id'],'friend_remark',$friend_remark);
@@ -433,17 +433,20 @@ class Chat extends MobileMember
         if(!$friend_member_id)output_error('好友账号不能为空！');
         $Friendly = model('Friendly');
 
-        //查询的朋友是否给我发送过好友申请
+        //查询是否是朋友关系
         $frexits = array(
             'member_id' => $friend_member_id ,
             'friend_id' => $this->member_info['member_id'] ,
+            'relation_state'=>2,
         );
         $frexits = $Friendly->getOne($frexits);
         $myexits = array(
             'member_id' => $this->member_info['member_id'] ,
             'friend_id' => $friend_member_id ,
+            'relation_state'=>2,
         );
         $myexits = $Friendly->getOne($myexits);
+        //是否是好友关系
         if(!$frexits || !$myexits)output_error('还未创建好友关系！');
 
         $del=array(
@@ -523,6 +526,7 @@ class Chat extends MobileMember
         $input = input();
         $group_owner_id  = isset($input['owner_id'])?(!empty($input['owner_id'])?$input['owner_id']:$this->member_info['member_id']):$this->member_info['member_id'];
         $groupName = isset($input['groupName'])?$input['groupName']:$this->member_info['member_name'].'建立的群聊';
+        if(empty($groupName))$groupName = $this->member_info['member_name'].'创建的群聊';
         //获取群员id
         $members = $input['members'];
         // $members = explode(',', $members);
@@ -757,6 +761,7 @@ class Chat extends MobileMember
         $member_id = $this->member_info['member_id'];
         $groupId = isset($input['group_id'])?$input['group_id']:0;
         $groupName = isset($input['group_name'])?trim($input['group_name']):$this->member_info['member_name'].'创建的群聊';
+        if(empty($groupName))$groupName = $this->member_info['member_name'].'创建的群聊';
         if($groupId==0)output_error('群ID错误！');
         $Group = model('Chatgroup');
         $groupInfo = $Group->getOneById($groupId);

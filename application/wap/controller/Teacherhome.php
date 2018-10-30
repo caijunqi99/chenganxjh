@@ -85,14 +85,14 @@ class Teacherhome extends MobileMall
         if(!empty(input('post.type'))) {
             $condition['t_type'] = input('post.type');
         }
+        if(!empty(input('post.type1'))){
+            $condition['t_type2'] = input('post.type1');
+        }
         if(!empty(input('post.type2'))){
-            $condition['t_type2'] = input('post.type2');
+            $condition['t_type3'] = input('post.type2');
         }
         if(!empty(input('post.type3'))){
-            $condition['t_type3'] = input('post.type3');
-        }
-        if(!empty(input('post.type4'))){
-            $condition['t_type4'] = input('post.type4');
+            $condition['t_type4'] = input('post.type3');
         }
         if(input('post.recommend')&&input('post.recommend')==2){//推荐
             $condition['t_recommend'] = input('post.recommend');
@@ -115,6 +115,11 @@ class Teacherhome extends MobileMall
         if(!empty(input('post.price_fees'))){
             $condition['t_price'] = array('neq',0);
         }
+        $title = input('param.title');//知识点（标题）
+        if ($title) {
+            $condition['t_title'] = array('like', "%" . $title . "%");
+        }
+        $condition['t_audit'] = 3;
         $list = $teachchild->getTeachchildList($condition,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_price,t_userid,t_author', '' ,$order);
         if($list){
             output_data($list);
