@@ -2,7 +2,7 @@ $(function() {
 
     var myPlayer;
     var Time = 1;
-
+    var video = '';
     // 获取详情
     $.ajax({
         url: api + '/Teacherdetail/detail',
@@ -14,7 +14,7 @@ $(function() {
         },
         success: function(response) {
             $('#related').html(HTML(response['result']));
-
+            video = response.result[0]['data']['t_url'];
             // myPlayer = videojs('my-player');
             if(user_token != '' && user_token != null){
                 if(response.result[0]['data'].t_price == 0){
