@@ -45,6 +45,13 @@ class Teacherdecide extends MobileMember
         }else{
             $data['buy'] = 0;
         }
+        //是否免费
+        $free = db('teachchild')->where(array('t_id'=>$video_id))->find();
+        if($free['t_price']!=0){
+            $data['price'] = $free['t_price'];
+        }else{
+            $data['price'] = 0;
+        }
         output_data($data);
     }
 
