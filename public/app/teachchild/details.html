@@ -77,11 +77,16 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
-                        if(res.result[0]['buy'] != 0){
+                        if(res.result[0]['price'] !=0){
+                            if(res.result[0]['buy'] != 0){
+                                $(this).parent().hide();
+                                $("#video").show();
+                            }else{
+                                $.toast("请前往购买", 'forbidden');
+                            }
+                        }else{
                             $(this).parent().hide();
                             $("#video").show();
-                        }else{
-                            $.toast("请前往购买", 'forbidden');
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){
