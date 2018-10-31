@@ -81,8 +81,16 @@ class Monitor extends AdminControl
                 $a.=$v['deviceid'].'-'.$v['channelid'].',';
             }
             $video=$vlink->Resources($accountid,$a);
-            //print_r($video['channels']);exit;
-            $this->assign('video', $video['channels']);
+            $camera=$video['channels'];
+            foreach($camera as $k=>$v){
+                foreach($data as $item){
+                    if($item['channelid']==$v['channelid']){
+                        $camera[$k]['cameraname']=$item['name'];
+                    }
+                }
+            }
+            $this->assign('video', $camera);
+            $this->assign('schoolname',$schoolres['name']);
         }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
