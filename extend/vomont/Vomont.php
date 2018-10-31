@@ -13,7 +13,6 @@ class Vomont
     protected $authkey;
     protected $username;
     protected $pswd;
-    public $SDK = null;
 
     /**
      * 参数初始化
