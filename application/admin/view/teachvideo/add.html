@@ -15,7 +15,8 @@
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
-        ajax.open("POST", "http://www.chenganxjh.com/index.php/Admin/Teachvideo/video_data");
+        //ajax.open("POST", "http://www.chenganxjh.com/index.php/Admin/Teachvideo/video_data");
+        ajax.open("POST", "{:url('Admin/Teachvideo/video_data')}");
         ajax.send(formdata);
     }
 
