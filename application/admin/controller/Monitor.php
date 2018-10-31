@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use think\Lang;
 use think\Validate;
+use vomont\Vomont;
 
 class Monitor extends AdminControl
 {
@@ -35,7 +36,24 @@ class Monitor extends AdminControl
             $this->error(lang('ds_assign_right'));
         }
         if($_POST){
-            print_r($_POST);exit;
+            $schoolid = intval($_POST['school']);
+            $grade=intval($_POST['grade']);
+            $classid=intval($_POST['class']);
+            $model_school = Model('school');
+            $schoolres=$model_school->getSchoolById($schoolid);
+            $shu[]=$schoolres['res_group_id'];
+            if($class!=0){
+                $model_class=Model('classes');
+                $classres=$model_class->getClassById($classid);
+                $shu[]=$classres['res_group_id'];
+            }else{
+
+            }
+            $vlink = new Vomont();
+            //$res= $vlink->SetLogin();
+            $accountid=$res['accountid'];
+            //$data=$vlink->SetPlay($accountid,85);
+            print_r($shu);exit;
         }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
