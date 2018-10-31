@@ -169,8 +169,16 @@
     <script src="../content/plugins/ckplayer/ckplayer.js"></script>
     <script src="../content/scripts/teachchild/upload.js"></script>
     <script>
-        alert(video_url);
-        $('#video_img').attr('src',video_url+'?vframe/jpg/offset/1');
+        fz_video =function(video_url){
+            $('#video_img').attr('src',video_url+'?vframe/jpg/offset/1');
+            var videoObject = {
+                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                autoplay: true, //是否自动播放
+                video:video_url//视频地址
+            };
+            var player = new ckplayer(videoObject);
+        }
 
         $(function() {
             // 反馈意见字数限制
@@ -190,13 +198,7 @@
             $("#video").show();
         });
 
-        var videoObject = {
-            container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-            variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-            autoplay: true, //是否自动播放
-            video:video_url//视频地址
-        };
-        var player = new ckplayer(videoObject);
+
     </script>
 </body>
 
