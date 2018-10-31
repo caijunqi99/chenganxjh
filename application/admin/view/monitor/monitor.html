@@ -94,120 +94,25 @@
         <div class="layui-row layui-col-space10 demo-list">
             <div class="layui-col-sm4">
                 <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="video" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#video', //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: 'rtmp://101.201.75.83/hls/365_1_1',
-                            poster:'http://101.201.75.83:10000/365_1_1.jpg'
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="videos" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript" src="../ckplayer/ckplayer.js"></script>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#videos', //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: 'rtmp://101.201.75.83/hls/365_2_1',
-                            poster:'http://101.201.75.83:10000/365_2_1.jpg'
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="videoa" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#videoa', //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: 'rtmp://101.201.75.83/hls/365_1_1',
-                            poster:'http://101.201.75.83:10000/365_1_1.jpg'
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4">
-            <!-- 填充内容 -->
-            <div class="layui-card">
-                <div id="videob" style="width: 600px; height: 400px;"></div>
-                <script type="text/javascript">
-                    var videoObject = {
-                        container: '#videob', //容器的ID或className
-                        variable: 'player',//播放函数名称
-                        autoplay:false,
-                        live:true,
-                        debug:true,
-                        video: 'rtmp://101.201.75.83/hls/365_2_1',
-                        poster:'http://101.201.75.83:10000/365_2_1.jpg'
-                    };
-                    var player = new ckplayer(videoObject);
-                </script>
-            </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-        </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="videoc" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#videoc', //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: 'rtmp://101.201.75.83/hls/365_1_1',
-                            poster:'http://101.201.75.83:10000/365_1_1.jpg'
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4 ">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="videod" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#videod', //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: 'rtmp://101.201.75.83/hls/365_2_1',
-                            poster:'http://101.201.75.83:10000/365_2_1.jpg'
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
+                <!--<div class="layui-card">-->
+                    <!--<div id="video" style="width: 600px; height: 400px;"></div>-->
+                    <!--<script type="text/javascript">-->
+                        <!--var videoObject = {-->
+                            <!--container: '#video', //容器的ID或className-->
+                            <!--variable: 'player',//播放函数名称-->
+                            <!--autoplay:false,-->
+                            <!--live:true,-->
+                            <!--debug:true,-->
+                            <!--video: 'rtmp://101.201.75.83/hls/365_1_1',-->
+                            <!--poster:'http://101.201.75.83:10000/365_1_1.jpg'-->
+                        <!--};-->
+                        <!--var player = new ckplayer(videoObject);-->
+                    <!--</script>-->
+                <!--</div>-->
+                <!--<p class="info_p">能想<a href="#">4545</a></p>-->
+            <!--</div>-->
+
+
         </div>
     </div>
     <!--<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
@@ -287,7 +192,7 @@
         form.on('select(school)', function(data){
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+data.value,
+                url:ADMIN_URL+'Common/get_school_infos?school='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变年级
@@ -303,7 +208,7 @@
             var school = $('#school').find('option:selected').val();
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+data.value,
+                url:ADMIN_URL+'Common/get_school_infos?school='+school+'&grade='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变班级
