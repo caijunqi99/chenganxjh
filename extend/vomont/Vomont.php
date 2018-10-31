@@ -13,7 +13,6 @@ class Vomont
     protected $authkey;
     protected $username;
     protected $pswd;
-    public $SDK = null;
 
     /**
      * 参数初始化
@@ -42,7 +41,7 @@ class Vomont
         }
         //app使用的ip
         $this->aipurl = 'http://'.$login['vlinkerip'].':'.$login['vlinkerport'].'/?';
-        return TRUE;
+        return $login;
     }
 
 
