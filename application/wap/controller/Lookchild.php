@@ -83,7 +83,7 @@ class Lookchild
                 foreach($html['resources'] as $k=> $v){
                     $html['resources'][$k]['status']=$v['online'];
                 }
-                $data['camera']=$html['resources'];
+                $data['camera']=!empty($html['resources'])?$html['resources']:[];
                 $data['logo']=$user;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);

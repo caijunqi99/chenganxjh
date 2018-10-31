@@ -41,19 +41,48 @@ class Monitor extends AdminControl
             $classid=intval($_POST['class']);
             $model_school = Model('school');
             $schoolres=$model_school->getSchoolById($schoolid);
-            $shu[]=$schoolres['res_group_id'];
-            if($class!=0){
-                $model_class=Model('classes');
+            $shu=array();
+            if($schoolres['res_group_id']!=0) {
+                $shu[] = $schoolres['res_group_id'];
+            }
+            $model_class=Model('classes');
+            if($classid!=0){
                 $classres=$model_class->getClassById($classid);
-                $shu[]=$classres['res_group_id'];
+                if($classres['res_group_id']!=0) {
+                    $shu[] = $classres['res_group_id'];
+                }
             }else{
-
+                $condtion=array();
+                if($grade!=0){
+                    $condtion['typeid']=$grade;
+                }
+                $condtion['schoolid']=$schoolid;
+                $condtion['isdel']=1;
+                $classres=$model_class->getAllClasses($condtion);
+                foreach($classres as $v){
+                    if($v['res_group_id']!=0) {
+                        $shu[] = $v['res_group_id'];
+                    }
+                }
             }
             $vlink = new Vomont();
-            //$res= $vlink->SetLogin();
+            $res= $vlink->SetLogin();
             $accountid=$res['accountid'];
-            //$data=$vlink->SetPlay($accountid,85);
-            print_r($shu);exit;
+            $data='';
+            foreach($shu as $v){
+                $datas=$vlink->SetPlay($accountid,$v);
+                if(empty($data)) {
+                    $data = $datas['resources'];
+                }else{
+                    $data[] = $datas['resources'];
+                }
+            }
+            foreach($data as $v){
+                $a.=$v['deviceid'].'-'.$v['channelid'].',';
+            }
+            $video=$vlink->Resources($accountid,$a);
+            //print_r($video['channels']);exit;
+            $this->assign('video', $video['channels']);
         }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
