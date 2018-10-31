@@ -80,16 +80,8 @@ function videoClick(id){
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
         window.webkit.messageHandlers.videoClick.postMessage(url);
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-<<<<<<< HEAD
         Android.videoClick();
-<<<<<<< HEAD
     } else { //pc
-=======
-=======
-        Android.videoClick(url);
->>>>>>> 2c47e13c69165bd2f75277c42aadb93cf20447ec
-  } else { //pc
->>>>>>> 40b0a506e894da4763f748ca2311d15b1894fbc2
     };
 }
 
