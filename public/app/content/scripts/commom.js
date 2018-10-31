@@ -86,6 +86,6 @@ function videoClick(id){
 }
 
 fz_video = function(video_url,video_image){
-    alert(video_image);alert(video_url);
+    alert(video_image);alert(video_url);return false;
 }
 
