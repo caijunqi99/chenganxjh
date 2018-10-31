@@ -89,9 +89,9 @@ $(function() {
 
 
     // 监听视频播放完时的操作
-    Video.addEventListener('ended', function() {
-        $('.ply').show();
-    });
+    // Video.addEventListener('ended', function() {
+    //     $('.ply').show();
+    // });
 
     // 暂停视频
     $('.back').click(function(event) {
