@@ -384,7 +384,6 @@ class Teachvideo extends AdminControl {
         //获取文件的名字//
         //$key = $data['video_file']['name'];
         $key = "admin_video_".date("YmdHis",time())."_".time().".mp4";
-        print_r($key);die;
         $filePath=$data['video_file']['tmp_name'];
         //获取token值
         $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
