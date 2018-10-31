@@ -110,7 +110,9 @@ class Classes extends Model {
         return $update;
     }
 
-
+    public function getClassById($id){
+        return db('class')->where('classid',$id)->find();
+    }
 
     /**
      * @name 获取某地区编码数
