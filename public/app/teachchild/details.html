@@ -37,7 +37,7 @@
         <div class="video_box_inner">
             <div class="upload_video">
                 <div class="videoimg_box">
-                    <img src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031173334_1540978414.mp4?vframe/jpg/offset/1" />
+                    <img id="video_image" src="" />
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
@@ -57,35 +57,44 @@
 <script src="../content/scripts/juqery.cookie.js"></script>
 <script src="../content/scripts/API.js"></script>
 <script src="../content/scripts/commom.js"></script>
-<!-- <script src="https://vjs.zencdn.net/7.2.3/video.js"></script> -->
 <script src="../content/plugins/ckplayer/ckplayer.js"></script>
 <script src="../content/scripts/teachchild/details.js"></script>
 
 <script>
-    // 判断是否免费
-    $("#video_screen").click(function() {
+    // 播放视频
+    $(".video_play_btn").click(function() {
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');
         }else{
-            $.toast("请前往购买", 'forbidden');
+            $.ajax({
+                type:'POST',
+                url:api+'/Teacherdecide/decide.html',
+                data:{
+                    key:user_token,
+                    member_id:user_member_id,
+                    video_id:GetQueryString("id")
+                },
+                dataType: "json",
+                success: function(res){
+                    if(res['code'] == 200){
+                        if(res.result[0]['buy'] != 0){
+                            $(this).parent().hide();
+                            $("#video").show();
+                        }else{
+                            $.toast("请前往购买", 'forbidden');
+                        }
+                    }else if(res['code'] == 400){
+                        $.toast('登陆失效，请重新登录','forbidden',function(){
+                            layout();
+                        });
+                    }else{
+                        $.toast('系统错误','forbidden');
+                    }
+                }
+            })
+
         }
     });
-
-    // 播放视频
-    $(".video_play_btn").click(function() {
-        $(this).parent().hide();
-        $("#video").show();
-    });
-    alert(v_url);
-    var videoObject = {
-        container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-        variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-        autoplay: true, //是否自动播放
-        video:v_url//视频地址
-    };
-    var player = new ckplayer(videoObject);
-
-
 
 </script>
 

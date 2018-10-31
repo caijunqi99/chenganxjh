@@ -2,7 +2,6 @@ $(function() {
 
     var myPlayer;
     var Time = 1;
-    var v_url = '';
     // 获取详情
     $.ajax({
         url: api + '/Teacherdetail/detail',
@@ -15,52 +14,16 @@ $(function() {
         success: function(response) {
             v_url = response.result[0]['data']['t_url'];
             $('#related').html(HTML(response['result']));
-            // myPlayer = videojs('my-player');
-            if(user_token != '' && user_token != null){
-                if(response.result[0]['data'].t_price == 0){
-                    $('#video_screen').hide();
-                }else{
-                    $.ajax({
-                        type:'POST',
-                        url:api+'/Teacherdecide/decide.html',
-                        data:{
-                            key:user_token,
-                            member_id:user_member_id,
-                            video_id:response.result[0]['data'].t_id
-                        },
-                        dataType: "json",
-                        success: function(res){
-                            if(res['code'] == 200){
-                                if(res.result[0]['collect'] != 0){
-                                    $('#qxCollect').show();
-                                    $('#collect').hide();
-                                }
-                                if(res.result[0]['buy'] != 0){
-                                    $('#video_screen').hide();
-                                }
-                            }else if(res['code'] == 400){
-                                $.toast('登陆失效，请重新登录','forbidden',function(){
-                                    layout();
-                                });
-                            }else{
-                                $.toast('系统错误','forbidden');
-                            }
-                        }
-                    })
-                }
-
-            }
+            $('#video_image').attr('src',v_url+'?vframe/jpg/offset/1');
+            var videoObject = {
+                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                autoplay: true, //是否自动播放
+                video:v_url//视频地址
+            };
+            var player = new ckplayer(videoObject);
         }
     })
-
-    // setTimeout(function() {
-    //     myPlayer.on('timeupdate', function(event) {
-    //         Time++;
-    //         if (Time == 2) {
-    //             addHistory();
-    //         }
-    //     })
-    // }, 1000)
 
     // 添加观看记录
     function addHistory() {
