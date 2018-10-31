@@ -42,14 +42,10 @@ class Lookchild
                     if(empty($stu)){
                         //请先购买看孩套餐
                         $data['status']=3;
-                        $data = !empty($data)?[$data]:$data;
-                        output_data($data);
                     }else{
                         if($stu['end_time']<time()){
                             //看孩套餐已到期
                             $data['status']=4;
-                            $data = !empty($data)?[$data]:$data;
-                            output_data($data);
                         }else{
                             //获取成功
                             $data['status']=0;
@@ -63,14 +59,10 @@ class Lookchild
                     if(empty($stu)){
                         //请先购买看孩套餐
                         $data['status']=3;
-                        $data = !empty($data)?[$data]:$data;
-                        output_data($data);
                     }else{
                         if($stu['end_time']<time()){
                             //看孩套餐已到期
                             $data['status']=4;
-                            $data = !empty($data)?[$data]:$data;
-                            output_data($data);
                         }else{
                             //获取成功
                             $data['status']=0;
