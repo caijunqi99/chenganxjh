@@ -117,7 +117,7 @@
             <!--<td class="align-center">。。。</td>-->
             <td class="align-center"><?php echo $v['username']; ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['t_maketime']); ?></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['option_time']); ?></td>
+            <td class="align-center"><?php if($v['option_time']!=""){echo date("Y-m-d H:i:s",$v['option_time']);} ?></td>
             <td class="align-center"><?php if($v['t_audit']==1){
                                     echo "待审核";
                                     }elseif($v['t_audit']==2){
