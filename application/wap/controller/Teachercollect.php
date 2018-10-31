@@ -60,19 +60,24 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['collect_id'] = $tid;
         $condition['type_id'] = 1;
-        $condition['isdel'] = 1;
         $collect = model('Membercollect');
         $res = $collect->getMembercollectInfo($condition);
         $condition['time'] = time();
         if($res){
+            $condition['isdel'] = $res['isdel']==1? 2 : 1;
             $result = $collect->editMembercollect(array('id'=>$res['id']),$condition);
+            if($condition['isdel']==1){
+                output_data([array('data'=>"收藏成功")]);
+            }else{
+                output_data([array('data'=>"取消收藏成功")]);
+            }
         }else {
             $result = $collect->addMembercollect($condition);
-        }
-        if ($result) {
-            output_data([array('data'=>"收藏成功")]);
-        } else {
-            output_error('收藏失败');
+            if ($result) {
+                output_data([array('data'=>"收藏成功")]);
+            } else {
+                output_error('收藏失败');
+            }
         }
     }
 
