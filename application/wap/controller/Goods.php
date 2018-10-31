@@ -35,20 +35,20 @@ class Goods extends MobileMall
         }
 
         //获取类别
-        $type_1 = db('goodsclass')->field('gc_id,gc_name')->where('gc_show =1 AND gc_parent_id=0')->order('gc_sort asc')->select();
+        $type_1 = db('goodsclass')->field('gc_id,gc_name')->where('gc_show =1 AND gc_parent_id=0')->order('gc_sort asc')->limit('0,4')->select();
 
-        if(!empty($type_1)){
+        /*if(!empty($type_1)){
             foreach ($type_1 as $ke=>$va) {
                 $type_2= db('goodsclass')->field('gc_id,gc_name')->where('gc_show =1 AND gc_parent_id="'.$va["gc_id"].'"')->order('gc_sort asc')->find();
                 if(!empty($type_2)){
                     $type[] = db('goodsclass')->field('gc_id,gc_name')->where('gc_show =1 AND gc_parent_id="'.$type_2["gc_id"].'"')->order('gc_sort asc')->find();
                 }
             }
-        }
-        if(!empty($type)){
-            foreach($type as $k=>$v){
-                $type[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?gc_id='.$v['gc_id'];
-                $type[$k]['image'] =$upload_file3.'category-pic-' . $type_1[$k]['gc_id'] . '.jpg';
+        }*/
+        if(!empty($type_1)){
+            foreach($type_1 as $k=>$v){
+                $type_1[$k]['link'] =BASE_SITE_URL.DIR_WAP. '/tmpl/product_list.html?gc_id='.$v['gc_id'];
+                $type_1[$k]['image'] =$upload_file3.'category-pic-' . $v['gc_id'] . '.jpg';
             }
         }
         //获取第一版广告位
@@ -66,7 +66,7 @@ class Goods extends MobileMall
             }
         }
         $result[] =array('gg'=>$gg_one,'cp'=>$goods);
-        $arr[] =array('lb'=>$banner,'type'=>$type,'goods'=>$result);
+        $arr[] =array('lb'=>$banner,'type'=>$type_1,'goods'=>$result);
 
         output_data($arr);
 
