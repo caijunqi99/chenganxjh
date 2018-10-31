@@ -26,10 +26,11 @@
 <body ontouchstart>
     <header class="details_header">
         <div class="goBack body_content">
-            <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+            <a href="javascript:;" class="back_btn" onClick="historyback()">
                 <i class="icon iconfont icon-jiantou3"></i>
             </a>
-            <p class="collectBtn" onclick="collectVideo()">收藏</p>
+            <p class="collectBtn" id="collect" onclick="collectVideo()" style="display: none;">收藏</p>
+            <p class="collectBtn" id="qxCollect" onclick="qxCollectVideo()" style="display: none;">取消收藏</p>
         </div>
     </header>
     <div class="video_box">
@@ -49,6 +50,7 @@
 <script src="../content/plugins/layer/layer.js"></script>
 <script src="../content/scripts/juqery.cookie.js"></script>
 <script src="../content/scripts/API.js"></script>
+<script src="../content/scripts/commom.js"></script>
 <!-- <script src="https://vjs.zencdn.net/7.2.3/video.js"></script> -->
 <script src="../content/plugins/ckplayer/ckplayer.js"></script>
 <script src="../content/scripts/teachchild/details.js"></script>

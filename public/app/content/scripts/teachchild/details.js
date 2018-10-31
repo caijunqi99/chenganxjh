@@ -13,11 +13,40 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
-            $('#related').html(HTML(response['result']))
+            $('#related').html(HTML(response['result']));
             // myPlayer = videojs('my-player');
-            if(user_token){
+            if(user_token != '' && user_token != null){
                 if(response.result[0]['data'].t_price == 0){
                     $('#video_screen').hide();
+                }else{
+                    $.ajax({
+                        type:'POST',
+                        url:api+'/Teacherdecide/decide.html',
+                        data:{
+                            key:user_token,
+                            member_id:user_member_id,
+                            video_id:response.result[0]['data'].t_id
+                        },
+                        dataType: "json",
+                        success: function(res){
+                            if(res['code'] == 200){
+                                if(res.result[0]['collect'] == 0){
+                                    $('#collect').show();
+                                }else{
+                                    $('#qxCollect').show();
+                                }
+                                if(res.result[0]['buy'] != 0){
+                                    $('#video_screen').hide();
+                                }
+                            }else if(res['code'] == 400){
+                                $.toast('登陆失效，请重新登录','forbidden',function(){
+                                    layout();
+                                });
+                            }else{
+                                $.toast('系统错误','forbidden');
+                            }
+                        }
+                    })
                 }
 
             }
@@ -32,11 +61,6 @@ $(function() {
     //         }
     //     })
     // }, 1000)
-
-    if(user_token){
-       $('#video_screen').hide();
-    }
-
 
     // 添加观看记录
     function addHistory() {
@@ -132,13 +156,3 @@ $(function() {
     }
 
 })
-//教孩视频详情
-function videoClick(id){
-    var url = http_url+"app/teachchild/details.html?id="+id;
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.videoClick.postMessage(url);
-    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.videoClick();
-    } else { //pc
-    };
-}

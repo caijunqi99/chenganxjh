@@ -81,6 +81,11 @@ function videoClick(id){
         window.webkit.messageHandlers.videoClick.postMessage(url);
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
         Android.videoClick();
-    } else { //pc
+  } else { //pc
     };
 }
+
+fz_video = function(video_url,video_image){
+    alert(video_image);alert(video_url);
+}
+
