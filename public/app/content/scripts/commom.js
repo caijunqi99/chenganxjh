@@ -80,7 +80,12 @@ function videoClick(id){
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
         window.webkit.messageHandlers.videoClick.postMessage(url);
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.videoClick(url);
-    } else { //pc
+        Android.videoClick();
+  } else { //pc
     };
 }
+
+fz_video = function(video_url,video_image){
+    alert(video_image);alert(video_url);
+}
+
