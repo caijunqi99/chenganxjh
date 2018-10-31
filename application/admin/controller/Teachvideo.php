@@ -327,13 +327,11 @@ class Teachvideo extends AdminControl {
             $insert_array['t_audit'] = 1;
             $insert_array['member_mobile'] = "后台";
             $insert_array['t_maketime'] = time();
-
             //上传视频封面图
-            if($_FILES['video_file']['name']){
+            if($_FILES['video_filename']['name']){
                 $insert_array['t_picture'] = "home/videoimg/".date("YmdHis",time())."_".time().".png";
                 $this->image($insert_array['t_picture']);
             }
-
             //上传视频
             $videoData = $this->video($_FILES);
             $insert_array['t_url'] = $videoData['path'];//视频路径
@@ -362,7 +360,7 @@ class Teachvideo extends AdminControl {
             mkdir($uploadimg_path."home/videoimg/",0777,true);
         }
         //允许上传的文件格式
-        $tp = array("image/gif","image/jpeg","image/jpg","image/png");
+        $tp = array("image/gif","image/jpeg","image/jpg","image/png","image/*");
         //检查上传文件是否在允许上传的类型
         if(!in_array($_FILES["video_filename"]["type"],$tp))
         {
