@@ -527,3 +527,24 @@
         line-height: 100px;
         text-align: center;
     }
+    .videoimg_box {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    .videoimg_box img{
+        width: 100%;
+    }
+    #video {
+        display: none;
+    }
+    .video_play_btn {
+        width: 101px;
+        height: 100px;
+        display: block;
+        background: url(../images/teachchild/video_ply.png) no-repeat;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -50px;
+        margin-top: -50px;
+    }
