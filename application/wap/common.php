@@ -1,7 +1,6 @@
 <?php
 
 function CalculationTime($order_info,$packagetime){
-    $package_end_time = isset($packagetime['end_time'])?$packagetime['end_time']:'';
     $nowTime = !empty($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
     
     $pkg_length = $order_info['pkg_length'];    
@@ -32,6 +31,12 @@ function CalculationTime($order_info,$packagetime){
     }
     return $endTime;
 }
+
+function axisFomat($str){
+    $time_list = config('pkgs_list');
+    return $time_list[$str];
+}
+
 function output_data($datas, $extend_data = array(),$codd=1,$isAssoc = 'false') {
     if(count($datas) == count($datas,1)){
         if(!empty($datas)){

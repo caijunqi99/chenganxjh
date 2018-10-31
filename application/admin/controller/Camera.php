@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use think\Lang;
 use think\Validate;
+use vomont\Vomont;
 
 class Camera extends AdminControl
 {
@@ -343,6 +344,17 @@ class Camera extends AdminControl
         }
 
         exit(json_encode(array('html'=>$html,'count'=>$list_count)));
+
+    }
+    /**
+     * 自动导入摄像头
+     */
+    public function get_camera(){
+        $model_school = Model('school');
+        $schoolres=$model_school->getSchoolById($schoolid);
+        $vlink = new Vomont();
+        $res= $vlink->SetLogin();
+        $accountid=$res['accountid'];
 
     }
 

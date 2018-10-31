@@ -50,7 +50,28 @@ class Packagesbuy extends MobileMember
         $condition=array();
         $condition['pkg_type'] = !empty(input('post.pkg_type'))?input('post.pkg_type'):1;
         $condition['pkg_enabled']=1;
-        $list = $pkg->getPkgList($condition);
+        $field = 'pkg_id,pkg_length,pkg_axis,pkg_length,pkg_name,pkg_price,pkg_cprice,pkg_sort,pkg_type,pkg_desc';
+        $list = $pkg->getPkgLists($condition,'');
+        foreach ($list as $k => &$v) {
+            $str = $v['pkg_length'].'个月';
+            switch ($v['pkg_axis']) {
+                case 'quarter':
+                    $str = ($v['pkg_length']*3).'个月';
+                    break;
+                case 'half':
+                    $str = ($v['pkg_length']*6).'个月';
+                    break;
+                case 'year':
+                    $str = ($v['pkg_length']*12).'个月';
+                    break;
+                
+                default:
+                    $str = $v['pkg_length'].'个月';
+                    break;
+            }
+            $v['pkg_title'] = $str;
+        }
+        unset($v);
         if ($list) {
             output_data($list);
         }else{
@@ -74,9 +95,15 @@ class Packagesbuy extends MobileMember
             }
         }
         if(in_array($this->member_info['client_type'],array('ios','android'))){
-            foreach ($payment_list as $k => $value) {
+            foreach ($payment_list as $k => $v) {
                if(!strpos($payment_list[$k]['payment_code'],'app')){
                    unset($payment_list[$k]);
+               }
+               if ($payment_list[$k]->payment_code== 'wxpay_app'){
+                    $payment_list[$k]->payment_title = 'wxpay_h5';
+               }
+               if ($payment_list[$k]->payment_code=='alipay_app'){
+                    $payment_list[$k]->payment_title = 'alipay_app';
                }
             }
         }
@@ -88,7 +115,21 @@ class Packagesbuy extends MobileMember
      * @return [type] [description]
      */
     public function packages_time_reckon(){
-        output_data(array());
+        $input = input();
+        $PkgTime = model('Packagetime');
+        $pkginfo= json_decode($input['pkginfo'],TRUE);
+        if(!isset($pkginfo['pkg_id']))output_error('参数错误！1');
+        if(!$pkginfo['pkg_id'])output_error('参数错误！2');
+
+        $condition=array(
+            'member_id'=>$this->member_info['member_id'],
+            's_id'=>$input['child_id'],
+            'pkg_type'=>$pkginfo['pkg_type']
+        );
+        $packagetime = $PkgTime->getOnePkg($condition);
+        $pkginfo['finnshed_time'] = time();
+        $end_time = CalculationTime($pkginfo,$packagetime);
+        output_data(array('end_time'=>date('Y-m-d',$end_time)));
 
     }
 
@@ -147,7 +188,7 @@ class Packagesbuy extends MobileMember
             output_error('没有当前孩子信息！');
         }
         $Relation = $Children->checkParentRelation($this->member_info['member_id'],$chind_id);
-//        if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
+       if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
         //加入学生学校班级信息
         if(is_array($childinfo))$order += $childinfo;        
         $order['order_amount'] = $packageInfo['pkg_price'];        
