@@ -25,7 +25,7 @@
         <header class="head">
             <div class="head0">
                 <div class="menu_bar_box">
-                    <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                    <a href="javascript:;" class="back_btn" onClick="historyback();">
                         <i class="icon iconfont icon-jiantou3"></i>
                     </a>
                 </div>
@@ -39,7 +39,7 @@
         <div class="main">
             <div class="upload_video">
                 <div class="videoimg_box">
-                    <img src="http://pgj4a41j8.bkt.clouddn.com/short_video_20181026085952.mp4?vframe/jpg/offset/1" />
+                    <img id="video_img" src="" />
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width:100%; height: 500px;margin-bottom: 30px;"></div>
@@ -169,7 +169,8 @@
     <script src="../content/plugins/ckplayer/ckplayer.js"></script>
     <script src="../content/scripts/teachchild/upload.js"></script>
     <script>
-
+        alert(video_url);
+        $('#video_img').attr('src',video_url+'?vframe/jpg/offset/1');
 
         $(function() {
             // 反馈意见字数限制
@@ -193,7 +194,7 @@
             container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
             variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
             autoplay: true, //是否自动播放
-            video:'http://pgj4a41j8.bkt.clouddn.com/short_video_20181026085952.mp4'//视频地址
+            video:video_url//视频地址
         };
         var player = new ckplayer(videoObject);
     </script>
