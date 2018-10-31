@@ -95,20 +95,6 @@ $(function() {
     }
 
 
-    // 监听视频播放完时的操作
-    Video.addEventListener('ended', function() {
-
-        $('.ply').show();
-    });
-
-    // 暂停视频
-    $('.back').click(function(event) {
-        if (!event.target.paused) {
-            $(this).get(0).pause();
-            $('.ply').show();
-        };
-    });
-
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
