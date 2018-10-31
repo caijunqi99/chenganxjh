@@ -82,9 +82,6 @@ class Teachvideo extends AdminControl {
             $teachtype2 = db('teachtype')->where(array('gc_parent_id'=>$type1))->select();
             $this->assign('teachtype2', $teachtype2);
         }
-        if ($teacher_status) {
-            $condition['status'] = $teacher_status;
-        }
         $teacher_list = $model_teach->getTeachchildList($condition, 15);
         foreach($teacher_list as $k=>$v){
             if($v['member_mobile']=="后台"){
