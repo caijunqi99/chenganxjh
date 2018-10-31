@@ -187,48 +187,12 @@
              v_url = video_url;
         }
 
-        //播放器
         var videoObject = {
-            //playerID:'ckplayer01',//播放器ID，第一个字符不能是数字，用来在使用多个播放器时监听到的函数将在所有参数最后添加一个参数用来获取播放器的内容
-            container: '#video', //容器的ID或className
-            variable: 'player', //播放函数名称
-            loaded: 'loadedHandler', //当播放器加载后执行的函数
-            loop: true, //播放结束是否循环播放
-            poster: v_url+'?vframe/jpg/offset/1', //封面图片
-            config: '', //指定配置函数
-            debug: true, //是否开启调试模式
-            drag: 'start', //拖动的属性
-            seek: 0, //默认跳转的时间
-            video: [
-                [v_url, 'video/mp4', '中文高清', 0],
-            ]
+            container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+            variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+            video:'http://pgj4a41j8.bkt.clouddn.com/short_video_20181026085952.mp4'//视频地址
         };
         var player = new ckplayer(videoObject);
-
-        function loadedHandler() {
-            player.addListener('error', errorHandler); //监听视频加载出错
-            player.addListener('loadedmetadata', loadedMetaDataHandler); //监听元数据
-            player.addListener('duration', durationHandler); //监听播放时间
-            player.addListener('time', timeHandler); //监听播放时间
-            player.addListener('play', playHandler); //监听暂停播放
-            player.addListener('pause', pauseHandler); //监听暂停播放
-            player.addListener('buffer', bufferHandler); //监听缓冲状态
-            player.addListener('seek', seekHandler); //监听跳转播放完成
-            player.addListener('seekTime', seekTimeHandler); //监听跳转播放完成
-            player.addListener('volume', volumeChangeHandler); //监听音量改变
-            player.addListener('full', fullHandler); //监听全屏/非全屏切换
-            player.addListener('ended', endedHandler); //监听播放结束
-            player.addListener('screenshot', screenshotHandler); //监听截图功能
-            player.addListener('mouse', mouseHandler); //监听鼠标坐标
-            player.addListener('frontAd', frontAdHandler); //监听前置广告的动作
-            player.addListener('wheel', wheelHandler); //监听视频放大缩小
-            player.addListener('controlBar', controlBarHandler); //监听控制栏显示隐藏事件
-            player.addListener('clickEvent', clickEventHandler); //监听点击事件
-            player.addListener('definitionChange', definitionChangeHandler); //监听清晰度切换事件
-            player.addListener('speed', speedHandler); //监听加载速度
-        }
-
-
     </script>
 </body>
 
