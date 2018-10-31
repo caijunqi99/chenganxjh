@@ -82,9 +82,6 @@ class Teachvideo extends AdminControl {
             $teachtype2 = db('teachtype')->where(array('gc_parent_id'=>$type1))->select();
             $this->assign('teachtype2', $teachtype2);
         }
-        if ($teacher_status) {
-            $condition['status'] = $teacher_status;
-        }
         $teacher_list = $model_teach->getTeachchildList($condition, 15);
         foreach($teacher_list as $k=>$v){
             if($v['member_mobile']=="后台"){
@@ -320,6 +317,7 @@ class Teachvideo extends AdminControl {
             $insert_array = array();
             $insert_array['t_title'] = input('post.video_name');
             $insert_array['t_desc'] = input('post.video_desc');
+            $insert_array['t_profile'] = input('post.t_profile');
             $insert_array['t_price'] = input('post.video_price');
             $insert_array['t_author'] = input('post.video_author');
             $insert_array['t_type'] = input('post.type1');
@@ -329,13 +327,11 @@ class Teachvideo extends AdminControl {
             $insert_array['t_audit'] = 1;
             $insert_array['member_mobile'] = "后台";
             $insert_array['t_maketime'] = time();
-
             //上传视频封面图
-            if($_FILES['video_file']['name']){
+            if($_FILES['video_filename']['name']){
                 $insert_array['t_picture'] = "home/videoimg/".date("YmdHis",time())."_".time().".png";
                 $this->image($insert_array['t_picture']);
             }
-
             //上传视频
             $videoData = $this->video($_FILES);
             $insert_array['t_url'] = $videoData['path'];//视频路径
@@ -364,7 +360,7 @@ class Teachvideo extends AdminControl {
             mkdir($uploadimg_path."home/videoimg/",0777,true);
         }
         //允许上传的文件格式
-        $tp = array("image/gif","image/jpeg","image/jpg","image/png");
+        $tp = array("image/gif","image/jpeg","image/jpg","image/png","image/*");
         //检查上传文件是否在允许上传的类型
         if(!in_array($_FILES["video_filename"]["type"],$tp))
         {

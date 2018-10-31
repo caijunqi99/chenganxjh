@@ -168,6 +168,8 @@
     <script src="../content/plugins/ckplayer/ckplayer.js"></script>
     <script src="../content/scripts/teachchild/upload.js"></script>
     <script>
+
+
         $(function() {
             // 反馈意见字数限制
             $("#sizeStatistics").on("keyup", function() {
@@ -185,6 +187,13 @@
             $(this).parent().hide();
             $("#video").show();
         });
+
+        var videoObject = {
+            container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+            variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+            video:'http://pgj4a41j8.bkt.clouddn.com/short_video_20181026085952.mp4'//视频地址
+        };
+        var player = new ckplayer(videoObject);
     </script>
 </body>
 

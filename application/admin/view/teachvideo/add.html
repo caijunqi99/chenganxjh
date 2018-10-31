@@ -102,8 +102,15 @@
                         </select></td>
                     <td class="vatop tips"></td>
                 </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="video_desc">{$Think.lang.teacher_index_videodesc}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" id="t_profile" name="t_profile" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
                 <tr>
-                    <td colspan="2" class="required"><label for="video_desc">{$Think.lang.teacher_index_videodesc}:</label></td>
+                    <td colspan="2" class="required"><label for="video_desc">备注:</label></td>
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform"><input type="text" value="" id="video_desc" name="video_desc" class="txt"></td>
@@ -135,7 +142,7 @@
                 video_name: {
                     required: true
                 },
-                video_desc: {
+                t_profile: {
                     required: true
                 },
                 video_type: {
@@ -155,7 +162,7 @@
                 video_name: {
                     required: '{$Think.lang.school_add_name_null}'
                 },
-                video_desc: {
+                t_profile: {
                     required: '{$Think.lang.school_add_desc_null}'
                 },
                 video_type: {
