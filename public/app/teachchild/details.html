@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
-    <!-- <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script> -->
+
     <script src="../content/scripts/mobile-util.js"></script>
 
 </head>
@@ -35,13 +35,35 @@
     </header>
     <div class="video_box">
         <div class="video_box_inner">
-            <div class="upload_video">
-                <div class="videoimg_box">
-                    <img id="video_image" src="" />
-                    <a href="javascript:;" class="video_play_btn"></a>
+            <!--<div class="upload_video">-->
+                <!--<div class="videoimg_box">-->
+                    <!--<img id="video_image" src="" />-->
+                    <!--<a href="javascript:;" class="video_play_btn"></a>-->
+                <!--</div>-->
+                <!--<div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>-->
+                <div class="upload_video">
+                    <!--<div class="video" id="CuPlayer">-->
+                        <!--<script type="text/javascript">-->
+                            <!--var vID = "c1"; //vID-->
+                            <!--var vWidth = "750"; //宽度设定，配合CSS实现-->
+                            <!--var vHeight = "400"; //高度设定，配合CSS实现-->
+                            <!--var vFile = "CuSunV4set.xml"; //配置文件地址:支持五种广告设定-->
+                            <!--var vPlayer = "player.swf?v=4.0"; //播放器文件地址-->
+                            <!--var vPic = "pic/pic01.jpg"; //视频缩略图-->
+                            <!--var vAutoPlay = "none"; //是否自动播放-->
+                            <!--var vEndTime = 0; //预览时间(秒数),默认为0-->
+                            <!--var vLogoPath = "images/logo.png"; //Logo地址-->
+                            <!--var vPlayMod = 0; //播放模式优先级,默认=0,html5优先=1,flash优先=2-->
+                            <!--var vMp4url = "http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4"; //视频文件地址推荐用mp4文件(h264编码)-->
+                        <!--</script>-->
+                        <!--<script class="CuPlayerVideo" data-mce-role="CuPlayerVideo" type="text/javascript" src="../content/plugins/CuPlayerV4/player.min.js"></script>-->
+                    <!--</div>poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4?vframe/jpg/offset/1"-->
+                    <video controls="controls" width="750px" height="400px" preload="none" >
+                        <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+                    </video>
+                    <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
                 </div>
-                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 
@@ -77,11 +99,16 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
-                        if(res.result[0]['buy'] != 0){
-                            $(this).parent().hide();
-                            $("#video").show();
+                        if(res.result[0]['price'] !=0){
+                            if(res.result[0]['buy'] != 0){
+                                $('.video_play_btn').parent().hide();
+                                $("#video").show();
+                            }else{
+                                $.toast("请前往购买", 'forbidden');
+                            }
                         }else{
-                            $.toast("请前往购买", 'forbidden');
+                            $('.video_play_btn').parent().hide();
+                            $("#video").show();
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){
