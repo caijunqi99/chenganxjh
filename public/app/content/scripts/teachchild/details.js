@@ -148,7 +148,7 @@ $(function() {
         var price = '';
         for (var i = 0; i < data[1]['lists'].length; i++) {
             List += '<li class="related_list_li clearBoth">' +
-                '<a href="javascript:;" onclick="videoClick('+data[1]['lists'][i]['t_id']+');" >' +
+                '<a href="details.html?id='+data[1]['lists'][i]['t_id']+'" >' +
                 '<div class="img_wrap float_left">' +
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
