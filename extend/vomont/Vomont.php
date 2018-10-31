@@ -69,6 +69,16 @@ class Vomont
                 }
         return $data;
     }
+    /**
+     * 后台获取播放资源列表
+     */
+    public function Resources($accpuntid,$channels){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::getAllResources;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&pageid=1&pagecount=6&channels={$channels}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
 
 
 
