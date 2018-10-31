@@ -43,7 +43,7 @@
                 <div class="pay_info">
                     <h2 class="pay_dingdan">订单金额：<span></span></h2>
                     <h2 class="pay_detail">订单详情: <span></span></h2>
-                    <p class="pay_remarks">该视频片段购买成功后，24小时内可以重复观看，过24小时需要重新购买才能观看</p>
+                    <p class="pay_remarks"></p>
                 </div>
             </div>
         </div>
@@ -91,6 +91,15 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        $.ajax({
+            type:'POST',
+            url:api+'/Common/site.html',
+            data:{},
+            dataType: 'json',
+            success: function(response){
+                $('.pay_remarks').html('该视频片段购买成功后，'+response.result[0]['value']+'小时内可以重复观看，过'+response.result[0]['value']+'小时需要重新购买才能观看');
+            }
+        })
         $.ajax({
             type:'POST',
             url:api+'/Teacherbuy/buy.html',

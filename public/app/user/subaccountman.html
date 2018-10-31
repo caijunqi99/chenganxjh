@@ -41,7 +41,7 @@
     <div class="main">
         <div class="subacc_info">
             <div class="container2">
-                <p class="subacc_p">您最多可以添加5个副账号，副账号和主账号同等权限</p>
+                <p class="subacc_p"></p>
             </div>
         </div>
 
@@ -106,8 +106,19 @@
     <script src="../content/scripts/regular.js"></script>
 
     <script>
-        $(function() {
 
+        $(function() {
+            var num = '';
+            $.ajax({
+                type:'POST',
+                url:api+'/Common/site.html',
+                data:{},
+                dataType: 'json',
+                success: function(response){
+                    $('.pay_remarks').html('您最多可以添加'+response.result[4]['value']+'个副账号，副账号和主账号同等权限');
+                    num = response.result[4]['value'];
+                }
+            })
             // 获取副账户列表
             function list() {
                 $.ajax({
@@ -163,8 +174,8 @@
 
             // 打开添加副账户popup
             $("#open_popup").click(function() {
-                if ($('.subacc_list').length >= 5) {
-                    $.toast('只能添加5个副帐号，已不能再添加了！','forbidden');return false;
+                if ($('.subacc_list').length >= num) {
+                    $.toast('只能添加'+num+'个副帐号，已不能再添加了！','forbidden');return false;
                 } else {
                     $("#full").popup();
                 }
