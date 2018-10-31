@@ -333,10 +333,13 @@ class Teachvideo extends AdminControl {
                 $this->image($insert_array['t_picture']);
             }
             //上传视频
-            $videoData = $this->video($_FILES);
-            $insert_array['t_url'] = $videoData['path'];//视频路径
-            $insert_array['t_videoimg'] = $videoData['pic'];//默认封面图
-            $insert_array['t_timelength'] = $videoData['time'];//视频时长
+//            $videoData = $this->video($_FILES);
+//            $insert_array['t_url'] = $videoData['path'];//视频路径
+//            $insert_array['t_videoimg'] = $videoData['pic'];//默认封面图
+//            $insert_array['t_timelength'] = $videoData['time'];//视频时长
+            $insert_array['t_url'] = input('post.path')?input('post.path'):"";//视频路径
+            $insert_array['t_videoimg'] = input('post.pic')?input('post.pic'):"";;//默认封面图
+            $insert_array['t_timelength'] = input('post.time')?input('post.time'):"";//视频时长
 
             //验证数据  END
             $result = $model_class->addTeachchild($insert_array);
@@ -413,6 +416,50 @@ class Teachvideo extends AdminControl {
             'time'=>$chang,
         ];
         return $data;
+    }
+
+    public function video_data(){
+        $fileName = $_FILES["file1"]["name"]; // The file name
+        $fileTmpLoc = $_FILES["file1"]["tmp_name"]; // File in the PHP tmp folder
+        $fileType = $_FILES["file1"]["type"]; // The type of file it is
+        $fileSize = $_FILES["file1"]["size"]; // File size in bytes
+        $fileErrorMsg = $_FILES["file1"]["error"]; // 0 for false... and 1 for true
+        if (!$fileTmpLoc) { // if file not chosen
+            echo "ERROR: Please browse for a file before clicking the upload button.";
+            exit();
+        }
+        //获取文件的名字//
+        $key = "admin_video_".date("YmdHis",time())."_".time().".mp4";
+        $filePath=$fileTmpLoc;
+        //获取token值
+        $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
+        $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
+        $WAILIAN='pgj4a41j8.bkt.clouddn.com';
+        // 初始化签权对象
+        $auth = new Auth($accessKey, $secretKey);
+        $bucket = 'avatar';
+        // 生成上传Token
+        $token = $auth->uploadToken($bucket);
+        $uploadMgr = new UploadManager();
+        // 调用 UploadManager 的 putFile 方法进行文件的上传。
+        list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+        // 获取视频的时长
+        // 第一步先获取到到的是关于视频所有信息的json字符串
+        $shichang = file_get_contents('http://'.$WAILIAN.'/'.$key.'?avinfo');
+        // 第二部转化为对象
+        $shi =json_decode($shichang);
+        // 第三部从中取出视频的时长
+        $chang = $shi->format->duration;
+        // 获取封面
+        $vpic = 'http://'.$WAILIAN.'/'.$key.'?vframe/jpg/offset/1';
+        $path ='http://'.$WAILIAN.'/'.$ret['key'];
+        $data = [
+            'path' => $path,
+            'pic' =>$vpic,
+            'time'=>$chang,
+        ];
+        echo json_encode($data);
+        exit;
     }
 
     /**
