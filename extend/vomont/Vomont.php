@@ -43,6 +43,43 @@ class Vomont
         $this->aipurl = 'http://'.$login['vlinkerip'].':'.$login['vlinkerport'].'/?';
         return $login;
     }
+    /**
+     * app获取资源列表
+     */
+    public function SetPlay($accpuntid,$parentid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::ResourcesLists;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&restype=1&parentid={$parentid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
+    /**
+     * app获取用户学校，班级资源列表
+     */
+    public function SetPlays($accpuntid,$schoolid,$classid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::ResourcesLists;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&restype=1&parentid={$schoolid}");
+        $res = json_decode($request,TRUE);
+        $requestcl = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&restype=1&parentid={$classid}");
+        $data=json_decode($requestcl,TRUE);
+        foreach($res['resources'] as $v){
+                    $data['resources'][]=$v;
+                }
+        return $data;
+    }
+    /**
+     * 后台获取播放资源列表
+     */
+    public function Resources($accpuntid,$channels){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::getAllResources;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&pageid=1&pagecount=6&channels={$channels}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
+
+
 
 
 

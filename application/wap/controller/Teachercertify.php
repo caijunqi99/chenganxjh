@@ -35,6 +35,7 @@ class Teachercertify extends MobileMember
         $data['region'] = input('post.region');
         $data['username'] = input('post.username');
         $data['phone'] = input('post.phone');
+        $data['status'] = 1;
         $data['createtime'] = time();
 
         if (empty($data['username'])) output_error('姓名不能为空');

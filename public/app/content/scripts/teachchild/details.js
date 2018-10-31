@@ -2,7 +2,6 @@ $(function() {
 
     var myPlayer;
     var Time = 1;
-
     // 获取详情
     $.ajax({
         url: api + '/Teacherdetail/detail',
@@ -13,30 +12,18 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
-            $('#related').html(HTML(response['result']))
-            // myPlayer = videojs('my-player');
-            if(user_token){
-                if(response.result[0]['data'].t_price == 0){
-                    $('#video_screen').hide();
-                }
-
-            }
+            v_url = response.result[0]['data']['t_url'];
+            $('#related').html(HTML(response['result']));
+            $('#video_image').attr('src',v_url+'?vframe/jpg/offset/1');
+            var videoObject = {
+                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                autoplay: true, //是否自动播放
+                video:v_url//视频地址
+            };
+            var player = new ckplayer(videoObject);
         }
     })
-
-    // setTimeout(function() {
-    //     myPlayer.on('timeupdate', function(event) {
-    //         Time++;
-    //         if (Time == 2) {
-    //             addHistory();
-    //         }
-    //     })
-    // }, 1000)
-
-    if(user_token){
-       $('#video_screen').hide();
-    }
-
 
     // 添加观看记录
     function addHistory() {
@@ -58,6 +45,7 @@ $(function() {
             }
         })
     }
+
 
     // 封装获取ID方法
     function GetPar(name) {
@@ -83,14 +71,40 @@ $(function() {
             },
             success: function(response) {
                 if (response['code'] == 200) {
-                    $.toast(response['result'][0]['data']);
+                    $('#qxCollect').show();
+                    $('#collect').hide();
+                    $.toast('收藏成功');
                 } else {
-                    console.log(response['message']);
+                    $.toast(response['message'],'forbidden');
                 }
             }
         })
     }
 
+    qxCollectVideo = function(event) {
+        if(!user_token){
+            $.toast('请前往登陆','forbidden');return false;
+        }
+        $.ajax({
+            url: api + '/teachercollect/collect',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                key: user_token,
+                member_id: user_member_id,
+                tid: $('#my-player').attr('data-id')
+            },
+            success: function(response) {
+                if (response['code'] == 200) {
+                    $('#qxCollect').hide();
+                    $('#collect').show();
+                    $.toast('取消收藏成功');
+                } else {
+                    $.toast(response['message'],'forbidden');
+                }
+            }
+        })
+    }
     // HTML模板
     function HTML(data) {
         var template = '';
@@ -98,7 +112,7 @@ $(function() {
         var price = '';
         for (var i = 0; i < data[1]['lists'].length; i++) {
             List += '<li class="related_list_li clearBoth">' +
-                '<a href="javascript:;" onclick="videoClick('+data[1]['lists'][i]['t_id']+');" >' +
+                '<a href="details.html?id='+data[1]['lists'][i]['t_id']+'" >' +
                 '<div class="img_wrap float_left">' +
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
@@ -120,7 +134,7 @@ $(function() {
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
             '<div class="related2">' +
-            '<button type="button" name="button">' + price + '</button>' +
+            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>' +
             '</div>' +
             '</div>' +
             '<div class="related_list">' +
@@ -131,14 +145,13 @@ $(function() {
         return template;
     }
 
-})
-//教孩视频详情
-function videoClick(id){
-    var url = http_url+"app/teachchild/details.html?id="+id;
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.videoClick.postMessage(url);
-    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.videoClick();
-    } else { //pc
-    };
+});
+//跳转购买页面
+function pay(t_id){
+    if(user_token){
+        location.href=http_url+"app/user/pay.html?t_id="+t_id;
+    }else{
+        $.toast('请前往登陆','forbidden');
+    }
 }
+

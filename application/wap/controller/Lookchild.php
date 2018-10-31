@@ -15,14 +15,16 @@ class Lookchild
     public function index(){
         $member_id = intval(input('post.member_id'));
         if(empty($member_id)){
-            $data['name']='请登录';
+            //请登录
+            $data['status']=1;
             $data = !empty($data)?[$data]:$data;
             output_data($data);
         }else{
             $student=model('student');
             $result=$student->getAllChilds($member_id);
             if(empty($result)){
-                $data['name']='请绑定学生';
+                //请绑定学生
+                $data['status']=2;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);
             }else {
@@ -31,34 +33,57 @@ class Lookchild
                 }
                 $data['name']=$res;
                 $sid  = input('post.sid');
+                $packtime=model('packagetime');
+                $condition=array();
+                $condition['pkg_type']=1;
                 if(empty($sid)) {
+                    $condition['s_id']=$result[0]['s_id'];
+                    $stu=$packtime->getOnePkg($condition);
+                    if(empty($stu)){
+                        //请先购买看孩套餐
+                        $data['status']=3;
+                    }else{
+                        if($stu['end_time']<time()){
+                            //看孩套餐已到期
+                            $data['status']=4;
+                        }else{
+                            //获取成功
+                            $data['status']=0;
+                        }
+                    }
                     $schoolid = $result[0]['res_group_id'];
                     $classid=$result[0]['clres_group_id'];
                 }else{
+                    $condition['s_id']=$sid;
+                    $stu=$packtime->getOnePkg($condition);
+                    if(empty($stu)){
+                        //请先购买看孩套餐
+                        $data['status']=3;
+                    }else{
+                        if($stu['end_time']<time()){
+                            //看孩套餐已到期
+                            $data['status']=4;
+                        }else{
+                            //获取成功
+                            $data['status']=0;
+                        }
+                    }
                     $str=$student->getChildrenInfoByIdes($sid);
                     $schoolid=$str['res_group_id'];
                     $classid=$str['clres_group_id'];
                 }
-                //$urls='http://117.78.26.155:8050/?msgid=110&authkey=webuser&username=test&pswd=e10adc3949ba59ab';
-                $urls='http://101.201.75.83:8050/?msgid=110&authkey=webuser&username=bjc&pswd=e10adc3949ba59ab';
-                $res = json_decode(file_get_contents($urls),true);
+                $vlink = new Vomont();
+                $res= $vlink->SetLogin();
                 $accountid=$res['accountid'];
                 $user['ip']=$res['vlinkerip'];
                 $user['port']=$res['vlinkerport'];
                 $user['username']=$res['username'];
                 $user['pwd']='123456';
-                //$url='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$schoolid;
-                $url='http://101.201.75.83:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid=85';
-                $html = json_decode(file_get_contents($url),true);
-//                $urlcl='http://117.78.26.155:8050/?msgid=1280&accountid='.$accountid.'&authkey=webuser&restype=1&parentid='.$classid;
-//                $htmlcl = json_decode(file_get_contents($urlcl),true);
-//                foreach($htmlcl['resources'] as $v){
-//                    $html['resources'][]=$v;
-//                }
+                $html=$vlink->SetPlays($accountid,$schoolid,$classid);
                 foreach($html['resources'] as $k=> $v){
                     $html['resources'][$k]['status']=$v['online'];
                 }
-                $data['camera']=$html['resources'];
+                $data['camera']=!empty($html['resources'])?$html['resources']:[];
                 $data['logo']=$user;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);

@@ -28,7 +28,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>重温课堂课程购买</p>
+                <p>教孩视频购买</p>
             </div>
             <div class="head_r">
 
@@ -41,9 +41,9 @@
         <div class="cont">
             <div class="container2">
                 <div class="pay_info">
-                    <h2 class="pay_dingdan">订单金额：<span>￥12.00</span></h2>
-                    <h2 class="pay_detail">订单详情: <span>09:00-09:30</span> <span>化学课重温</span></h2>
-                    <p class="pay_remarks">该视频片段购买成功后，24小时内可以重复观看，过24小时需要重新购买才能观看</p>
+                    <h2 class="pay_dingdan">订单金额：<span></span></h2>
+                    <h2 class="pay_detail">订单详情: <span></span></h2>
+                    <p class="pay_remarks"></p>
                 </div>
             </div>
         </div>
@@ -91,13 +91,63 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        $.ajax({
+            type:'POST',
+            url:api+'/Common/site.html',
+            data:{},
+            dataType: 'json',
+            success: function(response){
+                $('.pay_remarks').html('该视频片段购买成功后，'+response.result[0]['value']+'小时内可以重复观看，过'+response.result[0]['value']+'小时需要重新购买才能观看');
+            }
+        })
+        $.ajax({
+            type:'POST',
+            url:api+'/Teacherbuy/buy.html',
+            data:{
+                key:user_token,
+                tid:GetQueryString('t_id')
+            },
+            dataType: 'json',
+            success: function(response){
+                    if(response['code'] == 200){
+                        $('.pay_dingdan span').html('￥'+response.result[0]['t_price']);
+                        $('.pay_detail span').html('《'+response.result[0]['t_title']+'》，'+response.result[0]['t_profile']);
+                    }else if(response['code'] == 400){
+                        $.toast('请前往登陆','forbidden',function () {
+                            layout();
+                        })
+                    }else{
+                        $.toast(response['message'],'forbidden');
+                    }
+            }
+        });
+
         $(".pay_btn").click(function() {
-            $.confirm("确认支付?", "系统提示", function() {
-                window.location.href = "paysuccess.html"
+            var payment_code = $('input[name=payment_code]:checked').val();
+            var tid = GetQueryString('t_id');
+            $.confirm("确认支付?", "", function() {
+                // window.location.href = "paysuccess.html"
+                $.ajax({
+                    type:'POST',
+                    url:api+'/Teacherbuy/buyOrder.html',
+                    data:{
+                        key:user_token,
+                        member_id:user_member_id,
+                        tid:tid,
+                        payment_code:payment_code
+                    },
+                    dataType: "json",
+                    success: function(response){
+
+                    }
+                })
+
+
             }, function() {
                 //取消操作
             });
         });
+
     </script>
 
 </body>

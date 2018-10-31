@@ -247,5 +247,16 @@ class Common extends MobileMall
         }
 
     }
+    /**
+     * @desc 通用设置
+     * @time 20181031
+     * @author langzhiyao
+     */
+    public function site(){
 
+        $site = db('config')->where(' id >710')->select();
+        output_data($site);
+
+
+    }
 }
