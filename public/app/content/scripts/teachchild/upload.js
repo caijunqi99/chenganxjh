@@ -96,40 +96,39 @@ $(function() {
 
 
     // 监听视频播放完时的操作
-    Video.addEventListener('ended', function() {
-
+    /*Video.addEventListener('ended', function() {
         $('.ply').show();
-    });
+    });*/
 
     // 暂停视频
-    $('.back').click(function(event) {
+    /*$('.back').click(function(event) {
         if (!event.target.paused) {
             $(this).get(0).pause();
             $('.ply').show();
         };
-    });
+    });*/
 
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
             if ($('#bang_name').val() == '') {
-                $.alert("请先填写课程标题");
+                $.toast("请先填写课程标题",'forbidden');
                 return false;
             } else if ($('#aboutValue').val() == '') {
-                $.alert("请先填写课程简介");
+                $.toast("请先填写课程简介",'forbidden');
                 return false;
             } else if ($('#zuozhe').val() == '') {
-                $.alert("请先填写作者的姓名");
+                $.toast("请先填写作者的姓名",'forbidden');
                 return false;
             } else if ($('#category').val() == '') {
-                $.alert("请先选择类别");
+                $.toast("请先选择类别",'forbidden');
                 return false;
             } else if ($('#price').val() == '') {
-                $.alert("请先填写价格");
+                $.toast("请先填写价格",'forbidden');
                 return false;
             } else if (!$('#kemu').is(':hidden')) {
                 if ($('#kemu').val() == '') {
-                    $.alert("请先选择科目");
+                    $.toast("请先选择科目",'forbidden');
                     return false;
                 }
             } else {
@@ -155,22 +154,22 @@ $(function() {
                     params['type4'] = $('#kemu').get(0).dataset.id;
                 }
                 // 上传课件
-                // $.ajax({
-                //     url: api + '/teacherupload/index',
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: params,
-                //     success: function(response){
-                //         if(response['code'] == 200){
-                //
-                //         }else {
-                //             console.log(response['message']);
-                //         }
-                //     }
-                // })
+                $.ajax({
+                    url: api + '/teacherupload/index',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: params,
+                    success: function(response){
+                        if(response['code'] == 200){
+
+                        }else {
+                            console.log(response['message']);
+                        }
+                    }
+                })
             }
         } else {
-            window.history.back(-1);
+            historyback();
         }
     }
 })

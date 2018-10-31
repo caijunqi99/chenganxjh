@@ -30,10 +30,9 @@ $(function() {
                         dataType: "json",
                         success: function(res){
                             if(res['code'] == 200){
-                                if(res.result[0]['collect'] == 0){
-                                    $('#collect').show();
-                                }else{
+                                if(res.result[0]['collect'] != 0){
                                     $('#qxCollect').show();
+                                    $('#collect').hide();
                                 }
                                 if(res.result[0]['buy'] != 0){
                                     $('#video_screen').hide();
@@ -83,6 +82,7 @@ $(function() {
         })
     }
 
+
     // 封装获取ID方法
     function GetPar(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -107,14 +107,40 @@ $(function() {
             },
             success: function(response) {
                 if (response['code'] == 200) {
-                    $.toast(response['result'][0]['data']);
+                    $('#qxCollect').show();
+                    $('#collect').hide();
+                    $.toast('收藏成功');
                 } else {
-                    console.log(response['message']);
+                    $.toast(response['message'],'forbidden');
                 }
             }
         })
     }
 
+    qxCollectVideo = function(event) {
+        if(!user_token){
+            $.toast('请前往登陆','forbidden');return false;
+        }
+        $.ajax({
+            url: api + '/teachercollect/collect',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                key: user_token,
+                member_id: user_member_id,
+                tid: $('#my-player').attr('data-id')
+            },
+            success: function(response) {
+                if (response['code'] == 200) {
+                    $('#qxCollect').hide();
+                    $('#collect').show();
+                    $.toast('取消收藏成功');
+                } else {
+                    $.toast(response['message'],'forbidden');
+                }
+            }
+        })
+    }
     // HTML模板
     function HTML(data) {
         var template = '';
@@ -144,7 +170,7 @@ $(function() {
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
             '<div class="related2">' +
-            '<button type="button" name="button">' + price + '</button>' +
+            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>' +
             '</div>' +
             '</div>' +
             '<div class="related_list">' +
@@ -155,4 +181,13 @@ $(function() {
         return template;
     }
 
-})
+});
+//跳转购买页面
+function pay(t_id){
+    if(user_token){
+        location.href=http_url+"app/user/pay.html?t_id="+t_id;
+    }else{
+        $.toast('请前往登陆','forbidden');
+    }
+}
+
