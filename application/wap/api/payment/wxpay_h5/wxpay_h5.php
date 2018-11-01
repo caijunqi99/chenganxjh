@@ -144,7 +144,7 @@ class wxpay_h5
         $data['body']             = $this->config->orderInfo;
         $data['attach']           = $this->config->orderAttach;
         $data['out_trade_no']     = $this->config->orderSn;
-        $data['total_fee']        = 1;//$this->config->orderFee;
+        $data['total_fee']        = $this->config->orderFee;
         $data['spbill_create_ip'] = $_SERVER['REMOTE_ADDR'];
         $data['notify_url']       = $this->config->notifyUrl;
         $data['trade_type']       = 'MWEB';
@@ -162,7 +162,7 @@ class wxpay_h5
             exception("[{$result['err_code']}]{$result['err_code_des']}");
         }
 
-        return $result['mweb_url'];
+        return $result['mweb_url'].'&redirect_url='.urlencode('vip.xiangjianhai.com://');
     }
 
     public function notify()

@@ -157,8 +157,8 @@ class Teacherbuy extends MobileMember
             $mweburl = $api->get_payurl($this);
 
             output_data($mweburl);
-            $url = $mweburl['mweb_url'];
-            Header("Location: $url");
+            /*$url = $mweburl['mweb_url'];
+            Header("Location: $url");*/
             exit;
         }
         

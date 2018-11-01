@@ -5,7 +5,6 @@ $(function() {
         type: 'POST',
         dataType: 'json',
         success: function(response){
-            console.log(response['result'][0]['price']);
             var template = '';
             price = response['result'][0]['price'];
             for(var i = 0; i < price.length; i++){
@@ -40,7 +39,6 @@ $(function() {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
                                                 if(Three){
-                                                    console.log(Three);
                                                     var params = {
                                                         textAlign: 'center',
                                                         values: []
@@ -148,44 +146,42 @@ $(function() {
                     $.alert("请先选择科目");
                     return false;
                 }
-            } else {
-                var params = {
-                    key: user_token,
-                    member_id: user_member_id,
-                    title: $('#bang_name').val(),
-                    profile: $('#aboutValue').val(),
-                    price: $('#price').val(),
-                    author: $('#zuozhe').val(),
-                }
-                var types = $('#category').get(0).dataset.codes;
-                if (types[1] === types[2]) {
-                    params['type'] = types[0];
-                    params['type2'] = types[1];
-                } else {
-                    params['type'] = types[0];
-                    params['type2'] = types[1];
-                    params['type3'] = types[2];
-                }
-                if (!$('kemu').is(':hidden')) {
-                    params['type4'] = $('#kemu').get(0).dataset.id;
-                }
-                // 上传课件
-                // $.ajax({
-                //     url: api + '/teacherupload/index',
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: params,
-                //     success: function(response){
-                //         if(response['code'] == 200){
-                //
-                //         }else {
-                //             console.log(response['message']);
-                //         }
-                //     }
-                // })
             }
+            var params = {
+                key: user_token,
+                member_id: user_member_id,
+                title: $('#bang_name').val(),
+                profile: $('#aboutValue').val(),
+                price: $('#price').val(),
+                author: $('#zuozhe').val(),
+                url: video_url
+            }
+            var types = $('#category').get(0).dataset.codes;
+            if (types[1] === types[2]) {
+                params['type'] = types.split(',')[0];
+                params['type2'] = types.split(',')[1];
+            } else {
+                params['type'] = types.split(',')[0];
+                params['type2'] = types.split(',')[1];
+                params['type3'] = types.split(',')[2];
+            }
+            // 上传课件
+            $.ajax({
+                url: api + '/teacherupload/index',
+                type: 'POST',
+                dataType: 'json',
+                data: params,
+                success: function(response){
+                    if(response['code'] == 200){
+                        $.toast("上传成功");
+                        // historyback();
+                    }else {
+                        console.log(response['message']);
+                    }
+                }
+            })
         } else {
-            window.history.back(-1);
+            // historyback();
         }
     }
 })
