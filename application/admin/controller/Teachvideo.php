@@ -342,7 +342,9 @@ class Teachvideo extends AdminControl {
             $insert_array['t_timelength'] = input('post.time')?input('post.time'):"";//视频时长
 
             //验证数据  END
-            $result = $model_class->addTeachchild($insert_array);
+            if($insert_array['t_url']!="" && $insert_array['t_videoimg']!=""){
+                $result = $model_class->addTeachchild($insert_array);
+            }
             if ($result) {
                 $this->success(lang('ds_common_save_succ'), url('Admin/Teachvideo/index'));
             } else {
