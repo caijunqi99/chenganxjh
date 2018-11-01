@@ -60,7 +60,6 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        alert(user_token)
         $(function(){
            $.ajax({
                type:'POST',
@@ -115,9 +114,7 @@
                        }
 
                    }else if(response['code'] == '400'){
-                       $.toast(response['message'],'forbidden',function(){
-                           goLogin();
-                       });
+                       $.toast(response['message'],'forbidden');
                    }else{
                        $.toast(response['message'],'forbidden');return false;
                    }
