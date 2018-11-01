@@ -12,14 +12,13 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
-            v_url = response.result[0]['data']['t_url'];
             $('#related').html(HTML(response['result']));
-            $('#video_image').attr('src',v_url+'?vframe/jpg/offset/1');
+            $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
             var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                 autoplay: true, //是否自动播放
-                video:v_url//视频地址
+                video:response.result[0]['data']['t_url'];//视频地址
             };
             var player = new ckplayer(videoObject);
         }
