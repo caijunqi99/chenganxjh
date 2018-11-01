@@ -107,16 +107,12 @@
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
-                                var video=document.getElementById("video_true");
-                                video.play();
                             }else{
                                 $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
-                            var video=document.getElementById("video_true");
-                            video.play();
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){
