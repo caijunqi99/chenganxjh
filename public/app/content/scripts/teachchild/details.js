@@ -149,7 +149,7 @@ $(function() {
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
             '<div class="related2">' +
-            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>' +
+            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ','+data[0]['data']['t_price']+');">' + price + '</button>' +
             '</div>' +
             '</div>' +
             '<div class="related_list">' +
@@ -162,9 +162,11 @@ $(function() {
 
 });
 //跳转购买页面
-function pay(t_id){
+function pay(t_id,t_price){
     if(user_token){
-        location.href=http_url+"app/user/pay.html?t_id="+t_id;
+        if(t_price != 0 || !t_price){
+            location.href=http_url+"app/user/pay.html?t_id="+t_id;
+        }
     }else{
         $.toast('请前往登陆','forbidden');
     }
