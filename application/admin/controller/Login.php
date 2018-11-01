@@ -71,6 +71,7 @@ class Login extends Controller {
                             session('admin_is_super', $admin_info['admin_is_super']);
                             session('admin_company_id', $admin_info['admin_company_id']);
                             session('admin_school_id', $admin_info['admin_school_id']);
+                            session('login_identity', 'admin');
 
                             $this->success('登录成功', 'Admin/Index/index');
                         }

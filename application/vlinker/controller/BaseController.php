@@ -2,6 +2,7 @@
 
 namespace app\vlinker\Controller;
 use think\Controller;
+header("Access-Control-Allow-Origin: *");
 class BaseController extends Controller
 {
     const POST = 'POST';
@@ -16,6 +17,7 @@ class BaseController extends Controller
 
     public function _initialize()
     {
+
         parent::_initialize();
         
         
