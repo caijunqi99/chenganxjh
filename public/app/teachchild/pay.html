@@ -138,22 +138,23 @@
                         tid:tid,
                         payment_code:payment_code
                     },
+                    dataType: 'json',
                     success: function(response){
-                        if (payment_code == 'alipay_app') {
+                        if(payment_code=='wxpay_app'){
+                            var mbs = response.result[0];
+                            if (mbs.result_code== 'SUCCESS') {
+                                payClick(1,mbs);
+                            }
+                        }
+                        /*if (payment_code == 'alipay_app') {
                             $('#gopay').html(response);
                             return ;
                         }
-                        if(payment_code=='wxpay_app'){
-                            response =$.parseJSON(response);
-                            var mbs = response.result[0];
-                            if (mbs.result_code== 'SUCCESS') {
-                                location.href=mbs.mweb_url;return ;
-                            }
-                        }
+
                         jsondata =$.parseJSON(response);
                         if (jsondata.code == 100) {
                             $.alert(jsondata.message,'系统提示');return false;
-                        }
+                        }*/
                     }
                 })
 
