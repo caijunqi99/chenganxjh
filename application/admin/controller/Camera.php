@@ -318,24 +318,37 @@ class Camera extends AdminControl
                 $html .= '<td class="align-center">'.$value["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
                 $html .= '<td class="align-center">'.$value["id"].'</td>';
-                $html .= '<td class="align-center">'.$value["channelid"].'</td>';
-                if($value['is_public_area'] == 1){
-                    $html .= '<td class="align-center">是</td>';
-                }else if($value['is_public_area'] == 2){
-                    $html .= '<td class="align-center">否</td>';
+                if($value['online'] == 1){
+                    $html .= '<td class="align-center">在线</td>';
+                }else if($value['online'] == 0){
+                    $html .= '<td class="align-center">离线</td>';
                 }
-                $html .= '<td class="align-center">'.$value["school_name"].'</td>';
-//                $html .= '<td class="align-center">'.$value["address"].'</td>';
+                $html .= '<td class="align-center">'.$value["parentid"].'</td>';
+                $html .= '<td class="align-center">'.$value["imageurl"].'</td>';
+                $html .= '<td class="align-center">'.$value["rtmpplayurl"].'</td>';
+                if($value['is_classroom'] == 1){
+                    $html .= '<td class="align-center">否</td>';
+                }else if($value['is_classroom'] == 2){
+                    $html .= '<td class="align-center">是</td>';
+                }
+                if($value['status'] == 1){
+                    $html .= '<td class="align-center">开启</td>';
+                }else if($value['status'] == 2){
+                    $html .= '<td class="align-center">关闭</td>';
+                }
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
-                $html .= '<td class="align-center">'.$value["id"].'</td>';
-                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["content"].'</td>';
-                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
-                $html .= '<td class="w150 align-center">
-                        <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
-                $html .=  '</div></td>';
+                $html .= '<td class="align-center">'.$value["begintime"].'</td>';
+                $html .= '<td class="align-center">'.$value["endtime"].'</td>';
+//                $html .= '<td class="align-center">'.$value["address"].'</td>';
+//                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
+//                $html .= '<td class="align-center">'.$value["id"].'</td>';
+//                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
+//                $html .= '<td class="align-center">'.$value["content"].'</td>';
+//                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
+//                $html .= '<td class="w150 align-center">
+//                        <div class="layui-table-cell laytable-cell-9-8">
+//                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
+//                $html .=  '</div></td>';
 
                 $html .= '</tr>';
             }
@@ -397,8 +410,7 @@ class Camera extends AdminControl
         $result=$model_camera->getCameraList('','','id');
         $ret=$this->get_diff_array_by_pk($data,$result);
         $sult=$model_camera->cameras_add($ret);
-
-        print_r($sult);
+        return $sult;
     }
     function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
         try{
