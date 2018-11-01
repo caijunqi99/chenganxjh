@@ -54,22 +54,26 @@ class Login extends Controller {
             if (is_array($admin_info) and !empty($admin_info)) {
                 if($admin_info['admin_status'] == 1){
                     if(!empty($admin_info['admin_gid']) || $admin_info['admin_is_super'] == 1){
-                        //更新 admin 最新信息
-                        $update_info = array(
-                            'admin_login_num' => ($admin_info['admin_login_num'] + 1),
-                            'admin_login_time' => TIMESTAMP
-                        );
-                        db('admin')->where('admin_id', $admin_info['admin_id'])->update($update_info);
+                        if($admin_info['admin_gid']==5){
+                            $this->success('学校管理员，请使用学校后台登陆');
+                        }else{
+                            //更新 admin 最新信息
+                            $update_info = array(
+                                'admin_login_num' => ($admin_info['admin_login_num'] + 1),
+                                'admin_login_time' => TIMESTAMP
+                            );
+                            db('admin')->where('admin_id', $admin_info['admin_id'])->update($update_info);
 
-                        //设置 session
-                        session('admin_id', $admin_info['admin_id']);
-                        session('admin_name', $admin_info['admin_name']);
-                        session('admin_gid', $admin_info['admin_gid']);
-                        session('admin_is_super', $admin_info['admin_is_super']);
-                        session('admin_company_id', $admin_info['admin_company_id']);
-                        session('admin_school_id', $admin_info['admin_school_id']);
+                            //设置 session
+                            session('admin_id', $admin_info['admin_id']);
+                            session('admin_name', $admin_info['admin_name']);
+                            session('admin_gid', $admin_info['admin_gid']);
+                            session('admin_is_super', $admin_info['admin_is_super']);
+                            session('admin_company_id', $admin_info['admin_company_id']);
+                            session('admin_school_id', $admin_info['admin_school_id']);
 
-                        $this->success('登录成功', 'Admin/Index/index');
+                            $this->success('登录成功', 'Admin/Index/index');
+                        }
                     }else{
                         $this->success('该会员没有角色，请联系超级管理员');
                     }
