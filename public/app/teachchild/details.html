@@ -36,14 +36,15 @@
     <div class="video_box">
         <div class="video_box_inner">
             <div class="upload_video">
-                <!--<div class="videoimg_box">-->
-                    <!--<img id="video_image" src="" />-->
-                    <!--<a href="javascript:;" class="video_play_btn"></a>-->
-                <!--</div>-->
-                <!--<div id="video" style="width:100%; height: auto;margin-bottom: 30px;">-->
-                    <!--<video id="video_true" controls="controls" width="750px" height="400px" src="">-->
-                    <!--</video>-->
-                <!--</div>-->
+                <div class="videoimg_box">
+                    <img id="video_image" src="" />
+                    <a href="javascript:;" class="video_play_btn"></a>
+                </div>
+                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
+                    <video id="video_true" autoplay="autoplay" controls="controls" width="750px" height="400px" preload="none" >
+                        <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
+                    </video>
+                </div>
                 <!--<div class="upload_video">-->
                     <!--<div class="video" id="CuPlayer">-->
                         <!--<script type="text/javascript">-->
@@ -61,9 +62,9 @@
                         <!--</script>-->
                         <!--<script class="CuPlayerVideo" data-mce-role="CuPlayerVideo" type="text/javascript" src="../content/plugins/CuPlayerV4/player.min.js"></script>-->
                     <!--</div>poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4?vframe/jpg/offset/1"-->
-                    <video id="video" controls="controls" width="750px" height="400px" preload="none" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
-                        <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
-                    </video>
+                    <!--<video id="video" controls="controls" width="750px" height="400px" preload="none" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">-->
+                        <!--<source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>-->
+                    <!--</video>-->
                     <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
                 </div>
             <!--</div>-->
@@ -87,8 +88,7 @@
 
 <script>
     // 播放视频
-    var video=document.getElementById("video");
-    $("#video").click(function() {
+    $(".video_play_btn").click(function() {
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');
         }else{
@@ -105,15 +105,17 @@
                     if(res['code'] == 200){
                         if(res.result[0]['price'] !=0){
                             if(res.result[0]['buy'] != 0){
-                                // $('.video_play_btn').parent().hide();
-                                // $("#video").show();
+                                $('.video_play_btn').parent().hide();
+                                $("#video").show();
+                                var video=document.getElementById("video_true");
                                 video.play();
                             }else{
                                 $.toast("请前往购买", 'forbidden');
                             }
                         }else{
-                            // $('.video_play_btn').parent().hide();
-                            // $("#video").show();
+                            $('.video_play_btn').parent().hide();
+                            $("#video").show();
+                            var video=document.getElementById("video_true");
                             video.play();
                         }
                     }else if(res['code'] == 400){
