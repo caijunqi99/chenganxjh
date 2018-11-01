@@ -20,9 +20,7 @@ class Mbpayment extends Model {
      * @return array 数组格式的返回结果
      */
     public function getMbPaymentInfo($condition = array()) {
-        var_dump($condition);
         $payment_info = $this->where($condition)->find();
-        halt($payment_info);
         if (!empty($payment_info['payment_config'])) {
             $payment_info['payment_config'] = unserialize($payment_info['payment_config']);
         }
