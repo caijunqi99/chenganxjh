@@ -242,7 +242,7 @@ class Camera extends AdminControl
         $where = ' status=1 ';
         if(!empty($_GET)){
             if(!empty($_GET['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_GET["name"]).'%" ';
+                $where .= ' AND name LIKE "%'.trim($_GET["name"]).'%" ';
             }
             if(!empty($_GET['province'])){
                 $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
@@ -280,7 +280,7 @@ class Camera extends AdminControl
         $where = ' status=1 ';
         if(!empty($_POST)){
             if(!empty($_POST['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_POST["name"]).'%" ';
+                $where .= ' AND name LIKE "%'.trim($_POST["name"]).'%" ';
             }
             if(!empty($_POST['province'])){
                 $where .= ' AND province_id = "'.intval($_POST["province"]).'"';
@@ -307,7 +307,7 @@ class Camera extends AdminControl
 
 //        halt($start);
         //查询未绑定的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('sq_time DESC')->select();
+        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
         $list_count = db('camera')->where($where)->count();
 
         $html = '';
@@ -337,8 +337,7 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center">关闭</td>';
                 }
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["begintime"].'</td>';
-                $html .= '<td class="align-center">'.$value["endtime"].'</td>';
+                $html .= '<td class="align-center">'.$value["begintime"].'——'.$value["endtime"].'</td>';
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
 //                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
 //                $html .= '<td class="align-center">'.$value["id"].'</td>';
