@@ -39,114 +39,6 @@
     <div class="main">
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"> </div>
         <div class="mood_listbox" id="mood_listbox">
-            <!--<div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        &lt;!&ndash; 可以多个 &ndash;&gt;
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>
-
-            <div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        &lt;!&ndash; 可以多个 &ndash;&gt;
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>
-
-            <div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        &lt;!&ndash; 可以多个 &ndash;&gt;
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>-->
         </div>
 
         <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
@@ -222,11 +114,9 @@
                        }
 
                    }else if(response['code'] == '400'){
-                       $.alert(response['message'],function(){
-                           goLogin();
-                       });
+                       $.toast(response['message'],'forbidden');
                    }else{
-                       $.alert(response['message']);
+                       $.toast(response['message'],'forbidden');return false;
                    }
                }
            })

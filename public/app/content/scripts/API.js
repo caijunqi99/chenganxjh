@@ -11,5 +11,5 @@ var video_url = 'http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101111008_154
 
 // var user_token = $.cookie('token');
 // var user_member_id = $.cookie('member_id');
-var user_token = '23cb840bdd198cf9f4b1cf284031070d';
+var user_token = 'e69675b33d4bce38b2fb47f8cd5506c4';
 var user_member_id = 10017;
