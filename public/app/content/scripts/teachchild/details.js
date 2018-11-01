@@ -14,7 +14,7 @@ $(function() {
         success: function(response) {
             $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
             $('#related').html(HTML(response['result']));
-            var _videoSource = document.getElementById("video_true");
+            var _videoSource = document.getElementById("video");
             _videoSource.src = response.result[0]['data']['t_url'];
             // _videoSource.poster = response.result[0]['data']['t_videoimg'];
             /*var videoObject = {
