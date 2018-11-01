@@ -351,7 +351,10 @@ class Camera extends AdminControl
      */
     public function get_camera(){
         $model_school = Model('school');
-        $schoolres=$model_school->getSchoolById($schoolid);
+        $condition=array();
+        $condition['isdel']=1;
+        $school=$model_school->getSchoolList($condition);
+        print_r($school);exit;
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
