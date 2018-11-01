@@ -150,7 +150,9 @@ class Teachtype extends AdminControl {
         $gc_id = intval(input('param.gc_id'));
 
         if (!request()->isPost()) {
-            $class_array = $model_class->getGoodsClassInfoById($gc_id);
+            //$class_array = $model_class->getGoodsClassInfoById($gc_id);
+            $class_array = $model_class->getTeachInfoById($gc_id);
+
             if (empty($class_array)) {
                 $this->error(lang('goods_class_batch_edit_paramerror'));
             }
