@@ -144,9 +144,9 @@
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
                                 if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                    window.webkit.messageHandlers.paymentClick.postMessage(1,mbs);
+                                    window.webkit.messageHandlers.paymentClick.postMessage(mbs);
                                 } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                    Android.paymentClick(1,mbs);
+                                    Android.paymentClick(mbs);
                                 } else { //pc
                                 };
                             }
