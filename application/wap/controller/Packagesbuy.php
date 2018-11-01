@@ -230,8 +230,6 @@ class Packagesbuy extends MobileMember
             $api->setConfigs($param);
             $mweburl = $api->get_payurl($this);
             output_data($mweburl);
-            $url = $mweburl['mweb_url'];
-            Header("Location: $url");
             exit;
         }
         
