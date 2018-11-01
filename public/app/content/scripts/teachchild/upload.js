@@ -39,16 +39,21 @@ $(function() {
                                         for (var x = 0; x < Two.length; x++) {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
-                                                var params = {
-                                                    textAlign: 'center',
-                                                    values: []
+                                                if(Three){
+                                                    console.log(Three);
+                                                    var params = {
+                                                        textAlign: 'center',
+                                                        values: []
+                                                    }
+                                                    var data = {};
+                                                    for (var r = 0; r < Three.length; r++) {
+                                                        params['values'].push(Three[r]['gc_name']);
+                                                        data[Three[r]['gc_name']] = Three[r]['gc_id'];
+                                                    }
+                                                    prickKemu(params, data);
+                                                }else {
+                                                    $('.isKemu').hide();
                                                 }
-                                                var data = {};
-                                                for (var r = 0; r < Three.length; r++) {
-                                                    params['values'].push(Three[r]['gc_name']);
-                                                    data[Three[r]['gc_name']] = Three[r]['gc_id'];
-                                                }
-                                                prickKemu(params, data);
                                             }
                                         }
                                     }
@@ -108,18 +113,18 @@ $(function() {
 
 
     // 监听视频播放完时的操作
-  /*  Video.addEventListener('ended', function() {
-        $('.ply').show();
-    });*/
+    // Video.addEventListener('ended', function() {
+    //     $('.ply').show();
+    // });
 
     // 暂停视频
-    /*$('.back').click(function(event) {
+    $('.back').click(function(event) {
         if (!event.target.paused) {
             $(this).get(0).pause();
             $('.ply').show();
         };
     });
-*/
+
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {

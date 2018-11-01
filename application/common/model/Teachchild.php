@@ -63,4 +63,9 @@ class Teachchild extends Model {
         return db('teachchild')->where($condition)->update($update);
     }
 
+    public function delVideo($condition)
+    {
+        return db('teachchild')->where($condition)->delete();
+    }
+
 }
