@@ -186,6 +186,63 @@ class Teachvideo extends AdminControl {
         }
     }
 
+    public function edit() {
+        $video_id = input('param.video_id');
+        if (empty($video_id)) {
+            $this->error(lang('param_error'));
+        }
+        $model_teacher = model('Teachchild');
+        if (!request()->isPost()) {
+            $condition['t_id'] = $video_id;
+            $video_info = $model_teacher->getTeachchildInfo($condition);
+            $this->assign('video_info', $video_info);
+            //分类
+            $teachtype = db('teachtype')->where(array('gc_parent_id'=>0))->select();
+            $this->assign('teachtype', $teachtype);
+            if($video_info['t_type2']!=""){
+                $teachtype2 = db('teachtype')->where(array('gc_parent_id'=>$video_info['t_type']))->select();
+                $this->assign('teachtype2', $teachtype2);
+            }
+            if($video_info['t_type3']!=""){
+                $teachtype3 = db('teachtype')->where(array('gc_parent_id'=>$video_info['t_type2']))->select();
+                $this->assign('teachtype3', $teachtype3);
+            }
+            if($video_info['t_type4']!=""){
+                $teachtype4 = db('teachtype')->where(array('gc_parent_id'=>$video_info['t_type3']))->select();
+                $this->assign('teachtype4', $teachtype4);
+            }
+            $img_path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+            $this->assign('path', $img_path);
+            $this->setAdminCurItem('edit');
+            return $this->fetch();
+        } else {
+            $data = array(
+                't_title' => input('post.video_name'),
+                't_desc' => input('post.video_desc'),
+                't_profile' => input('post.t_profile'),
+                't_price' => input('post.video_price'),
+                't_author' => input('post.video_author'),
+                't_type' => input('post.type1'),
+                't_type2' => input('post.type2'),
+                't_type3' => input('post.type3'),
+                't_type4' => input('post.type4'),
+                't_audit' => 1
+            );
+            if($_FILES['video_filename']['name']){
+                $data['t_picture'] = "home/videoimg/".date("YmdHis",time())."_".time().".png";
+                $this->image($data['t_picture']);
+            }
+            //验证数据  END
+            $model_teacher = model('Teachchild');
+            $result = $model_teacher->editTeachchild(array('t_id'=>$video_id),$data);
+            if ($result) {
+                $this->success('编辑成功', 'Teachvideo/index');
+            } else {
+                $this->error('编辑失败');
+            }
+        }
+    }
+
 
     /**
      * ajax操作
@@ -464,6 +521,21 @@ class Teachvideo extends AdminControl {
         exit;
     }
 
+    //删除
+    public function del() {
+        $video_id = input('param.video_id');
+        if (empty($video_id)) {
+            $this->error(lang('param_error'));
+        }
+        $model_video = Model('Teachchild');
+        $result = $model_video->delVideo(array('t_id'=>$video_id));
+        if ($result) {
+            $this->success(lang('ds_common_del_succ'), 'Teachvideo/index');
+        } else {
+            $this->error('删除失败');
+        }
+    }
+
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
@@ -480,6 +552,13 @@ class Teachvideo extends AdminControl {
                 'name' => 'add',
                 'text' => '上传视频',
                 'url' => url('Admin/Teachvideo/add')
+            );
+        }
+        if (request()->action() == 'edit') {
+            $menu_array[] = array(
+                'name' => 'edit',
+                'text' => '编辑',
+                'url' => url('Admin/Teachvideo/edit')
             );
         }
         if (request()->action() == 'pass') {
