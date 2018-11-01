@@ -230,7 +230,7 @@ class Packagesbuy extends MobileMember
             $api->setConfigs($param);
             $mweburl = $api->get_payurl($this);
             if ($mweburl['result_code']=='SUCCESS') {
-                $redirect_url = urlencode(APP_SITE_URL.'/user/orderform.htm?orderSn='.$param['orderSn'].'&payment_code='.$this->payment_code);
+                $redirect_url = urlencode('vip.xiangjianhai.com');
                 $mweburl['mweb_url'] .='&redirect_url='.$redirect_url;
             }
             output_data($mweburl);
