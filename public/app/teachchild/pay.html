@@ -138,15 +138,14 @@
                         tid:tid,
                         payment_code:payment_code
                     },
+                    dataType: 'json',
                     success: function(response){
                         if(payment_code=='wxpay_app'){
-                            response =$.parseJSON(response);
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
                                 payClick(1,mbs);
                             }
                         }
-                        console.log(response);
                         /*if (payment_code == 'alipay_app') {
                             $('#gopay').html(response);
                             return ;
