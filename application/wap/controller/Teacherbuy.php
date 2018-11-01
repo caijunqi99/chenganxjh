@@ -23,22 +23,20 @@ class Teacherbuy extends MobileMember
         $condition['payment_code'] = $payment_code;
 //        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-        
 //        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
 //            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
 //        }
+        halt($mb_payment_info);
         if (!$mb_payment_info) {
             output_error('支付方式未开启');
         }
-        if ($mb_payment_info) {
-            $this->payment_code = $payment_code;
-            $this->payment_config = $mb_payment_info['payment_config'];
-            $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
-            if (!is_file($inc_file)) {
-                output_error('支付接口出错，请联系管理员！');
-            }
-            require_once($inc_file);
+        $this->payment_code = $payment_code;
+        $this->payment_config = $mb_payment_info['payment_config'];
+        $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+        if (!is_file($inc_file)) {
+            output_error('支付接口出错，请联系管理员！');
         }
+        require_once($inc_file);
         $this->_logic_buy_1 = \model('buy_1','logic');
     }
 
