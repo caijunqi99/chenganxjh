@@ -83,7 +83,9 @@
             <input type="button" class="pay_btn" value="立即支付" />
         </div>
     </div>
+    <div id="gopay" style="display: none;">
 
+    </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
@@ -138,7 +140,21 @@
                     },
                     dataType: "json",
                     success: function(response){
-
+                        if (payment_code == 'alipay_app') {
+                            $('#gopay').html(response);
+                            return ;
+                        }
+                        if(payment_code=='wxpay_h5'){
+                            response =$.parseJSON(response);
+                            var mbs = response.result[0];
+                            if (mbs.result_code== 'SUCCESS') {
+                                location.href=mbs.mweb_url;return ;
+                            }
+                        }
+                        jsondata =$.parseJSON(response);
+                        if (jsondata.code == 100) {
+                            $.alert(jsondata.message,'系统提示');return false;
+                        }
                     }
                 })
 
