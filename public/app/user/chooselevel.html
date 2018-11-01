@@ -141,7 +141,9 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
-
+<div id="gopay" style="display: none;">
+    
+</div>
     <script>
         $(function() {
             // api = 'http://w.xjh.com/index.php/Wap';
@@ -197,26 +199,21 @@
                     'payment_code': pay,
                     'chind_id': child_id,
                 }, function(data, textStatus, xhr) {
-                    // alert(data);
+                    
                     if (pay == 'alipay_app') {
-                        layer.open({
-                          type: 1,
-                          title: '课程管理',
-                          shadeClose: true,
-                          shade: false,
-                          maxmin: false, //开启最大化最小化按钮
-                          // area: ['400px', '300px'],
-                          content: data
-                        });
+                        $('#gopay').html(data);
                         return ;
                     }
                     if(pay=='wxpay_h5'){
                         data =$.parseJSON(data);
-                        var mbs = data.result;
-
+                        var mbs = data.result[0];
                         if (mbs.result_code== 'SUCCESS') {
                             window.location.href=mbs.mweb_url;return ;
                         }
+                    }
+                    jsondata =$.parseJSON(data);
+                    if (jsondata.code == 100) {
+                        $.alert(jsondata.message,'系统提示');return false;   
                     }
                 });
             });
