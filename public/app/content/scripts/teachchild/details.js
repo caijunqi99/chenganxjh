@@ -12,12 +12,11 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
+            $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
+            $('#related').html(HTML(response['result']));
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
-            _videoSource.poster = response.result[0]['data']['t_videoimg'];
-            // $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
-            $('#related').html(HTML(response['result']));
-
+            // _videoSource.poster = response.result[0]['data']['t_videoimg'];
             /*var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
@@ -150,7 +149,7 @@ $(function() {
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
             '<div class="related2">' +
-            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>' +
+            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ','+data[0]['data']['t_price']+');">' + price + '</button>' +
             '</div>' +
             '</div>' +
             '<div class="related_list">' +
@@ -163,9 +162,11 @@ $(function() {
 
 });
 //跳转购买页面
-function pay(t_id){
+function pay(t_id,t_price){
     if(user_token){
-        location.href=http_url+"app/user/pay.html?t_id="+t_id;
+        if(t_price != 0 || !t_price){
+            location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
+        }
     }else{
         $.toast('请前往登陆','forbidden');
     }

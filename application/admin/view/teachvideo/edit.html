@@ -64,41 +64,62 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+            <li>只可修改视频信息，如需修改视频，请重新上传。</li>
         </ul>
     </div>
     <br>
-    <tr class="noborder">
-        <td colspan="2" class="required"><label for="video_name">上传视频:</label></td>
-    </tr>
-    <tr class="noborder">
-        <td class="vatop rowform">
-            <input type="file" name="file1" id="file1"><br>
-            <input type="button" value="点击上传视频" onclick="uploadFile()">
-            <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
-            <h3 id="status"></h3>
-            <p id="loaded_n_total"></p></td>
-        <td class="vatop tips"></td>
-    </tr>
+    <!--<tr class="noborder">-->
+        <!--<td colspan="2" class="required"><label for="video_name">上传视频:</label></td>-->
+    <!--</tr>-->
+    <!--<tr class="noborder">-->
+        <!--<td class="vatop rowform">-->
+            <!--<input type="file" name="file1" id="file1"><br>-->
+            <!--<input type="button" value="点击上传视频" onclick="uploadFile()">-->
+            <!--<progress id="progressBar" value="0" max="100" style="width:300px;"></progress>-->
+            <!--<h3 id="status"></h3>-->
+            <!--<p id="loaded_n_total"></p></td>-->
+        <!--<td class="vatop tips"></td>-->
+    <!--</tr>-->
     <form id="user_form" enctype="multipart/form-data" method="post">
 
         <table class="ds-default-table">
             <tbody>
-            <input type="hidden" name="path" value="" id="path">
-            <input type="hidden" name="pic" value="" id="pic">
-            <input type="hidden" name="time" value="" id="time">
+            <input type="hidden" name="t_id" value="{$video_info.t_id}" id="t_id">
+            <input type="hidden" name="path" value="{$video_info.t_url}" id="path">
+            <input type="hidden" name="pic" value="{$video_info.t_videoimg}" id="pic">
+            <input type="hidden" name="time" value="{$video_info.t_timelength}" id="time">
             <tr>
                 <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimgfirst}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="file" name="video_filename" id="video_filename" /> </td>
+                <td class="vatop rowform">
+                    <input type="file" name="video_filename" id="video_filename" value="" />
+                    <!--<img src="{$path}{$video_info.t_picture}" onclick="$('#video_filename').click()" width="120" height="50" id="img">-->
+                </td>
                 <td class="vatop tips"></td>
             </tr>
+            <!--<script>-->
+                <!--$('#video_filename').change(function() {-->
+                    <!--img = getObjectURL($(this)[0].files[0]);-->
+                    <!--$('#img').attr('src',img ); // 或 this.files[0] this->input-->
+                <!--});-->
+                <!--function getObjectURL(file) {-->
+                    <!--var url = null ;-->
+                    <!--if (window.createObjectURL!=undefined) { // basic-->
+                        <!--url = window.createObjectURL(file) ;-->
+                    <!--} else if (window.URL!=undefined) { // mozilla(firefox)-->
+                        <!--url = window.URL.createObjectURL(file) ;-->
+                    <!--} else if (window.webkitURL!=undefined) { // webkit or chrome-->
+                        <!--url = window.webkitURL.createObjectURL(file) ;-->
+                    <!--}-->
+                    <!--return url ;-->
+                <!--}-->
+            <!--</script>-->
             <tr class="noborder">
                 <td colspan="2" class="required"><label for="video_name">作者:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="video_author" name="video_author" class="txt"></td>
+                <td class="vatop rowform"><input type="text" value="{$video_info.t_author}" id="video_author" name="video_author" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr>
@@ -106,14 +127,14 @@
             </tr>
 
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="video_price" name="video_price" class="txt"></td>
+                <td class="vatop rowform"><input type="text" value="{$video_info.t_price}" id="video_price" name="video_price" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
                 <tr class="noborder">
                     <td colspan="2" class="required"><label for="video_name">{$Think.lang.teacher_index_videoname}:</label></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" name="video_name" id="video_name" class="txt"></td>
+                    <td class="vatop rowform"><input type="text" value="{$video_info.t_title}" name="video_name" id="video_name" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
@@ -124,14 +145,14 @@
                     <td id="video_type"> <select name="type1" lay-verify="type1" class="select" onchange="fand_type2($(this))">
                         <option value="">{$Think.lang.teacher_index_videotypeone}</option>
                         {volist name="teachtype" id="type"}
-                        <option value="{$type.gc_id}" {if condition='$Think.get.type1 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
+                        <option value="{$type.gc_id}" {if condition='$video_info.t_type eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
                         {/volist}
                     </select>
                         <select id="type2_list" name="type2" lay-verify="type2" class="select" onchange="fand_type3($(this))">
                         <option value="">{$Think.lang.teacher_index_videotypetwo}</option>
                         <?php if($teachtype2){ ?>
                         {volist name="teachtype2" id="type"}
-                        <option value="{$type.gc_id}" {if condition='$Think.get.type2 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
+                        <option value="{$type.gc_id}" {if condition='$video_info.t_type2 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
                         {/volist}
                         <?php } ?>
                     </select>
@@ -139,7 +160,7 @@
                             <option value="">{$Think.lang.teacher_index_videotypethree}</option>
                             <?php if($teachtype3){ ?>
                             {volist name="teachtype3" id="type"}
-                            <option value="{$type.gc_id}" {if condition='$Think.get.type3 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
+                            <option value="{$type.gc_id}" {if condition='$video_info.t_type3 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
                             {/volist}
                             <?php } ?>
                         </select>
@@ -147,7 +168,7 @@
                             <option value="">{$Think.lang.teacher_index_videotypefour}</option>
                             <?php if($teachtype4){ ?>
                             {volist name="teachtype4" id="type"}
-                            <option value="{$type.gc_id}" {if condition='$Think.get.type4 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
+                            <option value="{$type.gc_id}" {if condition='$video_info.t_type4 eq $type.gc_id'}selected='selected'{/if}>{$type.gc_name}</option>
                             {/volist}
                             <?php } ?>
                         </select></td>
@@ -157,14 +178,14 @@
                 <td colspan="2" class="required"><label for="video_desc">{$Think.lang.teacher_index_videodesc}:</label></td>
             </tr>
             <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="t_profile" name="t_profile" class="txt"></td>
+                <td class="vatop rowform"><input type="text" value="{$video_info.t_profile}" id="t_profile" name="t_profile" class="txt"></td>
                 <td class="vatop tips"></td>
             </tr>
                 <tr>
                     <td colspan="2" class="required"><label for="video_desc">备注:</label></td>
                 </tr>
                 <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="video_desc" name="video_desc" class="txt"></td>
+                    <td class="vatop rowform"><input type="text" value="{$video_info.t_desc}" id="video_desc" name="video_desc" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
 
@@ -187,11 +208,11 @@
             if ($("#user_form").valid()) {
                 $("#user_form").submit();
             }
-            var pas1 =  $("#status").text();
-            var objFile = $("#file1").val();
-            if(pas1=="" || (objFile!="" && pas1!="上传成功")){
-                alert("请确认已选择视频文件，“点击上传视频”，并等待上传");exit;
-            }
+//            var pas1 =  $("#status").text();
+//            var objFile = $("#file1").val();
+//            if(pas1=="" || (objFile!="" && pas1!="上传成功")){
+//                alert("请确认已选择视频文件，“点击上传视频”，并等待上传");exit;
+//            }
         });
         $('#user_form').validate({
 

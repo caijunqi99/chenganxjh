@@ -165,6 +165,10 @@ class Teachtype extends Model
         return $data['data'][$id];
     }
 
+    public function getTeachInfoById($id){
+        return db("teachtype")->where(array('gc_id'=>$id))->find();
+    }
+
     /**
      * 返回缓存数据 原H('goods_class')形式
      */
