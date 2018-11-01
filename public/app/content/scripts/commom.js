@@ -85,14 +85,4 @@ function videoClick(id){
     };
 }
 
-//
-function payClick(type_id){
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.paymentClick.postMessage(type_id);
-    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.paymentClick(type_id);
-    } else { //pc
-    };
-}
-
 
