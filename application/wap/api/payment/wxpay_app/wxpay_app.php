@@ -40,10 +40,10 @@ class wxpay_app {
 
     function sign_again($order) {
         $values['appid'] = APPID;
+        $values['noncestr'] = $order['nonce_str'];
+        $values['package'] = 'Sign=WXpay';
         $values['partnerid'] = MCHID;
         $values['prepayid'] = $order['prepay_id'];
-        $values['package'] = 'Sign=WXpay';
-        $values['noncestr'] = $order['nonce_str'];
         $values['timestamp'] = $order['timestamp'];
         
         ksort($values);
