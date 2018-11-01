@@ -314,8 +314,11 @@ class Camera extends AdminControl
         if(!empty($list)){
             foreach($list as $key=>$value){
                 $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["camera_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["class_area"].'</td>';
+                $html .= '<td class="align-center">'.$value["name"].'</td>';
+                $html .= '<td class="align-center">'.$value["channelid"].'</td>';
+                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
+                $html .= '<td class="align-center">'.$value["id"].'</td>';
+                $html .= '<td class="align-center">'.$value["channelid"].'</td>';
                 if($value['is_public_area'] == 1){
                     $html .= '<td class="align-center">是</td>';
                 }else if($value['is_public_area'] == 2){
@@ -324,8 +327,8 @@ class Camera extends AdminControl
                 $html .= '<td class="align-center">'.$value["school_name"].'</td>';
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["sn"].'</td>';
-                $html .= '<td class="align-center">'.$value["key"].'</td>';
+                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
+                $html .= '<td class="align-center">'.$value["id"].'</td>';
                 $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
                 $html .= '<td class="align-center">'.$value["content"].'</td>';
                 $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
@@ -354,11 +357,58 @@ class Camera extends AdminControl
         $condition=array();
         $condition['isdel']=1;
         $school=$model_school->getSchoolList($condition);
-        print_r($school);exit;
+        $shu=array();
+        foreach($school as $v){
+            if($v['res_group_id']!=0){
+                $shu[] = $v['res_group_id'];
+            }
+        }
+        $model_class=Model('classes');
+        $where=array();
+        $where['isdel']=1;
+        $class=$model_class->getAllClasses($where);
+        foreach($class as $v){
+            if($v['res_group_id']!=0){
+                $shu[]=$v['res_group_id'];
+            }
+        }
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
+        $data='';
+        foreach($shu as $v){
+            $datas=$vlink->SetPlay($accountid,$v);
+            if(empty($data)) {
+                $data = $datas['resources'];
+            }else{
+                $data[] = $datas['resources'];
+            }
+        }
+        foreach($data as $k=>$v){
+            $play=$v['deviceid'].'-'.$v['channelid'].',';
+            $video=$vlink->Resources($accountid,$play);
+            $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
+            $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
+            $data[$k]['sq_time']=time();
+            $data[$k]['status']=1;
+            $data[$k]['is_classroom']=1;
+        }
+        $model_camera=Model('camera');
+        $result=$model_camera->getCameraList('','','id');
+        $ret=$this->get_diff_array_by_pk($data,$result);
+        $sult=$model_camera->cameras_add($ret);
 
+        print_r($sult);
+    }
+    function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
+        try{
+            $res=[];
+            foreach($arr2 as $item) $tmpArr[$item[$pk]] = $item;
+            foreach($arr1 as $v) if(! isset($tmpArr[$v[$pk]])) $res[] = $v;
+            return $res;
+        }catch (\Exception $exception){
+            return $arr1;
+        }
     }
 
     /**
@@ -367,13 +417,8 @@ class Camera extends AdminControl
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'camera',
-                'text' => '待绑定',
-                'url' => url('Admin/Camera/camera')
-            ),
-            array(
                 'name' => 'entered',
-                'text' => '已录入',
+                'text' => '摄像头列表',
                 'url' => url('Admin/Camera/entered')
             )
         );

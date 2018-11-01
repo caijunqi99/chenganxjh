@@ -17,6 +17,15 @@ class Camera extends Model {
     public function camera_add($param) {
         return db('camera')->insertGetId($param);
     }
+    /**
+     * 批量添加摄像头
+     *
+     * @param array $param 参数内容
+     * @return bool 布尔类型的返回结果
+     */
+    public function cameras_add($param) {
+        return db('camera')->insertAll($param);
+    }
 
 
     /**
@@ -48,7 +57,7 @@ class Camera extends Model {
      * @param obj $page 分页对象
      * @return array 二维数组
      */
-    public function getCameraList($condition, $page = '', $field = '*', $school = 'id asc', $limit = '', $extend = array(), $master = false) {
+    public function getCameraList($condition, $page = '', $field = '*', $school = 'cid desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('camera')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
