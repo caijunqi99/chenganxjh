@@ -140,19 +140,19 @@ $(function() {
                     params['type4'] = $('#kemu').get(0).dataset.id;
                 }
                 // 上传课件
-                $.ajax({
-                    url: api + '/teacherupload/index',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: params,
-                    success: function(response){
-                        if(response['code'] == 200){
-
-                        }else {
-                            console.log(response['message']);
-                        }
-                    }
-                })
+                // $.ajax({
+                //     url: api + '/teacherupload/index',
+                //     type: 'POST',
+                //     dataType: 'json',
+                //     data: params,
+                //     success: function(response){
+                //         if(response['code'] == 200){
+                //
+                //         }else {
+                //             console.log(response['message']);
+                //         }
+                //     }
+                // })
             }
         } else {
             historyback();
