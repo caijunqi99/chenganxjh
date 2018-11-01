@@ -240,7 +240,6 @@ class Packagesbuy extends MobileMember
         $param['orderFee'] = 0.0100;//$order_pay_info['order_amount'];//
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
-        output_data($return);
         echo $return;
         exit;
     }
