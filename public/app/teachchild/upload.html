@@ -38,11 +38,15 @@
         </header>
         <div class="main">
             <div class="upload_video">
-                <div class="videoimg_box">
-                    <img id="video_image" src="" />
-                    <a href="javascript:;" class="video_play_btn"></a>
-                </div>
-                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
+                <!--<div class="videoimg_box">-->
+                    <!--<img id="video_image" src="" />-->
+                    <!--<a href="javascript:;" class="video_play_btn"></a>-->
+                <!--</div>-->
+                <!--<div id="video" style="width:100%; height: auto;margin-bottom: 30px;">-->
+                    <video id="video" controls="controls" width="750px" height="400px" preload="none" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
+                        <source  src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
+                    </video>
+                <!--</div>-->
             </div>
 
             <!-- 表单 -->
@@ -172,14 +176,17 @@
     <script>
         $(function() {
             fz_video = function(video_url) {
-                $('#video_image').attr('src',video_url);
+                var _videoSource = document.getElementById("video");
+                _videoSource.src = video_url;
+                _videoSource.poster = video_url;
+              /*  $('#video_image').attr('src',video_url);
                 var videoObject = {
                     container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                     variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                     autoplay: true, //是否自动播放
                     video:video_url//视频地址
                 };
-                var player = new ckplayer(videoObject);
+                var player = new ckplayer(videoObject);*/
             }
 
             // 反馈意见字数限制

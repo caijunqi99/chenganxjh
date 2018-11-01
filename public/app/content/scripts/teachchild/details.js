@@ -13,7 +13,7 @@ $(function() {
         },
         success: function(response) {
             $('#related').html(HTML(response['result']));
-            var _videoSource = document.getElementById("video_image");
+            var _videoSource = document.getElementById("video");
             _videoSource.src = response.result[0]['data']['t_url'];
             _videoSource.poster = response.result[0]['data']['t_videoimg'];
             /*$('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
