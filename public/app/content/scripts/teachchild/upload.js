@@ -157,7 +157,7 @@ $(function() {
                 url: video_url
             }
             var types = $('#category').get(0).dataset.codes;
-            if (types[1] === types[2]) {
+            if (types.split(',')[1] == types.split(',')[2]) {
                 params['type'] = types.split(',')[0];
                 params['type2'] = types.split(',')[1];
             } else {
