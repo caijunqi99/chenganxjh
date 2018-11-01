@@ -58,7 +58,7 @@
                                 </p>
                             </div>
                             <div class="weui-cell__hd">
-                                <input type="radio" class="weui-check" name="payment_code" checked="checked" id="s11" value="wxpay_h5">
+                                <input type="radio" class="weui-check" name="payment_code" checked="checked" id="s11" value="wxpay_app">
                                 <i class="weui-icon-checked"></i>
                             </div>
                         </label>
@@ -106,7 +106,7 @@
             type:'POST',
             url:api+'/Teacherbuy/buy.html',
             data:{
-                key:'23cb840bdd198cf9f4b1cf284031070d',
+                key:user_token,
                 tid:GetQueryString('t_id')
             },
             dataType: 'json',
@@ -143,7 +143,7 @@
                             $('#gopay').html(response);
                             return ;
                         }
-                        if(payment_code=='wxpay_h5'){
+                        if(payment_code=='wxpay_app'){
                             response =$.parseJSON(response);
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
