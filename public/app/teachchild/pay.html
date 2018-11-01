@@ -143,7 +143,12 @@
                         if(payment_code=='wxpay_app'){
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
-                                payClick(1);
+                                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                                    window.webkit.messageHandlers.paymentClick.postMessage(1);
+                                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                    Android.paymentClick(1);
+                                } else { //pc
+                                };
                             }
                         }
                         /*if (payment_code == 'alipay_app') {
