@@ -67,25 +67,25 @@
             <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
         </ul>
     </div>
+    <tr class="noborder">
+        <td colspan="2" class="required"><label for="video_name">上传视频:</label></td>
+    </tr>
+    <tr class="noborder">
+        <td class="vatop rowform">
+            <input type="file" name="file1" id="file1"><br>
+            <input type="button" value="点击上传视频" onclick="uploadFile()">
+            <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+            <h3 id="status"></h3>
+            <p id="loaded_n_total"></p></td>
+        <td class="vatop tips"></td>
+    </tr>
     <form id="user_form" enctype="multipart/form-data" method="post">
 
         <table class="ds-default-table">
             <tbody>
-            <tr>
-                <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimg}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform">
-                    <input type="hidden" name="path" value="" id="path">
-                    <input type="hidden" name="pic" value="" id="pic">
-                    <input type="hidden" name="time" value="" id="time">
-                    <input type="file" name="file1" id="file1"><br>
-                    <input type="button" value="点击上传视频" onclick="uploadFile()">
-                    <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
-                    <h3 id="status"></h3>
-                    <p id="loaded_n_total"></p></td>
-                <td class="vatop tips"></td>
-            </tr>
+            <input type="hidden" name="path" value="" id="path">
+            <input type="hidden" name="pic" value="" id="pic">
+            <input type="hidden" name="time" value="" id="time">
             <tr>
                 <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimgfirst}:</label></td>
             </tr>
@@ -116,7 +116,7 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
-                    <td colspan="2" class="required"><label>{$Think.lang.teacher_index_videotype}:</label></td>
+                    <td colspan="2" class="required"><label>{$Think.lang.teacher_index_videotype}:（提示：视频上传成功再选择类别）</label></td>
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
