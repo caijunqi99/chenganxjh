@@ -10,7 +10,7 @@ $config = array (
 		'notify_url' => "http://vip.xiangjianhai.com:8001/index.php/Wap/payment/alipay_notify_app.html",
 		
 		//同步跳转
-		'return_url' => "http://vip.xiangjianhai.com:8001/app/user/chooselevel.html",
+		'return_url' => "http://vip.xiangjianhai.com:8001/app/user/orderform.html",
 
 		//编码格式
 		'charset' => "UTF-8",

@@ -20,7 +20,7 @@ class wxpay_h5
             'orderFee' => 1,
             'orderAttach' => '_',
             // 'sceneInfo' =>json_encode(array('h5_info'=>array('type'=>'WAP','wap_url'=>APP_SITE_URL,'wap_name'=>config('site_name')))),
-            'sceneInfo' =>json_encode(array('h5_info'=>array('type'=>'Wap','wap_url'=>APP_SITE_URL,'wap_name'=>config('site_name')))),
+            'sceneInfo' =>json_encode(array('h5_info'=>array('type'=>'Wap','wap_url'=>config('url_domain_root'),'wap_name'=>config('site_name')))),
         );
     }
 
