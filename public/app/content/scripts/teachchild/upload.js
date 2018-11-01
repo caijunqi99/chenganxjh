@@ -1,4 +1,20 @@
 $(function() {
+    // 获取价格
+    $.ajax({
+        url: api + '/teacherhome/index',
+        type: 'POST',
+        dataType: 'json',
+        success: function(response){
+            console.log(response['result'][0]['price']);
+            var template = '';
+            price = response['result'][0]['price'];
+            for(var i = 0; i < price.length; i++){
+                template += '<p>￥ '+ price[i]['pkg_price'] +'</p>'
+            }
+            $('.http_price_wrap').html(template);
+        }
+    })
+
     // 类别
     $('#category').cityPicker({
         title: "请选择类别",
@@ -6,7 +22,7 @@ $(function() {
         onClose: function(p, v, d) {
             // 判断是否有四级分类
             var tokens = p.value;
-            if (tokens.length == 3) {
+            if (tokens[1] != tokens[2]) {
                 $('.isKemu').show();
                 $.ajax({
                     url: api + '/teacherhome/index',
@@ -22,16 +38,13 @@ $(function() {
                                         var Two = tabs[i]['childTwo'][s]['childThree']
                                         for (var x = 0; x < Two.length; x++) {
                                             if (tokens[2] == Two[x]['gc_id']) {
-
                                                 var Three = Two[x]['childFour'];
                                                 var params = {
                                                     textAlign: 'center',
                                                     values: []
                                                 }
                                                 var data = {};
-
                                                 for (var r = 0; r < Three.length; r++) {
-
                                                     params['values'].push(Three[r]['gc_name']);
                                                     data[Three[r]['gc_name']] = Three[r]['gc_id'];
                                                 }
@@ -45,7 +58,6 @@ $(function() {
                     }
                 })
             } else {
-
                 $('.isKemu').hide();
             }
         }
@@ -57,12 +69,15 @@ $(function() {
     }
 
     // 遍历价格添加颜色
-    $('.price_boot_wrap p').each(function(index, el) {
-        $(this).click(function(event) {
-            $('.price_boot_wrap p').removeClass('action')
-            $(this).addClass('action');
+    setInterval(function(){
+        $('.price_boot_wrap p').each(function(index, el) {
+            $(this).click(function(event) {
+                $('.price_boot_wrap p').removeClass('action')
+                $(this).addClass('action');
+            });
         });
-    });
+    }, 20)
+
     $('.price_boot_wrap input').focus(function(event) {
         $('.price_boot_wrap p').removeClass('action')
     });
@@ -71,7 +86,6 @@ $(function() {
     pricePopupClose = function(event) {
         $('.price_boot_wrap p').each(function(index, el) {
             if ($(this).hasClass('action')) {
-
                 $('#price').val($(this).html().split(' ')[1])
             }
         });
@@ -80,9 +94,7 @@ $(function() {
         }
     }
 
-
     function prickKemu(value, data) {
-
         var arr = [];
         arr.push(value)
         $('#kemu').picker({
@@ -94,27 +106,41 @@ $(function() {
         })
     }
 
+
+    // 监听视频播放完时的操作
+  /*  Video.addEventListener('ended', function() {
+        $('.ply').show();
+    });*/
+
+    // 暂停视频
+    /*$('.back').click(function(event) {
+        if (!event.target.paused) {
+            $(this).get(0).pause();
+            $('.ply').show();
+        };
+    });
+*/
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
             if ($('#bang_name').val() == '') {
-                $.toast("请先填写课程标题",'forbidden');
+                $.alert("请先填写课程标题");
                 return false;
             } else if ($('#aboutValue').val() == '') {
-                $.toast("请先填写课程简介",'forbidden');
+                $.alert("请先填写课程简介");
                 return false;
             } else if ($('#zuozhe').val() == '') {
-                $.toast("请先填写作者的姓名",'forbidden');
+                $.alert("请先填写作者的姓名");
                 return false;
             } else if ($('#category').val() == '') {
-                $.toast("请先选择类别",'forbidden');
+                $.alert("请先选择类别");
                 return false;
             } else if ($('#price').val() == '') {
-                $.toast("请先填写价格",'forbidden');
+                $.alert("请先填写价格");
                 return false;
             } else if (!$('#kemu').is(':hidden')) {
                 if ($('#kemu').val() == '') {
-                    $.toast("请先选择科目",'forbidden');
+                    $.alert("请先选择科目");
                     return false;
                 }
             } else {
@@ -127,7 +153,6 @@ $(function() {
                     author: $('#zuozhe').val(),
                 }
                 var types = $('#category').get(0).dataset.codes;
-
                 if (types[1] === types[2]) {
                     params['type'] = types[0];
                     params['type2'] = types[1];
@@ -155,7 +180,7 @@ $(function() {
                 // })
             }
         } else {
-            historyback();
+            window.history.back(-1);
         }
     }
 })
