@@ -147,8 +147,6 @@ class Teacherbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
-
-
         //微信app支付
         if ($this->payment_code == 'wxpay_app') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
