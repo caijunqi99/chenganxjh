@@ -158,7 +158,6 @@
                         'payment_code': pay,
                         'chind_id': child_id,
                     }, function(data, textStatus, xhr) {
-                        console.log(data);return
                         if (pay == 'alipay_app') {
                             $('#gopay').html(data);
                             return ;
