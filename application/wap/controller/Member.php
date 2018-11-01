@@ -409,7 +409,7 @@ class Member extends MobileMember
             $student = db('student')->insert($data);
         }
             if($student){
-                output_data(array('message'=>'绑定成功'));
+                output_data(array('message'=>'绑定成功','sid'=>$student));
             }else{
                 output_error('绑定失败');
             }
