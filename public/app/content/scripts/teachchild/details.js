@@ -165,7 +165,7 @@ $(function() {
 function pay(t_id,t_price){
     if(user_token){
         if(t_price != 0 || !t_price){
-            location.href=http_url+"app/user/pay.html?t_id="+t_id;
+            location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
         }
     }else{
         $.toast('请前往登陆','forbidden');
