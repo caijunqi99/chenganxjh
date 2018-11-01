@@ -13,14 +13,17 @@ $(function() {
         },
         success: function(response) {
             $('#related').html(HTML(response['result']));
-            $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
+            var _videoSource = document.getElementById("video_image");
+            _videoSource.src = response.result[0]['data']['t_url'];
+            _videoSource.poster = response.result[0]['data']['t_videoimg'];
+            /*$('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
             var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                 autoplay: true, //是否自动播放
                 video:response.result[0]['data']['t_url']//视频地址
             };
-            var player = new ckplayer(videoObject);
+            var player = new ckplayer(videoObject);*/
         }
     })
 
