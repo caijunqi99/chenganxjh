@@ -155,14 +155,12 @@
                             $('#gopay').html(response);
                             return ;
                         }
-
                         jsondata =$.parseJSON(response);
                         if (jsondata.code == 100) {
                             $.alert(jsondata.message,'系统提示');return false;
                         }*/
                     }
                 })
-
 
             }, function() {
                 //取消操作
