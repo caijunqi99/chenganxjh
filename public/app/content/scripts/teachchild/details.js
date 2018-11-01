@@ -14,8 +14,8 @@ $(function() {
         success: function(response) {
             $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
             $('#related').html(HTML(response['result']));
-            // var _videoSource = document.getElementById("video_true");
-            // _videoSource.src = response.result[0]['data']['t_url'];
+            var _videoSource = document.getElementById("video_true");
+            _videoSource.src = response.result[0]['data']['t_url'];
             // _videoSource.poster = response.result[0]['data']['t_videoimg'];
             /*var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
@@ -25,7 +25,7 @@ $(function() {
             };
             var player = new ckplayer(videoObject);*/
 
-            var vID = "c1"; //vID
+           /* var vID = "c1"; //vID
             var vWidth = "750"; //宽度设定，配合CSS实现
             var vHeight = "400"; //高度设定，配合CSS实现
             var vFile = "CuSunV4set.xml"; //配置文件地址:支持五种广告设定
@@ -35,7 +35,7 @@ $(function() {
             var vEndTime = 0; //预览时间(秒数),默认为0
             var vLogoPath = "images/logo.png"; //Logo地址
             var vPlayMod = 0; //播放模式优先级,默认=0,html5优先=1,flash优先=2
-            var vMp4url = response.result[0]['data']['t_url']; //视频文件地址推荐用mp4文件(h264编码)
+            var vMp4url = response.result[0]['data']['t_url']; //视频文件地址推荐用mp4文件(h264编码)*/
 
         }
     })
