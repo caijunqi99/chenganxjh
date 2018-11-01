@@ -21,7 +21,6 @@ class Teacherbuy extends MobileMember
         $model_mb_payment = Model('mbpayment');
         $condition = array();
         $condition['payment_code'] = $payment_code;
-        halt($condition);
 //        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
 //        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
