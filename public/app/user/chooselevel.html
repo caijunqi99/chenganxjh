@@ -41,31 +41,7 @@
         <div class="cont margt50">
             <div class="container3">
                 <ul class="level_list clearfix">
-<!--                     <li class="active">
-                        <div class="level_item">
-                            <span class="level_hot">热门推荐</span>
-                            <p class="level_item_p1">12个月</p>
-                            <p class="level_item_p2">￥<strong>360</strong></p>
-                            <p class="level_item_p3">￥360</p>
-                            <p class="level_item_p4"><span>每天不到一块钱</span></p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="level_item">
-                            <p class="level_item_p1">3个月</p>
-                            <p class="level_item_p2">￥<strong>180</strong></p>
-                            <p class="level_item_p3">￥300</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="level_item">
-                            <p class="level_item_p1">1个月</p>
-                            <p class="level_item_p2">￥<strong>60</strong></p>
-                            <p class="level_item_p3">￥100</p>
-                        </div>
-                    </li> -->
-                    <!-- <li data-info='{"pkg_id":11,"pkg_name":"按月收费","pkg_sort":4,"pkg_enabled":1,"pkg_cprice":"0.00","pkg_price":"100.00","pkg_type":2,"pkg_length":1,"pkg_axis":"mouth","pkg_desc":"按月收费","up_time":null,"pkg_title":"1个月"}'><div class="level_item"><p class="level_item_p1">1个月</p><p class="level_item_p2">￥<strong>100.00</strong></p><p class="level_item_p3">￥0.00</p></div></li>
-                    <li class="active" data-info='{"pkg_id":8,"pkg_name":"一年套餐","pkg_sort":666,"pkg_enabled":1,"pkg_cprice":"0.00","pkg_price":"365.00","pkg_type":2,"pkg_length":1,"pkg_axis":"year","pkg_desc":"每天不到一块钱","up_time":"1537949293","pkg_title":"12个月"}'><div class="level_item"><span class="level_hot">热门推荐</span><p class="level_item_p1">12个月</p><p class="level_item_p2">￥<strong>365.00</strong></p><p class="level_item_p3">￥0.00</p><p class="level_item_p4"><span>每天不到一块钱</span></p></div></li> -->
+
                 </ul>
             </div>
 
@@ -131,7 +107,6 @@
         </div>
 
     </div>
-
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
@@ -141,12 +116,12 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
-<div id="gopay" style="display: none;">
+<div id="gopay" style="display: none;" >
     
 </div>
     <script>
-        // var api = 'http://w.xjh.com/index.php/Wap';
-        // var user_token = '4570a44f7d6512c8ec2e20507a80009a';
+        var api = 'http://w.xjh.com/index.php/Wap';
+        var user_token = '4570a44f7d6512c8ec2e20507a80009a';
         var pkg_type = GetQueryString('pkg_type');
         var child_id = GetQueryString('child_id');
         $(function() {
@@ -159,20 +134,23 @@
                 })
             }
             $('.total_cont_btn').click(function(event) {
+                var pay = $("input[name='payment_code']:checked").val();
+                if (pay=='undefined' || !pay || pay == '') {
+                    $.alert('没有选择支付方式','系统提示');return false;
+                }
+                var pkginfo = $('.active').attr('data-info');
+                if (pkginfo=='undefined' || !pkginfo || pkginfo == '') {
+                    $.alert('请选择套餐！','系统提示');return false;
+                }
+                    pkginfo =$.parseJSON(pkginfo);
+                var pkgid = pkginfo.pkg_id;
+                if(!pkgid){
+                    $.alert('请选择套餐！','系统提示');return false;
+                }
+                if (!child_id) {
+                    $.alert('参数错误! child','系统提示');return false;   
+                }
                 $.confirm('是否确认支付？','支付提醒',function(){
-                    var pay = $("input[name='payment_code']:checked").val();
-                    if (pay=='undefined' || !pay || pay == '') {
-                        $.alert('没有选择支付方式','系统提示');return false;
-                    }
-                    var pkginfo = $('.active').attr('data-info');
-                        pkginfo =$.parseJSON(pkginfo);
-                    var pkgid = pkginfo.pkg_id;
-                    if(!pkgid){
-                        $.alert('请选择套餐！','系统提示');return false;
-                    }
-                    if (!child_id) {
-                        $.alert('参数错误! child','系统提示');return false;   
-                    }
                     $.post(api+'/Packagesbuy/buy_step1',
                     {
                         'key': user_token,
@@ -214,11 +192,12 @@
                         var pkghtml='';
                         for (var i = 0; i < package.length; i++) {
                                 var packinfo = JSON.stringify(package[i]);
-                                if (package[i].pkg_sort==666) {
-                                    pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
-                                }else{
-                                    pkghtml+="<li data-info='"+packinfo+"' onclick='tableclick(this)'>";
-                                }
+                                // if (package[i].pkg_sort==666) {
+                                //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
+                                // }else{
+                                    
+                                // }
+                                pkghtml+="<li data-info='"+packinfo+"' onclick='tableclick(this)'>";
                                     pkghtml+=   '<div class="level_item">';
                                 if (package[i].pkg_sort==666) {
                                     pkghtml+=       '<span class="level_hot">热门推荐</span>';
@@ -281,13 +260,7 @@
             
         // })
     </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
 
-            $('.active').click();
-               
-        });
-    </script>
 </body>
 
 </html>
