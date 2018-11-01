@@ -47,9 +47,14 @@ class AdminControl extends Controller {
             'admin_gid' => session('admin_gid'),
             'admin_is_super' => session('admin_is_super'),
             'admin_company_id' => session('admin_company_id'),
-            'admin_school_id' => session('admin_school_id')
+            'admin_school_id' => session('admin_school_id'),
+            'login_identity' => session('login_identity')
         );
         if (empty($admin_info['admin_id']) || empty($admin_info['admin_name']) || !isset($admin_info['admin_gid']) || !isset($admin_info['admin_is_super'])) {
+                session(null);
+                $this->redirect('School/Login/index');
+        }
+        if (!in_array($admin_info['login_identity'],['school','admin'])) {
             session(null);
             $this->redirect('School/Login/index');
         }
