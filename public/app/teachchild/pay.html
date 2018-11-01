@@ -139,21 +139,23 @@
                         payment_code:payment_code
                     },
                     success: function(response){
-                        if (payment_code == 'alipay_app') {
-                            $('#gopay').html(response);
-                            return ;
-                        }
                         if(payment_code=='wxpay_app'){
                             response =$.parseJSON(response);
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
-                                location.href=mbs.mweb_url;return ;
+                                payClick(1,mbs);
                             }
                         }
+                        console.log(response);
+                        /*if (payment_code == 'alipay_app') {
+                            $('#gopay').html(response);
+                            return ;
+                        }
+
                         jsondata =$.parseJSON(response);
                         if (jsondata.code == 100) {
                             $.alert(jsondata.message,'系统提示');return false;
-                        }
+                        }*/
                     }
                 })
 
