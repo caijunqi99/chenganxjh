@@ -289,34 +289,35 @@
                     }
                 }, 'json');
             }
-            function tableclick(demo) {
-                $(demo).siblings().removeClass("active").end().addClass("active");
-                var pkginfo = $(demo).attr('data-info');
-                pkginfo = pkginfo.replace(' ', '');
-                $.post(api + '/Packagesbuy/packages_time_reckon', {
-                    'key': user_token,
-                    'child_id': child_id,
-                    'pkginfo': pkginfo
-                }, function (data, textStatus, xhr) {
-                    if (data.code == 200) {
-                        $('.date').text(data.result[0].end_time)
-                        pkginfo = $.parseJSON(pkginfo);
-                        $('#price').text(pkginfo.pkg_price)
-                        var Discount = pkginfo.pkg_cprice - pkginfo.pkg_price;
-                        $('#Discount').text('已优惠' + Discount + '元')
-                        var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
-                        var name = $('.active .level_item_p1').text();
-                        $('#pkgdesc').text('您已选择' + type + name + '套餐')
-                    } else {
-                        $('.choosed_info').html(data.msg);
-                    }
-                }, "json");
-            }
 
-            function payStatus(orderSn){
-                location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
-            }
         })
+        function tableclick(demo) {
+            $(demo).siblings().removeClass("active").end().addClass("active");
+            var pkginfo = $(demo).attr('data-info');
+            pkginfo = pkginfo.replace(' ', '');
+            $.post(api + '/Packagesbuy/packages_time_reckon', {
+                'key': user_token,
+                'child_id': child_id,
+                'pkginfo': pkginfo
+            }, function (data, textStatus, xhr) {
+                if (data.code == 200) {
+                    $('.date').text(data.result[0].end_time)
+                    pkginfo = $.parseJSON(pkginfo);
+                    $('#price').text(pkginfo.pkg_price)
+                    var Discount = pkginfo.pkg_cprice - pkginfo.pkg_price;
+                    $('#Discount').text('已优惠' + Discount + '元')
+                    var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
+                    var name = $('.active .level_item_p1').text();
+                    $('#pkgdesc').text('您已选择' + type + name + '套餐')
+                } else {
+                    $('.choosed_info').html(data.msg);
+                }
+            }, "json");
+        }
+
+        function payStatus(orderSn){
+            location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
+        }
     </script>
 
 </body>

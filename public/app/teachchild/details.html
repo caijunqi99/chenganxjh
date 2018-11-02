@@ -89,6 +89,7 @@
 <script>
     // 播放视频
     $(".video_play_btn").click(function() {
+        var _video = document.getElementById("video_true");
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');
         }else{
@@ -107,12 +108,14 @@
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
+                                _video.play();
                             }else{
                                 $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
+                            _video.play();
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){

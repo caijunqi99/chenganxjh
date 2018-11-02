@@ -9,6 +9,7 @@ $(function() {
         dataType: 'json',
         data: {
             key: user_token,
+            member_id:user_member_id,
             t_id: GetPar("id")
         },
         success: function(response) {
