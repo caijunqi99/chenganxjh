@@ -184,16 +184,10 @@
                 data:{
                     key:user_token,
                     order_sn:orderSn
-                    // order_sn:'150594483782422015'
                 },
                 dataType: "json",
                 success: function(response){
-                    alert(response);
-                    alert(response.result);
-                    alert(response['result']);
-                    console.log(response);
                     if(response['code'] == 200){
-                        alert(response['result'][0]['over_amount']);
                         location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
                     }else if(response['code'] == 400){
                         $.toast('请前往登陆','forbidden',function () {

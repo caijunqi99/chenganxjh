@@ -52,34 +52,13 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-
-        /*$.ajax({
-            type:'POST',
-            url:api+'/teacherpayment/getOrderByOrdersn.html',
-            data:{
-                key:user_token,
-                // order_sn:orderSn
-                order_sn:'150594483782422015'
-            },
-            dataType: 'json',
-            success: function(response){
-                console.log(response);
-                if(response['code'] == 200){
-                    alert(response['result'][0]['over_amount']);
-                    location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
-                }else if(response['code'] == 400){
-                    $.toast('请前往登陆','forbidden',function () {
-                        layout();
-                    })
-                }else{
-                    $.toast(response['message'],'forbidden');
-                }
-            }
-        });*/
-        $('.pay_finish_btn .back_btn').click(function(){
+        $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
+        $('.pay_finish_btn').click(function(){
             location.href=http_url+'app/teachchild/details.html?id='+GetQueryString('id');
         })
-        $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
+        $('.back_btn').click(function(){
+            location.href=http_url+'app/teachchild/details.html?id='+GetQueryString('id');
+        })
     </script>
 </body>
 
