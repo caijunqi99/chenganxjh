@@ -22,15 +22,14 @@
     <script src="../content/scripts/mobile-util.js"></script>
     <style>
         video::-internal-media-controls-download-button {
-            display:none;
+            display: none;
         }
-
+        video::-webkit-media-controls {
+            overflow: hidden !important;
+        }
         video::-webkit-media-controls-enclosure {
-            overflow:hidden;
-        }
-
-        video::-webkit-media-controls-panel {
-            width: calc(100% + 30px);
+            width: calc(100% + 32px);
+            margin-left: auto;
         }
     </style>
 </head>
@@ -53,7 +52,7 @@
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
-                    <video id="video_true" controls width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="">
+                    <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
                         <source src="" type="video/mp4">
                     </video>
                 </div>
