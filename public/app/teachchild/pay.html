@@ -189,6 +189,8 @@
                 dataType: "json",
                 success: function(response){
                     alert(response['result']);
+                    alert(response['result'][0]);
+                    alert(response['result'][0]['order_tid']);
                     console.log(response);
                     if(response['code'] == 200){
                         alert(response['result'][0]['over_amount']);
