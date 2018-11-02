@@ -38,7 +38,6 @@ class Schoolbus extends AdminControl {
 
             }
         }
-        //print_r($busList);die;
         $this->assign('busList', $busList);
         $this->setAdminCurItem('index');
         return $this->fetch();
@@ -93,8 +92,9 @@ class Schoolbus extends AdminControl {
         if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
+        $bus_id = input('param.bus_id');
+        $Schoolbus = Model('Schoolbus');
         if (request()->isPost()) {
-            $Schoolbus = Model('Schoolbus');
             $param =array();
             $input = input();
             $param['bus_card']       = input('post.bus_card');
@@ -121,11 +121,11 @@ class Schoolbus extends AdminControl {
 
             switch (input('actions')) {
                 case 'edit'://改
-                    $param['bus_id'] = intval(input('param.bus_id'));
-                    $result = $Schoolbus->schoolbus_update($param);
+                    $result = $Schoolbus->schoolbus_update($param,array('bus_id'=>$bus_id));
                     if ($result) {
                         $this->log(lang('bus_edit_succ') . '[' . input('post.bus_card') . ']', null);
-                        echo json_encode(['m' => true, 'ms' => lang('bus_edit_succ')]);
+                        $this->success("编辑成功", 'Schoolbus/index');
+//                        echo json_encode(['m' => true, 'ms' => lang('bus_edit_succ')]);
                     }
                     break; 
                 case 'del'://删
@@ -144,12 +144,26 @@ class Schoolbus extends AdminControl {
                     $result = $Schoolbus->schoolbus_add($param);
                     if ($result) {
                         $this->log(lang('bus_add_succ') . '[' . input('post.bus_card') . ']', null);
-                        echo json_encode(['m' => true, 'ms' => lang('bus_add_succ')]);
+                        $this->success("新增成功", 'Schoolbus/index');
+//                        echo json_encode(['m' => true, 'ms' => lang('bus_add_succ')]);
                     }
                     break;
             }
             exit;
 
+        }else{
+            $bus_info = $Schoolbus->getOneById($bus_id);
+            if($bus_info['bus_line']!=""){
+                $bus_info['bus_line'] = json_decode($bus_info['bus_line'],true);
+            }
+            if($bus_info['bus_repeat']!=""){
+                $bus_info['bus_repeat'] = explode(',',$bus_info['bus_repeat']);
+            }
+            $week = array(0=>"星期日",1=>"星期一",2=>"星期二",3=>"星期三",4=>"星期四",5=>"星期五",6=>"星期六");
+            $this->assign('week', $week);
+            $this->assign('bus_info', $bus_info);
+            $this->setAdminCurItem('schoolbus_edit');
+            return $this->fetch();
         }
     }
 
@@ -159,13 +173,6 @@ class Schoolbus extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        //        $menu_array = array(
-//            array(
-//                'name' => 'schoolbus_manage',
-//                'text' => lang('schoolbus_manage'),
-//                'url' => url('School/Course/schoolbus_manage')
-//            )
-//        );
         $menu_array = array(
             array(
                 'name' => 'index',
@@ -181,11 +188,11 @@ class Schoolbus extends AdminControl {
                 'url' => url('School/Schoolbus/schoolbus_manage')
             );
         }
-        if (request()->action() == 'edit') {
+        if (request()->action() == 'schoolbus_edit') {
             $menu_array[] = array(
-                'name' => 'edit',
+                'name' => 'schoolbus_edit',
                 'text' => '编辑',
-                'url' => url('School/Schoolbus/edit')
+                'url' => url('School/Schoolbus/schoolbus_edit')
             );
         }
         return $menu_array;
