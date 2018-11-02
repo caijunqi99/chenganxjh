@@ -13,15 +13,11 @@ class Schoolbus extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'school/lang/zh-cn/admin.lang.php');
         Lang::load(APP_PATH . 'school/lang/zh-cn/schoolbus.lang.php');
-        //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
-        $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
-        $this->assign('action',$action);
     }
 
     public function schoolbus_manage1(){
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
         $Schoolbus = model('Schoolbus');
@@ -40,16 +36,19 @@ class Schoolbus extends AdminControl {
     }
 
     public function schoolbus_manage(){
-        
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         return $this->fetch('bus_edit');   
     }
 
 
     public function schoolbus_edit(){
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
-        
         if (request()->isPost()) {
             $Schoolbus = Model('Schoolbus');
             $param =array();

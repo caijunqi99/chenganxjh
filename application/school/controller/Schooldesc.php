@@ -15,6 +15,10 @@ class Schooldesc extends AdminControl {
     }
 
     public function schooldesc_manage(){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         //类型
         $model_schooltype = model('Schooltype');
         $schoolType = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
@@ -23,7 +27,6 @@ class Schooldesc extends AdminControl {
         $region_list = db('area')->where('area_parent_id','0')->select();
         $desc=model('Schooldesc');
         if (!request()->isPost()) {
-            $admininfo = $this->getAdminInfo();
             if($admininfo['admin_id']!=1){
                 if(!empty($admininfo['admin_school_id'])){
                     $schoolid = $admininfo['admin_school_id'];
