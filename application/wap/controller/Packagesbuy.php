@@ -20,13 +20,16 @@ class Packagesbuy extends MobileMember
         }
         $model_mb_payment = Model('mbpayment');
         $condition = array();
-        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
+//        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
+        $condition['payment_code'] = $payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
         
-        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
-            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
+//        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
+//            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
+//        }
+        if (!$mb_payment_info) {
+            output_error('支付方式未开启');
         }
-        if ($mb_payment_info) {
             $this->payment_code = $payment_code;
             $this->payment_config = $mb_payment_info['payment_config'];
             $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
@@ -37,7 +40,6 @@ class Packagesbuy extends MobileMember
                 output_error('支付接口出错，请联系管理员！');
             }
             require_once($inc_file);
-        }
         $this->_logic_buy_1 = \model('buy_1','logic');
     }
 
@@ -222,7 +224,31 @@ class Packagesbuy extends MobileMember
         $param['orderInfo'] = config('site_name') . '商品订单' . $order_pay_info['pay_sn'];
         $param['orderSn'] = $order_pay_info['pay_sn'];
 
-        // 使用h5支付 wxpay_h5
+        //微信app支付
+        if ($this->payment_code == 'wxpay_app') {
+            $param['orderSn'] = $order_pay_info['pay_sn'];
+            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
+            $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
+            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/payment/wx_notify_h5.html';
+            $api = new \wxpay_app();
+            $api->get_payform($param);
+            exit;
+        }
+        //支付宝
+        if ($this->payment_code == 'alipay_app') {
+            $param['orderSn'] = $order_pay_info['pay_sn'];;
+            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
+            $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
+            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/payment/alipay_notify_app.html';
+            $api = new \alipay_app();
+            $api->get_payform($param);
+
+            exit;
+        }
+
+       /* // 使用h5支付 wxpay_h5
         if ($this->payment_code == 'wxpay_h5') {
             $param['orderFee'] = 1;//(100 * $order_pay_info['order_amount']);
             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
@@ -243,7 +269,7 @@ class Packagesbuy extends MobileMember
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
         echo $return;
-        exit;
+        exit;*/
     }
 
     public function notify_url(){

@@ -153,6 +153,7 @@ class Teacherbuy extends MobileMember
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5';
             $api = new \wxpay_app();
             $api->get_payform($param);
             exit;
@@ -163,6 +164,7 @@ class Teacherbuy extends MobileMember
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/alipay_notify_app';
             $api = new \alipay_app();
             $api->get_payform($param);
 

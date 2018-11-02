@@ -16,9 +16,9 @@ class wxpay_app {
         $input->SetAttach($param['orderAttach']);
         $input->SetOut_trade_no($param['orderSn']);
         $input->SetTotal_fee($param['orderFee']);
-        $input->SetNotify_url(MOBILE_SITE_URL . '/payment/wx_notify_app');
+//        $input->SetNotify_url(MOBILE_SITE_URL . '/payment/wx_notify_app');
+        $input->SetNotify_url($param['notifyUrl']);
         $input->SetTrade_type('APP');
-
         $wxpay = new \WxPayApi();
         $order = $wxpay->unifiedOrder($input);
 
@@ -26,6 +26,7 @@ class wxpay_app {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
                 $order['sign'] = $this->sign_again($order);
+                $order['orderSn'] = $param['orderSn'];
                 output_data($order);
                 //return json(['code'=>200,'result'=>$order]);
             } else {
