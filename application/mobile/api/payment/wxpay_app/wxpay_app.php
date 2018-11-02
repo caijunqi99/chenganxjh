@@ -42,7 +42,7 @@ class wxpay_app {
         $values['appid'] = APPID;
         $values['partnerid'] = MCHID;
         $values['prepayid'] = $order['prepay_id'];
-        $values['package'] = 'Sign=WXpay';
+        $values['package'] = 'Sign=WXPay';
         $values['noncestr'] = $order['nonce_str'];
         $values['timestamp'] = $order['timestamp'];
         
