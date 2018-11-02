@@ -52,35 +52,33 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
-        // alert(GetQueryString('orderSn'));
-        // var id = '';
-        // $.ajax({
-        //     type:'POST',
-        //     url:api+'/teacherpayment/getOrderByOrdersn.html',
-        //     data:{
-        //         key:user_token,
-        //         order_sn:GetQueryString('orderSn')
-        //         // order_sn:'150594483782422015'
-        //     },
-        //     dataType: 'json',
-        //     success: function(response){
-        //         if(response['code'] == 200){
-        //             alert(response.result[0]['over_amount']);
-        //             $('.pay_p2').html('实付￥'+response.result[0]['over_amount']);
-        //             id=response.result[0]['order_tid'];
-        //         }else if(response['code'] == 400){
-        //             $.toast('请前往登陆','forbidden',function () {
-        //                 layout();
-        //             })
-        //         }else{
-        //             $.toast(response['message'],'forbidden');
-        //         }
-        //     }
-        // });
+        $.ajax({
+            type:'POST',
+            url:api+'/teacherpayment/getOrderByOrdersn.html',
+            data:{
+                key:user_token,
+                // order_sn:orderSn
+                order_sn:'150594483782422015'
+            },
+            dataType: 'json',
+            success: function(response){
+                alert(response);
+                if(response['code'] == 200){
+                    alert(response['result'][0]['over_amount']);
+                    location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
+                }else if(response['code'] == 400){
+                    $.toast('请前往登陆','forbidden',function () {
+                        layout();
+                    })
+                }else{
+                    $.toast(response['message'],'forbidden');
+                }
+            }
+        });
         $('.pay_finish_btn .back_btn').click(function(){
             location.href=http_url+'app/teachchild/details.html?id='+GetQueryString('id');
         })
+        $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
     </script>
 </body>
 

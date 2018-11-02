@@ -186,9 +186,10 @@
                     order_sn:orderSn
                     // order_sn:'150594483782422015'
                 },
-                dataType: 'json',
+                dataType: "json",
                 success: function(response){
-                    alert(response['result'][0]['over_amount']);
+                    alert(response['result']);
+                    console.log(response);
                     if(response['code'] == 200){
                         alert(response['result'][0]['over_amount']);
                         location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
