@@ -13,7 +13,7 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
-            $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
+            // $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
             $('#related').html(HTML(response['result']));
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];

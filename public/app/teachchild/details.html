@@ -36,15 +36,15 @@
     <div class="video_box">
         <div class="video_box_inner">
             <div class="upload_video">
-                <div class="videoimg_box">
+                <!--<div class="videoimg_box">
                     <img id="video_image" src="" />
                     <a href="javascript:;" class="video_play_btn"></a>
-                </div>
-                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
+                </div>-->
+                <!--<div id="video" style="width:100%; height: auto;margin-bottom: 30px;">-->
                     <video id="video_true" width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
                         <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
                     </video>
-                </div>
+                <!--</div>-->
                 <!--<div class="upload_video">-->
                     <!--<div class="video" id="CuPlayer">-->
                         <!--<script type="text/javascript">-->
@@ -88,10 +88,48 @@
 
 <script>
     // 播放视频
-    function videoClick(){
-        var _video = document.getElementById("video_true");
+    var _video = document.getElementById("video_true");
+    _video.onclick=function(){
         if(_video.paused){
-            _video.play();
+            if(!user_token){
+                $.toast("请前往登陆", 'forbidden');
+            }else{
+                $.ajax({
+                    type:'POST',
+                    url:api+'/Teacherdecide/decide.html',
+                    data:{
+                        key:user_token,
+                        member_id:user_member_id,
+                        video_id:GetQueryString("id")
+                    },
+                    dataType: "json",
+                    success: function(res){
+                        if(res['code'] == 200){
+                            if(res.result[0]['price'] !=0){
+                                if(res.result[0]['buy'] != 0){
+                                    $('.video_play_btn').parent().hide();
+                                    $("#video").show();
+                                    _video.play();
+                                }else{
+                                    $.toast("请前往购买", 'forbidden');
+                                }
+                            }else{
+                                $('.video_play_btn').parent().hide();
+                                $("#video").show();
+                                _video.play();
+                            }
+                        }else if(res['code'] == 400){
+                            $.toast('登陆失效，请重新登录','forbidden',function(){
+                                layout();
+                            });
+                        }else{
+                            $.toast('系统错误','forbidden');
+                        }
+                    }
+                })
+
+            }
+
         }else{
             _video.pause();
         }
