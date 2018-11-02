@@ -183,16 +183,13 @@
                 url:api+'/teacherpayment/getOrderByOrdersn.html',
                 data:{
                     key:user_token,
-                    order_sn:orderSn
-                    // order_sn:'150594483782422015'
+                    // order_sn:orderSn
+                    order_sn:'150594483782422015'
                 },
                 success: function(response){
-                    response = $.parseJSON(response);
                     alert(response);
                     alert(response.result);
                     alert(response['result']);
-                    alert(response['result'][0]);
-                    alert(response['result'][0]['order_tid']);
                     console.log(response);
                     if(response['code'] == 200){
                         alert(response['result'][0]['over_amount']);

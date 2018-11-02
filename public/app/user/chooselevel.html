@@ -126,7 +126,7 @@
         var child_id = GetQueryString('child_id');
         $(function() {
             if (pkg_type && child_id) {
-                GetPackagesList(pkg_type)
+                GetPackagesList(pkg_type);
                 GetPaymentList();
             } else {
                 $.alert('参数错误,获取不到学生信息或套餐信息！', '系统提示', function () {
@@ -230,65 +230,65 @@
                 });
 
 
-                function GetPackagesList(pkg_type) {
-                    $.ajax({
-                        url: api + '/Packagesbuy/get_packages_list',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {'key': user_token, 'pkg_type': pkg_type},
-                    })
-                        .done(function (sb) {
-                            if (sb.code == 200) {
-                                package = sb.result;
-                                var pkghtml = '';
-                                for (var i = 0; i < package.length; i++) {
-                                    var packinfo = JSON.stringify(package[i]);
-                                    // if (package[i].pkg_sort==666) {
-                                    //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
-                                    // }else{
 
-                                    // }
-                                    pkghtml += "<li data-info='" + packinfo + "' onclick='tableclick(this)'>";
-                                    pkghtml += '<div class="level_item">';
-                                    if (package[i].pkg_sort == 666) {
-                                        pkghtml += '<span class="level_hot">热门推荐</span>';
-                                    }
-                                    pkghtml += '<p class="level_item_p1">' + package[i].pkg_title + '</p>' +
-                                        '<p class="level_item_p2">￥<strong>' + package[i].pkg_price + '</strong></p>' +
-                                        '<p class="level_item_p3">￥' + package[i].pkg_cprice + '</p>';
-                                    if (package[i].pkg_sort == 666) {
-                                        pkghtml += '<p class="level_item_p4"><span>' + package[i].pkg_desc + '</span></p>';
-                                    }
-                                    pkghtml += '</div>' +
-                                        '</li>';
-                                }
-                                $('.level_list').html(pkghtml);
-                            } else {
-                                $.alert(sb.message, '系统提示', function () {
-                                    historyback();
-                                })
-                            }
-
-                        })
-                }
-
-                function GetPaymentList() {
-                    $.post(api + '/Packagesbuy/get_payment_list', {'key': user_token}, function (data, textStatus, xhr) {
-                        if (data.code == 200) {
-                            var payment = data.result[0];
-                            if (payment.length > 0) {
-                                for (var i = 0; i < payment.length; i++) {
-                                    $('#' + payment[i].payment_title).css('visibility', 'visible');
-                                }
-                            } else {
-                                $('#nopay').css('visibility', 'visible');
-                            }
-
-                        }
-                    }, 'json');
-                }
             })
+            function GetPackagesList(pkg_type) {
+                $.ajax({
+                    url: api + '/Packagesbuy/get_packages_list',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'key': user_token, 'pkg_type': pkg_type},
+                })
+                    .done(function (sb) {
+                        if (sb.code == 200) {
+                            package = sb.result;
+                            var pkghtml = '';
+                            for (var i = 0; i < package.length; i++) {
+                                var packinfo = JSON.stringify(package[i]);
+                                // if (package[i].pkg_sort==666) {
+                                //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
+                                // }else{
 
+                                // }
+                                pkghtml += "<li data-info='" + packinfo + "' onclick='tableclick(this)'>";
+                                pkghtml += '<div class="level_item">';
+                                if (package[i].pkg_sort == 666) {
+                                    pkghtml += '<span class="level_hot">热门推荐</span>';
+                                }
+                                pkghtml += '<p class="level_item_p1">' + package[i].pkg_title + '</p>' +
+                                    '<p class="level_item_p2">￥<strong>' + package[i].pkg_price + '</strong></p>' +
+                                    '<p class="level_item_p3">￥' + package[i].pkg_cprice + '</p>';
+                                if (package[i].pkg_sort == 666) {
+                                    pkghtml += '<p class="level_item_p4"><span>' + package[i].pkg_desc + '</span></p>';
+                                }
+                                pkghtml += '</div>' +
+                                    '</li>';
+                            }
+                            $('.level_list').html(pkghtml);
+                        } else {
+                            $.alert(sb.message, '系统提示', function () {
+                                historyback();
+                            })
+                        }
+
+                    })
+            }
+
+            function GetPaymentList() {
+                $.post(api + '/Packagesbuy/get_payment_list', {'key': user_token}, function (data, textStatus, xhr) {
+                    if (data.code == 200) {
+                        var payment = data.result[0];
+                        if (payment.length > 0) {
+                            for (var i = 0; i < payment.length; i++) {
+                                $('#' + payment[i].payment_title).css('visibility', 'visible');
+                            }
+                        } else {
+                            $('#nopay').css('visibility', 'visible');
+                        }
+
+                    }
+                }, 'json');
+            }
             function tableclick(demo) {
                 $(demo).siblings().removeClass("active").end().addClass("active");
                 var pkginfo = $(demo).attr('data-info');
@@ -313,7 +313,7 @@
                 }, "json");
             }
 
-            function payStatus(orderSn{
+            function payStatus(orderSn){
                 location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
             }
         })

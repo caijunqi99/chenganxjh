@@ -52,7 +52,8 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $.ajax({
+
+        /*$.ajax({
             type:'POST',
             url:api+'/teacherpayment/getOrderByOrdersn.html',
             data:{
@@ -62,7 +63,7 @@
             },
             dataType: 'json',
             success: function(response){
-                alert(response);
+                console.log(response);
                 if(response['code'] == 200){
                     alert(response['result'][0]['over_amount']);
                     location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
@@ -74,7 +75,7 @@
                     $.toast(response['message'],'forbidden');
                 }
             }
-        });
+        });*/
         $('.pay_finish_btn .back_btn').click(function(){
             location.href=http_url+'app/teachchild/details.html?id='+GetQueryString('id');
         })
