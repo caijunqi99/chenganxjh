@@ -15,6 +15,49 @@ class Schoolbus extends AdminControl {
         Lang::load(APP_PATH . 'school/lang/zh-cn/schoolbus.lang.php');
     }
 
+    public function index(){
+        $model_bus = Model("Schoolbus");
+        $condtion = array();
+        $condtion['is_del'] = 1;
+        $busList = $model_bus->get_schoolbus_List($condtion);
+        if(!empty($busList)){
+            $week = array(0=>"日",1=>"一",2=>"二",3=>"三",4=>"四",5=>"五",6=>"六");
+            foreach($busList as $k=>$v){
+                $day = explode(',',$v['bus_repeat']);
+                $wes = "";
+                foreach($day as $ke=>$item){
+                    $wes[] = $week[$item];
+                }
+                $busList[$k]['week'] = implode(',',$wes);
+                $line = "";
+                $busline = json_decode($v['bus_line'],true);
+                foreach($busline as $key=>$val){
+                    $line .= $val['Station']."/".$val['ArrivalTime'].'--';
+                    $busList[$k]['line'] = rtrim($line, '--');
+                }
+
+            }
+        }
+        //print_r($busList);die;
+        $this->assign('busList', $busList);
+        $this->setAdminCurItem('index');
+        return $this->fetch();
+    }
+
+    public function drop() {
+        $bus_id = input('param.bus_id');
+        if (empty($bus_id)) {
+            $this->error(lang('param_error'));
+        }
+        $model_school = Model('Schoolbus');
+        $result = $model_school->schoolbus_update(array('is_del'=>2),array('bus_id'=>$bus_id));
+        if ($result) {
+            $this->success(lang('ds_common_del_succ'), 'Schoolbus/index');
+        } else {
+            $this->error('删除失败');
+        }
+    }
+
     public function schoolbus_manage1(){
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_gid']!=5){
@@ -40,7 +83,8 @@ class Schoolbus extends AdminControl {
         if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
-        return $this->fetch('bus_edit');   
+        $this->setAdminCurItem('schoolbus_manage');
+        return $this->fetch();
     }
 
 
@@ -115,14 +159,35 @@ class Schoolbus extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
+        //        $menu_array = array(
+//            array(
+//                'name' => 'schoolbus_manage',
+//                'text' => lang('schoolbus_manage'),
+//                'url' => url('School/Course/schoolbus_manage')
+//            )
+//        );
         $menu_array = array(
             array(
-                'name' => 'schoolbus_manage',
-                'text' => lang('schoolbus_manage'),
-                'url' => url('School/Course/schoolbus_manage')
-            )
+                'name' => 'index',
+                'text' => '管理',
+                'url' => url('School/Schoolbus/index')
+            ),
         );
-        
+
+        if (request()->action() == 'schoolbus_manage' || request()->action() == 'index') {
+            $menu_array[] = array(
+                'name' => 'schoolbus_manage',
+                'text' => '添加校车',
+                'url' => url('School/Schoolbus/schoolbus_manage')
+            );
+        }
+        if (request()->action() == 'edit') {
+            $menu_array[] = array(
+                'name' => 'edit',
+                'text' => '编辑',
+                'url' => url('School/Schoolbus/edit')
+            );
+        }
         return $menu_array;
     }
 
