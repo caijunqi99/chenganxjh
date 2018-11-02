@@ -15,9 +15,12 @@ class Coursemanage extends AdminControl {
     }
 
     public function index() {
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_arrangement = model('Arrangement');
         $condition = array();
-        $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
                 $condition['schoolid'] = $admininfo['admin_school_id'];
@@ -49,15 +52,15 @@ class Coursemanage extends AdminControl {
 
     public function add() {
         $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
                 $schoolid = $admininfo['admin_school_id'];
             }
         }else{
             $schoolid = 6;
-        }
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
             //地区信息
@@ -229,6 +232,10 @@ class Coursemanage extends AdminControl {
     }
 
     public function edit() {
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         $course_id = input('param.id');
         $schoolid = input('param.schoolid');
         if (empty($course_id)) {
@@ -428,6 +435,10 @@ class Coursemanage extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         $school_id = input('param.school_id');
         if (empty($school_id)) {
             $this->error(lang('param_error'));
@@ -446,6 +457,10 @@ class Coursemanage extends AdminControl {
     }
 
     public function course(){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         $course_id = input('param.course_id');
         $model = Model('Arrangement');
         $course = $model->getOneById($course_id);

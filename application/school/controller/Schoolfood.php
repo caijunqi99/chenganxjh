@@ -13,15 +13,11 @@ class Schoolfood extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'school/lang/zh-cn/admin.lang.php');
         Lang::load(APP_PATH . 'school/lang/zh-cn/schoolfood.lang.php');
-        //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
-        $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
-        $this->assign('action',$action);
     }
 
     public function schoolfood_manage1(){
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
         $Schoolfood = model('Schoolfood');
@@ -40,13 +36,17 @@ class Schoolfood extends AdminControl {
     }
 
     public function schoolfood_manage(){
-        
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
         return $this->fetch('food_edit');
     }
 
 
     public function schoolfood_edit(){
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
         if (request()->isPost()) {

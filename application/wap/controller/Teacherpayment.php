@@ -9,6 +9,9 @@
 namespace app\wap\controller;
 
 
+use SebastianBergmann\Comparator\MockObjectComparatorTest;
+use think\Model;
+
 class TeacherPayment extends MobileMall
 {
     public function _initialize()
@@ -348,5 +351,22 @@ class TeacherPayment extends MobileMall
             "lg_desc" => "教孩视频，用户支付成功,给总后台分成。"
         ];
         $log_model->addLog($admin_data);
+    }
+
+    public function getOrderByOrdersn(){
+        $order_sn = input('param.order_sn');
+        if(!$order_sn){
+            output_error('参数有误');
+        }
+        $model_teach = Model("Packagesorderteach");
+        $result = $model_teach->getOrderInfo(array('pay_sn'=>$order_sn),'','order_id,order_sn,pay_sn,order_tid,order_dieline,add_time,payment_time,order_amount,over_amount');
+        if(!empty($result)){
+            $result['add_time'] = $result['add_time']!=""?date("Y-m-d H:i:s",$result['add_time']):"";
+            $result['order_dieline'] = $result['order_dieline']!=""?date("Y-m-d H:i:s",$result['order_dieline']):"";
+            $result['payment_time'] = $result['payment_time']!=""?date("Y-m-d H:i:s",$result['payment_time']):"";
+            $result['over_amount'] = $result['over_amount']!=""?number_format($result['over_amount'],2):"";
+            $result['order_amount'] = $result['order_amount']!=""?number_format($result['order_amount'],2):"";
+        }
+        output_data($result);
     }
 }                  
