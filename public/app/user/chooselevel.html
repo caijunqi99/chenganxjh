@@ -187,9 +187,9 @@
                                 if (payment_code == 'alipay_app') {
                                     var mbs = response.result[0];
                                     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs['content']);
+                                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
                                     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                        Android.aliapyClick(mbs['content']);
+                                        Android.aliapyClick(mbs);
                                     } else { //pc
                                     }
                                     ;

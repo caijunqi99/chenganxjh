@@ -238,7 +238,7 @@ class Packagesbuy extends MobileMember
         //支付宝
         if ($this->payment_code == 'alipay_app') {
             $param['orderSn'] = $order_pay_info['pay_sn'];;
-            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
+            $param['orderFee'] = $order_pay_info['order_amount'];
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
             $param['notifyUrl'] = WAP_SITE_URL . '/payment/alipay_notify_app.html';
