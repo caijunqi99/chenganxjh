@@ -61,6 +61,30 @@ class AdminControl extends Controller {
         $menu_list = $this->menuList();
 
         $menu_list=$this->parseMenu($menu_list);
+        if($menu_list['school']){
+            $menu_list["school"]['children']['schooldesc'] = [
+                "permid" => 131,
+                "pid" => 27,
+                "c_name" => "学校简介",
+                "name" => "schooldesc",
+                "text" => "学校简介",
+                "args" => "schooldesc_manage,Schooldesc,school",
+                "action" => 4,
+                "sort" => 99,
+                "status" => 1
+            ];
+            $menu_list["school"]['children']['coursemanage'] = [
+                "permid" => 132,
+                "pid" => 27,
+                "c_name" => "课程管理",
+                "name" => "coursemanage",
+                "text" => "课程管理",
+                "args" => "index,Coursemanage,school",
+                "action" => "1,2,3,4",
+                "sort" => 99,
+                "status" => 1
+            ];
+        }
         $this->assign('menu_list', $menu_list);
     }
 
@@ -98,7 +122,7 @@ class AdminControl extends Controller {
         }
 
         //以下几项不需要验证   langzhiyao修改不需要验证的控制器：Organizes  Schoolinfo 过滤
-        $tmp = array('Index','Dashboard','Login','Organizes','Schoolinfo','Classesinfo','Studentinfo','Mlselection');
+        $tmp = array('Index','Schooldesc','Dashboard','Coursemanage','Login','Schoolinfo','Classesinfo','Studentinfo','Mlselection');
         if (in_array($act,$tmp)) return true;
         if (in_array($act,$permission) || in_array("$act.$op",$permission)){
             return true;
