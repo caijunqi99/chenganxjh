@@ -312,32 +312,34 @@ class Camera extends AdminControl
 
         $html = '';
         if(!empty($list)){
-            foreach($list as $key=>$value){
-                $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["name"].'</td>';
-                $html .= '<td class="align-center">'.$value["channelid"].'</td>';
-                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
-                $html .= '<td class="align-center">'.$value["id"].'</td>';
-                if($value['online'] == 1){
-                    $html .= '<td class="align-center">在线</td>';
-                }else if($value['online'] == 0){
-                    $html .= '<td class="align-center">离线</td>';
+            foreach($list as $key=>$v){
+                $datainfo = json_encode($v);
+                $html .= "<tr class='hover' id='tr_".$v['cid']."' datainfo='".$datainfo."'>";
+                $html .= '<td class="align-center">'.$v["name"].'</td>';
+                $html .= '<td class="align-center">'.$v["channelid"].'</td>';
+                $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
+                $html .= '<td class="align-center">'.$v["id"].'</td>';
+                if($v['online'] == 1){
+                    $html .= '<td class="align-center"><b style="color:green;">在线</b></td>';
+                }else if($v['online'] == 0){
+                    $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
-                $html .= '<td class="align-center">'.$value["parentid"].'</td>';
-                $html .= '<td class="align-center">'.$value["imageurl"].'</td>';
-                $html .= '<td class="align-center">'.$value["rtmpplayurl"].'</td>';
-                if($value['is_classroom'] == 1){
-                    $html .= '<td class="align-center">否</td>';
-                }else if($value['is_classroom'] == 2){
-                    $html .= '<td class="align-center">是</td>';
+                $html .= '<td class="align-center">'.$v["parentid"].'</td>';
+                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                if($v['is_classroom'] == 1){
+                    $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
+                }else if($v['is_classroom'] == 2){
+                    $html .= '<td class="align-center"><b style="color:green;">是</b></td>';
                 }
-                if($value['status'] == 1){
+                if($v['status'] == 1){
                     $html .= '<td class="align-center">开启</td>';
-                }else if($value['status'] == 2){
+                }else if($v['status'] == 2){
                     $html .= '<td class="align-center">关闭</td>';
                 }
-                $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["begintime"].'——'.$value["endtime"].'</td>';
+                $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
+                 $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
+                //$html .= '<td class="align-center"><input type="text" class="layui-input" id="test'.$v['cid'].'" placeholder=" - " onfocus="timesss('.$v['cid'].')"></td>';
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
 //                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
 //                $html .= '<td class="align-center">'.$value["id"].'</td>';
