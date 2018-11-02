@@ -98,7 +98,6 @@
     }
 
     $(".video_play_btn").click(function() {
-        var _video = document.getElementById("video_true");
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');
         }else{
@@ -117,8 +116,8 @@
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
+                                var _video = document.getElementById("video_true");
                                     if(_video.paused){
-                                        alert('aaa');
                                         _video.play();
                                     }else{
                                         _video.pause();
@@ -129,8 +128,8 @@
                         }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
+                            var _video = document.getElementById("video_true");
                             if(_video.paused){
-                                alert('aaa');
                                 _video.play();
                             }else{
                                 _video.pause();
