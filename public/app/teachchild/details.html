@@ -41,8 +41,8 @@
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>-->
                 <!--<div id="video" style="width:100%; height: auto;margin-bottom: 30px;">-->
-                    <video id="video_true" width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
-                        <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
+                    <video id="video_true" width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="">
+                        <source src="" type="video/mp4">
                     </video>
                 <!--</div>-->
                 <!--<div class="upload_video">-->
@@ -91,9 +91,11 @@
     var _video = document.getElementById("video_true");
     _video.onclick=function(){
         if(_video.paused){
+            alert('eee');
             if(!user_token){
                 $.toast("请前往登陆", 'forbidden');
             }else{
+                alert('bbb');
                 $.ajax({
                     type:'POST',
                     url:api+'/Teacherdecide/decide.html',
@@ -105,6 +107,7 @@
                     dataType: "json",
                     success: function(res){
                         if(res['code'] == 200){
+                            alert('cccc');
                             if(res.result[0]['price'] !=0){
                                 if(res.result[0]['buy'] != 0){
                                     _video.play();
@@ -112,6 +115,7 @@
                                     $.toast("请前往购买", 'forbidden');
                                 }
                             }else{
+                                alert('aaa');
                                 _video.play();
                             }
                         }else if(res['code'] == 400){
