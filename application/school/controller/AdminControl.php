@@ -84,7 +84,7 @@ class AdminControl extends Controller {
                 "c_name" => "食谱管理",
                 "name" => "schoolfood",
                 "text" => "食谱管理",
-                "args" => "schoolfood_manage,Schoolfood,school",
+                "args" => "index,Schoolfood,school",
                 "action" => "1,2,3,4",
                 "sort" => 99,
                 "status" => 1
