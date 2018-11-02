@@ -95,7 +95,7 @@ class Lookchild extends MobileMember
         $orderSn = trim(input('post.orderSn'));
         $member_id = intval(input('post.member_id'));
 
-        $result = db('packagesorder')->where('order_sn="'.$orderSn.'" AND buyer_id="'.$member_id.'"')->field('pkg_pirce,s_id')->find();
+        $result = db('packagesorder')->where('pay_sn="'.$orderSn.'" AND buyer_id="'.$member_id.'"')->field('pkg_pirce,s_id')->find();
 
         output_data($result);
 

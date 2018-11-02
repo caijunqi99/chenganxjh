@@ -126,7 +126,7 @@
         var child_id = GetQueryString('child_id');
         $(function() {
             if (pkg_type && child_id) {
-                GetPackagesList(pkg_type)
+                GetPackagesList(pkg_type);
                 GetPaymentList();
             } else {
                 $.alert('参数错误,获取不到学生信息或套餐信息！', '系统提示', function () {
@@ -187,9 +187,9 @@
                                 if (payment_code == 'alipay_app') {
                                     var mbs = response.result[0];
                                     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs['content']);
+                                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
                                     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                        Android.aliapyClick(mbs['content']);
+                                        Android.aliapyClick(mbs);
                                     } else { //pc
                                     }
                                     ;
@@ -230,93 +230,94 @@
                 });
 
 
-                function GetPackagesList(pkg_type) {
-                    $.ajax({
-                        url: api + '/Packagesbuy/get_packages_list',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {'key': user_token, 'pkg_type': pkg_type},
-                    })
-                        .done(function (sb) {
-                            if (sb.code == 200) {
-                                package = sb.result;
-                                var pkghtml = '';
-                                for (var i = 0; i < package.length; i++) {
-                                    var packinfo = JSON.stringify(package[i]);
-                                    // if (package[i].pkg_sort==666) {
-                                    //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
-                                    // }else{
 
-                                    // }
-                                    pkghtml += "<li data-info='" + packinfo + "' onclick='tableclick(this)'>";
-                                    pkghtml += '<div class="level_item">';
-                                    if (package[i].pkg_sort == 666) {
-                                        pkghtml += '<span class="level_hot">热门推荐</span>';
-                                    }
-                                    pkghtml += '<p class="level_item_p1">' + package[i].pkg_title + '</p>' +
-                                        '<p class="level_item_p2">￥<strong>' + package[i].pkg_price + '</strong></p>' +
-                                        '<p class="level_item_p3">￥' + package[i].pkg_cprice + '</p>';
-                                    if (package[i].pkg_sort == 666) {
-                                        pkghtml += '<p class="level_item_p4"><span>' + package[i].pkg_desc + '</span></p>';
-                                    }
-                                    pkghtml += '</div>' +
-                                        '</li>';
-                                }
-                                $('.level_list').html(pkghtml);
-                            } else {
-                                $.alert(sb.message, '系统提示', function () {
-                                    historyback();
-                                })
-                            }
-
-                        })
-                }
-
-                function GetPaymentList() {
-                    $.post(api + '/Packagesbuy/get_payment_list', {'key': user_token}, function (data, textStatus, xhr) {
-                        if (data.code == 200) {
-                            var payment = data.result[0];
-                            if (payment.length > 0) {
-                                for (var i = 0; i < payment.length; i++) {
-                                    $('#' + payment[i].payment_title).css('visibility', 'visible');
-                                }
-                            } else {
-                                $('#nopay').css('visibility', 'visible');
-                            }
-
-                        }
-                    }, 'json');
-                }
             })
+            function GetPackagesList(pkg_type) {
+                $.ajax({
+                    url: api + '/Packagesbuy/get_packages_list',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'key': user_token, 'pkg_type': pkg_type},
+                })
+                    .done(function (sb) {
+                        if (sb.code == 200) {
+                            package = sb.result;
+                            var pkghtml = '';
+                            for (var i = 0; i < package.length; i++) {
+                                var packinfo = JSON.stringify(package[i]);
+                                // if (package[i].pkg_sort==666) {
+                                //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
+                                // }else{
 
-            function tableclick(demo) {
-                $(demo).siblings().removeClass("active").end().addClass("active");
-                var pkginfo = $(demo).attr('data-info');
-                pkginfo = pkginfo.replace(' ', '');
-                $.post(api + '/Packagesbuy/packages_time_reckon', {
-                    'key': user_token,
-                    'child_id': child_id,
-                    'pkginfo': pkginfo
-                }, function (data, textStatus, xhr) {
+                                // }
+                                pkghtml += "<li data-info='" + packinfo + "' onclick='tableclick(this)'>";
+                                pkghtml += '<div class="level_item">';
+                                if (package[i].pkg_sort == 666) {
+                                    pkghtml += '<span class="level_hot">热门推荐</span>';
+                                }
+                                pkghtml += '<p class="level_item_p1">' + package[i].pkg_title + '</p>' +
+                                    '<p class="level_item_p2">￥<strong>' + package[i].pkg_price + '</strong></p>' +
+                                    '<p class="level_item_p3">￥' + package[i].pkg_cprice + '</p>';
+                                if (package[i].pkg_sort == 666) {
+                                    pkghtml += '<p class="level_item_p4"><span>' + package[i].pkg_desc + '</span></p>';
+                                }
+                                pkghtml += '</div>' +
+                                    '</li>';
+                            }
+                            $('.level_list').html(pkghtml);
+                        } else {
+                            $.alert(sb.message, '系统提示', function () {
+                                historyback();
+                            })
+                        }
+
+                    })
+            }
+
+            function GetPaymentList() {
+                $.post(api + '/Packagesbuy/get_payment_list', {'key': user_token}, function (data, textStatus, xhr) {
                     if (data.code == 200) {
-                        $('.date').text(data.result[0].end_time)
-                        pkginfo = $.parseJSON(pkginfo);
-                        $('#price').text(pkginfo.pkg_price)
-                        var Discount = pkginfo.pkg_cprice - pkginfo.pkg_price;
-                        $('#Discount').text('已优惠' + Discount + '元')
-                        var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
-                        var name = $('.active .level_item_p1').text();
-                        $('#pkgdesc').text('您已选择' + type + name + '套餐')
-                    } else {
-                        $('.choosed_info').html(data.msg);
+                        var payment = data.result[0];
+                        if (payment.length > 0) {
+                            for (var i = 0; i < payment.length; i++) {
+                                $('#' + payment[i].payment_title).css('visibility', 'visible');
+                            }
+                        } else {
+                            $('#nopay').css('visibility', 'visible');
+                        }
+
                     }
-                }, "json");
+                }, 'json');
             }
 
-            function payStatus(orderSn{
-                location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
-            }
         })
+        function tableclick(demo) {
+            $(demo).siblings().removeClass("active").end().addClass("active");
+            var pkginfo = $(demo).attr('data-info');
+            pkginfo = pkginfo.replace(' ', '');
+            $.post(api + '/Packagesbuy/packages_time_reckon', {
+                'key': user_token,
+                'child_id': child_id,
+                'pkginfo': pkginfo
+            }, function (data, textStatus, xhr) {
+                if (data.code == 200) {
+                    $('.date').text(data.result[0].end_time)
+                    pkginfo = $.parseJSON(pkginfo);
+                    $('#price').text(pkginfo.pkg_price)
+                    var Discount = pkginfo.pkg_cprice - pkginfo.pkg_price;
+                    $('#Discount').text('已优惠' + Discount + '元')
+                    var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
+                    var name = $('.active .level_item_p1').text();
+                    $('#pkgdesc').text('您已选择' + type + name + '套餐')
+                } else {
+                    $('.choosed_info').html(data.msg);
+                }
+            }, "json");
+        }
+
+        function payStatus(orderSn){
+            location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
+        }
     </script>
 
 </body>
