@@ -186,8 +186,10 @@
                     order_sn:orderSn
                     // order_sn:'150594483782422015'
                 },
-                dataType: "json",
                 success: function(response){
+                    response = $.parseJSON(response);
+                    alert(response);
+                    alert(response.result);
                     alert(response['result']);
                     alert(response['result'][0]);
                     alert(response['result'][0]['order_tid']);
