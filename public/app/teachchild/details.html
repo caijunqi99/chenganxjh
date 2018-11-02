@@ -107,15 +107,11 @@
                         if(res['code'] == 200){
                             if(res.result[0]['price'] !=0){
                                 if(res.result[0]['buy'] != 0){
-                                    $('.video_play_btn').parent().hide();
-                                    $("#video").show();
                                     _video.play();
                                 }else{
                                     $.toast("请前往购买", 'forbidden');
                                 }
                             }else{
-                                $('.video_play_btn').parent().hide();
-                                $("#video").show();
                                 _video.play();
                             }
                         }else if(res['code'] == 400){
@@ -136,7 +132,7 @@
     }
 
 
-    $(".video_play_btn").click(function() {
+    /*$(".video_play_btn").click(function() {
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');
         }else{
@@ -175,7 +171,7 @@
             })
 
         }
-    });
+    });*/
 
 </script>
 

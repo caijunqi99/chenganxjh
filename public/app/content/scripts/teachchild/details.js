@@ -149,9 +149,13 @@ $(function() {
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
-            '<div class="related2">' +
-            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ','+data[0]['data']['t_price']+');">' + price + '</button>' +
-            '</div>' +
+            '<div class="related2">' ;
+        if (data[0]['data']['t_price'] == 0) {
+            template +='<button type="button" >' + price + '</button>'
+        } else {
+            template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
+        }
+            template +=   '</div>' +
             '</div>' +
             '<div class="related_list">' +
             '<p class="title_more">更多课程</p>' +
@@ -163,11 +167,9 @@ $(function() {
 
 });
 //跳转购买页面
-function pay(t_id,t_price){
+function pay(t_id){
     if(user_token){
-        if(t_price != 0 || !t_price){
             location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
-        }
     }else{
         $.toast('请前往登陆','forbidden');
     }
