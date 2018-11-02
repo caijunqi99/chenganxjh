@@ -63,6 +63,7 @@
             dataType: 'json',
             success: function(response){
                 if(response['code'] == 200){
+                    alert(response.result[0]['over_amount']);
                     $('.pay_p2').html('实付￥'+response.result[0]['over_amount']);
                     id=response.result[0]['order_tid'];
                 }else if(response['code'] == 400){
