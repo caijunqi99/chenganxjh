@@ -54,7 +54,7 @@ class Schoolbus extends Model {
      * @param obj $page 分页对象
      * @return array 二维数组
      */
-    public function get_schoolbus_List($condition = array(), $page = '', $orderby = 'bus_id asc') {
+    public function get_schoolbus_List($condition = array(), $page = '', $orderby = 'bus_id desc') {
         if ($page) {
             $result = db('schoolbus')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
