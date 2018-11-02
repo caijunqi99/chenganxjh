@@ -32,12 +32,12 @@ class Teacherdetail extends MobileMall
 
         if(!empty($orderinfo)){
             if($orderinfo['order_dieline']>time()){
-                $result[]['data']['buy'] = 1;
+                $result[0]['data']['buy'] = 1;
             }else{
-                $result[]['data']['buy'] = 0;
+                $result[0]['data']['buy'] = 0;
             }
         }else{
-            $result[]['data']['buy'] = 0;
+            $result[0]['data']['buy'] = 0;
         }
         $conditions = array();
         $conditions['t_audit'] = 3;
