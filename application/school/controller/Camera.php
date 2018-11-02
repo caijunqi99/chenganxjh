@@ -4,6 +4,7 @@ namespace app\school\controller;
 
 use think\Lang;
 use think\Validate;
+use vomont\Vomont;
 
 class Camera extends AdminControl
 {
@@ -241,7 +242,7 @@ class Camera extends AdminControl
         $where = ' status=1 ';
         if(!empty($_GET)){
             if(!empty($_GET['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_GET["name"]).'%" ';
+                $where .= ' AND name LIKE "%'.trim($_GET["name"]).'%" ';
             }
             if(!empty($_GET['province'])){
                 $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
@@ -279,7 +280,7 @@ class Camera extends AdminControl
         $where = ' status=1 ';
         if(!empty($_POST)){
             if(!empty($_POST['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_POST["name"]).'%" ';
+                $where .= ' AND name LIKE "%'.trim($_POST["name"]).'%" ';
             }
             if(!empty($_POST['province'])){
                 $where .= ' AND province_id = "'.intval($_POST["province"]).'"';
@@ -306,32 +307,47 @@ class Camera extends AdminControl
 
 //        halt($start);
         //查询未绑定的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('sq_time DESC')->select();
+        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
         $list_count = db('camera')->where($where)->count();
 
         $html = '';
         if(!empty($list)){
             foreach($list as $key=>$value){
                 $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["camera_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["class_area"].'</td>';
-                if($value['is_public_area'] == 1){
-                    $html .= '<td class="align-center">是</td>';
-                }else if($value['is_public_area'] == 2){
-                    $html .= '<td class="align-center">否</td>';
+                $html .= '<td class="align-center">'.$value["name"].'</td>';
+                $html .= '<td class="align-center">'.$value["channelid"].'</td>';
+                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
+                $html .= '<td class="align-center">'.$value["id"].'</td>';
+                if($value['online'] == 1){
+                    $html .= '<td class="align-center">在线</td>';
+                }else if($value['online'] == 0){
+                    $html .= '<td class="align-center">离线</td>';
                 }
-                $html .= '<td class="align-center">'.$value["school_name"].'</td>';
-//                $html .= '<td class="align-center">'.$value["address"].'</td>';
+                $html .= '<td class="align-center">'.$value["parentid"].'</td>';
+                $html .= '<td class="align-center">'.$value["imageurl"].'</td>';
+                $html .= '<td class="align-center">'.$value["rtmpplayurl"].'</td>';
+                if($value['is_classroom'] == 1){
+                    $html .= '<td class="align-center">否</td>';
+                }else if($value['is_classroom'] == 2){
+                    $html .= '<td class="align-center">是</td>';
+                }
+                if($value['status'] == 1){
+                    $html .= '<td class="align-center">开启</td>';
+                }else if($value['status'] == 2){
+                    $html .= '<td class="align-center">关闭</td>';
+                }
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["sn"].'</td>';
-                $html .= '<td class="align-center">'.$value["key"].'</td>';
-                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["content"].'</td>';
-                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
-                $html .= '<td class="w150 align-center">
-                        <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
-                $html .=  '</div></td>';
+                $html .= '<td class="align-center">'.$value["begintime"].'——'.$value["endtime"].'</td>';
+//                $html .= '<td class="align-center">'.$value["address"].'</td>';
+//                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
+//                $html .= '<td class="align-center">'.$value["id"].'</td>';
+//                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
+//                $html .= '<td class="align-center">'.$value["content"].'</td>';
+//                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
+//                $html .= '<td class="w150 align-center">
+//                        <div class="layui-table-cell laytable-cell-9-8">
+//                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
+//                $html .=  '</div></td>';
 
                 $html .= '</tr>';
             }
@@ -345,6 +361,66 @@ class Camera extends AdminControl
         exit(json_encode(array('html'=>$html,'count'=>$list_count)));
 
     }
+    /**
+     * 自动导入摄像头
+     */
+    public function get_camera(){
+        $model_school = Model('school');
+        $condition=array();
+        $condition['isdel']=1;
+        $school=$model_school->getSchoolList($condition);
+        $shu=array();
+        foreach($school as $v){
+            if($v['res_group_id']!=0){
+                $shu[] = $v['res_group_id'];
+            }
+        }
+        $model_class=Model('classes');
+        $where=array();
+        $where['isdel']=1;
+        $class=$model_class->getAllClasses($where);
+        foreach($class as $v){
+            if($v['res_group_id']!=0){
+                $shu[]=$v['res_group_id'];
+            }
+        }
+        $vlink = new Vomont();
+        $res= $vlink->SetLogin();
+        $accountid=$res['accountid'];
+        $data='';
+        foreach($shu as $v){
+            $datas=$vlink->SetPlay($accountid,$v);
+            if(empty($data)) {
+                $data = $datas['resources'];
+            }else{
+                $data[] = $datas['resources'];
+            }
+        }
+        foreach($data as $k=>$v){
+            $play=$v['deviceid'].'-'.$v['channelid'].',';
+            $video=$vlink->Resources($accountid,$play);
+            $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
+            $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
+            $data[$k]['sq_time']=time();
+            $data[$k]['status']=1;
+            $data[$k]['is_classroom']=1;
+        }
+        $model_camera=Model('camera');
+        $result=$model_camera->getCameraList('','','id');
+        $ret=$this->get_diff_array_by_pk($data,$result);
+        $sult=$model_camera->cameras_add($ret);
+        return $sult;
+    }
+    function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
+        try{
+            $res=[];
+            foreach($arr2 as $item) $tmpArr[$item[$pk]] = $item;
+            foreach($arr1 as $v) if(! isset($tmpArr[$v[$pk]])) $res[] = $v;
+            return $res;
+        }catch (\Exception $exception){
+            return $arr1;
+        }
+    }
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
@@ -352,14 +428,9 @@ class Camera extends AdminControl
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'camera',
-                'text' => '待绑定',
-                'url' => url('School/Camera/camera')
-            ),
-            array(
                 'name' => 'entered',
-                'text' => '已录入',
-                'url' => url('School/Camera/entered')
+                'text' => '摄像头列表',
+                'url' => url('Admin/Camera/entered')
             )
         );
         return $menu_array;
