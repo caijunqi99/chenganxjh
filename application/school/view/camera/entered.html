@@ -1,6 +1,9 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
+
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/17time/timedropper.min.css">
+<script src="{$Think.config.url_domain_root}static/plugins/17time/timedropper.min.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -120,6 +123,11 @@
         </div>
     </form>
 </div>
+<style type="text/css">
+    .pictime{
+        width: 50px;
+    }
+</style>
 <div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
     <div class="layui-row layui-col-space10 demo-list">
         <div class="layui-col-sm4">
@@ -158,20 +166,45 @@
     }
 
     function timesss(cid) {
-        console.log(cid+'11111');
-        layui.use('laydate', function(){
-            var laydate = layui.laydate;
-            console.log(cid+'22222');
-            laydate.render({
-                elem: '#test'+cid
-                ,trigger: 'focus' //采用click弹出
-                ,type: 'time'
-                ,range: true
-              });
-            console.log(cid+'3333');
-
-        })
+        var foo = cid.split('_');
+        cid = foo[0];
+        act = foo[1];
+        $("#picktime"+act+cid).timeDropper({
+            meridians: false,
+            format: 'HH:mm',
+        });
     }
+    function changetime(d){
+        var info =$(d).attr('do');
+        info = info.split('_');
+        cid = info[0];
+        act = info[1];
+        var ctime = $("#picktime"+act+cid).val()
+        $.post("{:url('/School/camera/changetime')}", {'cid': cid,'ctime':ctime,'keys':act}, function(data, textStatus, xhr) {
+            layer.tips(data.message, $("#picktime"+act+cid));
+        },'json');
+    }
+    function makedefault(cid) {
+        var statu = $('#dp_'+cid).attr('statu');
+
+        if(statu ==1){
+            status = 2;
+        }else{
+            status = 1;
+        }
+        $.post("{:url('/School/camera/makedefault')}", {'cid': cid,'status':status}, function(data, textStatus, xhr) {
+            if(statu ==1){
+                $('#dp_'+cid).removeClass('layui-form-checked');
+                $('#dp_'+cid).attr('statu',status);
+            }else{
+                $('#dp_'+cid).addClass('layui-form-checked');
+                $('#dp_'+cid).attr('statu',status);
+            }
+        },'json');
+        console.log(statu)
+
+    }
+
 </script>
 <script type="text/javascript">
     
@@ -179,6 +212,15 @@
         var form = layui.form,
             laypage = layui.laypage
             ,layer = layui.layer;
+        //监听指定开关
+          form.on('switch(switch)', function(data){
+            var replay = this.checked ? 'true' : 'false';
+            if (replay=='true') { //每天
+
+            }else{ //自定义
+                
+            }
+          });
         //关键字搜索
         var name = '<?php if(!empty($_GET["name"])){echo $_GET["name"];}?>';
         //省 市 区

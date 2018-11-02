@@ -277,7 +277,7 @@ class Camera extends AdminControl
      */
     public function get_entered_list(){
 
-        $where = ' status=1 ';
+        $where = ' 1=1 ';
         if(!empty($_POST)){
             if(!empty($_POST['name'])){
                 $where .= ' AND name LIKE "%'.trim($_POST["name"]).'%" ';
@@ -333,13 +333,21 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center"><b style="color:green;">是</b></td>';
                 }
                 if($v['status'] == 1){
-                    $html .= '<td class="align-center">开启</td>';
+                //     $html .= '<td class="align-center">开启</td>';
+                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].');" ><span>开关</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }else if($v['status'] == 2){
-                    $html .= '<td class="align-center">关闭</td>';
+                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox" onclick="makedefault('.$v['cid'].');" ><span>开关</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                //     $html .= '<td class="align-center">关闭</td>';
                 }
+
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
                 // $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
-                $html .= '<td class="align-center"><input type="text" class="layui-input" id="test'.$v['cid'].'" placeholder=" - " onfocus="timesss('.$v['cid'].')"></td>';
+                $start = trim($v['cid'].'_Start');
+                $end = trim($v['cid'].'_End');
+                $html .= "<td class='align-center'>
+                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onClick='timesss(".'"'.$start.'"'.")' value='".date('H:i',$v["begintime"])."'/> <a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>确定</a><hr>
+                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onClick='timesss(".'"'.$end.'"'.")' value='".date('H:i',$v["endtime"])."' /> <a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>确定</a>
+                    </td>";
                 
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
 //                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
@@ -422,6 +430,53 @@ class Camera extends AdminControl
             return $res;
         }catch (\Exception $exception){
             return $arr1;
+        }
+    }
+
+
+    public function changetime(){
+        $input = input();
+        $act = $input['keys'];
+        $cid = $input['cid'];
+        $ctime = $input['ctime'];
+        $key=false;
+        switch ($act) {
+            case 'Start':
+                $key = 'begintime';
+                $msg = '开启时间';
+                break;
+            case 'End':
+                $key = 'endtime';
+                $msg = '关闭时间';
+                break;
+        }
+        if($cid && $ctime && $key ){
+            $ctime = strtotime($ctime);
+            $result = db('camera')->where('cid',$cid)->setField($key, $ctime);
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
+        }
+        
+    }
+
+    public function makedefault(){
+        $input = input();
+        $cid = $input['cid'];
+        $key=$input['status'];
+        if($cid && $key ){
+            $result = db('camera')->where('cid',$cid)->setField('status', $key);
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
         }
     }
 
