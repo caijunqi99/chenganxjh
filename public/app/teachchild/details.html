@@ -91,11 +91,9 @@
     var _video = document.getElementById("video_true");
     _video.onclick=function(){
         if(_video.paused){
-            alert('eee');
             if(!user_token){
                 $.toast("请前往登陆", 'forbidden');
             }else{
-                alert('bbb');
                 $.ajax({
                     type:'POST',
                     url:api+'/Teacherdecide/decide.html',
@@ -107,7 +105,6 @@
                     dataType: "json",
                     success: function(res){
                         if(res['code'] == 200){
-                            alert('cccc');
                             if(res.result[0]['price'] !=0){
                                 if(res.result[0]['buy'] != 0){
                                     _video.play();
@@ -115,8 +112,7 @@
                                     $.toast("请前往购买", 'forbidden');
                                 }
                             }else{
-                                alert('aaa');
-                                _video.play();
+                                bf();
                             }
                         }else if(res['code'] == 400){
                             $.toast('登陆失效，请重新登录','forbidden',function(){
@@ -133,6 +129,10 @@
         }else{
             _video.pause();
         }
+    }
+    function bf(){
+        var _bf = document.getElementById("video_true");
+        _bf.play();
     }
 
 
