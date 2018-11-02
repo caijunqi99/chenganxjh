@@ -359,7 +359,7 @@ class TeacherPayment extends MobileMall
             output_error('参数有误');
         }
         $model_teach = Model("Packagesorderteach");
-        $result = $model_teach->getOrderInfo(array('order_sn'=>$order_sn),'','order_id,order_sn,pay_sn,order_tid,order_dieline,add_time,payment_time,order_amount,over_amount');
+        $result = $model_teach->getOrderInfo(array('pay_sn'=>$order_sn),'','order_id,order_sn,pay_sn,order_tid,order_dieline,add_time,payment_time,order_amount,over_amount');
         if(!empty($result)){
             $result['add_time'] = $result['add_time']!=""?date("Y-m-d H:i:s",$result['add_time']):"";
             $result['order_dieline'] = $result['order_dieline']!=""?date("Y-m-d H:i:s",$result['order_dieline']):"";
