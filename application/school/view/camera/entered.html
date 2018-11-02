@@ -1,6 +1,6 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
-
+<script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -120,7 +120,61 @@
         </div>
     </form>
 </div>
+<div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
+    <div class="layui-row layui-col-space10 demo-list">
+        <div class="layui-col-sm4">
+            <!-- 填充内容 -->
+            <div class="layui-card">
+                <div id="video" style="width: 600px; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+                    
+                </script>
+<script type="text/javascript">
+    function rtmplay(cid){
+        var rtmpInfo= $('#tr_'+cid).attr('datainfo');
+        rtmpInfo =$.parseJSON(rtmpInfo);
+        layer.open({
+          type: 1,
+          title: rtmpInfo.name,
+          shadeClose: true,
+          area: ['644px', '470px'],
+          skin: 'layui-layer-rim',
+          content: $('#LAY')
+        });
+        var videoObject = {
+                container: '#video', //容器的ID或className
+                variable: 'player',//播放函数名称
+                autoplay:false,
+                live:true,
+                debug:true,
+                video: rtmpInfo.rtmpplayurl,
+                poster:rtmpInfo.imageurl
+            };
+        var player = new ckplayer(videoObject);
+    }
+
+    function timesss(cid) {
+        console.log(cid+'11111');
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            console.log(cid+'22222');
+            laydate.render({
+                elem: '#test'+cid
+                ,trigger: 'focus' //采用click弹出
+                ,type: 'time'
+                ,range: true
+              });
+            console.log(cid+'3333');
+
+        })
+    }
+</script>
+<script type="text/javascript">
+    
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
             laypage = layui.laypage

@@ -2,21 +2,21 @@
 
 //摄像头列表
 $lang['look_camera_title']			    = '摄像头管理';
-$lang['look_camera_name']			    = '摄像头名称';
+$lang['look_camera_name']			    = '名称';
 $lang['look_camera_sn']			    = 'sn';
 $lang['look_camera_key']			    = 'key';
 $lang['look_camera_area']			    = '学校地区';
 $lang['look_camera_school']			    = '学校名称';
 $lang['look_camera_time']			    = '申请时间';
-$lang['look_camera_channelid']          = '摄像头通道id';
+$lang['look_camera_channelid']          = '通道ID';
 $lang['look_camera_deviceid']           = '设备id';
 $lang['look_camera_id']                 = '摄像头id';
-$lang['look_camera_online']                 = '摄像头在线状态';
+$lang['look_camera_online']                 = '在线';
 $lang['look_camera_parentid']                 = '资源id';
-$lang['look_camera_pimageurl']                 = '播放第一帧地址';
-$lang['look_camera_rtmpplayurl']                 = 'rtmp播放地址';
-$lang['look_camera_classroom']                 = '是否是重温课堂';
-$lang['look_camera_cstatus']                 = '是否开启摄像头';
+$lang['look_camera_pimageurl']                 = '默认图片';
+$lang['look_camera_rtmpplayurl']                 = '播放地址';
+$lang['look_camera_classroom']                 = '重温课堂';
+$lang['look_camera_cstatus']                 = '开关';
 $lang['look_camera_sqtime']                 = '导入时间';
 $lang['look_camera_begintime']                 = '开启——关闭时间';
 $lang['look_camera_update']                 = '更新';
