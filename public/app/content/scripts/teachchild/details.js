@@ -139,10 +139,12 @@ $(function() {
                 '</div>' +
                 '</a></li>';
         }
-        if (data[0]['data']['t_price'] == 0) {
+        if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
             price = '免费观看';
-        } else {
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
             price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+            price = '已购买'
         }
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
             '<div class="related">' +
@@ -151,11 +153,13 @@ $(function() {
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
             '<div class="related2">' ;
-        if (data[0]['data']['t_price'] == 0) {
-            template +='<button type="button" >' + price + '</button>'
-        } else {
-            template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
-        }
+            if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
+                template +='<button type="button" >' + price + '</button>'
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
+                template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+                template +='<button type="button" >' + price + '</button>'
+            }
             template +=   '</div>' +
             '</div>' +
             '<div class="related_list">' +
