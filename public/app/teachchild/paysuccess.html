@@ -52,17 +52,19 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        var id = '';
         $.ajax({
             type:'POST',
-            url:api+'/Teacherbuy/buy.html',
+            url:api+'/teacherpayment/getOrderByOrdersn.html',
             data:{
                 key:user_token,
-                tid:GetQueryString('id')
+                order_sn:GetQueryString('orderSn')
             },
             dataType: 'json',
             success: function(response){
                 if(response['code'] == 200){
-                    $('.pay_p2').html('实付￥'+response.result[0]['t_price']);
+                    $('.pay_p2').html('实付￥'+response.result[0]['over_amount']);
+                    id=response.result[0]['order_tid'];
                 }else if(response['code'] == 400){
                     $.toast('请前往登陆','forbidden',function () {
                         layout();
@@ -73,7 +75,7 @@
             }
         });
         $('.pay_finish_btn .back_btn').click(function(){
-            location.href=http_url+'app/teachchild/details.html?id='+GetQueryString('id');
+            location.href=http_url+'app/teachchild/details.html?id='+id;
         })
     </script>
 </body>
