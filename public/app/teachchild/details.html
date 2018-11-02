@@ -88,14 +88,15 @@
 
 <script>
     // 播放视频
-    var _video = document.getElementById("video_true");
-    _video.onclick=function(){
+    function videoClick(){
+        var _video = document.getElementById("video_true");
         if(_video.paused){
             _video.play();
         }else{
             _video.pause();
         }
     }
+
 
     $(".video_play_btn").click(function() {
         if(!user_token){
@@ -116,24 +117,14 @@
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
-                                var _video = document.getElementById("video_true");
-                                    if(_video.paused){
-                                        _video.play();
-                                    }else{
-                                        _video.pause();
-                                    }
+                                videoClick();
                             }else{
                                 $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
-                            var _video = document.getElementById("video_true");
-                            if(_video.paused){
-                                _video.play();
-                            }else{
-                                _video.pause();
-                            }
+                            videoClick();
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){
