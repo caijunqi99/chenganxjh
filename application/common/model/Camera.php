@@ -80,6 +80,12 @@ class Camera extends Model {
     public function getOnePkg($condition = array()) {
         return db('camera')->where($condition)->find();
     }
+    public function getCameras($condition,$conditions,$field = '*', $school = 'cid desc') {
+        $list = db('camera')->field($field)->where($condition)->whereOr($conditions)->order($school)->select();
+        if (empty($list))
+            return array();
+        return $list;
+    }
 
 }
 
