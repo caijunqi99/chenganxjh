@@ -9,14 +9,16 @@ $(function() {
         dataType: 'json',
         data: {
             key: user_token,
+            member_id:user_member_id,
             t_id: GetPar("id")
         },
         success: function(response) {
             $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
-            $('#related').html(HTML(response['result']));
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
-            // _videoSource.poster = response.result[0]['data']['t_videoimg'];
+            _videoSource.poster = response.result[0]['data']['t_videoimg'];
+            $('#related').html(HTML(response['result']));
+
             /*var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
@@ -137,10 +139,12 @@ $(function() {
                 '</div>' +
                 '</a></li>';
         }
-        if (data[0]['data']['t_price'] == 0) {
+        if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
             price = '免费观看';
-        } else {
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
             price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+            price = '已购买'
         }
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
             '<div class="related">' +
@@ -148,9 +152,15 @@ $(function() {
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
             '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
             '</div>' +
-            '<div class="related2">' +
-            '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ','+data[0]['data']['t_price']+');">' + price + '</button>' +
-            '</div>' +
+            '<div class="related2">' ;
+            if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
+                template +='<button type="button" >' + price + '</button>'
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
+                template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+                template +='<button type="button" >' + price + '</button>'
+            }
+            template +=   '</div>' +
             '</div>' +
             '<div class="related_list">' +
             '<p class="title_more">更多课程</p>' +
@@ -162,11 +172,9 @@ $(function() {
 
 });
 //跳转购买页面
-function pay(t_id,t_price){
+function pay(t_id){
     if(user_token){
-        if(t_price != 0 || !t_price){
             location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
-        }
     }else{
         $.toast('请前往登陆','forbidden');
     }
