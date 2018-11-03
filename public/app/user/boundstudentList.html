@@ -44,12 +44,12 @@
 <div class="screen" id="screen"></div>
 <div class="main">
     <!-- 暂无学生 -->
-    <div class="no_bounds" style="display:none;">
+    <div class="no_bounds">
         <p class="no_bounds_p"><span>暂无绑定学生</span></p>
     </div>
 
     <!-- 有学生 -->
-    <div class="container2">
+    <div class="container2" style="display:none;">
         <div class="student_tab_box">
             <ul class="student_tab">
 
@@ -127,7 +127,7 @@
         <div class="weui-cell bang_list">
             <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
             <div class="weui-cell__bd">
-                <a href="javascript:;" class="input_txt color_blue">2218-02-02</a>
+                <input class="input_txt" id="see" type="text" readonly>
             </div>
         </div>
 
@@ -156,6 +156,8 @@
             if(response['code'] == 200){
                 var data = response.result;
                 if(data != ''){
+                    $('.no_bounds').hide();
+                    $('.container2').show();
                     if(data.length > 1){
                         var tab = '';
                         for(var i=0;i<data.length;i++){
@@ -177,6 +179,7 @@
                             $('#classes').val(data[0]['sc_type']);
                             $('#banji').val(data[0]['classname']);
                             $('#shibiema').val(data[0]['classCard']);
+                            $('#see').val(data[0]['time']);
                         }
                         $('.student_tab').html(tab);
                         $('.student_tab li').click(function(){
@@ -201,9 +204,14 @@
                                         $('#classes').val(response.result[0]['sc_type']);
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
+                                        $('#see').html(response.result[0]['time']);
                                     }else if(response['code'] == 400){
+                                        $('.no_bounds').show();
+                                        $('.container2').hide();
                                         $.toast("请登陆",'forbidden');return false;
                                     }else{
+                                        $('.no_bounds').show();
+                                        $('.container2').hide();
                                         $.toast(response['message'],'forbidden');return false;
                                     }
                                 }
@@ -211,7 +219,16 @@
 
                         })
                     }else{
-
+                        $('#bang_name').val(data[0]['s_name']);
+                        $('#sex').val(data[0]['s_name']);
+                        $('#date').val(data[0]['s_birthday']);
+                        $('#s_card').val(data[0]['s_card']);
+                        $('#city').val(data[0]['s_region']);
+                        $('#school').val(data[0]['name']);
+                        $('#classes').val(data[0]['sc_type']);
+                        $('#banji').val(data[0]['classname']);
+                        $('#shibiema').val(data[0]['classCard']);
+                        $('#see').val(data[0]['time']);
                     }
 
                 }else{
@@ -220,8 +237,12 @@
                 }
 
             }else if(response['code'] == 400){
+                $('.no_bounds').show();
+                $('.container2').hide();
                 $.toast('请登录','forbidden');return false;
             }else{
+                $('.no_bounds').show();
+                $('.container2').hide();
                 $.toast(response['message'],'forbidden');return false;
             }
         }
