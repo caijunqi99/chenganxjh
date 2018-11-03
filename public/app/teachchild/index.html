@@ -275,14 +275,14 @@
                 $('.filter_sort').hide();
                 var params = '';
                 if (isPrice == 0) {
-                    params = {
+                    params = { //免费
                         key: user_token,
-                        price_free: 1
+                        price_free: 1,
                     }
                 } else {
-                    params = {
+                    params = { //付费
                         key: user_token,
-                        price_fees: 1
+                        price_fees: 1,
                     }
                 }
                 GetKejian(params)
@@ -301,6 +301,7 @@
 
             // 顶部推荐切换
             sortTopAction = function(ID, el) {
+                $('.filter_top div li').removeClass('float_right_action');//去掉精品课堂下级默认
                 $('.sort_tabs_top li i').removeClass('action');
                 $(el).addClass('action');
                 var top = Index['result'][0]['categorize'];
