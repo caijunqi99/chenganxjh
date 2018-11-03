@@ -976,3 +976,7 @@ function GetQueryString(name)
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
+
+function payTo(){
+    location.href=http_url+'wap/tmpl/member/order_list.html?ago=1';
+}
