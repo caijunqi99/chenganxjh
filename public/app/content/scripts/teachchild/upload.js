@@ -1,5 +1,6 @@
 $(function() {
     fz_video= function(video_url){
+        alert(video_url);
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
         _videoSource.poster = video_url+'?vframe/jpg/offset/1';
@@ -122,6 +123,7 @@ $(function() {
     isUpload = function(isTrue) {
         if (isTrue == 0) {
             var video = fz_video();
+            alert(video);
             var video_img = video+'?vframe/jpg/offset/1';
             if (video == '') {
                 $.toast("获取上传视频失败，请重新上传",'forbidden');
