@@ -673,26 +673,62 @@ class Member extends MobileMember
         if($member['is_owner'] == 0){
             //主账号绑定的孩子
             $students = db('student')->alias('s')
-                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid')
-                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
-                ->join('__CLASS__ c','c.classid = s.s_classid')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
                 ->select();
-            output_data($students);
         }else{
             //副账号 显示起主账号绑定的孩子
             $students = db('student')->alias('s')
-                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid')
-                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
-                ->join('__CLASS__ c','c.classid = s.s_classid')
+                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
                 ->select();
-            output_data($students);
         }
+        if(!empty($students)){
+            foreach ($students as $v) {
+                $v['time'] = date('Y-m-d',$v['end_time']);
+            }
+        }
+
+        output_data($students);
     }
 
+    /**
+     * @desc 获取孩子信息
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function getStudent(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $sid = trim(input('post.sid'));
+        if(empty($token)){
+            output_error('缺少参数sid');
+        }
+        //获取绑定孩子
+            $student = db('student')->alias('s')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->where('s.s_id = "'.$sid.'"')
+                ->find();
+        if(!empty($student)){
+            $student['time'] = date('Y-m-d',$student['end_time']);
+        }
+            output_data($student);
+
+    }
 
 }
 
