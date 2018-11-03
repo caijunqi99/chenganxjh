@@ -52,7 +52,7 @@ class Chat extends MobileMember
         if ($result['code']==200) {
             output_data(array('state'=>TRUE));
         }else{
-            output_error('token生成失败！');
+            output_error('刷新失败！');
         }
 
     }

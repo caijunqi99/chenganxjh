@@ -43,6 +43,24 @@ class Packagesbuy extends MobileMember
         $this->_logic_buy_1 = \model('buy_1','logic');
     }
 
+
+    public function GetNowPackageTime(){
+        $input = input();
+        $condition=array(
+            'member_id'=>$this->member_info['member_id'],
+            's_id'=>$input['child_id'],
+            'pkg_type'=>1
+        );
+        $PkgTime = model('Packagetime');
+        $packagetime = $PkgTime->getOnePkg($condition);
+        if ($packagetime) {
+            output_data(array('endtime'=>date('Y-m-d',$packagetime['end_time'])));
+        }else{
+            output_error('还未购买套餐！');
+        }
+        
+
+    }
     /**
      * 获取套餐列表
      * @return [type] [description]

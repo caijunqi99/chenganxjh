@@ -4,7 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 use process\Process;
-
+use cloud\RongCloud;
 class Common extends MobileMall
 {
 
@@ -234,6 +234,11 @@ class Common extends MobileMall
                         $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
 //                        halt($file_dir);
                         $result[] = array('message'=>'修改成功','avatar_url'=>$name_dir);
+
+                        //刷新融云 头像
+                        $RongCloud = new RongCloud();
+                        $RongCloud->user()->refresh($member['member_id'], $member['member_nickname'], $file_dir);
+
                         output_data($result);
                     }
                 }else{

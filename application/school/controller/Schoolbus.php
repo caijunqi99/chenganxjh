@@ -16,9 +16,15 @@ class Schoolbus extends AdminControl {
     }
 
     public function index(){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
+        $schoolid = isset($admininfo['admin_school_id'])?$admininfo['admin_school_id']:0;
         $model_bus = Model("Schoolbus");
         $condtion = array();
         $condtion['is_del'] = 1;
+        $condtion['sc_id'] = $schoolid;
         $busList = $model_bus->get_schoolbus_List($condtion);
         if(!empty($busList)){
             $week = array(0=>"日",1=>"一",2=>"二",3=>"三",4=>"四",5=>"五",6=>"六");
@@ -92,6 +98,7 @@ class Schoolbus extends AdminControl {
         if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
+        $schoolid = isset($admininfo['admin_school_id'])?$admininfo['admin_school_id']:0;
         $bus_id = input('param.bus_id');
         $Schoolbus = Model('Schoolbus');
         if (request()->isPost()) {
@@ -140,7 +147,7 @@ class Schoolbus extends AdminControl {
                     }
                     break;               
                 default://增
-                    $param['sc_id']   = 1;          
+                    $param['sc_id']   = $schoolid;
                     $result = $Schoolbus->schoolbus_add($param);
                     if ($result) {
                         $this->log(lang('bus_add_succ') . '[' . input('post.bus_card') . ']', null);

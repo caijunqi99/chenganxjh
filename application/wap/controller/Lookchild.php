@@ -72,18 +72,40 @@ class Lookchild extends MobileMember
                     $schoolid=$str['res_group_id'];
                     $classid=$str['clres_group_id'];
                 }
-                $vlink = new Vomont();
-                $res= $vlink->SetLogin();
-                $accountid=$res['accountid'];
-                $user['ip']=$res['vlinkerip'];
-                $user['port']=$res['vlinkerport'];
-                $user['username']=$res['username'];
+                $user['ip']='101.201.75.83';
+                $user['port']='9001';
+                $user['username']='bjc';
                 $user['pwd']='123456';
-                $html=$vlink->SetPlays($accountid,$schoolid,$classid);
-                foreach($html['resources'] as $k=> $v){
-                    $html['resources'][$k]['status']=$v['online'];
+                $camera_model=Model('camera');
+                $condition=array();
+                $condition['parentid']=$classid;
+                $conditions['parentid']=$schoolid;
+                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,privilege,type,usernum,status,begintime,endtime');
+                $date=date('H:i',time());
+                foreach($html as $k=> $v){
+                    if($v['online']==0){
+                        $html[$k]['status']=2;
+                    }else{
+                        if($v['status']==1){
+                            if(!empty($v['begintime'])&&!empty($v['endtime'])){
+                                $begintime=date('H:i',$v['begintime']);
+                                $endtime=date('H:i',$v['endtime']);
+                                if($date<$begintime||$date>$endtime){
+                                 $html[$k]['status']=2;
+                                }
+                                $html[$k]['begintime']=$begintime;
+                                $html[$k]['endtime']=$endtime;
+                            }else{
+                                $html[$k]['begintime']='';
+                                $html[$k]['endtime']='';
+                            }
+                        }else{
+                            $html[$k]['begintime']='';
+                            $html[$k]['endtime']='';
+                        }
+                    }
                 }
-                $data['camera']=!empty($html['resources'])?$html['resources']:[];
+                $data['camera']=!empty($html)?$html:[];
                 $data['logo']=$user;
                 $data = !empty($data)?[$data]:$data;
                 output_data($data);
