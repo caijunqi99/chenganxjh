@@ -33,7 +33,7 @@ class Memberpayment extends MobileMember
             $this->payment_config = $mb_payment_info['payment_config'];
 
 
-            $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+            $inc_file = APP_PATH . DIR_MOBILE . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
 
             if (!is_file($inc_file)) {
                 output_error('支付接口出错，请联系管理员！');
@@ -377,7 +377,6 @@ class Memberpayment extends MobileMember
             $param['orderFee'] = (int)($pay_info['data']['api_pay_amount'] * 100);
             $param['orderInfo'] = config('site_name') . '商品订单' . $pay_sn;
             $param['orderAttach'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
-            $param['notifyUrl'] = MOBILE_SITE_URL . '/payment/wx_notify';
             $api = new \wxpay_app();
             $api->get_payform($param);
             exit;
@@ -385,10 +384,9 @@ class Memberpayment extends MobileMember
         //支付宝
         if ($this->payment_code == 'alipay_app') {
             $param['orderSn'] = $pay_sn;
-            $param['orderFee'] = $pay_info['data']['api_pay_amount'];
+            $param['orderFee'] = round($pay_info['data']['api_pay_amount'],2);;
             $param['orderInfo'] = config('site_name') . '商品订单' . $pay_sn;
             $param['order_type'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
-            $param['notifyUrl'] = MOBILE_SITE_URL . '/payment/notify.html';
             $api = new \alipay_app();
             $api->get_payform($param);
 
