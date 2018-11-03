@@ -56,7 +56,7 @@ class Teacherhistory extends MobileMember
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
         }
-        $datas[] = $data;
+        $datas = !empty($data) ? [$data] : $data;
         output_data($datas);
     }
 
