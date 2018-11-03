@@ -674,7 +674,7 @@ class Member extends MobileMember
             //主账号绑定的孩子
             $students = db('student')->alias('s')
                 ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid')
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
                 ->join('__CLASS__ c','c.classid = s.s_classid')
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
