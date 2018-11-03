@@ -82,7 +82,7 @@ class Camera extends AdminControl
  */
     public function get_list(){
 
-        $where = ' status=2 ';
+        $where = ' status=1 ';
         if(!empty($_POST)){
             if(!empty($_POST['name'])){
                 $where .= ' AND camera_name LIKE "%'.trim($_POST["name"]).'%" ';
@@ -283,7 +283,28 @@ class Camera extends AdminControl
                 $where .= ' AND name LIKE "%'.trim($_POST["name"]).'%" ';
             }
             if(!empty($_POST['province'])){
-                $where .= ' AND province_id = "'.intval($_POST["province"]).'"';
+                $province=intval($_POST["province"]);
+                $school_model=Model('school');
+                $condition=array();
+                $condition['isdel']=1;
+                $condition['provinceid']=$province;
+                $condition['res_group_id']=array('neq',0);
+                $school=$school_model->getAllAchool($condition,'schoolid,res_group_id');
+                $parentid='';
+                $class_model=Model('classes');
+                $conditions=array();
+                $conditions['isdel']=1;
+                $conditions['school_provinceid']=$province;
+                $conditions['res_group_id']=array('neq',0);
+                $class=$class_model->getAllClasses($conditions,'classid,res_group_id');
+                foreach($school as $v){
+                    $parentid.=$v['res_group_id'].',';
+                }
+                foreach($class as $value){
+                    $parentid.=$value['res_group_id'].',';
+                }
+                $groupid=substr($parentid,0,strlen($parentid)-1);
+                //$where .= ' AND parentid in ('.$groupid.')';
             }
             if(!empty($_POST['city'])){
                 $where .= ' AND city_id = "'.intval($_POST["city"]).'"';
@@ -306,10 +327,10 @@ class Camera extends AdminControl
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
 
 //        halt($start);
-        //查询未绑定的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
+        //查询已安装的摄像头
+        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->getLastSql();
+        return $list;exit;
         $list_count = db('camera')->where($where)->count();
-
         $html = '';
         if(!empty($list)){
             foreach($list as $key=>$v){
