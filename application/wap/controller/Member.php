@@ -648,6 +648,51 @@ class Member extends MobileMember
 
     }
 
+    /**
+     * @desc 获取绑定孩子数据
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function getStudents(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,is_owner')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        //获取绑定孩子
+        if($member['is_owner'] == 0){
+            //主账号绑定的孩子
+            $students = db('student')->alias('s')
+                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid')
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
+                ->join('__CLASS__ c','c.classid = s.s_classid')
+                ->where('s.s_ownerAccount = "'.$member_id.'"')
+                ->select();
+            output_data($students);
+        }else{
+            //副账号 显示起主账号绑定的孩子
+            $students = db('student')->alias('s')
+                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid')
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
+                ->join('__CLASS__ c','c.classid = s.s_classid')
+                ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
+                ->select();
+            output_data($students);
+        }
+    }
+
 
 }
 
