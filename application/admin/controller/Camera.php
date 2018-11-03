@@ -239,7 +239,7 @@ class Camera extends AdminControl
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
-        $where = ' status=1 ';
+        $where = ' 1=1 ';
         if(!empty($_GET)){
             if(!empty($_GET['name'])){
                 $where .= ' AND name LIKE "%'.trim($_GET["name"]).'%" ';
@@ -303,7 +303,7 @@ class Camera extends AdminControl
                 foreach($class as $value){
                     $parentid.=$value['res_group_id'].',';
                 }
-                $groupid=substr($parentid,0,strlen($parentid)-1);
+                //$groupid=substr($parentid,0,strlen($parentid)-1);
                 //$where .= ' AND parentid in ('.$groupid.')';
             }
             if(!empty($_POST['city'])){
@@ -328,8 +328,8 @@ class Camera extends AdminControl
 
 //        halt($start);
         //查询已安装的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->getLastSql();
-        return $list;exit;
+        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
+        //return $list;exit;
         $list_count = db('camera')->where($where)->count();
         $html = '';
         if(!empty($list)){
@@ -359,7 +359,7 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center">关闭</td>';
                 }
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
-                 $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
+                 $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]).'<hr>关闭时间：'.date('H:i',$v['endtime']).'</td>';
                 //$html .= '<td class="align-center"><input type="text" class="layui-input" id="test'.$v['cid'].'" placeholder=" - " onfocus="timesss('.$v['cid'].')"></td>';
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
 //                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
