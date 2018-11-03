@@ -52,15 +52,7 @@
     <div class="container2">
         <div class="student_tab_box">
             <ul class="student_tab">
-                <li class="active">
-                    <a href="javascript:;">张大伟</a>
-                </li>
-                <li>
-                    <a href="javascript:;">张小伟</a>
-                </li>
-                <li>
-                    <a href="javascript:;">涨伟</a>
-                </li>
+
             </ul>
         </div>
 
@@ -161,10 +153,80 @@
         },
         dataType: "json",
         success: function(response){
-            console.log(response);
-        }
+            if(response['code'] == 200){
+                var data = response.result;
+                if(data != ''){
+                    if(data.length > 1){
+                        var tab = '';
+                        for(var i=0;i<data.length;i++){
+                            if(i == 0){
+                                tab += '<li class="active" data-id="'+data[i]['s_id']+'">\n' +
+                                    '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
+                                    '                </li>'
+                            }else{
+                                tab += '<li data-id="'+data[i]['s_id']+'">\n' +
+                                    '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
+                                    '                </li>'
+                            }
+                            $('#bang_name').val(data[0]['s_name']);
+                            $('#sex').val(data[0]['s_name']);
+                            $('#date').val(data[0]['s_birthday']);
+                            $('#s_card').val(data[0]['s_card']);
+                            $('#city').val(data[0]['s_region']);
+                            $('#school').val(data[0]['name']);
+                            $('#classes').val(data[0]['sc_type']);
+                            $('#banji').val(data[0]['classname']);
+                            $('#shibiema').val(data[0]['classCard']);
+                        }
+                        $('.student_tab').html(tab);
+                        $('.student_tab li').click(function(){
+                            $(this).addClass('active').siblings().removeClass('active');
+                            var sid = $(this).attr('data-id');
+                            $.ajax({
+                                type:'POST',
+                                url:api+'/Member/getStudent.html',
+                                data:{
+                                    key:user_token,
+                                    sid:sid,
+                                },
+                                dataType: "json",
+                                success: function(response){
+                                    if(response['code'] == 200){
+                                        $('#bang_name').val(response.result[0]['s_name']);
+                                        $('#sex').val(response.result[0]['s_name']);
+                                        $('#date').val(response.result[0]['s_birthday']);
+                                        $('#s_card').val(response.result[0]['s_card']);
+                                        $('#city').val(response.result[0]['s_region']);
+                                        $('#school').val(response.result[0]['name']);
+                                        $('#classes').val(response.result[0]['sc_type']);
+                                        $('#banji').val(response.result[0]['classname']);
+                                        $('#shibiema').val(response.result[0]['classCard']);
+                                    }else if(response['code'] == 400){
+                                        $.toast("请登陆",'forbidden');return false;
+                                    }else{
+                                        $.toast(response['message'],'forbidden');return false;
+                                    }
+                                }
+                            })
 
+                        })
+                    }else{
+
+                    }
+
+                }else{
+                    $('.no_bounds').show();
+                    $('.container2').hide();
+                }
+
+            }else if(response['code'] == 400){
+                $.toast('请登录','forbidden');return false;
+            }else{
+                $.toast(response['message'],'forbidden');return false;
+            }
+        }
     })
+
 </script>
 </body>
 
