@@ -1,10 +1,10 @@
 $(function() {
     fz_video= function(video_url){
-        alert(video_url);
+        video = 'http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101162532_1541060732.mp4';
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
         _videoSource.poster = video_url+'?vframe/jpg/offset/1';
-        return video_url;
+        return video;
     }
     // 获取价格
     $.ajax({
@@ -123,7 +123,7 @@ $(function() {
     isUpload = function(isTrue) {
         if (isTrue == 0) {
             var video = fz_video();
-            alert(video);
+            alert(video); return false;
             var video_img = video+'?vframe/jpg/offset/1';
             if (video == '') {
                 $.toast("获取上传视频失败，请重新上传",'forbidden');
