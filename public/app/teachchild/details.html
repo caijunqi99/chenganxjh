@@ -20,10 +20,21 @@
     <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
 
     <script src="../content/scripts/mobile-util.js"></script>
-
+    <style>
+        video::-internal-media-controls-download-button {
+            display: none;
+        }
+        video::-webkit-media-controls {
+            overflow: hidden !important;
+        }
+        video::-webkit-media-controls-enclosure {
+            width: calc(100% + 32px);
+            margin-left: auto;
+        }
+    </style>
 </head>
 
-<body ontouchstart>
+<body>
     <header class="details_header">
         <div class="goBack body_content">
             <a href="javascript:;" class="back_btn" onClick="historyback()">
@@ -41,8 +52,8 @@
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
-                    <video id="video_true" autoplay="autoplay" controls="controls" width="750px" height="400px" preload="none" >
-                        <source src="" type="video/mp4"></source>
+                    <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
+                        <source src="" type="video/mp4">
                     </video>
                 </div>
                 <!--<div class="upload_video">-->
@@ -62,9 +73,9 @@
                         <!--</script>-->
                         <!--<script class="CuPlayerVideo" data-mce-role="CuPlayerVideo" type="text/javascript" src="../content/plugins/CuPlayerV4/player.min.js"></script>-->
                     <!--</div>poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4?vframe/jpg/offset/1"-->
-                    <!--<video id="video" controls="controls" width="750px" height="400px" preload="none" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">-->
-                        <!--<source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>-->
-                    <!--</video>-->
+                    <!--<video id="video_true" width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
+                        <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
+                    </video>-->
                     <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
                 </div>
             <!--</div>-->
@@ -88,6 +99,33 @@
 
 <script>
     // 播放视频
+    if(user_token){
+        $.ajax({
+            type:'POST',
+            url:api+'/Teacherdecide/decide.html',
+            data:{
+                key:user_token,
+                member_id:user_member_id,
+                video_id:GetQueryString("id")
+            },
+            dataType: "json",
+            success: function(res){
+                if(res['code'] == 200){
+                    if(res.result[0]['price'] !=0){
+                        if(res.result[0]['buy'] != 0){
+                            $('.video_play_btn').parent().hide();
+                            $("#video").show();
+                        }
+                    }else{
+                        $('.video_play_btn').parent().hide();
+                        $("#video").show();
+                    }
+                }
+            }
+        })
+
+    }
+
     $(".video_play_btn").click(function() {
         if(!user_token){
             $.toast("请前往登陆", 'forbidden');

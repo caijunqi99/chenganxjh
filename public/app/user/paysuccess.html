@@ -51,7 +51,32 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
-
+    <script>
+        $.ajax({
+            type:'POST',
+            url:api+'/Lookchild/getDetail.html',
+            data:{
+                key:user_token,
+                member_id:user_member_id,
+                orderSn:GetQueryString('orderSn')
+            },
+            dataType: 'json',
+            success: function(response){
+                if(response['code'] == 200){
+                    $('.pay_p2').html('实付￥'+response.result[0]['pkg_pirce']);
+                }else if(response['code'] == 400){
+                    $.toast('请前往登陆','forbidden',function () {
+                        goLogin();
+                    })
+                }else{
+                    $.toast(response['message'],'forbidden');
+                }
+            }
+        });
+        $('.pay_finish_btn').click(function(){
+            historyback();
+        })
+    </script>
 </body>
 
 </html>

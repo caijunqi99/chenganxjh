@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 use vomont\Vomont;
 
-class Lookchild
+class Lookchild extends MobileMember
 {
     //看孩
     public function index(){
@@ -89,6 +89,16 @@ class Lookchild
                 output_data($data);
                 }
         }
+    }
+//获取支付订单详情
+    public function getDetail(){
+        $orderSn = trim(input('post.orderSn'));
+        $member_id = intval(input('post.member_id'));
+
+        $result = db('packagesorder')->where('pay_sn="'.$orderSn.'" AND buyer_id="'.$member_id.'"')->field('pkg_pirce,s_id')->find();
+
+        output_data($result);
+
     }
 
 

@@ -148,6 +148,7 @@
                                     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                                         window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
                                     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                        mbs  = mbs['prepay_id']+','+mbs['nonce_str']+','+mbs['timestamp']+','+mbs['sign']+','+mbs['orderSn'];
                                         Android.wxpayClick(mbs);
                                     } else { //pc
                                     };
@@ -159,9 +160,9 @@
                             if (payment_code == 'alipay_app') {
                                 var mbs = response.result[0];
                                 if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                    window.webkit.messageHandlers.aliapyClick.postMessage(mbs['content']);
+                                    window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
                                 } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                    Android.aliapyClick(mbs['content']);
+                                    Android.aliapyClick(mbs);
                                 } else { //pc
                                 };
                             }
@@ -177,8 +178,28 @@
                 //取消操作
             });
         });
-        function payStatus(){
-            location.href=http_url+'app/teachchild/paysuccess.html';
+        function payStatus(orderSn){
+            $.ajax({
+                type:'POST',
+                url:api+'/teacherpayment/getOrderByOrdersn.html',
+                data:{
+                    key:user_token,
+                    order_sn:orderSn
+                },
+                dataType: "json",
+                success: function(response){
+                    if(response['code'] == 200){
+                        location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
+                    }else if(response['code'] == 400){
+                        $.toast('请前往登陆','forbidden',function () {
+                            layout();
+                        })
+                    }else{
+                        $.toast(response['message'],'forbidden');
+                    }
+                }
+            });
+
         }
 
     </script>

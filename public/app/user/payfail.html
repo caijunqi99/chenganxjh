@@ -21,7 +21,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:;" class="back_btn">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -42,7 +42,7 @@
             <p class="pay_p2">实付￥12.00</p>
         </div>
         <div class="pay_finish_btnbox">
-            <a href="pay.html" class="repayments_btn">重新支付</a>
+            <a href="javascript:;" class="repayments_btn">重新支付</a>
         </div>
     </div>
 
@@ -51,7 +51,34 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
-
+    <script>
+        var s_id = '';
+        $.ajax({
+            type:'POST',
+            url:api+'/Lookchild/getDetail.html',
+            data:{
+                key:user_token,
+                member_id:user_member_id,
+                orderSn:GetQueryString('orderSn')
+            },
+            dataType: 'json',
+            success: function(response){
+                if(response['code'] == 200){
+                    $('.pay_p2').html('实付￥'+response.result[0]['pkg_pirce']);
+                    s_id = response.result[0]['s_id'];
+                }else if(response['code'] == 400){
+                    $.toast('请前往登陆','forbidden',function () {
+                        goLogin();
+                    })
+                }else{
+                    $.toast(response['message'],'forbidden');
+                }
+            }
+        });
+        $('.repayments_btn .back_btn').click(function(){
+            location.href=http_url+'app/user/chooselevel.html?pkg_type=2&child_id'+s_id;
+        })
+    </script>
 </body>
 
 </html>

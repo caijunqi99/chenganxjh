@@ -19,7 +19,7 @@
 		<script src="../content/scripts/mobile-util.js"></script>
 	</head>
 
-	<body ontouchstart class="history_body">
+	<body class="history_body">
 
 		<div class="body_content">
 			<header class="head">
@@ -28,9 +28,6 @@
 		                <a href="javascript:;" class="back_btn" onClick="historyback();">
 		                	<i class="icon iconfont icon-jiantou3"></i>
 		                </a>
-		                <!-- <a href="javascript:;" class="back_btn" onClick="back('test')">
-		                    <i class="icon iconfont icon-jiantou3"></i>
-		                </a> -->
 		            </div>
 		            <div class="head_title">
 		                <p>我的收藏</p>
@@ -56,6 +53,7 @@
 		<script src="../content/plugins/layer/layer.js"></script>
 		<script src="../content/scripts/juqery.cookie.js"></script>
 		<script src="../content/scripts/API.js"></script>
+		<script src="../content/scripts/commom.js"></script>
 		<script type="text/javascript">
 
 			var IDArr = [];
@@ -192,7 +190,7 @@
 				for(var i = 0; i < data.length; i++){
 					var Time = Object.keys(data[i]);
 					for(var s = 0; s < data[i][Time[0]].length; s++){
-						content ='<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete'+ data[i][Time[0]][s]['id'] +'">'+
+						content +='<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete'+ data[i][Time[0]][s]['id'] +'">'+
 									'<label class="weui-cell weui-check__label float_left history_check_all">'+
 										'<div class="weui-cell__hd checked_input">'+
 											'<input type="checkbox" data-id="'+ data[i][Time[0]][s]['id'] +'" onChange="changeState(this)" class="weui-check" name="checkbox1">'+
@@ -204,7 +202,7 @@
 									'</div>'+
 									'<div class="cont_wrap float_left">'+
 										'<p class="cont_title">'+ data[i][Time[0]][s]['title'] +'</p>'+
-										'<p class="cont_time">剩余<span>03:59</span></p>'+
+										'<p class="cont_time">作者：<span>'+data[i][Time[0]][s]['author']+'</span></p>'+
 									'</div>'+
 								'</div>';
 					}
