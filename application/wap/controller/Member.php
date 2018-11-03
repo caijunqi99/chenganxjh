@@ -4,7 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 use process\Process;
-
+use cloud\RongCloud;
 class Member extends MobileMember
 {
 
@@ -136,6 +136,9 @@ class Member extends MobileMember
             //修改个人信息
             $result = db('member')->where($where)->update($data);
             if($result){
+                //刷新融云 头像
+                $RongCloud = new RongCloud();
+                $RongCloud->user()->refresh($member['member_id'], $member_nickname, UPLOAD_SITE_URL.$member['member_avatar']);
                 output_data(array('message'=>'修改成功'));
             }else{
                 output_error('修改失败');
