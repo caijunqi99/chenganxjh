@@ -717,10 +717,10 @@ class Member extends MobileMember
         //获取绑定孩子
             $student = db('student')->alias('s')
                 ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid')
-                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype')
-                ->join('__CLASS__ c','c.classid = s.s_classid')
-                ->join('__PACKAGETIME__ p','p.member_id = s.s_id')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
                 ->where('s.s_id = "'.$sid.'"')
                 ->find();
         if(!empty($student)){
