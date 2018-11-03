@@ -167,10 +167,12 @@ function toPay(a, e, p) {
                                 return false;
                             }
                             goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                            // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
                         }
                     })
                 } else {
                         goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                        // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
                 }
             })
         }
