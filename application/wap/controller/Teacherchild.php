@@ -36,6 +36,11 @@ class Teacherchild extends MobileMember
         }
         $page = !empty(input('post.page'))?input('post.page'):1;
         $list = $teachchild->getTeachchildList($condition,'',$page,'t_id desc',10);
+        foreach($list as $k=>$v){
+            if($v['t_del']==2){
+                $list[$k]['t_audit'] = 4;
+            }
+        }
         output_data($list);
     }
 
