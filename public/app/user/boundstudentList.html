@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>想见孩-绑定学生</title>
+    <meta name="author" content="想见孩" />
+    <meta name="copyright" content="想见孩" />
+    <meta name="description" content="想见孩" />
+    <meta id="viewport" name="viewport" content="width=750" />
+    <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
+    <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
+    <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
+    <script src="../content/scripts/mobile-util.js"></script>
+</head>
+
+<body>
+<header class="head">
+    <div class="head0">
+        <div class="menu_bar_box">
+            <!--  <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+             <i class="icon iconfont icon-jiantou3"></i>
+             </a> -->
+            <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <i class="icon iconfont icon-jiantou3"></i>
+            </a>
+        </div>
+        <div class="head_title">
+            <p>学生列表</p>
+        </div>
+        <div class="head_r">
+            <a href="boundstudent.html" class="add_student_bar">
+                <i class="icon iconfont icon-jiahao"></i>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- 主要内容 -->
+<div class="screen" id="screen"></div>
+<div class="main">
+    <!-- 暂无学生 -->
+    <div class="no_bounds" style="display:none;">
+        <p class="no_bounds_p"><span>暂无绑定学生</span></p>
+    </div>
+
+    <!-- 有学生 -->
+    <div class="container2">
+        <div class="student_tab_box">
+            <ul class="student_tab">
+                <li class="active">
+                    <a href="javascript:;">张大伟</a>
+                </li>
+                <li>
+                    <a href="javascript:;">张小伟</a>
+                </li>
+                <li>
+                    <a href="javascript:;">涨伟</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bang_list">
+            <div class="name_box">
+                <label for="bang_name">姓名</label>
+            </div>
+            <div class="input_box">
+                <input class="input_txt" id="bang_name" readonly type="text" >
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="sex" class="weui-label">性别</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt" id="sex" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="date" class="weui-label">生日</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt" id="date" type="text" readonly>
+            </div>
+        </div>
+        <div class="bang_list">
+            <div class="name_box">
+                <label for="bang_name">身份证号</label>
+            </div>
+            <div class="input_box">
+                <input class="input_txt" id="s_card" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="city" class="weui-label">所在地</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt " id="city" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="school" class="weui-label">就读学校</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt" id="school" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="classes" class="weui-label">所在年级</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt" id="classes" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label for="banji" class="weui-label">所在班级</label></div>
+            <div class="weui-cell__bd">
+                <input class="input_txt" id="banji" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="bang_list">
+            <div class="name_box">
+                <label for="shibiema">班级识别码</label>
+            </div>
+            <div class="input_box">
+                <input class="input_txt" id="shibiema" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="weui-cell bang_list">
+            <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
+            <div class="weui-cell__bd">
+                <a href="javascript:;" class="input_txt color_blue">2218-02-02</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="../content/scripts/jquery.min.js"></script>
+<script src="../content/scripts/juqery.cookie.js"></script>
+<script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+<script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
+<script src="../content/scripts/commom.js"></script>
+<script src="../content/scripts/API.js"></script>
+<script src="../content/scripts/regular.js"></script>
+
+<script>
+    $.ajax({
+        type:'POST',
+        url:api+'/Member/getStudents.html',
+        data:{
+            key:user_token,
+            member_id:user_member_id,
+        },
+        dataType: "json",
+        success: function(response){
+            console.log(response);
+        }
+
+    })
+</script>
+</body>
+
+</html>

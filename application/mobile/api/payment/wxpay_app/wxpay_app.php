@@ -26,6 +26,7 @@ class wxpay_app {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
                 $order['sign'] = $this->sign_again($order);
+                $order['orderSn'] = $param['orderSn'];
                 output_data($order);
                 //return json(['code'=>200,'result'=>$order]);
             } else {

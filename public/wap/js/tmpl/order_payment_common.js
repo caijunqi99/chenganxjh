@@ -102,7 +102,7 @@ function toPay(a, e, p) {
 
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                    if(i == "alipay" ){
+                   /* if(i == "alipay" ){
                         $("#" + i).parents("label").show();
                     }
                     if(i == "wxpay_jsapi" ){
@@ -119,14 +119,38 @@ function toPay(a, e, p) {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
                         }
+                    }*/
+                    if(i == "alipay_app" ){
+                        $("#" + i).parents("label").show();
+                    }
+                    if(i == "wxpay_app" ){
+                        $("#" + i).parents("label").show();
+                    }
+                    if (i == "alipay_app"  && r) {
+                        if (payment_code == "") {
+                            payment_code = i;
+                            $("#" + i).attr("checked", true).parents("label").addClass("checked")
+                        }
+                    }
+                    if (i == "wxpay_app"  && t) {
+                        if (payment_code == "") {
+                            payment_code = i;
+                            $("#" + i).attr("checked", true).parents("label").addClass("checked")
+                        }
                     }
                 }
             }
-            $("#alipay").click(function() {
+           /* $("#alipay").click(function() {
                 payment_code = "alipay";
             });
             $("#wxpay_jsapi").click(function() {
                     payment_code = "wxpay_jsapi";
+            });*/
+            $("#alipay_app").click(function() {
+                payment_code = "alipay_app";
+            });
+            $("#wxpay_app").click(function() {
+                payment_code = "wxpay_app";
             });
             $("#toPay").click(function() {
                 if (payment_code == "") {
@@ -166,18 +190,62 @@ function toPay(a, e, p) {
                                 });
                                 return false;
                             }
-                            goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
-                            // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
+                            // goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                            goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
                         }
                     })
                 } else {
-                        goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
-                        // goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
+                        // goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
+                        goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
                 }
             })
         }
     })
 }
 function goToPayment(a, e) {
-    location.href = ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
+    // location.href = ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
+    $.ajax({
+        type:'POST',
+        url:ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code,
+        data:{},
+        dataType: "json",
+        success: function(response){
+            if (response['code'] == 200) {
+                var mbs = response.result;
+                // 微信支付
+                if (payment_code == 'wxpay_app') {
+                    if (mbs.result_code == 'SUCCESS') {
+                        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                            window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
+                        } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                            mbs  = mbs['prepay_id']+','+mbs['nonce_str']+','+mbs['timestamp']+','+mbs['sign']+','+mbs['orderSn'];
+                            Android.wxpayClick(mbs);
+                        } else { //pc
+                        }
+                        ;
+                    } else {
+
+                    }
+                }
+                //支付宝支付
+                if (payment_code == 'alipay_app') {
+                    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
+                    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                        mbs  = mbs['content']+','+mbs['orderSn'];
+                        Android.aliapyClick(mbs);
+                    } else { //pc
+                    }
+                    ;
+                }
+            } else if (response['code'] == 400) {
+                $.toast('请先前往登陆', 'forbidden');
+                return false;
+            } else {
+                $.toast(response['message'], 'forbidden');
+                return false;
+            }
+        }
+    })
+
 }

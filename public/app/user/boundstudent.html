@@ -25,7 +25,7 @@
                 <!--  <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
                  <i class="icon iconfont icon-jiantou3"></i>
                  </a> -->
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -33,9 +33,9 @@
                 <p>绑定学生</p>
             </div>
             <div class="head_r">
-                <a href="javascript:;" onClick="scanning()">
+                <!--<a href="javascript:;" onClick="scanning()">
                     <i class="icon iconfont icon-saoyisao"></i>
-                </a>
+                </a>-->
             </div>
         </div>
     </header>
@@ -108,14 +108,17 @@
                     <label for="shibiema"><span class="redstar">*</span>班级识别码</label>
                 </div>
                 <div class="input_box">
-                    <input class="input_txt" id="shibiema"  type="text" placeholder="请输入班级识别码">
+                    <input class="input_txt" id="shibiema" type="text" placeholder="请输入班级识别码">
                 </div>
+                <a href="javascript:;" class="scan_bar" onClick="scanning()">
+                    <i class="icon iconfont icon-saoyisao"></i>
+                </a>
             </div>
 
             <div class="weui-cell bang_list">
                 <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
                 <div class="weui-cell__bd">
-                    <a href="javascript:;" class="input_txt color_blue">暂无</a>
+                    <a href="javascript:;" class="input_txt color_blue">前往购买套餐</a>
                 </div>
             </div>
 
