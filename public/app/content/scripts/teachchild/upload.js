@@ -1,8 +1,11 @@
 $(function() {
+    var video ='';
     fz_video= function(video_url){
+        video = video_url;
+        video_img = video_url+'?vframe/jpg/offset/1';
         var _videoSource = document.getElementById("video_true");
-        _videoSource.src = video_url;
-        _videoSource.poster = video_url+'?vframe/jpg/offset/1';
+        _videoSource.src = video;
+        _videoSource.poster = video_img;
     }
     // 获取价格
     $.ajax({
@@ -148,7 +151,7 @@ $(function() {
                 profile: $('#aboutValue').val(),
                 price: $('#price').val(),
                 author: $('#zuozhe').val(),
-                url: video_url,
+                url: video,
                 pic:video_img
             }
             var types = $('#category').get(0).dataset.codes;
