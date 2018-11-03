@@ -326,7 +326,7 @@ class Teachvideo extends AdminControl {
             }else{
                 //审核结果给用户发送短信提醒
                 if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
-                    $content = '尊敬的'.$phone.'，您的教孩视频已审核通过，感谢您的支持！ ';
+                    $content = '您的教孩视频已审核通过，感谢您的支持!';
                     $sms = new \sendmsg\sdk\SmsApi();
                     $send = $sms->sendSMS($phone,$content);
                     if(!$send){
