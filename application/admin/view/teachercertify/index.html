@@ -109,7 +109,7 @@
             <td class="align-center">
                 <?php if($v['status']==1){ ?>
                 <a href="{:url('/admin/teachercertify/pass',['teacher_id'=>$v.id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
-                <?php }elseif($v['status']==2){  ?>
+                <?php }elseif($v['status']==3){  ?>
                 <a href="{:url('/admin/teachercertify/pass',['teacher_id'=>$v.id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_repass}</a>
                 <?php }else{ ?>
                 无
