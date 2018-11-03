@@ -182,6 +182,17 @@ class Teachercertify extends AdminControl {
                 $member_model->editMember(array('member_id'=>$teacher_id),array("member_identity"=>2));
                 //审核结果给用户发送短信提醒
                 if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
+                    $content = '尊敬的'.$phone.',您的教师认证申请已通过，登录想见孩APP继续操作。';
+                    $sms = new \sendmsg\sdk\SmsApi();
+                    $send = $sms->sendSMS($phone,$content);
+                    if(!$send){
+                        $this->error('给用户发送短信失败 ');
+                    }
+                }
+                $this->success(lang('teacher_index_apass'), 'Teachercertify/index');
+            }else{
+                //审核结果给用户发送短信提醒
+                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
                     if(empty($reason)){
                         $content = '您的教师认证申请未通过。请登录想见孩app重新认证!';
                     }else{
@@ -195,17 +206,6 @@ class Teachercertify extends AdminControl {
                     }
                 }
                 $this->success(lang('teacher_index_noapass'), 'Teachercertify/index');
-            }else{
-                //审核结果给用户发送短信提醒
-                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)){
-                    $content = '尊敬的'.$phone.',您的教师认证申请已通过，登录想见孩APP继续操作。';
-                    $sms = new \sendmsg\sdk\SmsApi();
-                    $send = $sms->sendSMS($phone,$content);
-                    if(!$send){
-                        $this->error('给用户发送短信失败 ');
-                    }
-                }
-                $this->success(lang('teacher_index_apass'), 'Teachercertify/index');
             }
 
         } else {
