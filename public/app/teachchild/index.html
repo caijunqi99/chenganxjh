@@ -305,7 +305,7 @@
                 $(el).addClass('action');
                 var top = Index['result'][0]['categorize'];
                 var filtsort = Index['result'][0]['navigate']['subsume']['child'];
-                if (ID == 0) {
+                if (ID == 0) { //推荐
                     hideFilterBox();
                     $('.sort_block').hide();
                     $('.sort_tabs').hide();
@@ -315,7 +315,7 @@
                         recommend: 2
                     }
                     GetKejian(params)
-                } else if (ID == 777 || ID == 3) {
+                } else if (ID == 777 || ID == 3) {  //宝宝试听和父母课堂
                     hideFilterBox();
                     $('.sort_block').show();
                     $('.sort_tabs').hide();
@@ -330,7 +330,7 @@
                         type: ID
                     }
                     GetKejian(params);
-                } else if (ID == 4) {
+                } else if (ID == 4) { //精品课堂
                     $('.sort_block').hide();
                     $('.sort_tabs').show();
                     $('.filter').show();
@@ -342,7 +342,7 @@
                             var params = {
                                 key: user_token,
                                 type: ID,
-                                type1: top[i]['childTwo'][0]['gc_id'],
+                                // type1: top[i]['childTwo'][0]['gc_id'],
                                 subsume: 1
                             }
                             GetKejian(params);
