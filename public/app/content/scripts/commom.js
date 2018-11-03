@@ -109,4 +109,9 @@ function videoUpload() {
     };
 }
 
+//视频下架提示
+function forbidden(){
+    $.toast('该视频已过期且下架，无法观看','forbidden');
+}
+
 
