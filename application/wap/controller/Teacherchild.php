@@ -36,6 +36,11 @@ class Teacherchild extends MobileMember
         }
         $page = !empty(input('post.page'))?input('post.page'):1;
         $list = $teachchild->getTeachchildList($condition,'',$page,'t_id desc',10);
+        foreach($list as $k=>$v){
+            if($v['t_del']==2){
+                $list[$k]['t_audit'] = 4;
+            }
+        }
         output_data($list);
     }
 
@@ -57,12 +62,39 @@ class Teacherchild extends MobileMember
             $result[$k]['author'] = $videoinfo['t_author'];
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
             $result[$k]['payment_time'] = date("Y-m-d H:i:s",$v['payment_time']);
+            if($v['order_dieline']>time()){
+                $result[$k]['is_click'] = 1;
+            }else{
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
         }
         $data = isset($data)?[$data]:[];
         output_data($data);
+    }
+
+    public function delOrder(){
+        $member_id = input('post.member_id');
+        $order_id = input('post.order_id');
+        if(empty($order_id)){
+            output_error('订单id不能为空');
+        }
+        if(empty($member_id)){
+            output_error('会员id不能为空');
+        }
+        $model_order = Model("Packagesorderteach");
+        $orderInfo = $model_order->getOrderInfo(array('buyer_id'=>$member_id,'order_id'=>$order_id));
+        if(empty($orderInfo)){
+            output_error('会员id和订单id不匹配');
+        }
+        $result = $model_order->editOrder(array('delete_state'=>1),array('order_id'=>$order_id));
+        if($result){
+            output_data("删除成功");
+        }else{
+            output_error('删除失败');
+        }
     }
 
 }

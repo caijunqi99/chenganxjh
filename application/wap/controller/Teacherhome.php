@@ -82,7 +82,7 @@ class Teacherhome extends MobileMall
         $teachchild = model('Teachchild');
 
         $page = !empty(input('post.page')) ? input('post.page'): 1;
-        $where = "t_audit=3";
+        $where = "t_audit=3 and t_del=1";
         if(!empty(input('post.type'))) {
             $where .= " and t_type=".input('post.type');
         }

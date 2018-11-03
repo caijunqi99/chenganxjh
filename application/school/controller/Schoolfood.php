@@ -16,9 +16,15 @@ class Schoolfood extends AdminControl {
     }
 
     public function index(){
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_gid']!=5){
+            $this->error(lang('ds_assign_right'));
+        }
+        $schoolid = isset($admininfo['admin_school_id'])?$admininfo['admin_school_id']:0;
         $model_bus = Model("Schoolfood");
         $condtion = array();
         $condtion['is_del'] = 1;
+        $condtion['sc_id'] = $schoolid;
         $busList = $model_bus->get_schoolfood_List($condtion);
         if(!empty($busList)){
             $week = array(0=>"日",1=>"一",2=>"二",3=>"三",4=>"四",5=>"五",6=>"六");
@@ -78,6 +84,7 @@ class Schoolfood extends AdminControl {
         if($admininfo['admin_gid']!=5){
             $this->error(lang('ds_assign_right'));
         }
+        $schoolid = isset($admininfo['admin_school_id'])?$admininfo['admin_school_id']:0;
         $Schoolfood = Model('Schoolfood');
         $food_id = input('param.food_id');
         if (request()->isPost() || input('param.actions')) {
@@ -99,7 +106,7 @@ class Schoolfood extends AdminControl {
                         'food_content' => $v[1],
                         'food_desc'    => $v[2],
                         'up_time'      => time(),
-                        'sc_id'        => 1
+                        'sc_id'        => $schoolid
                     );
                 }                                           
             }

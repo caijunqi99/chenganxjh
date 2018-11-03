@@ -82,6 +82,7 @@ class Teachvideo extends AdminControl {
             $teachtype2 = db('teachtype')->where(array('gc_parent_id'=>$type1))->select();
             $this->assign('teachtype2', $teachtype2);
         }
+        $condition['t_del'] = 1;
         $teacher_list = $model_teach->getTeachchildList($condition, 15);
         foreach($teacher_list as $k=>$v){
             if($v['member_mobile']=="后台"){
@@ -528,7 +529,7 @@ class Teachvideo extends AdminControl {
             $this->error(lang('param_error'));
         }
         $model_video = Model('Teachchild');
-        $result = $model_video->delVideo(array('t_id'=>$video_id));
+        $result = $model_video->editTeachchild(array('t_id'=>$video_id),array('t_del'=>2));
         if ($result) {
             $this->success(lang('ds_common_del_succ'), 'Teachvideo/index');
         } else {

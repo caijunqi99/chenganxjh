@@ -361,6 +361,9 @@ a:active {
 .content_wrap .title {
     font-size: 26px;
     margin-top: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .content_wrap .zuozhe {

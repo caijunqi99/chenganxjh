@@ -128,8 +128,9 @@
             if (pkg_type && child_id) {
                 GetPackagesList(pkg_type);
                 GetPaymentList();
-            } else {
-                $.alert('参数错误,获取不到学生信息或套餐信息！', '系统提示', function () {
+                GetNowPackageTime(child_id);
+            }else{
+                $.alert('参数错误,获取不到学生信息或套餐信息！','系统提示',function(){
                     historyback();
                 })
             }
@@ -190,6 +191,7 @@
                                     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                                         window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
                                     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                        mbs  = mbs['content']+','+mbs['orderSn'];
                                         Android.aliapyClick(mbs);
                                     } else { //pc
                                     }
@@ -309,9 +311,19 @@
                     $('#Discount').text('已优惠' + Discount + '元')
                     var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
                     var name = $('.active .level_item_p1').text();
-                    $('#pkgdesc').text('您已选择' + type + name + '套餐')
-                } else {
-                    $('.choosed_info').html(data.msg);
+                    $('#pkgdesc').text('您已选择'+type+name+'套餐')
+                }else{
+                    $('.choosed_info').html(data.message);
+                }
+            },"json");
+        }
+
+        function GetNowPackageTime(child_id) {
+            $.post(api+'/Packagesbuy/GetNowPackageTime', {'key': user_token,'child_id':child_id}, function(data, textStatus, xhr) {
+                if (data.code == 200) {
+                    $('.date').text(data.result[0].endtime)
+                }else{
+                    $('.choosed_info').html(data.message);
                 }
             }, "json");
         }

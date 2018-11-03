@@ -70,7 +70,7 @@
 					dataType: 'json',
 					data: {
 						key: user_token,
-						member_id: 28
+						member_id: user_member_id
 					},
 					success: function(response){
 						if(response['code'] == 200){
@@ -143,12 +143,12 @@
 					let idString = IDArr.join(',');
 					if($('.weui-check').length == IDArr.length){
 						params.key = user_token;
-						params.userid = 28;
+						params.userid = user_member_id;
 						params.ids = idString;
 						params.all = 1;
 					}else {
 						params.key = user_token;
-						params.userid = 28;
+						params.userid = user_member_id;
 						params.ids = idString;
 					}
 					$.confirm("确定要删除吗？", function() {
@@ -192,21 +192,40 @@
 				for(var i = 0; i < data.length; i++){
 					var Time = Object.keys(data[i]);
 					for(var s = 0; s < data[i][Time[0]].length; s++){
-						content ='<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete'+ data[i][Time[0]][s]['t_id'] +'">'+
-									'<label class="weui-cell weui-check__label float_left history_check_all">'+
-										'<div class="weui-cell__hd checked_input">'+
-											'<input type="checkbox" data-id="'+ data[i][Time[0]][s]['t_id'] +'" onChange="changeState(this)" class="weui-check" name="checkbox1">'+
-											'<i class="weui-icon-checked"></i>'+
-										'</div>'+
-									'</label>'+
-									'<div class="history_img_wrap float_left">'+
-										'<img src="'+ data[i][Time[0]][s]['videoimg'] +'" alt="'+ data[i][Time[0]][s]['videourl'] +'">'+
-									'</div>'+
-									'<div class="cont_wrap float_left">'+
-										'<p class="cont_title">'+ data[i][Time[0]][s]['title'] +'</p>'+
-										'<p class="cont_time">作者：<span>'+data[i][Time[0]][s]['author']+'</span></p>'+
-									'</div>'+
-								'</div>';
+                        if(data[i][Time[0]][s]['is_click'] == 1){
+                            content +='<div onclick="videoClick('+data[i][Time[0]][s]['t_id']+')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete'+ data[i][Time[0]][s]['t_id'] +'">'+
+                                '<label class="weui-cell weui-check__label float_left history_check_all">'+
+                                '<div class="weui-cell__hd checked_input">'+
+                                '<input type="checkbox" data-id="'+ data[i][Time[0]][s]['t_id'] +'" onChange="changeState(this)" class="weui-check" name="checkbox1">'+
+                                '<i class="weui-icon-checked"></i>'+
+                                '</div>'+
+                                '</label>'+
+                                '<div class="history_img_wrap float_left">'+
+                                '<img src="'+ data[i][Time[0]][s]['videoimg'] +'" alt="'+ data[i][Time[0]][s]['videourl'] +'">'+
+                                '</div>'+
+                                '<div class="cont_wrap float_left">'+
+                                '<p class="cont_title">'+ data[i][Time[0]][s]['title'] +'</p>'+
+                                '<p class="cont_time">作者：<span>'+data[i][Time[0]][s]['author']+'</span></p>'+
+                                '</div>'+
+                                '</div>';
+						}else{
+                            content +='<div onclick="forbidden()" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete'+ data[i][Time[0]][s]['order_tid'] +'">'+
+                                '<label class="weui-cell weui-check__label float_left history_check_all">'+
+                                '<div class="weui-cell__hd checked_input">'+
+                                '<input type="checkbox" data-id="'+ data[i][Time[0]][s]['order_tid'] +'" onChange="changeState(this)" class="weui-check" name="checkbox1">'+
+                                '<i class="weui-icon-checked"></i>'+
+                                '</div>'+
+                                '</label>'+
+                                '<div class="history_img_wrap float_left">'+
+                                '<img src="'+ data[i][Time[0]][s]['videoimg'] +'" alt="'+ data[i][Time[0]][s]['videourl'] +'">'+
+                                '</div>'+
+                                '<div class="cont_wrap float_left">'+
+                                '<p class="cont_title">'+ data[i][Time[0]][s]['title'] +'</p>'+
+                                '<p class="cont_time">作者：<span>'+data[i][Time[0]][s]['author']+'</span></p>'+
+                                '</div>'+
+                                '</div>';
+						}
+
 					}
 					template += '<p class="time_title"><i class="dian"></i>'+ Time[0] +'</p>'+'<div class="time_content">'+ content +'</div>';
 				}

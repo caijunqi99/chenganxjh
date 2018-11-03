@@ -145,14 +145,12 @@
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
-                                videoClick();
                             }else{
                                 $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
-                            videoClick();
                         }
                     }else if(res['code'] == 400){
                         $.toast('登陆失效，请重新登录','forbidden',function(){
