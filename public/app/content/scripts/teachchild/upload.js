@@ -4,8 +4,8 @@ $(function() {
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
         _videoSource.poster = video_url+'?vframe/jpg/offset/1';
-        return video;
     }
+    fz_video();
     // 获取价格
     $.ajax({
         url: api + '/teacherhome/index',
@@ -122,7 +122,6 @@ $(function() {
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
-            var video = fz_video();
             var video_img = video+'?vframe/jpg/offset/1';
             if (video == '') {
                 $.toast("获取上传视频失败，请重新上传",'forbidden');
