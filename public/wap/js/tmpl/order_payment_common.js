@@ -211,9 +211,7 @@ function goToPayment(a, e) {
         dataType: "json",
         success: function(response){
             if (response['code'] == 200) {
-                console.log(response);
-                alert(response.result[0]);
-                var mbs = response.result[0];
+                var mbs = response.result;
                 // 微信支付
                 if (payment_code == 'wxpay_app') {
                     if (mbs.result_code == 'SUCCESS') {
