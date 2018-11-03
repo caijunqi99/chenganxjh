@@ -506,11 +506,11 @@
                         '<p class="zuozhe">作者：<span>' + data[i]['t_author'] + '</span></p>';
 
                     if(data[i]['t_profile'] == ''){
-                        List +='<p class="cont">暂无简介</p>';
+                        template +='<p class="cont">暂无简介</p>';
                     }else{
-                        List +='<p class="cont">' + data[i]['t_profile'] + '</p>';
+                        template +='<p class="cont">' + data[i]['t_profile'] + '</p>';
                     }
-                    List += '</div>';
+                    template += '</div>';
                 }
                 return template;
             }
