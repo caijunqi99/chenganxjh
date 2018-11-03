@@ -8,8 +8,8 @@
 
 namespace app\wap\controller;
 use vomont\Vomont;
-//extends MobileMember
-class Lookchild
+
+class Lookchild extends MobileMember
 {
     //看孩
     public function index(){
