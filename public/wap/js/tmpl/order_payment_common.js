@@ -211,9 +211,11 @@ function goToPayment(a, e) {
         dataType: "json",
         success: function(response){
             if (response['code'] == 200) {
+                console.log(response);
+                alert(response.result[0]);
+                var mbs = response.result[0];
                 // 微信支付
                 if (payment_code == 'wxpay_app') {
-                    var mbs = response.result[0];
                     if (mbs.result_code == 'SUCCESS') {
                         if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                             window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
@@ -229,7 +231,6 @@ function goToPayment(a, e) {
                 }
                 //支付宝支付
                 if (payment_code == 'alipay_app') {
-                    var mbs = response.result[0];
                     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                         window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
                     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
