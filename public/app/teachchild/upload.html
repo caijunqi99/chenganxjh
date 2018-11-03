@@ -38,10 +38,11 @@
         </header>
         <div class="main">
             <div class="upload_video">
-                <!-- <video class="back" src="http://pgj4a41j8.bkt.clouddn.com/5a802948d494d4d9d91f0dab1e27cd7d.mp4" autoplay poster="../content/images/teachchild/video.jpg"></video> -->
-                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
-                <!-- <img class="" src="../content/images/teachchild/video.jpg" alt=""> -->
-                <!-- <img class="ply" onclick="PlayVideo(this)" src="../content/images/teachchild/video_ply.png" alt=""> -->
+                <div style="width:100%; height: auto;margin-bottom: 30px;">
+                    <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
+                        <source src="" type="video/mp4">
+                    </video>
+                </div>
             </div>
 
             <!-- 表单 -->
@@ -71,7 +72,7 @@
                             <header class="head">
                                 <div class="head0">
                                     <div class="menu_bar_box">
-                                        <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                                        <a href="javascript:;" class="back_btn" onClick="popupClose(event)">
                                             <i class="icon iconfont icon-jiantou3 close-popup"></i>
                                         </a>
                                     </div>
@@ -181,8 +182,6 @@
                 $("#currentSize").html(size);
             })
         })
-
-
 
     </script>
 </body>
