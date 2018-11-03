@@ -730,6 +730,32 @@ class Member extends MobileMember
 
     }
 
+    /**
+     * @desc 判断是否位主账号
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function isOwner(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,is_owner')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        output_data($member);
+
+
+    }
+
 }
 
 ?>

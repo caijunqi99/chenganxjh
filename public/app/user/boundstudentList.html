@@ -33,7 +33,7 @@
             <p>学生列表</p>
         </div>
         <div class="head_r">
-            <a href="boundstudent.html" class="add_student_bar">
+            <a href="javascript:;" class="add_student_bar">
                 <i class="icon iconfont icon-jiahao"></i>
             </a>
         </div>
@@ -204,7 +204,7 @@
                                         $('#classes').val(response.result[0]['sc_type']);
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
-                                        $('#see').html(response.result[0]['time']);
+                                        $('#see').val(response.result[0]['time']);
                                     }else if(response['code'] == 400){
                                         $('.no_bounds').show();
                                         $('.container2').hide();
@@ -246,6 +246,30 @@
                 $.toast(response['message'],'forbidden');return false;
             }
         }
+    })
+    $('.add_student_bar').click(function(){
+        $.ajax({
+            type:'POST',
+            url:api+'/Member/isOwner.html',
+            data:{
+                key:user_token,
+                member_id:user_member_id,
+            },
+            dataType: "json",
+            success: function(response){
+                if(response['code'] == 200){
+                    if(response.result[0]['is_owner'] == 0){
+                        location.href='boundstudent.html';
+                    }else{
+                        $.toast("副账号不允许绑定孩子",'forbidden');return false;
+                    }
+                }else if(response['code'] == 400){
+                    $.toast("请登陆",'forbidden');return false;
+                }else{
+                    $.toast(response['message'],'forbidden');return false;
+                }
+            }
+        })
     })
 
 </script>
