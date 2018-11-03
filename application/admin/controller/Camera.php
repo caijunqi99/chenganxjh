@@ -239,29 +239,9 @@ class Camera extends AdminControl
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
-        $where = ' 1=1 ';
+        $where = '';
         if(!empty($_GET)){
-            if(!empty($_GET['name'])){
-                $where .= ' AND name LIKE "%'.trim($_GET["name"]).'%" ';
-            }
-            if(!empty($_GET['province'])){
-                $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
-            }
-            if(!empty($_GET['city'])){
-                $where .= ' AND city_id = "'.intval($_GET["city"]).'"';
-            }
-            if(!empty($_GET['area'])){
-                $where .= ' AND area_id = "'.intval($_GET["area"]).'"';
-            }
-            if(!empty($_GET['school'])){
-                $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
-            }
-            if(!empty($_GET['grade'])){
-                $where .= ' AND class_area LIKE "%'.trim($_GET["grade"]).'%"';
-            }
-            if(!empty($_GET['class'])){
-                $where .= ' AND class_area LIKE "%'.trim($_GET["class"]).'%"';
-            }
+            $where = $this->_conditions($_GET);
         }
 
         $list_count = db('camera')->where($where)->count();
@@ -271,55 +251,150 @@ class Camera extends AdminControl
         return $this->fetch('entered');
     }
     /**
+     * 摄像头查询过滤
+     * @创建时间   2018-11-03T00:39:28+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function _conditions($where){
+        if (isset($where['name']) && !empty($where['name'])) {
+            $condition['name'] = array('LIKE','%'.$where['name'].'%');
+        }
+        $res = array();
+        $name = false;
+        if (isset($where['class']) && !empty($where['class']) ) {
+            $class = $this->getResGroupIds(array('classname'=>$where['class']));
+            if ($class) {
+                $res=array_merge($res, $class);
+            }
+            unset($where);
+            $name = 'true';
+        }
+        if (isset($where['grade']) && !empty($where['grade'])) {
+            $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
+            unset($where['school']);
+            unset($where['area']);
+            unset($where['city']);
+            unset($where['province']);
+            $name = 'true';
+            if ($grade) {
+                $res=array_merge($res, $grade);
+            }
+        }
+        if (isset($where['school']) && $where['school'] != 0 ) {
+            $school = $this->getResGroupIds(array('schoolid'=>$where['school']));
+            unset($where['area']);
+            unset($where['city']);
+            unset($where['province']);
+            $name = 'true';
+            if ($school) {
+                $res=array_merge($res, $school);
+            }
+        }
+        if (isset($where['area']) && $where['area'] != 0 ) {
+            $area = $this->getResGroupIds(array('areaid'=>$where['area']));
+            unset($where['city']);
+            unset($where['province']);
+            $name = 'true';
+            if ($area) {
+                $res=array_merge($res, $area);
+            }
+        }
+        if (isset($where['city']) && $where['city'] != 0 ) {
+            $city = $this->getResGroupIds(array('cityid'=>$where['city']));
+            unset($where['province']);
+            $name = 'true';
+            if ($city) {
+                $res=array_merge($res, $city);
+            }
+        }
+        if (isset($where['province']) && $where['province'] != 0 ) {
+            $province = $this->getResGroupIds(array('provinceid'=>$where['province']));
+            $name = 'true';
+            if ($province) {
+                $res=array_merge($res, $province);
+            }
+        }
+        if ($name == 'true') {
+            $condition['parentid'] = array('in',$res);
+        }
+        return $condition;
+    }
+    /**
+     * 查询学校和班级摄像头
+     * @创建时间   2018-11-03T00:39:48+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function getResGroupIds($where){
+        $School = model('School');
+        $Class = model('Classes');
+
+        if (isset($where['sc_type']) && !empty($where['sc_type'])) {
+            $sc_id = db('schooltype')->where($where)->value('sc_id');
+            unset($where['sc_type']);
+            $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
+        }
+        $classname = '';
+        if (isset($where['classname']) && !empty($where['classname']) ) {
+            $classname = $where['classname'];
+            unset($where['classname']);
+        }
+        $where['res_group_id'] =array('gt',0);
+        $Schoollist = $School->getAllAchool($where,'res_group_id');
+        // p($where);exit;
+        if (isset($where['provinceid']) && !empty($where['provinceid'])) {
+            $where['school_provinceid'] =$where['provinceid'];
+            unset($where['provinceid']);
+        }
+        if (isset($where['cityid']) && !empty($where['cityid'])) {
+            $where['school_cityid'] =$where['cityid'];
+            unset($where['cityid']);
+        }
+        if (isset($where['areaid']) && !empty($where['areaid'])) {
+            $where['school_areaid'] =$where['areaid'];
+            unset($where['areaid']);
+        }
+        if (isset($where['areaid']) && !empty($where['areaid'])) {
+            $where['school_areaid'] =$where['areaid'];
+            unset($where['areaid']);
+        }
+        if (!empty($classname)) {
+            $where['classname'] = array('like','%'.$classname.'%');
+        }
+        $res = array();
+        $Classlist = $Class->getAllClasses($where,'res_group_id');
+        $sc_resids=array_column($Schoollist, 'res_group_id');
+        if ($sc_resids) {
+            array_push($res, $sc_resids);
+        }
+        $cl_resids=array_column($Classlist, 'res_group_id');
+        if ($cl_resids) {
+            array_push($res, $cl_resids);
+        }
+        $ids = array_merge($sc_resids,$cl_resids);
+        if ($ids) {
+            return $ids;
+        }else{
+            return $res;
+        }
+    }
+    /**
      * @desc 获取分页数据
      * @author langzhiyao
      * @time 20190929
      */
     public function get_entered_list(){
 
-        $where = ' status=1 ';
+        $where = ' 1=1 ';
         if(!empty($_POST)){
-            if(!empty($_POST['name'])){
-                $where .= ' AND name LIKE "%'.trim($_POST["name"]).'%" ';
+            // p($_POST);exit;
+            $cond = array();
+            foreach ($_POST as $key => $p) {
+                if(!in_array($key, ['page','page_count']) && !empty($p))$cond[$key]=$p;
             }
-            if(!empty($_POST['province'])){
-                $province=intval($_POST["province"]);
-                $school_model=Model('school');
-                $condition=array();
-                $condition['isdel']=1;
-                $condition['provinceid']=$province;
-                $condition['res_group_id']=array('neq',0);
-                $school=$school_model->getAllAchool($condition,'schoolid,res_group_id');
-                $parentid='';
-                $class_model=Model('classes');
-                $conditions=array();
-                $conditions['isdel']=1;
-                $conditions['school_provinceid']=$province;
-                $conditions['res_group_id']=array('neq',0);
-                $class=$class_model->getAllClasses($conditions,'classid,res_group_id');
-                foreach($school as $v){
-                    $parentid.=$v['res_group_id'].',';
-                }
-                foreach($class as $value){
-                    $parentid.=$value['res_group_id'].',';
-                }
-                //$groupid=substr($parentid,0,strlen($parentid)-1);
-                //$where .= ' AND parentid in ('.$groupid.')';
-            }
-            if(!empty($_POST['city'])){
-                $where .= ' AND city_id = "'.intval($_POST["city"]).'"';
-            }
-            if(!empty($_POST['area'])){
-                $where .= ' AND area_id = "'.intval($_POST["area"]).'"';
-            }
-            if(!empty($_POST['school'])){
-                $where .= ' AND school_id = "'.intval($_POST["school"]).'"';
-            }
-            if(!empty($_POST['grade'])){
-                $where .= ' AND class_area LIKE "%'.trim($_POST["grade"]).'%"';
-            }
-            if(!empty($_POST['class'])){
-                $where .= ' AND class_area LIKE "%'.trim($_POST["class"]).'%"';
+            if ($cond) {
+                $where = $this->_conditions($cond);
             }
         }
 
@@ -359,25 +434,22 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center">关闭</td>';
                 }
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
-                 $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]).'<hr>关闭时间：'.date('H:i',$v['endtime']).'</td>';
-                //$html .= '<td class="align-center"><input type="text" class="layui-input" id="test'.$v['cid'].'" placeholder=" - " onfocus="timesss('.$v['cid'].')"></td>';
-//                $html .= '<td class="align-center">'.$value["address"].'</td>';
-//                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
-//                $html .= '<td class="align-center">'.$value["id"].'</td>';
-//                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
-//                $html .= '<td class="align-center">'.$value["content"].'</td>';
-//                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
-//                $html .= '<td class="w150 align-center">
-//                        <div class="layui-table-cell laytable-cell-9-8">
-//                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
-//                $html .=  '</div></td>';
-
+                if(!empty($v['begintime'])){
+                    $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]);
+                }else{
+                    $html .= '<td class="align-center">开启时间：';
+                }
+                if(!empty($v['endtime'])) {
+                    $html .= '<hr>关闭时间：' . date('H:i', $v['endtime']) . '</td>';
+                }else{
+                    $html .= '<hr>关闭时间：</td>';
+                }
                 $html .= '</tr>';
             }
         }
         if($html == ''){
             $html .= '<tr class="no_data">
-                    <td colspan="11">没有符合条件的记录</td>
+                    <td colspan="12">没有符合条件的记录</td>
                 </tr>';
         }
 
