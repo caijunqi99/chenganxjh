@@ -105,7 +105,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;拒绝原因：<input type="text" value="" name="fail_reason" id="fail_reason" class="txt">
         <input type="hidden" id="role" value="">
         <input type="hidden" id="mit"  value="{:url('/admin/teachercertify/drop',['teacher_id'=>$teachinfo.id,'status'=>3,'phone'=>$teachinfo.phone,'reason'=>''])}">
-        &nbsp;&nbsp;&nbsp;&nbsp;<a href="{:url('/admin/teachercertify/drop',['teacher_id'=>$teachinfo.id,'status'=>2,'phone'=>$teachinfo.phone])}" class="btn" id="submitBtn">审核通过</a><a href="javascript:da()" class="btn" id="">拒绝审核</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="{:url('/admin/teachercertify/drop',['teacher_id'=>$teachinfo.id,'member_id'=>$teachinfo.member_id,'status'=>2,'phone'=>$teachinfo.phone])}" class="btn" id="submitBtn">审核通过</a><a href="javascript:da()" class="btn" id="">拒绝审核</a>
 
     </form>
 
