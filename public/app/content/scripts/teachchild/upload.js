@@ -1,4 +1,12 @@
 $(function() {
+    var video ='';
+    fz_video= function(video_url){
+        video = video_url;
+        video_img = video_url+'?vframe/jpg/offset/1';
+        var _videoSource = document.getElementById("video_true");
+        _videoSource.src = video;
+        _videoSource.poster = video_img;
+    }
     // 获取价格
     $.ajax({
         url: api + '/teacherhome/index',
@@ -17,12 +25,13 @@ $(function() {
     // 类别
     $('#category').cityPicker({
         title: "请选择类别",
-        onChange: function(p, v, dv) {},
+        onChange: function(p, v, dv) {
+            $('.isKemu').hide();
+        },
         onClose: function(p, v, d) {
             // 判断是否有四级分类
             var tokens = p.value;
             if (tokens[1] != tokens[2]) {
-                $('.isKemu').show();
                 $.ajax({
                     url: api + '/teacherhome/index',
                     type: 'POST',
@@ -39,6 +48,7 @@ $(function() {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
                                                 if(Three){
+                                                    $('.isKemu').show();
                                                     var params = {
                                                         textAlign: 'center',
                                                         values: []
@@ -110,40 +120,27 @@ $(function() {
     }
 
 
-    // 监听视频播放完时的操作
-    // Video.addEventListener('ended', function() {
-    //     $('.ply').show();
-    // });
-
-    // 暂停视频
-    $('.back').click(function(event) {
-        if (!event.target.paused) {
-            $(this).get(0).pause();
-            $('.ply').show();
-        };
-    });
-
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
             if ($('#bang_name').val() == '') {
-                $.alert("请先填写课程标题");
+                $.toast("请先填写课程标题",'forbidden');
                 return false;
             } else if ($('#aboutValue').val() == '') {
-                $.alert("请先填写课程简介");
+                $.toast("请先填写课程简介",'forbidden');
                 return false;
             } else if ($('#zuozhe').val() == '') {
-                $.alert("请先填写作者的姓名");
+                $.toast("请先填写作者的姓名",'forbidden');
                 return false;
             } else if ($('#category').val() == '') {
-                $.alert("请先选择类别");
+                $.toast("请先选择类别",'forbidden');
                 return false;
             } else if ($('#price').val() == '') {
-                $.alert("请先填写价格");
+                $.toast("请先填写价格",'forbidden');
                 return false;
             } else if (!$('#kemu').is(':hidden')) {
                 if ($('#kemu').val() == '') {
-                    $.alert("请先选择科目");
+                    $.toast("请先选择科目",'forbidden');
                     return false;
                 }
             }
@@ -154,7 +151,8 @@ $(function() {
                 profile: $('#aboutValue').val(),
                 price: $('#price').val(),
                 author: $('#zuozhe').val(),
-                url: video_url
+                url: video,
+                pic:video_img
             }
             var types = $('#category').get(0).dataset.codes;
             if (types.split(',')[1] == types.split(',')[2]) {
@@ -173,15 +171,20 @@ $(function() {
                 data: params,
                 success: function(response){
                     if(response['code'] == 200){
-                        $.toast("上传成功");
-                        // historyback();
+                        $.toast("上传成功",'',function(){
+                            location.href=http_url+'app/teachchild/myupload.html';
+                        });
                     }else {
-                        console.log(response['message']);
+                        $.toast(response['message'],'forbidden');
                     }
                 }
             })
         } else {
-            // historyback();
+            $.confirm('确定要删除退出吗？','提示',function(){
+                    historyback();
+            },function(){
+
+            })
         }
     }
 })

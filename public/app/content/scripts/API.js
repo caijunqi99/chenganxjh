@@ -4,8 +4,6 @@ var upload_url = 'http://vip.xiangjianhai.com:8001/uploads';
 
 var http_url = 'http://vip.xiangjianhai.com:8001/';
 
-// 视频的url地址
-var video_url = 'http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101111008_1541041808.mp4';
 
 //获取cookie中存储的token,member_id
 
