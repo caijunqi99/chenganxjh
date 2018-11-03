@@ -209,7 +209,7 @@ function goToPayment(a, e) {
         url:ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code,
         data:{},
         dataType: "json",
-        success: function(){
+        success: function(response){
             if (response['code'] == 200) {
                 // 微信支付
                 if (payment_code == 'wxpay_app') {
