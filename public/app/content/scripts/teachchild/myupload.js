@@ -41,17 +41,21 @@ $(function(){
 		for(var i = 0; i < data.length; i++){
 			if(data[i]['t_audit'] == 1){
 				img = '../content/images/teachchild/1.png';//审核中
+                template += '<div class="content_wrap" >';
 			}else if(data[i]['t_audit'] == 2){
 				img = '../content/images/teachchild/2.png';//失败
+                template += '<div class="content_wrap" >';
 			}else if(data[i]['t_audit'] == 3 && data[i]['t_price'] == 0 ){
 				img = '../content/images/teachchild/3.png';//通过免费
+                template += '<div class="content_wrap" onclick="videoClick('+data[i]['t_id']+')">';
 			}else if(data[i]['t_audit'] == 3 && data[i]['t_price'] != 0 ){
                 img = '../content/images/teachchild/4.png';//通过付费
+                template += '<div class="content_wrap" onclick="videoClick('+data[i]['t_id']+')">';
             }else if(data[i]['t_audit'] == 4){
                 img = '../content/images/teachchild/5.png';//下架
+                template += '<div class="content_wrap" onclick="videoClick('+data[i]['t_id']+')">';
 			}
-			template += '<div class="content_wrap" onclick="videoClick('+data[i]['t_id']+')">'+
-				'<div class="img_wrap">'+
+            template += 	'<div class="img_wrap">'+
 					'<img class="img_top" src="'+ img +'">'+
 					'<img src="'+ data[i]['t_videoimg'] +'" alt="'+ data[i]['t_url'] +'">'+
 				'</div>'+

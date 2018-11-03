@@ -36,7 +36,7 @@
                 <p>我的视频</p>
             </div>
             <div class="head_r">
-                <span data-select="false" class="history_edit">编辑</span>
+                <!--<span data-select="false" class="history_edit">编辑</span>-->
             </div>
         </div>
     </header>
@@ -65,12 +65,13 @@
     $(function(){
 
         $.ajax({
-            url: api + '/teacherhistory/lists',
+            url: api + '/teacherchild/myVideos',
             type: 'POST',
             dataType: 'json',
             data: {
                 key: user_token,
-                member_id: 28
+                member_id: user_member_id,
+                page:1
             },
             success: function(response){
                 if(response['code'] == 200){
@@ -143,12 +144,12 @@
             let idString = IDArr.join(',');
             if($('.weui-check').length == IDArr.length){
                 params.key = user_token;
-                params.userid = 28;
+                params.userid = user_member_id;
                 params.ids = idString;
                 params.all = 1;
             }else {
                 params.key = user_token;
-                params.userid = 28;
+                params.userid = user_member_id;
                 params.ids = idString;
             }
             $.confirm("确定要删除吗？", function() {
