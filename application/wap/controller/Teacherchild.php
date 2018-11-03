@@ -36,6 +36,11 @@ class Teacherchild extends MobileMember
         }
         $page = !empty(input('post.page'))?input('post.page'):1;
         $list = $teachchild->getTeachchildList($condition,'',$page,'t_id desc',10);
+        foreach($list as $k=>$v){
+            if($v['t_del']==2){
+                $list[$k]['t_audit'] = 4;
+            }
+        }
         output_data($list);
     }
 
@@ -57,6 +62,11 @@ class Teacherchild extends MobileMember
             $result[$k]['author'] = $videoinfo['t_author'];
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
             $result[$k]['payment_time'] = date("Y-m-d H:i:s",$v['payment_time']);
+            if($v['order_dieline']>time()){
+                $result[$k]['is_click'] = 1;
+            }else{
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;

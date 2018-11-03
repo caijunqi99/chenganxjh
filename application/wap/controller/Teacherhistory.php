@@ -38,11 +38,25 @@ class Teacherhistory extends MobileMember
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
+            if($videoinfo['t_price']==0){
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }else{
+                $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$videoinfo['t_id'],'order_state'=>20))->order('order_id desc')->limit(1)->find();
+                if(!empty($orderinfo)){
+                    if($orderinfo['order_dieline']>time()){
+                        $result[$k]['is_click'] = 1;
+                    }else{
+                        $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                    }
+                }else{
+                    $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                }
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
         }
-        $datas[] = $data;
+        $datas = !empty($data) ? [$data] : $data;
         output_data($datas);
     }
 
