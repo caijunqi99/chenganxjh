@@ -214,3 +214,18 @@
 .details_header .icon-jiantou3 {
     color: #666;
 }
+.video_detail{
+    height: 92px;line-height: 46px;
+    overflow: hidden;font-size: 26px;
+    color: #aeaeae;position: relative;
+    margin-bottom: 15px;}
+.video_detail p{
+    padding-right: 40px;}
+.video_detail.open{height:auto;min-height: 92px;overflow: visible;}
+.video_detail_icon{
+    width: 30px;
+    height: 30px;display: block;position: absolute;right:0;top:20px;}
+.video_detail_icon i.icon{
+    font-size: 30px;
+    color: #aaa;}
+.video_detail.open .video_detail_icon{display: none;}

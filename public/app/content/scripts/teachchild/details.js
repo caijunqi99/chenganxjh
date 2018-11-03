@@ -134,9 +134,13 @@ $(function() {
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
                 '<div class="content_wrap float_left">' +
-                '<p class="title">' + data[1]['lists'][i]['t_title'] + '</p>' +
-                '<p class="content">' + data[1]['lists'][i]['t_profile'] + '</p>' +
-                '</div>' +
+                '<p class="title">' + data[1]['lists'][i]['t_title'] + '</p>';
+                if(data[1]['lists'][i]['t_profile'] == ''){
+                    List +='<p class="content">暂无简介</p>';
+                }else{
+                    List +='<p class="content">' + data[1]['lists'][i]['t_profile'] + '</p>';
+                }
+            List +=   '</div>' +
                 '</a></li>';
         }
         if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
@@ -147,11 +151,13 @@ $(function() {
             price = '已购买'
         }
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
-            '<div class="related">' +
+            '<div class="related" style="height: 120px">' +
             '<div class="related1">' +
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
-            '<p class="content">' + data[0]['data']['t_profile'] + '</p>' +
+            '<p class="content" style="line-height: 40px;height: 40px;">作者：' + data[0]['data']['t_author'] + '</p>' +
             '</div>' +
+
+
             '<div class="related2">' ;
             if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
                 template +='<button type="button" >' + price + '</button>'
@@ -161,9 +167,12 @@ $(function() {
                 template +='<button type="button" >' + price + '</button>'
             }
             template +=   '</div>' +
+
             '</div>' +
-            '<div class="related_list">' +
-            '<p class="title_more">更多课程</p>' +
+                '<div class="video_detail" onclick="msg_switch($(this))"><p>' + data[0]['data']['t_profile'] + '</p><a class="video_detail_icon" href="javascript:;"><i class="icon iconfont icon-iconfontjiantou"></i></a></div>'+
+
+            '<div class="related_list" style="border-top: 1px solid #aaa;">' +
+            '<p class="title_more ">更多课程</p>' +
             '<ul>' + List + '</ul>' +
             '</div>' +
             '</div>';
@@ -180,3 +189,6 @@ function pay(t_id){
     }
 }
 
+function msg_switch(obj) {
+    obj.toggleClass("open");
+}
