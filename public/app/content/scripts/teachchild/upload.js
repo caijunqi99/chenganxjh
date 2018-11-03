@@ -1,11 +1,9 @@
 $(function() {
-    var video ='';
     fz_video= function(video_url){
-        video = video_url;
-        video_img = video_url+'?vframe/jpg/offset/1';
         var _videoSource = document.getElementById("video_true");
-        _videoSource.src = video;
-        _videoSource.poster = video_img;
+        _videoSource.src = video_url;
+        _videoSource.poster = video_url+'?vframe/jpg/offset/1';
+        return video_url;
     }
     // 获取价格
     $.ajax({
@@ -123,7 +121,12 @@ $(function() {
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
-            if ($('#bang_name').val() == '') {
+            var video = fz_video();
+            var video_img = video+'?vframe/jpg/offset/1';
+            if (video == '') {
+                $.toast("获取上传视频失败，请重新上传",'forbidden');
+                return false;
+            } else if ($('#bang_name').val() == '') {
                 $.toast("请先填写课程标题",'forbidden');
                 return false;
             } else if ($('#aboutValue').val() == '') {
@@ -152,7 +155,7 @@ $(function() {
                 price: $('#price').val(),
                 author: $('#zuozhe').val(),
                 url: video,
-                pic:video_img
+                pic: video_img
             }
             var types = $('#category').get(0).dataset.codes;
             if (types.split(',')[1] == types.split(',')[2]) {
