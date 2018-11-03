@@ -131,11 +131,6 @@
 <script type="text/javascript">
     layui.use(['form'], function(){
         var form = layui.form;
-          laydate.render({
-            elem: '#test9'
-            ,type: 'time'
-            ,range: true
-          });
         //省
         form.on('select(province)', function(data){
             $.ajax({

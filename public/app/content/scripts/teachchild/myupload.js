@@ -16,10 +16,11 @@ $(function(){
 	function getList(type){
 		let params = {
 			key: user_token,
+			member_id:user_member_id,
 			status: type
 		}
 		$.ajax({
-			url: api + '/teacherchild/myUpload?key=1234',
+			url: api + '/teacherchild/myUpload.html',
 			type: 'POST',
 			dataType: 'json',
 			data: params,

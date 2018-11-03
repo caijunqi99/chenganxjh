@@ -73,9 +73,9 @@ class Classes extends Model {
         return $list;
     }
 
-    public function getAllClasses($condtion){
+    public function getAllClasses($condtion,$field="*"){
         //$result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
-        $result = db('class')->where($condtion)->select();
+        $result = db('class')->where($condtion)->field($field)->select();
         return $result;
     }
 
