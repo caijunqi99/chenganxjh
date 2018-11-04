@@ -663,6 +663,7 @@ a.quit_popup i {
     color: #fff;
     border-radius: 10px;
 }
+
 .orderforms_list3>li {
     margin-bottom: 20px;
     background: #fff;
@@ -1072,4 +1073,107 @@ a.repayments_btn {
     background: #4ec3bb;
     font-size: 28px;
     color: #fff;
+}
+
+
+/**/
+
+.scan_bar {
+    display: block;
+    float: right;
+    width: 60px;
+    height: 90px;
+}
+
+.scan_bar i.icon-saoyisao {
+    font-size: 34px;
+    line-height: 90px;
+    padding-left: 15px;
+}
+
+.add_student_bar i.icon {
+    font-size: 34px;
+    font-weight: bold;
+    color: #999;
+}
+
+.no_bounds {
+    padding-top: 100px;
+}
+
+.no_bounds_p {
+    font-size: 22px;
+    color: #aaa;
+    text-align: center;
+    line-height: 30px;
+}
+
+.no_bounds_p span {
+    position: relative;
+}
+
+.no_bounds_p span::before {
+    content: '';
+    width: 200px;
+    height: 1px;
+    background: #999;
+    position: absolute;
+    left: -230px;
+    top: 17px;
+    z-index: 3;
+}
+
+.no_bounds_p span::after {
+    content: '';
+    width: 200px;
+    height: 1px;
+    background: #999;
+    position: absolute;
+    right: -230px;
+    top: 17px;
+    z-index: 3;
+}
+
+.student_tab_box {
+    padding: 20px 0;
+}
+
+.student_tab {
+    -webkit-display: flex;
+    display: flex;
+    border-radius: 15px;
+    border-right: 2px solid #e5e5e5;
+}
+
+.student_tab>li {
+    flex: 1;
+    background: #f2f2f2;
+    height: 60px;
+    border-top: 2px solid #e5e5e5;
+    border-bottom: 2px solid #e5e5e5;
+    border-left: 2px solid #e5e5e5;
+}
+
+.student_tab>li>a {
+    display: block;
+    height: 100%;
+    font-size: 26px;
+    color: #666;
+    text-align: center;
+    line-height: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.student_tab>li:first-child {
+    border-radius: 15px 0 0 15px;
+}
+
+.student_tab>li:last-child {
+    border-radius: 0 15px 15px 0;
+}
+
+.student_tab>li.active {
+    background: #fff;
 }

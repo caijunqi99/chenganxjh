@@ -1,4 +1,19 @@
 $(function() {
+    // 获取价格
+    $.ajax({
+        url: api + '/teacherhome/index',
+        type: 'POST',
+        dataType: 'json',
+        success: function(response){
+            var template = '';
+            price = response['result'][0]['price'];
+            for(var i = 0; i < price.length; i++){
+                template += '<p>￥ '+ price[i]['pkg_price'] +'</p>'
+            }
+            $('.http_price_wrap').html(template);
+        }
+    })
+
     // 类别
     $('#category').cityPicker({
         title: "请选择类别",
@@ -6,7 +21,7 @@ $(function() {
         onClose: function(p, v, d) {
             // 判断是否有四级分类
             var tokens = p.value;
-            if (tokens.length == 3) {
+            if (tokens[1] != tokens[2]) {
                 $('.isKemu').show();
                 $.ajax({
                     url: api + '/teacherhome/index',
@@ -23,16 +38,20 @@ $(function() {
                                         for (var x = 0; x < Two.length; x++) {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
-                                                var params = {
-                                                    textAlign: 'center',
-                                                    values: []
+                                                if(Three){
+                                                    var params = {
+                                                        textAlign: 'center',
+                                                        values: []
+                                                    }
+                                                    var data = {};
+                                                    for (var r = 0; r < Three.length; r++) {
+                                                        params['values'].push(Three[r]['gc_name']);
+                                                        data[Three[r]['gc_name']] = Three[r]['gc_id'];
+                                                    }
+                                                    prickKemu(params, data);
+                                                }else {
+                                                    $('.isKemu').hide();
                                                 }
-                                                var data = {};
-                                                for (var r = 0; r < Three.length; r++) {
-                                                    params['values'].push(Three[r]['gc_name']);
-                                                    data[Three[r]['gc_name']] = Three[r]['gc_id'];
-                                                }
-                                                prickKemu(params, data);
                                             }
                                         }
                                     }
@@ -53,12 +72,15 @@ $(function() {
     }
 
     // 遍历价格添加颜色
-    $('.price_boot_wrap p').each(function(index, el) {
-        $(this).click(function(event) {
-            $('.price_boot_wrap p').removeClass('action')
-            $(this).addClass('action');
+    setInterval(function(){
+        $('.price_boot_wrap p').each(function(index, el) {
+            $(this).click(function(event) {
+                $('.price_boot_wrap p').removeClass('action')
+                $(this).addClass('action');
+            });
         });
-    });
+    }, 20)
+
     $('.price_boot_wrap input').focus(function(event) {
         $('.price_boot_wrap p').removeClass('action')
     });
@@ -124,44 +146,42 @@ $(function() {
                     $.alert("请先选择科目");
                     return false;
                 }
-            } else {
-                var params = {
-                    key: user_token,
-                    member_id: user_member_id,
-                    title: $('#bang_name').val(),
-                    profile: $('#aboutValue').val(),
-                    price: $('#price').val(),
-                    author: $('#zuozhe').val(),
-                }
-                var types = $('#category').get(0).dataset.codes;
-                if (types[1] === types[2]) {
-                    params['type'] = types[0];
-                    params['type2'] = types[1];
-                } else {
-                    params['type'] = types[0];
-                    params['type2'] = types[1];
-                    params['type3'] = types[2];
-                }
-                if (!$('kemu').is(':hidden')) {
-                    params['type4'] = $('#kemu').get(0).dataset.id;
-                }
-                // 上传课件
-                // $.ajax({
-                //     url: api + '/teacherupload/index',
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: params,
-                //     success: function(response){
-                //         if(response['code'] == 200){
-                //
-                //         }else {
-                //             console.log(response['message']);
-                //         }
-                //     }
-                // })
             }
+            var params = {
+                key: user_token,
+                member_id: user_member_id,
+                title: $('#bang_name').val(),
+                profile: $('#aboutValue').val(),
+                price: $('#price').val(),
+                author: $('#zuozhe').val(),
+                url: video_url
+            }
+            var types = $('#category').get(0).dataset.codes;
+            if (types.split(',')[1] == types.split(',')[2]) {
+                params['type'] = types.split(',')[0];
+                params['type2'] = types.split(',')[1];
+            } else {
+                params['type'] = types.split(',')[0];
+                params['type2'] = types.split(',')[1];
+                params['type3'] = types.split(',')[2];
+            }
+            // 上传课件
+            $.ajax({
+                url: api + '/teacherupload/index',
+                type: 'POST',
+                dataType: 'json',
+                data: params,
+                success: function(response){
+                    if(response['code'] == 200){
+                        $.toast("上传成功");
+                        // historyback();
+                    }else {
+                        console.log(response['message']);
+                    }
+                }
+            })
         } else {
-            window.history.back(-1);
+            // historyback();
         }
     }
 })

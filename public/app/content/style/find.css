@@ -1399,3 +1399,160 @@ a.lookall {
 .platenumber {
     margin-left: 15px;
 }
+
+
+/**/
+
+.agree_cont {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.agree_cont {
+    padding-top: 20px;
+    margin-bottom: 80px;
+}
+
+.declare_text {
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px #ccc;
+}
+
+.declare_inner {
+    padding: 30px 100px;
+}
+
+.declare_h1 {
+    font-size: 28px;
+    color: #8a8a8a;
+    text-align: center;
+    line-height: 50px;
+}
+
+.declare_h1 span {
+    padding: 8px 0;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.declare_h1 strong {
+    color: #ce4646;
+    position: relative;
+}
+
+.declare_h1 strong::after {
+    content: '';
+    width: 100%;
+    height: 3px;
+    display: block;
+    background: #f66c6c;
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    z-index: 7;
+}
+
+.declare_h2 {
+    font-size: 22px;
+    color: #d2d2d2;
+    line-height: 40px;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding-top: 2px;
+}
+
+.declare_title_box {
+    padding-bottom: 20px;
+}
+
+.declare_p {
+    font-size: 26px;
+    color: #888;
+    line-height: 50px;
+    margin-bottom: 5px;
+}
+
+.declare_p.margb40 {
+    margin-bottom: 40px;
+}
+
+.foot {
+    height: auto;
+    padding: 15px 60px;
+    line-height: 30px;
+    background: #393939;
+    color: #eee;
+    text-align: center;
+    border: none !important;
+}
+
+.aboutus_cont1 {
+    padding: 60px 0 50px;
+    background: url(../images/find/aboutus_bg1.jpg) no-repeat;
+}
+
+.aboutus_cont2 {
+    padding: 10px 0 50px;
+    background: url(../images/find/aboutus_bg2.jpg) no-repeat;
+}
+
+.aboutus_title_box {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: #e8e8e8;
+    position: relative;
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+
+.aboutus_title_box .aboutus_title_h1 {
+    width: 100%;
+    height: 50px;
+    font-size: 30px;
+    color: #242424;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    font-weight: bold;
+}
+
+.aboutus_text p {
+    font-size: 24px;
+    color: #242424;
+    line-height: 44px;
+    text-indent: 2em;
+}
+
+.aboutus_text2 {
+    width: 630px;
+    height: 160px;
+    box-shadow: 0 0 15px #ccc;
+    border-radius: 20px;
+    margin: 0 auto;
+    -webkit-display: flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.aboutus_cont3 {
+    padding-bottom: 30px;
+}
+
+.aboutus_cont4 {
+    padding: 110px 0 200px;
+    background: url(../images/find/aboutus_bg3.jpg) no-repeat
+}
+
+.aboutus_text2 p {
+    font-size: 24px;
+    color: #242424;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+}

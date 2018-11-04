@@ -19,56 +19,63 @@
 </head>
 
 <body>
-    <ul class="sort_tabs_top"></ul>
-    <div class="sort_block clearBoth" style="display: none"></div>
-    <!-- <ul class="sort_tabs" style="display: none"></ul> -->
-    <ul class="filter" style="display: none">
-        <div class="filter_top">
-            <div class="body_content clearBoth">
-                <li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
-                <li class="float_left" onclick="sortPrice(0)">查看免费</li>
-                <li class="float_left" onclick="sortPrice(1)">查看付费</li>
-                <p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
-            </div>
-        </div>
-        <div class="filter_sort">
-            <ul class="body_content"></ul>
-        </div>
-        <div class="filter_filter">
-            <div class="body_content">
-                <div class="clearBoth filter_span_wrap stage">
-                </div>
-                <div class="clearBoth filter_span_wrap grade">
-                </div>
-                <div class="clearBoth filter_span_wrap subject">
+    <div class="list_wrap">
+        <ul class="sort_tabs_top"></ul>
+        <div class="sort_block clearBoth" style="display: none"></div>
+        <!-- <ul class="sort_tabs" style="display: none"></ul> -->
+        <ul class="filter" style="display: none">
+            <div class="filter_top">
+                <div class="body_content clearBoth">
+                    <li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
+                    <li class="float_left isfree" onclick="sortPrice(0)">查看免费</li>
+                    <li class="float_left isfree" onclick="sortPrice(1)">查看付费</li>
+                    <p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
                 </div>
             </div>
-            <div class="filter_confirm">
-                <span onclick="filterOK(0)">重置</span>
-                <span onclick="filterOK(1)">确认</span>
+            <div class="filter_sort">
+                <ul class="body_content"></ul>
             </div>
-        </div>
-    </ul>
+            <div class="filter_filter">
+                <div class="body_content">
+                    <div class="clearBoth filter_span_wrap stage">
+                    </div>
+                    <div class="clearBoth filter_span_wrap grade">
+                    </div>
+                    <div class="clearBoth filter_span_wrap subject">
+                    </div>
+                </div>
+                <div class="filter_confirm">
+                    <span onclick="filterOK(0)">重置</span>
+                    <span onclick="filterOK(1)">确认</span>
+                </div>
+            </div>
+        </ul>
 
-    <!-- 主要内容部分 -->
-    <div class="body_content clearBoth main_content">
-    </div>
-    <div class="sub-nav">
-        <div class="content">
-            <ul>
-                <li><a href="history.html"><i class="icon iconfont icon-shizhong"></i>&nbsp;&nbsp;观看历史</a></li>
-                <li><i class="icon iconfont icon-shoucang"></i>&nbsp;&nbsp;我的收藏</li>
-                <li><a href="upload.html"><i class="icon iconfont icon-ge_shangchuan"></i>&nbsp;&nbsp;上传视频</a></li>
-            </ul>
+        <!-- 主要内容部分 -->
+        <div class="body_content clearBoth main_content">
         </div>
-        <s><i></i></s>
+        <div class="weui-loadmore" style="display: none">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
+        <div class="sub-nav">
+            <div class="content">
+                <ul>
+                    <li><a href="history.html"><i class="icon iconfont icon-shizhong"></i>&nbsp;&nbsp;观看历史</a></li>
+                    <li><i class="icon iconfont icon-shoucang"></i>&nbsp;&nbsp;我的收藏</li>
+                    <li><a href="upload.html"><i class="icon iconfont icon-ge_shangchuan"></i>&nbsp;&nbsp;上传视频</a></li>
+                </ul>
+            </div>
+            <s><i></i></s>
+        </div>
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
+    <script src="../content/scripts/commom.js"></script>
+    <!-- <script src="../content/scripts/pullUpLoading.js"></script> -->
     <script type="text/javascript">
         $(function() {
 
@@ -80,6 +87,12 @@
                 type2: '',
                 type3: ''
             }
+            var Type = '';
+            var Page = 1;
+            var Params = {
+                recommend: 2,
+                page: Page,
+            };
 
             // 默认获取列表
             $.ajax({
@@ -101,10 +114,82 @@
             });
 
             // 默认获取推荐课件列表
-            GetKejian({
-                key: user_token,
-                recommend: 2
-            })
+            GetKejian(Params)
+
+            // 分页
+            var loading = false; //状态标记
+            $(document.body).infinite(1).on("infinite", function(event) {
+                if (loading) return;
+                loading = true;
+                setTimeout(function() {
+                    Page = Page + 1;
+                    Params['page'] = Page,
+                        getPage(Params);
+                    loading = false;
+                }, 20)
+            });
+
+            // 顶部推荐切换
+            sortTopAction = function(ID, el, type) {
+                Page = 1;
+                $('.sort_tabs_top li i').removeClass('action');
+                $(el).addClass('action');
+                var top = Index['result'][0]['categorize'];
+                var filtsort = Index['result'][0]['navigate']['subsume']['child'];
+                if (ID == 0) {
+                    hideFilterBox();
+                    $('.sort_block').hide();
+                    $('.sort_tabs').hide();
+                    $('.filter').hide();
+                    var params = {
+                        key: user_token,
+                        recommend: 2,
+                        page: Page
+                    }
+                    GetKejian(params);
+                    Params = params;
+                } else if (type == 4) {
+                    Type = ID;
+                    $('.sort_block').hide();
+                    $('.sort_tabs').show();
+                    $('.filter').show();
+                    var childID = '';
+                    for (var i = 0; i < top.length; i++) {
+                        if (ID == top[i]['gc_id']) {
+                            $('.sort_tabs').html(sortTabs(top[i]['childTwo']))
+                                // 默认获取第一项的内容
+                            var params = {
+                                key: user_token,
+                                type: ID,
+                                type1: top[i]['childTwo'][0]['gc_id'],
+                                subsume: 1,
+                                page: Page
+                            }
+                            GetKejian(params);
+                            Params = params;
+                            $('.filter_sort ul').html(filterSort(Index['result'][0]['navigate']['subsume']['child']))
+                            $('.stage').html(stageList(top[i]['childTwo']))
+                        }
+                    }
+                } else {
+                    hideFilterBox();
+                    $('.sort_block').show();
+                    $('.sort_tabs').hide();
+                    $('.filter').hide();
+                    for (var i = 0; i < top.length; i++) {
+                        if (ID == top[i]['gc_id']) {
+                            $('.sort_block').html(sortBlock(top[i]['childTwo']))
+                        }
+                    }
+                    var params = {
+                        key: user_token,
+                        type: ID,
+                        page: Page
+                    }
+                    GetKejian(params);
+                    Params = params;
+                }
+            }
 
             $('.filter_top div li').click(function(event) {
                 $('.filter_top div li').removeClass('float_right_action')
@@ -127,6 +212,7 @@
                                 $('.filter_sort_li' + li[i].index).children('i').css('opacity', '1');
                             }
                             li[i].onclick = function() {
+                                Page = 1;
                                 for (var i = 0; i < li.length; i++) {
                                     $('.filter_sort_li' + li[i].index).children('i').css('opacity', '0');
                                 }
@@ -139,23 +225,30 @@
                                     case 0:
                                         var params = {
                                             key: user_token,
-                                            subsume: 1
+                                            subsume: 1,
+                                            type: Type,
+                                            page: Page
                                         };
                                         break;
                                     case 1:
                                         var params = {
                                             key: user_token,
-                                            price_desc: 1
+                                            price_desc: 1,
+                                            type: Type,
+                                            page: Page
                                         };
                                         break;
                                     case 2:
                                         var params = {
                                             key: user_token,
-                                            price_asc: 1
+                                            price_asc: 1,
+                                            type: Type,
+                                            page: Page
                                         };
                                         break;
                                 }
-                                GetKejian(params)
+                                GetKejian(params);
+                                Params = params;
                             }
                         }
                     } else {
@@ -172,11 +265,12 @@
                     $('.filter_filter').show();
                     $('.filterFilter').addClass('float_right_action');
                     event.target.dataset.select = true;
-                    var stage = $('.stage span'); //阶段
-                    var grade = $('.grade span'); //年级
-                    var subject = $('.subject span'); //科目
+                    var stage = $('.stage span'); // 第一列
+                    var grade = $('.grade span'); // 第二列
+                    var subject = $('.subject span'); // 第三列
                     for (var i = 0; i < stage.length; i++) {
                         stage[i].index = i;
+                        // 第一列点击获取第二列的内容
                         stage[i].onclick = function() {
                             for (var i = 0; i < stage.length; i++) {
                                 stage[i].className = '';
@@ -211,7 +305,7 @@
                 }
             })
 
-            //
+            // 第二列点击获取第三列的内容
             gradeListAction = function(parentID, ID, el, topID) {
                 $('.grade span').removeClass('action');
                 $(el).addClass('action');
@@ -233,6 +327,7 @@
                 }
             }
 
+            // 第三列内容
             subjectListAction = function(parentID, ID, el) {
                 filterParams['type3'] = ID;
                 $('.subject span').removeClass('action');
@@ -252,6 +347,24 @@
                         filterParams[KEY[i]] = '';
                     }
                 } else {
+                    // 判断查看免费付费以及综合
+                    $('.isfree').each(function(index, el) {
+                        if ($(this).hasClass('float_right_action')) {
+                            if ($(this).html() == '查看免费') {
+                                params['price_free'] = 1;
+                            } else {
+                                params['price_fees'] = 1;
+                            }
+                        }
+                    });
+                    if ($('.filterSort span').html() == '综合') {
+                        params['subsume'] = 1;
+                    } else if ($('.filterSort span').html() == '价格最高') {
+                        params['price_desc'] = 1;
+                    } else {
+                        params['price_asc'] = 1;
+                    }
+                    params['page'] = Page;
                     for (var i = 0; i < KEY.length; i++) {
                         if (filterParams[KEY[i]] != '') {
                             params[KEY[i]] = filterParams[KEY[i]]
@@ -261,6 +374,7 @@
                         $.toast("请选择筛选内容", "cancel");
                     } else {
                         GetKejian(params);
+                        Params = params;
                         $('.filterFilter').removeClass('float_right_action')
                         $('.filter_filter').hide();
                     }
@@ -269,6 +383,7 @@
 
             // 查看免费和付费
             sortPrice = function(isPrice) {
+                Page = 1;
                 // 0为免费, 1为付费
                 $('.filter_filter').hide();
                 $('.filter_sort').hide();
@@ -276,15 +391,20 @@
                 if (isPrice == 0) {
                     params = {
                         key: user_token,
-                        price_free: 1
+                        price_free: 1,
+                        type: Type,
+                        page: Page
                     }
                 } else {
                     params = {
                         key: user_token,
-                        price_fees: 1
+                        price_fees: 1,
+                        type: Type,
+                        page: Page
                     }
                 }
-                GetKejian(params)
+                GetKejian(params);
+                Params = params;
             }
 
             // 显示更多
@@ -297,60 +417,6 @@
             // 		event.target.dataset.select = 'false';
             // 	}
             // })
-
-            // 顶部推荐切换
-            sortTopAction = function(ID, el) {
-                $('.sort_tabs_top li i').removeClass('action');
-                $(el).addClass('action');
-                var top = Index['result'][0]['categorize'];
-                var filtsort = Index['result'][0]['navigate']['subsume']['child'];
-                if (ID == 0) {
-                    hideFilterBox();
-                    $('.sort_block').hide();
-                    $('.sort_tabs').hide();
-                    $('.filter').hide();
-                    var params = {
-                        key: user_token,
-                        recommend: 2
-                    }
-                    GetKejian(params)
-                } else if (ID == 2 || ID == 3) {
-                    hideFilterBox();
-                    $('.sort_block').show();
-                    $('.sort_tabs').hide();
-                    $('.filter').hide();
-                    for (var i = 0; i < top.length; i++) {
-                        if (ID == top[i]['gc_id']) {
-                            $('.sort_block').html(sortBlock(top[i]['childTwo']))
-                        }
-                    }
-                    var params = {
-                        key: user_token,
-                        type: ID
-                    }
-                    GetKejian(params);
-                } else if (ID == 4) {
-                    $('.sort_block').hide();
-                    $('.sort_tabs').show();
-                    $('.filter').show();
-                    var childID = '';
-                    for (var i = 0; i < top.length; i++) {
-                        if (ID == top[i]['gc_id']) {
-                            $('.sort_tabs').html(sortTabs(top[i]['childTwo']))
-                                // 默认获取第一项的内容
-                            var params = {
-                                key: user_token,
-                                type: ID,
-                                type1: top[i]['childTwo'][0]['gc_id'],
-                                subsume: 1
-                            }
-                            GetKejian(params);
-                            $('.filter_sort ul').html(filterSort(Index['result'][0]['navigate']['subsume']['child']))
-                            $('.stage').html(stageList(top[i]['childTwo']))
-                        }
-                    }
-                }
-            }
 
             // 隐藏筛选框
             function hideFilterBox() {
@@ -369,45 +435,31 @@
             }
 
             sortBottomAction = function(parentID, ID, el) {
+                Page = 1;
                 $('.sort_tabs li i').removeClass('action');
                 $(el).addClass('action');
                 var params = {
                     key: user_token,
                     type: parentID,
-                    type1: ID
+                    type1: ID,
+                    page: Page,
                 }
                 GetKejian(params);
+                Params = params;
             }
 
             GetKejianTwo = function(parentID, ID, el) {
+                Page = 1;
                 $('.sort_block span i').removeClass('action');
                 $(el).addClass('action');
                 var params = {
                     key: user_token,
                     type: parentID,
-                    type1: ID
+                    type1: ID,
+                    page: Page
                 }
                 GetKejian(params);
-            }
-
-            //选项卡模板
-            function SortTop(data) {
-                var template = '';
-                var content = '';
-                var actionClass = '';
-                var ID = '';
-                for (let i = 0; i < data['categorize'].length; i++) {
-                    var DATA = data['categorize'][i];
-                    if (data['categorize'][i]['gc_name'] == '推荐') {
-                        actionClass = 'action';
-                        ID = 0;
-                    } else {
-                        ID = data['categorize'][i]['gc_id'];
-                    }
-                    content += '<li><i class="' + actionClass + '" onclick="sortTopAction(' + ID + ', this' + ')">' + data['categorize'][i]['gc_name'] + '</i></li>';
-                }
-                template = '<div class="body_content clearBoth">' + content + '</div>';
-                return template;
+                Params = params;
             }
 
             // 获取课件接口
@@ -425,6 +477,32 @@
                         }
                     }
                 });
+            }
+
+            //选项卡模板
+            function SortTop(data) {
+                var template = '';
+                var content = '';
+                var actionClass = '';
+                var ID = '';
+                var type = '';
+                for (let i = 0; i < data['categorize'].length; i++) {
+                    var DATA = data['categorize'][i];
+                    if (data['categorize'][i]['gc_name'] == '推荐') {
+                        actionClass = 'action';
+                        ID = 0;
+                    } else {
+                        ID = data['categorize'][i]['gc_id'];
+                    }
+                    if (data['categorize'][i]['type']) {
+                        type = data['categorize'][i]['type']
+                    } else {
+                        type = 0;
+                    }
+                    content += '<li><i class="' + actionClass + '" onclick="sortTopAction(' + ID + ', this' + ',' + type + ')">' + data['categorize'][i]['gc_name'] + '</i></li>';
+                }
+                template = '<div class="body_content clearBoth">' + content + '</div>';
+                return template;
             }
 
             // sort_block模板
@@ -463,6 +541,7 @@
             }
 
             // 筛选下拉列表
+            // 第一列
             function stageList(data) {
                 var template = '';
                 for (var i = 0; i < data.length; i++) {
@@ -471,6 +550,7 @@
                 return template;
             }
 
+            // 第二列
             function gradeList(data, topID) {
                 var template = '';
                 for (var i = 0; i < data.length; i++) {
@@ -479,6 +559,7 @@
                 return template;
             }
 
+            // 第三列
             function subjectList(data) {
                 var template = '';
                 for (var i = 0; i < data.length; i++) {
@@ -509,6 +590,26 @@
                 return template;
             }
 
+            // 分页
+            function getPage(params) {
+                $.ajax({
+                    type: "POST",
+                    url: api + '/Teacherhome/lists',
+                    dataType: "json",
+                    data: params,
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            if (response['result'].length == 0) {
+                                $.toast("只有这么多了", "text");
+                            } else {
+                                $('.main_content').append(HTML(response['result']))
+                            }
+                        } else {
+                            console.log(response['message']);
+                        }
+                    }
+                });
+            }
         })
     </script>
 

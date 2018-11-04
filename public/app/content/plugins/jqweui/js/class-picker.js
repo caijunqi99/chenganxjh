@@ -214,7 +214,7 @@ function($) {
             var p = $.extend({}, params, config);
             //计算value
             var val = $(this).val();
-            if (!val) val = '父母课堂 英文';
+            if (!val) val = '精品课堂 小学 二年级';
             currentProvince = val.split(" ")[0];
             currentCity = val.split(" ")[1];
             currentDistrict = val.split(" ")[2];

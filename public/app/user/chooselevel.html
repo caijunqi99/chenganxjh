@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
-    <link rel="stylesheet" href="/static/plugins/layer/css/layui.css">      
+    <link rel="stylesheet" href="/static/plugins/layer/css/layui.css">
 </head>
 
 <body>
@@ -144,47 +144,46 @@
                 // api = 'http://w.xjh.com/index.php/Wap';
                 user_token = user_token;
                 var chind_id = '10';
-                $.post(api+'/Packagesbuy/buy_step1',
-                {
+                $.post(api + '/Packagesbuy/buy_step1', {
                     'key': user_token,
                     'pkg_id': '8',
                     'payment_code': pay,
                     'chind_id': chind_id,
                 }, function(data, textStatus, xhr) {
-                /*optional stuff to do after success */
+                    /*optional stuff to do after success */
                     // alert(data);
                     if (pay == 'alipay_app') {
                         layer.open({
-                          type: 1,
-                          title: '课程管理',
-                          shadeClose: true,
-                          shade: false,
-                          maxmin: false, //开启最大化最小化按钮
-                          // area: ['400px', '300px'],
-                          content: data
+                            type: 1,
+                            title: '课程管理',
+                            shadeClose: true,
+                            shade: false,
+                            maxmin: false, //开启最大化最小化按钮
+                            // area: ['400px', '300px'],
+                            content: data
                         });
-                        return ;
+                        return;
                     }
-                    if(pay=='wxpay_h5'){
-                        data =$.parseJSON(data);
+                    if (pay == 'wxpay_h5') {
+                        data = $.parseJSON(data);
                         var mbs = data.result;
 
-                        if (mbs.result_code== 'SUCCESS') {
-                            window.location.href=mbs.mweb_url;return ;
+                        if (mbs.result_code == 'SUCCESS') {
+                            window.location.href = mbs.mweb_url;
+                            return;
                         }
                     }
                 });
             });
         })
 
-        $.alert(window.location.href,'URL',function(){
-            
+        $.alert(window.location.href, 'URL', function() {
+
         })
 
-  // $.alert("AlphaGo 就是天网的前身，人类要完蛋了！", "警告！",function(){
-  //       alert("看来真的药丸");
-  // });
-
+        // $.alert("AlphaGo 就是天网的前身，人类要完蛋了！", "警告！",function(){
+        //       alert("看来真的药丸");
+        // });
     </script>
 </body>
 
