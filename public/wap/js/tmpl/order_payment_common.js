@@ -242,10 +242,10 @@ function goToPayment(a, e) {
                     ;
                 }
             } else if (response['code'] == 400) {
-                $.toast('请先前往登陆', 'forbidden');
+                alert('请先前往登陆');
                 return false;
             } else {
-                $.toast(response['message'], 'forbidden');
+                alert(response['message']);
                 return false;
             }
         }
