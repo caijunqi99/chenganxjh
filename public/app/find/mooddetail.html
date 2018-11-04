@@ -67,9 +67,9 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        var id = GetQueryString('id');
         $(function() {
-            var id = GetQueryString('id');
-            if(id != ''){
+            if(id){
                 $.ajax({
                     type:'POST',
                     url:api+'/Mood/mooddetail.html',
@@ -123,7 +123,7 @@
                         }
 
                     }
-                })
+                });
                 // 删除
                 $(".md_del_btn").click(function() {
                     $.confirm("您确定要删除吗?", "删除", function() {
@@ -139,7 +139,8 @@
                             success: function (response) {
                                 if(response['code'] == 200){
                                     $.toast('删除成功','',function(){
-                                        location.href='moodlist.html';
+                                        // location.href=http_url+'app/find/mood.html';
+                                        location.href='mood.html';
                                     });
                                 }else{
                                     $.toast(response['message'],'forbidden');
@@ -172,11 +173,10 @@
                             mid:id,
                             content:content
                         },
-                        dataTyep: "json",
+                        dataType: "json",
                         success: function(response){
-                            if(response['code'] == 200){
-                                alert('aaa');
-                                $.toast('发送成功','',function(){
+                            if(response['code'] == "200"){
+                                $.toast('回复成功','',function(){
                                     location.reload();
                                 });
                             }else{
@@ -186,7 +186,6 @@
                     })
 
                 });
-
             }else{
                 $.toast('该内容不存在','forbidden',function(){
                     location.href='moodlist.html';
