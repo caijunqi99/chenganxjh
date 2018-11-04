@@ -244,7 +244,8 @@ function goToPayment(a, e) {
                 $.toast('请先前往登陆', 'forbidden');
                 return false;
             } else {
-                $.alert(response['message']);
+                $.toast(response['message'], 'forbidden');
+                return false;
             }
         }
     })
