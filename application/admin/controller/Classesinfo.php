@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
+use think\Model;
 use think\Validate;
 
 class Classesinfo extends AdminControl {
@@ -60,7 +61,6 @@ class Classesinfo extends AdminControl {
         $model_camera = model('Camera');
         $where['classid']=$class_id;
         $data=$this->_conditions($where);
-        print_r($data);die;
         $cameraList = $model_camera->getCameraList($data, 10);
         $this->assign('page', $model_camera->page_info->render());
         $this->assign('camera_list', $cameraList);
@@ -77,58 +77,13 @@ class Classesinfo extends AdminControl {
     public function _conditions($where){
         $res = array();
         $name = false;
+        $class_model = Model('Classes');
         if (isset($where['classid']) && !empty($where['classid']) ) {
-            $class = $this->getResGroupIds(array('classid'=>$where['classid']));
-            if ($class) {
-                $res=array_merge($res, $class);
-            }
-            unset($where);
-            $name = 'true';
-        }
-        if ($name == 'true') {
-            $condition['parentid'] = array('in',$res);
+            $class = $class_model->getClassInfo(array('classid'=>$where['classid']));
+            $condition['parentid'] = $class['res_group_id'];
         }
         return $condition;
     }
-    /**
-     * 查询学校和班级摄像头
-     * @创建时间   2018-11-03T00:39:48+0800
-     * @param  [type]                   $where [description]
-     * @return [type]                          [description]
-     */
-    public function getResGroupIds($where){
-        $School = model('School');
-        $Class = model('Classes');
-        $classname = '';
-        if (isset($where['classid']) && !empty($where['classid']) ) {
-            $classname = $where['classid'];
-            unset($where['classid']);
-        }
-        $where['res_group_id'] =array('gt',0);
-//        $Schoollist = $School->getAllAchool($where,'res_group_id');
-//        if (!empty($classid)) {
-//            $where['classid'] = $classid;
-//        }
-        $res = array();
-        $Classlist = $Class->getAllClasses($where,'res_group_id');
-        print_r($Classlist);die;
-//        $sc_resids=array_column($Schoollist, 'res_group_id');
-//        if ($sc_resids) {
-//            array_push($res, $sc_resids);
-//        }
-        $cl_resids=array_column($Classlist, 'res_group_id');
-        if ($cl_resids) {
-            array_push($res, $cl_resids);
-        }
-        //$ids = array_merge($sc_resids,$cl_resids);
-        $ids = $cl_resids;
-        if ($ids) {
-            return $ids;
-        }else{
-            return $res;
-        }
-    }
-
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
