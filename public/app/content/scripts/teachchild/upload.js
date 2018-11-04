@@ -1,12 +1,10 @@
 $(function() {
     fz_video= function(video_url){
-        alert(video_url);return false;
         video = video_url;
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
         _videoSource.poster = video_url+'?vframe/jpg/offset/1';
     }
-    fz_video();
     // 获取价格
     $.ajax({
         url: api + '/teacherhome/index',
@@ -122,6 +120,7 @@ $(function() {
 
     // 确认上传和取消
     isUpload = function(isTrue) {
+        fz_video();
         if (isTrue == 0) {
             var video_img = video+'?vframe/jpg/offset/1';
             if (video == '') {
