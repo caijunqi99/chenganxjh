@@ -248,10 +248,10 @@ class Mood extends MobileMember{
             $xing = substr($mood['member_mobile'],3,4);
             $mood['member_nickname']=str_replace($xing,'****',$mood['member_mobile']);
             if($mood['member_avatar'] != ''){
-                $mood['rel_member_avatar'] = UPLOAD_SITE_URL.$mood['member_avatar'];
+                $mood['member_avatar'] = UPLOAD_SITE_URL.$mood['member_avatar'];
             }else{
-                $mood['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
-                $mood['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+//                $mood['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+                $mood['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
             }
         }
         $mood['pubtime']=date("Y-m-d H:i:s",$mood['pubtime']);
