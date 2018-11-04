@@ -488,7 +488,7 @@ class Camera extends AdminControl
             if(empty($data)) {
                 $data = $datas['resources'];
             }else{
-                $data[] = $datas['resources'];
+                $data = array_merge($data,$datas['resources']);
             }
         }
         foreach($data as $k=>$v){
@@ -504,7 +504,11 @@ class Camera extends AdminControl
         $result=$model_camera->getCameraList('','','id');
         $ret=$this->get_diff_array_by_pk($data,$result);
         $sult=$model_camera->cameras_add($ret);
-        return $sult;
+        if($sult){
+            echo json_encode(array('count'=>$sult));
+        }else{
+            echo json_encode(array('count'=>0));
+        }
     }
     function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
         try{
