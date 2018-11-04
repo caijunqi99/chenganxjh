@@ -100,9 +100,9 @@ function toPay(a, e, p) {
                     r = true
                 }
 
-                /*for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
+                for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
-                   /!* if(i == "alipay" ){
+                   /* if(i == "alipay" ){
                         $("#" + i).parents("label").show();
                     }
                     if(i == "wxpay_jsapi" ){
@@ -119,7 +119,7 @@ function toPay(a, e, p) {
                             payment_code = i;
                             $("#" + i).attr("checked", true).parents("label").addClass("checked")
                         }
-                    }*!/
+                    }*/
                     if(i == "alipay_app" ){
                         $("#" + i).parents("label").show();
                     }
@@ -138,7 +138,7 @@ function toPay(a, e, p) {
                             $("#" + i).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
                         }
                     }
-                }*/
+                }
             }
            /* $("#alipay").click(function() {
                 payment_code = "alipay";
@@ -148,11 +148,9 @@ function toPay(a, e, p) {
             });*/
             $("#alipay_app").click(function() {
                 payment_code = "alipay_app";
-                $("#" + payment_code).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
             });
             $("#wxpay_app").click(function() {
                 payment_code = "wxpay_app";
-                $("#" + payment_code).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
             });
             $("#toPay").click(function() {
                 if (payment_code == "") {
@@ -205,7 +203,6 @@ function toPay(a, e, p) {
     })
 }
 function goToPayment(a, e) {
-    alert(a);
     // location.href = ApiUrl + "/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + password + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
     $.ajax({
         type:'POST',
