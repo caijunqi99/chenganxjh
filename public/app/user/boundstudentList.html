@@ -171,7 +171,12 @@
                                     '                </li>'
                             }
                             $('#bang_name').val(data[0]['s_name']);
-                            $('#sex').val(data[0]['s_name']);
+                            if(data[0]['s_sex'] == 1){
+                                $('#sex').val('男');
+                            }else{
+                                $('#sex').val('女');
+                            }
+
                             $('#date').val(data[0]['s_birthday']);
                             $('#s_card').val(data[0]['s_card']);
                             $('#city').val(data[0]['s_region']);
@@ -196,7 +201,11 @@
                                 success: function(response){
                                     if(response['code'] == 200){
                                         $('#bang_name').val(response.result[0]['s_name']);
-                                        $('#sex').val(response.result[0]['s_name']);
+                                        if(response.result[0]['s_sex'] == 1){
+                                            $('#sex').val('男');
+                                        }else{
+                                            $('#sex').val('女');
+                                        }
                                         $('#date').val(response.result[0]['s_birthday']);
                                         $('#s_card').val(response.result[0]['s_card']);
                                         $('#city').val(response.result[0]['s_region']);
@@ -220,7 +229,12 @@
                         })
                     }else{
                         $('#bang_name').val(data[0]['s_name']);
-                        $('#sex').val(data[0]['s_name']);
+                        if(data[0]['s_sex'] == 1){
+                            $('#sex').val('男');
+                        }else{
+                            $('#sex').val('女');
+                        }
+
                         $('#date').val(data[0]['s_birthday']);
                         $('#s_card').val(data[0]['s_card']);
                         $('#city').val(data[0]['s_region']);
