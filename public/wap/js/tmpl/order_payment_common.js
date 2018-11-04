@@ -212,7 +212,6 @@ function goToPayment(a, e) {
         data:{},
         dataType: "json",
         success: function(response){
-            alert(response['code']);
             if (response['code'] == 200) {
                 var mbs = response.result;
                 // 微信支付
@@ -245,8 +244,7 @@ function goToPayment(a, e) {
                 $.toast('请先前往登陆', 'forbidden');
                 return false;
             } else {
-                $.toast(response['message'], 'forbidden');
-                return false;
+                $.alert(response['message']);
             }
         }
     })
