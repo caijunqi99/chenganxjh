@@ -151,10 +151,12 @@ function toPay(a, e, p) {
                 $("#" + payment_code).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
             });
             $("#wxpay_app").click(function() {
+                alert('ccc');
                 payment_code = "wxpay_app";
                 $("#" + payment_code).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
             });
             $("#toPay").click(function() {
+                alert('bbb');
                 if (payment_code == "") {
                     $.sDialog({
                         skin: "red",
@@ -197,6 +199,7 @@ function toPay(a, e, p) {
                         }
                     })
                 } else {
+                    alert('aaa');
                         // goToPayment(a, e == "memberbuy" ? "pay_new": "vr_pay_new")
                         goToPayment(a, e == "memberbuy" ? "orderpay_app": "orderpay_app_vr")
                 }
