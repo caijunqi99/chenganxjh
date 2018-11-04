@@ -211,19 +211,19 @@ a:active {
     color: #6bbfc1 !important;
 }
 
-.filter .action span{
+.filter .action span {
     color: #6bbfc1 !important;
 }
 
-.filter .action i{
+.filter .action i {
     color: #6bbfc1 !important;
 }
 
-.filterFilter{
+.filterFilter {
     font-size: 26px
 }
 
-.filterFilter i{
+.filterFilter i {
     font-size: 30px
 }
 
@@ -544,6 +544,9 @@ a:active {
 
 .cont_wrap .cont_title {
     font-size: 30px;
+    width: 450px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cont_wrap .cont_time {
@@ -605,4 +608,42 @@ a:active {
 
 .weui-dialog__ft a {
     font-size: 30px;
+}
+
+
+/* 下拉加载样式重构 */
+
+.weui-pull-to-refresh__layer {
+    font-size: 22px !important;
+}
+
+.weui-pull-to-refresh__arrow {
+    background-size: 35px 35px !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.weui-pull-to-refresh__preloader {
+    background-size: 35px 35px !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.weui-loadmore {
+    font-size: 30px !important;
+}
+
+.weui-loadmore_line {
+    margin-top: 400px !important;
+}
+
+.nodata_bottom_ziding {
+    border-top: 1px solid #E5E5E5;
+    float: left;
+    font-size: 28px;
+    color: #E5E5E5;
+    width: 300px;
+    margin: 40px 201px;
+    text-align: center;
+    line-height: 0;
 }
