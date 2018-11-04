@@ -38,8 +38,10 @@ class alipay_app {
     function verify_notify($param) {
         require_once APP_PATH .ATTACH_MOBILE.'/api/payment/alipay_app/AopClient.php';
         $aop = new \AopClient;
-        
-        $aop->alipayrsaPublicKey = $param['app_public_key'];
+
+//        $aop->alipayrsaPublicKey = $param['app_public_key'];
+        $aop->alipayrsaPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPXfE+mKzBC+NBgN68OORr2WtqHzhkNgbrqlfW4ClwHgRO/YABz2e7iHD4SFcFidFEUvKp7eQPWr39IwNOQ8tBYMzdIHTgebzuI36RaGO0ojEokm5QyIBNnutWuJVQ7AWD3gexqivn+Aoh0WA0pnXq7vI348EvkrQFRVkLDbMpd/FzwYQ8q4HCM/ffVnAN7gZ/kYLOuvc3LypwTkXZOUlZYvzCVg1d9nPxBXj5zxXV/lXDzPyIswX/99yONixC+RA2OCRmeiskEYaSrXN+WY8i7aBrFvLnHQ7IppYGWlhdhjc6YovrUnVR/7mY2ThkMsns9/o24tEUSljT8I/gGGoQIDAQAB";
+
         $flag = $aop->rsaCheckV1($_POST, NULL, "RSA2");
         if ($flag) {
             $notify_result = array(
