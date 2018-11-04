@@ -70,7 +70,11 @@ class Admin extends AdminControl {
 
         if (!request()->isPost()) {
             //得到权限组
+
+            //获取角色
             $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
+
+            //获取所有公司
             $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
 
             if($company_id['admin_company_id'] != 1){
@@ -83,7 +87,7 @@ class Admin extends AdminControl {
 
             $this->assign('company_id',$company_id['admin_company_id']);
             $this->assign('company',$company);
-            $this->assign('gadmin', $gadmin);
+//            $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin_add');
             return $this->fetch('admin_add');
         } else {
@@ -235,6 +239,17 @@ class Admin extends AdminControl {
                     exit('false');
                 }
 
+                break;
+            case 'get_gadmin':
+                $condition['company_id'] = input('post.id');
+                $result = db('gadmin')->field('gname,gid')->where($condition)->select();
+                $html = '<option value="" selected>{$Think.lang.admin_add_role_chose}</option>';
+                if(!empty($result)){
+                    foreach($result as $key=>$value){
+                        $html += '<option value="'+$value["gid"]+'">'+$value["gname"]+'</option>';
+                    }
+                }
+                return $html;
                 break;
         }
     }
