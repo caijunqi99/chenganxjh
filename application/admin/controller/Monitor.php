@@ -51,8 +51,8 @@ class Monitor extends AdminControl
 
         //查询已安装的摄像头
             $camera= db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
-            if(!empty($_POST['schoolid'])){
-                $schoolid=$_POST['schoolid'];
+            if(!empty($_POST['school'])){
+                $schoolid=$_POST['school'];
                 $model_school = Model('school');
                 $schoolres=$model_school->getSchoolById($schoolid);
                 $this->assign('schoolname',$schoolres['name']);

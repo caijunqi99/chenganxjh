@@ -87,7 +87,8 @@
     <?php if(!empty($video)){ ?>
     <div class="layui-card-header">
         <h3 class="panel-title" style="text-align: center;">
-            <span style="color:#E00515;">（{$schoolname}）</span>{$Think.lang.look_revisit_jk_ts}
+            <?php if($schoolname!=''){ ?>
+            <span style="color:#E00515;">（{$schoolname}）</span><?php } ?>{$Think.lang.look_revisit_jk_ts}
         </h3>
     </div>
     <div class="layui-fluid layui-card-body" id="LAY-component-grid-list">
