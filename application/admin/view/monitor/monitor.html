@@ -227,12 +227,8 @@
             var city=$("#city").val();
             var area=$("#area").val();
             var school=$("#school").val();
-            if(school==0){
-                   alert("请先选择学校！");
-                   return false;
-            }else{
-                   var grade=$("#grade").val();
-                   var classid=$("#class").val();
+            var grade=$("#grade").val();
+            var classid=$("#class").val();
                    $.ajax({
                         url: "{:url('/Admin/monitor/monitor')}",
                         type: 'POST',
@@ -247,6 +243,6 @@
                           }
                     }
                   });
-            }
+
     });
 </script>
