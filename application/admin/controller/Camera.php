@@ -437,12 +437,12 @@ class Camera extends AdminControl
                 if(!empty($v['begintime'])){
                     $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]);
                 }else{
-                    $html .= '<td class="align-center">开启时间：';
+                    $html .= '<td class="align-center">开启时间：未设置';
                 }
                 if(!empty($v['endtime'])) {
                     $html .= '<hr>关闭时间：' . date('H:i', $v['endtime']) . '</td>';
                 }else{
-                    $html .= '<hr>关闭时间：</td>';
+                    $html .= '<hr>关闭时间：未设置</td>';
                 }
                 $html .= '</tr>';
             }
