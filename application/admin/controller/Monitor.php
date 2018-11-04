@@ -37,8 +37,6 @@ class Monitor extends AdminControl
         }
         $where = '1=1';
         if(!empty($_POST)){
-
-
             $cond = array();
             foreach ($_POST as $key => $p) {
                 if(!in_array($key, ['page','page_count']) && !empty($p))$cond[$key]=$p;
@@ -80,7 +78,7 @@ class Monitor extends AdminControl
             $name = 'true';
         }
         if (isset($where['grade']) && !empty($where['grade'])) {
-            $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
+            $grade = $this->getResGroupIds(array('sc_id'=>$where['grade']));
             unset($where['school']);
             unset($where['area']);
             unset($where['city']);
@@ -139,9 +137,9 @@ class Monitor extends AdminControl
         $School = model('School');
         $Class = model('Classes');
 
-        if (isset($where['sc_type']) && !empty($where['sc_type'])) {
+        if (isset($where['sc_id']) && !empty($where['sc_id'])) {
             $sc_id = db('schooltype')->where($where)->value('sc_id');
-            unset($where['sc_type']);
+            unset($where['sc_id']);
             $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
         }
         $classid = '';
