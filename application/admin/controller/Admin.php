@@ -243,7 +243,7 @@ class Admin extends AdminControl {
             case 'get_gadmin':
                 $condition['company_id'] = input('post.id');
                 $result = db('gadmin')->field('gname,gid')->where($condition)->select();
-                $html = '<option value="" selected>{$Think.lang.admin_add_role_chose}</option>';
+                $html = '<option value="" selected>请选择所属角色</option>';
                 if(!empty($result)){
                     foreach($result as $key=>$value){
                         $html += '<option value="'+$value["gid"]+'">'+$value["gname"]+'</option>';
