@@ -63,6 +63,7 @@
         <!-- 主要内容部分 -->
         <div class="body_content clearBoth main_content">
         </div>
+        <div class="nodata_bottom_ziding" style="display: none">我是有底线的</div>
         <div class="weui-loadmore" style="display: none">
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
@@ -646,7 +647,8 @@
                             if (response['result'].length == 0) {
                                 // $.toast("只有这么多了", "text");
                                 $(document.body).destroyInfinite();
-                                $('.main_content').html('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                                // $('.main_content').html('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                                $('.nodata_bottom_ziding').show();
                             } else {
                                 $('.main_content').append(HTML(response['result']))
                             }
