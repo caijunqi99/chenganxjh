@@ -254,6 +254,7 @@ class Mood extends MobileMember{
                 $mood['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
             }
         }
+        halt($mood);
         $mood['pubtime']=date("Y-m-d H:i:s",$mood['pubtime']);
         $contient=array();
         $contient['v_mid']=$mood['id'];
