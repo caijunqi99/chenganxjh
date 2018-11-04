@@ -46,7 +46,9 @@ class Login extends MobileMall
         }
         $model_member = Model('member');
         $array = array();
-        $array['member_mobile'] = $phone;     
+        $array['member_mobile'] = $phone;
+        //根据手机号查询会员
+        $member_info = $model_member->getMemberInfo($array,'member_password,member_name,member_id');
         if ($is_pass==2) { // 验证码判断
             if (empty($captcha))output_error('请输入正确的验证码');
             $state = 'true';
@@ -60,50 +62,31 @@ class Login extends MobileMall
             if(empty($sms_log) || ($sms_log['add_time'] < TIMESTAMP-1800)) {//半小时内进行验证为有效
                 output_error('动态码错误或已过期，重新输入');
             }
-        }
-        if ($is_pass == 1) {
-            if(empty($password))output_error('非法登陆');
-        }
-        $member_info = $model_member->getMemberInfo($array,'member_password,member_name,member_id');
-        if (!$member_info) {//注册
-            // $this->register($register_info)
-            $pass = getRandomString(8,null,'n');
-            $member = array();
-            $member['member_name'] = $phone;
-            $member['member_nickname'] = $phone;
-            $member['member_password'] = md5(trim($pass));;
-            $member['member_mobile'] = $phone;
-            $member['member_email'] = '';
-            $member['member_mobile_bind'] = 1;
-            $result = $model_member->addMember($member);
-            $register  = true;
-            if (!$result) {                
-                output_error('注册失败');
-            }else{
-                //添加会员积分--前期可以不使用
-                // if (config('points_isuse')) {
-                //     Model('points')->savePointsLog('regist', array(
-                //         'pl_memberid' => $insert_id, 'pl_membername' => $register_info['member_name']
-                //     ), false);
-                //     //添加邀请人(推荐人)会员积分
-                //     $inviter_name = db('member')->where('member_id', $member_info['inviter_id'])->find();
-                //     if ($inviter_name) {
-                //         Model('points')->savePointsLog('inviter', array(
-                //             'pl_memberid' => $register_info['inviter_id'], 'pl_membername' => $inviter_name['member_name'],
-                //             'invited' => $member_info['member_name']
-                //         ));
-                //     }
-                // }
-            }
-        }else{//登陆
-            if ($password && $is_pass == 1){
-                if ($member_info['member_password'] != md5(trim($password))) {//密码对比
-                    output_error('密码填写错误！');
+            if (!$member_info) {
+                //注册
+                $pass = getRandomString(6,null,'n');
+                $member = array();
+                $member['member_name'] = $phone;
+                $member['member_nickname'] = $phone;
+                $member['member_password'] = md5(trim($pass));;
+                $member['member_mobile'] = $phone;
+                $member['member_email'] = '';
+                $member['member_mobile_bind'] = 1;
+                $result = $model_member->addMember($member);
+                $register  = true;
+                if (!$result) {
+                    output_error('注册失败');
                 }
-            }            
+            }
+        }else if ($is_pass == 1) {
+            if(empty($password))output_error('非法登陆');
+            if (!$member_info) output_error('手机号不存在');
+            if ($member_info['member_password'] != md5(trim($password))) {//密码对比
+                output_error('密码填写错误！');
+            }
         }
+
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
-        
 
         if (is_array($member) && !empty($member)) {
             $token = $this->_get_token($member['member_id'], $member['member_name'], $client);
@@ -122,13 +105,7 @@ class Login extends MobileMall
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
                 $logindata['is_owner'] = $member['is_owner'];                
-                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
-
-                // $logindata['favorites_store'] = Model('favorites')->getStoreFavoritesCountByMemberId($this->member_info['member_id']);
-                // $logindata['favorites_goods'] = Model('favorites')->getGoodsFavoritesCountByMemberId($this->member_info['member_id']);
-                // $logindata['student'] = $Student->getMemberStudentInfoById('m.member_id='.$member['member_id']);
-
-                // $logindata['sql'] = $Student->getLastSql();
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']);
                 if ($register) {
                     //发送随机密码
                     //生成数字字符随机 密码

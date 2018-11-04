@@ -138,11 +138,11 @@
                             dataType: "json",
                             success: function (response) {
                                 if(response['code'] == 200){
-                                    $.toast(response.result[0].message,function(){
+                                    $.toast('删除成功','',function(){
                                         location.href='moodlist.html';
                                     });
                                 }else{
-                                    $.toast(response['message']);
+                                    $.toast(response['message'],'forbidden');
                                 }
                             }
                         })
@@ -153,7 +153,7 @@
                 // 举报
                 $(".md_jubao_btn").click(function() {
                     $.confirm("您确定要举报吗?", "举报", function() {
-                        $.toast("举报成功!");
+                        $.toast("举报成功!",'');
                     }, function() {
                         //取消操作
                     });
@@ -161,7 +161,7 @@
                 $('.send').click(function(){
                     var content = $('input[name=content]').val();
                     if(content == ''){
-                        $.toast('请输入评论内容');return false;
+                        $.toast('请输入评论内容','forbidden');return false;
                     }
                     $.ajax({
                         type:'POST',
@@ -175,11 +175,12 @@
                         dataTyep: "json",
                         success: function(response){
                             if(response['code'] == 200){
-                                $.toast(response.result[0].message,function(){
+                                alert('aaa');
+                                $.toast('发送成功','',function(){
                                     location.reload();
                                 });
                             }else{
-                                $.toast(response['message']);
+                                $.toast(response['message'],'forbidden');
                             }
                         }
                     })
@@ -187,7 +188,9 @@
                 });
 
             }else{
-                $.toast('该内容不存在');
+                $.toast('该内容不存在','forbidden',function(){
+                    location.href='moodlist.html';
+                });
             }
         })
     </script>
