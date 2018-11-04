@@ -414,7 +414,9 @@ $(function() {
                             getFreeVoucher($(this).attr("data-tid"))
                         });
                 $(".kefu").click(function() {
-                    window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
+                    $.sDialog({skin: "red", content: "请直接联系业务人员！", okBtn: false, cancelBtn: false});
+                    return;
+                    // window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
                 })
                 $(".cart").click(function() {
                     window.location.href = WapSiteUrl + "/tmpl/cart_list.html"
