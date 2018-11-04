@@ -71,9 +71,6 @@ class Admin extends AdminControl {
         if (!request()->isPost()) {
             //得到权限组
 
-            //获取角色
-            $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_id")->select();
-
             //获取所有公司
             $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
 
@@ -306,7 +303,7 @@ class Admin extends AdminControl {
             $this->assign('company',$company);
             $this->assign('admin', $admin);
             //得到权限组
-            $gadmin = db('gadmin')->field('gname,gid')->where("create_uid = $admin_userid")->select();
+            $gadmin = db('gadmin')->field('gname,gid')->where("company_id = '".$company_id['admin_company_id']."'")->select();
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin');
             return $this->fetch('admin_edit');

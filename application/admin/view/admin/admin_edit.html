@@ -45,7 +45,7 @@
             <dl>
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
-                    <select name="gid">
+                    <select name="gid" id="gid">
                         <option value="" <?php if(empty($admin['admin_gid'])){?>selected<?php }?>>{$Think.lang.admin_add_role_chose}</option>
                         <?php foreach((array)$gadmin as $v){?>
                             <option value="<?php echo $v['gid'];?>" <?php if($v['gid']==$admin['admin_gid']){?>selected<?php }?>><?php echo $v['gname'];?></option>
@@ -113,6 +113,19 @@
 </div>
 
 <script>
+
+    $('select[name=admin_company_id]').change(function(){
+        var id = $(this).find('option:selected').val();
+        $.ajax({
+            type:'POST',
+            url:ADMIN_URL+'/Admin/ajax.html?branch=get_gadmin',
+            data:{id:id},
+            dataType:'json',
+            success: function(response){
+                $("#gid").html(response);
+            }
+        })
+    })
 //按钮先执行验证再提交表单
                     $(function() {
                         $("#submitBtn").click(function() {
