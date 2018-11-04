@@ -67,48 +67,44 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        var m_id = GetQueryString('id');
+        var id = GetQueryString('id');
         $(function() {
-            if(m_id){
+            if(id){
                 $.ajax({
                     type:'POST',
                     url:api+'/Mood/mooddetail.html',
                     data:{
                         key:user_token,
-                        id:m_id
+                        id:id
                     },
                     dataType: "json",
                     success: function (response) {
                         var mood = response.result.mood;
-                    console.log(mood);
-                        if(mood['member_id'] == user_member_id){
+                        if(mood.member_id == user_member_id){
                             $('.md_del_btn').show();
                         }
-
                         var view = response.result.view;
-
+                        var mood_html = '';
                         var view_html = '';
-
-                        var img = '';
+                        mood_html += '<div class="head_picbox">\n' +
+                            '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
+                            '                </div>\n' +
+                            '                <div class="head_pic">\n' +
+                            '                    <p class="name">'+mood.member_nickname+'</p>\n' +
+                            '                    <p class="time">'+mood.pubtime+'</p>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="mood_txt">\n' +
+                            '                <p class="mood_p">'+mood.content+'</p>\n' +
+                            '            </div>\n' +
+                            '            <div class="dynamic_box">\n';
                         if(mood.image[0] != ''){
                             for(var i=0;i<mood.image.length;i++){
                                 var img_url = upload_url +'/'+mood.image[i];
-                                img +='<img class="dynamic_img" src="'+img_url+'" alt="">\n' ;
+                                mood_html +='<img class="dynamic_img" src="'+img_url+'" alt="">\n' ;
                             }
                         }
-
-                        var  mood_html = '<div class="head_picbox">\n' +
-                                '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
-                                '                </div>\n' +
-                                '                <div class="head_pic">\n' +
-                                '                    <p class="name">'+mood.member_nickname+'</p>\n' +
-                                '                    <p class="time">'+mood.pubtime+'</p>\n' +
-                                '                </div>\n' +
-                                '            </div>\n' +
-                                '            <div class="mood_txt">\n' +
-                                '                <p class="mood_p">'+mood.content+'</p>\n' +
-                                '            </div>\n' +
-                                '            <div class="dynamic_box">\n' +img+ '</div>';
+                        mood_html += '</div>';
                         $('.mood_detail').html(mood_html);
                         $('.commentary_h2 span').html(view.length);
                         if(view != ''){
@@ -128,73 +124,72 @@
 
                     }
                 });
-            }else{
-                $.toast('该内容不存在','forbidden',function(){
-                    location.href='moodlist.html';
+                // 删除
+                $(".md_del_btn").click(function() {
+                    $.confirm("您确定要删除吗?", "删除", function() {
+                        $.ajax({
+                            type:'POST',
+                            url:api+'/mood/mooddel.html',
+                            data:{
+                                member_id:user_member_id,
+                                key:user_token,
+                                id:id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response['code'] == 200){
+                                    $.toast('删除成功','',function(){
+                                        location.href='moodlist.html';
+                                    });
+                                }else{
+                                    $.toast(response['message'],'forbidden');
+                                }
+                            }
+                        })
+                    }, function() {
+                        //取消操作
+                    });
                 });
-            }
-
-            // 删除
-            $(".md_del_btn").click(function() {
-                $.confirm("您确定要删除吗?", "删除", function() {
+                // 举报
+                $(".md_jubao_btn").click(function() {
+                    $.confirm("您确定要举报吗?", "举报", function() {
+                        $.toast("举报成功!",'');
+                    }, function() {
+                        //取消操作
+                    });
+                });
+                $('.send').click(function(){
+                    var content = $('input[name=content]').val();
+                    if(content == ''){
+                        $.toast('请输入评论内容','forbidden');return false;
+                    }
                     $.ajax({
                         type:'POST',
-                        url:api+'/mood/mooddel.html',
+                        url:api+'/mood/moodview.html',
                         data:{
-                            member_id:user_member_id,
                             key:user_token,
-                            id:id
+                            memberid:user_member_id,
+                            mid:id,
+                            content:content
                         },
                         dataType: "json",
-                        success: function (response) {
-                            if(response['code'] == 200){
-                                $.toast('删除成功','',function(){
-                                    location.href='moodlist.html';
+                        success: function(response){
+                            if(response['code'] == "200"){
+                                $.toast('回复成功','',function(){
+                                    location.reload();
                                 });
                             }else{
                                 $.toast(response['message'],'forbidden');
                             }
                         }
                     })
-                }, function() {
-                    //取消操作
-                });
-            });
-            // 举报
-            $(".md_jubao_btn").click(function() {
-                $.confirm("您确定要举报吗?", "举报", function() {
-                    $.toast("举报成功!",'');
-                }, function() {
-                    //取消操作
-                });
-            });
-            $('.send').click(function(){
-                var content = $('input[name=content]').val();
-                if(content == ''){
-                    $.toast('请输入评论内容','forbidden');return false;
-                }
-                $.ajax({
-                    type:'POST',
-                    url:api+'/mood/moodview.html',
-                    data:{
-                        key:user_token,
-                        memberid:user_member_id,
-                        mid:id,
-                        content:content
-                    },
-                    dataTyep: "json",
-                    success: function(response){
-                        if(response['code'] == 200){
-                            $.toast('发送成功','',function(){
-                                location.reload();
-                            });
-                        }else{
-                            $.toast(response['message'],'forbidden');
-                        }
-                    }
-                })
 
-            });
+                });
+            }else{
+                $.toast('该内容不存在','forbidden',function(){
+                    location.href='moodlist.html';
+                });
+            }
         })
     </script>
 </body>
