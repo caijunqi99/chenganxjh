@@ -1,10 +1,11 @@
 $(function() {
-    fz_video= function(video_url){
-        alert(video_url);return false;
+    fz_video = function(video_url) {
+        alert(video_url);
+        return false;
         video = video_url;
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
-        _videoSource.poster = video_url+'?vframe/jpg/offset/1';
+        _videoSource.poster = video_url + '?vframe/jpg/offset/1';
     }
     fz_video();
     // 获取价格
@@ -12,11 +13,11 @@ $(function() {
         url: api + '/teacherhome/index',
         type: 'POST',
         dataType: 'json',
-        success: function(response){
+        success: function(response) {
             var template = '';
             price = response['result'][0]['price'];
-            for(var i = 0; i < price.length; i++){
-                template += '<p>￥ '+ price[i]['pkg_price'] +'</p>'
+            for (var i = 0; i < price.length; i++) {
+                template += '<p>￥ ' + price[i]['pkg_price'] + '</p>'
             }
             $('.http_price_wrap').html(template);
         }
@@ -47,7 +48,7 @@ $(function() {
                                         for (var x = 0; x < Two.length; x++) {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
-                                                if(Three){
+                                                if (Three) {
                                                     $('.isKemu').show();
                                                     var params = {
                                                         textAlign: 'center',
@@ -59,7 +60,7 @@ $(function() {
                                                         data[Three[r]['gc_name']] = Three[r]['gc_id'];
                                                     }
                                                     prickKemu(params, data);
-                                                }else {
+                                                } else {
                                                     $('.isKemu').hide();
                                                 }
                                             }
@@ -82,11 +83,12 @@ $(function() {
     }
 
     // 遍历价格添加颜色
-    setInterval(function(){
+    setInterval(function() {
         $('.price_boot_wrap p').each(function(index, el) {
             $(this).click(function(event) {
                 $('.price_boot_wrap p').removeClass('action')
                 $(this).addClass('action');
+                $('.price_boot_wrap input').val('')
             });
         });
     }, 20)
@@ -94,6 +96,17 @@ $(function() {
     $('.price_boot_wrap input').focus(function(event) {
         $('.price_boot_wrap p').removeClass('action')
     });
+
+    $('.weui-popup__overlay').on('click', function() {
+        $('.price_boot_wrap p').each(function(index, el) {
+            if ($(this).hasClass('action')) {
+                $('#price').val($(this).html().split(' ')[1])
+            }
+        });
+        if ($('.price_boot_wrap input').val() != '') {
+            $('#price').val($('.price_boot_wrap input').val())
+        }
+    })
 
     // 选择价格
     pricePopupClose = function(event) {
@@ -106,6 +119,15 @@ $(function() {
             $('#price').val($('.price_boot_wrap input').val())
         }
     }
+
+    // 取消选择价格
+    $('.price_close').on('click', function() {
+        $('.price_boot_wrap p').each(function(index, el) {
+            $(this).removeClass('action')
+        });
+        $('.price_boot_wrap input').val('');
+        $('#price').val('');
+    })
 
     function prickKemu(value, data) {
         var arr = [];
@@ -123,28 +145,28 @@ $(function() {
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
-            var video_img = video+'?vframe/jpg/offset/1';
+            var video_img = video + '?vframe/jpg/offset/1';
             if (video == '') {
-                $.toast("获取上传视频失败，请重新上传",'forbidden');
+                $.toast("获取上传视频失败，请重新上传", 'forbidden');
                 return false;
             } else if ($('#bang_name').val() == '') {
-                $.toast("请先填写课程标题",'forbidden');
+                $.toast("请先填写课程标题", 'forbidden');
                 return false;
             } else if ($('#aboutValue').val() == '') {
-                $.toast("请先填写课程简介",'forbidden');
+                $.toast("请先填写课程简介", 'forbidden');
                 return false;
             } else if ($('#zuozhe').val() == '') {
-                $.toast("请先填写作者的姓名",'forbidden');
+                $.toast("请先填写作者的姓名", 'forbidden');
                 return false;
             } else if ($('#category').val() == '') {
-                $.toast("请先选择类别",'forbidden');
+                $.toast("请先选择类别", 'forbidden');
                 return false;
             } else if ($('#price').val() == '') {
-                $.toast("请先填写价格",'forbidden');
+                $.toast("请先填写价格", 'forbidden');
                 return false;
             } else if (!$('#kemu').is(':hidden')) {
                 if ($('#kemu').val() == '') {
-                    $.toast("请先选择科目",'forbidden');
+                    $.toast("请先选择科目", 'forbidden');
                     return false;
                 }
             }
@@ -173,20 +195,20 @@ $(function() {
                 type: 'POST',
                 dataType: 'json',
                 data: params,
-                success: function(response){
-                    if(response['code'] == 200){
-                        $.toast("上传成功",'',function(){
-                            location.href=http_url+'app/teachchild/myupload.html';
+                success: function(response) {
+                    if (response['code'] == 200) {
+                        $.toast("上传成功", '', function() {
+                            location.href = http_url + 'app/teachchild/myupload.html';
                         });
-                    }else {
-                        $.toast(response['message'],'forbidden');
+                    } else {
+                        $.toast(response['message'], 'forbidden');
                     }
                 }
             })
         } else {
-            $.confirm('确定要删除退出吗？','提示',function(){
-                    historyback();
-            },function(){
+            $.confirm('确定要删除退出吗？', '提示', function() {
+                historyback();
+            }, function() {
 
             })
         }
