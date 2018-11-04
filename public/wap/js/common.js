@@ -425,6 +425,7 @@ $(function() {
                     area_info: ASINFO
                 };
                 options.success.call("success", e);
+                alert(e)
                 if (!ASINIT) {
                     $("#areaSelected").find(".nctouch-full-mask").addClass("right").removeClass("left")
                 }
