@@ -58,11 +58,71 @@ class Schoolinfo extends AdminControl {
     public function camera() {
         $schoolid = input('param.school_id');
         $model_camera = model('Camera');
-        $cameraList = $model_camera->getCameraList(array('school_id'=>$schoolid), 10);
+        $where['schoolid']=$schoolid;
+        $data=$this->_conditions($where);
+        $cameraList = $model_camera->getCameraList($data, 10);
         $this->assign('page', $model_camera->page_info->render());
         $this->assign('cameraList', $cameraList);
         $this->setAdminCurItem('camera');
         return $this->fetch();
+    }
+
+    /**
+     * 摄像头查询过滤
+     * @创建时间   2018-11-03T00:39:28+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function _conditions($where){
+        $res = array();
+        $name = false;
+        if (isset($where['schoolid']) && $where['schoolid'] != 0 ) {
+            $school = $this->getResGroupIds(array('schoolid'=>$where['schoolid']));
+            $name = 'true';
+            if ($school) {
+                $res=array_merge($res, $school);
+            }
+        }
+        if ($name == 'true') {
+            $condition['parentid'] = array('in',$res);
+        }
+        return $condition;
+    }
+    /**
+     * 查询学校和班级摄像头
+     * @创建时间   2018-11-03T00:39:48+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function getResGroupIds($where){
+        $School = model('School');
+        $Class = model('Classes');
+        $classname = '';
+        if (isset($where['classid']) && !empty($where['classid']) ) {
+            $classname = $where['classid'];
+            unset($where['classid']);
+        }
+        $where['res_group_id'] =array('gt',0);
+        $Schoollist = $School->getAllAchool($where,'res_group_id');
+        if (!empty($classid)) {
+            $where['classid'] = $classid;
+        }
+        $res = array();
+        $Classlist = $Class->getAllClasses($where,'res_group_id');
+        $sc_resids=array_column($Schoollist, 'res_group_id');
+        if ($sc_resids) {
+            array_push($res, $sc_resids);
+        }
+        $cl_resids=array_column($Classlist, 'res_group_id');
+        if ($cl_resids) {
+            array_push($res, $cl_resids);
+        }
+        $ids = array_merge($sc_resids,$cl_resids);
+        if ($ids) {
+            return $ids;
+        }else{
+            return $res;
+        }
     }
 
 
