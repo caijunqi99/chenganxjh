@@ -164,3 +164,17 @@ body {
     margin-left: -50px;
     margin-top: -50px;
 }
+
+.price_wrap_label {
+    position: relative;
+}
+
+.price_wrap_label label {
+    position: absolute;
+    right: 0;
+    height: 91px;
+    line-height: 91px;
+    top: -27px;
+    font-size: 26px;
+    color: #999;
+}

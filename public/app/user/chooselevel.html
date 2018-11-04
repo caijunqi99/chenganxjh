@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
-    <link rel="stylesheet" href="/static/plugins/layer/css/layui.css">      
+    <link rel="stylesheet" href="/static/plugins/layer/css/layui.css">
 </head>
 
 <body>
@@ -116,9 +116,9 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script src="../content/scripts/API.js"></script>
-<div id="gopay" style="display: none;" >
-    
-</div>
+    <div id="gopay" style="display: none;">
+
+    </div>
     <script>
         // var api = 'http://w.xjh.com/index.php/Wap';
         // var user_token = '4570a44f7d6512c8ec2e20507a80009a';
@@ -129,12 +129,12 @@
                 GetPackagesList(pkg_type);
                 GetPaymentList();
                 GetNowPackageTime(child_id);
-            }else{
-                $.alert('参数错误,获取不到学生信息或套餐信息！','系统提示',function(){
+            } else {
+                $.alert('参数错误,获取不到学生信息或套餐信息！', '系统提示', function() {
                     historyback();
                 })
             }
-            $('.total_cont_btn').click(function (event) {
+            $('.total_cont_btn').click(function(event) {
                 var pay = $("input[name='payment_code']:checked").val();
                 if (pay == 'undefined' || !pay || pay == '') {
                     $.alert('没有选择支付方式', '系统提示');
@@ -155,58 +155,56 @@
                     $.alert('参数错误! child', '系统提示');
                     return false;
                 }
-                $.confirm('是否确认支付？', '支付提醒', function () {
+                $.confirm('是否确认支付？', '支付提醒', function() {
 
                     $.ajax({
-                        type: 'POST',
-                        url: api + '/Packagesbuy/buy_step1.html',
-                        data: {
-                            'key': user_token,
-                            'pkg_id': pkgid,
-                            'payment_code': pay,
-                            'chind_id': child_id,
-                        },
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response['code'] == 200) {
-                                // 微信支付
-                                if (pay == 'wxpay_app') {
-                                    var mbs = response.result[0];
-                                    if (mbs.result_code == 'SUCCESS') {
-                                        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                            window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
-                                        } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                            mbs  = mbs['prepay_id']+','+mbs['nonce_str']+','+mbs['timestamp']+','+mbs['sign']+','+mbs['orderSn'];
-                                            Android.wxpayClick(mbs);
-                                        } else { //pc
-                                        }
-                                        ;
-                                    } else {
+                            type: 'POST',
+                            url: api + '/Packagesbuy/buy_step1.html',
+                            data: {
+                                'key': user_token,
+                                'pkg_id': pkgid,
+                                'payment_code': pay,
+                                'chind_id': child_id,
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response['code'] == 200) {
+                                    // 微信支付
+                                    if (pay == 'wxpay_app') {
+                                        var mbs = response.result[0];
+                                        if (mbs.result_code == 'SUCCESS') {
+                                            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                                                window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
+                                            } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                                mbs = mbs['prepay_id'] + ',' + mbs['nonce_str'] + ',' + mbs['timestamp'] + ',' + mbs['sign'] + ',' + mbs['orderSn'];
+                                                Android.wxpayClick(mbs);
+                                            } else { //pc
+                                            };
+                                        } else {
 
+                                        }
                                     }
-                                }
-                                //支付宝支付
-                                if (pay == 'alipay_app') {
-                                    var mbs = response.result[0];
-                                    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                        window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
-                                    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                        mbs  = mbs['content']+','+mbs['orderSn'];
-                                        Android.aliapyClick(mbs);
-                                    } else { //pc
+                                    //支付宝支付
+                                    if (pay == 'alipay_app') {
+                                        var mbs = response.result[0];
+                                        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                                            window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
+                                        } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                            mbs = mbs['content'] + ',' + mbs['orderSn'];
+                                            Android.aliapyClick(mbs);
+                                        } else { //pc
+                                        };
                                     }
-                                    ;
+                                } else if (response['code'] == 400) {
+                                    $.toast('请先前往登陆', 'forbidden');
+                                    return false;
+                                } else {
+                                    $.toast(response['message'], 'forbidden');
+                                    return false;
                                 }
-                            } else if (response['code'] == 400) {
-                                $.toast('请先前往登陆', 'forbidden');
-                                return false;
-                            } else {
-                                $.toast(response['message'], 'forbidden');
-                                return false;
                             }
-                        }
-                    })
-                    /*$.post(api+'/Packagesbuy/buy_step1',
+                        })
+                        /*$.post(api+'/Packagesbuy/buy_step1',
                     {
                         'key': user_token,
                         'pkg_id': pkgid,
@@ -235,14 +233,18 @@
 
 
             })
+
             function GetPackagesList(pkg_type) {
                 $.ajax({
-                    url: api + '/Packagesbuy/get_packages_list',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {'key': user_token, 'pkg_type': pkg_type},
-                })
-                    .done(function (sb) {
+                        url: api + '/Packagesbuy/get_packages_list',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            'key': user_token,
+                            'pkg_type': pkg_type
+                        },
+                    })
+                    .done(function(sb) {
                         if (sb.code == 200) {
                             package = sb.result;
                             var pkghtml = '';
@@ -251,7 +253,6 @@
                                 // if (package[i].pkg_sort==666) {
                                 //     pkghtml+="<li class='active' data-info='"+packinfo+"' onclick='tableclick(this)'>";
                                 // }else{
-
                                 // }
                                 pkghtml += "<li data-info='" + packinfo + "' onclick='tableclick(this)'>";
                                 pkghtml += '<div class="level_item">';
@@ -269,7 +270,7 @@
                             }
                             $('.level_list').html(pkghtml);
                         } else {
-                            $.alert(sb.message, '系统提示', function () {
+                            $.alert(sb.message, '系统提示', function() {
                                 historyback();
                             })
                         }
@@ -278,7 +279,9 @@
             }
 
             function GetPaymentList() {
-                $.post(api + '/Packagesbuy/get_payment_list', {'key': user_token}, function (data, textStatus, xhr) {
+                $.post(api + '/Packagesbuy/get_payment_list', {
+                    'key': user_token
+                }, function(data, textStatus, xhr) {
                     if (data.code == 200) {
                         var payment = data.result[0];
                         if (payment.length > 0) {
@@ -292,8 +295,8 @@
                     }
                 }, 'json');
             }
-
         })
+
         function tableclick(demo) {
             $(demo).siblings().removeClass("active").end().addClass("active");
             var pkginfo = $(demo).attr('data-info');
@@ -302,7 +305,7 @@
                 'key': user_token,
                 'child_id': child_id,
                 'pkginfo': pkginfo
-            }, function (data, textStatus, xhr) {
+            }, function(data, textStatus, xhr) {
                 if (data.code == 200) {
                     $('.date').text(data.result[0].end_time)
                     pkginfo = $.parseJSON(pkginfo);
@@ -311,25 +314,28 @@
                     $('#Discount').text('已优惠' + Discount + '元')
                     var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
                     var name = $('.active .level_item_p1').text();
-                    $('#pkgdesc').text('您已选择'+type+name+'套餐')
-                }else{
-                    $('.choosed_info').html(data.message);
-                }
-            },"json");
-        }
-
-        function GetNowPackageTime(child_id) {
-            $.post(api+'/Packagesbuy/GetNowPackageTime', {'key': user_token,'child_id':child_id}, function(data, textStatus, xhr) {
-                if (data.code == 200) {
-                    $('.date').text(data.result[0].endtime)
-                }else{
+                    $('#pkgdesc').text('您已选择' + type + name + '套餐')
+                } else {
                     $('.choosed_info').html(data.message);
                 }
             }, "json");
         }
 
-        function payStatus(orderSn){
-            location.href=http_url+'app/user/paysuccess.html?orderSn='+orderSn;
+        function GetNowPackageTime(child_id) {
+            $.post(api + '/Packagesbuy/GetNowPackageTime', {
+                'key': user_token,
+                'child_id': child_id
+            }, function(data, textStatus, xhr) {
+                if (data.code == 200) {
+                    $('.date').text(data.result[0].endtime)
+                } else {
+                    $('.choosed_info').html(data.message);
+                }
+            }, "json");
+        }
+
+        function payStatus(orderSn) {
+            location.href = http_url + 'app/user/paysuccess.html?orderSn=' + orderSn;
         }
     </script>
 
