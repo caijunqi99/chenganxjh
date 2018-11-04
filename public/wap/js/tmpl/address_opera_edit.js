@@ -43,7 +43,7 @@ $(function() {
                     if (a.code==200) {
                         location.href = WapSiteUrl + "/tmpl/member/address_list.html"
                     } else {
-                        location.href = WapSiteUrl
+                        location.href = WapSiteUrl+ "/tmpl/member/address_list.html"
                     }
                 }})
         }
