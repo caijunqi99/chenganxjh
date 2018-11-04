@@ -175,6 +175,7 @@
                         dataTyep: "json",
                         success: function(response){
                             if(response['code'] == 200){
+                                alert('aaa');
                                 $.toast('发送成功','',function(){
                                     location.reload();
                                 });
