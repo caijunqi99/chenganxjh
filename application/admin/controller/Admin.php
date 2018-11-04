@@ -299,14 +299,11 @@ class Admin extends AdminControl {
                 $company = db('company')->field('o_id,o_name')->where('o_del = 1')->select();
             }
 
-            //编辑用户所属公司ID
-            $c_id = db('admin')->field('admin_company_id')->where('admin_id = "'.$admin_id.'"')->find();
-
             $this->assign('company_id',$company_id['admin_company_id']);
             $this->assign('company',$company);
             $this->assign('admin', $admin);
             //得到权限组
-            $gadmin = db('gadmin')->field('gname,gid')->where("company_id = '".$c_id['admin_company_id']."'")->select();
+            $gadmin = db('gadmin')->field('gname,gid')->where("company_id = '".$admin['admin_company_id']."'")->select();
             $this->assign('gadmin', $gadmin);
             $this->setAdminCurItem('admin');
             return $this->fetch('admin_edit');
