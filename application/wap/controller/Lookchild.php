@@ -74,7 +74,7 @@ class Lookchild extends MobileMember
                 }
                 $user['ip']='117.78.26.155';
                 $user['port']='9001';
-                $user['username']='test';
+                $user['username']='xjh';
                 $user['pwd']='123456';
                 $camera_model=Model('camera');
                 $condition=array();
