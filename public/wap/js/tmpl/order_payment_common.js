@@ -129,13 +129,13 @@ function toPay(a, e, p) {
                     if (i == "alipay_app"  && r) {
                         if (payment_code == "") {
                             payment_code = i;
-                            $("#" + i).attr("checked", true).parents("label").addClass("checked")
+                            $("#" + i).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
                         }
                     }
                     if (i == "wxpay_app"  && t) {
                         if (payment_code == "") {
                             payment_code = i;
-                            $("#" + i).attr("checked", true).parents("label").addClass("checked")
+                            $("#" + i).attr("checked", true).parents("label").addClass("checked").siblings().removeClass('checked');
                         }
                     }
                 }
