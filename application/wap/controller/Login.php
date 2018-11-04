@@ -17,12 +17,13 @@ class Login extends MobileMall
 
 
     public function dologin(){
-        $phone    = input('post.mobile');
-        $password = input('post.password');
-        $client   = input('post.client');
-        $log_type = input('post.log_type');        
-        $captcha  = input('post.captcha');
-        $is_pass  = intval(input('post.is_pass'));
+        $input = input();
+        $phone    = $input['mobile'];
+        $password = $input['password'];
+        $client   = $input['client'];
+        $log_type = $input['log_type'];       
+        $captcha  = $input['captcha'];
+        $is_pass  = intval($input['is_pass']);
         switch ($log_type) {
             case 'sms_register':
                 $log_type=1;
