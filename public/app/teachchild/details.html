@@ -18,11 +18,6 @@
     <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
-<<<<<<< HEAD
-
-    <script src="../content/scripts/mobile-util.js"></script>
-=======
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
 
     <script src="../content/scripts/mobile-util.js"></script>
     <style>
@@ -45,11 +40,7 @@
             <a href="javascript:;" class="back_btn" onClick="historyback()">
                 <i class="icon iconfont icon-jiantou3"></i>
             </a>
-<<<<<<< HEAD
-            <p class="collectBtn" id="collect" onclick="collectVideo()">收藏</p>
-=======
             <p class="collectBtn" id="collect" onclick="collectVideo()" >收藏</p>
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             <p class="collectBtn" id="qxCollect" onclick="qxCollectVideo()" style="display: none;">取消收藏</p>
         </div>
     </header>
@@ -61,34 +52,6 @@
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
-<<<<<<< HEAD
-                    <video id="video_true" autoplay="autoplay" controls="controls" width="750px" height="400px" preload="none">
-                        <source src="" type="video/mp4"></source>
-                    </video>
-                </div>
-                <!--<div class="upload_video">-->
-                <!--<div class="video" id="CuPlayer">-->
-                <!--<script type="text/javascript">-->
-                <!--var vID = "c1"; //vID-->
-                <!--var vWidth = "750"; //宽度设定，配合CSS实现-->
-                <!--var vHeight = "400"; //高度设定，配合CSS实现-->
-                <!--var vFile = "CuSunV4set.xml"; //配置文件地址:支持五种广告设定-->
-                <!--var vPlayer = "player.swf?v=4.0"; //播放器文件地址-->
-                <!--var vPic = "pic/pic01.jpg"; //视频缩略图-->
-                <!--var vAutoPlay = "none"; //是否自动播放-->
-                <!--var vEndTime = 0; //预览时间(秒数),默认为0-->
-                <!--var vLogoPath = "images/logo.png"; //Logo地址-->
-                <!--var vPlayMod = 0; //播放模式优先级,默认=0,html5优先=1,flash优先=2-->
-                <!--var vMp4url = "http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4"; //视频文件地址推荐用mp4文件(h264编码)-->
-                <!--</script>-->
-                <!--<script class="CuPlayerVideo" data-mce-role="CuPlayerVideo" type="text/javascript" src="../content/plugins/CuPlayerV4/player.min.js"></script>-->
-                <!--</div>poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4?vframe/jpg/offset/1"-->
-                <!--<video id="video" controls="controls" width="750px" height="400px" preload="none" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">-->
-                <!--<source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>-->
-                <!--</video>-->
-                <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
-            </div>
-=======
                     <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
                         <source src="" type="video/mp4">
                     </video>
@@ -115,7 +78,6 @@
                     </video>-->
                     <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
                 </div>
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             <!--</div>-->
         </div>
     </div>
@@ -126,6 +88,7 @@
 </body>
 
 <script src="../content/scripts/jquery.min.js"></script>
+<script src="../content/plugins/jqweui/lib/fastclick.js"></script>
 <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
 <script src="../content/plugins/layer/layer.js"></script>
 <script src="../content/scripts/juqery.cookie.js"></script>
@@ -136,40 +99,6 @@
 
 <script>
     // 播放视频
-<<<<<<< HEAD
-    $(".video_play_btn").click(function() {
-        if (!user_token) {
-            $.toast("请前往登陆", 'forbidden');
-        } else {
-            $.ajax({
-                type: 'POST',
-                url: api + '/Teacherdecide/decide.html',
-                data: {
-                    key: user_token,
-                    member_id: user_member_id,
-                    video_id: GetQueryString("id")
-                },
-                dataType: "json",
-                success: function(res) {
-                    if (res['code'] == 200) {
-                        if (res.result[0]['price'] != 0) {
-                            if (res.result[0]['buy'] != 0) {
-                                $('.video_play_btn').parent().hide();
-                                $("#video").show();
-                            } else {
-                                $.toast("请前往购买", 'forbidden');
-                            }
-                        } else {
-                            $('.video_play_btn').parent().hide();
-                            $("#video").show();
-                        }
-                    } else if (res['code'] == 400) {
-                        $.toast('登陆失效，请重新登录', 'forbidden', function() {
-                            layout();
-                        });
-                    } else {
-                        $.toast('系统错误', 'forbidden');
-=======
     if(user_token){
         $.ajax({
             type:'POST',
@@ -229,7 +158,6 @@
                         });
                     }else{
                         $.toast('系统错误','forbidden');
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     }
                 }
             })

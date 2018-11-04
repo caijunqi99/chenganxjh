@@ -16,11 +16,7 @@ $(function(){
 	function getList(type){
 		let params = {
 			key: user_token,
-<<<<<<< HEAD
-			member_id: user_member_id,
-=======
 			member_id:user_member_id,
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
 			status: type
 		}
 		$.ajax({

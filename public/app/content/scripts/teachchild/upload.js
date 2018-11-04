@@ -1,6 +1,4 @@
 $(function() {
-<<<<<<< HEAD
-=======
     fz_video= function(video_url){
         alert(video_url);return false;
         video = video_url;
@@ -9,7 +7,6 @@ $(function() {
         _videoSource.poster = video_url+'?vframe/jpg/offset/1';
     }
     fz_video();
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     // 获取价格
     $.ajax({
         url: api + '/teacherhome/index',
@@ -35,10 +32,6 @@ $(function() {
             // 判断是否有四级分类
             var tokens = p.value;
             if (tokens[1] != tokens[2]) {
-<<<<<<< HEAD
-                $('.isKemu').show();
-=======
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                 $.ajax({
                     url: api + '/teacherhome/index',
                     type: 'POST',
@@ -55,10 +48,7 @@ $(function() {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
                                                 if(Three){
-<<<<<<< HEAD
-=======
                                                     $('.isKemu').show();
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                                                     var params = {
                                                         textAlign: 'center',
                                                         values: []
@@ -165,12 +155,8 @@ $(function() {
                 profile: $('#aboutValue').val(),
                 price: $('#price').val(),
                 author: $('#zuozhe').val(),
-<<<<<<< HEAD
-                url: video_url
-=======
                 url: video,
                 pic: video_img
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             }
             var types = $('#category').get(0).dataset.codes;
             if (types.split(',')[1] == types.split(',')[2]) {
@@ -189,31 +175,20 @@ $(function() {
                 data: params,
                 success: function(response){
                     if(response['code'] == 200){
-<<<<<<< HEAD
-                        $.toast("上传成功");
-                        // historyback();
-                    }else {
-                        console.log(response['message']);
-=======
                         $.toast("上传成功",'',function(){
                             location.href=http_url+'app/teachchild/myupload.html';
                         });
                     }else {
                         $.toast(response['message'],'forbidden');
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     }
                 }
             })
         } else {
-<<<<<<< HEAD
-            // historyback();
-=======
             $.confirm('确定要删除退出吗？','提示',function(){
                     historyback();
             },function(){
 
             })
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
         }
     }
 })

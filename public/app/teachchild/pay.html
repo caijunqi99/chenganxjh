@@ -23,11 +23,7 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-<<<<<<< HEAD
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
-=======
                 <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -144,32 +140,6 @@
                     },
                     dataType: 'json',
                     success: function(response){
-<<<<<<< HEAD
-                        if(payment_code=='wxpay_app'){
-                            var mbs = response.result[0];
-                            if (mbs.result_code== 'SUCCESS') {
-                                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                    window.webkit.messageHandlers.paymentClick.postMessage(mbs);
-                                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-                                    Android.paymentClick(mbs);
-                                } else { //pc
-                                };
-                            }
-                        }
-                        /*if (payment_code == 'alipay_app') {
-                            $('#gopay').html(response);
-                            return ;
-                        }
-
-                        jsondata =$.parseJSON(response);
-                        if (jsondata.code == 100) {
-                            $.alert(jsondata.message,'系统提示');return false;
-                        }*/
-                    }
-                })
-
-
-=======
                         if(response['code'] == 200){
                             // 微信支付
                             if(payment_code=='wxpay_app'){
@@ -205,13 +175,10 @@
                     }
                 })
 
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             }, function() {
                 //取消操作
             });
         });
-<<<<<<< HEAD
-=======
         function payStatus(orderSn){
             $.ajax({
                 type:'POST',
@@ -235,7 +202,6 @@
             });
 
         }
->>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
 
     </script>
 

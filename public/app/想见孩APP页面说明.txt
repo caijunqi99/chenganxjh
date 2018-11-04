@@ -1,6 +1,5 @@
 
 我-绑定学生：views/user/boundstudent.html    完成
-我-绑定学生：views/user/boundstudent2.html    完成
 
 个人信息：views/user/personalinfo.html      完成  
 
@@ -30,8 +29,6 @@
 发现-宝宝课堂：views/find/curriculum.html*
 发现-宝宝食谱：views/find/cookbook.html*~
 发现-幼儿园介绍：views/find/kindergartenintroduce.html*
-发现-关于我们：views/find/aboutus.html*
-发现-协议：views/find/agreement.html*
 发现-校园简介：views/find/schoolintroduction.html  此页去掉了
 发现-晒心情：views/find/mood.html*
 发现-心情记录：views/find/moodrecord.html*
