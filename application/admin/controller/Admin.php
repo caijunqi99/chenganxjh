@@ -246,7 +246,7 @@ class Admin extends AdminControl {
                 $html = '<option value="" selected>请选择所属角色</option>';
                 if(!empty($result)){
                     foreach($result as $key=>$value){
-                        $html += '<option value="'+$value["gid"]+'">'+$value["gname"]+'</option>';
+                        $html .= '<option value="'.$value["gid"].'">'.$value["gname"].'</option>';
                     }
                 }
                 return $html;
