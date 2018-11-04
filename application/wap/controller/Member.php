@@ -17,8 +17,8 @@ class Member extends MobileMember
 
     public function self_assets(){
         $self = array(
-            'available_predeposit' =>$this->member_info['available_predeposit'],
-            'freeze_predeposit' =>$this->member_info['freeze_predeposit'],
+            'available_predeposit' =>ncPriceFormatb($this->member_info['available_predeposit']),
+            'freeze_predeposit' =>ncPriceFormatb($this->member_info['freeze_predeposit']),
             'income' => '0.00',//收入金额
             'reflect' => '0.00',//提现金额
         );
