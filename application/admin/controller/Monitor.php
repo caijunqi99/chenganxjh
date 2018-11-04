@@ -46,7 +46,7 @@ class Monitor extends AdminControl
             if ($cond) {
                 $where = $this->_conditions($cond);
             }
-            $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 15;//每页的条数
+            $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 6;//每页的条数
             $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
 
         //查询已安装的摄像头
