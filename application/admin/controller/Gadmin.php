@@ -99,8 +99,11 @@ class Gadmin extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
-
-        $list = db('gadmin')->where('create_uid',$this->admin_info['admin_id'])->paginate(10);
+//        if($this->admin_info['admin_is_super'] != 1) {
+            $list = db('gadmin')->where('company_id', $this->admin_info['admin_company_id'])->paginate(10);
+//        }else{
+//            $list = db('gadmin')->paginate(10);
+//        }
         $this->assign('list', $list->items());
         $this->assign('page', $list->render());
         $this->setAdminCurItem('gadmin');
@@ -114,6 +117,9 @@ class Gadmin extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
+        //查询用户信息
+        $admin_model = Model('admin');
+        $admin = $admin_model->getOneAdmin(session('admin_id'));
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
                 $gid = intval($this->admin_info['admin_gid']);
@@ -157,6 +163,7 @@ class Gadmin extends AdminControl {
             $data['nav'] = encrypt($nav_str, MD5_KEY . md5($_POST['gname']));
             $data['gname'] = $_POST['gname'];
             $data['create_uid'] = session('admin_id');
+            $data['company_id'] = $admin['admin_company_id'];
             $result = db('gadmin')->insertGetId($data);
             if ($result >0) {
                 if(!empty($_POST['action'])){
