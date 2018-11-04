@@ -7,8 +7,8 @@ namespace vomont\Core;
 class SDKConfig
 {
 
-	const HTTP_URL       = 'http://117.78.26.155:8050/?';
+	const HTTP_URL       = 'http://101.201.75.83:8050/?';
 	const KEY            = 'webuser';
-	const VomontUsername = 'test';
+	const VomontUsername = 'bjc';
 	const VomontPswd     = 'e10adc3949ba59ab';
 }
