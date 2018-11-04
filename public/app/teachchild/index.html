@@ -66,7 +66,7 @@
         <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
             <span class="weui-over">没有更多信息了</span>
         </div>
-        <div class="weui-loadmore">
+        <div class="weui-loadmore" style="display: none;">
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
         </div>
@@ -639,6 +639,7 @@
 
             // 分页
             function getPage(params) {
+                $('.weui-loadmore').show();
                 $.ajax({
                     type: "POST",
                     url: api + '/Teacherhome/lists',
@@ -653,6 +654,7 @@
                                 $('.weui-footer').show();
                                 $('.weui-loadmore').hide();
                             } else {
+                                $('.weui-loadmore').hide();
                                 $('.main_content').append(HTML(response['result']))
                             }
                         } else {
