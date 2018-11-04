@@ -351,7 +351,7 @@
             type: 'GET',
             dataType: 'json',
             success:function(sb){
-                if(sb) {
+                if(sb.count !=0) {
                     layer.open({
                         type: 1,
                         area: ['230px', '200px'],
@@ -359,7 +359,7 @@
                         shadeClose: true,
                         shade: 0.4,
                         maxmin: false, //开启最大化最小化按钮
-                        content: "<div style='padding: 40px 50px;'>已更新" + sb + "个摄像头！</div>",
+                        content: "<div style='padding: 40px 50px;'>已更新" + sb.count + "个摄像头！</div>",
                         btn: '确定',
                         shade: 0,
                         btnAlign: 'c',

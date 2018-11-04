@@ -95,7 +95,7 @@ class Payment extends MobileMall
 
         list($result, $output) = $api->notify();
         if ($result) {
-            $internalSn = $result['out_trade_no'] . '_' . $result['attach'];
+            $internalSn = $result['out_trade_no'] . '-' . $result['attach'];
             $externalSn = $result['transaction_id'];
             $updateSuccess = $this->_update_order($internalSn, $externalSn);
 
@@ -122,7 +122,7 @@ class Payment extends MobileMall
         $result = $api->verify_notify($params);
 
         if ($result['trade_status'] == '1') {
-            $internalSn = $result['out_trade_no'] . '_' . $result['attach'];
+            $internalSn = $result['out_trade_no'] . '-' . $result['attach'];
             $externalSn = $result['transaction_id'];
             $updateSuccess = $this->_update_order($internalSn, $externalSn);
 
