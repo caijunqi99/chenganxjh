@@ -644,9 +644,9 @@
                     success: function(response) {
                         if (response['code'] == 200) {
                             if (response['result'].length == 0) {
-                                $.toast("只有这么多了", "text");
+                                // $.toast("只有这么多了", "text");
                                 $(document.body).destroyInfinite();
-                                $('.main_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                                $('.main_content').html('<div class="nodata_bottom_ziding">我是有底线的</div>')
                             } else {
                                 $('.main_content').append(HTML(response['result']))
                             }
