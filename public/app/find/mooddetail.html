@@ -139,7 +139,7 @@
                             success: function (response) {
                                 if(response['code'] == 200){
                                     $.toast('删除成功','',function(){
-                                        location.href='moodlist.html';
+                                        location.href=http_url+'app/find/moodlist.html';
                                     });
                                 }else{
                                     $.toast(response['message'],'forbidden');
