@@ -1,5 +1,6 @@
 $(function() {
     fz_video= function(video_url){
+        alert(video_url);
         video = video_url;
         var _videoSource = document.getElementById("video_true");
         _videoSource.src = video_url;
