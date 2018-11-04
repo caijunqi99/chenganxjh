@@ -67,7 +67,6 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        var UPLOAD_SITE_URL = '{$Think.UPLOAD_SITE_URL}';
         var m_id = GetQueryString('id');
         $(function() {
             if(m_id){
@@ -99,7 +98,7 @@
                         }
 
                         var  mood_html = '<div class="head_picbox">\n' +
-                                '                <div class="head_piccont" style="background:url('+mood.member_avatar+') no-repeat center;background-size:cover;">\n' +
+                                '                <div class="head_piccont" style="background:url('+mood.rel_member_avatar+') no-repeat center;background-size:cover;">\n' +
                                 '                </div>\n' +
                                 '                <div class="head_pic">\n' +
                                 '                    <p class="name">'+mood.member_nickname+'</p>\n' +
