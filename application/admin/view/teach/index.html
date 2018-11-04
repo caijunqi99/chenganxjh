@@ -64,16 +64,16 @@
         <tr class="thead">
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th colspan="align-center">{$Think.lang.school_index_names}</th>
-            <th colspan="align-center">{$Think.lang.school_index_extend}</th>
+            <!--<th colspan="align-center">{$Think.lang.school_index_extend}</th>-->
             <th class="align-center">{$Think.lang.school_index_order}</th>
-            <th class="align-center">{$Think.lang.school_index_sing}</th>
+            <!--<th class="align-center">{$Think.lang.school_index_sing}</th>-->
             <th class="align-center">{$Think.lang.school_index_price}</th>
             <th class="align-center">{$Think.lang.school_index_orderstatus}</th>
             <th class="align-center">{$Think.lang.school_index_paytype}</th>
             <th class="align-center">{$Think.lang.school_order_dieline}</th>
             <th class="align-center">{$Think.lang.school_order_createtime}</th>
             <th class="align-center">{$Think.lang.school_index_paytime}</th>
-            <th class="align-center">{$Think.lang.school_index_desc}</th>
+            <!--<th class="align-center">{$Think.lang.school_index_desc}</th>-->
         </tr>
         <tbody>
         <?php if(!empty($order_list) && is_array($order_list)){ ?>
@@ -81,9 +81,9 @@
         <tr class="hover member">
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <td class="align-center"><?php echo $v['buyer_name']; ?></td>
-            <td class="align-center"><?php echo $v['student_name']; ?></td>
+            <!--<td class="align-center"><?php echo $v['student_name']; ?></td>-->
             <td class="align-center"><?php echo $v['order_name']; ?></td>
-            <td class="align-center"><?php echo $v['length']; ?></td>
+            <!--<td class="align-center"><?php echo $v['length']; ?></td>-->
             <td class="align-center"><?php echo $v['order_amount']; ?></td>
             <td class="align-center"><?php if($v['order_state']==10){echo "待付款";}
             elseif($v['order_state']==20){echo "已付款";}
@@ -96,7 +96,7 @@
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['order_dieline']); ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['add_time']); ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['payment_time']); ?></td>
-            <td class="align-center"><?php echo $v['order_desc']; ?></td>
+            <!--<td class="align-center"><?php echo $v['order_desc']; ?></td>-->
         </tr>
         <?php } ?>
         <?php }else { ?>

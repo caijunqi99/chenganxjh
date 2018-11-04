@@ -70,6 +70,7 @@ class Login extends MobileMall
             $pass = getRandomString(8,null,'n');
             $member = array();
             $member['member_name'] = $phone;
+            $member['member_nickname'] = $phone;
             $member['member_password'] = md5(trim($pass));;
             $member['member_mobile'] = $phone;
             $member['member_email'] = '';
@@ -180,7 +181,7 @@ class Login extends MobileMall
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
-                $logindata['is_owner'] = $member['is_owner']==0?true:false;                
+                $logindata['is_owner'] = $member['is_owner'];                
                 $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
                 
                 output_data($logindata);

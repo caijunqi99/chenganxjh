@@ -36,8 +36,11 @@ class alipay_app {
 
             $payResponse = new AlipayTradeService($config);
 
-
-            $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+            if($param['notifyUrl'] && $param['return_url']){
+                $result=$payResponse->wapPay($payRequestBuilder,$param['return_url'],$param['notifyUrl']);
+            }else{
+                $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+            }
             write_payment(json_encode($result),'alipay_app');
 
             return ;
@@ -156,7 +159,8 @@ class alipay_app {
                 . "\"product_code\":\"QUICK_MSECURITY_PAY\""
                 . "}";
         trace('bizcontent'.$bizcontent,'debug');
-        $request->setNotifyUrl(MOBILE_SITE_URL . '/payment/alipay_notify_app');
+//        $request->setNotifyUrl(MOBILE_SITE_URL . '/payment/alipay_notify_app');
+        $request->setNotifyUrl($param['notifyUrl']);
         $request->setBizContent($bizcontent);
 //这里和普通的接口调用不同，使用的是sdkExecute
         $response = $aop->sdkExecute($request);
@@ -164,7 +168,7 @@ class alipay_app {
 //htmlspecialchars是为了输出到页面时防止被浏览器将关键参数html转义，实际打印到日志以及http传输不会有这个问题
 //        echo htmlspecialchars($response); //就是orderString 可以直接给客户端请求，无需再做处理。
 
-        output_data(array('content'=>$response));
+        output_data(array('content'=>$response,'orderSn'=>$param['orderSn']));
     }
 
     function verify_notify($param) {

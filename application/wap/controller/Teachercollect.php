@@ -27,7 +27,8 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['isdel'] = 1;
         $condition['type_id'] = 1;
-        $result = $collect->getMembercollectList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $result = $collect->getMembercollectList($condition,'',$page,'id desc',10);
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['time'])){
@@ -40,6 +41,20 @@ class Teachercollect extends MobileMember
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
+            if($videoinfo['t_price']==0){
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }else{
+                $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$videoinfo['t_id'],'order_state'=>20))->order('order_id desc')->limit(1)->find();
+                if(!empty($orderinfo)){
+                    if($orderinfo['order_dieline']>time()){
+                        $result[$k]['is_click'] = 1;
+                    }else{
+                        $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                    }
+                }else{
+                    $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                }
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
@@ -63,14 +78,20 @@ class Teachercollect extends MobileMember
         $res = $collect->getMembercollectInfo($condition);
         $condition['time'] = time();
         if($res){
+            $condition['isdel'] = $res['isdel']==1? 2 : 1;
             $result = $collect->editMembercollect(array('id'=>$res['id']),$condition);
+            if($condition['isdel']==1){
+                output_data([array('data'=>"收藏成功")]);
+            }else{
+                output_data([array('data'=>"取消收藏成功")]);
+            }
         }else {
             $result = $collect->addMembercollect($condition);
-        }
-        if ($result) {
-            output_data([array('data'=>"收藏成功")]);
-        } else {
-            output_error('收藏失败');
+            if ($result) {
+                output_data([array('data'=>"收藏成功")]);
+            } else {
+                output_error('收藏失败');
+            }
         }
     }
 

@@ -1,6 +1,50 @@
 {include file="public/header" /}
 <script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<script>
+    function _(el){
+        return document.getElementById(el);
+    }
+    function uploadFile(){
+        var file = _("file1").files[0];
+        // alert(file.name+" | "+file.size+" | "+file.type);
+        var formdata = new FormData();
+        formdata.append("file1", file);
+        var ajax = new XMLHttpRequest();
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        //ajax.open("POST", "http://www.chenganxjh.com/index.php/Admin/Teachvideo/video_data");
+        ajax.open("POST", "{:url('Admin/Teachvideo/video_data')}");
+        ajax.send(formdata);
+    }
+
+    function progressHandler(event){
+//        _("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total;
+        var percent = (event.loaded / event.total) * 100;
+        _("progressBar").value = Math.round(percent);
+        _("status").innerHTML = Math.round(percent)+"% 正在上传，请等待";
+    }
+
+    function completeHandler(event){
+        var bbb=event.target.responseText;
+        bbb = $.parseJSON( bbb );
+        _("status").innerHTML = "上传成功";
+        _("progressBar").value = 0;
+        $("#path").val(bbb.path);
+        $("#pic").val(bbb.pic);
+        $("#time").val(bbb.time);
+    }
+
+    function errorHandler(event){
+        _("status").innerHTML = "Upload Failed";
+    }
+
+    function abortHandler(event){
+        _("status").innerHTML = "Upload Aborted";
+    }
+</script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -23,19 +67,26 @@
             <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
         </ul>
     </div>
-
-
+    <br>
+    <tr class="noborder">
+        <td colspan="2" class="required"><label for="video_name">上传视频:</label></td>
+    </tr>
+    <tr class="noborder">
+        <td class="vatop rowform">
+            <input type="file" name="file1" id="file1"><br>
+            <input type="button" value="点击上传视频" onclick="uploadFile()">
+            <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+            <h3 id="status"></h3>
+            <p id="loaded_n_total"></p></td>
+        <td class="vatop tips"></td>
+    </tr>
     <form id="user_form" enctype="multipart/form-data" method="post">
 
         <table class="ds-default-table">
             <tbody>
-            <tr>
-                <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimg}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="file" name="video_file" id="video_file" /> </td>
-                <td class="vatop tips"></td>
-            </tr>
+            <input type="hidden" name="path" value="" id="path">
+            <input type="hidden" name="pic" value="" id="pic">
+            <input type="hidden" name="time" value="" id="time">
             <tr>
                 <td colspan="2" class="required"><label for="video_file">{$Think.lang.teacher_index_videoimgfirst}:</label></td>
             </tr>
@@ -43,9 +94,17 @@
                 <td class="vatop rowform"><input type="file" name="video_filename" id="video_filename" /> </td>
                 <td class="vatop tips"></td>
             </tr>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label for="video_name">作者:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" id="video_author" name="video_author" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
             <tr>
                 <td colspan="2" class="required"><label for="video_price">{$Think.lang.teacher_index_videoprice}:</label></td>
             </tr>
+
             <tr class="noborder">
                 <td class="vatop rowform"><input type="text" value="" id="video_price" name="video_price" class="txt"></td>
                 <td class="vatop tips"></td>
@@ -58,7 +117,7 @@
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
-                    <td colspan="2" class="required"><label>{$Think.lang.teacher_index_videotype}:</label></td>
+                    <td colspan="2" class="required"><label>{$Think.lang.teacher_index_videotype}:（提示：视频上传成功再选择类别）</label></td>
                     <td class="vatop tips"></td>
                 </tr>
                 <tr class="noborder">
@@ -94,8 +153,15 @@
                         </select></td>
                     <td class="vatop tips"></td>
                 </tr>
+            <tr>
+                <td colspan="2" class="required"><label for="video_desc">{$Think.lang.teacher_index_videodesc}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="" id="t_profile" name="t_profile" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
                 <tr>
-                    <td colspan="2" class="required"><label for="video_desc">{$Think.lang.teacher_index_videodesc}:</label></td>
+                    <td colspan="2" class="required"><label for="video_desc">备注:</label></td>
                 </tr>
                 <tr class="noborder">
                     <td class="vatop rowform"><input type="text" value="" id="video_desc" name="video_desc" class="txt"></td>
@@ -110,24 +176,33 @@
             </tfoot>
         </table>
     </form>
+
 </div>
+
 <script type="text/javascript">
+
     $(function() {
         //按钮先执行验证再提交表单
         $("#submitBtn").click(function () {
             if ($("#user_form").valid()) {
                 $("#user_form").submit();
             }
+            var pas1 =  $("#status").text();
+            var objFile = $("#file1").val();
+            if(pas1=="" || (objFile!="" && pas1!="上传成功")){
+                alert("请确认已选择视频文件，“点击上传视频”，并等待上传");exit;
+            }
         });
         $('#user_form').validate({
+
             errorPlacement: function(error, element) {
                 error.appendTo(element.parent().parent().prev().find('td:first'));
             },
             rules: {
-                video_name: {
+                file1: {
                     required: true
                 },
-                video_desc: {
+                t_profile: {
                     required: true
                 },
                 video_type: {
@@ -138,13 +213,19 @@
                 },
                 video_price: {
                     required: true
+                },
+                video_author: {
+                    required: true
+                },
+                status: {
+                    required: true
                 }
             },
             messages: {
-                video_name: {
+                file1: {
                     required: '{$Think.lang.school_add_name_null}'
                 },
-                video_desc: {
+                t_profile: {
                     required: '{$Think.lang.school_add_desc_null}'
                 },
                 video_type: {
@@ -155,6 +236,12 @@
                 },
                 video_price: {
                     required: '{$Think.lang.school_add_price_null}'
+                },
+                video_author: {
+                    required: '作者不能为空，可随意起名'
+                },
+                status: {
+                    required: '请上传视频'
                 }
             }
         });

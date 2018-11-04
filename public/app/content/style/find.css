@@ -1114,7 +1114,7 @@ a.lookall {
 }
 
 .mesage_text {
-    padding: 10px 20px;
+    padding: 10px 20px 0;
     background: #fff;
     height: 60px;
     overflow: hidden;
@@ -1400,9 +1400,12 @@ a.lookall {
     margin-left: 15px;
 }
 
+<<<<<<< HEAD
 
 /**/
 
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
 .agree_cont {
     max-width: 1000px;
     margin: 0 auto;

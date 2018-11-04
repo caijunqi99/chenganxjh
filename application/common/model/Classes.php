@@ -20,6 +20,33 @@ class Classes extends Model {
         return $class_info;
     }
 
+
+    public function getClassInfoBySchool($areaid) {
+        $class_info = db('class')
+                    ->alias('c')
+                    ->join('__SCHOOL__ sc','sc.schoolid=c.schoolid','LEFT')
+                    ->field('sc.schoolid,sc.name,sc.res_group_id as sc_res_group_id,c.classid as res_group_id,c.classname as res_group_name')
+                    ->where('sc.res_group_id = '.$areaid)
+                    ->whereor('sc.schoolid = '.$areaid)
+                    ->select();
+        if (empty($class_info)) {
+            return array();
+        }
+        return $class_info;
+    }
+
+    /**
+     * 修改班级单个字段
+     * @param  [type] $classid [description]
+     * @param  [type] $key     [键名]
+     * @param  [type] $velue   [键值]
+     * @return [type]          [description]
+     */
+    public function class_set($classid,$key,$velue){
+        return db('class')->where('classid', $classid)->setField($key, $velue);
+    }
+
+
     /**
      * 取得学校列表(所有)
      * @param unknown $condition
@@ -46,9 +73,9 @@ class Classes extends Model {
         return $list;
     }
 
-    public function getAllClasses($condtion){
+    public function getAllClasses($condtion,$field="*"){
         //$result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
-        $result = db('class')->where($condtion)->select();
+        $result = db('class')->where($condtion)->field($field)->select();
         return $result;
     }
 
@@ -83,7 +110,9 @@ class Classes extends Model {
         return $update;
     }
 
-
+    public function getClassById($id){
+        return db('class')->where('classid',$id)->find();
+    }
 
     /**
      * @name 获取某地区编码数

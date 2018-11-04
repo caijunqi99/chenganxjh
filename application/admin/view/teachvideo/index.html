@@ -96,6 +96,8 @@
             <th class="align-center">{$Think.lang.teacher_index_optiontime}</th>
             <th class="align-center">{$Think.lang.teacher_index_status}</th>
             <!--<?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('10',$action) || in_array('6',$action))){?>-->
+            <th class="align-center">推荐</th>
+            <th class="align-center">审核</th>
             <th class="align-center">{$Think.lang.ds_handle}</th>
             <!--<?php }?>-->
             <th class="align-center">{$Think.lang.teacher_index_desc}</th>
@@ -116,7 +118,7 @@
             <!--<td class="align-center">。。。</td>-->
             <td class="align-center"><?php echo $v['username']; ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['t_maketime']); ?></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['option_time']); ?></td>
+            <td class="align-center"><?php if($v['option_time']!=""){echo date("Y-m-d H:i:s",$v['option_time']);} ?></td>
             <td class="align-center"><?php if($v['t_audit']==1){
                                     echo "待审核";
                                     }elseif($v['t_audit']==2){
@@ -133,14 +135,28 @@
                 <!--无-->
                 <!--<?php }  ?>-->
             <!--</td>-->
+            <td class="align-center"> <?php if($v['t_recommend']==1){ ?>
+                <a href="{:url('/admin/teachvideo/recom',['t_id'=>$v.t_id,'t_recommend'=>2])}" class="layui-btn layui-btn-xs">推荐</a>
+                <?php }else{ ?>
+                <a href="{:url('/admin/teachvideo/recom',['t_id'=>$v.t_id,'t_recommend'=>1])}" class="layui-btn layui-btn-xs">取消推荐</a>
+                <?php } ?></td>
+
             <td class="align-center">
                 <?php if($v['t_audit']==1){ ?>
                 <a href="{:url('/admin/teachvideo/pass',['t_id'=>$v.t_id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
                 <?php }elseif($v['t_audit']==2){  ?>
                 <a href="{:url('/admin/teachvideo/pass',['t_id'=>$v.t_id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_repass}</a>
                 <?php }else{ ?>
-                无
+                <a href="javascript:(0)" class="layui-btn layui-btn-xs">无</a>
                 <?php }  ?>
+            </td>
+            <td class="align-center">
+                <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
+                <a href="{:url('/admin/teachvideo/edit',['video_id'=>$v.t_id])}" class="layui-btn layui-btn-xs">{$Think.lang.ds_edit}</a>
+                <?php } ?>
+                <a href="javascript:void(0)" onclick="if(confirm('{$Think.lang.ds_ensure_del}'))
+                location.href='{:url('/admin/teachvideo/del',['video_id'=>$v.t_id])}';" class="layui-btn layui-btn-xs">{$Think.lang.ds_del}</a>
+
             </td>
             <td class="align-center"><?php echo $v['t_desc']; ?></td>
         </tr>

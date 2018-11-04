@@ -19,13 +19,13 @@
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body>
+<body >
 
     <div class="body_content">
         <header class="head">
             <div class="head0">
                 <div class="menu_bar_box">
-                    <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                    <a href="javascript:;" class="back_btn" onClick="historyback()">
                         <i class="icon iconfont icon-jiantou3"></i>
                     </a>
                 </div>
@@ -38,10 +38,18 @@
         </header>
         <div class="main">
             <div class="upload_video">
+<<<<<<< HEAD
                 <!-- <video class="back" src="http://pgj4a41j8.bkt.clouddn.com/5a802948d494d4d9d91f0dab1e27cd7d.mp4" autoplay poster="../content/images/teachchild/video.jpg"></video> -->
                 <div id="video" style="width:100%; height: auto;margin-bottom: 30px;"></div>
                 <!-- <img class="" src="../content/images/teachchild/video.jpg" alt=""> -->
                 <!-- <img class="ply" onclick="PlayVideo(this)" src="../content/images/teachchild/video_ply.png" alt=""> -->
+=======
+                <div style="width:100%; height: auto;margin-bottom: 30px;">
+                    <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
+                        <source src="" type="video/mp4">
+                    </video>
+                </div>
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             </div>
 
             <!-- 表单 -->
@@ -71,7 +79,7 @@
                             <header class="head">
                                 <div class="head0">
                                     <div class="menu_bar_box">
-                                        <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                                        <a href="javascript:;" class="back_btn" onClick="popupClose(event)">
                                             <i class="icon iconfont icon-jiantou3 close-popup"></i>
                                         </a>
                                     </div>
@@ -143,7 +151,7 @@
                     </div>
                     <div class="price_boot_wrap">
                         <div class="http_price_wrap">
-
+                            
                         </div>
                         <!-- <p>自定义价格</p> -->
                         <input id="zidingyiinput" type="text" min="1" name="" value="" placeholder="自定义价格">
@@ -161,6 +169,7 @@
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
@@ -180,6 +189,10 @@
                 $("#currentSize").html(size);
             })
         })
+<<<<<<< HEAD
+=======
+
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     </script>
 </body>
 

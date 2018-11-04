@@ -384,7 +384,7 @@ class Memberpayment extends MobileMember
         //支付宝
         if ($this->payment_code == 'alipay_app') {
             $param['orderSn'] = $pay_sn;
-            $param['orderFee'] = $pay_info['data']['api_pay_amount'];
+            $param['orderFee'] = round($pay_info['data']['api_pay_amount'],2);;
             $param['orderInfo'] = config('site_name') . '商品订单' . $pay_sn;
             $param['order_type'] = ($pay_info['data']['order_type'] == 'real_order' ? 'r' : 'v');
             $api = new \alipay_app();

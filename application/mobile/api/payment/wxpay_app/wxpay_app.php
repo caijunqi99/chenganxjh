@@ -26,6 +26,7 @@ class wxpay_app {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
                 $order['sign'] = $this->sign_again($order);
+                $order['orderSn'] = $param['orderSn'];
                 output_data($order);
                 //return json(['code'=>200,'result'=>$order]);
             } else {
@@ -42,7 +43,7 @@ class wxpay_app {
         $values['appid'] = APPID;
         $values['partnerid'] = MCHID;
         $values['prepayid'] = $order['prepay_id'];
-        $values['package'] = 'Sign=WXpay';
+        $values['package'] = 'Sign=WXPay';
         $values['noncestr'] = $order['nonce_str'];
         $values['timestamp'] = $order['timestamp'];
         
@@ -74,7 +75,6 @@ class wxpay_app {
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $data = $notify->FromXml($xml);
 //        $data = unserialize('a:17:{s:5:"appid";s:18:"wx65ea6cb402565257";s:6:"attach";s:10:"1491293185";s:9:"bank_type";s:10:"CMB_CREDIT";s:8:"cash_fee";s:1:"1";s:8:"fee_type";s:3:"CNY";s:12:"is_subscribe";s:1:"N";s:6:"mch_id";s:10:"1451261902";s:9:"nonce_str";s:32:"ritkibas1i8py3qatdt275kzbvj5nft7";s:6:"openid";s:28:"o3kLx0rwsQVbobTG5KoiRXKFpHtQ";s:12:"out_trade_no";s:10:"1491293185";s:11:"result_code";s:7:"SUCCESS";s:11:"return_code";s:7:"SUCCESS";s:4:"sign";s:32:"CA8CD53E20EE5FFE3F58B6372CE1D74D";s:8:"time_end";s:14:"20170404160702";s:9:"total_fee";s:1:"1";s:10:"trade_type";s:3:"APP";s:14:"transaction_id";s:28:"4001522001201704045834278811";}');
-
         if (!array_key_exists("transaction_id", $data)) {
             $verify_notify = false;
         } else {

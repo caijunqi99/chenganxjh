@@ -23,7 +23,11 @@
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
+<<<<<<< HEAD
                 <a href="javascript:;" class="back_btn" onClick="historyback()">
+=======
+                <a href="javascript:;" class="back_btn" onClick="javascript:history.back(-1);">
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -140,6 +144,7 @@
                     },
                     dataType: 'json',
                     success: function(response){
+<<<<<<< HEAD
                         if(payment_code=='wxpay_app'){
                             var mbs = response.result[0];
                             if (mbs.result_code== 'SUCCESS') {
@@ -164,10 +169,73 @@
                 })
 
 
+=======
+                        if(response['code'] == 200){
+                            // 微信支付
+                            if(payment_code=='wxpay_app'){
+                                var mbs = response.result[0];
+                                if (mbs.result_code== 'SUCCESS') {
+                                    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                                        window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
+                                    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                        mbs  = mbs['prepay_id']+','+mbs['nonce_str']+','+mbs['timestamp']+','+mbs['sign']+','+mbs['orderSn'];
+                                        Android.wxpayClick(mbs);
+                                    } else { //pc
+                                    };
+                                }else{
+
+                                }
+                            }
+                            //支付宝支付
+                            if (payment_code == 'alipay_app') {
+                                var mbs = response.result[0];
+                                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                                    window.webkit.messageHandlers.aliapyClick.postMessage(mbs);
+                                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                                    mbs  = mbs['content']+','+mbs['orderSn'];
+                                    Android.aliapyClick(mbs);
+                                } else { //pc
+                                };
+                            }
+                        }else if(response['code'] == 400){
+                            $.toast('请先前往登陆','forbidden');return false;
+                        }else{
+                            $.toast(response['message'],'forbidden');return false;
+                        }
+                    }
+                })
+
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             }, function() {
                 //取消操作
             });
         });
+<<<<<<< HEAD
+=======
+        function payStatus(orderSn){
+            $.ajax({
+                type:'POST',
+                url:api+'/teacherpayment/getOrderByOrdersn.html',
+                data:{
+                    key:user_token,
+                    order_sn:orderSn
+                },
+                dataType: "json",
+                success: function(response){
+                    if(response['code'] == 200){
+                        location.href=http_url+'app/teachchild/paysuccess.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
+                    }else if(response['code'] == 400){
+                        $.toast('请前往登陆','forbidden',function () {
+                            layout();
+                        })
+                    }else{
+                        $.toast(response['message'],'forbidden');
+                    }
+                }
+            });
+
+        }
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
 
     </script>
 

@@ -88,15 +88,16 @@
                 } else {
                     freeState = data[i]['t_price'];
                 }
-
+                var img_url = upload_url + '/' + data[i]['t_picture'];
                 template += '<li>' +
                     '<a href="javascript:;">' +
                     '<span class="pay_type pay_free">' + freeState + '</span>' +
-                    '<div class="collect_img" style="background: url(../content/images/user/collect_img.jpg) no-repeat center;background-size:cover;"></div>' +
+                    '<div class="collect_img" style="background: url(' + img_url + ') no-repeat center;background-size:cover;"></div>' +
                     '<dl class="collect_txt">' +
-                    '<dt>一起学唐诗</dt>' +
-                    '<dd class="bolds">作者：好看的猫</dd>' +
-                    '<dd>唐诗宋词经典语录快速学习唐诗宋词经典语录快速学习</dd>' +
+                    '<dt>' + data[i]['t_title'] + '</dt>' +
+                    '<dd class="bolds">作者：' + data[i]['member_nickname'] + '</dd>' +
+                    '<dd>' + data[i]['t_profile'] + '</dd>' +
+
                     '</dl>' +
                     '</a>' +
                     '</li>'

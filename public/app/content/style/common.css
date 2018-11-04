@@ -417,7 +417,11 @@
     }
     
     .bang_submit_box {
+<<<<<<< HEAD
         padding: 200px 0 30px;
+=======
+        padding: 150px 0 30px;
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
         text-align: center;
     }
     
@@ -527,11 +531,24 @@
         line-height: 100px;
         text-align: center;
     }
+<<<<<<< HEAD
     
     #video {
         display: none;
     }
     
+=======
+    .videoimg_box {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    .videoimg_box img{
+        width: 100%;
+    }
+    #video {
+        display: none;
+    }
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     .video_play_btn {
         width: 101px;
         height: 100px;
@@ -542,9 +559,12 @@
         top: 50%;
         margin-left: -50px;
         margin-top: -50px;
+<<<<<<< HEAD
     }
     
     .vjs-big-play-centered .vjs-big-play-button {
         margin-top: 0 !important;
         margin-left: 0 !important;
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     }

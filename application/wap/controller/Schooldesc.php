@@ -2,9 +2,11 @@
 
 namespace app\wap\controller;
 
+use app\mobile\controller\MobileMember;
 use think\captcha\Captcha;
 
-class Schooldesc {
+class Schooldesc extends MobileMember
+{
 
 
     /**
@@ -30,6 +32,10 @@ class Schooldesc {
         $where=array();
         $where['s_sid']=$school_id;
         $data=$desc->getDescInfo($where);
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        if(!empty($data['s_img'])){
+            $data['s_img'] = $path.$data['s_img'];
+        }
         $data['name']=$logindata['name'];
         $data['region']=$logindata['region'];
         $data['address']=$logindata['address'];

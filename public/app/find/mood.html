@@ -39,116 +39,11 @@
     <div class="main">
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"> </div>
         <div class="mood_listbox" id="mood_listbox">
-            <div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>
-
-            <div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>
-
-            <div class="mood_list cont">
-                <div class="head_picbox">
-                    <div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">
-                        <img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">
-                    </div>
-                    <div class="head_pic">
-                        <p class="name">小虎牙</p>
-                        <p class="time">10-15 10:23</p>
-                    </div>
-                </div>
-                <div class="mood_txt">
-                    <p class="mood_p">儿子又得了一个小红花真棒~</p>
-                </div>
-                <div class="mood_imgbox">
-                    <ul class="mood_imglist clearfix">
-                        <!-- 可以多个 -->
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                        <li>
-                            <div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">
-                                <img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="thumbs">
-                    <div class="thumbs_l">
-                        <a href="javascript:;"><i class="icon iconfont icon-bubble"></i></a>
-                    </div>
-                    <div class="thumbs_r">22条评论</div>
-                </div>
-            </div>
         </div>
 
+        <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+            <span class="weui-over">没有更多信息了</span>
+        </div>
         <div class="weui-loadmore">
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
@@ -165,44 +60,140 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        $(function(){
+           $.ajax({
+               type:'POST',
+               url:api+'/Mood/moodlist.html',
+               data: {
+                   key:user_token
+               },
+               dataType: "json",
+               success: function (response) {
+                   var data = response.result[0];
+                   if(response['code'] == 200){
+                       if(data.length>0){
+                           for(var i=0; i<data.length;i++) {
+                               var ml = '';
+                               ml +='<div class="mood_list cont">' +
+                                   '<div class="head_picbox">' +
+                                   '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
+                                   '</div>' +
+                                   '<div class="head_pic">' +
+                                   '<p class="name">'+data[i].member_nickname+'</p>' +
+                                   '<p class="time">'+data[i].pubtime+'</p>' +
+                                   '</div>' +
+                                   '</div>' +
+                                   '<div class="mood_txt">' +
+                                   '<p class="mood_p">'+data[i].content+'</p>' +
+                                   '</div>' +
+                                   '<div class="mood_imgbox">' +
+                                   '<ul class="mood_imglist clearfix">';
+                               if(data[i].image[0] != ''){
+                                   for(var a=0;a<data[i].image.length;a++){
+                                       var img_url = upload_url+'/'+data[i].image[a];
+                                       ml +=  '<li>' +
+                                           '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
+                                           '<img src="'+img_url+'" class="v_hiden" alt="">' +
+                                           '</div>' +
+                                           '</li>';
+                                   }
+                               }
+                               ml += '</ul></div>';
+                               ml +='<div class="thumbs">\n' +
+                                   '                    <div class="thumbs_l">\n' +
+                                   '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
+                                   '                    </div>\n' +
+                                   '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
+                                   '                </div>';
+                               $("#mood_listbox").append(ml);
+                           }
+                       }else{
+                           $('.weui-footer').show();
+                           $('.weui-loadmore').hide();
+                           $(document.body).destroyInfinite()
+                       }
+
+                   }else if(response['code'] == '400'){
+                       $.toast(response['message'],'forbidden');
+                   }else{
+                       $.toast(response['message'],'forbidden');return false;
+                   }
+               }
+           })
+        });
+
+
+
         var loading = false;
+        var start = 1;
         $(document.body).infinite().on("infinite", function() {
             if (loading) return;
             loading = true;
             setTimeout(function() {
-                $("#mood_listbox").append('<div class="mood_list cont">' +
-                    '<div class="head_picbox">' +
-                    '<div class="head_piccont" style="background:url(../content/images/find/head_pic.jpg) no-repeat center;background-size:cover;">' +
-                    '<img src="../content/images/find/head_pic.jpg" class="visibility_hide" alt="">' +
-                    '</div>' +
-                    '<div class="head_pic">' +
-                    '<p class="name">小虎牙</p>' +
-                    '<p class="time">10-15 10:23</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="mood_txt">' +
-                    '<p class="mood_p">儿子又得了一个小红花真棒~</p>' +
-                    '</div>' +
-                    '<div class="mood_imgbox">' +
-                    '<ul class="mood_imglist clearfix">' +
-                    '<!-- 可以多个 -->' +
-                    '<li>' +
-                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
-                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
-                    '</div>' +
-                    '</li>' +
-                    '<li>' +
-                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
-                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
-                    '</div>' +
-                    '</li>' +
-                    '<li>' +
-                    '<div class="moodimg" style="background:url(../content/images/find/mood_imglist.jpg) no-repeat center;background-size:cover;">' +
-                    '<img src="../content/images/find/mood_imglist.jpg" class="v_hiden" alt="">' +
-                    '</div>' +
-                    '</li>' +
-                    '</ul>' +
-                    '</div>');
+                $.ajax({
+                    type:'POST',
+                    url:api+'/Mood/moodlist.html',
+                    data: {
+                        key:user_token,
+                        start:start
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        var data = response.result[0];
+                        if(response.result[1].page_count >start){
+                            start = start+1;
+                            if(response['code'] == 200){
+                                if(data[0] != ''){
+                                    for(var i=0; i<data.length;i++) {
+                                        var ml = '';
+                                        ml +='<div class="mood_list cont">' +
+                                            '<div class="head_picbox">' +
+                                            '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
+                                            '</div>' +
+                                            '<div class="head_pic">' +
+                                            '<p class="name">'+data[i].member_nickname+'</p>' +
+                                            '<p class="time">'+data[i].pubtime+'</p>' +
+                                            '</div>' +
+                                            '</div>' +
+                                            '<div class="mood_txt">' +
+                                            '<p class="mood_p">'+data[i].content+'</p>' +
+                                            '</div>' +
+                                            '<div class="mood_imgbox">' +
+                                            '<ul class="mood_imglist clearfix">';
+                                        if(data[i].image[0] != ''){
+                                            for(var a=0;a<data[i].image.length;a++){
+                                                var img_url = upload_url+'/'+data[i].image[a];
+                                                ml +=  '<li>' +
+                                                    '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
+                                                    '<img src="'+img_url+'" class="v_hiden" alt="">' +
+                                                    '</div>' +
+                                                    '</li>';
+                                            }
+                                        }
+                                        ml += '</ul></div>';
+                                        ml +='<div class="thumbs">\n' +
+                                            '                    <div class="thumbs_l">\n' +
+                                            '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
+                                            '                    </div>\n' +
+                                            '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
+                                            '                </div>';
+                                        $("#mood_listbox").append(ml);
+                                    }
+                                }
+                            }else if(response['code'] == '400'){
+                                $.alert(response['message'],function(){
+                                    goLogin();
+                                });
+                            }else{
+                                $.alert(response['message']);
+                            }
+                        }else{
+                           $('.weui-footer').show();
+                           $('.weui-loadmore').hide();
+                            $(document.body).destroyInfinite()
+                        }
+                    }
+                });
                 loading = false;
             }, 2000);
         });

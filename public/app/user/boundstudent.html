@@ -25,7 +25,7 @@
                 <!--  <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
                  <i class="icon iconfont icon-jiantou3"></i>
                  </a> -->
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -33,7 +33,13 @@
                 <p>绑定学生</p>
             </div>
             <div class="head_r">
+<<<<<<< HEAD
 
+=======
+                <!--<a href="javascript:;" onClick="scanning()">
+                    <i class="icon iconfont icon-saoyisao"></i>
+                </a>-->
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             </div>
         </div>
     </header>
@@ -127,6 +133,7 @@
     </div>
 
 
+<<<<<<< HEAD
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
@@ -212,6 +219,229 @@
                 onClose: function(p, v, d) {
                     $("#screen").removeClass("show");
                     schollID = p.data.values;
+=======
+        <script src="../content/scripts/jquery.min.js"></script>
+        <script src="../content/scripts/juqery.cookie.js"></script>
+        <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
+        <script src="../content/plugins/jqweui/js/city-picker.min.js"></script>
+        <script src="../content/scripts/commom.js"></script>
+        <script src="../content/scripts/API.js"></script>
+        <script src="../content/scripts/regular.js"></script>
+
+        <script>
+            $(function() {
+                // 性别选择
+                $("#sex").picker({
+                    title: "请选择您的性别",
+                    cols: [{
+                        textAlign: 'center',
+                        values: ['男', '女']
+                    }],
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function() {
+                        $('#bang_name,#shibiema').blur();
+                        $("#screen").removeClass("show");
+                    },
+                });
+
+                //生日选择
+                $("#date").calendar({
+                    onChange: function(p, values, displayValues) {},
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function(p, values, displayValues) {
+                        $('#bang_name,#shibiema').blur();
+                        $("#screen").removeClass("show");
+                    },
+                });
+
+
+                // 所在地区选择
+                /*$("#sex,#date,#city,#school").click(function() {
+                    $('#bang_name,#shibiema').blur();
+                    $("#screen").addClass("show");
+                });*/
+                $("#city").cityPicker({
+                    title: "请选择所在地",
+                    onChange: function(picker) {
+                        $("#school").val('');
+                        $("#classes").val('');
+                        $("#banji").val('');
+                    },
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function(picker) {
+                        $("#screen").removeClass("show");
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/school.html',
+                            data: {
+                                key: user_token,
+                                province: picker.value[0],
+                                city: picker.value[1],
+                                area: picker.value[2]
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if(response['result'].length == 0){
+                                    $("#school").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#school").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
+                            }
+                        });
+                    }
+                });
+                // 学校就读选择
+
+                var schollID = '';
+                $("#school").select({
+                    title: "请选择学校",
+                    items: [{}],
+                    onChange: function(p, v, d) {
+                        $("#classes").val('');
+                        $("#banji").val('');
+                    },
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
+                        schollID = p.data.values;
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/grade.html',
+                            data: {
+                                key: user_token,
+                                school_id: p.data.values
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if(response['result'].length == 0){
+                                    $("#classes").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#classes").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+
+                            }
+                        });
+                    }
+                });
+
+                //年级选择
+                $("#classes").select({
+                    title: "请选择所在年级",
+                    items: [{}],
+                    onChange: function(p, v, d) {
+                        $("#banji").val('');
+                    },
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
+                        $.ajax({
+                            type: "POST",
+                            url: api + '/Common/classData.html',
+                            data: {
+                                key: user_token,
+                                school_id: schollID,
+                                grade_id: p.data.values
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if(response['result'].length == 0){
+                                    $("#banji").select("update", {
+                                        items: [{}]
+                                    })
+                                }else{
+                                    $("#banji").select("update", {
+                                        items: response['result']
+                                    })
+                                }
+                            }
+                        });
+                    }
+                });
+
+                //班级选择
+                $("#banji").select({
+                    title: "请选择所在班级",
+                    items: [{}],
+                    onChange: function(p, v, d) {
+                    },
+                    onOpen: function(){
+                        $('#bang_name,#s_card,#shibiema').blur();
+                        $("#screen").addClass("show");
+                    },
+                    onClose: function(p, v, d) {
+                        $("#screen").removeClass("show");
+
+                    }
+                });
+
+            })
+
+            //绑定学生的提交操作
+            $("#bang_submit").click(function() {
+                if ($("#bang_name").val() == '') {
+                    $.toast("请先填写孩子的姓名",'forbidden');return false;
+                } else if ($("#s_card").val() == '') {
+                    $.toast("请先填写身份证号",'forbidden');return false;
+                } else if ($("#city").val() == '') {
+                    $.toast("请选择所在地",'forbidden');return false;
+                } else if ($("#school").val() == '') {
+                    $.toast("请选择孩子就读学校",'forbidden');return false;
+                } else if ($("#classes").val() == '') {
+                    $.toast("请选择孩子所在年级",'forbidden');return false;
+                } else if ($("#banji").val() == '') {
+                    $.toast("请选择孩子的班级",'forbidden');return false;
+                } else if ($("#shibiema").val() == '') {
+                    $.toast("请填写班级识别码",'forbidden');return false;
+                } else {
+                    //ActionName：原生中对应的方法名；parameter：回传的参数
+                    //json传递参数
+                    var params = new Object();
+                    params['key'] = user_token;
+                    params['member_id'] = user_member_id;
+                    params["name"] = $('#bang_name').val();
+                    switch ($('#sex').val()) {
+                        case '男':
+                            params["sex"] = 1;
+                            break;
+                        case '女':
+                            params["sex"] = 2;
+                            break;
+                    }
+                    params["birthday"] = $('#date').val().split('/')[0] + '-' + $('#date').val().split('/')[1] + '-' + $('#date').val().split('/')[2];
+                    params["province"] = $('#city').get(0).dataset.codes.split(',')[0];
+                    params["city"] = $('#city').get(0).dataset.codes.split(',')[1];
+                    params["area"] = $('#city').get(0).dataset.codes.split(',')[2];
+                    params["school"] = $('#school').get(0).dataset.values;
+                    params['grade'] = $('#classes').get(0).dataset.values;
+                    params['class'] = $('#banji').get(0).dataset.values;
+                    // params['class'] = 15;
+                    params['class_code'] = $('#shibiema').val();
+                    params['card'] = $('#s_card').val();
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     $.ajax({
                         type: "POST",
                         url: api + '/Common/grade.html',
@@ -221,6 +451,7 @@
                         },
                         dataType: "json",
                         success: function(response) {
+<<<<<<< HEAD
                             if (response['result'].length == 0) {
                                 $("#classes").select("update", {
                                     items: [{}]
@@ -228,9 +459,19 @@
                             } else {
                                 $("#classes").select("update", {
                                     items: response['result']
+=======
+                            if(response['code'] == 400){
+                                $.toast(response['message'],'forbidden',function(){
+                                    layout();
+                                });
+                            }else if(response['code'] == 200){
+                                $.toast('绑定成功,请及时购买看孩套餐','',function(){
+                                    historyback();
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                                 })
+                            }else{
+                                $.toast(response['message'],'forbidden');return false;
                             }
-
                         }
                     });
                 }

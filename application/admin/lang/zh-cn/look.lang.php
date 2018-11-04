@@ -2,12 +2,24 @@
 
 //摄像头列表
 $lang['look_camera_title']			    = '摄像头管理';
-$lang['look_camera_name']			    = '摄像头名称';
+$lang['look_camera_name']			    = '名称';
 $lang['look_camera_sn']			    = 'sn';
 $lang['look_camera_key']			    = 'key';
 $lang['look_camera_area']			    = '学校地区';
 $lang['look_camera_school']			    = '学校名称';
 $lang['look_camera_time']			    = '申请时间';
+$lang['look_camera_channelid']          = '通道ID';
+$lang['look_camera_deviceid']           = '设备id';
+$lang['look_camera_id']                 = '摄像头id';
+$lang['look_camera_online']                 = '在线';
+$lang['look_camera_parentid']                 = '资源id';
+$lang['look_camera_pimageurl']                 = '默认图片';
+$lang['look_camera_rtmpplayurl']                 = '播放地址';
+$lang['look_camera_classroom']                 = '重温课堂';
+$lang['look_camera_cstatus']                 = '开关';
+$lang['look_camera_sqtime']                 = '导入时间';
+$lang['look_camera_begintime']                 = '开启——关闭时间';
+$lang['look_camera_update']                 = '更新';
 $lang['look_camera_az_area']			    = '绑定班级/区域';
 $lang['look_camera_is_public_area']			    = '是否公共区域';
 $lang['look_camera_import']			    = '导入摄像头安装申请表';
@@ -15,7 +27,7 @@ $lang['look_camera_import_true']			    = '导入摄像头安装申请表真实�
 $lang['look_camera_import_name']			    = '导入摄像头安装申请表名称';
 $lang['look_camera_download']			    = '下载摄像头安装申请表excel模板';
 $lang['look_camera_download_mb']			    = '摄像头安装申请模板';
-$lang['look_camera_wait_an_number']			    = '待安装系统摄像头数量';
+$lang['look_camera_wait_an_number']			    = '已安装摄像头数量';
 $lang['look_camera_search']			    = '搜索';
 $lang['look_camera_cz_ts']			    = '操作提示';
 $lang['look_camera_file']			    = '选择导入excel文件';

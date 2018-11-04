@@ -961,7 +961,7 @@ function member_url($name){
 
 }
 
-function ago_back(ago=null){
+function ago_back(){
      ago = GetQueryString('ago');
     if(ago==null){
         historyback();
@@ -975,4 +975,8 @@ function GetQueryString(name)
     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
+}
+
+function payTo(){
+    location.href='http://vip.xiangjianhai.com:8001/wap/tmpl/member/order_list.html?ago=1';
 }

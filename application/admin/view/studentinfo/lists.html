@@ -23,7 +23,7 @@
     <table class="ds-default-table">
         <thead>
         <tr class="thead">
-            <th colspan="align-center">{$Think.lang.school_index_id}</th>
+            <th colspan="align-center">账号id</th>
             <th class="align-center">{$Think.lang.school_index_susernamesuo}</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
@@ -38,7 +38,7 @@
             <?php if($k==0){ ?>
             <td class="align-center">绑定主账号(家长)</td>
             <?php }else{ ?>
-            <td class="align-center">绑定副账号<?php if($v['member_desc']!=""){echo "(".$v['member_desc'].")";} ?></td>
+            <td class="align-center">绑定副账号<?php if($v['member_aboutname']!=""){echo "(".$v['member_aboutname'].")";} ?></td>
             <?php } ?>
         </tr>
         <?php } ?>

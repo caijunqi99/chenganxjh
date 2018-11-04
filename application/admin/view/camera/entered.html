@@ -1,6 +1,6 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
-
+<script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -63,9 +63,12 @@
             </div>
             <div class="layui-inline">
                 <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-inline">
+                <a href="javascript:update()" class="layui-btn" data-type="auto" data-method="offset">{$Think.lang.look_camera_update}</a>
             </div>
-
         </div>
+
         <table class="layui-table">
             <colgroup>
                 <col >
@@ -74,7 +77,7 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="11">
+                <th colspan="12">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
@@ -82,17 +85,28 @@
             <thead>
             <tr class="thead">
                 <th class="align-center">{$Think.lang.look_camera_name}</th>
-                <th class="align-center">{$Think.lang.look_camera_az_area}</th>
-                <th class="align-center">{$Think.lang.look_camera_is_public_area}</th>
-                <th class="align-center">{$Think.lang.look_camera_school}</th>
+                <th class="align-center">{$Think.lang.look_camera_channelid}</th>
+                <th class="align-center">{$Think.lang.look_camera_deviceid}</th>
+                <th class="align-center">{$Think.lang.look_camera_id}</th>
+                <th class="align-center">{$Think.lang.look_camera_online}</th>
+                <th class="align-center">{$Think.lang.look_camera_parentid}</th>
+                <th class="align-center">{$Think.lang.look_camera_pimageurl}</th>
+                <th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>
+                <th class="align-center">{$Think.lang.look_camera_classroom}</th>
+                <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
+                <th class="align-center">{$Think.lang.look_camera_sqtime}</th>
+                <th class="align-center">{$Think.lang.look_camera_begintime}</th>
+                <!--<th class="align-center">{$Think.lang.look_camera_az_area}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_is_public_area}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_school}</th>-->
                 <!--<th class="align-center">{$Think.lang.look_camera_area}</th>-->
-                <th class="align-center">{$Think.lang.look_camera_time}</th>
-                <th class="align-center">{$Think.lang.look_camera_sn}</th>
-                <th class="align-center">{$Think.lang.look_camera_key}</th>
-                <th class="align-center">{$Think.lang.look_camera_company}</th>
-                <th class="align-center">{$Think.lang.look_camera_text}</th>
-                <th class="align-center">{$Think.lang.look_camera_status}</th>
-                <th class="align-center">{$Think.lang.ds_handle}</th>
+                <!--<th class="align-center">{$Think.lang.look_camera_time}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_sn}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_key}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_company}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_text}</th>-->
+                <!--<th class="align-center">{$Think.lang.look_camera_status}</th>-->
+                <!--<th class="align-center">{$Think.lang.ds_handle}</th>-->
             </tr>
             </thead>
             <tbody id="html">
@@ -106,7 +120,39 @@
         </div>
     </form>
 </div>
+<div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
+    <div class="layui-row layui-col-space10 demo-list">
+        <div class="layui-col-sm4">
+            <!-- 填充内容 -->
+            <div class="layui-card">
+                <div id="video" style="width: 600px; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+    function rtmplay(cid){
+        var rtmpInfo= $('#tr_'+cid).attr('datainfo');
+        rtmpInfo =$.parseJSON(rtmpInfo);
+        layer.open({
+            type: 1,
+            title: rtmpInfo.name,
+            shadeClose: true,
+            area: ['644px', '470px'],
+            skin: 'layui-layer-rim',
+            content: $('#LAY')
+        });
+        var videoObject = {
+            container: '#video', //容器的ID或className
+            variable: 'player',//播放函数名称
+            autoplay:false,
+            live:true,
+            debug:true,
+            video: rtmpInfo.rtmpplayurl,
+            poster:rtmpInfo.imageurl
+        };
+        var player = new ckplayer(videoObject);
+    }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
             laypage = layui.laypage
@@ -276,7 +322,7 @@
         laypage.render({
             elem: 'page'
             ,count: '<?php echo $list_count;?>'
-            ,limit:2
+            ,limit:15
             ,layout: ['count', 'prev', 'page', 'next',  'skip']
             ,jump: function(obj){
                 // console.log(obj);
@@ -299,6 +345,48 @@
         });
 
     });
-
+    function update(){
+        $.ajax({
+            url: "{:url('/Admin/camera/get_camera')}",
+            type: 'GET',
+            dataType: 'json',
+            success:function(sb){
+                if(sb.count !=0) {
+                    layer.open({
+                        type: 1,
+                        area: ['230px', '200px'],
+                        fixed: false, //不固定
+                        shadeClose: true,
+                        shade: 0.4,
+                        maxmin: false, //开启最大化最小化按钮
+                        content: "<div style='padding: 40px 50px;'>已更新" + sb.count + "个摄像头！</div>",
+                        btn: '确定',
+                        shade: 0,
+                        btnAlign: 'c',
+                        yes: function () {
+                            layer.closeAll();
+                            window.location.href = "{:url('/Admin/camera/entered')}";
+                        }
+                    });
+                }else{
+                    layer.open({
+                        type: 1,
+                        area: ['230px', '200px'],
+                        fixed: false, //不固定
+                        shadeClose: true,
+                        shade: 0.4,
+                        maxmin: false, //开启最大化最小化按钮
+                        content: "<div style='padding: 40px 80px;'>暂无更新！</div>",
+                        btn: '确定',
+                        shade: 0,
+                        btnAlign: 'c',
+                        yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            }
+        });
+    }
 
 </script>

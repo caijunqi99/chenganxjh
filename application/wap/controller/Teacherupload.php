@@ -26,7 +26,7 @@ class Teacherupload extends MobileMember
         if(empty($member_id)){
             output_error('会员id不能为空');
         }
-        $member_identity = db('member')->field('member_identity')->where(array('member_id'=>$member_id))->find();
+        $member_identity = db('member')->field('member_identity,member_mobile')->where(array('member_id'=>$member_id))->find();
         if($member_identity['member_identity']!=2){
             output_error('该会员未认证教师身份，无法上传课件');
         }

@@ -4,7 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 use process\Process;
-
+use cloud\RongCloud;
 class Member extends MobileMember
 {
 
@@ -136,6 +136,9 @@ class Member extends MobileMember
             //修改个人信息
             $result = db('member')->where($where)->update($data);
             if($result){
+                //刷新融云 头像
+                $RongCloud = new RongCloud();
+                $RongCloud->user()->refresh($member['member_id'], $member_nickname, UPLOAD_SITE_URL.$member['member_avatar']);
                 output_data(array('message'=>'修改成功'));
             }else{
                 output_error('修改失败');
@@ -291,7 +294,6 @@ class Member extends MobileMember
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-
         output_data($member);
 
     }
@@ -364,7 +366,7 @@ class Member extends MobileMember
 
         $name = trim(input('post.name'));//姓名
         $sex = intval(input('post.sex'));//性别
-        $birthday = strtotime(trim(input('post.birthday')));//出生日期
+        $birthday = trim(input('post.birthday'));//出生日期
         $province_id = intval(input('post.province'));//省ID
         $city_id = intval(input('post.city'));//市ID
         $area_id = intval(input('post.area'));//区ID
@@ -410,7 +412,7 @@ class Member extends MobileMember
             $student = db('student')->insert($data);
         }
             if($student){
-                output_data(array('message'=>'绑定成功'));
+                output_data(array('message'=>'绑定成功','sid'=>$student));
             }else{
                 output_error('绑定失败');
             }
@@ -471,7 +473,7 @@ class Member extends MobileMember
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-        $res = array();
+
         //查询当前会员绑定的孩子
         $member_student = db('student')->field('s_card,s_ownerAccount')->where(' s_ownerAccount = "'.$member_id.'"')->select();
         //查询绑定手机号是否存在
@@ -483,9 +485,10 @@ class Member extends MobileMember
         if($member_about['is_owner'] != 0){
             output_error('该手机号为副账号，不能添加');
         }
+        $res = array();
         if(!empty($member_student)){
             foreach($member_student as $k=>$v){
-                $res += $v['s_card'];
+                $res[] = $v['s_card'];
             }
         }
 
@@ -503,7 +506,7 @@ class Member extends MobileMember
                         output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
                         if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){
-                            $result= db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                            $result= db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                             $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                             if ($result) {
                                 $sms = new \sendmsg\Sms();
@@ -521,7 +524,7 @@ class Member extends MobileMember
                         }
                     }
                 }else{
-                    $result = db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                    $result = db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                     $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                     if ($result) {
                         $sms = new \sendmsg\Sms();
@@ -539,7 +542,7 @@ class Member extends MobileMember
                 if(!empty($student)){
                     output_error('该手机号绑定有多个孩子，不能添加');
                 }else{
-                    $result = db('member')->where('mobile="'.$member_mobile.'"')->update($data);
+                    $result = db('member')->where('member_mobile="'.$member_mobile.'"')->update($data);
                     $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member_mobile . ']'.'添加为副账号，可共同使用想见孩平台';
                     if ($result) {
                         $sms = new \sendmsg\Sms();
@@ -645,6 +648,113 @@ class Member extends MobileMember
 
     }
 
+    /**
+     * @desc 获取绑定孩子数据
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function getStudents(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,is_owner')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        //获取绑定孩子
+        if($member['is_owner'] == 0){
+            //主账号绑定的孩子
+            $students = db('student')->alias('s')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->where('s.s_ownerAccount = "'.$member_id.'"')
+                ->select();
+        }else{
+            //副账号 显示起主账号绑定的孩子
+            $students = db('student')->alias('s')
+                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
+                ->select();
+        }
+        if(!empty($students)){
+            foreach ($students as $v) {
+                $v['time'] = date('Y-m-d',$v['end_time']);
+            }
+        }
+
+        output_data($students);
+    }
+
+    /**
+     * @desc 获取孩子信息
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function getStudent(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $sid = trim(input('post.sid'));
+        if(empty($token)){
+            output_error('缺少参数sid');
+        }
+        //获取绑定孩子
+            $student = db('student')->alias('s')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
+                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
+                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->where('s.s_id = "'.$sid.'"')
+                ->find();
+        if(!empty($student)){
+            $student['time'] = date('Y-m-d',$student['end_time']);
+        }
+            output_data($student);
+
+    }
+
+    /**
+     * @desc 判断是否位主账号
+     * @author langzhiyao
+     * @time 20181103
+     */
+    public function isOwner(){
+        $token = trim(input('post.key'));
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+
+        $where = ' member_id = "'.$member_id.'"';
+
+        $member = db('member')->field('member_id,is_owner')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        output_data($member);
+
+
+    }
 
 }
 

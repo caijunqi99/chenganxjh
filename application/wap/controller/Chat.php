@@ -17,10 +17,14 @@ class Chat extends MobileMember
 
         // $RongCloud = new \cloud\RongCloud();
         $RongCloud = new RongCloud();
-        
-        $this->member_info['avator'] = getMemberAvatarForID($this->member_info['member_id']);
+        if(!empty($this->member_info['member_avatar'])){
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL.$this->member_info['member_avatar'];
+        }else{
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+        }
+        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name'];
         // 获取 Token 方法
-        $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
+        $result = $RongCloud->user()->getToken($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
             output_data(array(
@@ -28,7 +32,7 @@ class Chat extends MobileMember
                 'CloudToken'  => $result['token']
             ));
         }else{
-            output_error('token生成失败！');
+            output_error($result['errorMessage']);
         }
     }
 
@@ -37,13 +41,18 @@ class Chat extends MobileMember
      */
     public function RefreshRongCloudToken(){
         $RongCloud = new RongCloud();
-        $this->member_info['avatar'] = getMemberAvatarForID($this->member_info['member_id']);
-        $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_mobile'], $this->member_info['avator']);
+        if(!empty($this->member_info['member_avatar'])){
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL.$this->member_info['member_avatar'];
+        }else{
+            $this->member_info['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+        }
+        if (empty($this->member_info['member_nickname'])) $this->member_info['member_nickname'] = $this->member_info['member_name'];
+        $result = $RongCloud->user()->refresh($this->member_info['member_id'], $this->member_info['member_nickname'], $this->member_info['member_avatar']);
         $result = json_decode($result,TRUE);
         if ($result['code']==200) {
             output_data(array('state'=>TRUE));
         }else{
-            output_error('token生成失败！');
+            output_error('刷新失败！');
         }
 
     }
@@ -160,8 +169,8 @@ class Chat extends MobileMember
         $Friendly = model('Friendly');
         //查询双方关系
         $myexits = array(
-            'member_id' => $friendInfo['member_id']  ,
-            'friend_id' =>$this->member_info['member_id'] ,
+            'member_id' => $this->member_info['member_id'] ,
+            'friend_id' => $friendInfo['member_id'] ,
         );
         $myexits = $Friendly->getOne($myexits);
         $state = 4;
@@ -328,28 +337,34 @@ class Chat extends MobileMember
         $myexits = $Friendly->getOne($myexits);
         if(!$frexits)output_error('未收到该账号的好友申请！');
         if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
+        $oreday = false;
         if($myexits){
             if($myexits['relation_state'] ==2 && $frexits['relation_state'] == 2)output_error('你们已经是好友关系啦！');
+            $oreday = true;
         }
         $friendInfo = $Member->getMemberInfo(array('member_id'=>$friend_member_id));
         $time = time();
         try {
             $Friendly->startTrans();
             //双方成为好友
-            $Friendly->friendly_set($frexits['id'],'relation_state',2);
-            $insert =array(
-                'member_id' => $this->member_info['member_id'] ,
-                'friend_id' => $friend_member_id,
-                'relation_state' => 2,
-                'apply_remark' => $frexits['apply_remark'],
-                'friend_remark' =>$friendInfo['member_name'] ,
-                'creat_time' => $time,
-                'from_type' => 2,
-                'up_time' => $time,
-            );
+            if ($oreday) { // 已存在申请，直接成为好友
+                $Friendly->friendly_set($myexits['id'],'relation_state',2);
+                $Friendly->friendly_set($myexits['id'],'up_time',$time);
+            }else{
+                $insert =array(
+                    'member_id' => $this->member_info['member_id'] ,
+                    'friend_id' => $friend_member_id,
+                    'relation_state' => 2,
+                    'apply_remark' => $frexits['apply_remark'],
+                    'friend_remark' =>$friendInfo['member_name'] ,
+                    'creat_time' => $time,
+                    'from_type' => $friend_member_id,
+                    'up_time' => $time,
+                );
+                $Friendly->friendly_add($insert);
+            }
             $Friendly->friendly_set($frexits['id'],'relation_state',2);
             $Friendly->friendly_set($frexits['id'],'up_time',$time);
-            $Friendly->friendly_add($insert);
             $Friendly->commit();
             $msg = 'true';
         } catch (Exception $e) {
@@ -408,7 +423,6 @@ class Chat extends MobileMember
         );
         $frexits = $Friendly->getOne($frexits);
         if(!$frexits)output_error('你们还不是好友关系！');
-        if($frexits['relation_state']==3)output_error('你已经忽略过此好友申请！');
         if($frexits['relation_state']==1)output_error('你还未同意成为好友关系！');
         if($frexits['friend_remark']==$friend_remark)output_data(array('state'=>'true'));
         $result = $Friendly->friendly_set($frexits['id'],'friend_remark',$friend_remark);
@@ -425,29 +439,28 @@ class Chat extends MobileMember
         if(!$friend_member_id)output_error('好友账号不能为空！');
         $Friendly = model('Friendly');
 
-        //查询的朋友是否给我发送过好友申请
+        //查询是否是朋友关系
         $frexits = array(
             'member_id' => $friend_member_id ,
             'friend_id' => $this->member_info['member_id'] ,
+            'relation_state'=>2,
         );
         $frexits = $Friendly->getOne($frexits);
         $myexits = array(
             'member_id' => $this->member_info['member_id'] ,
             'friend_id' => $friend_member_id ,
+            'relation_state'=>2,
         );
         $myexits = $Friendly->getOne($myexits);
+        //是否是好友关系
         if(!$frexits || !$myexits)output_error('还未创建好友关系！');
 
-        if($frexits['relation_state']==2 && $myexits['relation_state'] == 2){
-            $del=array(
-                'id' =>array('in',[$frexits['id'],$myexits['id']]),
-            );
-            $result = $Friendly->friendly_delAll($del);
-            if(!$result)output_error('删除好友请求失败，请检查网络设置！');
-            output_data(array('state'=>'true'));
-        }else{
-            output_error('还不是好友关系！');
-        }
+        $del=array(
+            'id' =>array('in',[$frexits['id'],$myexits['id']]),
+        );
+        $result = $Friendly->friendly_delAll($del);
+        if(!$result)output_error('删除好友请求失败，请检查网络设置！');
+        output_data(array('state'=>'true'));
     }
 
     /**
@@ -519,6 +532,7 @@ class Chat extends MobileMember
         $input = input();
         $group_owner_id  = isset($input['owner_id'])?(!empty($input['owner_id'])?$input['owner_id']:$this->member_info['member_id']):$this->member_info['member_id'];
         $groupName = isset($input['groupName'])?$input['groupName']:$this->member_info['member_name'].'建立的群聊';
+        if(empty($groupName))$groupName = $this->member_info['member_name'].'创建的群聊';
         //获取群员id
         $members = $input['members'];
         // $members = explode(',', $members);
@@ -753,6 +767,7 @@ class Chat extends MobileMember
         $member_id = $this->member_info['member_id'];
         $groupId = isset($input['group_id'])?$input['group_id']:0;
         $groupName = isset($input['group_name'])?trim($input['group_name']):$this->member_info['member_name'].'创建的群聊';
+        if(empty($groupName))$groupName = $this->member_info['member_name'].'创建的群聊';
         if($groupId==0)output_error('群ID错误！');
         $Group = model('Chatgroup');
         $groupInfo = $Group->getOneById($groupId);

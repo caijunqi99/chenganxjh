@@ -13,8 +13,7 @@ class Arrangement extends MobileMember
     public function index() {
         $school_id  = intval(input('post.school_id'));
         $class_id  = intval(input('post.class_id'));
-        $last  = intval(input('post.last'));
-        $next  = intval(input('post.next'));
+        $weektype  = intval(input('post.weektype'));
         if (empty($school_id)) {
             output_error('参数有误');
         }
@@ -23,17 +22,19 @@ class Arrangement extends MobileMember
         if(!empty($data['content'])){
             $data['content']= json_decode($data['content'],true);
         }
-        //本周日期
         $week = date('w');
-        $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 1-$week .' days' ));
-        $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 2-$week .' days' ));
-        $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 3-$week .' days' ));
-        $weeks['Thursday'] = date('Y-m-d',strtotime( '+'. 4-$week .' days' ));
-        $weeks['Friday'] = date('Y-m-d',strtotime( '+'. 5-$week .' days' ));
-        $weeks['Saturday'] = date('Y-m-d',strtotime( '+'. 6-$week .' days' ));
-        $weeks['Sunday'] = date('Y-m-d',strtotime( '+'. 7-$week .' days' ));
+        //本周日期
+        if($weektype==2){
+            $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 1-$week .' days' ));
+            $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 2-$week .' days' ));
+            $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 3-$week .' days' ));
+            $weeks['Thursday'] = date('Y-m-d',strtotime( '+'. 4-$week .' days' ));
+            $weeks['Friday'] = date('Y-m-d',strtotime( '+'. 5-$week .' days' ));
+            $weeks['Saturday'] = date('Y-m-d',strtotime( '+'. 6-$week .' days' ));
+            $weeks['Sunday'] = date('Y-m-d',strtotime( '+'. 7-$week .' days' ));
+        }
         //上周日期
-        if($last){
+        if($weektype==1){
             $weeks['Monday'] = date('Y-m-d',strtotime( '-'. 6-$week .' days' ));
             $weeks['Tuesday'] = date('Y-m-d',strtotime( '-'. 5-$week .' days' ));
             $weeks['Wednesday'] = date('Y-m-d',strtotime( '-'. 4-$week .' days' ));
@@ -43,7 +44,7 @@ class Arrangement extends MobileMember
             $weeks['Sunday'] = date('Y-m-d',strtotime( '-'. 0-$week .' days' ));
         }
         //下周日期
-        if($next){
+        if($weektype==3){
             $weeks['Monday'] = date('Y-m-d',strtotime( '+'. 8-$week .' days' ));
             $weeks['Tuesday'] = date('Y-m-d',strtotime( '+'. 9-$week .' days' ));
             $weeks['Wednesday'] = date('Y-m-d',strtotime( '+'. 10-$week .' days' ));
@@ -64,11 +65,59 @@ class Arrangement extends MobileMember
                 }
             }
         }
+        if(!empty($data['content']['Monday'])){
+            $argc[] = $data['content']['Monday'];
+        }
+        if(!empty($data['content']['Tuesday'])){
+            $argc[] = $data['content']['Tuesday'];
+        }
+        if(!empty($data['content']['Wednesday'])){
+            $argc[] = $data['content']['Wednesday'];
+        }
+        if(!empty($data['content']['Thursday'])){
+            $argc[] = $data['content']['Thursday'];
+        }
+        if($data['content']['Friday']){
+            $argc[] = $data['content']['Friday'];
+        }
+        if($data['content']['Saturday']){
+            $argc[] = $data['content']['Saturday'];
+        }
+        if($data['content']['Sunday']){
+            $argc[] = $data['content']['Sunday'];
+        }
+        if(!empty($argc)){
+            $data['content'] = $argc;
+        }
+        $data = !empty($data)?[$data]:[];
         if($data){
             output_data($data);
         }else{
             output_data(array());
         }
+
+    }
+
+    /**
+     * 获取下周一到下周日的数组日期
+     * @param $date
+     * @return array
+     */
+    function getNextWeekOf($date)
+    {
+        $dates = array();
+        $time = strtotime($date . ' 12:00:00');
+        $w = date('w', $time);
+
+        if ($w == 0) {
+            $nextMonday = 1;
+        } else {
+            $nextMonday = 7 - $w + 1;
+        }
+        for ($i = $nextMonday; $i < $nextMonday + 7; $i++) {
+            $dates[] = date('Y-m-d', $time + 3600 * 24 * $i);
+        }
+        return $dates;
 
     }
 

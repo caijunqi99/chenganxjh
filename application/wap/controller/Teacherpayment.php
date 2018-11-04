@@ -9,6 +9,9 @@
 namespace app\wap\controller;
 
 
+use SebastianBergmann\Comparator\MockObjectComparatorTest;
+use think\Model;
+
 class TeacherPayment extends MobileMall
 {
     public function _initialize()
@@ -91,7 +94,6 @@ class TeacherPayment extends MobileMall
 
         if (!empty($order_info) && $input) {
             $callback_info = $payment_api->verify_notify($input);
-            
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
                 $update = array(
@@ -105,17 +107,16 @@ class TeacherPayment extends MobileMall
                     'order_dieline' => $this->time()
                 );
 
-                $result = $this->_update_order($update, $order_info);
-
-                if ($result['code']) {
-                    echo 'success';
-                    exit;
+                $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+                if ($result) {
+                    $this->money($callback_info['total_fee'],$order_info['order_tid']);
+                    echo 'SUCCESS';die;
                 }
             }
         }
         //验证失败
-        echo "fail";
-        exit;
+        echo "fail";exit;
+
     }
 
     /**
@@ -145,17 +146,13 @@ class TeacherPayment extends MobileMall
                 'over_amount' => $input['total_fee']/100, //最终支付金额
                 'order_dieline' => $this->time()
             );
-            $result = $this->_update_order($update, $order_info);
-            
-            if ($result['code']) {
-                echo 'success';
-                exit;
+            $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+            if ($result) {
+                $this->money($input['total_fee']/100,$order_info['order_tid']);
+                echo 'SUCCESS';die;
             }
         }
-        echo 'fail';
-        exit;
-
-
+        echo 'fail';die;
     }
 
     //视频有效期
@@ -228,28 +225,6 @@ class TeacherPayment extends MobileMall
         return $payment_info['payment_config'];
     }
 
-    /**
-     * 更新订单状态
-     */
-    private function _update_order($input, $orderInfo)
-    {
-        $model_order = model('Packagesorder');
-        $logic_payment = model('payment', 'logic');
-        $paymentCode = $this->payment_code;
-        if ($orderInfo) {
-            $result = $logic_payment->updatePackageOrder($input, $orderInfo, $paymentCode);
-
-            
-            $log_buyer_id = $orderInfo['buyer_id'];
-            $log_buyer_name = $orderInfo['buyer_name'];
-            $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
-
-        }
-
-
-        return $result;
-    }
-
     /*
      * 教孩视频支付成功 给教师，市代，省代，总后台分成
      * 分成比例在后台设置 config表-》code=teacher_pay_scale
@@ -259,10 +234,7 @@ class TeacherPayment extends MobileMall
      * 每次分成，金额增加日志存pdlog表
      *
      * */
-    public function money(){
-        $price = "50.00";//支付金额
-        $video_id = "4";//视频id
-
+    public function money($price,$video_id){
         //分成比例
         $proportion = db('config')->where(array('code'=>"teacher_pay_scale"))->find();
         $proportion['value'] = json_decode($proportion['value'],true);
@@ -293,8 +265,8 @@ class TeacherPayment extends MobileMall
         $company_model = Model("Company");
         $city_agent = $company_model->getOrganizeInfo(array('o_provinceid'=>$teachercertify['provinceid'],'o_cityid'=>$teachercertify['cityid']));
         if($city_agent){
-            $city_new_price = $city_agent['total_count'] + $city_price;
-            $city = $company_model->editOrganize(array("o_id"=>$city_agent['o_id']),array("total_count"=>$city_new_price));
+            $city_new_price = $city_agent['total_amount'] + $city_price;
+            $city = $company_model->editOrganize(array("o_id"=>$city_agent['o_id']),array("total_amount"=>$city_new_price));
             if(empty($city)){
                 output_error('市代分成失败');
             }
@@ -308,7 +280,7 @@ class TeacherPayment extends MobileMall
             ];
             $log_model->addLog($city_data);
         }else{
-            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
             $city_new_price = $admininfo['admin_total_count'] + $city_price;
             $admin_model = Model("Admin");
             $admin = $admin_model->updateAdmin(array("admin_total_count"=>$city_new_price),$admininfo['admin_id']);
@@ -344,7 +316,7 @@ class TeacherPayment extends MobileMall
             ];
             $log_model->addLog($province_data);
         }else{
-            $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+            $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
             $province_new_price = $admininfo['admin_total_count'] + $province_price;
             $admin_model = Model("Admin");
             $admin = $admin_model->updateAdmin(array("admin_total_count"=>$province_new_price),$admininfo['admin_id']);
@@ -363,7 +335,7 @@ class TeacherPayment extends MobileMall
         }
         //总后台分成金额
         $admin_price = sprintf('%.4f', $price*$proportion['value']['zb']/100);
-        $admininfo = db("member")->where(array("admin_gid"=>0))->find();
+        $admininfo = db("admin")->where(array("admin_gid"=>0))->find();
         $admin_new_price = $admininfo['admin_total_count'] + $admin_price;
         $admin_model = Model("Admin");
         $admin = $admin_model->updateAdmin(array("admin_total_count"=>$admin_new_price),$admininfo['admin_id']);
@@ -379,5 +351,22 @@ class TeacherPayment extends MobileMall
             "lg_desc" => "教孩视频，用户支付成功,给总后台分成。"
         ];
         $log_model->addLog($admin_data);
+    }
+
+    public function getOrderByOrdersn(){
+        $order_sn = input('param.order_sn');
+        if(!$order_sn){
+            output_error('参数有误');
+        }
+        $model_teach = Model("Packagesorderteach");
+        $result = $model_teach->getOrderInfo(array('pay_sn'=>$order_sn),'','order_id,order_sn,pay_sn,order_tid,order_dieline,add_time,payment_time,order_amount,over_amount');
+        if(!empty($result)){
+            $result['add_time'] = $result['add_time']!=""?date("Y-m-d H:i:s",$result['add_time']):"";
+            $result['order_dieline'] = $result['order_dieline']!=""?date("Y-m-d H:i:s",$result['order_dieline']):"";
+            $result['payment_time'] = $result['payment_time']!=""?date("Y-m-d H:i:s",$result['payment_time']):"";
+            $result['over_amount'] = $result['over_amount']!=""?number_format($result['over_amount'],2):"";
+            $result['order_amount'] = $result['order_amount']!=""?number_format($result['order_amount'],2):"";
+        }
+        output_data($result);
     }
 }                  

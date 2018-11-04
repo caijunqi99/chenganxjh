@@ -13,7 +13,7 @@ class School extends Model {
      * @param array $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return unknown
      */
-    public function getSchoolInfo($condition = array(), $extend = array(), $fields = '*', $school = '', $group = '') {
+    public function getSchoolInfo($condition = array(), $fields = '*', $school = '', $group = '') {
         $school_info = db('school')->field($fields)->where($condition)->group($group)->order($school)->find();
         if (empty($school_info)) {
             return array();
@@ -28,6 +28,17 @@ class School extends Model {
         return db('ordercommon')->where($condition)->find();
     }
 
+
+    /**
+     * 修改学校单个字段
+     * @param  [type] $schoolid [description]
+     * @param  [type] $key     [键名]
+     * @param  [type] $velue   [键值]
+     * @return [type]          [description]
+     */
+    public function school_set($schoolid,$key,$velue){
+        return db('school')->where('schoolid', $schoolid)->setField($key, $velue);
+    }
 
     /**
      * 取得学校列表(所有)
@@ -74,9 +85,9 @@ class School extends Model {
         return $list;
     }
 
-    public function getAllAchool($condtion){
+    public function getAllAchool($condtion,$field ='*'){
         //$result = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
-        $result = db('school')->where($condtion)->select();
+        $result = db('school')->where($condtion)->field($field)->select();
         //print_r(db('school')->getLastSql());die;
         return $result;
     }

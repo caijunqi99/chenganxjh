@@ -46,7 +46,7 @@
                     <div class="bang_list userhead" style="position:relative;">
                         <div class="name_box user_head_txt">
                             <label for="picture" class="picture_label">头像</label>
-                            <input type="text" placeholder="" id="picture" onclick="fileChange()" style="visibility:hidden;width: 0;height: 0;" />
+                            <input type="text" placeholder="" id="picture"  style="visibility:hidden;width: 0;height: 0;" />
                         </div>
                         <div class="input_box user_head_cont" style="float:right;">
                             <div class="user_head_box">
@@ -66,11 +66,12 @@
                             <input class="input_txt" id="nickname"  type="text" placeholder="" value="" />
                         </div>
                     </div>
-
-                    <div class="weui-cell bang_list">
-                        <div class="weui-cell__hd name_box"><label for="shenfen" class="weui-label">身份</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input input_txt inputpointer" id="shenfen" onfocus="this.blur()"  type="text" value="家长" />
+                    <div class="bang_list">
+                        <div class="name_box">
+                            <label for="nickname">身份</label>
+                        </div>
+                        <div class="input_box">
+                            <input class="input_txt" id="shenfen" disabled="disabled" type="text" placeholder="" value="家长" />
                         </div>
                     </div>
 
@@ -120,7 +121,7 @@
             </div>
 
 
-            <div class="bang_submit_box" style="padding-top: 100px;">
+            <div class="bang_submit_box" style="padding-top: 50px;">
                 <input class="bang_submit" type="button" value="保 存" />
             </div>
 
@@ -177,12 +178,12 @@
                         $('#email').val(response['result'][0]['member_email']);
                         $('#city').get(0).dataset.code = response['result'][0]['member_provinceid'];
                         $('#city').get(0).dataset.codes = response['result'][0]['member_provinceid'] + ',' + response['result'][0]['member_cityid'] + ',' + response['result'][0]['member_areaid'];
-                        if(response['result'][0]['member_provinceid'] == null || response['result'][0]['member_provinceid'] == 0){
-                            $('#city').val('')
+                        if(response['result'][0]['province_name'] == null || response['result'][0]['member_provinceid'] == 0){
+                            $('#city').val('');
                         }else{
                             $('#city').val(response['result'][0]['province_name'] + ' ' + response['result'][0]['city_name'] + ' ' + response['result'][0]['area_name']);
                         }
-                        $('#trade').val(response['result'][0]['job_name'])
+                        $('#trade').val(response['result'][0]['job_name']);
                         $('#trade').get(0).dataset.values = response['result'][0]['member_jobid']
                     };
                 }
@@ -204,12 +205,12 @@
                     hangye = response['result']
                 }
             });
-            $("#shenfen,#sex,#city,#trade").click(function() {
+            $("#sex,#city,#trade").click(function() {
                 $('#nickname,#nianling,#email').blur();
                 $("#screen").addClass("show");
             });
             // 身份选择
-            $("#shenfen").picker({
+            /*$("#shenfen").picker({
                 title: "请选择您的身份",
                 cols: [{
                     textAlign: 'center',
@@ -219,7 +220,7 @@
                 onClose: function(p, v, d) {
                     $("#screen").removeClass("show");
                 }
-            });
+            });*/
 
             // 性别选择
             $("#sex").picker({
@@ -257,16 +258,23 @@
             });
 
             // 上传头像
-
-
-            fileChange = function() {
+            $('#picture').click(function(){
                 if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                     window.webkit.messageHandlers.uploadImage.postMessage('');
                 } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
                     Android.uploadImage();
                 } else { //pc
                 };
-            }
+            })
+
+            /*fileChange = function() {
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    window.webkit.messageHandlers.uploadImage.postMessage('');
+                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                    Android.uploadImage();
+                } else { //pc
+                };
+            }*/
 
              fz_avatar = function(avatar_url){
                  img_name = avatar_url;
@@ -274,12 +282,13 @@
                 $('.user_img').attr('src',img_url);
             }
 
-
             $('.bang_submit').on('click', function() {
-                if (!Tools.IsAge($("#nianling").val())) {
-                    $.alert("年龄不符合科学，请重新输入");
+                if($('#nickname').val() == ''){
+                    $.toast("请输入昵称",'forbidden');return false;
+                }else if (!Tools.IsAge($("#nianling").val())) {
+                    $.toast("年龄不符合科学，请重新输入",'forbidden');return false;
                 } else if (!Tools.IsEmail($("#email").val())) {
-                    $.alert("请输入正确的邮箱地址");
+                    $.toast("请输入正确的邮箱地址",'forbidden');return false;
                 } else {
                     //修改个人信息
                     var params = {};
@@ -322,19 +331,22 @@
                         dataType: "json",
                         success: function(response) {
                             if (response['code'] == 200) {
-                                $.toast(response['result']['message'],'',function(){
+                                $.toast(response['result'][0]['message'],'',function(){
                                     historyback();
                                 })
                             }else if(response['code'] == 400){
-                                layout();
+                                $.toast(response['message'],'forbidden',function(){
+                                    layout();
+                                })
+
                             }else{
-                                $.toast(response['message'],'',function(){
+                                $.toast(response['message'],'forbidden',function(){
                                     window.location.reload();
                                 })
                             }
                         },
                         error(error) {
-                            $.toast(error,'',function(){
+                            $.toast(error,'forbidden',function(){
                                 window.location.reload();
                             })
                         }

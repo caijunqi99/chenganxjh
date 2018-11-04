@@ -35,6 +35,7 @@ class Teachercertify extends MobileMember
         $data['region'] = input('post.region');
         $data['username'] = input('post.username');
         $data['phone'] = input('post.phone');
+        $data['status'] = 1;
         $data['createtime'] = time();
 
         if (empty($data['username'])) output_error('姓名不能为空');
@@ -69,7 +70,7 @@ class Teachercertify extends MobileMember
             if(empty($info)){
                 output_error('member_id和id不匹配');
             }
-            $result = $teachercertify_model->teacher_update(array('id'=>$id),$data);
+            $result = $teachercertify_model->teacher_update($data,array('id'=>$id));
         }else{
             $result = $teachercertify_model->teacher_add($data);
         }

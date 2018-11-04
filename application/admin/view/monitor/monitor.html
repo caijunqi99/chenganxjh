@@ -1,5 +1,6 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
 <style>
     .info_p{
         height: 36px;
@@ -32,11 +33,11 @@
 
     <form method="post" class="layui-form">
         <div class="layui-form-item">
-            <div class="layui-inline">
-                <div class="layui-input-inline">
-                    <input name="phone" lay-verify="required|phone" autocomplete="off" placeholder="请输入关键字搜索" class="layui-input" type="tel">
-                </div>
-            </div>
+            <!--<div class="layui-inline">-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input name="phone" lay-verify="required|phone" autocomplete="off" placeholder="请输入关键字搜索" class="layui-input" type="tel">-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">
@@ -78,63 +79,45 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
+                <button class="layui-btn" data-type="reload" id="submitBtn">{$Think.lang.look_camera_search}</button>
             </div>
 
         </div>
     </form>
-
+    <?php if(!empty($video)){ ?>
     <div class="layui-card-header">
         <h3 class="panel-title" style="text-align: center;">
-            <span style="color:#E00515;">（北京市房山区彩虹幼儿园）</span>{$Think.lang.look_revisit_jk_ts}
+            <span style="color:#E00515;">（{$schoolname}）</span>{$Think.lang.look_revisit_jk_ts}
         </h3>
     </div>
     <div class="layui-fluid layui-card-body" id="LAY-component-grid-list">
         <div class="layui-row layui-col-space10 demo-list">
+            <?php foreach($video as $k=>$v){ ?>
+            <input id="rtmp{$k}" type="hidden" value="{$v.rtmpplayurl}">
+            <input id="image{$k}" type="hidden" value="{$v.imageurl}">
             <div class="layui-col-sm4">
                 <!-- 填充内容 -->
                 <div class="layui-card">
-                    <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
+                    <div id="video{$k}" style="width: 600px; height: 400px;"></div>
+                    <script type="text/javascript">
+                        var videoObject = {
+                            container: '#video'+{$k}, //容器的ID或className
+                            variable: 'player',//播放函数名称
+                            autoplay:false,
+                            live:true,
+                            debug:true,
+                            video: $("#rtmp"+{$k}).val(),
+                            poster:$("#image"+{$k}).val()
+                        };
+                        var player = new ckplayer(videoObject);
+                    </script>
                 </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
+                <p class="info_p">{$v.cameraname}</p>
             </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4">
-            <!-- 填充内容 -->
-            <div class="layui-card">
-                <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
-            </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-        </div>
-            <div class="layui-col-sm4">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-            <div class="layui-col-sm4 ">
-                <!-- 填充内容 -->
-                <div class="layui-card">
-                    <img src="{$Think.config.url_domain_root}/static/admin/images/wallpage/bg_4.jpg" width="100%"/>
-                </div>
-                <p class="info_p">能想<a href="#">4545</a></p>
-            </div>
-        </div>
+            <?php } ?>
     </div>
+</div>
+    <?php } ?>
     <!--<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
         <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
         <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
@@ -212,7 +195,7 @@
         form.on('select(school)', function(data){
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+data.value,
+                url:ADMIN_URL+'Common/get_school_infos?school='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变年级
@@ -228,7 +211,7 @@
             var school = $('#school').find('option:selected').val();
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+data.value,
+                url:ADMIN_URL+'Common/get_school_infos?school='+school+'&grade='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变班级
@@ -239,5 +222,31 @@
         });
     });
 
+    $("#submitBtn").click(function() {
+            var province=$("#province").val();
+            var city=$("#city").val();
+            var area=$("#area").val();
+            var school=$("#school").val();
+            if(school==0){
+                   alert("请先选择学校！");
+                   return false;
+            }else{
+                   var grade=$("#grade").val();
+                   var classid=$("#class").val();
+                   $.ajax({
+                        url: "{:url('/Admin/monitor/monitor')}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'classid':classid},
+                        success:function(sb){
+                           if (sb.m) {
+                               layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                               window.location.href="{:url('/Admin/Company/index')}";
+                             });
 
+                          }
+                    }
+                  });
+            }
+    });
 </script>

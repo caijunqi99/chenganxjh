@@ -9,14 +9,23 @@ $(function() {
         dataType: 'json',
         data: {
             key: user_token,
+            member_id:user_member_id,
             t_id: GetPar("id")
         },
         success: function(response) {
             $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
+<<<<<<< HEAD
             $('#related').html(HTML(response['result']));
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
             // _videoSource.poster = response.result[0]['data']['t_videoimg'];
+=======
+            var _videoSource = document.getElementById("video_true");
+            _videoSource.src = response.result[0]['data']['t_url'];
+            _videoSource.poster = response.result[0]['data']['t_videoimg'];
+            $('#related').html(HTML(response['result']));
+
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             /*var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
@@ -73,7 +82,11 @@ $(function() {
     // 收藏视频
     collectVideo = function(event) {
         if(!user_token){
+<<<<<<< HEAD
             $.toast('请前往登陆','forbidden');return false;
+=======
+         $.toast('请前往登陆','forbidden');return false;
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
         }
         $.ajax({
             url: api + '/teachercollect/collect',
@@ -132,17 +145,24 @@ $(function() {
                 '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
                 '<div class="content_wrap float_left">' +
-                '<p class="title">' + data[1]['lists'][i]['t_title'] + '</p>' +
-                '<p class="content">' + data[1]['lists'][i]['t_profile'] + '</p>' +
-                '</div>' +
+                '<p class="title">' + data[1]['lists'][i]['t_title'] + '</p>';
+                if(data[1]['lists'][i]['t_profile'] == ''){
+                    List +='<p class="content">暂无简介</p>';
+                }else{
+                    List +='<p class="content">' + data[1]['lists'][i]['t_profile'] + '</p>';
+                }
+            List +=   '</div>' +
                 '</a></li>';
         }
-        if (data[0]['data']['t_price'] == 0) {
+        if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
             price = '免费观看';
-        } else {
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
             price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
+        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+            price = '已购买'
         }
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
+<<<<<<< HEAD
             '<div class="related">' +
             '<div class="related1">' +
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
@@ -150,10 +170,30 @@ $(function() {
             '</div>' +
             '<div class="related2">' +
             '<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ','+data[0]['data']['t_price']+');">' + price + '</button>' +
+=======
+            '<div class="related" style="height: 120px">' +
+            '<div class="related1">' +
+            '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
+            '<p class="content" style="line-height: 40px;height: 40px;">作者：' + data[0]['data']['t_author'] + '</p>' +
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             '</div>' +
+
+
+            '<div class="related2">' ;
+            if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
+                template +='<button type="button" >' + price + '</button>'
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
+                template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+                template +='<button type="button" >' + price + '</button>'
+            }
+            template +=   '</div>' +
+
             '</div>' +
-            '<div class="related_list">' +
-            '<p class="title_more">更多课程</p>' +
+                '<div class="video_detail" onclick="msg_switch($(this))"><p>' + data[0]['data']['t_profile'] + '</p><a class="video_detail_icon" href="javascript:;"><i class="icon iconfont icon-iconfontjiantou"></i></a></div>'+
+
+            '<div class="related_list" style="border-top: 1px solid #aaa;">' +
+            '<p class="title_more ">更多课程</p>' +
             '<ul>' + List + '</ul>' +
             '</div>' +
             '</div>';
@@ -162,12 +202,25 @@ $(function() {
 
 });
 //跳转购买页面
+<<<<<<< HEAD
 function pay(t_id,t_price){
     if(user_token){
         if(t_price != 0 || !t_price){
             location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
         }
+=======
+function pay(t_id){
+    if(user_token){
+            location.href=http_url+"app/teachchild/pay.html?t_id="+t_id;
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     }else{
         $.toast('请前往登陆','forbidden');
     }
 }
+<<<<<<< HEAD
+=======
+
+function msg_switch(obj) {
+    obj.toggleClass("open");
+}
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d

@@ -26,7 +26,8 @@ class Teacherhistory extends MobileMember
         $condition=array();
         $condition['t_userid']=$member_id;
         $condition['t_del']=1;
-        $result=$teachhistory->getTeachhistoryList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $result=$teachhistory->getTeachhistoryList($condition,'',$page,'t_id desc',10);
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['t_maketime']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['t_maketime'])){
@@ -37,11 +38,25 @@ class Teacherhistory extends MobileMember
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
+            if($videoinfo['t_price']==0){
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }else{
+                $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$videoinfo['t_id'],'order_state'=>20))->order('order_id desc')->limit(1)->find();
+                if(!empty($orderinfo)){
+                    if($orderinfo['order_dieline']>time()){
+                        $result[$k]['is_click'] = 1;
+                    }else{
+                        $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                    }
+                }else{
+                    $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+                }
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
         }
-        $datas[] = $data;
+        $datas = !empty($data) ? [$data] : $data;
         output_data($datas);
     }
 

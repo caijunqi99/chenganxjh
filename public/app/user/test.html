@@ -141,16 +141,15 @@
 
             $('.total_cont_btn').click(function(event) {
                 var pay = $("input[name='payment_code']:checked").val();
-                // api = 'http://w.xjh.com/index.php/Wap';
-                user_token = '216327ba4d1034e33ba3c325661e3222';
-                var chind_id = '1';
+                 //api = 'http://www.chenganxjh.com/index.php/Wap';
+                user_token = '74db5c057bf603370584ee935bd5e461';
                 $.post(api+'/Teacherbuy/buyOrder',
                 {
                     'key': user_token,
-                    'tid': "1",
+                    'tid': "103",
                     'payment_code': pay,
-                    'member_id':2,
-                    'student_id': "2"
+                    'member_id':10018,
+                    'student_id': "10"
                 }, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
                     

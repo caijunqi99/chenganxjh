@@ -2,6 +2,7 @@
 
 namespace app\wap\controller;
 
+use think\Model;
 
 class Teacherbuy extends MobileMember
 {
@@ -19,21 +20,23 @@ class Teacherbuy extends MobileMember
         }
         $model_mb_payment = Model('mbpayment');
         $condition = array();
-        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
+        $condition['payment_code'] = $payment_code;
+//        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-        
-        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
-            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
+//        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
+//            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
+//        }
+
+        if (!$mb_payment_info) {
+            output_error('支付方式未开启');
         }
-        if ($mb_payment_info) {
-            $this->payment_code = $payment_code;
-            $this->payment_config = $mb_payment_info['payment_config'];
-            $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
-            if (!is_file($inc_file)) {
-                output_error('支付接口出错，请联系管理员！');
-            }
-            require_once($inc_file);
+        $this->payment_code = $payment_code;
+        $this->payment_config = $mb_payment_info['payment_config'];
+        $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
+        if (!is_file($inc_file)) {
+            output_error('支付接口出错，请联系管理员！');
         }
+        require_once($inc_file);
         $this->_logic_buy_1 = \model('buy_1','logic');
     }
 
@@ -45,12 +48,13 @@ class Teacherbuy extends MobileMember
             output_error('t_id参数有误');
         }
         $teachInfo = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
-        if(emmpty($teachInfo)){
+
+        if(empty($teachInfo)){
             output_error('暂无数据');
         }
-        $time = db('config')->where(array('code'=>"teacher_children"))->find();
-        $teachInfo['time_line'] = $time['value'];
-
+        $config_model = Model("Config");
+        $info_times = $config_model->getRowConfig("teacher_children");
+        $teachInfo['time_line'] = !empty($info_times['value'])?$info_times['value']:24;
         $payment_list = model('mbpayment')->getMbPaymentOpenList();
         if (!empty($payment_list)) {
             foreach ($payment_list as $k => $value) {
@@ -84,8 +88,7 @@ class Teacherbuy extends MobileMember
      * 购买视频
      * 1，拿到需要购买的套餐信息
      *     --购买人信息
-     *     --套餐信息
-     *     --购买人孩子信息，摄像头信息
+     *     --视频信息
      *     --支付类型
      * 2，根据得到的信息生成订单
      *     --生成订单流水号
@@ -96,7 +99,6 @@ class Teacherbuy extends MobileMember
      */
     public function buyOrder(){
         $tid = input('post.tid');
-        //$child_id = input('post.student_id');
         $member_id = input('post.member_id');
         if ( !$tid) {
             output_error('缺少参数！');
@@ -106,20 +108,14 @@ class Teacherbuy extends MobileMember
         if(empty($teachInfo)){
             output_error('无此视频的信息！');
         }
-//        $Children = model('Student');
-//        $childinfo=$Children->getChildrenInfoById($child_id);
-//        if (!$childinfo) {
-//            output_error('没有当前孩子信息！');
-//        }
         $model = Model('Packagesorderteach');
         //会员信息
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
         //生成基本订单信息
         $order = array();
-//        $order['student_id'] = $child_id;
         $order['buyer_id'] = $member_id;
-        $order['order_sn'] = "111";
-        $order['pay_sn'] = "111";
+        $order['order_sn'] = "111111";//初始
+        $order['pay_sn'] = "111111";//初始
         $order['buyer_name'] = $memberinfo['member_name'];
         $order['buyer_mobile'] = $memberinfo['member_mobile'];
         $order['order_name'] = $teachInfo['t_title'];
@@ -130,9 +126,8 @@ class Teacherbuy extends MobileMember
         if ($order['payment_code'] == "") {
             $order['payment_code'] = "offline";
         }
-        //$order['order_from'] = $this->member_info['client_type'];
+        $order['order_from'] = $this->member_info['client_type'];
         $order['order_state'] = ORDER_STATE_NEW;
-
         //写入订单表
         $order_pay_id = $model->addOrder($order);
         $this->orderInfo = $order;
@@ -152,36 +147,58 @@ class Teacherbuy extends MobileMember
      */
     private function _app_pay($order_pay_info){
         $param = $this->payment_config;
-        // 使用h5支付 wxpay_h5
-        if ($this->payment_code == 'wxpay_h5') {
+        //微信app支付
+        if ($this->payment_code == 'wxpay_app') {
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
             $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
-            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5.html';
-            $api = new \wxpay_h5();
-            $api->setConfigs($param);
-
-            $mweburl = $api->get_payurl($this);
-            output_data($mweburl);
-            $url = $mweburl['mweb_url'];
-            Header("Location: $url");
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5';
+            $api = new \wxpay_app();
+            $api->get_payform($param);
             exit;
         }
-        
+        //支付宝
+        if ($this->payment_code == 'alipay_app') {
+            $param['orderSn'] = $order_pay_info['pay_sn'];;
+            $param['orderFee'] = $order_pay_info['order_amount'];
+            $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
+            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/alipay_notify_app';
+            $api = new \alipay_app();
+            $api->get_payform($param);
+
+            exit;
+        }
+
+        // 使用h5支付 wxpay_h5
+       /* if ($this->payment_code == 'wxpay_h5') {
+            $param['orderSn'] = $order_pay_info['pay_sn'];
+            $param['orderFee'] = (100 * $order_pay_info['order_amount']);
+            $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
+            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5';
+            $api = new \wxpay_h5();
+            $api->setConfigs($param);
+            $mweburl = $api->get_payurl($this);
+
+            output_data($mweburl);*/
+            /*$url = $mweburl['mweb_url'];
+            Header("Location: $url");*/
+        /*    exit;
+        }*/
         //alipay and so on
-        $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+        /*$param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
         $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
         $param['orderSn'] = $order_pay_info['pay_sn'];
-        $param['orderFee'] = $order_pay_info['order_amount'];//$order_pay_info['order_amount'];
+        $param['orderFee'] = $order_pay_info['order_amount'];
         $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
-        $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/wx_notify_h5.html';
-
-        
+        $param['notifyUrl'] = WAP_SITE_URL . '/teacherpayment/alipay_notify_app';
+        $param['return_url'] = APP_SITE_URL . '/user/test.html';
         $payment_api = new $this->payment_code($param);
         $return = $payment_api->getSubmitUrl($param);
         echo $return;
-        exit;
+        exit;*/
     }
 
     public function notify_url(){

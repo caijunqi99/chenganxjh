@@ -18,9 +18,13 @@ class Teacherchild extends MobileMember
 
     //我的上传
     public function myUpload(){
+        $member_id = input('post.member_id');
+        if(empty($member_id)){
+            output_error('member_id参数有误');
+        }
         $teachchild = model('Teachchild');
         $condition = array();
-        $condition['t_userid'] = 1;
+        $condition['t_userid'] = $member_id;
         if(input('post.status')){
             if(input('post.status')==3){
                 $condition['t_audit'] = 3;
@@ -30,14 +34,22 @@ class Teacherchild extends MobileMember
         }else{
             $condition['t_audit'] = array('between',array(1,2));
         }
-        $list = $teachchild->getTeachchildList($condition);
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $list = $teachchild->getTeachchildList($condition,'',$page,'t_id desc',10);
+        foreach($list as $k=>$v){
+            if($v['t_del']==2){
+                $list[$k]['t_audit'] = 4;
+            }
+        }
         output_data($list);
     }
 
     //我的视频/我的订单
     public function myVideos(){
         $member_id = input('post.member_id');
-        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->select();
+        $page = !empty(input('post.page'))?input('post.page'):1;
+        $start = ($page-1)*10;
+        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->limit($start,10)->select();
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['add_time'])){
@@ -50,12 +62,39 @@ class Teacherchild extends MobileMember
             $result[$k]['author'] = $videoinfo['t_author'];
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
             $result[$k]['payment_time'] = date("Y-m-d H:i:s",$v['payment_time']);
+            if($v['order_dieline']>time()){
+                $result[$k]['is_click'] = 1;
+            }else{
+                $result[$k]['is_click'] = $videoinfo['t_del']==2 ? 0 : 1;
+            }
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
         }
         $data = isset($data)?[$data]:[];
         output_data($data);
+    }
+
+    public function delOrder(){
+        $member_id = input('post.member_id');
+        $order_id = input('post.order_id');
+        if(empty($order_id)){
+            output_error('订单id不能为空');
+        }
+        if(empty($member_id)){
+            output_error('会员id不能为空');
+        }
+        $model_order = Model("Packagesorderteach");
+        $orderInfo = $model_order->getOrderInfo(array('buyer_id'=>$member_id,'order_id'=>$order_id));
+        if(empty($orderInfo)){
+            output_error('会员id和订单id不匹配');
+        }
+        $result = $model_order->editOrder(array('delete_state'=>1),array('order_id'=>$order_id));
+        if($result){
+            output_data("删除成功");
+        }else{
+            output_error('删除失败');
+        }
     }
 
 }

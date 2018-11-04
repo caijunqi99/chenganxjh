@@ -48,7 +48,6 @@ class Controller
      */
     public function __construct(Request $request = null)
     {
-
         header("Access-Control-Allow-Origin: *");
         if (is_null($request)) {
             $request = Request::instance();

@@ -28,6 +28,14 @@ class Teachchild extends Model {
             return $res->items();
         }
     }
+
+    //分页读取数据
+    public function getPageTeachildList($where,$order,$page){
+        $start = ($page-1)*50;
+        $sql = "select * from x_teachchild where ".$where." order by ".$order." limit ".$start.",50";
+        $result = $this->query($sql);
+        return $result;
+    }
     /**
      * 添加课件
      * @param array $insert
@@ -53,6 +61,11 @@ class Teachchild extends Model {
      */
     public function editTeachchild($condition, $update) {
         return db('teachchild')->where($condition)->update($update);
+    }
+
+    public function delVideo($condition)
+    {
+        return db('teachchild')->where($condition)->delete();
     }
 
 }

@@ -75,7 +75,10 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
+<<<<<<< HEAD
     <!-- <script src="../content/scripts/pullUpLoading.js"></script> -->
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     <script type="text/javascript">
         $(function() {
 
@@ -389,18 +392,24 @@
                 $('.filter_sort').hide();
                 var params = '';
                 if (isPrice == 0) {
-                    params = {
+                    params = { //免费
                         key: user_token,
                         price_free: 1,
+<<<<<<< HEAD
                         type: Type,
                         page: Page
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     }
                 } else {
-                    params = {
+                    params = { //付费
                         key: user_token,
                         price_fees: 1,
+<<<<<<< HEAD
                         type: Type,
                         page: Page
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     }
                 }
                 GetKejian(params);
@@ -418,6 +427,64 @@
             // 	}
             // })
 
+<<<<<<< HEAD
+=======
+            // 顶部推荐切换
+            sortTopAction = function(ID, el) {
+                $('.filter_top div li').removeClass('float_right_action');//去掉精品课堂下级默认
+                $('.sort_tabs_top li i').removeClass('action');
+                $(el).addClass('action');
+                var top = Index['result'][0]['categorize'];
+                var filtsort = Index['result'][0]['navigate']['subsume']['child'];
+                if (ID == 0) { //推荐
+                    hideFilterBox();
+                    $('.sort_block').hide();
+                    $('.sort_tabs').hide();
+                    $('.filter').hide();
+                    var params = {
+                        key: user_token,
+                        recommend: 2
+                    }
+                    GetKejian(params)
+                } else if (ID == 777 || ID == 3) {  //宝宝试听和父母课堂
+                    hideFilterBox();
+                    $('.sort_block').show();
+                    $('.sort_tabs').hide();
+                    $('.filter').hide();
+                    for (var i = 0; i < top.length; i++) {
+                        if (ID == top[i]['gc_id']) {
+                            $('.sort_block').html(sortBlock(top[i]['childTwo']))
+                        }
+                    }
+                    var params = {
+                        key: user_token,
+                        type: ID
+                    }
+                    GetKejian(params);
+                } else if (ID == 4) { //精品课堂
+                    $('.sort_block').hide();
+                    $('.sort_tabs').show();
+                    $('.filter').show();
+                    var childID = '';
+                    for (var i = 0; i < top.length; i++) {
+                        if (ID == top[i]['gc_id']) {
+                            $('.sort_tabs').html(sortTabs(top[i]['childTwo']))
+                                // 默认获取第一项的内容
+                            var params = {
+                                key: user_token,
+                                type: ID,
+                                // type1: top[i]['childTwo'][0]['gc_id'],
+                                subsume: 1
+                            }
+                            GetKejian(params);
+                            $('.filter_sort ul').html(filterSort(Index['result'][0]['navigate']['subsume']['child']))
+                            $('.stage').html(stageList(top[i]['childTwo']))
+                        }
+                    }
+                }
+            }
+
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             // 隐藏筛选框
             function hideFilterBox() {
                 $('.filterFilter').removeClass('float_right_action');
@@ -580,12 +647,17 @@
                     }
                     template += '<div class="content_wrap">' +
                         '<div class="img_wrap">' +
-                        '<a href="./details.html?id=' + data[i]['t_id'] + '"><img src="' + img + '" alt="' + data[i]['t_title'] + '"></a>' +
+                        '<a href="javascript:;" onclick="videoClick('+data[i]['t_id']+');"><img src="' + img + '" alt="' + data[i]['t_title'] + '"></a>' +
                         '</div>' +
                         '<h3 class="title">' + data[i]['t_title'] + '</h3>' +
-                        '<p class="zuozhe">作者：<span>' + data[i]['t_author'] + '</span></p>' +
-                        '<p class="cont">' + data[i]['t_profile'] + '</p>' +
-                        '</div>'
+                        '<p class="zuozhe">作者：<span>' + data[i]['t_author'] + '</span></p>';
+
+                    if(data[i]['t_profile'] == ''){
+                        template +='<p class="cont">暂无简介</p>';
+                    }else{
+                        template +='<p class="cont">' + data[i]['t_profile'] + '</p>';
+                    }
+                    template += '</div>';
                 }
                 return template;
             }

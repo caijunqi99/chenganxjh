@@ -4,7 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 use process\Process;
-
+use cloud\RongCloud;
 class Common extends MobileMall
 {
 
@@ -91,10 +91,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function school(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $province = intval(input('post.province'));
         $city = intval(input('post.city'));
         $area = intval(input('post.area'));
@@ -120,10 +120,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function grade(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $school_id = intval(input('post.school_id'));
         if(empty($school_id)){
             output_error('缺少参数school_id');
@@ -138,9 +138,11 @@ class Common extends MobileMall
         if(!empty($school['typeid'])){
             $type = explode(',',$school['typeid']);
             foreach($type as $key=>$value){
-                $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'"')->find();
-                $arr[$key]['value'] = $name['sc_id'];
-                $arr[$key]['title'] = $name['sc_type'];
+                $name =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$value.'" AND sc_enabled=1')->find();
+                if(!empty($name)){
+                    $arr[$key]['value'] = $name['sc_id'];
+                    $arr[$key]['title'] = $name['sc_type'];
+                }
             }
         }
 
@@ -155,10 +157,10 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function classData(){
-        $token = trim(input('post.key'));
+        /*$token = trim(input('post.key'));
         if(empty($token)){
             output_error('缺少参数token');
-        }
+        }*/
         $school_id = intval(input('post.school_id'));
         if(empty($school_id)){
             output_error('缺少参数school_id');
@@ -174,11 +176,11 @@ class Common extends MobileMall
         if(empty($school)){
             output_error('该学校不存在或已被删除，请联系管理员');
         }
-        $grade =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$grade_id.'"')->find();
+        $grade =db('schooltype')->field('sc_id,sc_type')->where('sc_id  = "'.$grade_id.'"  AND sc_enabled=1')->find();
         if(empty($grade)){
             output_error('该年级不存在或已被删除，请联系管理员');
         }
-        $class = db('class')->field('classid as value,classname as title')->where('schoolid = "'.$school_id.'" AND typeid = "'.$grade_id.'"')->select();
+        $class = db('class')->field('classid as value,classname as title')->where('schoolid = "'.$school_id.'" AND typeid = "'.$grade_id.'" AND isdel=1')->select();
         output_data($class);
 
 
@@ -232,6 +234,11 @@ class Common extends MobileMall
                         $file_dir=UPLOAD_SITE_URL.'/'.ATTACH_AVATAR.'/'.$info->getFilename();
 //                        halt($file_dir);
                         $result[] = array('message'=>'修改成功','avatar_url'=>$name_dir);
+
+                        //刷新融云 头像
+                        $RongCloud = new RongCloud();
+                        $RongCloud->user()->refresh($member['member_id'], $member['member_nickname'], $file_dir);
+
                         output_data($result);
                     }
                 }else{
@@ -245,5 +252,16 @@ class Common extends MobileMall
         }
 
     }
+    /**
+     * @desc 通用设置
+     * @time 20181031
+     * @author langzhiyao
+     */
+    public function site(){
 
+        $site = db('config')->where(' id >710')->select();
+        output_data($site);
+
+
+    }
 }

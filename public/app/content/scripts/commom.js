@@ -54,9 +54,64 @@ function layout(){
 
 function send_mood(){
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        window.webkit.messageHandlers.sendMood.postMessage('back!!');
+        window.webkit.messageHandlers.sendClick.postMessage('back!!');
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
-        Android.sendMood();
+        Android.sendClick();
     } else { //pc
     };
 }
+
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+
+//刷新页面
+
+function reLoad(){
+    location.reload()
+}
+
+//教孩视频详情
+function videoClick(id){
+    var url = http_url+"app/teachchild/details.html?id="+id;
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        window.webkit.messageHandlers.videoClick.postMessage(url);
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.videoClick(url);
+    } else { //pc
+    };
+}
+
+//跳视频首页
+function videoList() {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        // window.webkit.messageHandlers.backClick();
+        // window.webkit.messageHandlers.backClick.postMessage();
+        window.webkit.messageHandlers.videoListClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.videoListClick();
+    } else { //pc
+    };
+}
+
+//跳上传视频页面
+function videoUpload() {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+        // window.webkit.messageHandlers.backClick();
+        // window.webkit.messageHandlers.backClick.postMessage();
+        window.webkit.messageHandlers.videoUploadClick.postMessage('back!!');
+    } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+        Android.videoUploadClick();
+    } else { //pc
+    };
+}
+
+//视频下架提示
+function forbidden(){
+    $.toast('该视频已过期且下架，无法观看','forbidden');
+}
+
+

@@ -1,4 +1,15 @@
 $(function() {
+<<<<<<< HEAD
+=======
+    fz_video= function(video_url){
+        alert(video_url);return false;
+        video = video_url;
+        var _videoSource = document.getElementById("video_true");
+        _videoSource.src = video_url;
+        _videoSource.poster = video_url+'?vframe/jpg/offset/1';
+    }
+    fz_video();
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
     // 获取价格
     $.ajax({
         url: api + '/teacherhome/index',
@@ -17,12 +28,17 @@ $(function() {
     // 类别
     $('#category').cityPicker({
         title: "请选择类别",
-        onChange: function(p, v, dv) {},
+        onChange: function(p, v, dv) {
+            $('.isKemu').hide();
+        },
         onClose: function(p, v, d) {
             // 判断是否有四级分类
             var tokens = p.value;
             if (tokens[1] != tokens[2]) {
+<<<<<<< HEAD
                 $('.isKemu').show();
+=======
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                 $.ajax({
                     url: api + '/teacherhome/index',
                     type: 'POST',
@@ -39,6 +55,10 @@ $(function() {
                                             if (tokens[2] == Two[x]['gc_id']) {
                                                 var Three = Two[x]['childFour'];
                                                 if(Three){
+<<<<<<< HEAD
+=======
+                                                    $('.isKemu').show();
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                                                     var params = {
                                                         textAlign: 'center',
                                                         values: []
@@ -110,40 +130,31 @@ $(function() {
     }
 
 
-    // 监听视频播放完时的操作
-    // Video.addEventListener('ended', function() {
-    //     $('.ply').show();
-    // });
-
-    // 暂停视频
-    $('.back').click(function(event) {
-        if (!event.target.paused) {
-            $(this).get(0).pause();
-            $('.ply').show();
-        };
-    });
-
     // 确认上传和取消
     isUpload = function(isTrue) {
         if (isTrue == 0) {
-            if ($('#bang_name').val() == '') {
-                $.alert("请先填写课程标题");
+            var video_img = video+'?vframe/jpg/offset/1';
+            if (video == '') {
+                $.toast("获取上传视频失败，请重新上传",'forbidden');
+                return false;
+            } else if ($('#bang_name').val() == '') {
+                $.toast("请先填写课程标题",'forbidden');
                 return false;
             } else if ($('#aboutValue').val() == '') {
-                $.alert("请先填写课程简介");
+                $.toast("请先填写课程简介",'forbidden');
                 return false;
             } else if ($('#zuozhe').val() == '') {
-                $.alert("请先填写作者的姓名");
+                $.toast("请先填写作者的姓名",'forbidden');
                 return false;
             } else if ($('#category').val() == '') {
-                $.alert("请先选择类别");
+                $.toast("请先选择类别",'forbidden');
                 return false;
             } else if ($('#price').val() == '') {
-                $.alert("请先填写价格");
+                $.toast("请先填写价格",'forbidden');
                 return false;
             } else if (!$('#kemu').is(':hidden')) {
                 if ($('#kemu').val() == '') {
-                    $.alert("请先选择科目");
+                    $.toast("请先选择科目",'forbidden');
                     return false;
                 }
             }
@@ -154,7 +165,12 @@ $(function() {
                 profile: $('#aboutValue').val(),
                 price: $('#price').val(),
                 author: $('#zuozhe').val(),
+<<<<<<< HEAD
                 url: video_url
+=======
+                url: video,
+                pic: video_img
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
             }
             var types = $('#category').get(0).dataset.codes;
             if (types.split(',')[1] == types.split(',')[2]) {
@@ -173,15 +189,31 @@ $(function() {
                 data: params,
                 success: function(response){
                     if(response['code'] == 200){
+<<<<<<< HEAD
                         $.toast("上传成功");
                         // historyback();
                     }else {
                         console.log(response['message']);
+=======
+                        $.toast("上传成功",'',function(){
+                            location.href=http_url+'app/teachchild/myupload.html';
+                        });
+                    }else {
+                        $.toast(response['message'],'forbidden');
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
                     }
                 }
             })
         } else {
+<<<<<<< HEAD
             // historyback();
+=======
+            $.confirm('确定要删除退出吗？','提示',function(){
+                    historyback();
+            },function(){
+
+            })
+>>>>>>> c8d2bd1f2a128bd3848a1233feccd35d611e063d
         }
     }
 })
