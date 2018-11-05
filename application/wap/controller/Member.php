@@ -175,7 +175,7 @@ class Member extends MobileMember
         $order ='';
         switch ($type_id){
             case 1:
-                $order = db('packagesorder')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as order_dieline')->where($where)->order('order_id DESC')->select();
                 break;
             case 2:
 //                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();

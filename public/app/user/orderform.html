@@ -179,7 +179,8 @@
                             if (response['code'] == 200) {
                                 if (response['result'].length > 0) {
                                     var html = '';
-                                   for(var i=0;i<response['result'].length;i++){
+                                    if(cursel == 3){
+                                        for(var i=0;i<response['result'].length;i++){
                                         html += '<li class="clear">\n' +
                                             '                                           <a href="javascript:;" class="clearfix">\n' +
                                             '                                           <div class="orderforms_r2">\n' +
@@ -204,7 +205,25 @@
                                             '                                       </a>\n' +
                                             '                                       </li>'
                                    }
-                                   $('.orderforms_list3').html(html);
+                                       $('#order_jobs_3 >.orderforms_list3').html(html);
+                                    }else if(cursel == 1){
+                                        for(var i=0;i<response['result'].length;i++){
+                                            html += ' <li class="clear">\n' +
+                                                '                    <a href="javascript:;" class="clearfix">\n' +
+                                                '                        <div class="orderforms_l">\n' +
+                                                '                            <img src="../content/images/user/year_meal.png" alt="">\n' +
+                                                '                        </div>\n' +
+                                                '                        <div class="orderforms_r">\n' +
+                                                '                            <p class="orderforms_type"><span class="fr">已完成</span></p>\n' +
+                                                '                            <h2 class="orderforms_h2 clear">一年套餐<span>￥360</span></h2>\n' +
+                                                '                            <p class="orderforms_p">购买时间：2018-10-14</p>\n' +
+                                                '                            <p class="orderforms_p">到期时间：2019-10-13</p>\n' +
+                                                '                        </div>\n' +
+                                                '                    </a>\n' +
+                                                '                </li>'
+                                        }
+                                        $('#order_jobs_1 >.orderforms_list3').html(html);
+                                    }
                                 }
                             } else {
                                 console.log(response['message']);
