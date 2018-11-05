@@ -75,8 +75,7 @@ class WxPayDataBase
 	public function FromXml($xml)
 	{	
 		if(!$xml){
-            return "xml数据异常！";
-//			throw new WxPayException("xml数据异常！");
+			throw new WxPayException("xml数据异常！");
 		}
         //将XML转为array 
         $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
