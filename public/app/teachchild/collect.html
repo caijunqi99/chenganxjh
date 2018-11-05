@@ -127,7 +127,7 @@
 
         // 分页
         var loading = false; //状态标记
-        $('.history_content').infinite().on("infinite", function(event) {
+        $('.body_content').infinite().on("infinite", function(event) {
             if (loading) return;
             loading = true;
             setTimeout(function() {
@@ -138,18 +138,18 @@
         });
 
         // 下拉刷新
-        $('.history_content').pullToRefresh(function() {
-            $('.history_content').infinite();
+        $('.body_content').pullToRefresh(function() {
+            $('.body_content').infinite();
             setTimeout(function() {
                 GetKejian();
-                $('.history_content').pullToRefreshDone(); // 重置下拉刷新
+                $('.body_content').pullToRefreshDone(); // 重置下拉刷新
             }, 1000)
         });
 
 
         // 获取课件接口
         function GetKejian() {
-            $('.history_content').infinite();
+            $('.body_content').infinite();
             $.ajax({
                 type: "POST",
                 url: api + '/Teacherhome/lists',
@@ -301,7 +301,7 @@
                                 $('.weui-footer').show();
                             }
                             $('.load').hide();
-                            $('.history_content').destroyInfinite();
+                            $('.body_content').destroyInfinite();
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -329,33 +329,33 @@
                 var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
-                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['collect_id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
+                        content += '<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['id'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
                             '<i class="weui-icon-checked"></i>' +
                             '</div>' +
                             '</label>' +
-                            '<div class="history_img_wrap float_left">' +
+                            '<div  onclick="videoClick(' + data[i][Time[0]][s]['collect_id'] + ')"  class="history_img_wrap float_left">' +
                             '<img src="' + data[i][Time[0]][s]['videoimg'] + '" alt="' + data[i][Time[0]][s]['videourl'] + '">' +
                             '</div>' +
-                            '<div class="cont_wrap float_left">' +
+                            '<div  onclick="videoClick(' + data[i][Time[0]][s]['collect_id'] +')"  class="cont_wrap float_left">' +
                             '<p class="cont_title">' + data[i][Time[0]][s]['title'] + '</p>' +
                             '<p class="cont_time">作者：<span>' + data[i][Time[0]][s]['author'] + '</span></p>' +
                             '</div>' +
                             '</div>';
                     } else {
-                        content += '<div onclick="forbidden()" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
+                        content += '<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['id'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
                             '<i class="weui-icon-checked"></i>' +
                             '</div>' +
                             '</label>' +
-                            '<div class="history_img_wrap float_left">' +
+                            '<div onclick="forbidden()"  class="history_img_wrap float_left">' +
                             '<img src="' + data[i][Time[0]][s]['videoimg'] + '" alt="' + data[i][Time[0]][s]['videourl'] + '">' +
                             '</div>' +
-                            '<div class="cont_wrap float_left">' +
+                            '<div  onclick="forbidden()" class="cont_wrap float_left">' +
                             '<p class="cont_title">' + data[i][Time[0]][s]['title'] + '</p>' +
                             '<p class="cont_time">作者：<span>' + data[i][Time[0]][s]['author'] + '</span></p>' +
                             '</div>' +
