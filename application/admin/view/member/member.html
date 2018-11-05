@@ -89,6 +89,7 @@
           <th colspan="2">{$Think.lang.member_index_name}</th>
           <th class="align-center"><span>身份</span></th>
           <th class="align-center"><span>年龄</span></th>
+          <th class="align-center"><span>账号</span></th>
           <!--<th class="align-center"><span fieldname="logins" nc_type="order_by">{$Think.lang.member_index_login_time}</span></th>-->
           <!--<th class="align-center"><span fieldname="last_login" nc_type="order_by">{$Think.lang.member_index_last_login}</span></th>-->
           <!-- <th class="align-center">{$Think.lang.member_index_points}</th> -->
@@ -145,6 +146,7 @@
             }
             ?></td>
           <td class="align-center"><?php echo $v['member_age']; ?></td>
+          <td class="align-center"><?php if($v['is_owner']!=0){echo "副账号";}else{echo "主账号";} ?></td>
           <!--<td class="align-center"><?php echo $v['member_login_num']; ?></td>-->
           <!--<td class="w150 align-center"><p><?php echo $v['member_login_time']; ?></p>-->
             <!--<p><?php echo $v['member_login_ip']; ?></p></td>-->

@@ -78,7 +78,8 @@ class WxPayDataBase
 			throw new WxPayException("xml数据异常！");
 		}
         //将XML转为array 
-        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
 		return $this->values;
 	}
 	

@@ -191,7 +191,6 @@ class Chat extends MobileMember
                 $state = 3;
                 break;
         }
-        
 
         $output = array(
             'member_id'     => $friendInfo['member_id'],
@@ -204,7 +203,7 @@ class Chat extends MobileMember
             'state'         => $state,
         );
         output_data($output);
-    
+
     }
 
     /**

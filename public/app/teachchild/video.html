@@ -60,6 +60,13 @@
 
         </div>
     </div>
+    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+        <span class="weui-over">没有更多信息了</span>
+    </div>
+    <div class="weui-loadmore" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
     <!-- 删除 -->
     <div class="history_delete_wrap">
         <span onClick="checkedAll(event)" data-select="false">全选</span>
@@ -122,36 +129,43 @@
         $(document.body).pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
-                $.ajax({
-                    url: api + '/teacherchild/myVideos',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        key: user_token,
-                        member_id: user_member_id,
-                        page: 1
-                    },
-                    success: function(response) {
-                        if (response['code'] == 200) {
-                            if (response['result'].length == 0) {
-                                $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
-                            } else {
-                                let keys = Object.keys(response['result'][0]);
-                                for (var i = 0; i < keys.length; i++) {
-                                    let params = new Object();
-                                    params[keys[i]] = response['result'][0][keys[i]];
-                                    List.push(params);
-                                }
-                                $('.history_content').html(HTML(List));
-                            }
-                        } else {
-                            console.log(response['message']);
-                        }
-                    }
-                })
+                GetKejian();
                 $(document.body).pullToRefreshDone(); // 重置下拉刷新
             }, 1000)
         });
+        // 获取课件接口
+        function GetKejian() {
+            $(document.body).infinite();
+            $.ajax({
+                url: api + '/teacherchild/myVideos',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    key: user_token,
+                    member_id: user_member_id,
+                    page: 1
+                },
+                success: function(response) {
+                    if (response['code'] == 200) {
+                        if (response['result'].length == 0) {
+                            $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                        } else {
+                            let keys = Object.keys(response['result'][0]);
+                            for (var i = 0; i < keys.length; i++) {
+                                let params = new Object();
+                                params[keys[i]] = response['result'][0][keys[i]];
+                                List.push(params);
+                            }
+                            $('.history_content').html(HTML(List));
+                        }
+                    } else {
+                        console.log(response['message']);
+                    }
+                }
+            })
+        }
+
+
 
         $('.history_edit').on('click', function(event) {
             var select = event.target.dataset.select;
@@ -252,6 +266,7 @@
 
         // 分页
         function getPage(num) {
+            $('.weui-loadmore').show();
             $.ajax({
                 url: api + '/teacherchild/myVideos',
                 type: 'POST',
@@ -264,9 +279,12 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
-                            $.toast("只有这么多了", "text");
+                            var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                            if(!is_data){
+                                $('.weui-footer').show();
+                            }
+                            $('.weui-loadmore').hide();
                             $(document.body).destroyInfinite();
-                            $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -274,9 +292,12 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
+                            $('.weui-loadmore').hide();
                             $('.history_content').append(HTML(List));
                         }
                     } else {
+                        $('.weui-footer').show();
+                        $('.weui-loadmore').hide();
                         console.log(response['message']);
                     }
                 }
@@ -286,10 +307,9 @@
         // HTML模板
         function HTML(data) {
             var template = '';
-            var content = '';
             for (var i = 0; i < data.length; i++) {
-                content = '';
                 var Time = Object.keys(data[i]);
+                var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
                         content += '<div onclick="videoClick(' + data[i][Time[0]][s]['order_tid'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['order_tid'] + '">' +
@@ -326,7 +346,7 @@
                     }
 
                 }
-                template = '<p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div>';
+                template += '<p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div>';
             }
             return template;
         }

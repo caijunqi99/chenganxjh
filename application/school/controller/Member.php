@@ -22,13 +22,32 @@ class Member extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
+        $condition = array();
+        $admininfo = $this->getAdminInfo();
+        if(!empty($admininfo['admin_school_id'])){
+            $studentInfo = db('student')->where(array('s_schoolid'=>$admininfo['admin_school_id'],'s_del'=>1))->select();
+            foreach($studentInfo as $key=>$item){
+                if(!empty($item['s_ownerAccount'])){
+                    $member_ids[] = $item['s_ownerAccount'];
+                }
+            }
+            $member_ids = array_unique($member_ids);
+            $fu = db('member')->field("member_id")->where("is_owner in (".implode(',',$member_ids).")")->select();
+            foreach($fu as $F=>$it){
+                $fu_ac[] = $it['member_id'];
+            }
+            $member_ids = !empty($fu_ac)?array_merge($member_ids,$fu_ac):$member_ids;
+            $condition['member_id'] = array('in',$member_ids);
+        }else{
+            $this->error("非法操作");
+        }
+
         $model_member = Model('member');
         // $model_member->ttttt();exit;
         //会员级别
         $member_grade = $model_member->getMemberGradeArr();
         $search_field_value = input('search_field_value');
         $search_field_name = input('search_field_name');
-        $condition = array();
         if ($search_field_value != '') {
             switch ($search_field_name) {
                 case 'member_name':
@@ -83,7 +102,7 @@ class Member extends AdminControl {
         if (empty($order)) {
             $order = 'member_id desc';
         }
-        $field = 'member_id,member_avatar,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
+        $field = 'member_id,member_avatar,is_owner,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
         $is_del = intval(input('is_del'));
         $condition['is_del'] = 1;
         if ($is_del) {
@@ -99,7 +118,6 @@ class Member extends AdminControl {
                 $member_list[$k]['member_grade'] = ($t = $model_member->getOneMemberGrade($v['member_exppoints'], false, $member_grade)) ? $t['level_name'] : '';
             }
         }
-        
         $this->assign('member_grade', $member_grade);
         $this->assign('search_sort', $order);
         $this->assign('search_field_name', trim($search_field_name));

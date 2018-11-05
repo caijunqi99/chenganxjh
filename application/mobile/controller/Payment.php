@@ -117,30 +117,13 @@ class Payment extends MobileMall
     {
 
         $this->payment_code = 'wxpay_app';
-        $api = $this->_get_payment_api();
         $params = $this->_get_payment_config();
+        $api = $this->_get_payment_api();
+
 
         $result = $api->verify_notify($params);
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$params,
-                'input' =>$result,
-                // 'data' =>$d,
-                'other'=>$api
-            ))
-        );
-        db('testt')->insert($insert);
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>1,
-                'input' =>2,
-                // 'data' =>$d,
-                'other'=>3
-            ))
-        );
-        db('testt')->insert($insert);
+
+
         if ($result['trade_status'] == '1') {
             $internalSn = $result['out_trade_no'] . '-' . $result['attach'];
             $externalSn = $result['transaction_id'];
@@ -149,8 +132,13 @@ class Payment extends MobileMall
             if (!$updateSuccess) {
                 // @todo
                 // 直接退出 等待下次通知
+                echo 'fail';
+                exit;
+            }else{
+                echo 'success';
                 exit;
             }
+
         }
         exit;
     }
@@ -197,13 +185,6 @@ class Payment extends MobileMall
         }
         $payment_api = new $this->payment_code($payment_config);
 
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$payment_api,
-            ))
-        );
-        db('testt')->insert($insert);
         return $payment_api;
     }
 
@@ -223,13 +204,7 @@ class Payment extends MobileMall
             $condition['payment_code'] = $this->payment_code;
         }
         $payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$payment_info,
-            ))
-        );
-        db('testt')->insert($insert);
+
         return $payment_info['payment_config'];
     }
 

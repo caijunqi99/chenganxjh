@@ -32,27 +32,32 @@ $(function() {
         setTimeout(function() {
             var params = Params;
             params['page'] = 1;
-            $.ajax({
-                url: api + '/teacherchild/myUpload.html',
-                type: 'POST',
-                dataType: 'json',
-                data: params,
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        if (response['result'].length == 0) {
-                            $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
-                        } else {
-                            $('.main_content').html(HTML(response['result']))
-                        }
-                    } else {
-                        $.toast(response['message'], 'forbidden');
-                        return false;
-                    };
-                }
-            })
+            GetKejian(params);
             $(document.body).pullToRefreshDone(); // 重置下拉刷新
         }, 1000)
     });
+    // 获取课件接口
+    function GetKejian() {
+        $(document.body).infinite();
+        $.ajax({
+            url: api + '/teacherchild/myUpload.html',
+            type: 'POST',
+            dataType: 'json',
+            data: params,
+            success: function(response) {
+                if (response['code'] == 200) {
+                    if (response['result'].length == 0) {
+                        $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
+                    } else {
+                        $('.main_content').html(HTML(response['result']))
+                    }
+                } else {
+                    $.toast(response['message'], 'forbidden');
+                    return false;
+                };
+            }
+        })
+    }
 
     // 选项卡切换
     Tabs = function(type, el) {
@@ -90,6 +95,7 @@ $(function() {
     }
 
     function getPage(params) {
+        $('.weui-loadmore').show();
         $.ajax({
             url: api + '/teacherchild/myUpload.html',
             type: 'POST',
@@ -98,13 +104,19 @@ $(function() {
             success: function(response) {
                 if (response['code'] == 200) {
                     if (response['result'].length == 0) {
-                        $.toast("只有这么多了", "text");
+                        var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                        if(!is_data){
+                            $('.weui-footer').show();
+                        }
+                        $('.weui-loadmore').hide();
                         $(document.body).destroyInfinite();
-                        $('.main_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
                     } else {
+                        $('.weui-loadmore').hide();
                         $('.main_content').append(HTML(response['result']))
                     }
                 } else {
+                    $('.weui-footer').show();
+                    $('.weui-loadmore').hide();
                     $.toast(response['message'], 'forbidden');
                     return false;
                 };

@@ -60,6 +60,13 @@
 
         </div>
     </div>
+    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+        <span class="weui-over">没有更多信息了</span>
+    </div>
+    <div class="weui-loadmore load" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
     <!-- 删除 -->
     <div class="history_delete_wrap">
         <span onClick="checkedAll(event)" data-select="false">全选</span>
@@ -122,32 +129,42 @@
         $(document.body).pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
-                $.ajax({
-                    url: api + '/teacherhistory/lists',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        key: user_token,
-                        member_id: user_member_id,
-                        page: 1
-                    },
-                    success: function(response) {
-                        if (response['code'] == 200) {
+                GetKejian();
+                $(document.body).pullToRefreshDone(); // 重置下拉刷新
+            }, 1000)
+        });
+
+        // 获取课件接口
+        function GetKejian() {
+            $(document.body).infinite();
+            $.ajax({
+                url: api + '/teacherhistory/lists',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    key: user_token,
+                    member_id: user_member_id,
+                    page: 1
+                },
+                success: function(response) {
+                    if (response['code'] == 200) {
+                        if (response['result'].length == 0) {
+                            $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                        } else {
                             let keys = Object.keys(response['result'][0]);
-                            for (var i = 0; i < keys.length; i++) {
+                            for (var i = 1; i < keys.length; i++) {
                                 let params = new Object();
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
                             $('.history_content').html(HTML(List));
-                        } else {
-                            console.log(response['message']);
                         }
+                    } else {
+                        console.log(response['message']);
                     }
-                })
-                $(document.body).pullToRefreshDone(); // 重置下拉刷新
-            }, 1000)
-        });
+                }
+            })
+        }
 
         $('.history_edit').on('click', function(event) {
             var select = event.target.dataset.select;
@@ -221,8 +238,10 @@
                         success: function(response) {
                             if (response['code'] == 200) {
                                 //成功后的回调函数
-                                $.toast("删除成功");
-                                for (var i = 0; i < IDArr.length; i++) {
+                                $.toast("删除成功",'',function(){
+                                    location.reload();
+                                });
+                                /*for (var i = 0; i < IDArr.length; i++) {
                                     $('.delete' + IDArr[i]).remove();
                                 }
                                 IDArr = [];
@@ -242,7 +261,7 @@
                                     } else {
                                         return false;
                                     }
-                                })
+                                })*/
                             } else {
                                 console.log(response['message'])
                             };
@@ -264,6 +283,7 @@
 
         // 分页
         function getPage(num) {
+            $('.load').show();
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
@@ -271,14 +291,17 @@
                 data: {
                     key: user_token,
                     member_id: user_member_id,
-                    page: 1
+                    page: num
                 },
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
-                            $.toast("只有这么多了", "text");
+                            var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                            if(!is_data){
+                                $('.weui-footer').show();
+                            }
+                            $('.load').hide();
                             $(document.body).destroyInfinite();
-                            $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -286,9 +309,12 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
-                            $('.history_content').html(HTML(List));
+                            $('.load').hide();
+                            $('.history_content').append(HTML(List));
                         }
                     } else {
+                        $('.weui-footer').show();
+                        $('.load').hide();
                         console.log(response['message']);
                     }
                 }
@@ -298,39 +324,38 @@
         // HTML模板
         function HTML(data) {
             var template = '';
-            var content = '';
             for (var i = 0; i < data.length; i++) {
-                content = '';
                 var Time = Object.keys(data[i]);
+                var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
-                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['t_id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['t_id'] + '">' +
+                        content += '<div  class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['t_id'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['t_id'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
                             '<i class="weui-icon-checked"></i>' +
                             '</div>' +
                             '</label>' +
-                            '<div class="history_img_wrap float_left">' +
+                            '<div onclick="videoClick(' + data[i][Time[0]][s]['t_tid'] + ')" class="history_img_wrap float_left">' +
                             '<img src="' + data[i][Time[0]][s]['videoimg'] + '" alt="' + data[i][Time[0]][s]['videourl'] + '">' +
                             '</div>' +
-                            '<div class="cont_wrap float_left">' +
+                            '<div onclick="videoClick(' + data[i][Time[0]][s]['t_tid'] + ')" class="cont_wrap float_left">' +
                             '<p class="cont_title">' + data[i][Time[0]][s]['title'] + '</p>' +
                             '<p class="cont_time">作者：<span>' + data[i][Time[0]][s]['author'] + '</span></p>' +
                             '</div>' +
                             '</div>';
                     } else {
-                        content += '<div onclick="forbidden()" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['order_tid'] + '">' +
+                        content += '<div class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['order_tid'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['order_tid'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
                             '<i class="weui-icon-checked"></i>' +
                             '</div>' +
                             '</label>' +
-                            '<div class="history_img_wrap float_left">' +
+                            '<div onclick="forbidden()" class="history_img_wrap float_left">' +
                             '<img src="' + data[i][Time[0]][s]['videoimg'] + '" alt="' + data[i][Time[0]][s]['videourl'] + '">' +
                             '</div>' +
-                            '<div class="cont_wrap float_left">' +
+                            '<div onclick="forbidden()"  class="cont_wrap float_left">' +
                             '<p class="cont_title">' + data[i][Time[0]][s]['title'] + '</p>' +
                             '<p class="cont_time">作者：<span>' + data[i][Time[0]][s]['author'] + '</span></p>' +
                             '</div>' +
@@ -338,7 +363,7 @@
                     }
 
                 }
-                template = '<div class="is_delete_time"><p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div></div>';
+                template += '<div class="is_delete_time"><p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div></div>';
             }
             return template;
         }
