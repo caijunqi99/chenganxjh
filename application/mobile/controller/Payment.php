@@ -196,6 +196,14 @@ class Payment extends MobileMall
             require($inc_file);
         }
         $payment_api = new $this->payment_code($payment_config);
+
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$payment_api,
+            ))
+        );
+        db('testt')->insert($insert);
         return $payment_api;
     }
 
@@ -215,7 +223,13 @@ class Payment extends MobileMall
             $condition['payment_code'] = $this->payment_code;
         }
         $payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$payment_info,
+            ))
+        );
+        db('testt')->insert($insert);
         return $payment_info['payment_config'];
     }
 
