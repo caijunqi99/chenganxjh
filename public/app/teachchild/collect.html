@@ -90,7 +90,7 @@
             data: {
                 key: user_token,
                 member_id: user_member_id,
-                page: Page
+                page: 1
             },
             success: function(response) {
                 if (response['code'] == 200) {
@@ -141,7 +141,6 @@
         $(document.body).pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
-                $('.history_content').html('');
                 $.ajax({
                     url: api + '/teachercollect/lists',
                     type: 'POST',
@@ -149,22 +148,26 @@
                     data: {
                         key: user_token,
                         member_id: user_member_id,
-                        page: Page
+                        page: 1
                     },
                     success: function(response) {
                         if (response['code'] == 200) {
-                            let keys = Object.keys(response['result'][0]);
-                            for (var i = 0; i < keys.length; i++) {
-                                let params = new Object();
-                                params[keys[i]] = response['result'][0][keys[i]];
-                                List.push(params);
+                            if (response['result'].length == 0) {
+                                $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                            } else {
+                                let keys = Object.keys(response['result'][0]);
+                                for (var i = 0; i < keys.length; i++) {
+                                    let params = new Object();
+                                    params[keys[i]] = response['result'][0][keys[i]];
+                                    List.push(params);
+                                }
+                                $('.history_content').html(HTML(List));
                             }
-                            $('.history_content').html(HTML(List));
                         } else {
                             console.log(response['message']);
                         }
                     }
-                })
+                });
                 $(document.body).pullToRefreshDone(); // 重置下拉刷新
             }, 1000)
         });
