@@ -86,15 +86,15 @@
         $(function() {
             $('.bang_submit').on('click', function() {
                 if ($('#pwd1').val() == '') {
-                    $.toast('请输入原始密码');return false;
+                    $.toast('请输入原始密码','forbidden');return false;
                 } else if ($('#pwd2').val() == '') {
-                    $.toast('请输入新密码');return false;
+                    $.toast('请输入新密码','forbidden');return false;
                 } else if ($('#pwd2').val().length < 6 || $('#pwd2').val().length > 12 ) {
-                    $.toast('密码长度为6~12位');return false;
+                    $.toast('密码长度为6~12位','forbidden');return false;
                 } else if ($('#pwd3').val() == '') {
-                    $.toast('请再一次输入新密码');return false;
+                    $.toast('请再一次输入新密码','forbidden');return false;
                 } else if ($('#pwd3').val() != $('#pwd2').val()) {
-                    $.toast('两次密码输入不一致，请重新输入');return false;
+                    $.toast('两次密码输入不一致，请重新输入','forbidden');return false;
                 }
 
                 $.ajax({
@@ -116,7 +116,7 @@
                         }else if(response['code'] == 400){
                             layout();
                         } else {
-                            $.toast(response['message'])
+                            $.toast(response['message'],'forbidden');return false;
                         }
                     }
                 });
