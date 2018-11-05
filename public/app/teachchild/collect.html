@@ -158,6 +158,7 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
+                            $('.history_content').html('');
                             $('.history_content').html(HTML(List));
                         } else {
                             console.log(response['message']);
