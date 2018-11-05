@@ -13,12 +13,10 @@ class Students extends MobileMember{
     public function get_student_info() {
 
         $member_id  = $this->member_info;
-        $Student = model('Student');
-        $childs = $Student->getAllChilds($this->member_info['member_id']);
+        $member_info = db('member')->where(array("member_id"=>$member_id))->find();
+        $member = $member_info['is_owner']==0 ? $member_id : $member_info['is_owner'];
+        $childs = db('student')->alias('s')->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')->field("s_id,s_name,s_schoolid,name,s_classid")->where(array('s_del'=>1,'s_ownerAccount'=>$member))->select();
         output_data($childs);
-
-
-
     }
 
     /**
