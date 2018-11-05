@@ -65,9 +65,10 @@ class Teacherhome extends MobileMall
             'fees' => ["name"=>"查看付费"],
             "select" => ['name'=>"筛选"]
         ];
-
+//        $data['categorize'] = $parentType;
         $data['categorize'][] = array("gc_name"=>"推荐","childTwo"=>[]);
-        $data['categorize'] = $parentType;
+
+        $data['categorize'] = array_merge($data['categorize'],$parentType);
         //视频价格范围
         $pkg = model('pkgs');
         $conditions = array();
