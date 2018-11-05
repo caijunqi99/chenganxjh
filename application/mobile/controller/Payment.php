@@ -195,7 +195,8 @@ class Payment extends MobileMall
         if (is_file($inc_file)) {
             require($inc_file);
         }
-        $payment_api = new $this->payment_code($payment_config);
+//        $payment_api = new $this->payment_code($payment_config);
+        $payment_api = new \wxpay_app();
 
         $insert = array(
             'content'=>json_encode(array(
@@ -223,13 +224,7 @@ class Payment extends MobileMall
             $condition['payment_code'] = $this->payment_code;
         }
         $payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$payment_info,
-            ))
-        );
-        db('testt')->insert($insert);
+
         return $payment_info['payment_config'];
     }
 
