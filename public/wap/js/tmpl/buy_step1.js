@@ -16,7 +16,7 @@ var freight_hash, city_id, area_id;
 var area_info;
 var goods_id;
 $(function() {
-	map = new BMap.Map('mymap');
+	/*map = new BMap.Map('mymap');
     var lng=$('#longitude').val();
     var lat=$('#latitude').val();
     if(lng=='' && lat==''){
@@ -51,7 +51,7 @@ $(function() {
             }
         }
     };
-    local = new BMap.LocalSearch(map, options);
+    local = new BMap.LocalSearch(map, options);*/
     $("#list-address-valve").click(function() {
         $.ajax({
             type: "post",
@@ -103,7 +103,7 @@ $(function() {
                 area_id = e.area_id;
                 area_info = e.area_info;
                 $("#varea_info").val(e.area_info)
-                change_map(e.area_info);
+                // change_map(e.area_info);
             }
         });
     });
@@ -530,6 +530,7 @@ $(function() {
         })
     })
 });
+/*
 function change_map(name){
     if(name!=''){
         map.centerAndZoom(name,16);
@@ -540,4 +541,4 @@ function change_map(name){
 //        document.getElementById("latitude").value = point.lat;
     }
     
-}
+}*/
