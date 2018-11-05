@@ -141,6 +141,7 @@
         $(document.body).pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
+                $('.history_content').html('');
                 $.ajax({
                     url: api + '/teachercollect/lists',
                     type: 'POST',
