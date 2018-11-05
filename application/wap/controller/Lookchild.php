@@ -7,6 +7,7 @@
  */
 
 namespace app\wap\controller;
+use think\Model;
 use vomont\Vomont;
 
 class Lookchild extends MobileMember
@@ -18,6 +19,7 @@ class Lookchild extends MobileMember
             $member_info = db("member")->where(array("member_id"=>$member_id))->find();
             $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : $member_id;
         }
+        $student = Model("Student");
         if(empty($member_id)){
             //请登录
             $data['status']=1;
