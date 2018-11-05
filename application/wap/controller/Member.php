@@ -725,7 +725,7 @@ class Member extends MobileMember
                 ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.s_id = s.s_id')
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
                 ->select();
         }else{
