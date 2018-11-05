@@ -36,13 +36,6 @@ class Member extends AdminControl {
             }elseif($companyInfo['o_provinceid']!=0 && $companyInfo['o_cityid']==0 && $companyInfo['o_areaid']==0){
                 $condition['member_provinceid'] = $companyInfo['o_provinceid'];
             }
-            $studentInfo = db('student')->where(array('admin_company_id'=>$admininfo['admin_company_id'],'s_del'=>1))->select();
-            foreach($studentInfo as $key=>$item){
-                if(!empty($item['s_ownerAccount'])){
-                    $member_ids[] = $item['s_ownerAccount'];
-                }
-            }
-            $condition['member_id'] = array('in',$member_ids);
         }
         $model_member = Model('member');
         // $model_member->ttttt();exit;
