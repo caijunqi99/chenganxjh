@@ -120,7 +120,16 @@ class Payment extends MobileMall
         $params = $this->_get_payment_config();
 
         $result = $api->verify_notify($params);
-
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$params,
+                'input' =>$result,
+                // 'data' =>$d,
+                'other'=>$api
+            ))
+        );
+        db('testt')->insert($insert);
         if ($result['trade_status'] == '1') {
             $internalSn = $result['out_trade_no'] . '-' . $result['attach'];
             $externalSn = $result['transaction_id'];
