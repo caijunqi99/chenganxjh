@@ -10,10 +10,26 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
+    <style>
+        .weui-cells_radio {
+            padding: 30px 40px;
+        }
+        
+        .weui-check_label {
+            font-size: 28px;
+            line-height: 80px;
+        }
+        
+        .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
+            font-size: 30px;
+        }
+    </style>
 </head>
 
 <body class="infobody">
@@ -27,7 +43,9 @@
             <div class="head_title">
                 <p>校园介绍</p>
             </div>
-            <div class="head_r"></div>
+            <div class="head_r">
+                <a href="javascript:;" class="role_switch" id="role_switch"><i class="icon iconfont icon-qiehuantuichu"></i></a>
+            </div>
         </div>
     </header>
 
@@ -66,43 +84,134 @@
             </div>
         </div>
     </div>
-
+    <input type="hidden" value="0" id="childid" >
+    <input type="hidden" value="xx" id="infos" >
     <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $.ajax({
-            type: "POST",
-            url: api + "/schooldesc/detailinfo?key=1234",
-            data: {
-                key: user_token,
-                school_id: 6
-            },
-            dataType: "json",
-            success: function(response) {
-                $("#school_imgbox").html(HTML(response["result"]));
-                $("#school_title").text(response["result"][0].name);
-                $("#schooladdress").text(response["result"][0].address);
-                if (response["result"][0].s_type == 1) {
-                    $("#school_type").text("公立");
-                } else {
-                    $("#school_type").text("私立");
-                }
-                $("#school_info_cont").html(response["result"][0].s_present);
-                $("#faculty").html(response["result"][0].s_teacher);
-            }
-        });
+        GetChildList(user_token,'reday');
+        // $.ajax({
+        //     type: "POST",
+        //     url: api + "/schooldesc/detailinfo",
+        //     data: {
+        //         key: user_token,
+        //         school_id: 1
+        //     },
+        //     dataType: "json",
+        //     success: function(response) {
+        //         console.log(response["result"][0]);
+
+                // $("#school_imgbox").html(HTML(response["result"]));
+                // $("#school_title").text(response["result"][0].name);
+                // $("#schooladdress").text(response["result"][0].address);
+                // if (response["result"][0].s_type == 1) {
+                //     $("#school_type").text("公立");
+                // } else {
+                //     $("#school_type").text("私立");
+                // }
+                // $("#school_info_cont").html(response["result"][0].s_present);
+                // $("#faculty").html(response["result"][0].s_teacher);
+            //}
+        //});
 
         // 学校形象照片模板
         function HTML(data) {
-            var template = '<div class="school_img" style="background:url(' + data[0].s_img + ') no-repeat center;background-size:cover;">' +
-                '<img src="' + data[0].s_img + '" class="visibility_hide" alt="">' +
-                '</div>' +
+            var template = '<div class="school_img">' ;
+                if(data[0].s_img == undefined){
+                    template +='<img src="../content/images/find/school_img.jpg" style="width:100%;" alt="">' ;
+                }else{
+                    template +='<img src="' + data[0].s_img + '" style="width:100%;" alt="">' ; 
+                }
+                template +='</div>' +
                 '<div class="school_logo" style="background:url(../content/images/find/kindergarten_logo.png) no-repeat center;background-size:cover;"></div>';
 
             return template;
         }
+        $(function(){
+            setTimeout(function(){
+                var ssss = $('#infos').val();
+                ssss = $.parseJSON(ssss);
+                
+                $("#role_switch").select({
+                    title: "选择学生绑定学校",
+                    items: ssss,
+                    onChange: function(d) {
+                        console.log();
+                        if(d.values=='undefined' || d.values == null) return;
+                        detailinfo(d.values)
+                    },
+                    
+                    onOpen: function() {
+                        // console.log($(".cookbook_title").text());
+                        $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
+                    },
+                });   
+            }, 500 );
+            
+        })
+
+                // 食谱详情开关 end
+            /**
+ * 获取当前家长的所有孩子列表
+ * 包含学校id
+ * 包含班级id
+ * 包含孩子id
+ * @创建时间 2018-11-05T14:05:59+0800
+ */
+function GetChildList(key,act,a){
+    if(!key){
+        key = user_token;
+    }
+    $.post(api+"/Students/get_student_info.html", {key: key}, function(data, textStatus, xhr) {
+        if(data.code==200){
+            var s_id = data.result[0]['s_schoolid'];
+
+            $('#childid').val(s_id);
+
+            var list = data.result;
+            var StudentsList = new Array;
+            for (var i = 0; i < list.length; i++) {
+                var info = {'title':list[i].name+'--'+list[i].s_name,'value':list[i].s_schoolid}
+               StudentsList.push(info);
+            }
+            // console.log(list);
+            var sssss =JSON.stringify(StudentsList);
+            $("#infos").val(sssss);
+            if (act == 'reday') {
+                detailinfo(s_id)
+            }
+        }
+        return data;
+    },'json');
+}
+function detailinfo(s_id){
+    $.ajax({
+        type: "POST",
+        url: api + "/schooldesc/detailinfo.html",
+        data: {
+            key: user_token,
+            school_id: s_id
+        },
+        dataType: "json",
+        success: function(response) {
+            $("#school_imgbox").html(HTML(response["result"]));
+            $("#school_title").text(response["result"][0].name);
+            $("#schooladdress").text(response["result"][0].address);
+            if (response["result"][0].s_type == 1) {
+                $("#school_type").text("公立");
+            } else {
+                $("#school_type").text("私立");
+            }
+            $("#school_info_cont").html(response["result"][0].s_present);
+            $("#faculty").html(response["result"][0].s_teacher);
+            
+            
+        }
+    });
+}
     </script>
 </body>
 

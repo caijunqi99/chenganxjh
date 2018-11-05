@@ -173,8 +173,14 @@ class Chat extends MobileMember
             'friend_id' => $friendInfo['member_id'] ,
         );
         $myexits = $Friendly->getOne($myexits);
+        //查询的朋友是否给我发送过好友申请
+        $frexits = array(
+            'member_id' => $friend_member_id,
+            'friend_id' => $this->member_info['member_id'] ,
+        );
+        $frexits = $Friendly->getOne($frexits);
         $state = 4;
-        if($myexits)switch ($myexits['relation_state']) {
+        if($frexits)switch ($frexits['relation_state']) {
             case '1'://已发送过好友申请
                 $state = 1;
                 break;
@@ -184,16 +190,8 @@ class Chat extends MobileMember
             case '3'://对方已忽略过我发送的好友申请
                 $state = 3;
                 break;
-            default://双方没有关系
-                $state = 4;
-                break;
         }
-        //查询的朋友是否给我发送过好友申请
-        $frexits = array(
-            'member_id' => $friend_member_id,
-            'friend_id' => $this->member_info['member_id'] ,
-        );
-        $frexits = $Friendly->getOne($frexits);
+        
 
         $output = array(
             'member_id'     => $friendInfo['member_id'],
