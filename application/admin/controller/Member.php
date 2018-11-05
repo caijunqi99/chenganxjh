@@ -22,13 +22,21 @@ class Member extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
+        $condition = array();
+//        $admininfo = $this->getAdminInfo();
+//        if($admininfo['admin_id']!=1){
+//            if(!empty($admininfo['admin_school_id'])){
+//                $condition['schoolid'] = $admininfo['admin_school_id'];
+//            }else{
+//                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+//            }
+//        }
         $model_member = Model('member');
         // $model_member->ttttt();exit;
         //会员级别
         $member_grade = $model_member->getMemberGradeArr();
         $search_field_value = input('search_field_value');
         $search_field_name = input('search_field_name');
-        $condition = array();
         if ($search_field_value != '') {
             switch ($search_field_name) {
                 case 'member_name':

@@ -152,21 +152,21 @@ class Studentinfo extends AdminControl {
                 'text' => '看孩订单',
                 'url' => url('School/Studentinfo/order',array('student_id'=>$student_id))
             ),
-            array(
-                'name' => 'teachorder',
-                'text' => '教孩订单',
-                'url' => url('School/Studentinfo/teachorder',array('student_id'=>$student_id))
-            ),
+//            array(
+//                'name' => 'teachorder',
+//                'text' => '教孩订单',
+//                'url' => url('School/Studentinfo/teachorder',array('student_id'=>$student_id))
+//            ),
             array(
                 'name' => 'reviveorder',
                 'text' => '重温课堂订单',
                 'url' => url('School/Studentinfo/reviveorder',array('student_id'=>$student_id))
             ),
-            array(
-                'name' => 'shopping',
-                'text' => '商城订单',
-                'url' => url('School/Studentinfo/shopping',array('student_id'=>$student_id))
-            )
+//            array(
+//                'name' => 'shopping',
+//                'text' => '商城订单',
+//                'url' => url('School/Studentinfo/shopping',array('student_id'=>$student_id))
+//            )
 //            array(
 //                'name' => 'order',
 //                'text' => '已购套餐',
