@@ -132,8 +132,13 @@ class Payment extends MobileMall
             if (!$updateSuccess) {
                 // @todo
                 // 直接退出 等待下次通知
+                echo 'fail';
+                exit;
+            }else{
+                echo 'success';
                 exit;
             }
+
         }
         exit;
     }
