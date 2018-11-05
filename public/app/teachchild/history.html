@@ -291,8 +291,11 @@
                 },
                 success: function(response) {
                     if (response['code'] == 200) {
+                        alert(response['result'].length);
                         if (response['result'].length == 0) {
+                            alert('aaa');
                             var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                            alert(is_data);
                             if(!is_data){
                                 $('.weui-footer').show();
                             }
