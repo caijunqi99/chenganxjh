@@ -79,6 +79,7 @@
       <hr>
 
         <?php if(!empty($bus_info['bus_line'])){ ?>
+        <?php $buslinenum = count($bus_info['bus_line']);?>
       <?php foreach($bus_info['bus_line'] as $k=>$v){ ?>
       <div class="foot_list foot_lists clear clearfix">
           <div class="foot_item foot_item1">
@@ -112,6 +113,11 @@
   $('#subsss').click(function() {
     $('#form1').submit();
   });
+  $(function(){
+    var pids =<?php echo $buslinenum;?>;
+    ++pids
+    $('#add_foodlist').attr('pid',pids);
+  })
 </script>
  
 
@@ -122,6 +128,7 @@
 <script type="text/javascript">
   $("#add_foodlist").click(function(){
     var pid = $(this).attr('pid');
+    
 
     var footlist_str='<div class="foot_list foot_lists clear clearfix">'+
          '<div class="foot_item foot_item1">'+
