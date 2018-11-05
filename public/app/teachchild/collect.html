@@ -127,7 +127,7 @@
 
         // 分页
         var loading = false; //状态标记
-        $('.body_content').infinite().on("infinite", function(event) {
+        $(document.body).infinite().on("infinite", function(event) {
             if (loading) return;
             loading = true;
             setTimeout(function() {
@@ -138,18 +138,18 @@
         });
 
         // 下拉刷新
-        $('.body_content').pullToRefresh(function() {
-            $('.body_content').infinite();
+        $(document.body).pullToRefresh(function() {
+            $(document.body).infinite();
             setTimeout(function() {
                 GetKejian();
-                $('.body_content').pullToRefreshDone(); // 重置下拉刷新
+                $(document.body).pullToRefreshDone(); // 重置下拉刷新
             }, 1000)
         });
 
 
         // 获取课件接口
         function GetKejian() {
-            $('.body_content').infinite();
+            $(document.body).infinite();
             $.ajax({
                 type: "POST",
                 url: api + '/Teacherhome/lists',
@@ -301,7 +301,7 @@
                                 $('.weui-footer').show();
                             }
                             $('.load').hide();
-                            $('.body_content').destroyInfinite();
+                            $(document.body).destroyInfinite();
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
