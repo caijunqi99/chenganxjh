@@ -7,6 +7,7 @@
  */
 
 namespace app\wap\controller;
+use think\Model;
 use vomont\Vomont;
 
 class Lookchild extends MobileMember
@@ -14,19 +15,31 @@ class Lookchild extends MobileMember
     //看孩
     public function index(){
         $member_id = intval(input('post.member_id'));
+        if($member_id){
+            $member_info = db("member")->where(array("member_id"=>$member_id))->find();
+            $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : $member_id;
+        }
+        $student = Model("Student");
         if(empty($member_id)){
             //请登录
             $data['status']=1;
             $data = !empty($data)?[$data]:$data;
             output_data($data);
         }else{
-            $student=model('student');
-            $result=$student->getAllChilds($member_id);
+            $result = db("student")->alias('s')
+                ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
+                ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
+                ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id as clres_group_id')
+                ->where(array("s_ownerAccount"=>$member_id,'s_del'=>1))->select();
+//            $student=model('student');
+//            $result=$student->getAllChilds($member_id);
             if(empty($result)){
-                //请绑定学生
-                $data['status']=2;
-                $data = !empty($data)?[$data]:$data;
-                output_data($data);
+                if($member_info['is_owner']==0){
+                    //请绑定学生
+                    $data['status']=2;
+                    $data = !empty($data)?[$data]:$data;
+                    output_data($data);
+                }
             }else {
                 foreach($result as $v){
                     $res[$v['s_id']]=$v['s_name'];
