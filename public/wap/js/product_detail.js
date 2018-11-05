@@ -308,7 +308,9 @@ $(function() {
                 });
                 $(".kefu").click(function() {
 
-                    window.location.href = 'tel：400-000-000';
+                    $.sDialog({skin: "red", content: "请直接联系业务人员！", okBtn: false, cancelBtn: false});
+                    return
+                    // window.location.href = 'tel：400-000-000';
                     // window.location.href = WapSiteUrl + "/tmpl/member/chat_info.html?goods_id=" + r + "&t_id=" + e.result.store_info.member_id
 
                 })

@@ -67,9 +67,9 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
+        var id = GetQueryString('id');
         $(function() {
-            var id = GetQueryString('id');
-            if(id != ''){
+            if(id){
                 $.ajax({
                     type:'POST',
                     url:api+'/Mood/mooddetail.html',
@@ -123,7 +123,7 @@
                         }
 
                     }
-                })
+                });
                 // 删除
                 $(".md_del_btn").click(function() {
                     $.confirm("您确定要删除吗?", "删除", function() {
@@ -138,11 +138,11 @@
                             dataType: "json",
                             success: function (response) {
                                 if(response['code'] == 200){
-                                    $.toast(response.result[0].message,function(){
-                                        location.href='moodlist.html';
+                                    $.toast('删除成功','',function(){
+                                        location.href='mood.html';
                                     });
                                 }else{
-                                    $.toast(response['message']);
+                                    $.toast(response['message'],'forbidden');
                                 }
                             }
                         })
@@ -153,7 +153,7 @@
                 // 举报
                 $(".md_jubao_btn").click(function() {
                     $.confirm("您确定要举报吗?", "举报", function() {
-                        $.toast("举报成功!");
+                        $.toast("举报成功!",'');
                     }, function() {
                         //取消操作
                     });
@@ -161,7 +161,7 @@
                 $('.send').click(function(){
                     var content = $('input[name=content]').val();
                     if(content == ''){
-                        $.toast('请输入评论内容');return false;
+                        $.toast('请输入评论内容','forbidden');return false;
                     }
                     $.ajax({
                         type:'POST',
@@ -172,22 +172,23 @@
                             mid:id,
                             content:content
                         },
-                        dataTyep: "json",
+                        dataType: "json",
                         success: function(response){
-                            if(response['code'] == 200){
-                                $.toast(response.result[0].message,function(){
+                            if(response['code'] == "200"){
+                                $.toast('回复成功','',function(){
                                     location.reload();
                                 });
                             }else{
-                                $.toast(response['message']);
+                                $.toast(response['message'],'forbidden');
                             }
                         }
                     })
 
                 });
-
             }else{
-                $.toast('该内容不存在');
+                $.toast('该内容不存在','forbidden',function(){
+                    location.href='moodlist.html';
+                });
             }
         })
     </script>

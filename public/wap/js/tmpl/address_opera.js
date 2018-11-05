@@ -37,9 +37,10 @@ $(function() {
         }
     });
     $("#area_info").on("click", function() {
+        $(this).blur();
         $.areaSelected({success: function(a) {
                 $("#area_info").val(a.area_info).attr({"data-areaid": a.area_id, "data-areaid2": a.area_id_2 == 0 ? a.area_id_1 : a.area_id_2});
-                change_map(a.area_info);
+                // change_map(a.area_info);
             }})
     })
     $(".public-pos").on("click", function() {
@@ -49,7 +50,7 @@ $(function() {
                 $('#address').val(a.address);
             }})
     })
-    map = new BMap.Map('mymap');
+   /* map = new BMap.Map('mymap');
     var lng=$('#longitude').val();
     var lat=$('#latitude').val();
     if(lng=='' && lat==''){
@@ -83,9 +84,10 @@ $(function() {
             }
         }
     };
-    local = new BMap.LocalSearch(map, options);
+    local = new BMap.LocalSearch(map, options);*/
     
 });
+/*
     function change_map(name){
             if(name!=''){
                 map.centerAndZoom(name,16);
@@ -96,4 +98,4 @@ $(function() {
 //                document.getElementById("latitude").value = point.lat;
             }
             
-    }
+    }*/

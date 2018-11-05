@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/base.css">
 <link rel="stylesheet" type="text/css" href="../../css/nctouch_member.css">
 <link rel="stylesheet" type="text/css" href="../../css/nctouch_common.css">
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=22bb7221fc279a484895afcc6a0bb33a"></script>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=22bb7221fc279a484895afcc6a0bb33a"></script>-->
 </head>
 <body>
 <header id="header">
@@ -45,18 +45,21 @@
         <li class="form-item">
           <h4>地区选择</h4>
           <div class="input-box">
-            <input name="area_info" type="text" class="inp" id="area_info" autocomplete="off" onChange="btn_check($('form'));" readonly/>
+            <input name="area_info" type="text" class="inp" id="area_info"  autocomplete="off" onChange="btn_check($('form'));" readonly />
           </div>
         </li>
         <li class="form-item">
           <h4>详细地址</h4>
           <div class="input-box">
-            <input type="text" class="inp" name="address" id="address" autocomplete="off" oninput="writeClear($(this));" onkeyup="local.search($(this).val());" />
-            <div id="mymap"></div>
+            <input type="text" class="inp" name="address" id="address" autocomplete="off"  />
+            <!--<input type="text" class="inp" name="address" id="address" autocomplete="off" oninput="writeClear($(this));" onkeyup="local.search($(this).val());" />-->
+            <!--<div id="mymap"></div>
             <input type="hidden" name="longitude" id="longitude">
             <input type="hidden" name="latitude" id="latitude">
             <span class="public-pos"></span>
-            <span class="input-del"></span> </div>
+            <span class="input-del"></span>-->
+
+          </div>
         </li>
         <li>
           <h4>默认地址</h4>
@@ -68,7 +71,7 @@
         </li>
       </ul>
       <div class="error-tips"></div>
-      <div class="form-btn"><a class="btn" href="javascript:;">保存地址</a></div>
+      <div class="form-btn ok"><a class="btn" href="javascript:;">保存地址</a></div>
     </div>
   </form>
 </div>

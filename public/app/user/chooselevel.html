@@ -156,7 +156,6 @@
                     return false;
                 }
                 $.confirm('是否确认支付？', '支付提醒', function() {
-
                     $.ajax({
                             type: 'POST',
                             url: api + '/Packagesbuy/buy_step1.html',
@@ -164,7 +163,7 @@
                                 'key': user_token,
                                 'pkg_id': pkgid,
                                 'payment_code': pay,
-                                'chind_id': child_id,
+                                'child_id': child_id,
                             },
                             dataType: 'json',
                             success: function(response) {
@@ -203,35 +202,8 @@
                                     return false;
                                 }
                             }
-                        })
-                        /*$.post(api+'/Packagesbuy/buy_step1',
-                    {
-                        'key': user_token,
-                        'pkg_id': pkgid,
-                        'payment_code': pay,
-                        'chind_id': child_id,
-                    }, function(data, textStatus, xhr) {
-                        if (pay == 'alipay_app') {
-                            $('#gopay').html(data);
-                            return ;
-                        }
-                        if(pay=='wxpay_h5'){
-                            data =$.parseJSON(data);
-                            var mbs = data.result[0];
-                            if (mbs.result_code== 'SUCCESS') {
-                                window.location.href=mbs.mweb_url;return ;
-                            }
-                        }
-                        jsondata =$.parseJSON(data);
-                        if (jsondata.code == 100) {
-                            $.alert(jsondata.message,'系统提示');return false;
-                        }
-                    });
-                })*/
+                    })
                 });
-
-
-
             })
 
             function GetPackagesList(pkg_type) {

@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
+use think\Model;
 use think\Validate;
 
 class Classesinfo extends AdminControl {
@@ -58,13 +59,31 @@ class Classesinfo extends AdminControl {
     public function camera() {
         $class_id = input('param.class_id');
         $model_camera = model('Camera');
-        $cameraList = $model_camera->getCameraList(array('class_id'=>$class_id), 10);
+        $where['classid']=$class_id;
+        $data=$this->_conditions($where);
+        $cameraList = $model_camera->getCameraList($data, 10);
         $this->assign('page', $model_camera->page_info->render());
         $this->assign('camera_list', $cameraList);
         $this->setAdminCurItem('camera');
         return $this->fetch();
     }
 
+    /**
+     * 摄像头查询过滤
+     * @创建时间   2018-11-03T00:39:28+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function _conditions($where){
+        $res = array();
+        $name = false;
+        $class_model = Model('Classes');
+        if (isset($where['classid']) && !empty($where['classid']) ) {
+            $class = $class_model->getClassInfo(array('classid'=>$where['classid']));
+            $condition['parentid'] = $class['res_group_id'];
+        }
+        return $condition;
+    }
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目

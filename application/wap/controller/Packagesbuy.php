@@ -172,9 +172,9 @@ class Packagesbuy extends MobileMember
      */
     public function buy_step1(){
         $package_id = input('post.pkg_id');
-        $chind_id = input('post.chind_id');
+        $chind_id = input('post.child_id');
         if (!$chind_id || !$package_id) {
-            output_error('缺少参数！');
+            output_error('缺少参数package_id或chind_id ！');
         }
         $Pkgs=model('Pkgs');
 
