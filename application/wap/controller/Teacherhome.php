@@ -21,7 +21,7 @@ class Teacherhome extends MobileMall
         $model_type = model('Teachtype');
         $tmp_list = $model_type->getTreeTypeList(4);
         //一级分类
-        $parentType = db('teachtype')->where(array('gc_parent_id'=>0))->select();
+        $parentType = db('teachtype')->where(array('gc_parent_id'=>0))->order('gc_sort ASC')->select();
         //二级分类
         foreach($parentType as $key=>$item){
             foreach($tmp_list as $k=>$v){
