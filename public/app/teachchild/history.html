@@ -279,6 +279,7 @@
 
         // 分页
         function getPage(num) {
+            $('.weui-loadmore').show();
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
@@ -286,14 +287,17 @@
                 data: {
                     key: user_token,
                     member_id: user_member_id,
-                    page: 1
+                    page: num
                 },
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
-                            $.toast("只有这么多了", "text");
-                            $(document.body).destroyInfinite();
-                            $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                            var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                            if(!is_data){
+                                $('.weui-footer').show();
+                                $('.weui-loadmore').hide();
+                                $(document.body).destroyInfinite();
+                            }
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -301,9 +305,12 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
+                            $('.weui-loadmore').hide();
                             $('.history_content').html(HTML(List));
                         }
                     } else {
+                        $('.weui-footer').show();
+                        $('.weui-loadmore').hide();
                         console.log(response['message']);
                     }
                 }

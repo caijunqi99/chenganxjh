@@ -95,6 +95,7 @@ $(function() {
     }
 
     function getPage(params) {
+        $('.weui-loadmore').show();
         $.ajax({
             url: api + '/teacherchild/myUpload.html',
             type: 'POST',
@@ -103,13 +104,19 @@ $(function() {
             success: function(response) {
                 if (response['code'] == 200) {
                     if (response['result'].length == 0) {
-                        $.toast("只有这么多了", "text");
-                        $(document.body).destroyInfinite();
-                        $('.main_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                        var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                        if(!is_data){
+                            $('.weui-footer').show();
+                            $('.weui-loadmore').hide();
+                            $(document.body).destroyInfinite();
+                        }
                     } else {
+                        $('.weui-loadmore').hide();
                         $('.main_content').append(HTML(response['result']))
                     }
                 } else {
+                    $('.weui-footer').show();
+                    $('.weui-loadmore').hide();
                     $.toast(response['message'], 'forbidden');
                     return false;
                 };

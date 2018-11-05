@@ -297,10 +297,11 @@
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
                             var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
-                            alert(is_data);
-                            $('.weui-footer').show();
-                            $('.weui-loadmore').hide();
-                            $(document.body).destroyInfinite();
+                            if(!is_data){
+                                $('.weui-footer').show();
+                                $('.weui-loadmore').hide();
+                                $(document.body).destroyInfinite();
+                            }
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -308,6 +309,7 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
+                            $('.weui-loadmore').hide();
                             $('.history_content').append(HTML(List));
                         }
                     } else {
