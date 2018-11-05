@@ -75,6 +75,11 @@ class Studentinfo extends AdminControl {
         $condition['s_id'] = $student_id;
         $condition['pkg_type'] = 1;
         $lookOrder = $model_packagesorder->getOrderList($condition,10);
+        foreach($lookOrder as $k=>$v){
+            if(!empty($v['order_amount'])){
+                $lookOrder[$k]['order_amount'] = !empty($v['order_amount'])?sprintf('%.2f', $v['order_amount']):"";
+            }
+        }
         $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
         $this->setAdminCurItem('order');
@@ -90,6 +95,11 @@ class Studentinfo extends AdminControl {
         $condition['s_id'] = $student_id;
         $condition['pkg_type'] = 2;
         $lookOrder = $model_packagesorder->getOrderList($condition,10);
+        foreach($lookOrder as $k=>$v){
+            if(!empty($v['order_amount'])){
+                $lookOrder[$k]['order_amount'] = !empty($v['order_amount'])?sprintf('%.2f', $v['order_amount']):"";
+            }
+        }
         $this->assign('page', $model_packagesorder->page_info->render());
         $this->assign('lookOrder', $lookOrder);
         $this->setAdminCurItem('reviveorder');
