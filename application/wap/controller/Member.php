@@ -175,30 +175,29 @@ class Member extends MobileMember
         $order ='';
         switch ($type_id){
             case 1:
-                $order = db('packagesorder')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
                 break;
             case 2:
 //                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
                 break;
             case 3:
-                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as order_dieline')->where($where)->order('order_id DESC')->select();
-                if(!empty($order)){
-                    foreach ($order as $key=>$value) {
-                        $order[$key]['order_amount'] = round($value['order_amount'],2);
-                        if(!empty($value['order_dieline'])){
-                            if($value['order_dieline'] >time()){
-                                $order[$key]['is_gq'] = 1;
-                            }else{
-                                $order[$key]['is_gq'] = 2;
-                            }
-                        }else{
-                            $order[$key]['is_gq'] = 0;
-                        }
-
+                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                break;
+        }
+        if(!empty($order)){
+            foreach ($order as $key=>$value) {
+                $order[$key]['order_amount'] = round($value['order_amount'],2);
+                if(!empty($value['order_dieline'])){
+                    if($value['order_dieline'] >=time()){
+                        $order[$key]['is_gq'] = 1;
+                    }else{
+                        $order[$key]['is_gq'] = 2;
                     }
+                }else{
+                    $order[$key]['is_gq'] = 0;
                 }
 
-                break;
+            }
         }
         output_data($order);
 

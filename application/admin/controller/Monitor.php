@@ -37,25 +37,27 @@ class Monitor extends AdminControl
         }
         $where = '1=1';
         if(!empty($_POST)){
-            $cond = array();
-            foreach ($_POST as $key => $p) {
-                if(!in_array($key, ['page','page_count']) && !empty($p))$cond[$key]=$p;
-            }
-            if ($cond) {
-                $where = $this->_conditions($cond);
-            }
-            $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 6;//每页的条数
-            $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
+            if(array_sum($_POST)!=0) {
+                $cond = array();
+                foreach ($_POST as $key => $p) {
+                    if (!in_array($key, ['page', 'page_count']) && !empty($p)) $cond[$key] = $p;
+                }
+                if ($cond) {
+                    $where = $this->_conditions($cond);
+                }
+                $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 6;//每页的条数
+                $start = intval(input('post.page')) ? (intval(input('post.page')) - 1) * $page_count : 0;//开始页数
 
-        //查询已安装的摄像头
-            $camera= db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
-            if(!empty($_POST['school'])){
-                $schoolid=$_POST['school'];
-                $model_school = Model('school');
-                $schoolres=$model_school->getSchoolById($schoolid);
-                $this->assign('schoolname',$schoolres['name']);
+                //查询已安装的摄像头
+                $camera = db('camera')->where($where)->limit($start, $page_count)->order('cid DESC')->select();
+                if (!empty($_POST['school'])) {
+                    $schoolid = $_POST['school'];
+                    $model_school = Model('school');
+                    $schoolres = $model_school->getSchoolById($schoolid);
+                    $this->assign('schoolname', $schoolres['name']);
+                }
+                $this->assign('video', $camera);
             }
-            $this->assign('video', $camera);
         }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
