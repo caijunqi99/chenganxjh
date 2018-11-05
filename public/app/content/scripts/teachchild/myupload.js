@@ -107,9 +107,9 @@ $(function() {
                         var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
                         if(!is_data){
                             $('.weui-footer').show();
-                            $('.weui-loadmore').hide();
-                            $(document.body).destroyInfinite();
                         }
+                        $('.weui-loadmore').hide();
+                        $(document.body).destroyInfinite();
                     } else {
                         $('.weui-loadmore').hide();
                         $('.main_content').append(HTML(response['result']))

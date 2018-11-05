@@ -282,9 +282,9 @@
                             var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
                             if(!is_data){
                                 $('.weui-footer').show();
-                                $('.weui-loadmore').hide();
-                                $(document.body).destroyInfinite();
                             }
+                            $('.weui-loadmore').hide();
+                            $(document.body).destroyInfinite();
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
