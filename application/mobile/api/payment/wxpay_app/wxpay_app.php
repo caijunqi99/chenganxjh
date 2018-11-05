@@ -21,7 +21,16 @@ class wxpay_app {
 
         $wxpay = new \WxPayApi();
         $order = $wxpay->unifiedOrder($input);
-
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>$order,
+                'input' =>MOBILE_SITE_URL . '/payment/wx_notify_app',
+                // 'data' =>$d,
+//                'other'=>$api
+            ))
+        );
+        db('testt')->insert($insert);
         if ($order['return_code'] == 'SUCCESS') {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
