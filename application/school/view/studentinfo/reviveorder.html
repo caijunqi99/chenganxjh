@@ -36,7 +36,7 @@
             elseif($v['order_state']==30){echo "已发货";}
             elseif($v['order_state']==40){echo "已收货";}
             elseif($v['order_state']==0){echo "已取消";}?></td>
-            <td class="align-center"><?php if($v['order_dieline']!=""){echo date("Y-m-d H:i:s",$v['order_dieline']);} ?></td>
+            <td class="align-center"><?php if(!empty($v['order_dieline'])){echo date("Y-m-d H:i:s",$v['order_dieline']);} ?></td>
             <td class="align-center"><?php if($v['payment_time']==0){echo "";}else{echo date("Y-m-d H:i:s",$v['payment_time']);} ?></td>
             <td class="align-center"><?php echo $v['pkg_desc']; ?></td>
         </tr>
