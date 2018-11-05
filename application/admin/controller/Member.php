@@ -23,14 +23,16 @@ class Member extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         $condition = array();
-//        $admininfo = $this->getAdminInfo();
-//        if($admininfo['admin_id']!=1){
-//            if(!empty($admininfo['admin_school_id'])){
-//                $condition['schoolid'] = $admininfo['admin_school_id'];
-//            }else{
-//                $condition['admin_company_id'] = $admininfo['admin_company_id'];
-//            }
-//        }
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $studentInfo = db('student')->where(array('admin_company_id'=>$admininfo['admin_company_id'],'s_del'=>1))->select();
+            foreach($studentInfo as $key=>$item){
+                if(!empty($item['s_ownerAccount'])){
+                    $member_ids[] = $item['s_ownerAccount'];
+                }
+            }
+            $condition['member_id'] = array('in',$member_ids);
+        }
         $model_member = Model('member');
         // $model_member->ttttt();exit;
         //会员级别
