@@ -117,20 +117,12 @@ class Payment extends MobileMall
     {
 
         $this->payment_code = 'wxpay_app';
-        $api = $this->_get_payment_api();
         $params = $this->_get_payment_config();
+        $api = $this->_get_payment_api();
+
 
         $result = $api->verify_notify($params);
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$params,
-                'input' =>$result,
-                // 'data' =>$d,
-                'other'=>$api
-            ))
-        );
-        db('testt')->insert($insert);
+
         $insert = array(
             'content'=>json_encode(array(
                 'InsertTime'=>date('Y-m-d H:i:s',time()),
@@ -195,16 +187,8 @@ class Payment extends MobileMall
         if (is_file($inc_file)) {
             require($inc_file);
         }
-//        $payment_api = new $this->payment_code($payment_config);
-        $payment_api = new \wxpay_app();
+        $payment_api = new $this->payment_code($payment_config);
 
-        $insert = array(
-            'content'=>json_encode(array(
-                'InsertTime'=>date('Y-m-d H:i:s',time()),
-                'PaymentCode'=>$payment_api,
-            ))
-        );
-        db('testt')->insert($insert);
         return $payment_api;
     }
 
