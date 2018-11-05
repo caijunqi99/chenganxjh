@@ -274,7 +274,7 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
-                            $.toast("只有这么多了", "text");
+                            // $.toast("只有这么多了", "text");
                             $(document.body).destroyInfinite();
                             $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
                         } else {
@@ -301,7 +301,7 @@
                 var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
-                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
+                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['collect_id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['id'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['id'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
