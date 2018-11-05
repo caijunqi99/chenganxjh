@@ -115,6 +115,16 @@ class Payment extends MobileMall
      */
     public function wx_notify_app()
     {
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'PaymentCode'=>1,
+                'input' =>2,
+                // 'data' =>$d,
+                'other'=>3
+            ))
+        );
+        db('testt')->insert($insert);
         $this->payment_code = 'wxpay_app';
         $api = $this->_get_payment_api();
         $params = $this->_get_payment_config();
