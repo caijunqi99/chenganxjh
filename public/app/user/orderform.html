@@ -93,9 +93,18 @@
         </div>
         <div class="orderforms_cont clear hover" id="order_jobs_2" style="display: none;">
             <ul class="orderforms_list3">
-                <div class="weui-loadmore load" >
-                    <span class="weui-loadmore__tips">暂无数据</span>
-                </div>
+               <!-- <li class="clear">
+                    <a href="javascript:;" class="clearfix">
+                        <div class="orderforms_l">
+                            <img src="../content/images/user/review_img.png" alt="">
+                        </div>
+                        <div class="orderforms_r">
+                            &lt;!&ndash;<p class="orderforms_type"><span class="nopay fr">未支付</span></p>&ndash;&gt;
+                            <h2 class="orderforms_h2 clear">暂未开放<span>（敬请期待）</span></h2>
+                            <p class="orderforms_p">程序猿正在努力攻城中...</p>
+                        </div>
+                    </a>
+                </li>-->
                 <!--<li class="clear">
                     <a href="pay.html" class="clearfix">
                         <div class="orderforms_l">
@@ -180,12 +189,44 @@
                 if (i == cursel) {
                     menu.addClass("active");
                     con.fadeIn();
+                    $.ajax({
+                        url: api + '/Member/order.html',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            key: user_token,
+                            member_id: user_member_id,
+                            type: cursel
+                        },
+                        success: function(response) {
+                            var data = response['result'];
+                            if (response['code'] == 200) {
+                                if (response['result'].length > 0) {
+                                    var html = '';
+                                   for(var i=0;i<response['result'].length;i++){
+                                        html += '<li class="clear">\n' +
+                                            '                                           <a href="javascript:;" class="clearfix">\n' +
+                                            '                                           <div class="orderforms_r2">\n' +
+                                            '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['order_name']+'<span class="nopay fr">待支付</span></h2>\n' +
+                                            '                                       <p class="orderforms_p5">下单时间：'+data[i]['order_amount']+'<span>￥'+data[i]['order_amount']+'</span></p>\n' +
+                                            '                                       </div>\n' +
+                                            '                                       </a>\n' +
+                                            '                                       </li>'
+                                   }
+                                }
+                            } else {
+                                console.log(response['message']);
+                            }
+                        }
+                    })
+
                 } else {
                     menu.removeClass("active");
                     con.hide();
                 }
             }
         }
+
     </script>
 </body>
 
