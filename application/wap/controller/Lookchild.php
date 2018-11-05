@@ -14,19 +14,26 @@ class Lookchild extends MobileMember
     //看孩
     public function index(){
         $member_id = intval(input('post.member_id'));
+        if($member_id){
+            $member_info = db("member")->where(array("member_id"=>$member_id))->find();
+            $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : $member_id;
+        }
         if(empty($member_id)){
             //请登录
             $data['status']=1;
             $data = !empty($data)?[$data]:$data;
             output_data($data);
         }else{
-            $student=model('student');
-            $result=$student->getAllChilds($member_id);
+            $result = db("student")->where(array("s_ownerAccount"=>$member_id,'s_del'=>1))->select();
+//            $student=model('student');
+//            $result=$student->getAllChilds($member_id);
             if(empty($result)){
-                //请绑定学生
-                $data['status']=2;
-                $data = !empty($data)?[$data]:$data;
-                output_data($data);
+                if($member_info['is_owner']==0){
+                    //请绑定学生
+                    $data['status']=2;
+                    $data = !empty($data)?[$data]:$data;
+                    output_data($data);
+                }
             }else {
                 foreach($result as $v){
                     $res[$v['s_id']]=$v['s_name'];
