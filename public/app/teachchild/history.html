@@ -234,8 +234,10 @@
                         success: function(response) {
                             if (response['code'] == 200) {
                                 //成功后的回调函数
-                                $.toast("删除成功");
-                                for (var i = 0; i < IDArr.length; i++) {
+                                $.toast("删除成功",'',function(){
+                                    location.reload();
+                                });
+                                /*for (var i = 0; i < IDArr.length; i++) {
                                     $('.delete' + IDArr[i]).remove();
                                 }
                                 IDArr = [];
@@ -255,7 +257,7 @@
                                     } else {
                                         return false;
                                     }
-                                })
+                                })*/
                             } else {
                                 console.log(response['message'])
                             };
