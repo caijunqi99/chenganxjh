@@ -60,7 +60,7 @@
     <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
         <span class="weui-over">没有更多信息了</span>
     </div>
-    <div class="weui-loadmore" style="display: none;">
+    <div class="weui-loadmore load" style="display: none;">
         <i class="weui-loading"></i>
         <span class="weui-loadmore__tips">正在加载</span>
     </div>
@@ -283,7 +283,7 @@
 
         // 分页
         function getPage(num) {
-            $('.weui-loadmore').show();
+            $('.load').show();
             $.ajax({
                 url: api + '/teachercollect/lists',
                 type: 'POST',
@@ -300,7 +300,7 @@
                             if(!is_data){
                                 $('.weui-footer').show();
                             }
-                            $('.weui-loadmore').hide();
+                            $('.load').hide();
                             $(document.body).destroyInfinite();
                         } else {
                             let keys = Object.keys(response['result'][0]);
@@ -309,12 +309,12 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
-                            $('.weui-loadmore').hide();
+                            $('.load').hide();
                             $('.history_content').append(HTML(List));
                         }
                     } else {
                         $('.weui-footer').show();
-                        $('.weui-loadmore').hide();
+                        $('.load').hide();
                         console.log(response['message']);
                     }
                 }
