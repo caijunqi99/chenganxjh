@@ -25,15 +25,17 @@ class Member extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-//            $companyInfo = db('company')->where(array('o_id'=>$admininfo['admin_company_id']))->find();
-//            if($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']!=0){
-//                $condition['member_provinceid'] = $companyInfo['o_province'];
-//                $condition['member_cityid'] = $companyInfo['o_cityid'];
-//                $condition['member_areaid'] = $companyInfo['o_areaid'];
-//            }elseif($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']==0){
-//                $condition['member_provinceid'] = $companyInfo['o_province'];
-//                $condition['member_cityid'] = $companyInfo['o_cityid'];
-//            }
+            $companyInfo = db('company')->where(array('o_id'=>$admininfo['admin_company_id']))->find();
+            if($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']!=0){
+                $condition['member_provinceid'] = $companyInfo['o_province'];
+                $condition['member_cityid'] = $companyInfo['o_cityid'];
+                $condition['member_areaid'] = $companyInfo['o_areaid'];
+            }elseif($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']==0){
+                $condition['member_provinceid'] = $companyInfo['o_province'];
+                $condition['member_cityid'] = $companyInfo['o_cityid'];
+            }elseif($companyInfo['o_province']!=0 && $companyInfo['o_cityid']==0 && $companyInfo['o_areaid']==0){
+                $condition['member_provinceid'] = $companyInfo['o_province'];
+            }
             $studentInfo = db('student')->where(array('admin_company_id'=>$admininfo['admin_company_id'],'s_del'=>1))->select();
             foreach($studentInfo as $key=>$item){
                 if(!empty($item['s_ownerAccount'])){
@@ -102,7 +104,7 @@ class Member extends AdminControl {
         if (empty($order)) {
             $order = 'member_id desc';
         }
-        $field = 'member_id,member_avatar,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
+        $field = 'member_id,member_avatar,is_owner,member_add_time,member_login_time,member_exppoints,member_name,member_truename,member_email,member_ww,member_qq,member_mobile,member_identity,member_age,member_login_num,available_predeposit,freeze_predeposit,member_state,inform_allow,is_buy,is_allowtalk';
         $is_del = intval(input('is_del'));
         $condition['is_del'] = 1;
         if ($is_del) {
