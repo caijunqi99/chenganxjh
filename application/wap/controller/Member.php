@@ -188,7 +188,7 @@ class Member extends MobileMember
             foreach ($order as $key=>$value) {
                 $order[$key]['order_amount'] = round($value['order_amount'],2);
                 if(!empty($value['order_dieline'])){
-                    if($value['order_dieline'] >time()){
+                    if($value['order_dieline'] >=time()){
                         $order[$key]['is_gq'] = 1;
                     }else{
                         $order[$key]['is_gq'] = 2;
