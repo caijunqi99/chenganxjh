@@ -659,6 +659,8 @@
                                 $('.main_content').append(HTML(response['result']))
                             }
                         } else {
+                            $('.weui-footer').show();
+                            $('.weui-loadmore').hide();
                             console.log(response['message']);
                         }
                     }

@@ -57,6 +57,13 @@
 
         </div>
     </div>
+    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+        <span class="weui-over">没有更多信息了</span>
+    </div>
+    <div class="weui-loadmore" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
     <!-- 删除 -->
     <div class="history_delete_wrap">
         <span onClick="checkedAll(event)" data-select="false">全选</span>
@@ -262,6 +269,7 @@
 
         // 分页
         function getPage(num) {
+            $('.weui-loadmore').show();
             $.ajax({
                 url: api + '/teachercollect/lists',
                 type: 'POST',
@@ -276,7 +284,9 @@
                         if (response['result'].length == 0) {
                             // $.toast("只有这么多了", "text");
                             $(document.body).destroyInfinite();
-                            $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
+                            $('.weui-footer').show();
+                            $('.weui-loadmore').hide();
+                            // $('.history_content').append('<div class="nodata_bottom_ziding">我是有底线的</div>')
                         } else {
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
@@ -287,6 +297,8 @@
                             $('.history_content').append(HTML(List));
                         }
                     } else {
+                        $('.weui-footer').show();
+                        $('.weui-loadmore').hide();
                         console.log(response['message']);
                     }
                 }
