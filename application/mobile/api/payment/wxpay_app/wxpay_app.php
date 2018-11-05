@@ -73,14 +73,16 @@ class wxpay_app {
         $notify = new \WxPayNotify();
         $notify->Handle(true);
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-
+        $a = 1;
         if (!$xml){
+            $a =2;
             $xml = file_get_contents('php://input');
         }
         $insert = array(
             'content'=>json_encode(array(
                 'InsertTime'=>date('Y-m-d H:i:s',time()),
                 'PaymentCode'=>$xml,
+                'a'=>$a
             ))
         );
         db('testt')->insert($insert);
