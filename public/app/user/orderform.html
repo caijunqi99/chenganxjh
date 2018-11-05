@@ -235,7 +235,7 @@
                                             '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['order_name']+'<span class="nopay fr">';
                                         if(data[i]['order_state'] == 10){
                                             html += '待支付';
-                                        }else if(data[i]['order_state'] == 20){
+                                        }else if(data[i]['order_state'] == 40){
                                             if(data[i]['is_gq'] == 1){
                                                 html += '已支付';
                                             }else{
@@ -296,7 +296,7 @@
                                                 '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['pkg_name']+'<span class="nopay fr">';
                                             if(data[i]['order_state'] == 10){
                                                 html += '待支付';
-                                            }else if(data[i]['order_state'] == 20){
+                                            }else if(data[i]['order_state'] == 40){
                                                 if(data[i]['is_gq'] == 1){
                                                     html += '已支付';
                                                 }else{
