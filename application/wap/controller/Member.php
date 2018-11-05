@@ -725,7 +725,7 @@ class Member extends MobileMember
                 ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
                 ->select();
         }else{
@@ -735,7 +735,7 @@ class Member extends MobileMember
                 ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
                 ->select();
         }
@@ -768,7 +768,7 @@ class Member extends MobileMember
         if(empty($token)){
             output_error('缺少参数token');
         }
-        $sid = trim(input('post.sid'));
+        $sid = intval(input('post.sid'));
         if(empty($token)){
             output_error('缺少参数sid');
         }
@@ -778,11 +778,15 @@ class Member extends MobileMember
                 ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.member_id = s.s_id',LEFT)
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_id = "'.$sid.'"')
                 ->find();
         if(!empty($student)){
-            $student['time'] = date('Y-m-d',$student['end_time']);
+            if(!empty($student['end_time'])){
+                $students['time'] = date('Y-m-d','1543993471');
+            }else{
+                $students['time'] = '请前往购买套餐';
+            }
             if(empty($student['s_region'])){
                 $student['s_region'] = $this->getAddress($student['s_provinceid']).' '.$this->getAddress($student['s_cityid']).' '.$this->getAddress($student['s_areaid']);
             }
