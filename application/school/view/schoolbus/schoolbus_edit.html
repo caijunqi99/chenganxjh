@@ -26,7 +26,7 @@
 })
 </script>
 
-          <!--<button class="layui-btn add_foodlist" id="add_foodlist" pid="0"><i class="layui-icon">&#xe608;</i> 添加</button>-->
+<button class="layui-btn add_foodlist" id="add_foodlist" pid="0"><i class="layui-icon">&#xe608;</i> 添加站点</button>
  <div class="foot_edits">
   <form action="{:url('/school/Schoolbus/schoolbus_edit')}" id="form1" method="post" class="layui-form">
       <input type="hidden" name="action" value="add">
@@ -89,18 +89,22 @@
           <div class="foot_item foot_item2">
               <input type="text" value="<?php echo $v['ArrivalTime']; ?>" name="bus_line[<?php echo $k; ?>][]" placeholder="例如：07:00"/>
           </div>
+          <div class="foot_item foot_item4">
+            <a class="layui-btn layui-btn-sm" onclick="delline(this)"><i class="layui-icon">&#xe640;</i></a>
+         </div>
       </div>
       <?php } ?>
       <?php } ?>
       <input type="hidden" name="actions" value="edit">
       <input type="hidden" name="bus_id" value="{$bus_info.bus_id}">
-  </form>
-   <div class="foot_submit_box clear">
+      <div class="foot_submit_box clear">
       
-      <!--<button class="layui-btn" id="reset"> 重置</button>-->
-      <button class="layui-btn" id="subsss">提交</button>
+        <button id="reset" type="reset" class="layui-btn layui-btn-primary"> 重置</button>
+        <button class="layui-btn" id="subsss">提交</button>
 
-   </div>
+     </div>
+  </form>
+
 </div>
 <script type="text/javascript">
   $('#subsss').click(function() {
@@ -126,11 +130,17 @@
          '<div class="foot_item foot_item2">'+
             '<input type="text" value="0'+pid+':00" name="bus_line['+pid+'][]" placeholder="例如：07:00"/>'+
          '</div>'+
+         '<div class="foot_item foot_item4">'+
+            '<a class="layui-btn layui-btn-sm" onclick="delline(this)"><i class="layui-icon">&#xe640;</i></a>'+
+         '</div>'+
        '</div>';
     $('#foot_list_box').append(footlist_str);
     pid++
     $(this).attr('pid',pid);
   })
+function delline(obj){
+  $(obj).parents(".foot_list").remove();
+}
 </script>
 
 
