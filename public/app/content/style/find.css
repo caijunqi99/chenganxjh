@@ -115,8 +115,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-top:1px dashed #eee;
 }
-
 .classplan dd a {
     color: #6b6b6b;
     display: block;
