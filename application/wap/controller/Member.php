@@ -417,12 +417,20 @@ class Member extends MobileMember
             }
         }else{
             $student = db('student')->insert($data);
-            $Member=array(
-                'classid'  =>$class_id,
-                'schoolid' =>$school_id
-            );
+
+            if(!empty($member['classid'])){
+                $updateMember['classid'] = trim(',',$member['classid'].','.$class_id);
+            }else{
+                $updateMember['classid'] = $class_id;
+            }
+            if(!empty($member['schoolid'])){
+                $updateMember['schoolid'] = trim(',',$member['schoolid'].','.$school_id);
+            }else{
+                $updateMember['schoolid'] = $school_id;
+            }
             //给家长绑定学校id和班级id
-            $MemberBind = db('member')->where('member_id',$member_id)->update($Member);
+             db('member')->where('member_id',$member_id)->update($updateMember);
+
         }   
             if($student){
                 output_data(array('message'=>'绑定成功','sid'=>$student));
