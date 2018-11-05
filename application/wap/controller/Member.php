@@ -364,22 +364,22 @@ class Member extends MobileMember
             output_error('会员不存在，请联系管理员');
         }
 
-        $name = trim(input('post.name'));//姓名
-        $sex = intval(input('post.sex'));//性别
-        $birthday = trim(input('post.birthday'));//出生日期
+        $name        = trim(input('post.name'));//姓名
+        $sex         = intval(input('post.sex'));//性别
+        $birthday    = trim(input('post.birthday'));//出生日期
         $province_id = intval(input('post.province'));//省ID
-        $city_id = intval(input('post.city'));//市ID
-        $area_id = intval(input('post.area'));//区ID
-        $school_id = intval(input('post.school'));//学校ID
-        $grade_id = intval(input('post.grade'));//年级ID
-        $class_id = intval(input('post.class'));//班级ID
-        $classCard = trim(input('post.class_code'));//班级识别码
-        $card = trim(input('post.card'));//学生身份证ID
+        $city_id     = intval(input('post.city'));//市ID
+        $area_id     = intval(input('post.area'));//区ID
+        $school_id   = intval(input('post.school'));//学校ID
+        $grade_id    = intval(input('post.grade'));//年级ID
+        $class_id    = intval(input('post.class'));//班级ID
+        $classCard   = trim(input('post.class_code'));//班级识别码
+        $card        = trim(input('post.card'));//学生身份证ID
         if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
             output_error('传的参数不完整');
         }
         //判断识别码是否存在 并是不是这个班级的识别码
-        $class = db('class')->field('classCard,classid')->where(' classid =  "'.$class_id.'"')->find();
+        $class = db('class')->field('classCard,classid,schoolid')->where(' classid =  "'.$class_id.'"')->find();
         if(empty($class)){
             output_error('班级不存在');
         }
@@ -390,17 +390,17 @@ class Member extends MobileMember
         $student = db('student')->field('s_ownerAccount')->where(' s_card = "'.$card.'"')->find();
         $data = array(
             's_ownerAccount' => $member_id,
-            's_name' => $name,
-            's_sex' => $sex,
-            's_classid' => $class_id,
-            's_schoolid' => $school_id,
-            's_sctype' => $grade_id,
-            's_birthday' => $birthday,
-            's_provinceid' => $province_id,
-            's_cityid' => $city_id,
-            's_areaid' => $area_id,
-            's_card' => $card,
-            'classCard' =>$classCard
+            's_name'         => $name,
+            's_sex'          => $sex,
+            's_classid'      => $class_id,
+            's_schoolid'     => $school_id,
+            's_sctype'       => $grade_id,
+            's_birthday'     => $birthday,
+            's_provinceid'   => $province_id,
+            's_cityid'       => $city_id,
+            's_areaid'       => $area_id,
+            's_card'         => $card,
+            'classCard'      =>$classCard
         );
         if(!empty($student)){
             if(!empty($student['s_ownerAccount'])){
@@ -410,7 +410,13 @@ class Member extends MobileMember
             }
         }else{
             $student = db('student')->insert($data);
-        }
+            $Member=array(
+                'classid'  =>$class_id,
+                'schoolid' =>$school_id
+            );
+            //给家长绑定学校id和班级id
+            $MemberBind = db('member')->where('member_id',$member_id)->update($Member);
+        }   
             if($student){
                 output_data(array('message'=>'绑定成功','sid'=>$student));
             }else{
