@@ -60,6 +60,13 @@
 
         </div>
     </div>
+    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+        <span class="weui-over">没有更多信息了</span>
+    </div>
+    <div class="weui-loadmore" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
     <!-- 删除 -->
     <div class="history_delete_wrap">
         <span onClick="checkedAll(event)" data-select="false">全选</span>
@@ -305,7 +312,7 @@
                 var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
-                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['t_id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['t_id'] + '">' +
+                        content += '<div onclick="videoClick(' + data[i][Time[0]][s]['t_tid'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['t_id'] + '">' +
                             '<label class="weui-cell weui-check__label float_left history_check_all">' +
                             '<div class="weui-cell__hd checked_input">' +
                             '<input type="checkbox" data-id="' + data[i][Time[0]][s]['t_id'] + '" onChange="changeState(this)" class="weui-check" name="checkbox1">' +
