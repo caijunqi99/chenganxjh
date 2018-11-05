@@ -192,7 +192,6 @@ class Chat extends MobileMember
                 break;
         }
 
-
         $output = array(
             'member_id'     => $friendInfo['member_id'],
             'member_name'   => $friendInfo['member_name'],
