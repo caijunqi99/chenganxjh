@@ -388,6 +388,7 @@ class Member extends MobileMember
         $province_id = intval(input('post.province'));//省ID
         $city_id     = intval(input('post.city'));//市ID
         $area_id     = intval(input('post.area'));//区ID
+        $region      = getAddress($province_id).' '.getAddress($city_id).' '.getAddress($area_id);
         $school_id   = intval(input('post.school'));//学校ID
         $grade_id    = intval(input('post.grade'));//年级ID
         $class_id    = intval(input('post.class'));//班级ID
@@ -424,6 +425,7 @@ class Member extends MobileMember
             's_provinceid'   => $province_id,
             's_cityid'       => $city_id,
             's_areaid'       => $area_id,
+            's_region'       => $region,
             's_card'         => $card,
             'classCard'      =>$classCard
         );
@@ -719,7 +721,7 @@ class Member extends MobileMember
         if($member['is_owner'] == 0){
             //主账号绑定的孩子
             $students = db('student')->alias('s')
-                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
                 ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
@@ -729,7 +731,7 @@ class Member extends MobileMember
         }else{
             //副账号 显示起主账号绑定的孩子
             $students = db('student')->alias('s')
-                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
                 ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
@@ -737,9 +739,14 @@ class Member extends MobileMember
                 ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
                 ->select();
         }
+
+
         if(!empty($students)){
             foreach ($students as $v) {
                 $v['time'] = date('Y-m-d',$v['end_time']);
+                if(empty($v['s_region'])){
+                    $v['s_region'] = getAddress($v['s_provinceid']).' '.getAddress($v['s_cityid']).' '.getAddress($v['s_areaid']);
+                }
             }
         }
 
@@ -762,7 +769,7 @@ class Member extends MobileMember
         }
         //获取绑定孩子
             $student = db('student')->alias('s')
-                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
                 ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
@@ -771,6 +778,9 @@ class Member extends MobileMember
                 ->find();
         if(!empty($student)){
             $student['time'] = date('Y-m-d',$student['end_time']);
+            if(empty($student['s_region'])){
+                $student['s_region'] = getAddress($student['s_provinceid']).' '.getAddress($student['s_cityid']).' '.getAddress($student['s_areaid']);
+            }
         }
             output_data($student);
 
@@ -802,7 +812,14 @@ class Member extends MobileMember
 
     }
 
+/**
+ * @desc 获取地址
+ */
+function getAddress($addressID){
+    $res = db('area')->where('area_id = "'.$addressID.'"')->field('area_name')->find();
 
+    return $res['area_name'];
+}
 
 }
 
