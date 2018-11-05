@@ -90,7 +90,7 @@
             data: {
                 key: user_token,
                 member_id: user_member_id,
-                page: 1
+                page: Page
             },
             success: function(response) {
                 if (response['code'] == 200) {
@@ -148,7 +148,7 @@
                     data: {
                         key: user_token,
                         member_id: user_member_id,
-                        page: 1
+                        page: Page
                     },
                     success: function(response) {
                         if (response['code'] == 200) {
@@ -158,7 +158,6 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
-                            $('.history_content').html('');
                             $('.history_content').html(HTML(List));
                         } else {
                             console.log(response['message']);
