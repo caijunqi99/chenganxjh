@@ -35,6 +35,9 @@ class Schooldesc extends MobileMember
         $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         if(!empty($data['s_img'])){
             $data['s_img'] = $path.$data['s_img'];
+        }else{
+            $data['s_present']='';
+            $data['s_teacher']='';
         }
         $data['name']=$logindata['name'];
         $data['region']=$logindata['region'];

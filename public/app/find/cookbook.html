@@ -74,39 +74,17 @@
         </div>
 
     </div>
-    <div class="screen"></div>
-
+    <!-- <div class="screen"></div> -->
+    <input type="hidden" value="0" id="childid" >
+    <input type="hidden" value="xx" id="infos" >
     <script src="../content/scripts/jquery.min.js "></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js "></script>
     <script>
-        $.ajax({
-            type: "POST",
-            url: api + "/Students/GetSchoolFoodInfo.html",
-            data: {
-                key: user_token,
-                child_id: 10
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response["code"] == 200) {
-                    if (response["result"].length == 0) { // 如果没有食谱
-                        $("#no_cook_cont").show();
-                        $("#cook_cont").hide();
-                    } else { //如果有食谱
-                        $("#no_cook_cont").hide();
-                        $("#cook_cont").show();
-                        // 学校名称
-                        $(".cookbook_title").text(response["result"][0]["food_class"]);
-                        // 为食谱铺数据
-                        var resultLength = response["result"].length;
-                        $("#cookbooklist").html(HTML(response["result"]))
-                    }
-                }
-            }
-        });
+        GetChildList(user_token,'reday');
+
         // 食谱html模板
         function HTML(data) {
             var template = '';
@@ -132,29 +110,28 @@
             return template;
         }
 
-        // 切换孩子
-        $("#role_switch").click(function() {
-            //打开遮罩层
-            $(".screen").addClass("show");
-        });
-        $("#role_switch").select({
-            title: "选择职业",
-            items: ["高一或10年级", "小神童第二儿童幼儿园"],
-            onChange: function(d) {
-                console.log(this, d);
-            },
-            onClose: function() {
-                //关闭遮罩层
-                $(".screen").removeClass("show");
-                console.log("close");
-            },
-            onOpen: function() {
-                console.log($(".cookbook_title").text());
-                $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
-
-            },
-        });
-
+        $(function(){
+            setTimeout(function(){
+                var ssss = $('#infos').val();
+                ssss = $.parseJSON(ssss);
+                
+                $("#role_switch").select({
+                    title: "选择学生绑定学校",
+                    items: ssss,
+                    onChange: function(d) {
+                        console.log();
+                        if(d.values=='undefined' || d.values == null) return;
+                        GetSchoolFoodInfo(d.values)
+                    },
+                    
+                    onOpen: function() {
+                        // console.log($(".cookbook_title").text());
+                        $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
+                    },
+                });   
+            }, 500 );
+            
+        })
         // 食谱详情开关 start
         function footlistclick(Olink) {
             Olink.parent().siblings().removeClass("heightauto");
@@ -164,6 +141,61 @@
             Olink.parent().find(".iconfont").addClass("icon-jiantou-copy-copy-copy");
         }
         // 食谱详情开关 end
+            /**
+ * 获取当前家长的所有孩子列表
+ * 包含学校id
+ * 包含班级id
+ * 包含孩子id
+ * @创建时间 2018-11-05T14:05:59+0800
+ */
+function GetChildList(key,act,a){
+    if(!key){
+        key = user_token;
+    }
+    $.post(api+"/Students/get_student_info.html", {key: key}, function(data, textStatus, xhr) {
+        if(data.code==200){
+            var s_id = data.result[0]['s_id'];
+            $('#childid').val(s_id);
+
+            var list = data.result;
+            var StudentsList = new Array;
+            for (var i = 0; i < list.length; i++) {
+                var info = {'title':list[i].name+'--'+list[i].s_name,'value':list[i].s_id}
+               StudentsList.push(info);
+            }
+            // console.log(StudentsList);
+            var sssss =JSON.stringify(StudentsList);
+            $("#infos").val(sssss);
+            if (act == 'reday') {
+                GetSchoolFoodInfo(s_id)
+            }
+        }
+        return data;
+    },'json');
+}
+function GetSchoolFoodInfo(s_id){
+    $.ajax({
+        type: "POST",
+        url: api + "/Students/GetSchoolFoodInfo.html",
+        data: {
+            key: user_token,
+            child_id: s_id
+        },
+        dataType: "json",
+        success: function(response) {
+            // return;
+            var food = HTML(response["result"]);
+            if(food){
+                $("#cookbooklist").html(food);        
+            }else{
+                $("#no_cook_cont").show();
+                        $("#cook_cont").hide();
+            }
+            
+            
+        }
+    });
+}
     </script>
 </body>
 
