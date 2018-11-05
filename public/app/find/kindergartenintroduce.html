@@ -207,8 +207,8 @@ function detailinfo(s_id){
             }
             $("#school_info_cont").html(response["result"][0].s_present);
             $("#faculty").html(response["result"][0].s_teacher);
-            
-            
+            $("#faculty").html(response["result"][0].s_teacher);
+            $(".school_remarks").html(response["result"][0].s_desc);
         }
     });
 }
