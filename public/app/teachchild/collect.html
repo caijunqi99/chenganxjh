@@ -296,6 +296,7 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
+                            alert(response['result'].length);alert(num);
                             // $.toast("只有这么多了", "text");
                             $(document.body).destroyInfinite();
                             $('.weui-footer').show();
