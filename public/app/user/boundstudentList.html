@@ -124,11 +124,23 @@
             </div>
         </div>
 
-        <div class="weui-cell bang_list">
+        <!--<div class="weui-cell bang_list">
             <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
             <div class="weui-cell__bd">
                 <input class="input_txt color_blue" id="see" onblur="this.blur()" type="text" readonly>
             </div>
+        </div>-->
+        <div class="bang_list">
+            <div class="name_box">
+                <label for="shibiema">看孩套餐</label>
+            </div>
+            <div class="input_box">
+                <input class="input_txt" id="see" onblur="this.blur()" type="text" readonly>
+                <input type="hidden"  name="s_id" id="s_id">
+            </div>
+            <a href="javascript:;" class="scan_bar" data-id="" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
+                续费
+            </a>
         </div>
 
     </div>
@@ -165,26 +177,33 @@
                                 tab += '<li class="active" data-id="'+data[i]['s_id']+'">\n' +
                                     '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
                                     '                </li>'
+                                $('#bang_name').val(data[0]['s_name']);
+                                if(data[0]['s_sex'] == 1){
+                                    $('#sex').val('男');
+                                }else{
+                                    $('#sex').val('女');
+                                }
+                                $('#s_id').val(data[0]['s_id']);
+                                $('#date').val(data[0]['s_birthday']);
+                                $('#s_card').val(data[0]['s_card']);
+                                $('#city').val(data[0]['s_region']);
+                                $('#school').val(data[0]['name']);
+                                $('#classes').val(data[0]['sc_type']);
+                                $('#banji').val(data[0]['classname']);
+                                $('#shibiema').val(data[0]['classCard']);
+                                if(data[0]['time'] != '前往购买套餐'){
+                                    $('.scan_bar').show();
+                                }else{
+                                    $('.scan_bar').hide();
+                                }
+                                $('#see').val(data[0]['time']);
+
                             }else{
                                 tab += '<li data-id="'+data[i]['s_id']+'">\n' +
                                     '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
                                     '                </li>'
                             }
-                            $('#bang_name').val(data[0]['s_name']);
-                            if(data[0]['s_sex'] == 1){
-                                $('#sex').val('男');
-                            }else{
-                                $('#sex').val('女');
-                            }
 
-                            $('#date').val(data[0]['s_birthday']);
-                            $('#s_card').val(data[0]['s_card']);
-                            $('#city').val(data[0]['s_region']);
-                            $('#school').val(data[0]['name']);
-                            $('#classes').val(data[0]['sc_type']);
-                            $('#banji').val(data[0]['classname']);
-                            $('#shibiema').val(data[0]['classCard']);
-                            $('#see').val(data[0]['time']);
                         }
                         $('.student_tab').html(tab);
                         $('.student_tab li').click(function(){
@@ -206,6 +225,7 @@
                                         }else{
                                             $('#sex').val('女');
                                         }
+                                        $('#s_id').val(data[0]['s_id']);
                                         $('#date').val(response.result[0]['s_birthday']);
                                         $('#s_card').val(response.result[0]['s_card']);
                                         $('#city').val(response.result[0]['s_region']);
@@ -213,6 +233,12 @@
                                         $('#classes').val(response.result[0]['sc_type']);
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
+
+                                        if(response.result[0]['time'] != '前往购买套餐'){
+                                            $('.scan_bar').show();
+                                        }else{
+                                            $('.scan_bar').hide();
+                                        }
                                         $('#see').val(response.result[0]['time']);
                                     }else if(response['code'] == 400){
                                         $('.no_bounds').show();
@@ -234,7 +260,7 @@
                         }else{
                             $('#sex').val('女');
                         }
-
+                        $('#s_id').val(data[0]['s_id']);
                         $('#date').val(data[0]['s_birthday']);
                         $('#s_card').val(data[0]['s_card']);
                         $('#city').val(data[0]['s_region']);
@@ -242,6 +268,11 @@
                         $('#classes').val(data[0]['sc_type']);
                         $('#banji').val(data[0]['classname']);
                         $('#shibiema').val(data[0]['classCard']);
+                        if(data[0]['time'] != '前往购买套餐'){
+                            $('.scan_bar').show();
+                        }else{
+                            $('.scan_bar').hide();
+                        }
                         $('#see').val(data[0]['time']);
                     }
 
@@ -284,7 +315,22 @@
                 }
             }
         })
-    })
+    });
+    //购买套餐
+    $('#see').click(function(){
+        var sid = $('#s_id').val();
+        if(sid){
+            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
+        }
+    });
+    function see(){
+        var sid = $('#s_id').val();
+        if(sid){
+            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
+        }
+
+    }
+
 
 </script>
 </body>
