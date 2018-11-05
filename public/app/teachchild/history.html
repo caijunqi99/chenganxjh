@@ -157,7 +157,6 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
-
                             $('.history_content').html(HTML(List));
                         }
                     } else {
@@ -325,7 +324,6 @@
         // HTML模板
         function HTML(data) {
             var template = '';
-            alert(data.length);
             for (var i = 0; i < data.length; i++) {
                 var Time = Object.keys(data[i]);
                 var content = '';
