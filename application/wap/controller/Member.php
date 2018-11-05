@@ -378,6 +378,13 @@ class Member extends MobileMember
         if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
             output_error('传的参数不完整');
         }
+        //判断该账号绑定孩子数量
+        $student_num = db('student')->where('s_ownerAccount =  "'.$member_id.'"')->count();
+
+        if($student_num >=3){
+            output_error('绑定孩子数量超出限制，如有需要，请联系客服');
+        }
+
         //判断识别码是否存在 并是不是这个班级的识别码
         $class = db('class')->field('classCard,classid,schoolid')->where(' classid =  "'.$class_id.'"')->find();
         if(empty($class)){
