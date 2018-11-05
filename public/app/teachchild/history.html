@@ -137,7 +137,6 @@
         // 获取课件接口
         function GetKejian() {
             $(document.body).infinite();
-            $('.history_content').html('');
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
@@ -158,6 +157,7 @@
                                 params[keys[i]] = response['result'][0][keys[i]];
                                 List.push(params);
                             }
+                            alert(HTML(List))
                             $('.history_content').html(HTML(List));
                         }
                     } else {
@@ -311,7 +311,7 @@
                                 List.push(params);
                             }
                             $('.load').hide();
-                            $('.history_content').html(HTML(List));
+                            $('.history_content').append(HTML(List));
                         }
                     } else {
                         $('.weui-footer').show();
