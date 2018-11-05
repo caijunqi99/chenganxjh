@@ -35,7 +35,7 @@
                 <dt>{$Think.lang.school_index_desc}：{$class_array.desc}</dt>
             </dl>
             {if condition="$class_array.qr neq ''"}
-            <img src="{$Think.UPLOAD_SITE_URL}/{$class_array.qr}">
+            <img src="{$Think.UPLOAD_SITE_URL}{$class_array.qr}">
             <span class="box"><a href="{$Think.UPLOAD_SITE_URL}/{$class_array.qr}" download="{$class_array.qr}">保存</a></span><br />
             {/if}
         </div>

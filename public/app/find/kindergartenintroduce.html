@@ -41,7 +41,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>校园介绍</p>
+                <p>学校简介</p>
             </div>
             <div class="head_r">
                 <a href="javascript:;" class="role_switch" id="role_switch"><i class="icon iconfont icon-qiehuantuichu"></i></a>
@@ -207,8 +207,8 @@ function detailinfo(s_id){
             }
             $("#school_info_cont").html(response["result"][0].s_present);
             $("#faculty").html(response["result"][0].s_teacher);
-            
-            
+            $("#faculty").html(response["result"][0].s_teacher);
+            $(".school_remarks").html(response["result"][0].s_desc);
         }
     });
 }
