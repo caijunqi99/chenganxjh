@@ -742,10 +742,15 @@ class Member extends MobileMember
 
 
         if(!empty($students)){
-            foreach ($students as $v) {
-                $v['time'] = date('Y-m-d',$v['end_time']);
+            foreach ($students as $k=>$v) {
+                if(!empty($v['end_time'])){
+                    $students[$k]['time'] = date('Y-m-d',$v['end_time']);
+                }else{
+                    $students[$k]['time'] = '请前往购买套餐';
+                }
+
                 if(empty($v['s_region'])){
-                    $v['s_region'] = getAddress($v['s_provinceid']).' '.getAddress($v['s_cityid']).' '.getAddress($v['s_areaid']);
+                    $students[$k]['s_region'] = getAddress($v['s_provinceid']).' '.getAddress($v['s_cityid']).' '.getAddress($v['s_areaid']);
                 }
             }
         }
