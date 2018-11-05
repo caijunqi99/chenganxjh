@@ -490,11 +490,14 @@ class Member extends MobileMember
         }
         $member_where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
+        $member = db('member')->field('member_id,member_mobile,is_owner')->where($member_where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
 
+        if($member['is_owner'] != 0){
+            output_error('该手机号为副账号，不能添加');
+        }
         //查询当前会员绑定的孩子
         $member_student = db('student')->field('s_card,s_ownerAccount')->where(' s_ownerAccount = "'.$member_id.'"')->select();
         //查询绑定手机号是否存在
@@ -504,7 +507,7 @@ class Member extends MobileMember
             output_error('不能添加自己为副账号');
         }
         if($member_about['is_owner'] != 0){
-            output_error('该手机号为副账号，不能添加');
+            output_error('该手机号已有归属主账号，不能重复添加');
         }
         $res = array();
         if(!empty($member_student)){
