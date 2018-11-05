@@ -44,12 +44,12 @@ class Teacherchild extends MobileMember
         output_data($list);
     }
 
-    //我的视频/我的订单
+    //我的视频
     public function myVideos(){
         $member_id = input('post.member_id');
         $page = !empty(input('post.page'))?input('post.page'):1;
         $start = ($page-1)*10;
-        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id))->order('add_time',desc)->limit($start,10)->select();
+        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id,'order_state'=>"20"))->order('add_time',desc)->limit($start,10)->select();
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['add_time'])){
