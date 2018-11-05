@@ -133,26 +133,26 @@
     layui.use(['form'], function(){
         var form = layui.form;
         //省
-        form.on('select(province)', function(data){
-            $.ajax({
-                type:'POST',
-                url:ADMIN_URL+'Common/get_address_school?province='+data.value,
-                success:function(data){
-                    data = jQuery.parseJSON(data);
-                    //改变市区
-                    $('#city').html(data.city);
-                    //改变县区
-                    $('#area').html(data.area);
-                    //改变学校
-                    $('#school').html(data.school);
-                    //改变年级
-                    $('#grade').html(data.grade);
-                    //改变班级
-                    $('#class').html(data.class);
-                    form.render('select');//select是固定写法 不是选择器
-                }
-            })
-        });
+            form.on('select(province)', function (data) {
+                $.ajax({
+                    type: 'POST',
+                    url: ADMIN_URL + 'Common/get_address_school?province=' + data.value,
+                    success: function (data) {
+                        data = jQuery.parseJSON(data);
+                        //改变市区
+                        $('#city').html(data.city);
+                        //改变县区
+                        $('#area').html(data.area);
+                        //改变学校
+                        $('#school').html(data.school);
+                        //改变年级
+                        $('#grade').html(data.grade);
+                        //改变班级
+                        $('#class').html(data.class);
+                        form.render('select');//select是固定写法 不是选择器
+                    }
+                })
+            });
         //市
         form.on('select(city)', function(data){
             var province = $('#province').find('option:selected').val();
