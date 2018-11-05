@@ -83,39 +83,8 @@
     <script type="text/javascript">
         var IDArr = [];
         var List = [];
-        var getList = [];
         var Page = 1;
-        // 获取课件接口
-        function GetKejian() {
-            $(document.body).infinite();
-            $.ajax({
-                url: api + '/teacherhistory/lists',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    key: user_token,
-                    member_id: user_member_id,
-                    page: 1
-                },
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        if (response['result'].length == 0) {
-                            $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
-                        } else {
-                            let keys = Object.keys(response['result'][0]);
-                            for (var i = 0; i < keys.length; i++) {
-                                let param = new Object();
-                                param[keys[i]] = response['result'][0][keys[i]];
-                                getList.push(param);
-                            }
-                            $('.history_content').html(HTML(getList));
-                        }
-                    } else {
-                        console.log(response['message']);
-                    }
-                }
-            })
-        }
+
         $.ajax({
             url: api + '/teacherhistory/lists',
             type: 'POST',
@@ -165,7 +134,37 @@
             }, 1000)
         });
 
-
+        // 获取课件接口
+        function GetKejian() {
+            $(document.body).infinite();
+            $.ajax({
+                url: api + '/teacherhistory/lists',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    key: user_token,
+                    member_id: user_member_id,
+                    page: 1
+                },
+                success: function(response) {
+                    if (response['code'] == 200) {
+                        if (response['result'].length == 0) {
+                            $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                        } else {
+                            let keys = Object.keys(response['result'][0]);
+                            for (var i = 1; i < keys.length; i++) {
+                                let params = new Object();
+                                params[keys[i]] = response['result'][0][keys[i]];
+                                List.push(params);
+                            }
+                            $('.history_content').html(HTML(List));
+                        }
+                    } else {
+                        console.log(response['message']);
+                    }
+                }
+            })
+        }
 
         $('.history_edit').on('click', function(event) {
             var select = event.target.dataset.select;

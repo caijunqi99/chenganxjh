@@ -178,10 +178,20 @@ class Member extends MobileMember
                 $order = db('packagesorder')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
                 break;
             case 2:
-                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
+//                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
                 break;
             case 3:
-                $order = db('order')->alias('o')->field('g.goods_name as order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->join('__ORDERGOODS__ g','g.order_id=o.order_id','LEFT')->where($where)->order('o.order_id DESC')->select();
+                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as order_dieline')->where($where)->order('order_id DESC')->select();
+                if(!empty($order)){
+                    foreach ($order as $key=>$value) {
+                            if($value['order_dieline'] >time()){
+                                $order[$key]['is_gq'] = 1;
+                            }else{
+                                $order[$key]['is_gq'] = 2;
+                            }
+                    }
+                }
+
                 break;
         }
         output_data($order);
@@ -359,9 +369,12 @@ class Member extends MobileMember
         }
         $where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_paypwd')->where($where)->find();
+        $member = db('member')->field('member_id,member_paypwd,is_owner')->where($where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
+        }
+        if($member['is_owner'] != 0){
+            output_error('该手机号为副账号，不允许绑定孩子');
         }
 
         $name        = trim(input('post.name'));//姓名
@@ -490,11 +503,14 @@ class Member extends MobileMember
         }
         $member_where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_mobile')->where($member_where)->find();
+        $member = db('member')->field('member_id,member_mobile,is_owner')->where($member_where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
 
+        if($member['is_owner'] != 0){
+            output_error('该手机号为副账号，不能添加');
+        }
         //查询当前会员绑定的孩子
         $member_student = db('student')->field('s_card,s_ownerAccount')->where(' s_ownerAccount = "'.$member_id.'"')->select();
         //查询绑定手机号是否存在
@@ -504,7 +520,7 @@ class Member extends MobileMember
             output_error('不能添加自己为副账号');
         }
         if($member_about['is_owner'] != 0){
-            output_error('该手机号为副账号，不能添加');
+            output_error('该手机号已有归属主账号，不能重复添加');
         }
         $res = array();
         if(!empty($member_student)){
@@ -776,6 +792,8 @@ class Member extends MobileMember
 
 
     }
+
+
 
 }
 
