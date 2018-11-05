@@ -75,10 +75,26 @@ class WxPayDataBase
 	public function FromXml($xml)
 	{	
 		if(!$xml){
+            $insert = array(
+                'content'=>json_encode(array(
+                    'InsertTime'=>date('Y-m-d H:i:s',time()),
+                    'api'=>$xml,
+                    'data'=>1
+                ))
+            );
+            db('testt')->insert($insert);
 			throw new WxPayException("xml数据异常！");
 		}
         //将XML转为array 
-        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        $insert = array(
+            'content'=>json_encode(array(
+                'InsertTime'=>date('Y-m-d H:i:s',time()),
+                'api'=>$this->values,
+                'data'=>2
+            ))
+        );
+        db('testt')->insert($insert);
 		return $this->values;
 	}
 	
