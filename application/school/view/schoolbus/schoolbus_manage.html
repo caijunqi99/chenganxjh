@@ -25,8 +25,10 @@
   ,laydate = layui.laydate;
 })
 </script>
-
-          <button class="layui-btn add_foodlist" id="add_foodlist" pid="0"><i class="layui-icon">&#xe608;</i> 添加</button>
+<style type="text/css">
+  .foot_item4 {width:10%;}
+</style>
+<button class="layui-btn add_foodlist" id="add_foodlist" pid="0"><i class="layui-icon">&#xe608;</i> 添加站点</button>
  <div class="foot_edits">
   <form action="{:url('/school/Schoolbus/schoolbus_edit')}" id="form1" method="post" class="layui-form">
       <input type="hidden" name="action" value="add">
@@ -79,18 +81,20 @@
   <hr>
       </div>
       <input type="hidden" name="action" value="add">
-  </form>
-   <div class="foot_submit_box clear">
+      <div class="foot_submit_box clear">
       
-      <!--<button class="layui-btn" id="reset"> 重置</button>-->
-      <button class="layui-btn" id="subsss">提交</button>
+        <button id="reset" type="reset" class="layui-btn layui-btn-primary"> 重置</button>
+        <button class="layui-btn" id="subsss">提交</button>
 
-   </div>
+     </div>
+  </form>
+   
 </div>
 <script type="text/javascript">
   $('#subsss').click(function() {
     $('#form1').submit();
   });
+
 </script>
  
 
@@ -102,20 +106,29 @@
   $("#add_foodlist").click(function(){
     var pid = $(this).attr('pid');
 
-    var footlist_str='<div class="foot_list foot_lists clear clearfix">'+
-         '<div class="foot_item foot_item1">'+
-          '<div>'+
-            '<input type="text" value="苏庄'+pid+'" name="bus_line['+pid+'][]" placeholder="例如：苏庄"/>'+
-          '</div>'+
-         '</div>'+
-         '<div class="foot_item foot_item2">'+
-            '<input type="text" value="0'+pid+':00" name="bus_line['+pid+'][]" placeholder="例如：07:00"/>'+
-         '</div>'+
-       '</div>';
+    var footlist_str='<div class="foot_list foot_lists clear clearfix" id="line_'+pid+'">'+
+                         '<div class="foot_item foot_item1">'+
+                          '<div>'+
+                            '<input type="text" value="苏庄'+pid+'" name="bus_line['+pid+'][]" placeholder="例如：苏庄"/>'+
+                          '</div>'+
+                         '</div>'+
+                         '<div class="foot_item foot_item2">'+
+                            '<input type="text" value="0'+pid+':00" name="bus_line['+pid+'][]" placeholder="例如：07:00"/>'+
+                         '</div>'+
+                         '<div class="foot_item foot_item4">'+
+                            '<a class="layui-btn layui-btn-sm" onclick="delline(this)"><i class="layui-icon">&#xe640;</i></a>'+
+                         '</div>'+
+                       '</div>';
     $('#foot_list_box').append(footlist_str);
     pid++
     $(this).attr('pid',pid);
   })
+
+
+function delline(obj){
+  $(obj).parents(".foot_list").remove();
+}
+
 </script>
 
 

@@ -51,6 +51,11 @@
 
     <!-- 主要内容 -->
     <div class="main">
+        <div class="curriculum_content" id="curriculum_content" style="padding-top: 20px;">
+            <div class="cookbook_title_box" style="margin-bottom: 0px;">
+                <h2 class="cookbook_title" id="cooktitle">小神童第二儿童幼儿园</h2>
+            </div>
+        </div>
         <div class="container3">
             <div class="schoolbus_cont">
                 <img class="schoolbus_img" src="../content/images/find/schoolbus_img.png" alt="">
@@ -167,6 +172,7 @@
                     items: ssss,
                     onChange: function(d) {
                         if(d.values=='undefined' || d.values == null) return;
+                        $('#cooktitle').text(d.titles)
                         GetBusInfo(d.values)
                     },
                     onClose: function() {
@@ -198,7 +204,7 @@ function GetChildList(key,act,a){
         if(data.code==200){
             var s_id = data.result[0]['s_id'];
             $('#childid').val(s_id);
-
+            $('#cooktitle').text(data.result[0].name+'--'+data.result[0].s_name)
             var list = data.result;
             var StudentsList = new Array;
             for (var i = 0; i < list.length; i++) {

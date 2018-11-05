@@ -51,6 +51,11 @@
 
     <!-- 主要内容 -->
     <div class="main">
+        <div class="curriculum_content" id="curriculum_content" style="padding-top: 20px;margin-bottom: 20px;">
+            <div class="cookbook_title_box">
+                <h2 class="cookbook_title" id="cooktitle">小神童第二儿童幼儿园</h2>
+            </div>
+        </div>
         <div class="cont margt30">
             <ul class="week_bar clearfix">
                 <li id="jobs1" onclick="setTab1('jobs',1,3)">
@@ -151,6 +156,7 @@
                     onChange: function(d) {
                         if(d.values=='undefined' || d.values == null) return;
                         var school_class = d.values.split('_');
+                        $('#cooktitle').text(d.titles);
                         GetCurriculumInfo(school_class[1],school_class[0],2)
                     },
                     
@@ -181,6 +187,7 @@ function GetChildList(key,act,a){
             $("#class_id").val(result.s_classid);
             $("#school_id").val(result.s_schoolid);
             $('#childid').val(result.s_id);
+            $('#cooktitle').text(result.name+'--'+result.s_name);
             var list = data.result;
             var StudentsList = new Array;
             for (var i = 0; i < list.length; i++) {
@@ -226,15 +233,13 @@ function GetCurriculumInfo(classid,school_id,wek){
  // 模板2
         function HTML2(data2) {
             var template2 = '';
-
-            // 上午课程 模板21
-            var template21 = '';
-            // 下午课程 模板22
-            var template22 = '';
             for (j = 0; j < data2.length; j++) {
-                var morning = data2[j].morning;
-                
-                for (j1 = 0; j1 < morning.length; j1++) {
+                // 上午课程 模板21
+                var template21 = '';
+                // 下午课程 模板22
+                var template22 = '';
+                for (j1 = 0; j1 < data2[j].morning.length; j1++) {
+                    console.log(j1);
                     template21 += '<dd>' +
                         '<a href="javascript:;"><span class="dot">●</span>' + data2[j].morning[j1].time + ' ' + data2[j].morning[j1].content +
                         '</dd>' +
