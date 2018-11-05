@@ -378,6 +378,13 @@ class Member extends MobileMember
         if(empty($name) || empty($school_id) || empty($grade_id) || empty($class_id) || empty($classCard)){
             output_error('传的参数不完整');
         }
+        //判断该账号绑定孩子数量
+        $student_num = db('student')->where('s_ownerAccount =  "'.$member_id.'"')->count();
+
+        if($student_num >=3){
+            output_error('绑定孩子数量超出限制，如有需要，请联系客服');
+        }
+
         //判断识别码是否存在 并是不是这个班级的识别码
         $class = db('class')->field('classCard,classid,schoolid')->where(' classid =  "'.$class_id.'"')->find();
         if(empty($class)){
@@ -410,12 +417,20 @@ class Member extends MobileMember
             }
         }else{
             $student = db('student')->insert($data);
-            $Member=array(
-                'classid'  =>$class_id,
-                'schoolid' =>$school_id
-            );
+
+            if(!empty($member['classid'])){
+                $updateMember['classid'] = trim(',',$member['classid'].','.$class_id);
+            }else{
+                $updateMember['classid'] = $class_id;
+            }
+            if(!empty($member['schoolid'])){
+                $updateMember['schoolid'] = trim(',',$member['schoolid'].','.$school_id);
+            }else{
+                $updateMember['schoolid'] = $school_id;
+            }
             //给家长绑定学校id和班级id
-            $MemberBind = db('member')->where('member_id',$member_id)->update($Member);
+             db('member')->where('member_id',$member_id)->update($updateMember);
+
         }   
             if($student){
                 output_data(array('message'=>'绑定成功','sid'=>$student));

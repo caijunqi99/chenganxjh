@@ -298,10 +298,11 @@
         // HTML模板
         function HTML(data) {
             var template = '';
-            var content = '';
+
             for (var i = 0; i < data.length; i++) {
                 content = '';
                 var Time = Object.keys(data[i]);
+                var content = '';
                 for (var s = 0; s < data[i][Time[0]].length; s++) {
                     if (data[i][Time[0]][s]['is_click'] == 1) {
                         content += '<div onclick="videoClick(' + data[i][Time[0]][s]['t_id'] + ')" class="history_content_wrap clearBoth weui-cells weui-cells_checkbox delete' + data[i][Time[0]][s]['t_id'] + '">' +
@@ -338,7 +339,7 @@
                     }
 
                 }
-                template = '<div class="is_delete_time"><p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div></div>';
+                template += '<div class="is_delete_time"><p class="time_title"><i class="dian"></i>' + Time[0] + '</p>' + '<div class="time_content">' + content + '</div></div>';
             }
             return template;
         }
