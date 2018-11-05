@@ -388,7 +388,7 @@ class Member extends MobileMember
         $province_id = intval(input('post.province'));//省ID
         $city_id     = intval(input('post.city'));//市ID
         $area_id     = intval(input('post.area'));//区ID
-        $region      = getAddress($province_id).' '.getAddress($city_id).' '.getAddress($area_id);
+        $region      = $this->getAddress($province_id).' '.$this->getAddress($city_id).' '.$this->getAddress($area_id);
         $school_id   = intval(input('post.school'));//学校ID
         $grade_id    = intval(input('post.grade'));//年级ID
         $class_id    = intval(input('post.class'));//班级ID
@@ -750,7 +750,7 @@ class Member extends MobileMember
                 }
 
                 if(empty($v['s_region'])){
-                    $students[$k]['s_region'] = getAddress($v['s_provinceid']).' '.getAddress($v['s_cityid']).' '.getAddress($v['s_areaid']);
+                    $students[$k]['s_region'] = $this->getAddress($v['s_provinceid']).' '.$this->getAddress($v['s_cityid']).' '.$this->getAddress($v['s_areaid']);
                 }
             }
         }
@@ -784,7 +784,7 @@ class Member extends MobileMember
         if(!empty($student)){
             $student['time'] = date('Y-m-d',$student['end_time']);
             if(empty($student['s_region'])){
-                $student['s_region'] = getAddress($student['s_provinceid']).' '.getAddress($student['s_cityid']).' '.getAddress($student['s_areaid']);
+                $student['s_region'] = $this->getAddress($student['s_provinceid']).' '.$this->getAddress($student['s_cityid']).' '.$this->getAddress($student['s_areaid']);
             }
         }
             output_data($student);
