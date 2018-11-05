@@ -25,6 +25,15 @@ class Member extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
+//            $companyInfo = db('company')->where(array('o_id'=>$admininfo['admin_company_id']))->find();
+//            if($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']!=0){
+//                $condition['member_provinceid'] = $companyInfo['o_province'];
+//                $condition['member_cityid'] = $companyInfo['o_cityid'];
+//                $condition['member_areaid'] = $companyInfo['o_areaid'];
+//            }elseif($companyInfo['o_province']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']==0){
+//                $condition['member_provinceid'] = $companyInfo['o_province'];
+//                $condition['member_cityid'] = $companyInfo['o_cityid'];
+//            }
             $studentInfo = db('student')->where(array('admin_company_id'=>$admininfo['admin_company_id'],'s_del'=>1))->select();
             foreach($studentInfo as $key=>$item){
                 if(!empty($item['s_ownerAccount'])){
