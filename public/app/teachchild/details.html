@@ -122,6 +122,22 @@
                     }
                 }
             }
+        });
+    //添加历史纪录
+        $.ajax({
+            type:'POST',
+            url:api+'/teacherhistory/addhistory.html',
+            data:{
+                key:user_token,
+                member_id:user_member_id,
+                tid:GetQueryString("id")
+            },
+            dataType: "json",
+            success: function(res){
+                if(res['code'] == 200){
+                    // console.log()
+                }
+            }
         })
 
     }
