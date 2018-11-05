@@ -243,14 +243,16 @@ function GetCurriculumInfo(classid,school_id,wek){
                 // 下午课程 模板22
                 var template22 = '';
                 for (j1 = 0; j1 < data2[j].morning.length; j1++) {
+                    if(data2[j].morning[j1].time=='-')data2[j].morning[j1].time='';
                     template21 += '<dd>' +
-                        '<a href="javascript:;"><span class="dot">●</span>' + data2[j].morning[j1].time + ' ' + data2[j].morning[j1].content +
+                        '<a href="javascript:;"><span class="dot">●</span>' + data2[j].morning[j1].content + '<span style="margin-left:15px;">' + data2[j].morning[j1].time  +'</span></a>'+
                         '</dd>' +
                         '<dd>';
                 }
                 for (j2 = 0; j2 < data2[j].afternoon.length; j2++) {
+                    if(data2[j].afternoon[j2].time=='-')data2[j].afternoon[j2].time='';
                     template22 += '<dd>' +
-                        '<a href="javascript:;"><span class="dot">●</span>' + data2[j].afternoon[j2].time + ' ' + data2[j].afternoon[j2].content +
+                        '<a href="javascript:;"><span class="dot">●</span>' + data2[j].afternoon[j2].content + '<span style="margin-left:15px;">' + data2[j].afternoon[j2].time +'</span></a>'+
                         '</dd>' +
                         '<dd>';
                 }
