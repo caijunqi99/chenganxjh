@@ -32,27 +32,32 @@ $(function() {
         setTimeout(function() {
             var params = Params;
             params['page'] = 1;
-            $.ajax({
-                url: api + '/teacherchild/myUpload.html',
-                type: 'POST',
-                dataType: 'json',
-                data: params,
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        if (response['result'].length == 0) {
-                            $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
-                        } else {
-                            $('.main_content').html(HTML(response['result']))
-                        }
-                    } else {
-                        $.toast(response['message'], 'forbidden');
-                        return false;
-                    };
-                }
-            })
+            GetKejian(params);
             $(document.body).pullToRefreshDone(); // 重置下拉刷新
         }, 1000)
     });
+    // 获取课件接口
+    function GetKejian() {
+        $(document.body).infinite();
+        $.ajax({
+            url: api + '/teacherchild/myUpload.html',
+            type: 'POST',
+            dataType: 'json',
+            data: params,
+            success: function(response) {
+                if (response['code'] == 200) {
+                    if (response['result'].length == 0) {
+                        $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
+                    } else {
+                        $('.main_content').html(HTML(response['result']))
+                    }
+                } else {
+                    $.toast(response['message'], 'forbidden');
+                    return false;
+                };
+            }
+        })
+    }
 
     // 选项卡切换
     Tabs = function(type, el) {
