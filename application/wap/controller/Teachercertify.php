@@ -40,7 +40,7 @@ class Teachercertify extends MobileMember
         $data['createtime'] = time();
 
         if (empty($data['username'])) output_error('姓名不能为空');
-        if (empty($data['phone'])) output_error('手机号不能为空');
+//        if (empty($data['phone'])) output_error('手机号不能为空');
         if (empty($_FILES['idcard_front']['name'])) output_error('身份证正面图不能为空');
         if (empty($_FILES['idcard_back']['name'])) output_error('身份证反面图不能为空');
         if (empty($_FILES['certificate_front']['name'])) output_error('资格证不能为空');
@@ -95,8 +95,11 @@ class Teachercertify extends MobileMember
         if(empty($teachinfo['provinceid'])){
             $member_info = db('member')->where(array('member_id'=>$member_id))->find();
             $teachinfo['provinceid'] = !empty($member_info['member_provinceid'])?$member_info['member_provinceid']:"";
+            $teachinfo['provincename'] = "";
             $teachinfo['cityid'] = !empty($member_info['member_cityid'])?$member_info['member_cityid']:"";
+            $teachinfo['cityname'] = "";
             $teachinfo['areaid'] = !empty($member_info['member_areaid'])?$member_info['member_areaid']:"";
+            $teachinfo['areaname'] = "";
             $teachinfo['status'] = 0;
         }
         if(!empty($teachinfo['provinceid'])){
