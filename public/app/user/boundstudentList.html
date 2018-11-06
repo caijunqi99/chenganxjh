@@ -33,7 +33,7 @@
             <p>学生列表</p>
         </div>
         <div class="head_r">
-            <a href="javascript:;" class="add_student_bar">
+            <a href="javascript:;" class="add_student_bar" style="display:none;">
                 <i class="icon iconfont icon-jiahao"></i>
             </a>
         </div>
@@ -156,6 +156,32 @@
 <script src="../content/scripts/regular.js"></script>
 
 <script>
+    /**
+     * @desc 判断是否为副账号
+     */
+    $.ajax({
+        type:'POST',
+        url:api+'/Member/isOwner.html',
+        data:{
+            key:user_token,
+            member_id:user_member_id,
+        },
+        dataType: "json",
+        success: function(response){
+            if(response['code'] == 200){
+                if(response.result[0]['is_owner'] == 0){
+                    $('.add_student_bar').show();
+                }else{
+                    $('.add_student_bar').hide();
+                }
+            }else if(response['code'] == 400){
+                $.toast("请登陆",'forbidden');return false;
+            }else{
+                $.toast(response['message'],'forbidden');return false;
+            }
+        }
+    })
+    
     $.ajax({
         type:'POST',
         url:api+'/Member/getStudents.html',
@@ -330,6 +356,8 @@
         }
 
     }
+
+
 
 
 </script>
