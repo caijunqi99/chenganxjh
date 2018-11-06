@@ -21,7 +21,7 @@
         <table class="search-form">
             <tbody>
                <tr>
-                   <td> <label>手机号：</label></td>
+                   <td> <label>身份证号：</label></td>
                    <td><input type="text" name="user" value="{$Think.get.user}"></td>
                    <td> <label>{$Think.lang.teacher_index_name}：</label></td>
                    <td><input type="text" name="username" value="{$Think.get.username}"></td>
@@ -59,7 +59,7 @@
             <th colspan="align-center">{$Think.lang.teacher_index_id}</th>
             <!--<th class="align-center">{$Think.lang.teacher_index_user}</th>-->
             <th class="align-center">{$Think.lang.teacher_index_name}</th>
-            <th class="align-center">{$Think.lang.teacher_index_phone}</th>
+            <th class="align-center">身份证号</th>
             <!--<th class="align-center">{$Think.lang.teacher_index_idcard}</th>-->
             <th class="align-center">{$Think.lang.teacher_index_cardimg}</th>
             <th class="align-center">{$Think.lang.teacher_index_cardimg_fan}</th>
@@ -81,8 +81,8 @@
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <!--<td class="align-center"><?php echo $v['member_mobile']; ?></td>-->
             <td class="align-center"><?php echo $v['username']; ?></td>
-            <td class="align-center"><?php echo $v['phone']; ?></td>
-            <!--<td class="align-center"><?php echo $v['idcard']; ?></td>-->
+            <!--<td class="align-center"><?php echo $v['phone']; ?></td>-->
+            <td class="align-center"><?php echo $v['idcard']; ?></td>
             <td class="align-center"><img src="<?php echo $path.$v['cardimg']; ?>" alt="" width="80px" height="40px"></td>
             <td class="align-center"> <img src="<?php echo $path.$v['cardimg_fan']; ?>" alt="" width="80px" height="40px"></td>
             <td class="align-center"><img src="<?php echo $path.$v['certificate']; ?>" alt="" width="80px" height="40px"></td>
