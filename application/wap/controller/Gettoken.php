@@ -28,7 +28,7 @@ class Gettoken
         //生成上传token
         $data['token'] = $auth->uploadToken($bucket);
         $data['bucket'] = 'avatar';
-        $data['url']='http://pgj4a41j8.bkt.clouddn.com/';
+        $data['url']='http://avatar.xiangjianhai.com/';
         output_data($data);
     }
 }

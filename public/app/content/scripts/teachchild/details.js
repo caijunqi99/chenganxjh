@@ -143,39 +143,47 @@ $(function() {
             List +=   '</div>' +
                 '</a></li>';
         }
-        if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
-            price = '免费观看';
-        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
-            price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
-        } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
-            price = '已购买'
+        if(data[0]['data']['myself'] == 0){
+            if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
+                price = '免费观看';
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
+                price = '￥ ' + data[0]['data']['t_price'] + ' 购买'
+            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+                price = '已购买'
+            }
+        }else{
+            if (data[0]['data']['t_audit'] == 1) {
+                price = '待审核';
+            } else if(data[0]['data']['t_audit'] == 2 ){
+                price = '审核失败';
+            } else if(data[0]['data']['t_audit'] ==3){
+                price = '审核通过';
+            }
+
         }
+
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
             '<div class="related" style="height: 120px">' +
             '<div class="related1">' +
             '<h2 class="title">' + data[0]['data']['t_title'] + '</h2>' +
             '<p class="content" style="line-height: 40px;height: 40px;">作者：' + data[0]['data']['t_author'] + '</p>' +
             '</div>' +
-
-
             '<div class="related2">' ;
-            if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
-                template +='<button type="button" >' + price + '</button>'
-            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
-                template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
-            } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+            if(data[0]['data']['myself'] == 0){
+                if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
+                    template +='<button type="button" >' + price + '</button>'
+                } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
+                    template +='<button type="button" onclick="pay(' + data[0]['data']['t_id'] + ');">' + price + '</button>';
+                } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] != 0){
+                    template +='<button type="button" >' + price + '</button>'
+                }
+            }else{
                 template +='<button type="button" >' + price + '</button>'
             }
             template +=   '</div>' +
-
-            '</div>' +
+                '</div>' +
                 '<div class="video_detail" onclick="msg_switch($(this))"><p>' + data[0]['data']['t_profile'] + '</p><a class="video_detail_icon" href="javascript:;"><i class="icon iconfont icon-iconfontjiantou"></i></a></div>'+
-
-            '<div class="related_list" style="border-top: 1px solid #aaa;">' +
-            '<p class="title_more ">更多课程</p>' +
-            '<ul>' + List + '</ul>' +
-            '</div>' +
-            '</div>';
+                '<div class="related_list" style="border-top: 1px solid #aaa;">' + '<p class="title_more ">更多课程</p>' + '<ul>' + List + '</ul>' + '</div>' + '</div>';
         return template;
     }
 

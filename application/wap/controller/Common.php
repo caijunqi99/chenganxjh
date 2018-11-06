@@ -47,26 +47,35 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function address(){
-        $token = trim(input('post.key'));
-        if(empty($token)){
-            output_error('缺少参数token');
-        }
         $where = ' area_parent_id = 0';
         $area = db('area')->field('area_id as code,area_name as name')->where($where)->select();
+
+         $arr = '';
         if(!empty($area)){
             foreach($area as $key=>$value){
+                //app
+//                $arr['86'][$value['code']] =$value['name'];
                 $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$value['code'].'"')->select();
                 if(!empty($area[$key]['sub'])){
                     foreach($area[$key]['sub'] as $k=>$v){
+//                        $arr[$value['code']][$v['code']] = $v['name'];
                         $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$v['code'].'"')->select();
+                        /*if(!empty($area[$key]['sub'][$k]['sub'])){
+                            foreach($area[$key]['sub'][$k]['sub'] as $kk=>$vv){
+                                $arr[$v['code']][$vv['code']] = $vv['name'];
+
+                            }
+                        }*/
                     }
+
                 }
             }
         }
 
+//        halt($arr);
 
+//        echo json_encode($arr);
         output_data($area);
-
     }
 
     /**

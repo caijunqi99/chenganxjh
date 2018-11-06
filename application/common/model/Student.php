@@ -70,11 +70,14 @@ class Student extends Model {
      */
     public function checkParentRelation($member_id,$s_id){
 
+        $res = db('member')->where('member_id="'.$member_id.'"')->field('is_owner')->find();
+        if($res['is_owner'] != 0){
+            $member_id = $res['is_owner'];
+        }
         $result = db('student')
         ->field('s_id,s_name')
         ->where('s_id',$s_id)
         ->whereor('s_ownerAccount',$member_id)
-        ->whereor('FIND_IN_SET('.$member_id.',s_viceAccount)')
         ->find();
         if($result){
             return 'true';

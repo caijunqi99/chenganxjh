@@ -151,9 +151,9 @@
         function GetKejian() {
             $(document.body).infinite();
             $.ajax({
-                type: "POST",
-                url: api + '/Teacherhome/lists',
-                dataType: "json",
+                url: api + '/teachercollect/lists',
+                type: 'POST',
+                dataType: 'json',
                 data: {
                     key: user_token,
                     member_id: user_member_id,
@@ -164,6 +164,7 @@
                         if (response['result'].length == 0) {
                             $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
                         } else {
+                            List = [];
                             let keys = Object.keys(response['result'][0]);
                             for (var i = 0; i < keys.length; i++) {
                                 let params = new Object();
@@ -176,7 +177,7 @@
                         console.log(response['message']);
                     }
                 }
-            });
+            })
         }
 
 

@@ -111,15 +111,30 @@
             dataType: "json",
             success: function(res){
                 if(res['code'] == 200){
-                    if(res.result[0]['price'] !=0){
-                        if(res.result[0]['buy'] != 0){
+                    if(res.result[0]['myself'] == 0){
+                        if(res.result[0]['price'] !=0){
+                            if(res.result[0]['buy'] != 0){
+                                $('.video_play_btn').parent().hide();
+                                $("#video").show();
+                            }
+                        }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
+                        }
+                        if(res.result[0]['collect'] == 0){
+                            $('#collect').show();
+                            $('#qxCollect').hide();
+                        }else{
+                            $('#collect').hide();
+                            $('#qxCollect').show();
                         }
                     }else{
                         $('.video_play_btn').parent().hide();
                         $("#video").show();
+                        $('#collect').hide();
+                        $('#qxCollect').hide();
                     }
+
                 }
             }
         });
@@ -157,12 +172,17 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
-                        if(res.result[0]['price'] !=0){
-                            if(res.result[0]['buy'] != 0){
+                        if(res.result[0]['myself'] == 0){
+                            if(res.result[0]['price'] !=0){
+                                if(res.result[0]['buy'] != 0){
+                                    $('.video_play_btn').parent().hide();
+                                    $("#video").show();
+                                }else{
+                                    $.toast("请前往购买", 'forbidden');
+                                }
+                            }else{
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
-                            }else{
-                                $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();

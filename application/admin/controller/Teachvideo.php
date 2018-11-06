@@ -451,7 +451,7 @@ class Teachvideo extends AdminControl {
         //获取token值
         $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
         $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
-        $WAILIAN='pgj4a41j8.bkt.clouddn.com';
+        $WAILIAN='avatar.xiangjianhai.com';
         // 初始化签权对象
         $auth = new Auth($accessKey, $secretKey);
         $bucket = 'avatar';
@@ -494,7 +494,7 @@ class Teachvideo extends AdminControl {
         //获取token值
         $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
         $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
-        $WAILIAN='pgj4a41j8.bkt.clouddn.com';
+        $WAILIAN='avatar.xiangjianhai.com';
         // 初始化签权对象
         $auth = new Auth($accessKey, $secretKey);
         $bucket = 'avatar';
