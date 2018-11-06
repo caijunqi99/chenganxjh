@@ -156,6 +156,7 @@
                     return false;
                 }
                 $.confirm('是否确认支付？', '支付提醒', function() {
+                    alert('aaa');
                     $.ajax({
                             type: 'POST',
                             url: api + '/Packagesbuy/buy_step1.html',
@@ -167,6 +168,8 @@
                             },
                             dataType: 'json',
                             success: function(response) {
+                                alert('bbb');
+                                alert(response['code']);
                                 if (response['code'] == 200) {
                                     // 微信支付
                                     if (pay == 'wxpay_app') {
