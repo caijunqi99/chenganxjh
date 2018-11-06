@@ -176,6 +176,7 @@
                                 html += '<li class="clear">\n' ;
                                 if(data[i]['order_state'] == 10){
                                     var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id'+data[i]['s_id'];
+                                    alert(url);
                                     html += '<a href="'+url+'" class="clearfix">\n';
                                 }else{
                                     html += '<a  class="clearfix">\n';
@@ -245,7 +246,7 @@
 
                                             if(data[i]['order_state'] == 10){
                                             html += '待支付';
-                                        }else if(data[i]['order_state'] == 40){
+                                        }else if(data[i]['order_state'] == 20){
                                             if(data[i]['is_gq'] == 1){
                                                 html += '已支付';
                                             }else{
