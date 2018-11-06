@@ -48,20 +48,30 @@ class Common extends MobileMall
      */
     public function address(){
         $where = ' area_parent_id = 0';
-        $area = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where($where)->select();
+        $area = db('area')->field('area_id as code,area_name as name')->where($where)->select();
+
+         $arr = '';
         if(!empty($area)){
             foreach($area as $key=>$value){
-                $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where(' area_parent_id = "'.$value['code'].'"')->select();
-                if(!empty($area[$key]['sub'])){
-                    foreach($area[$key]['sub'] as $k=>$v){
-                        $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where(' area_parent_id = "'.$v['code'].'"')->select();
-                    }
-                }
+                //app
+                $arr['86'][$value['code']] =$value['name'];
+
+//                $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$value['code'].'"')->select();
+//                $sub = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$value['code'].'"')->select();
+
+//                $arr[$value['code']] = $sub;
+//                if(!empty($area[$key]['sub'])){
+//
+//                    foreach($area[$key]['sub'] as $k=>$v){
+//
+//                        $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$v['code'].'"')->select();
+//                    }
+//                }
             }
         }
 
-
-        output_data($area);
+//        halt($arr);
+        output_data($arr);
 
     }
 
