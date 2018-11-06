@@ -11,9 +11,13 @@
             <dl>
                 <dt><?php echo $mview['content']; ?></dt>
             </dl>
-                    <?php foreach($mview['image'] as $v ){ ?>
+                    <?php
+                     if($mview['image']!=''){
+                     foreach($mview['image'] as $v ){ ?>
                        <img src="<?php echo $path.$v; ?>" >&nbsp;&nbsp;&nbsp;
-                    <?php } ?>
+                    <?php
+                        }
+                     } ?>
            <br/>
             <?php if(count($moodview)!=''){ ?>
             <dl>
