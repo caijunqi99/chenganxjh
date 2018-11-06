@@ -172,11 +172,15 @@
                 if (response['code'] == 200) {
                     if (response['result'].length > 0) {
                         var html = '';
-
                             for(var i=0;i<response['result'].length;i++){
-                                html += '<li class="clear">\n' +
-                                    '                                           <a href="javascript:;" class="clearfix">\n' +
-                                    '                                           <div class="orderforms_r2">\n' +
+                                html += '<li class="clear">\n' ;
+                                if(data[i]['order_state'] == 10){
+                                    var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id'+data[i]['s_id'];
+                                    html += '<a href="'+url+'" class="clearfix">\n';
+                                }else{
+                                    html += '<a  class="clearfix">\n';
+                                }
+                                html +=     '                                           <div class="orderforms_r2">\n' +
                                     '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['pkg_name']+'<span class="nopay fr">';
                                 if(data[i]['order_state'] == 10){
                                     html += '待支付';
@@ -229,11 +233,17 @@
                                     var html = '';
                                     if(cursel == 3){
                                         for(var i=0;i<response['result'].length;i++){
-                                        html += '<li class="clear">\n' +
-                                            '                                           <a href="javascript:;" class="clearfix">\n' +
-                                            '                                           <div class="orderforms_r2">\n' +
-                                            '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['order_name']+'<span class="nopay fr">';
-                                        if(data[i]['order_state'] == 10){
+                                       html += '<li class="clear">\n' ;
+                                            if(data[i]['order_state'] == 10){
+                                                var url = http_url+'app/teachchild/pay.html?t_id='+data[i]['order_tid'];
+                                                html += '<a href="'+url+'" class="clearfix">\n';
+                                            }else{
+                                                html += '<a  class="clearfix">\n';
+                                            }
+                                            html +=     '                                           <div class="orderforms_r2">\n' +
+                                                '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['order_name']+'<span class="nopay fr">';
+
+                                            if(data[i]['order_state'] == 10){
                                             html += '待支付';
                                         }else if(data[i]['order_state'] == 40){
                                             if(data[i]['is_gq'] == 1){
@@ -255,44 +265,15 @@
                                    }
                                        $('#order_jobs_3 >.orderforms_list3').html(html);
                                     }else if(cursel == 1){
-                                        /*for(var i=0;i<response['result'].length;i++){
-                                            html += ' <li class="clear">\n' +
-                                                '                    <a href="javascript:;" class="clearfix">\n' +
-                                                '                        <div class="orderforms_l">\n' ;
-
-                                            // html +=    '                            <img src="../content/images/user/year_meal.png" alt="">\n' ;
-
-                                            html +=    '                        </div>\n' +
-                                                '                        <div class="orderforms_r">\n' +
-                                                '                            <p class="orderforms_type"><span class="fr">';
-
-                                            if(data[i]['order'] == 10){
-                                                html += '待支付';
-                                            }else if(data[i]['order'] == 20){
-                                                if(data[i]['is_gq'] == 1){
-                                                    html += '已支付';
-                                                }else{
-                                                    html += '已过期';
-                                                }
-                                            }else if(data[i]['order'] == 0){
-                                                html += '已取消';
-                                            }
-
-                                                html +='</span></p>\n                           <h2 class="orderforms_h2 clear">'+data[i]['pkg_name']+'<span>￥'+data[i]['order_amount']+'</span></h2>\n' +
-                                                '                            <p class="orderforms_p">购买时间：'+data[i]['add_time']+'</p>\n' ;
-
-                                            if(data[i]['is_gq'] != 0){
-                                                html += '                            <p class="orderforms_p">到期时间：'+data[i]["order_dieline"]+'</p>\n' ;
-                                            }
-                                                html +='                        </div>\n' +
-                                                '                    </a>\n' +
-                                                '                </li>'
-                                        }*/
-
                                         for(var i=0;i<response['result'].length;i++){
-                                            html += '<li class="clear">\n' +
-                                                '                                           <a href="javascript:;" class="clearfix">\n' +
-                                                '                                           <div class="orderforms_r2">\n' +
+                                            html += '<li class="clear">\n' ;
+                                            if(data[i]['order_state'] == 10){
+                                                var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id'+data[i]['s_id'];
+                                                html += '<a href="'+url+'" class="clearfix">\n';
+                                            }else{
+                                                html += '<a  class="clearfix">\n';
+                                            }
+                                            html +=     '                                           <div class="orderforms_r2">\n' +
                                                 '                                           <h2 class="orderforms_h2 orderforms_h22 clear">'+data[i]['pkg_name']+'<span class="nopay fr">';
                                             if(data[i]['order_state'] == 10){
                                                 html += '待支付';
