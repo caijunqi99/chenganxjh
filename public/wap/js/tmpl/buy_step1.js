@@ -138,7 +138,6 @@ $(function() {
         return (parseFloat(e) || 0).toFixed(2)
     });
     var _init = function(e) {
-        alert(e);
         var a = 0;
         $.ajax({
             type: "post",
@@ -218,7 +217,7 @@ $(function() {
                 if ($.isEmptyObject(e.result.address_info)) {
                     $.sDialog({
                         skin: "block",
-                        content: "请添加地址",
+                        content: "请添加地址222",
                         okFn: function() {
                             $("#new-address-valve").click()
                         },
