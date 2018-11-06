@@ -138,6 +138,7 @@ $(function() {
         return (parseFloat(e) || 0).toFixed(2)
     });
     var _init = function(e) {
+        alert(e);
         var a = 0;
         $.ajax({
             type: "post",
