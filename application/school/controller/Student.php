@@ -53,9 +53,9 @@ class Student extends AdminControl {
         }
         $student_status = input('param.student_status');//绑定状态
         if ($student_status==1) {
-            $condition['s_ownerAccount'] = array('eq',"");
+            $condition['s_ownerAccount'] = array('eq',0);
         }elseif($student_status==2){
-            $condition['s_ownerAccount'] = array('neq',"");
+            $condition['s_ownerAccount'] = array('neq',0);
         }
         $area_id = input('param.area_id');//地区
         if($area_id){
