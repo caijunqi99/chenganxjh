@@ -440,7 +440,7 @@ class Stest extends AdminControl {
 			$data[$key]['member_idcard']         = $m['idCard']; //真实姓名
 			$data[$key]['member_password']       = $m['password']; //密码 
 			$data[$key]['member_mobile']         = $m['phone']; //手机号
-			$data[$key]['member_mobile_bind']    = 1; //是否绑定手机
+			$data[$key]['member_mobile_bind']    = empty($m['phone'])?0:1; //是否绑定手机
 			$data[$key]['member_add_time']       = empty($m['createTime'])?TIMESTAMP:strtotime($m['createTime']); //会员添加时间
 			$data[$key]['member_edit_time']      = strtotime($m['lastTime']); //修改时间
 			$data[$key]['member_old_login_time'] = strtotime($m['lastLoginTime']); //会员上次登录时间
@@ -526,7 +526,7 @@ class Stest extends AdminControl {
 					's_region'       => empty($s['address'])?$c['school_region']:$s['address'], //地址
 					's_createtime'   => $s['createTime'], //创建时间
 					's_remark'       => $s['note'], //备注
-					's_ownerAccount' => !empty($member_id)?$member_id:0, //学生绑定的家长账号id （主账户）
+					's_ownerAccount' => !empty($member_id)?$member_id:'', //学生绑定的家长账号id （主账户）
 					'classCard'      => $c['classCard'], //班级识别码（app绑定学生时添加）
 					'oldid'          => $s['id'], //老id
     			);
