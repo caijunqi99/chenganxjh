@@ -78,15 +78,16 @@ class Classes extends AdminControl {
         );
         $this->assign('address', $address);
         //学校类型
+        $model_school = model('School');
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
-
+        $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
+        $left_menu = array_column($school_list, 'schoolid');
         foreach ($class_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $class_list[$k]['typename'] = $schooltype['sc_type'];
-            $school = db('school')->where('schoolid',$v['schoolid'])->find();
-            $class_list[$k]['schoolname'] = $school['name'];
+            $key = array_search($v['schoolid'], $left_menu); 
+            $class_list[$k]['typename'] = db('schooltype')->where('sc_id',$v['typeid'])->value('sc_type');
+            $class_list[$k]['schoolname'] = $school_list[$key]['name'];
         }
         //全部学校
         if($admininfo['admin_id']!=1){
@@ -98,8 +99,8 @@ class Classes extends AdminControl {
             }
         }
         $condition_school['isdel'] = 1;
-        $model_school = model('School');
-        $school_list = $model_school->getAllAchool($condition_school);
+        
+        
         $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
