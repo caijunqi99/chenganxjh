@@ -32,7 +32,7 @@ class Teachercertify extends AdminControl {
 //        }
         $user = input('param.user');//会员账户
         if ($user) {
-            $condition['member_mobile'] = array('like', "%" . $user . "%");
+            $condition['idcard'] = array('like', "%" . $user . "%");
         }
         $teacher_status = input('param.teacher_status');//状态
         if ($teacher_status) {
