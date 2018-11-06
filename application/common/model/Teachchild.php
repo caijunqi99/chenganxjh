@@ -31,8 +31,8 @@ class Teachchild extends Model {
 
     //分页读取数据
     public function getPageTeachildList($where,$order,$page){
-        $start = ($page-1)*50;
-        $sql = "select * from x_teachchild where ".$where." order by ".$order." limit ".$start.",50";
+        $start = ($page-1)*10;
+        $sql = "select * from x_teachchild where ".$where." order by ".$order." limit ".$start.",10";
         $result = $this->query($sql);
         return $result;
     }
