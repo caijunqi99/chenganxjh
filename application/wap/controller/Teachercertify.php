@@ -94,9 +94,10 @@ class Teachercertify extends MobileMember
         $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         if(empty($teachinfo['provinceid'])){
             $member_info = db('member')->where(array('member_id'=>$member_id))->find();
-            $teachinfo['provinceid'] = $member_info['member_provinceid'];
-            $teachinfo['cityid'] = $member_info['cityid'];
-            $teachinfo['areaid'] = $member_info['areaid'];
+            $teachinfo['provinceid'] = !empty($member_info['member_provinceid'])?$member_info['member_provinceid']:"";
+            $teachinfo['cityid'] = !empty($member_info['cityid'])?$member_info['cityid']:"";
+            $teachinfo['areaid'] = !empty($member_info['areaid'])?$member_info['areaid']:"";
+            $teachinfo['status'] = 0;
         }
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
