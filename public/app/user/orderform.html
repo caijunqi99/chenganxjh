@@ -175,8 +175,7 @@
                             for(var i=0;i<response['result'].length;i++){
                                 html += '<li class="clear">\n' ;
                                 if(data[i]['order_state'] == 10){
-                                    var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id'+data[i]['s_id'];
-                                    alert(url);
+                                    var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id='+data[i]['s_id'];
                                     html += '<a href="'+url+'" class="clearfix">\n';
                                 }else{
                                     html += '<a  class="clearfix">\n';
@@ -269,7 +268,7 @@
                                         for(var i=0;i<response['result'].length;i++){
                                             html += '<li class="clear">\n' ;
                                             if(data[i]['order_state'] == 10){
-                                                var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id'+data[i]['s_id'];
+                                                var url = http_url+'app/user/chooselevel.html?pkg_type=1&child_id='+data[i]['s_id'];
                                                 html += '<a href="'+url+'" class="clearfix">\n';
                                             }else{
                                                 html += '<a  class="clearfix">\n';
