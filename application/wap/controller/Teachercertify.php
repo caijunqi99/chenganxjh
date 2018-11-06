@@ -40,7 +40,7 @@ class Teachercertify extends MobileMember
         $data['createtime'] = time();
 
         if (empty($data['username'])) output_error('姓名不能为空');
-        if (empty($data['phone'])) output_error('手机号不能为空');
+//        if (empty($data['phone'])) output_error('手机号不能为空');
         if (empty($_FILES['idcard_front']['name'])) output_error('身份证正面图不能为空');
         if (empty($_FILES['idcard_back']['name'])) output_error('身份证反面图不能为空');
         if (empty($_FILES['certificate_front']['name'])) output_error('资格证不能为空');
