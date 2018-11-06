@@ -175,7 +175,7 @@
                     $('.add_student_bar').hide();
                 }
             }else if(response['code'] == 400){
-                $.toast("请登陆",'forbidden');return false;
+                $.toast(response['message'],'forbidden');return false;
             }else{
                 $.toast(response['message'],'forbidden');return false;
             }
@@ -193,7 +193,7 @@
         success: function(response){
             if(response['code'] == 200){
                 var data = response.result;
-                if(data != ''){
+                if(data.length >0){
                     $('.no_bounds').hide();
                     $('.container2').show();
                     if(data.length > 1){
@@ -301,12 +301,10 @@
                         }
                         $('#see').val(data[0]['time']);
                     }
-
                 }else{
                     $('.no_bounds').show();
                     $('.container2').hide();
                 }
-
             }else if(response['code'] == 400){
                 $('.no_bounds').show();
                 $('.container2').hide();
