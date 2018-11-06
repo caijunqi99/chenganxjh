@@ -213,11 +213,10 @@ $(function() {
                         }
                     })
                 });
-                alert(e.result.address_info);
                 if ($.isEmptyObject(e.result.address_info)) {
                     $.sDialog({
                         skin: "block",
-                        content: "请添加地址222",
+                        content: "请添加地址",
                         okFn: function() {
                             $("#new-address-valve").click()
                         },

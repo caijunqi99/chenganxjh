@@ -97,7 +97,7 @@ class Address extends Model {
      * @return bool 布尔类型的返回结果
      */
     public function addAddress($param) {
-        return db('address')->insert($param);
+        return db('address')->insertGetId($param);
     }
 
     /**
