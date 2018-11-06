@@ -370,7 +370,8 @@ $(function() {
                 success: function(a) {
                     if (a.code==200) {
                         e.address_id = a.result.address_id;
-                        _init(e.address_id);
+                        setTimeout(_init(e.address_id),500);
+
                         $("#new-address-wrapper,#list-address-wrapper").find(".header-l > a").click()
                     }
                 }
