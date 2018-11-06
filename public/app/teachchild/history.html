@@ -151,11 +151,13 @@
                         if (response['result'].length == 0) {
                             $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
                         } else {
+                            List = [];
                             let keys = Object.keys(response['result'][0]);
-                            for (var i = 1; i < keys.length; i++) {
-                                let params = new Object();
-                                params[keys[i]] = response['result'][0][keys[i]];
-                                List.push(params);
+                            for (var i = 0; i < keys.length; i++) {
+                                let param = new Object();
+                                param[keys[i]] = response['result'][0][keys[i]];
+                                console.log(param);
+                                List.push(param);
                             }
                             $('.history_content').html(HTML(List));
                         }
