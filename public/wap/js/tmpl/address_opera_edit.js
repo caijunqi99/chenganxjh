@@ -48,6 +48,9 @@ $(function() {
                 }})
         }
     });
+    $("#header-nav").click(function() {
+        $(".btn").click()
+    });
     $("#area_info").on("click", function() {
         $(this).blur();
         $.areaSelected({success: function(a) {
