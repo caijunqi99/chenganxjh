@@ -34,7 +34,8 @@ class Teachercertify extends MobileMember
         $data['areaid'] = trim(input('post.areaid'));
         $data['region'] = input('post.region');
         $data['username'] = input('post.username');
-        $data['phone'] = input('post.phone');
+        $data['phone'] = !empty(input('post.phone'))?input('post.phone'):"";
+        $data['idcard'] = !empty(input('post.idcard'))?input('post.idcard'):"";
         $data['status'] = 1;
         $data['createtime'] = time();
 
@@ -91,15 +92,15 @@ class Teachercertify extends MobileMember
         $teachchild = model('Teachercertify');
         $teachinfo = db('teachercertify')->where(array('member_id'=>$member_id))->order('id',desc)->limit(1)->find();
         $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        if(empty($teachinfo['provinceid'])){
+            $member_info = db('member')->where(array('member_id'=>$member_id))->find();
+            $teachinfo['provinceid'] = $member_info['member_provinceid'];
+            $teachinfo['cityid'] = $member_info['cityid'];
+            $teachinfo['areaid'] = $member_info['areaid'];
+        }
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
             $teachinfo['provincename'] = $parent['area_name'];
-        }
-        if(!empty($teachinfo['createtime'])){
-            $teachinfo['createtime'] = date("H:i",$teachinfo['createtime']);
-        }
-        if(!empty($teachinfo['option_time'])){
-            $teachinfo['option_time'] = date("H:i",$teachinfo['option_time']);
         }
         if(!empty($teachinfo['cityid'])){
             $child = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['cityid']))->find();
@@ -108,6 +109,12 @@ class Teachercertify extends MobileMember
         if(!empty($teachinfo['areaid'])){
             $child3 = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['areaid']))->find();
             $teachinfo['areaname'] = $child3['area_name'];
+        }
+        if(!empty($teachinfo['createtime'])){
+            $teachinfo['createtime'] = date("H:i",$teachinfo['createtime']);
+        }
+        if(!empty($teachinfo['option_time'])){
+            $teachinfo['option_time'] = date("H:i",$teachinfo['option_time']);
         }
         if(!empty($teachinfo['cardimg'])){
             $teachinfo['cardimg'] = $path.$teachinfo['cardimg'];
