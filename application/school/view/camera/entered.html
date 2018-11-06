@@ -24,26 +24,7 @@
                     <input name="name"  autocomplete="off" placeholder="请输入摄像头名称搜索" value="<?php echo $_GET['name'];?>" class="layui-input" type="text">
                 </div>
             </div>
-            <div class="layui-inline">
-                <div class="layui-input-inline">
-                    <select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">
-                        <option value="0" selected>{$Think.lang.look_address_province}</option>
-                        {volist name="province" id="vo"}
-                        <option value="{$vo.area_id}" <?php if($vo['area_id'] == $_GET['province']){echo 'selected';}?> >{$vo.area_name}</option>
-                        {/volist}
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">
-                        <option value="0">{$Think.lang.look_address_city}</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">
-                        <option value="0">{$Think.lang.look_address_area}</option>
-                    </select>
-                </div>
-            </div>
+            
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="school" lay-filter="school"  class="select"  lay-verify="type"  id="school">
@@ -386,7 +367,7 @@
         laypage.render({
             elem: 'page'
             ,count: '<?php echo $list_count;?>'
-            ,limit:2
+            ,limit:6
             ,layout: ['count', 'prev', 'page', 'next',  'skip']
             ,jump: function(obj){
                 // console.log(obj);
