@@ -97,6 +97,7 @@ $(function() {
     });
     $("#new-address-wrapper").on("click", "#varea_info",
     function() {
+        $(this).blur();
         $.areaSelected({
             success: function(e) {
                 city_id = e.area_id_2 == 0 ? e.area_id_1: e.area_id_2;

@@ -427,7 +427,8 @@ class Member extends MobileMember
             's_areaid'       => $area_id,
             's_region'       => $region,
             's_card'         => $card,
-            'classCard'      =>$classCard
+            'classCard'      =>$classCard,
+            's_createtime'   => date('Y-m-d H:i:s',time())
         );
         if(!empty($student)){
             if(!empty($student['s_ownerAccount'])){
