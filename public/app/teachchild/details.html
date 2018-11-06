@@ -120,6 +120,13 @@
                         $('.video_play_btn').parent().hide();
                         $("#video").show();
                     }
+                    if(res.result[0]['collect'] == 0){
+                        $('#collect').show();
+                        $('#qxCollect').hide();
+                    }else{
+                        $('#collect').hide();
+                        $('#qxCollect').show();
+                    }
                 }
             }
         });

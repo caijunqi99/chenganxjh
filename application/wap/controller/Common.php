@@ -47,18 +47,14 @@ class Common extends MobileMall
      * @time 20181002
      */
     public function address(){
-        $token = trim(input('post.key'));
-        if(empty($token)){
-            output_error('缺少参数token');
-        }
         $where = ' area_parent_id = 0';
-        $area = db('area')->field('area_id as code,area_name as name')->where($where)->select();
+        $area = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where($where)->select();
         if(!empty($area)){
             foreach($area as $key=>$value){
-                $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$value['code'].'"')->select();
+                $area[$key]['sub'] = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where(' area_parent_id = "'.$value['code'].'"')->select();
                 if(!empty($area[$key]['sub'])){
                     foreach($area[$key]['sub'] as $k=>$v){
-                        $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name')->where(' area_parent_id = "'.$v['code'].'"')->select();
+                        $area[$key]['sub'][$k]['sub'] = db('area')->field('area_id as code,area_name as name,area_parent_id as parent_id')->where(' area_parent_id = "'.$v['code'].'"')->select();
                     }
                 }
             }

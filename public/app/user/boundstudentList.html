@@ -136,9 +136,9 @@
             </div>
             <div class="input_box">
                 <input class="input_txt" id="see" onblur="this.blur()" type="text" readonly>
-                <input type="hidden"  name="s_id" id="s_id">
+                <input type="hidden" value="" name="s_id" id="s_id">
             </div>
-            <a href="javascript:;" class="scan_bar" data-id="" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
+            <a href="javascript:;" class="scan_bar" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
                 续费
             </a>
         </div>
@@ -180,7 +180,7 @@
                 $.toast(response['message'],'forbidden');return false;
             }
         }
-    })
+    });
     
     $.ajax({
         type:'POST',
@@ -316,6 +316,10 @@
             }
         }
     })
+
+
+
+
     $('.add_student_bar').click(function(){
         $.ajax({
             type:'POST',
@@ -343,16 +347,13 @@
     //购买套餐
     $('#see').click(function(){
         var sid = $('#s_id').val();
-        if(sid){
-            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
-        }
+
+        location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
+
     });
     function see(){
         var sid = $('#s_id').val();
-        if(sid){
-            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
-        }
-
+        location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
     }
 
 

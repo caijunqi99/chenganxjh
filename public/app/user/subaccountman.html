@@ -30,7 +30,7 @@
                 <p>副帐户管理</p>
             </div>
             <div class="head_r">
-                <a href="javascript:;" data-target="#full" id="open_popup">
+                <a href="javascript:;" data-target="#full" id="open_popup" style="display: none">
                     <i class="icon iconfont icon-jiahao"></i>
                 </a>
             </div>
@@ -118,7 +118,32 @@
                     $('.pay_remarks').html('您最多可以添加'+response.result[4]['value']+'个副账号，副账号和主账号同等权限');
                     num = response.result[4]['value'];
                 }
-            })
+            });
+            /**
+             * @desc 判断是否为副账号
+             */
+            $.ajax({
+                type:'POST',
+                url:api+'/Member/isOwner.html',
+                data:{
+                    key:user_token,
+                    member_id:user_member_id,
+                },
+                dataType: "json",
+                success: function(response){
+                    if(response['code'] == 200){
+                        if(response.result[0]['is_owner'] == 0){
+                            $('#open_popup').show();
+                        }else{
+                            $('#open_popup').hide();
+                        }
+                    }else if(response['code'] == 400){
+                        $.toast(response['message'],'forbidden');return false;
+                    }else{
+                        $.toast(response['message'],'forbidden');return false;
+                    }
+                }
+            });
             // 获取副账户列表
             function list() {
                 $.ajax({
