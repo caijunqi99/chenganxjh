@@ -73,7 +73,7 @@ class Packagesbuy extends MobileMember
         $field = 'pkg_id,pkg_length,pkg_axis,pkg_length,pkg_name,pkg_price,pkg_cprice,pkg_sort,pkg_type,pkg_desc';
         $list = $pkg->getPkgLists($condition,'');
         foreach ($list as $k => &$v) {
-            $str = $v['pkg_length'].'个月';
+          /*  $str = $v['pkg_length'].'个月';
             switch ($v['pkg_axis']) {
                 case 'quarter':
                     $str = ($v['pkg_length']*3).'个月';
@@ -89,7 +89,9 @@ class Packagesbuy extends MobileMember
                     $str = $v['pkg_length'].'个月';
                     break;
             }
-            $v['pkg_title'] = $str;
+            $v['pkg_title'] = $str;*/
+            $v['pkg_title'] = $v['pkg_name'];
+
         }
         unset($v);
         if ($list) {
