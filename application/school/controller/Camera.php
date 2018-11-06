@@ -246,6 +246,19 @@ class Camera extends AdminControl
         
 
         $list_count = db('camera')->where($where)->count();
+
+        //年级类型
+        $school_where=[];
+        $school_where['schoolid'] = session('admin_school_id');
+        $school_type = db('school')->field('typeid')->where($school_where)->find();
+        if(!empty($school_type)){
+            $type = explode(',',$school_type['typeid']);
+            $grade = array();
+            foreach($type as $key=>$val){
+                $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
+            }
+            $this->assign('grade',$grade);
+        }
         $this->assign('list_count',$list_count);
         $this->setAdminCurItem('entered');
         return $this->fetch('entered');
@@ -258,6 +271,7 @@ class Camera extends AdminControl
      * @return [type]                          [description]
      */
     public function _conditions($where){
+
         if (isset($where['name']) && !empty($where['name'])) {
             $condition['name'] = array('LIKE','%'.$where['name'].'%');
         }
@@ -280,40 +294,6 @@ class Camera extends AdminControl
             $name = 'true';
             if ($grade) {
                 $res=array_merge($res, $grade);
-            }
-        }
-        if (isset($where['school']) && $where['school'] != 0 ) {
-            $school = $this->getResGroupIds(array('schoolid'=>$where['school']));
-            unset($where['area']);
-            unset($where['city']);
-            unset($where['province']);
-            $name = 'true';
-            if ($school) {
-                $res=array_merge($res, $school);
-            }
-        }
-        if (isset($where['area']) && $where['area'] != 0 ) {
-            $area = $this->getResGroupIds(array('areaid'=>$where['area']));
-            unset($where['city']);
-            unset($where['province']);
-            $name = 'true';
-            if ($area) {
-                $res=array_merge($res, $area);
-            }
-        }
-        if (isset($where['city']) && $where['city'] != 0 ) {
-            $city = $this->getResGroupIds(array('cityid'=>$where['city']));
-            unset($where['province']);
-            $name = 'true';
-            if ($city) {
-                $res=array_merge($res, $city);
-            }
-        }
-        if (isset($where['province']) && $where['province'] != 0 ) {
-            $province = $this->getResGroupIds(array('provinceid'=>$where['province']));
-            $name = 'true';
-            if ($province) {
-                $res=array_merge($res, $province);
             }
         }
         if ($name == 'true') {
@@ -342,24 +322,13 @@ class Camera extends AdminControl
             $classname = $where['classname'];
             unset($where['classname']);
         }
+
         $where['res_group_id'] =array('gt',0);
         $Schoollist = $School->getAllAchool($where,'res_group_id');
-        // p($where);exit;
-        if (isset($where['provinceid']) && !empty($where['provinceid'])) {
-            $where['school_provinceid'] =$where['provinceid'];
-            unset($where['provinceid']);
-        }
-        if (isset($where['cityid']) && !empty($where['cityid'])) {
-            $where['school_cityid'] =$where['cityid'];
-            unset($where['cityid']);
-        }
-        
-        if (isset($where['areaid']) && !empty($where['areaid'])) {
-            $where['school_areaid'] =$where['areaid'];
-            unset($where['areaid']);
-        }
+
         if (!empty($classname)) {
-            $where['classname'] = array('like','%'.$classname.'%');
+            $where['classname'] = $classname;
+            unset($Schoollist);
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
