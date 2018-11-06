@@ -39,7 +39,7 @@ class Teacherdetail extends MobileMall
         }else{
             $result[0]['data']['buy'] = 0;
         }
-        $result[0]['data']['myself'] = $result[0]['data']['t_userid']==$member_id? 1 : 0;
+        $result[0]['data']['myself'] = !empty($result[0]['data']['t_userid'])&&($result[0]['data']['t_userid']==$member_id)? 1 : 0;
         $conditions = array();
         $conditions['t_audit'] = 3;
         $conditions['t_del'] = 1;

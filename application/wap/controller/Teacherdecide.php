@@ -40,7 +40,7 @@ class Teacherdecide extends MobileMember
         $free = db('teachchild')->where(array('t_id'=>$video_id))->find();
         $data['price'] = $free['t_price']!=0 ? $free['t_price'] : 0;
         //是否是自己上传的
-        $data['myself'] = $free['t_userid']==$member_id? 1 : 0;
+        $data['myself'] = !empty($free['t_userid'])&&($free['t_userid']==$member_id)? 1 : 0;
         //视频状态
         $data['t_audit'] = $free['t_audit'];
         output_data($data);
