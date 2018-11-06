@@ -156,7 +156,6 @@
 <script src="../content/scripts/regular.js"></script>
 
 <script>
-    alert(user_token);
     $.ajax({
         type:'POST',
         url:api+'/Member/getStudents.html',
@@ -285,7 +284,7 @@
             }else if(response['code'] == 400){
                 $('.no_bounds').show();
                 $('.container2').hide();
-                $.toast('请登录','forbidden');return false;
+                $.toast(response['message'],'forbidden');return false;
             }else{
                 $('.no_bounds').show();
                 $('.container2').hide();
