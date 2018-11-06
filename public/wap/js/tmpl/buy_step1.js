@@ -213,6 +213,7 @@ $(function() {
                         }
                     })
                 });
+                alert(e.result.address_info);
                 if ($.isEmptyObject(e.result.address_info)) {
                     $.sDialog({
                         skin: "block",
@@ -370,8 +371,8 @@ $(function() {
                 success: function(a) {
                     if (a.code==200) {
                         e.address_id = a.result.address_id;
-                        setTimeout(_init(e.address_id),500);
-
+                        alert(e.address_id);
+                        _init(e.address_id);
                         $("#new-address-wrapper,#list-address-wrapper").find(".header-l > a").click()
                     }
                 }
