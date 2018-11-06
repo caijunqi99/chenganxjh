@@ -145,12 +145,12 @@
             // 下拉刷新
             $(document.body).pullToRefresh(function() {
                 $(document.body).infinite();
+                var params = Params;
+                params['page'] = 1;
+                GetKejian(params);
                 setTimeout(function() {
-                    var params = Params;
-                    params['page'] = 1;
-                    GetKejian(params);
                     $(document.body).pullToRefreshDone(); // 重置下拉刷新
-                }, 1000)
+                }, 2000)
             });
 
             // 顶部推荐切换

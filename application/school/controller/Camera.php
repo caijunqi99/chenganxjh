@@ -353,10 +353,7 @@ class Camera extends AdminControl
             $where['school_cityid'] =$where['cityid'];
             unset($where['cityid']);
         }
-        if (isset($where['areaid']) && !empty($where['areaid'])) {
-            $where['school_areaid'] =$where['areaid'];
-            unset($where['areaid']);
-        }
+        
         if (isset($where['areaid']) && !empty($where['areaid'])) {
             $where['school_areaid'] =$where['areaid'];
             unset($where['areaid']);
