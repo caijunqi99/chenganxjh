@@ -299,7 +299,6 @@ class Stest extends AdminControl {
 				'address'          => $school['address'], //学校地址
 				'common_phone'     => '0',//电话
 				'username'         => db('aauser')->where('id',$school['user_user_id'])->value('name'), //负责/联系人 性别
-				'dieline'          => '', //合同截止日期
 				'desc'             => $school['name'], //备注
 				'createtime'       => $school['createTime'], //添加时间/
 				'updatetime'       => date('Y-m-d H:i:s',time()), ///修改时间

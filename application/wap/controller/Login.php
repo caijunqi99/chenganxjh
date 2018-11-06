@@ -85,6 +85,8 @@ class Login extends MobileMall
             if ($member_info['member_password'] != md5(trim($password))) {//密码对比
                 output_error('密码填写错误！');
             }
+        }else{
+            output_error('非法登陆');
         }
 
         $member = $model_member->getMemberInfo(array('member_mobile' => $phone));
