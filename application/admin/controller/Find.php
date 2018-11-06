@@ -71,10 +71,20 @@ class Find extends AdminControl {
             $this->assign('etime',$etime);
         }
         $mood_list = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->order('id desc')->paginate(15,false,['query' => request()->param()]);
-        $model_student = model('Student');
+        //print_r($mood_list);exit;
+        //$model_student = model('Student');
         $list=$mood_list->items();
+        //print_r($list);exit;
         foreach($list as $k=>$v){
-            $student=$model_student->getAllChilds($v['member_id']);
+            $member_info = db("member")->where(array("member_id"=>$v['member_id']))->find();
+            $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : $member_id;
+            $student = db("student")->alias('s')
+                ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
+                ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
+                ->field('s.s_id,s.s_name,s.s_region,sc.schoolid,sc.name,sc.res_group_id,cl.classid,cl.classname,cl.classCard,cl.res_group_id as clres_group_id')
+                ->where(array("s_ownerAccount"=>$member_id,'s_del'=>1))->select();
+
+            //$student=$model_student->getAllChilds($v['member_id']);
             if($student[0]!='') {
                 $list[$k]['student'] = $student[0];
             }else{
@@ -82,7 +92,7 @@ class Find extends AdminControl {
             }
             $list[$k]['image']=explode(',',$v['image']);
         }
-
+        
         $this->assign('path',$img_path);
         $this->assign('page', $mood_list->render());
         $this->assign('mood_list', $list);
