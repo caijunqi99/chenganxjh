@@ -167,8 +167,6 @@
                             },
                             dataType: 'json',
                             success: function(response) {
-                                alert('bbb');
-                                alert(response['code']);
                                 if (response['code'] == 200) {
                                     // 微信支付
                                     if (pay == 'wxpay_app') {
