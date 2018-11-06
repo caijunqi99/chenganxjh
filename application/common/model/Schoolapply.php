@@ -46,8 +46,8 @@ class Schoolapply extends Model {
         return $list;
     }
 
-    public function getAllAchoolapply($condtion){
-        $result = db('schoolapply')->where($condtion)->select();
+    public function getAllAchoolapply(){
+        $result = db('schoolapply')->select();
         return $result;
     }
 
