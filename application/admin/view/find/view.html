@@ -13,7 +13,7 @@
             </dl>
                     <?php
                      if($mview['image']!=''){
-                     foreach($mview['image'] as $v ){ ?>
+                     foreach($mview['image'][0] as $v ){ ?>
                        <img src="<?php echo $path.$v; ?>" >&nbsp;&nbsp;&nbsp;
                     <?php
                         }
