@@ -173,7 +173,7 @@
                                         var mbs = response.result[0];
                                         if (mbs.result_code == 'SUCCESS') {
                                             if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-                                                window.webkit.messageHandlers.wxClick.postMessage('aaa');
+                                                window.webkit.messageHandlers.wxpayClick.postMessage(mbs);
                                             } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
                                                 mbs = mbs['prepay_id'] + ',' + mbs['nonce_str'] + ',' + mbs['timestamp'] + ',' + mbs['sign'] + ',' + mbs['orderSn'];
                                                 Android.wxpayClick(mbs);
