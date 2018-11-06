@@ -122,10 +122,10 @@ class Memberorder extends MobileMember {
         if (!$if_allow) {
             output_error('无权操作');
         }
-        if (TIMESTAMP - 86400 < $order_info['add_time']) {
+        /*if (TIMESTAMP - 86400 < $order_info['add_time']) {
             $_hour = ceil(($order_info['add_time'] + 86400 - TIMESTAMP) / 3600);
             output_error('该订单曾尝试使用第三方支付平台支付，须在' . $_hour . '小时以后才可取消');
-        }
+        }*/
         $result = $logic_order->changeOrderStateCancel($order_info, 'buyer', $this->member_info['member_name'], '其它原因');
         if (!$result['code']) {
             output_error($result['msg']);
