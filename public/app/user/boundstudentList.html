@@ -180,7 +180,7 @@
                 $.toast(response['message'],'forbidden');return false;
             }
         }
-    })
+    });
     
     $.ajax({
         type:'POST',
@@ -316,6 +316,10 @@
             }
         }
     })
+
+
+
+
     $('.add_student_bar').click(function(){
         $.ajax({
             type:'POST',
