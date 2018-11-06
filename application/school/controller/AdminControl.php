@@ -138,6 +138,7 @@ class AdminControl extends Controller {
         }else{
             $permission = $this->permission;
         }
+
 //        halt($this->permission);
         //显示隐藏小导航，成功与否都直接返回
         if (is_array($link_nav)){
@@ -149,7 +150,7 @@ class AdminControl extends Controller {
         }
 
         //以下几项不需要验证   langzhiyao修改不需要验证的控制器：Organizes  Schoolinfo 过滤
-        $tmp = array('Index','Schooldesc','Dashboard','Schoolbus','Schoolfood','Coursemanage','Login','Schoolinfo','Classesinfo','Studentinfo','Mlselection');
+        $tmp = array('Index','Schooldesc','Dashboard','Schoolbus','Schoolfood','Coursemanage','Login','Schoolinfo','Classesinfo','Studentinfo','Mlselection','Common');
         if (in_array($act,$tmp)) return true;
         if (in_array($act,$permission) || in_array("$act.$op",$permission)){
             return true;
