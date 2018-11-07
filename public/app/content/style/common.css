@@ -63,7 +63,7 @@
         position: fixed;
         left: 0;
         top: 0;
-        z-index: 8;
+        z-index: 99;
     }
     
     .head>div.head0 {
@@ -527,16 +527,20 @@
         line-height: 100px;
         text-align: center;
     }
+    
     .videoimg_box {
         position: relative;
         margin-bottom: 30px;
     }
-    .videoimg_box img{
+    
+    .videoimg_box img {
         width: 100%;
     }
+    
     #video {
         display: none;
     }
+    
     .video_play_btn {
         width: 101px;
         height: 100px;
@@ -547,4 +551,21 @@
         top: 50%;
         margin-left: -50px;
         margin-top: -50px;
+    }
+    
+    .nodata {
+        height: 500px;
+    }
+    
+    .no_collect {
+        background: url(../images/icons/no_collect.png) no-repeat center;
+    }
+    
+    .nodata_p {
+        font-size: 24px;
+        color: #aaa;
+        text-align: center;
+        width: 100%;
+        line-height: 30px;
+        padding-top: 380px;
     }

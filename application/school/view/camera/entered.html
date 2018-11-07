@@ -124,10 +124,14 @@
         layer.open({
           type: 1,
           title: rtmpInfo.name,
-          shadeClose: true,
+          // shadeClose: true,
+          shade: false,
           area: ['644px', '470px'],
           skin: 'layui-layer-rim',
           content: $('#LAY')
+          ,cancel: function(){
+
+          }
         });
         var videoObject = {
                 container: '#video', //容器的ID或className
@@ -139,6 +143,9 @@
                 poster:rtmpInfo.imageurl
             };
         var player = new ckplayer(videoObject);
+
+
+
     }
 
     function timesss(cid) {

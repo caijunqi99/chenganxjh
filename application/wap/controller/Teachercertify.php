@@ -94,13 +94,35 @@ class Teachercertify extends MobileMember
         $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         if(empty($teachinfo['provinceid'])){
             $member_info = db('member')->where(array('member_id'=>$member_id))->find();
-            $teachinfo['provinceid'] = !empty($member_info['member_provinceid'])?$member_info['member_provinceid']:"";
+            $teachinfo['provinceid'] = !empty($member_info['member_provinceid'])?$member_info['member_provinceid']:0;
             $teachinfo['provincename'] = "";
-            $teachinfo['cityid'] = !empty($member_info['member_cityid'])?$member_info['member_cityid']:"";
+            $teachinfo['cityid'] = !empty($member_info['member_cityid'])?$member_info['member_cityid']:0;
             $teachinfo['cityname'] = "";
-            $teachinfo['areaid'] = !empty($member_info['member_areaid'])?$member_info['member_areaid']:"";
+            $teachinfo['areaid'] = !empty($member_info['member_areaid'])?$member_info['member_areaid']:0;
             $teachinfo['areaname'] = "";
             $teachinfo['status'] = 0;
+            $teachinfo['id'] = 0;
+            $teachinfo['member_id'] = 0;
+            $teachinfo['member_mobile'] = "";
+            $teachinfo['username'] = "";
+            $teachinfo['idcard'] = "";
+            $teachinfo['phone'] = "";
+            $teachinfo['sex'] = "";
+            $teachinfo['birthday'] = "";
+            $teachinfo['region'] = "";
+            $teachinfo['cardimg'] = "";
+            $teachinfo['cardimg_fan'] = "";
+            $teachinfo['certificate'] = "";
+            $teachinfo['certificate_fan'] = "";
+            $teachinfo['createtime'] = "";
+            $teachinfo['job'] = "";
+            $teachinfo['email'] = "";
+            $teachinfo['address'] = "";
+            $teachinfo['failreason'] = "";
+            $teachinfo['affiliat'] = "";
+            $teachinfo['desc'] = "";
+            $teachinfo['option_id'] = 0;
+            $teachinfo['option_time'] = "";
         }
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
