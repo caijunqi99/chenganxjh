@@ -22,13 +22,12 @@ class Member extends MobileMember
             'income' => '0.00',//收入金额
             'reflect' => '0.00',//提现金额
         );
-        
-
-
-
         output_data($self);
     }
 
+    public function RefreshPullOldOrder(){
+        output_data(array('state'=>'true'));
+    }
     /**
      * @desc 个人信息
      * @author langzhiyao

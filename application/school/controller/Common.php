@@ -315,6 +315,7 @@ class Common extends AdminControl
      * @time 20180927
      */
     public function get_school_info(){
+
         $school_id = intval(input('get.school'));
         $grade_name = trim(input('get.grade'));//年级类型ID
         $class_name = trim(input('get.class'));//年级类型ID
@@ -328,7 +329,7 @@ class Common extends AdminControl
             }*/
             //班级
             $grade_where['schoolid'] = $school_id;
-            $grade_class = db('schooltype')->field('sc_id,sc_type')->where(' `sc_type` = "'.$grade_name.'"')->find();
+            $grade_class = db('schooltype')->field('sc_id,sc_type')->where('sc_type',$grade_name)->find();
             $grade_where['typeid'] = $grade_class['sc_id'];
             $class =  db('class')->field('classid,classname')->where($grade_where)->select();
             if(!empty($class)){
