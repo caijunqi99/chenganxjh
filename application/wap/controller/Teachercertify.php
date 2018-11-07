@@ -101,6 +101,28 @@ class Teachercertify extends MobileMember
             $teachinfo['areaid'] = !empty($member_info['member_areaid'])?$member_info['member_areaid']:"";
             $teachinfo['areaname'] = "";
             $teachinfo['status'] = 0;
+            $teachinfo['id'] = "";
+            $teachinfo['member_id'] = "";
+            $teachinfo['member_mobile'] = "";
+            $teachinfo['username'] = "";
+            $teachinfo['idcard'] = "";
+            $teachinfo['phone'] = "";
+            $teachinfo['sex'] = "";
+            $teachinfo['birthday'] = "";
+            $teachinfo['region'] = "";
+            $teachinfo['cardimg'] = "";
+            $teachinfo['cardimg_fan'] = "";
+            $teachinfo['certificate'] = "";
+            $teachinfo['certificate_fan'] = "";
+            $teachinfo['createtime'] = "";
+            $teachinfo['job'] = "";
+            $teachinfo['email'] = "";
+            $teachinfo['address'] = "";
+            $teachinfo['failreason'] = "";
+            $teachinfo['affiliat'] = "";
+            $teachinfo['desc'] = "";
+            $teachinfo['option_id'] = "";
+            $teachinfo['option_time'] = "";
         }
         if(!empty($teachinfo['provinceid'])){
             $parent = db('area')->field("area_name")->where(array('area_id'=>$teachinfo['provinceid']))->find();
