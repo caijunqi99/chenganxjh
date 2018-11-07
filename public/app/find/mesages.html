@@ -78,7 +78,7 @@
         function HTML(data) {
             var template = "";
             for (i = 0; i < data.length; i++) {
-                template += '<li onclick="msg_switch($(this))">' +
+                template += '<li onclick="msg_switch($(this))" mid="'+data[i].message_id+'">' +
                     '<h3 class="mesage_title">' + data[i].from_member_name + '<span class="date">' + data[i]["message_time"] + '</span></h3>' +
                     '<div class="mesage_text">' +
                     '<p class="mesage_text_p">' + data[i]["message_body"] + '</p>' +
@@ -92,6 +92,10 @@
         function msg_switch(obj) {
             obj.addClass("open");
             obj.siblings().removeClass("open");
+            var mid = obj.attr('mid');
+            $.post(api+'/Membermessage/showmsgbatch.html', {'key': user_token,'type':'msg_system','message_id':mid}, function(data, textStatus, xhr) {
+                console.log(data);
+            });
         }
 
         // 滚动加载
