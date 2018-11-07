@@ -560,6 +560,9 @@
     .no_collect {
         background: url(../images/icons/no_collect.png) no-repeat center;
     }
+    .no_pinglun {
+        background: url(../images/icons/no_pinglun.png) no-repeat center;
+    }
     
     .nodata_p {
         font-size: 24px;

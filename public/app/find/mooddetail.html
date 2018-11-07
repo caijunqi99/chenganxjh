@@ -51,7 +51,7 @@
             <h2 class="commentary_h2">评论<span></span></h2>
             <!-- 如果没有评论请为下面的div添加class="no_cont" -->
             <div class="commentary_text">
-
+                <div id="nodata_box"></div>
             </div>
         </div>
     </div>
@@ -120,6 +120,10 @@
                                     '                </div>';
                             }
                             $('.commentary_text').html(view_html);
+                        }else{
+                            $('#nodata_box').html('<div class="nodata no_pinglun" style="height: 200px;">\n' +
+                                '                        <p class="nodata_p" style="padding-top:180px;">暂无评论</p >\n' +
+                                '                    </div>');
                         }
 
                     }
