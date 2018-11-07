@@ -38,6 +38,8 @@ class Teacherdetail extends MobileMall
         }else{
             $result[0]['data']['buy'] = 0;
         }
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $result[0]['data']['t_picture'] = !empty($result[0]['data']['t_picture'])?$path.$result[0]['data']['t_picture']:"";
         $result[0]['data']['myself'] = !empty($result[0]['data']['t_userid'])&&($result[0]['data']['t_userid']==$member_id)? 1 : 0;
         $conditions = array();
         $conditions['t_audit'] = 3;
@@ -45,6 +47,11 @@ class Teacherdetail extends MobileMall
         $conditions['t_type'] = $result[0]['data']['t_type'];
         $conditions['t_id'] = array('neq',$result[0]['data']['t_id']);
         $result[]['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
+        if(!empty($result['list'])){
+            foreach($result['list'] as $k=>$v){
+                $result['list'][$k]['t_picture'] = !empty($v['t_picture'])?$path.$v['t_picture']:"";
+            }
+        }
         if($result) {
             output_data($result);
         }else{
