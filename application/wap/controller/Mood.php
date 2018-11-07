@@ -136,6 +136,57 @@ class Mood extends MobileMember{
         }
     }
 
+    public function uploadThump(){
+        if(!empty($_FILES)){
+            if($_FILES["mood"]["size"] < 8*1024*1024){
+                if ($_FILES["mood"]["error"] > 0){
+                    output_error($_FILES["mood"]["error"]);
+                }else{
+                    //根目录地址
+                    $base_url = str_replace('\\', '/',BASE_UPLOAD_PATH );
+                    //正常上传的地址
+                    $big_url=$base_url .'/'. ATTACH_PATH . '/mood/';
+                    //压缩后的图片上传的地址
+                    $small_url=$big_url.'smallmood/';
+
+                    if (!empty($_FILES['mood']['tmp_name'])) {
+                        $file_object= request()->file('mood');
+                        $ext = strtolower(pathinfo($_FILES['mood']['name'], PATHINFO_EXTENSION));
+                        $file_name='mood_'.time().rand(1000,9999).".$ext";
+                        $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($big_url,$file_name);
+
+                        if (!$info) output_error($file_object->getError());
+                    } else {
+                        output_error('上传失败，请尝试更换图片格式或小图片');
+                    }
+                    $imgUlr =$info->getFilename();
+                    $big_name_dir= '/' . ATTACH_PATH . '/mood/' . $imgUlr;
+                    $imageinfo=getimagesize(BASE_UPLOAD_PATH.$big_name_dir);
+                    $file_dir=$big_url.$imgUlr;
+
+                    $image = \think\Image::open($file_dir);
+                    // 按照原图的比例生成一个最大为600*600的缩略图替换原图
+                    // p($base_url.'smallmood/' . $inmUrl);exit;
+                    $image->thumb(110, 110)->save($small_url. $imgUlr);
+                    $small_name_dir ='/' . ATTACH_PATH . '/mood/smallmood/' . $imgUlr;
+                    
+                    $result = array();
+                    $result[0] = array(
+                        'big_name_dir' => $big_name_dir,//原图相对路径
+                        'big_file_dir' => $big_url. $imgUlr,//原图绝对路径
+                        'big_imageinfo' => getimagesize($big_url. $imgUlr),//原图详情
+                        'small_name_dir' => $small_name_dir, //压缩后的图片相对路径
+                        'small_file_dir' => $small_url. $imgUlr,//压缩后的图片绝对路径
+                        'small_imageinfo' => getimagesize($small_url. $imgUlr), //压缩图详情 
+                        'error' =>$file_object->getError() //上传错误，正常为空
+                    );
+                    output_data($result);
+                }
+            }else{
+                output_error('图片上传大小不允许超过8M，请重新上传');
+            }
+        }
+    }
     /*
  * 上传图片
  * */

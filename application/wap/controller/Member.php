@@ -26,6 +26,7 @@ class Member extends MobileMember
     }
 
     public function RefreshPullOldOrder(){
+
         $oldid = $this->member_info['oldid'];
         //获取订单
         $orderCondition=array(
