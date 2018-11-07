@@ -120,6 +120,8 @@ class Mood extends MobileMember{
                 $file1["file"]['error'] = $_FILES['file']["error"][$key];
                 $file1["file"]['size'] = $_FILES['file']["size"][$key];
                 $smallname="home/smallmood/".$imgname;
+                $file1["file"]['small']=$smallname;
+
                 $info = $this->upload($file1);
                 if($info){
                     $a .="," . $file1["file"]['name'];
@@ -216,10 +218,9 @@ class Mood extends MobileMember{
                 if(!is_dir($uploadimg_path."home/smallmood/")){
                     mkdir($uploadimg_path."home/smallmood/",0777,true);
                 }
-                $small_url=$uploadimg_path.'smallmood/';
                 // 按照原图的比例生成一个最大为600*600的缩略图替换原图
                 // p($base_url.'smallmood/' . $inmUrl);exit;
-                $image->thumb(110, 110)->save($small_url. $data['file']['name']);
+                $image->thumb(110, 110)->save($uploadimg_path. $data['file']['smallname']);
                 if ($upload) {
                     return $upload;
                 } else {
