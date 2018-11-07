@@ -29,7 +29,6 @@ class Teacherdetail extends MobileMall
         if($member_id!=""){
             $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$tid,'order_state'=>20))->order('order_id desc')->limit(1)->find();
         }
-
         if(!empty($orderinfo)){
             if($orderinfo['order_dieline']>time()){
                 $result[0]['data']['buy'] = 1;
