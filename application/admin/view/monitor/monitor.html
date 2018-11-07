@@ -96,24 +96,10 @@
             <?php foreach($video as $k=>$v){ ?>
             <input id="rtmp{$k}" type="hidden" value="{$v.rtmpplayurl}">
             <input id="image{$k}" type="hidden" value="{$v.imageurl}">
-            <div class="layui-col-sm4">
+            <div class="layui-col-sm4" id="tr_{$v.cid}" datainfo='{$v.datainfo}'>
                 <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="video{$k}" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#video'+{$k}, //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: $("#rtmp"+{$k}).val(),
-                            poster:$("#image"+{$k}).val()
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">{$v.cameraname}</p>
+                <img onClick="rtmplay({$v['cid']})" src="{$v['imageurl']}" width="500" height="250">
+                <p class="info_p">{$v.name}</p>
             </div>
             <?php } ?>
     </div>
@@ -128,7 +114,45 @@
     {/notempty}
     </tfoot>
 </div>
+<div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
+    <div class="layui-row layui-col-space10 demo-list">
+        <div class="layui-col-sm4">
+            <!-- 填充内容 -->
+            <div class="layui-card">
+                <div id="video" style="width: 600px; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+    function rtmplay(cid){
+        //alert(1);
+        var rtmpInfo= $('#tr_'+cid).attr('datainfo');
+        rtmpInfo =$.parseJSON(rtmpInfo);
+        layer.open({
+            type: 1,
+            title: rtmpInfo.name,
+            //shadeClose: true,
+            area: ['644px', '470px'],
+            skin: 'layui-layer-rim',
+            content: $('#LAY'),
+            cancel: function(){
+
+
+            //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
+        }
+        });
+        var videoObject = {
+            container: '#video', //容器的ID或className
+            variable: 'player',//播放函数名称
+            autoplay:false,
+            live:true,
+            debug:true,
+            video: rtmpInfo.rtmpplayurl,
+            poster:rtmpInfo.imageurl
+        };
+        var player = new ckplayer(videoObject);
+    }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
                 laypage = layui.laypage
@@ -298,7 +322,7 @@
             var area=$("#area").val();
             var school=$("#school").val();
             var grade=$("#grade").val();
-            var classid=$("#class").val();
+            var classes=$("#class").val();
                    $.ajax({
                         url: "{:url('/Admin/monitor/monitor')}",
                         type: 'POST',
