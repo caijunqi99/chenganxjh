@@ -28,7 +28,11 @@ class Member extends MobileMember
     public function RefreshPullOldOrder(){
         $oldid = $this->member_info['oldid'];
         //获取订单
-        $order = db('aaorder')->where('member_member_id',$oldid)->select();
+        $orderCondition=array(
+            'member_member_id' =>$oldid,
+            'status' =>0,
+        );
+        $order = db('aaorder')->where($orderCondition)->select();
         if ($order) {
             $TrueOrder=[];
             foreach ($order as $key => $o) {
@@ -37,7 +41,7 @@ class Member extends MobileMember
             if (count($TrueOrder) ==0)output_data(array('state'=>'true'));
             $sign = [];
             foreach ($TrueOrder as $k => $t) {
-                
+                # code...
             }
             //获取订单详情
             $orderitem = db('aaorderitem')->where('order_order_id',$order['id'])->find();
