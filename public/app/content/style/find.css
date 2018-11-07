@@ -115,8 +115,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-top:1px dashed #eee;
+    border-top: 1px dashed #eee;
 }
+
 .classplan dd a {
     color: #6b6b6b;
     display: block;
@@ -528,17 +529,17 @@ a.lookall {
 }
 
 .addmood_btn {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     display: block;
     background: -webkit-linear-gradient(to right, #6ee0d8, #1fd0c4);
     background: linear-gradient(to right, #6ee0d8, #1fd0c4);
     border-radius: 50%;
-    line-height: 80px;
+    line-height: 100px;
     text-align: center;
     box-shadow: 0 0 20px #6ee0d8;
     position: fixed;
-    right: 20px;
+    right: 30px;
     bottom: 50px;
     z-index: 9999;
 }
