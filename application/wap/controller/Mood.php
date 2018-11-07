@@ -135,7 +135,7 @@ class Mood extends MobileMember{
             output_error('发布失败');
         }
     }
-
+    
     public function uploadThump(){
         if(!empty($_FILES)){
             if($_FILES["mood"]["size"] < 8*1024*1024){
