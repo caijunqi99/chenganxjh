@@ -46,18 +46,47 @@ class Monitor extends AdminControl
                     $where = $this->_conditions($cond);
                 }
                 $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 6;//每页的条数
-                $start = intval(input('post.page')) ? (intval(input('post.page')) - 1) * $page_count : 0;//开始页数
 
                 //查询已安装的摄像头
-                $camera = db('camera')->where($where)->limit($start, $page_count)->order('cid DESC')->select();
+                $camera_model=Model('camera');
+                $cameras=$camera_model->getCameraList($where,$page_count);
+                foreach($cameras as $k=>$v){
+                    $cameras[$k]['datainfo']=json_encode($v);
+                }
                 if (!empty($_POST['school'])) {
                     $schoolid = $_POST['school'];
                     $model_school = Model('school');
                     $schoolres = $model_school->getSchoolById($schoolid);
                     $this->assign('schoolname', $schoolres['name']);
                 }
-                $this->assign('video', $camera);
+                $this->assign('video', $cameras);
+                $this->assign('page', $camera_model->page_info->render());
             }
+        }
+        if(!empty($_GET)){
+            $cond = array();
+            foreach ($_GET as $key => $p) {
+                if (!in_array($key, ['page', 'page_count']) && !empty($p)) $cond[$key] = $p;
+            }
+            if ($cond) {
+                $where = $this->_conditions($cond);
+            }
+            $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 6;//每页的条数
+
+            //查询已安装的摄像头
+            $camera_model=Model('camera');
+            $cameras=$camera_model->getCameraList($where,$page_count);
+            foreach($cameras as $k=>$v){
+                $cameras[$k]['datainfo']=json_encode($v);
+            }
+            if (!empty($_GET['school'])) {
+                $schoolid = $_GET['school'];
+                $model_school = Model('school');
+                $schoolres = $model_school->getSchoolById($schoolid);
+                $this->assign('schoolname', $schoolres['name']);
+            }
+            $this->assign('video', $cameras);
+            $this->assign('page', $camera_model->page_info->render());
         }
         $this->setAdminCurItem('monitor');
         return $this->fetch('monitor');
