@@ -113,20 +113,24 @@ class Mood extends MobileMember{
         if(!empty($_FILES['file']['name'][0])) {
             foreach ($_FILES['file']['name'] as $key => $value) {
                 $file1 = array();
-                $file1["file"]['name'] = "home/moodimg/".($key+1).date("YmdHis",time())."_".time().".".end(explode('.', $value));
+                $imgname=($key+1).date("YmdHis",time())."_".time().".".end(explode('.', $value));
+                $file1["file"]['name'] = "home/moodimg/".$imgname;
                 $file1["file"]['type'] = $_FILES['file']["type"][$key];
                 $file1["file"]['tmp_name'] = $_FILES['file']["tmp_name"][$key];
                 $file1["file"]['error'] = $_FILES['file']["error"][$key];
                 $file1["file"]['size'] = $_FILES['file']["size"][$key];
+                $smallname="home/smallmood/".$imgname;
                 $info = $this->upload($file1);
                 if($info){
                     $a .="," . $file1["file"]['name'];
+                    $b .=",".$smallname;
                 }else{
                     output_error('图片上传失败');
                 }
             }
             //把第一个#去掉，同时写进data数据库里面的intro_pic字段
             $condition['image']= substr($a, 1);
+            $condition['smallimage']=substr($b, 1);
         }
         $result=$mood->addMood($condition);
         if($result){
@@ -207,6 +211,15 @@ class Mood extends MobileMember{
         if($data["file"]["size"] < 8*1024*1024) {
             if (!empty($data['file']['name'])) {
                 $upload = move_uploaded_file($data["file"]["tmp_name"], $uploadimg_path . $data['file']['name']);
+                $image = \think\Image::open($uploadimg_path . $data['file']['name']);
+                //检查是否有该文件夹，如果没有就创建
+                if(!is_dir($uploadimg_path."home/smallmood/")){
+                    mkdir($uploadimg_path."home/smallmood/",0777,true);
+                }
+                $small_url=$uploadimg_path.'smallmood/';
+                // 按照原图的比例生成一个最大为600*600的缩略图替换原图
+                // p($base_url.'smallmood/' . $inmUrl);exit;
+                $image->thumb(110, 110)->save($small_url. $data['file']['name']);
                 if ($upload) {
                     return $upload;
                 } else {
