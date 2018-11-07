@@ -77,7 +77,7 @@ class Mood extends MobileMember{
         $page_count = ceil(intval($mood_count)/intval($page_num));
         $ar = array('page_count'=>$page_count);
         foreach($mood_list as $k=>$v){
-            $mood_list[$k]['image']=explode(',',$v['image']);
+            $mood_list[$k]['image']=explode(',',$v['smallimage']);
             $mood_list[$k]['pubtime'] = date("Y-m-d H:i",$v['pubtime']);
             if($v['member_nickname']==''){
                 $xing = substr($v['member_mobile'],3,4);
@@ -220,7 +220,7 @@ class Mood extends MobileMember{
                 }
                 // 按照原图的比例生成一个最大为600*600的缩略图替换原图
                 // p($base_url.'smallmood/' . $inmUrl);exit;
-                $image->thumb(110, 110)->save($uploadimg_path. $data['file']['smallname']);
+                $image->thumb(110, 110)->save($uploadimg_path. $data['file']['small']);
                 if ($upload) {
                     return $upload;
                 } else {
