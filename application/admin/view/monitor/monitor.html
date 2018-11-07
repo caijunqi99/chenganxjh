@@ -96,42 +96,110 @@
             <?php foreach($video as $k=>$v){ ?>
             <input id="rtmp{$k}" type="hidden" value="{$v.rtmpplayurl}">
             <input id="image{$k}" type="hidden" value="{$v.imageurl}">
-            <div class="layui-col-sm4">
+            <div class="layui-col-sm4" id="tr_{$v.cid}" datainfo='{$v.datainfo}'>
                 <!-- 填充内容 -->
-                <div class="layui-card">
-                    <div id="video{$k}" style="width: 600px; height: 400px;"></div>
-                    <script type="text/javascript">
-                        var videoObject = {
-                            container: '#video'+{$k}, //容器的ID或className
-                            variable: 'player',//播放函数名称
-                            autoplay:false,
-                            live:true,
-                            debug:true,
-                            video: $("#rtmp"+{$k}).val(),
-                            poster:$("#image"+{$k}).val()
-                        };
-                        var player = new ckplayer(videoObject);
-                    </script>
-                </div>
-                <p class="info_p">{$v.cameraname}</p>
+                <img onClick="rtmplay({$v['cid']})" src="{$v['imageurl']}" width="500" height="250">
+                <p class="info_p">{$v.name}</p>
             </div>
             <?php } ?>
     </div>
 </div>
     <?php } ?>
-    <!--<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-        <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
-        <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
-        <a href="javascript:;" data-page="2">2</a>
-        <a href="javascript:;" data-page="3">3</a>
-        <a href="javascript:;" data-page="4">4</a>
-        <a href="javascript:;" data-page="5">5</a>
-        <a href="javascript:;" class="layui-laypage-next" data-page="2">下一页</a>
-    </div>-->
+    <tfoot>
+    {notempty name="video"}
+    <tr colspan="15" class="tfoot">
+        <td colspan="16">
+            <div class="pagination"> {$page} </div></td>
+    </tr>
+    {/notempty}
+    </tfoot>
+</div>
+<div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
+    <div class="layui-row layui-col-space10 demo-list">
+        <div class="layui-col-sm4">
+            <!-- 填充内容 -->
+            <div class="layui-card">
+                <div id="video" style="width: 600px; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
-    layui.use(['form'], function(){
-        var form = layui.form;
+    function rtmplay(cid){
+        //alert(1);
+        var rtmpInfo= $('#tr_'+cid).attr('datainfo');
+        rtmpInfo =$.parseJSON(rtmpInfo);
+        layer.open({
+            type: 1,
+            title: rtmpInfo.name,
+            //shadeClose: true,
+            area: ['644px', '470px'],
+            skin: 'layui-layer-rim',
+            content: $('#LAY'),
+            cancel: function(){
+
+
+            //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
+        }
+        });
+        var videoObject = {
+            container: '#video', //容器的ID或className
+            variable: 'player',//播放函数名称
+            autoplay:false,
+            live:true,
+            debug:true,
+            video: rtmpInfo.rtmpplayurl,
+            poster:rtmpInfo.imageurl
+        };
+        var player = new ckplayer(videoObject);
+    }
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+                laypage = layui.laypage
+                ,layer = layui.layer;
+        //省 市 区
+        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
+        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
+        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
+        //学校 年级 班级
+        var school = '<?php if(!empty($_GET["school"])){echo $_GET["school"];}?>';
+        var grade = '<?php if(!empty($_GET["grade"])){echo $_GET["grade"];}?>';
+        var classes = '<?php if(!empty($_GET["class"])){echo $_GET["class"];}?>';
+        if(province != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area+'&school='+school,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    //改变学校
+                    $('#school').html(data.school);
+                    //改变年级
+                    $('#grade').html(data.grade);
+                    //改变班级
+                    $('#class').html(data.class);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+
+        if(school != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+grade+'&class='+classes,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变年级
+                    $('#grade').html(data.grade);
+                    //改变班级
+                    $('#class').html(data.class);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
         //省
             form.on('select(province)', function (data) {
                 $.ajax({
@@ -221,6 +289,31 @@
                 }
             })
         });
+        //分页
+        laypage.render({
+            elem: 'page'
+            ,count: '<?php echo $list_count;?>'
+            ,limit:2
+            ,layout: ['count', 'prev', 'page', 'next',  'skip']
+            ,jump: function(obj){
+                // console.log(obj);
+                var page = obj.curr,
+                        page_count = obj.limit;
+                $.ajax({
+                    type:'POST',
+                    url:ADMIN_URL+'Monitor/monitor',
+                    data:{name:name,province:province,city:city,area:area,school:school,grade:grade,class:classes,page:page,page_count:page_count},
+                    success:function(data){
+                        data = jQuery.parseJSON(data);
+
+                        // console.log(data.html);
+                        $('#html').html(data.html);
+                        $('#count').html(data.count+'个');
+                    }
+                })
+
+            }
+        });
     });
 
     $("#submitBtn").click(function() {
@@ -229,12 +322,12 @@
             var area=$("#area").val();
             var school=$("#school").val();
             var grade=$("#grade").val();
-            var classid=$("#class").val();
+            var classes=$("#class").val();
                    $.ajax({
                         url: "{:url('/Admin/monitor/monitor')}",
                         type: 'POST',
                         dataType: 'json',
-                        data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'classid':classid},
+                        data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'class':classes},
                         success:function(sb){
                            if (sb.m) {
                                layer.msg(sb.ms, {icon: 16,time: 500},function(){
