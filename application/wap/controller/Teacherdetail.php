@@ -24,7 +24,7 @@ class Teacherdetail extends MobileMall
         if(empty($tid)){
             output_error('t_id参数有误');
         }
-        $result[]['data'] = $teachchild->getTeachchildInfo(array('t_id'=>$tid));
+        $result[]['data'] = $teachchild->getTeachchildInfo(array('t_id'=>$tid),"t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_price,t_userid,t_author");
         //是否购买
         if($member_id!=""){
             $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$tid,'order_state'=>20))->order('order_id desc')->limit(1)->find();
