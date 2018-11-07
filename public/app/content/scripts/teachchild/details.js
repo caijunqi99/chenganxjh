@@ -1,5 +1,5 @@
 $(function() {
-
+    $.showLoading();
     var myPlayer;
     var Time = 1;
     // 获取详情
@@ -18,7 +18,7 @@ $(function() {
             _videoSource.src = response.result[0]['data']['t_url'];
             _videoSource.poster = response.result[0]['data']['t_videoimg'];
             $('#related').html(HTML(response['result']));
-
+            $.hideLoading();
             /*var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象

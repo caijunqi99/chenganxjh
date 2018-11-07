@@ -10,9 +10,8 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
@@ -71,9 +70,7 @@
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/plugins/layer/layer.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
@@ -243,27 +240,6 @@
                                 $.toast("取消成功",'',function(){
                                     location.reload();
                                 });
-                                /*for (var i = 0; i < IDArr.length; i++) {
-                                    $('.delete' + IDArr[i]).remove();
-                                }
-                                IDArr = [];
-                                number(IDArr.length);
-                                // 关闭操作列表
-                                $('.history_delete_wrap').hide();
-                                $('.history_edit').attr('data-select', 'false');
-                                // 判断是否删除时间
-                                $('.is_delete_time').each(function(index, el) {
-                                    var that = $(this);
-                                    if (that.children('.time_content').html() == '') {
-                                        that.children('.time_title').remove();
-                                    }
-                                    // 判断是否显示暂无数据
-                                    if (that.children('.time_content').html() == '') {
-                                        $('.history_content').html('<h2>暂无数据</h2>');
-                                    } else {
-                                        return false;
-                                    }
-                                })*/
                             } else {
                                 console.log(response['message'])
                             };
