@@ -119,19 +119,63 @@
     </div>
 </div>
     <?php } ?>
-    <!--<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-        <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
-        <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
-        <a href="javascript:;" data-page="2">2</a>
-        <a href="javascript:;" data-page="3">3</a>
-        <a href="javascript:;" data-page="4">4</a>
-        <a href="javascript:;" data-page="5">5</a>
-        <a href="javascript:;" class="layui-laypage-next" data-page="2">下一页</a>
-    </div>-->
+    <tfoot>
+    {notempty name="video"}
+    <tr colspan="15" class="tfoot">
+        <td colspan="16">
+            <div class="pagination"> {$page} </div></td>
+    </tr>
+    {/notempty}
+    </tfoot>
 </div>
 <script type="text/javascript">
-    layui.use(['form'], function(){
-        var form = layui.form;
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+                laypage = layui.laypage
+                ,layer = layui.layer;
+        //省 市 区
+        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
+        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
+        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
+        //学校 年级 班级
+        var school = '<?php if(!empty($_GET["school"])){echo $_GET["school"];}?>';
+        var grade = '<?php if(!empty($_GET["grade"])){echo $_GET["grade"];}?>';
+        var classes = '<?php if(!empty($_GET["class"])){echo $_GET["class"];}?>';
+        if(province != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area+'&school='+school,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    //改变学校
+                    $('#school').html(data.school);
+                    //改变年级
+                    $('#grade').html(data.grade);
+                    //改变班级
+                    $('#class').html(data.class);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+
+        if(school != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+grade+'&class='+classes,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变年级
+                    $('#grade').html(data.grade);
+                    //改变班级
+                    $('#class').html(data.class);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
         //省
             form.on('select(province)', function (data) {
                 $.ajax({
@@ -221,6 +265,31 @@
                 }
             })
         });
+        //分页
+        laypage.render({
+            elem: 'page'
+            ,count: '<?php echo $list_count;?>'
+            ,limit:2
+            ,layout: ['count', 'prev', 'page', 'next',  'skip']
+            ,jump: function(obj){
+                // console.log(obj);
+                var page = obj.curr,
+                        page_count = obj.limit;
+                $.ajax({
+                    type:'POST',
+                    url:ADMIN_URL+'Monitor/monitor',
+                    data:{name:name,province:province,city:city,area:area,school:school,grade:grade,class:classes,page:page,page_count:page_count},
+                    success:function(data){
+                        data = jQuery.parseJSON(data);
+
+                        // console.log(data.html);
+                        $('#html').html(data.html);
+                        $('#count').html(data.count+'个');
+                    }
+                })
+
+            }
+        });
     });
 
     $("#submitBtn").click(function() {
@@ -234,7 +303,7 @@
                         url: "{:url('/Admin/monitor/monitor')}",
                         type: 'POST',
                         dataType: 'json',
-                        data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'classid':classid},
+                        data: {'province': province,'city':city,'area':area,'school':school,'grade':grade,'class':classes},
                         success:function(sb){
                            if (sb.m) {
                                layer.msg(sb.ms, {icon: 16,time: 500},function(){
