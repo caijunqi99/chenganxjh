@@ -22,13 +22,12 @@ class Member extends MobileMember
             'income' => '0.00',//收入金额
             'reflect' => '0.00',//提现金额
         );
-        
-
-
-
         output_data($self);
     }
 
+    public function RefreshPullOldOrder(){
+        output_data(array('state'=>'true'));
+    }
     /**
      * @desc 个人信息
      * @author langzhiyao
@@ -175,13 +174,13 @@ class Member extends MobileMember
         $order ='';
         switch ($type_id){
             case 1:
-                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.s_id,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
                 break;
             case 2:
 //                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
                 break;
             case 3:
-                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.order_tid,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
                 break;
         }
         if(!empty($order)){

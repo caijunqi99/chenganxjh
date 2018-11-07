@@ -37,7 +37,7 @@ $(function() {
         }, 1000)
     });
     // 获取课件接口
-    function GetKejian() {
+    function GetKejian(params) {
         $(document.body).infinite();
         $.ajax({
             url: api + '/teacherchild/myUpload.html',
