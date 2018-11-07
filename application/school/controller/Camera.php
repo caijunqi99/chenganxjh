@@ -410,9 +410,11 @@ class Camera extends AdminControl
                 // $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
                 $start = trim($v['cid'].'_Start');
                 $end = trim($v['cid'].'_End');
+                $defulbegin =empty($v["begintime"])?'':date('H:i',$v["begintime"]);
+                $defulend   =empty($v["endtime"])?'':date('H:i',$v["endtime"]);
                 $html .= "<td class='align-center'>
-                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onClick='timesss(".'"'.$start.'"'.")' value='".date('H:i',$v["begintime"])."'/> <a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>确定</a><hr>
-                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onClick='timesss(".'"'.$end.'"'.")' value='".date('H:i',$v["endtime"])."' /> <a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>确定</a>
+                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onClick='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>设置</a><hr>
+                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onClick='timesss(".'"'.$end.'"'.")' value='".$defulend."' /> <a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>设置</a>
                     </td>";
                 
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';

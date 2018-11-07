@@ -26,7 +26,28 @@ class Member extends MobileMember
     }
 
     public function RefreshPullOldOrder(){
-        output_data(array('state'=>'true'));
+        $oldid = $this->member_info['oldid'];
+        //获取订单
+        $order = db('aaorder')->where('member_member_id',$oldid)->select();
+        if ($order) {
+            $TrueOrder=[];
+            foreach ($order as $key => $o) {
+                if($o['status'] == 0)$TrueOrder[]=$o;
+            }
+            if (count($TrueOrder) ==0)output_data(array('state'=>'true'));
+            $sign = [];
+            foreach ($TrueOrder as $k => $t) {
+                
+            }
+            //获取订单详情
+            $orderitem = db('aaorderitem')->where('order_order_id',$order['id'])->find();
+            //获取套餐时间
+            $allpackageeauthority = db('aallpackageeauthority')->where('member_member_id',$oldid)->find();
+
+            $nowTime = TIMESTAMP ;
+
+        }
+        output_data(array('state'=>$TrueOrder));
     }
     /**
      * @desc 个人信息
