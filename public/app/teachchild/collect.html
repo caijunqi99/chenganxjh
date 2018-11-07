@@ -52,7 +52,7 @@
             <div class="up">释放刷新</div>
             <div class="refresh">正在刷新</div>
         </div>
-
+        <div id="nodata_box"></div>
         <div class="history_content">
 
         </div>
@@ -95,7 +95,7 @@
             success: function(response) {
                 if (response['code'] == 200) {
                     if (response['result'].length == 0) {
-                        $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                        $("#nodata_box").html('<div class="nodata no_collect"><p class="nodata_p">暂无收藏</p></div>');
                     } else {
                         let keys = Object.keys(response['result'][0]);
                         for (var i = 0; i < keys.length; i++) {
@@ -163,7 +163,7 @@
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
-                            $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+                            $("#nodata_box").html('<div class="nodata no_collect"><p class="nodata_p">暂无收藏</p></div>');
                         } else {
                             List = [];
                             let keys = Object.keys(response['result'][0]);
