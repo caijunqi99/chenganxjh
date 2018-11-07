@@ -44,7 +44,7 @@ class Teacherdetail extends MobileMall
         $conditions['t_del'] = 1;
         $conditions['t_type'] = $result[0]['data']['t_type'];
         $conditions['t_id'] = array('neq',$result[0]['data']['t_id']);
-        $result[]['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
+        $result[]['lists'] = $teachchild->getTeachchildList($conditions,'t_id,t_url,t_videoimg,t_picture,t_title,t_profile,t_author', '' ,'t_maketime desc',4);
         if($result) {
             output_data($result);
         }else{

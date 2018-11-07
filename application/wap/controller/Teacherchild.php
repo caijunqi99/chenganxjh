@@ -58,6 +58,7 @@ class Teacherchild extends MobileMember
             $videoinfo = db('teachchild')->where(array('t_id'=>$v['order_tid']))->find();
             $result[$k]['title'] = $videoinfo['t_title'];
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
+            $result[$k]['t_picture'] = $videoinfo['t_picture'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
