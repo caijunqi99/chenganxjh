@@ -271,12 +271,13 @@ class Camera extends AdminControl
      * @return [type]                          [description]
      */
     public function _conditions($where){
-
+        $where['school'] = session('admin_school_id');
         if (isset($where['name']) && !empty($where['name'])) {
             $condition['name'] = array('LIKE','%'.$where['name'].'%');
         }
         $res = array();
         $name = false;
+        // p($where);
         if (isset($where['class']) && !empty($where['class']) ) {
             $class = $this->getResGroupIds(array('classname'=>$where['class']));
             if ($class) {
@@ -296,7 +297,18 @@ class Camera extends AdminControl
                 $res=array_merge($res, $grade);
             }
         }
+        if (isset($where['school']) && $where['school'] != 0 ) {
+            $school = $this->getResGroupIds(array('schoolid'=>$where['school']));
+            unset($where['area']);
+            unset($where['city']);
+            unset($where['province']);
+            $name = 'true';
+            if ($school) {
+                $res=array_merge($res, $school);
+            }
+        }
         if ($name == 'true') {
+            $res =is_array($res[0])?$res[0]:$res;
             $condition['parentid'] = array('in',$res);
         }
         return $condition;
@@ -410,13 +422,14 @@ class Camera extends AdminControl
                 // $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
                 $start = trim($v['cid'].'_Start');
                 $end = trim($v['cid'].'_End');
-                $defulbegin =empty($v["begintime"])?'':date('H:i',$v["begintime"]);
-                $defulend   =empty($v["endtime"])?'':date('H:i',$v["endtime"]);
+                $defulbegin =empty($v["begintime"])?'':date('H:i:s',$v["begintime"]);
+                $defulend   =empty($v["endtime"])?'':date('H:i:s',$v["endtime"]);
                 $html .= "<td class='align-center'>
-                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onClick='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>设置</a><hr>
-                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onClick='timesss(".'"'.$end.'"'.")' value='".$defulend."' /> <a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>设置</a>
+                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onfocus='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <hr>
+                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onfocus='timesss(".'"'.$end.'"'.")' value='".$defulend."' /> 
                     </td>";
-                
+                    //<a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>设置</a>
+                    //<a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>设置</a>
 //                $html .= '<td class="align-center">'.$value["address"].'</td>';
 //                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
 //                $html .= '<td class="align-center">'.$value["id"].'</td>';
@@ -504,30 +517,18 @@ class Camera extends AdminControl
 
     public function changetime(){
         $input = input();
-        $act = $input['keys'];
         $cid = $input['cid'];
-        $ctime = $input['ctime'];
-        $key=false;
-        switch ($act) {
-            case 'Start':
-                $key = 'begintime';
-                $msg = '开启时间';
-                break;
-            case 'End':
-                $key = 'endtime';
-                $msg = '关闭时间';
-                break;
-        }
-        if($cid && $ctime && $key ){
-            $ctime = strtotime($ctime);
-            $result = db('camera')->where('cid',$cid)->setField($key, $ctime);
-            if ($result) {
-                ds_json_encode('200', $msg.'设置成功');
-            }else{
-                ds_json_encode('100', $msg.'设置失败');
-            }
+        $updata = array(
+            'begintime' =>strtotime($input['starttime']),
+            'endtime' =>strtotime($input['endtime'])
+        );
+        $starttime = 
+        $endtime = 
+        $result = db('camera')->where('cid',$cid)->update($updata);
+        if ($result) {
+            ds_json_encode('200', $msg.'设置成功');
         }else{
-            ds_json_encode('100', '参数错误');;
+            ds_json_encode('100', $msg.'设置失败');
         }
         
     }
