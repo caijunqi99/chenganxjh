@@ -163,8 +163,10 @@
                     });
                 });
                 $('.send').click(function(){
+                    $('.send').attr('disabled','disabled');
                     var content = $('input[name=content]').val();
                     if(content == ''){
+                        $('.send').removeAttr('disabled');
                         $.toast('请输入评论内容','forbidden');return false;
                     }
                     $.ajax({
@@ -183,6 +185,7 @@
                                     location.reload();
                                 });
                             }else{
+                                $('.send').removeAttr('disabled');
                                 $.toast(response['message'],'forbidden');
                             }
                         }
