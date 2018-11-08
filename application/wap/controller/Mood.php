@@ -213,13 +213,13 @@ class Mood extends MobileMember{
         if($data["file"]["size"] < 8*1024*1024) {
             if (!empty($data['file']['name'])) {
                 $upload = move_uploaded_file($data["file"]["tmp_name"], $uploadimg_path . $data['file']['name']);
-                $image = \think\Image::open($uploadimg_path . $data['file']['name']);
+                $image = \think\Image::open($uploadimg_path.$data['file']['name']);
                 //检查是否有该文件夹，如果没有就创建
                 if(!is_dir($uploadimg_path."home/smallmood/")){
                     mkdir($uploadimg_path."home/smallmood/",0777,true);
                 }
                 // 按照原图的比例生成一个最大为600*600的缩略图替换原图
-                // p($base_url.'smallmood/' . $inmUrl);exit;
+                 //p($uploadimg_path. $data['file']['small']);exit;
                 $image->thumb(110, 110)->save($uploadimg_path. $data['file']['small']);
                 if ($upload) {
                     return $upload;
