@@ -305,6 +305,18 @@ class School extends AdminControl {
         $branch = input('param.branch');
 
         switch ($branch) {
+            //管理人员名称验证
+            case 'check_admin_name':
+                $model_admin = Model('admin');
+                $condition['admin_name'] = input('get.admin_name');
+                $condition['admin_del_status']=1;
+                $list = $model_admin->where($condition)->find();
+                if (!empty($list)) {
+                    exit('false');
+                } else {
+                    exit('true');
+                }
+                break;
             /**
              * 验证学校名是否重复
              */
