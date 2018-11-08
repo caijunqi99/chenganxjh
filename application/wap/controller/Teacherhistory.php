@@ -37,7 +37,9 @@ class Teacherhistory extends MobileMember
                 foreach($result as $kk=>$vv){
                     $time = $vv['t_maketime'];
                 }
-                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime=".$time)->order('t_id desc')->select();
+                $strtime = strtotime(date("Y-m-d",$time));
+                $endtime = strtotime(date("Y-m-d",$time))+24*3600;
+                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime<".$endtime," and t_maketime>=".$strtime)->order('t_id desc')->select();
                 $result=array_merge($result,$day);
                 $result=array_unique($result, SORT_REGULAR);
             }
