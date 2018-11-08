@@ -281,8 +281,6 @@
                                 if(!is_data){
                                     $('.weui-footer').show();
                                 }
-                                $('.load').hide();
-                                $(document.body).destroyInfinite();
                             } else {
                                 List = [];
                                 let keys = Object.keys(response['result'][0]);
@@ -291,10 +289,11 @@
                                     params[keys[i]] = response['result'][0][keys[i]];
                                     List.push(params);
                                 }
-                                $('.load').hide();
                                 $('#id').val(response['result'][1]['id']);
                                 $('.history_content').append(HTML(List));
                             }
+                            $('.load').hide();
+                            $(document.body).destroyInfinite();
                         } else {
                             $('.weui-footer').show();
                             $('.load').hide();
