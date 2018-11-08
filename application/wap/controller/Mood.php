@@ -77,7 +77,7 @@ class Mood extends MobileMember{
         $page_count = ceil(intval($mood_count)/intval($page_num));
         $ar = array('page_count'=>$page_count);
         foreach($mood_list as $k=>$v){
-            $mood_list[$k]['image']=explode(',',$v['image']);
+            $mood_list[$k]['image']=explode(',',$v['smallimage']);
             $mood_list[$k]['pubtime'] = date("Y-m-d H:i",$v['pubtime']);
             if($v['member_nickname']==''){
                 $xing = substr($v['member_mobile'],3,4);
@@ -113,20 +113,26 @@ class Mood extends MobileMember{
         if(!empty($_FILES['file']['name'][0])) {
             foreach ($_FILES['file']['name'] as $key => $value) {
                 $file1 = array();
-                $file1["file"]['name'] = "home/moodimg/".($key+1).date("YmdHis",time())."_".time().".".end(explode('.', $value));
+                $imgname=($key+1).date("YmdHis",time())."_".time().".".end(explode('.', $value));
+                $file1["file"]['name'] = "home/moodimg/".$imgname;
                 $file1["file"]['type'] = $_FILES['file']["type"][$key];
                 $file1["file"]['tmp_name'] = $_FILES['file']["tmp_name"][$key];
                 $file1["file"]['error'] = $_FILES['file']["error"][$key];
                 $file1["file"]['size'] = $_FILES['file']["size"][$key];
+                $smallname="home/smallmood/".$imgname;
+                $file1["file"]['small']=$smallname;
+
                 $info = $this->upload($file1);
                 if($info){
                     $a .="," . $file1["file"]['name'];
+                    $b .=",".$smallname;
                 }else{
                     output_error('图片上传失败');
                 }
             }
             //把第一个#去掉，同时写进data数据库里面的intro_pic字段
             $condition['image']= substr($a, 1);
+            $condition['smallimage']=substr($b, 1);
         }
         $result=$mood->addMood($condition);
         if($result){
@@ -135,7 +141,58 @@ class Mood extends MobileMember{
             output_error('发布失败');
         }
     }
+    
+    public function uploadThump(){
+        if(!empty($_FILES)){
+            if($_FILES["mood"]["size"] < 8*1024*1024){
+                if ($_FILES["mood"]["error"] > 0){
+                    output_error($_FILES["mood"]["error"]);
+                }else{
+                    //根目录地址
+                    $base_url = str_replace('\\', '/',BASE_UPLOAD_PATH );
+                    //正常上传的地址
+                    $big_url=$base_url .'/'. ATTACH_PATH . '/mood/';
+                    //压缩后的图片上传的地址
+                    $small_url=$big_url.'smallmood/';
 
+                    if (!empty($_FILES['mood']['tmp_name'])) {
+                        $file_object= request()->file('mood');
+                        $ext = strtolower(pathinfo($_FILES['mood']['name'], PATHINFO_EXTENSION));
+                        $file_name='mood_'.time().rand(1000,9999).".$ext";
+                        $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($big_url,$file_name);
+
+                        if (!$info) output_error($file_object->getError());
+                    } else {
+                        output_error('上传失败，请尝试更换图片格式或小图片');
+                    }
+                    $imgUlr =$info->getFilename();
+                    $big_name_dir= '/' . ATTACH_PATH . '/mood/' . $imgUlr;
+                    $imageinfo=getimagesize(BASE_UPLOAD_PATH.$big_name_dir);
+                    $file_dir=$big_url.$imgUlr;
+
+                    $image = \think\Image::open($file_dir);
+                    // 按照原图的比例生成一个最大为600*600的缩略图替换原图
+                    // p($base_url.'smallmood/' . $inmUrl);exit;
+                    $image->thumb(110, 110)->save($small_url. $imgUlr);
+                    $small_name_dir ='/' . ATTACH_PATH . '/mood/smallmood/' . $imgUlr;
+                    
+                    $result = array();
+                    $result[0] = array(
+                        'big_name_dir' => $big_name_dir,//原图相对路径
+                        'big_file_dir' => $big_url. $imgUlr,//原图绝对路径
+                        'big_imageinfo' => getimagesize($big_url. $imgUlr),//原图详情
+                        'small_name_dir' => $small_name_dir, //压缩后的图片相对路径
+                        'small_file_dir' => $small_url. $imgUlr,//压缩后的图片绝对路径
+                        'small_imageinfo' => getimagesize($small_url. $imgUlr), //压缩图详情 
+                        'error' =>$file_object->getError() //上传错误，正常为空
+                    );
+                    output_data($result);
+                }
+            }else{
+                output_error('图片上传大小不允许超过8M，请重新上传');
+            }
+        }
+    }
     /*
  * 上传图片
  * */
@@ -156,6 +213,14 @@ class Mood extends MobileMember{
         if($data["file"]["size"] < 8*1024*1024) {
             if (!empty($data['file']['name'])) {
                 $upload = move_uploaded_file($data["file"]["tmp_name"], $uploadimg_path . $data['file']['name']);
+                $image = \think\Image::open($uploadimg_path.$data['file']['name']);
+                //检查是否有该文件夹，如果没有就创建
+                if(!is_dir($uploadimg_path."home/smallmood/")){
+                    mkdir($uploadimg_path."home/smallmood/",0777,true);
+                }
+                // 按照原图的比例生成一个最大为600*600的缩略图替换原图
+                 //p($uploadimg_path. $data['file']['small']);exit;
+                $image->thumb(210, 210)->save($uploadimg_path. $data['file']['small']);
                 if ($upload) {
                     return $upload;
                 } else {

@@ -27,8 +27,19 @@ class Member extends MobileMember
 
     public function RefreshPullOldOrder(){
         $oldid = $this->member_info['oldid'];
+        if (!$oldid) output_data(array('state'=>'不是老会员'));//不是老会员
+        $trans = array(
+            'member_id'=>$this->member_info['member_id'],
+            'is_trans' =>['gt',0],
+        );
+        $isTrans = db('packagetrans')->where($trans)->find();
+        if ($isTrans) output_data(array('state'=>'已转移完成'));//已转移完成
         //获取订单
-        $order = db('aaorder')->where('member_member_id',$oldid)->select();
+        $orderCondition=array(
+            'member_member_id' =>$oldid,
+            'status' =>0,
+        );
+        $order = db('aaorder')->where($orderCondition)->select();
         if ($order) {
             $TrueOrder=[];
             foreach ($order as $key => $o) {
@@ -36,19 +47,61 @@ class Member extends MobileMember
             }
             if (count($TrueOrder) ==0)output_data(array('state'=>'true'));
             $sign = [];
+            $packageTime = [];
             foreach ($TrueOrder as $k => $t) {
-                
+                //获取订单详情
+                $TrueOrder[$k]['orderitem'] = db('aaorderitem')->where('order_order_id',$t['id'])->find();
+                //获取套餐时间
+                $TrueOrder[$k]['allpackageeauthority'] = db('aallpackageeauthority')->where('member_member_id',$oldid)->find();
+                $Student = db('student')->where('oldid',$t['student_student_id'])->field('s_id,s_name')->find();
+                $packageTime[]=array(
+                    'member_id' => $this->member_info['member_id'],
+                    'member_name' => $this->member_info['member_name'],
+                    's_id' => $Student['s_id'],
+                    's_name' => $Student['s_name'],
+                    'start_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['liveBeginTime']),
+                    'end_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['liveDeadTime']),
+                    'up_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['lastTime']),
+                    'up_desc' => $TrueOrder[$k]['allpackageeauthority']['lastTime'].'  '.$TrueOrder[$k]['allpackageeauthority']['name'],
+                    'pkg_type' => 1,
+                    'is_oldorder' => 2,
+                );
             }
-            //获取订单详情
-            $orderitem = db('aaorderitem')->where('order_order_id',$order['id'])->find();
-            //获取套餐时间
-            $allpackageeauthority = db('aallpackageeauthority')->where('member_member_id',$oldid)->find();
-
-            $nowTime = TIMESTAMP ;
-
+            $count = count($packageTime);
+            if (!$count==1) {
+                $res = db('packagetime')->insertGetId($packageTime[0]);
+            }else{
+                $start_time = [];
+                $lastTime = [];
+                foreach ($packageTime as $ke => $p){
+                    $start_time[$k] =$p['start_time'];
+                    $lastTime[$ke]  =$p['end_time'];
+                } 
+                $start_time =min($start_time);//最早购买的时间
+                $lastTime = max($lastTime); // 最晚的结束时间
+                $end_time = array_column($packageTime, 'end_time'); 
+                $k = array_search($lastTime, $end_time);
+                $newTime = $packageTime[0];
+                $newTime['start_time'] = $start_time; //使用最早的开始时间
+                $newTime['end_time'] = $packageTime[$k]['end_time'];//使用最晚的结束时间
+                $res = db('packagetime')->insertGetId($newTime);
+            }
+            if($res){
+                $transRes=db('packagetrans')->insertGetId(array(
+                    'member_id' => $this->member_info['member_id'],
+                    'is_trans' => $res,
+                    'transtime' => TIMESTAMP,
+                ));
+            }
         }
-        output_data(array('state'=>$TrueOrder));
+        if($transRes){
+            output_data(array('state'=>'转移完成'));    
+        }else{
+            output_data(array('state'=>'转移失败'));
+        }
+        
     }
+
     /**
      * @desc 个人信息
      * @author langzhiyao
