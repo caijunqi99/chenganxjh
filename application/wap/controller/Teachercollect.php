@@ -32,9 +32,7 @@ class Teachercollect extends MobileMember
             $last_info = db('membercollect')->where("time <".$last_id." and member_id=".$member_id." and isdel=1")->order('time desc')->find();
             $strtime = strtotime(date("Y-m-d",$last_info['time'])." 00:00:00");
             $endtime = $strtime+24*3600;
-            $condition['time'] = array('egt',$strtime);
-            $condition['time'] = array('lt',$endtime);
-            $result = $collect->getCollect($condition);
+            $result = $collect->getCollect("member_id=".$member_id." and isdel=1 and type_id=1 and time<".$endtime." and time>=".$strtime);
         }else{
             $result=$collect->getMembercollectList($condition,'',1,'time desc',10);
             if(count($result)==10){
@@ -43,7 +41,7 @@ class Teachercollect extends MobileMember
                 }
                 $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
                 $endtime = $strtime+24*3600;
-                $day = db('membercollect')->where("member_id=".$member_id." and isdel=1 and time<".$endtime." and time>=".$strtime)->order('time desc')->select();
+                $day = db('membercollect')->where("member_id=".$member_id." and isdel=1 and type_id=1 and time<".$endtime." and time>=".$strtime)->order('time desc')->select();
                 $result=array_merge($result,$day);
                 $result=array_unique($result, SORT_REGULAR);
             }

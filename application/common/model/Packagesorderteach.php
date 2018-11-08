@@ -93,6 +93,6 @@ class Packagesorderteach extends Model {
     }
 
     public function getTeachOrder($condition){
-        return db('packagesorderteach')->where($condition)->order('order_id desc')->select();
+        return db('packagesorderteach')->where($condition)->order('add_time desc')->select();
     }
 }
