@@ -26,6 +26,7 @@ class Admin extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
+
         if(session('admin_is_super') == 1){
             $where = ' a.admin_del_status=1';
         }else{
@@ -38,6 +39,10 @@ class Admin extends AdminControl {
                 $where .= ' AND (a.admin_name LIKE "%'.$_POST["account"].'%" || a.admin_phone LIKE "%'.$_POST["account"].'%") ';
                 $account = trim($_POST['account']);
             }
+            if(!empty($_POST['company'])){
+                $where .= ' AND a.admin_company_id = '.intval($_POST["company"]);
+                $com = intval($_POST['company']);
+            }
             if(!empty($_POST['role'])){
                 $where .= ' AND a.admin_gid = '.intval($_POST["role"]);
                 $role = intval($_POST['role']);
@@ -49,11 +54,21 @@ class Admin extends AdminControl {
 //        halt($admin_list);
         //获取所创建的角色
         $gadmin_list = db('gadmin')->field('gid,create_uid,gname')->where('create_uid= '.$admin_id.' ')->select();
-
         $this->assign('gadmin_list',$gadmin_list);
+
+        //获取所有公司
+        if(session('admin_is_super') == 1){
+            $company = db('company')->field('o_id,o_name')->select();
+        }else{
+            $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
+            $company = db('company')->field('o_id,o_name')->where('o_id="'.$adminUser['admin_company_id'].'"')->select();
+        }
+        $this->assign('company',$company);
+
         $this->assign('admin_list', $admin_list->items());
         $this->assign('account',$account);
         $this->assign('role',$role);
+        $this->assign('com',$com);
         $this->assign('page', $admin_list->render());
         $this->setAdminCurItem('admin');
         return $this->fetch('admin');

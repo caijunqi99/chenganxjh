@@ -624,7 +624,7 @@ class Member extends MobileMember
             }
             if(!empty($res)){
                 if(!empty($student)){
-                    if(count($student) != 1){
+                    if(count($student) > 1){
                         output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
                         if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){

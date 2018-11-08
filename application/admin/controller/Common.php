@@ -447,6 +447,8 @@ class Common extends AdminControl
 
     }
 
+
+
     /**
      * @desc 根据ID 获取地址名称
      * @author langzhiyao
@@ -458,6 +460,39 @@ class Common extends AdminControl
 
         return $address_info['area_name'];
 
+    }
+
+
+    /**
+     * @desc 根据省市区联动及学校信息
+     * @author langzhiyao
+     * @time 20180927
+     */
+    public function get_company_role(){
+        $company_id = intval(input('get.company_id'));
+        $role_id = intval(input('get.role_id'));
+        $role_html = '<option value="0">请选择角色</option>';
+        if(!empty($company_id)){
+            //角色
+            $where['company_id'] = $company_id;
+            if($company_id == 1){
+                $role = db('gadmin')->field('gid,gname')->select();
+            }else{
+                $role = db('gadmin')->field('gid,gname')->where($where)->select();
+            }
+            if(!empty($role)){
+                foreach($role as $key=>$value){
+                    if($value['gid'] == $role_id){
+                        $role_html .='<option value='.$value["gid"].' selected>'.$value["gname"].'</option>';
+                    }else{
+                        $role_html .='<option value='.$value["gid"].'>'.$value["gname"].'</option>';
+                    }
+
+                }
+            }
+        }
+
+        exit(json_encode(array('role'=>$role_html)));
     }
 
 }

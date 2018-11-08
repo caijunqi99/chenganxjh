@@ -33,25 +33,42 @@
                         <input type="text"  name="account" placeholder="请输入账号/手机号" value="{$account}" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                <!--<div class="layui-inline">-->
+                    <!--<label class="layui-form-label">权限组</label>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<select name="role">-->
+                            <!--<option value="0" >请选择</option>-->
+                            <!--{volist name="gadmin_list" id="vo"}-->
+                                <!--<option value="{$vo.gid}" <?php if($vo['gid']==$role){?>selected="selected"<?php }?>>{$vo.gname}</option>-->
+                            <!--{/volist}-->
+                        <!--</select>-->
+                        <!--<div class="layui-unselect layui-form-select">-->
+                            <!--<div class="layui-select-title">-->
+                                <!--<input type="text" placeholder="请选择" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div>-->
+                            <!--<dl class="layui-anim layui-anim-upbit">-->
+                                <!--<dd lay-value="0" >请选择</dd>-->
+                                <!--{volist name="gadmin_list" id="vo"}-->
+                                    <!--<dd lay-value="{$vo.gid}" <?php if($vo['gid']==$role){?>class="layui-this"<?php }?>>{$vo.gname}{$role}</dd>-->
+                                <!--{/volist}-->
+                            <!--</dl>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="layui-inline">
                     <label class="layui-form-label">权限组</label>
-                    <div class="layui-input-block">
-                        <select name="role">
-                            <option value="0" >请选择</option>
-                            {volist name="gadmin_list" id="vo"}
-                                <option value="{$vo.gid}" <?php if($vo['gid']==$role){?>selected="selected"<?php }?>>{$vo.gname}</option>
+                    <div class="layui-input-inline">
+                        <select name="company" lay-filter="company"  class="select"  lay-verify="type"  id="company">
+                            <option value="0" selected="">请选择公司</option>
+                            <option value="1" <?php if(1==$com){?>selected="selected"<?php }?>>总公司</option>
+                            {volist name="company" id="vo"}
+                            <option value="{$vo.o_id}" <?php if($vo['o_id']==$com){?>selected="selected"<?php }?> >{$vo.o_name}</option>
                             {/volist}
                         </select>
-                        <div class="layui-unselect layui-form-select">
-                            <div class="layui-select-title">
-                                <input type="text" placeholder="请选择" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div>
-                            <dl class="layui-anim layui-anim-upbit">
-                                <dd lay-value="0" >请选择</dd>
-                                {volist name="gadmin_list" id="vo"}
-                                    <dd lay-value="{$vo.gid}" <?php if($vo['gid']==$role){?>class="layui-this"<?php }?>>{$vo.gname}{$role}</dd>
-                                {/volist}
-                            </dl>
-                        </div>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="role" lay-filter="role"  class="select"  lay-verify="type"  id="role">
+                            <option value="0" selected="">请选择角色</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -151,9 +168,37 @@
 <script type="text/javascript">
     layui.use(['form'], function(){
         var form = layui.form;
+        var company_id = '{$com}';
+        var role_id = '{$role}';
+
+        if(company_id != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_company_role?company_id='+company_id+'&role_id='+role_id,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#role').html(data.role);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+        form.on('select(company)', function(data){
+            //改变市区
+            $('#role').html('<option value="0">请选择角色</option>');
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_company_role?company_id='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#role').html(data.role);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+
     });
-
-
     //关闭
     function close_status(name,id){
         var msg = '{$Think.lang.admin_status_close_before}'+name+'{$Think.lang.admin_status_close_after}';
