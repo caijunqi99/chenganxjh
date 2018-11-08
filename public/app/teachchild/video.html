@@ -270,45 +270,49 @@
 
         // 分页
         function getPage(num) {
-            $('.weui-loadmore').show();
-            $.ajax({
-                url: api + '/teacherchild/myVideos',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    key: user_token,
-                    member_id: user_member_id,
-                    page: num
-                },
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        if (response['result'].length == 0) {
-                            var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
-                            if(!is_data){
-                                $('.weui-footer').show();
+            if(num != ''){
+                $(document.body).destroyInfinite();
+                $('.weui-loadmore').show();
+                $.ajax({
+                    url: api + '/teacherchild/myVideos',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        key: user_token,
+                        member_id: user_member_id,
+                        page: num
+                    },
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            if (response['result'].length == 0) {
+                                var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                                if(!is_data){
+                                    $('.weui-footer').show();
+                                }
+                                $('.weui-loadmore').hide();
+                            } else {
+                                $(document.body).infinite();
+                                List = [];
+                                let keys = Object.keys(response['result'][0]);
+                                for (var i = 0; i < keys.length; i++) {
+                                    let params = new Object();
+                                    params[keys[i]] = response['result'][0][keys[i]];
+                                    List.push(params);
+                                }
+                                $('.weui-loadmore').hide();
+                                $('#id').val(response['result'][1]['id']);
+                                $('.history_content').append(HTML(List));
                             }
+                        } else {
+                            $('.weui-footer').show();
                             $('.weui-loadmore').hide();
                             $(document.body).destroyInfinite();
-                        } else {
-                            List = [];
-                            let keys = Object.keys(response['result'][0]);
-                            for (var i = 0; i < keys.length; i++) {
-                                let params = new Object();
-                                params[keys[i]] = response['result'][0][keys[i]];
-                                List.push(params);
-                            }
-                            $('.weui-loadmore').hide();
-                            $('#id').val(response['result'][1]['id']);
-                            $('.history_content').append(HTML(List));
+                            $.toast(response['message'],'forbidden');return false;
                         }
-                    } else {
-                        $('.weui-footer').show();
-                        $('.weui-loadmore').hide();
-                        $(document.body).destroyInfinite();
-                        $.toast(response['message'],'forbidden');return false;
                     }
-                }
-            })
+                })
+            }
+
         }
 
         // HTML模板
