@@ -48,7 +48,7 @@ class Mood extends MobileMember{
             $data[$k]['month'] = date("m",$v['pubtime']);
             $data[$k]['pubtime'] = date("Y-m-d",$v['pubtime']);
             $data[$k]['ago'] = $model_mood->getnum($v['pubtime']);
-            $data[$k]['image']=explode(',',$v['image']);
+            $data[$k]['image']=explode(',',$v['smallimage']);
         }
 
         $logindata['mood'] = $data;
