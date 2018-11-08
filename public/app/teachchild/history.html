@@ -264,6 +264,7 @@
         // 分页
         function getPage(num) {
             if(num != ''){
+                $(document.body).destroyInfinite();
                 $('.load').show();
                 $.ajax({
                     url: api + '/teacherhistory/lists',
@@ -293,7 +294,7 @@
                                 $('.history_content').append(HTML(List));
                             }
                             $('.load').hide();
-                            $(document.body).destroyInfinite();
+
                         } else {
                             $('.weui-footer').show();
                             $('.load').hide();
