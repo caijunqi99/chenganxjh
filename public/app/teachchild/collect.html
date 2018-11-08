@@ -151,6 +151,7 @@
 
         // 获取课件接口
         function GetKejian() {
+            $('.weui-footer').hide();
             $.ajax({
                 url: api + '/teachercollect/lists',
                 type: 'POST',
