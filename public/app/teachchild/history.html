@@ -126,10 +126,10 @@
         });
 
         // 下拉刷新
-        $('.history_body').pullToRefresh(function() {
+        $(document.body).pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
-                $('.history_body').pullToRefreshDone(); // 重置下拉刷新
+                $(document.body).pullToRefreshDone(); // 重置下拉刷新
             }, 1500)
             GetKejian();
         });
