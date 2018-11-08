@@ -56,7 +56,7 @@ class Membercollect extends Model {
     }
 
     public function getCollect($condition){
-        return db('membercollect')->where($condition)->order('id desc')->select();
+        return db('membercollect')->where($condition)->order('time desc')->select();
     }
 
 }

@@ -30,7 +30,10 @@ class Teachercollect extends MobileMember
         $last_id = input('post.page');
         if($last_id){
             $last_info = db('membercollect')->where("time <".$last_id." and member_id=".$member_id." and isdel=1")->order('time desc')->find();
-            $condition['time'] = $last_info['time'];
+            $strtime = strtotime(date("Y-m-d",$last_info['time'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $condition['time'] = array('egt',$strtime);
+            $condition['time'] = array('lt',$endtime);
             $result = $collect->getCollect($condition);
         }else{
             $result=$collect->getMembercollectList($condition,'',1,'time desc',10);
