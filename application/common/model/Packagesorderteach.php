@@ -92,4 +92,7 @@ class Packagesorderteach extends Model {
         return (date('y', time()) % 9 + 1) . sprintf('%013d', $pay_id) . sprintf('%02d', $num);
     }
 
+    public function getTeachOrder($condition){
+        return db('packagesorderteach')->where($condition)->order('order_id desc')->select();
+    }
 }
