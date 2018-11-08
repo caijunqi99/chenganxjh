@@ -31,7 +31,7 @@ class Teachercollect extends MobileMember
         if($last_id){
             $last_info = db('membercollect')->where("id <".$last_id." and member_id=".$member_id." and isdel=1")->order('id desc')->find();
             $condition['time'] = $last_info['time'];
-            $result = $collect->getHistory($condition);
+            $result = $collect->getCollect($condition);
         }else{
             $result=$collect->getMembercollectList($condition,'',1,'id desc',10);
             if(count($result)==10){
