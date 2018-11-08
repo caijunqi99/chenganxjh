@@ -127,7 +127,7 @@
 
         // 下拉刷新
         $('.history_body').pullToRefresh(function() {
-            $('.history_body').infinite();
+            $(document.body).infinite();
             setTimeout(function() {
                 $('.history_body').pullToRefreshDone(); // 重置下拉刷新
             }, 1500)
@@ -136,7 +136,6 @@
 
         // 获取课件接口
         function GetKejian() {
-            $('.history_body').infinite();
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
@@ -156,7 +155,6 @@
                             for (var i = 0; i < keys.length; i++) {
                                 let param = new Object();
                                 param[keys[i]] = response['result'][0][keys[i]];
-                                console.log(param);
                                 List.push(param);
                             }
                             $('#id').val(response['result'][1]['id']);

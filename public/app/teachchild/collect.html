@@ -141,7 +141,7 @@
 
         // 下拉刷新
         $('.history_body').pullToRefresh(function() {
-            $('.history_body').infinite();
+            $(document.body).infinite();
             setTimeout(function() {
                 $('.history_body').pullToRefreshDone(); // 重置下拉刷新
             }, 1500)
