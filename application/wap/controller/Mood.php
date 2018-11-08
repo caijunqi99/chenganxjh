@@ -220,7 +220,7 @@ class Mood extends MobileMember{
                 }
                 // 按照原图的比例生成一个最大为600*600的缩略图替换原图
                  //p($uploadimg_path. $data['file']['small']);exit;
-                $image->thumb(110, 110)->save($uploadimg_path. $data['file']['small']);
+                $image->thumb(210, 210)->save($uploadimg_path. $data['file']['small']);
                 if ($upload) {
                     return $upload;
                 } else {
