@@ -30,7 +30,7 @@ class Teachhistory extends Model {
     }
 
     public function getHistory($condition){
-        return db('teachhistory')->where($condition)->order('t_id desc')->select();
+        return db('teachhistory')->where($condition)->order('t_maketime desc')->select();
     }
     /**
      * 添加课件观看历史

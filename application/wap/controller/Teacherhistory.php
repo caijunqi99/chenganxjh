@@ -29,7 +29,10 @@ class Teacherhistory extends MobileMember
         $last_id = input('post.page');
         if($last_id){
             $last_info = db('teachhistory')->where("t_maketime <".$last_id." and t_userid=".$member_id." and t_del=1")->order('t_maketime desc')->find();
-            $condition['t_maketime'] = $last_info['t_maketime'];
+            $strtime = strtotime(date("Y-m-d",$last_info['t_maketime'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $condition['t_maketime'] = array('egt',$strtime);
+            $condition['t_maketime'] = array('lt',$endtime);
             $result = $teachhistory->getHistory($condition);
         }else{
             $result=$teachhistory->getTeachhistoryList($condition,'',1,'t_maketime desc',10);
