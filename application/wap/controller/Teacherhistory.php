@@ -26,8 +26,22 @@ class Teacherhistory extends MobileMember
         $condition=array();
         $condition['t_userid']=$member_id;
         $condition['t_del']=1;
-        $page = !empty(input('post.page'))?input('post.page'):1;
-        $result=$teachhistory->getTeachhistoryList($condition,'',$page,'t_id desc',10);
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('teachhistory')->where("t_id <".$last_id." and t_userid=".$member_id." and t_del=1")->order('t_id desc')->find();
+            $condition['t_maketime'] = $last_info['t_maketime'];
+            $result = $teachhistory->getHistory($condition);
+        }else{
+            $result=$teachhistory->getTeachhistoryList($condition,'',1,'t_id desc',10);
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['t_maketime'];
+                }
+                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime=".$time)->order('t_id desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['t_maketime']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['t_maketime'])){
@@ -55,8 +69,12 @@ class Teacherhistory extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
+            $last_id = $item['t_id'];
         }
         $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($datas);
     }
 

@@ -27,8 +27,22 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['isdel'] = 1;
         $condition['type_id'] = 1;
-        $page = !empty(input('post.page'))?input('post.page'):1;
-        $result = $collect->getMembercollectList($condition,'',$page,'id desc',10);
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('membercollect')->where("id <".$last_id." and member_id=".$member_id." and isdel=1")->order('id desc')->find();
+            $condition['time'] = $last_info['time'];
+            $result = $collect->getHistory($condition);
+        }else{
+            $result=$collect->getMembercollectList($condition,'',1,'id desc',10);
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['time'];
+                }
+                $day = db('membercollect')->where("member_id=".$member_id." and isdel=1 and time=".$time)->order('id desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['time'])){
@@ -58,8 +72,12 @@ class Teachercollect extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
+            $last_id = $item['id'];
         }
         $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($datas);
     }
 
