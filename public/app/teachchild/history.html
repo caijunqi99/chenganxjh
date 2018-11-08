@@ -127,7 +127,6 @@
 
         // 下拉刷新
         $('.history_body').pullToRefresh(function() {
-            $('.weui-footer').hide();
             $(document.body).infinite();
             setTimeout(function() {
                 $('.history_body').pullToRefreshDone(); // 重置下拉刷新
@@ -137,6 +136,7 @@
 
         // 获取课件接口
         function GetKejian() {
+            $('.weui-footer').hide();
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
