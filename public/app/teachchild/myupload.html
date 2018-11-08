@@ -21,13 +21,40 @@
         .weui-pull-to-refresh__layer {
             font-size: 22px !important;
             position: relative;
-            top: 80px;
+        }
+        .content{
+            min-height: 1000px;
         }
     </style>
 </head>
 
 <body>
+<header class="head">
+    <div class="head0">
+        <div class="menu_bar_box">
+            <a href="javascript:;" class="back_btn" onClick="historyback();">
+                <i class="icon iconfont icon-jiantou3"></i>
+            </a>
+        </div>
+        <div class="head_title">
+            <p>我的上传</p>
+        </div>
+        <div class="head_r" onclick="videoUpload()">
+            <span>上传</span>
+        </div>
+    </div>
+</header>
 
+<div class="myupload_tabs">
+    <div class="myupload_tabs_wrap clearBoth">
+        <span class="float_left action" onclick="Tabs(1, this)">审核中</span>
+        <span class="float_left" onclick="Tabs(3, this)">已上传</span>
+    </div>
+
+</div>
+
+
+<div class="content">
     <div class="weui-pull-to-refresh__layer">
         <div class='weui-pull-to-refresh__arrow'></div>
         <div class='weui-pull-to-refresh__preloader'></div>
@@ -35,32 +62,7 @@
         <div class="up">释放刷新</div>
         <div class="refresh">正在刷新</div>
     </div>
-
-    <div class="body_content">
-        <header class="head">
-            <div class="head0">
-                <div class="menu_bar_box">
-                    <a href="javascript:;" class="back_btn" onClick="historyback();">
-                        <i class="icon iconfont icon-jiantou3"></i>
-                    </a>
-                </div>
-                <div class="head_title">
-                    <p>我的上传</p>
-                </div>
-                <div class="head_r" onclick="videoUpload()">
-                    <span>上传</span>
-                </div>
-            </div>
-        </header>
-    </div>
-
     <!-- 主要内容部分 -->
-    <div class="myupload_tabs">
-        <div class="myupload_tabs_wrap clearBoth">
-            <span class="float_left action" onclick="Tabs(1, this)">审核中</span>
-            <span class="float_left" onclick="Tabs(3, this)">已上传</span>
-        </div>
-    </div>
     <div class="body_content clearBoth main_content">
     </div>
     <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
@@ -70,6 +72,9 @@
         <i class="weui-loading"></i>
         <span class="weui-loadmore__tips">正在加载</span>
     </div>
+</div>
+
+
 
     <script src="../content/scripts/jquery.min.js"></script>
     <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>

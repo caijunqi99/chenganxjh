@@ -386,7 +386,17 @@ a.lookall {
     height: 78px;
     border-radius: 50%;
     float: left;
+    overflow: hidden;
+    position: relative;
 }
+.head_piccont img{
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
 
 .head_pic p.name {
     font-size: 28px;
