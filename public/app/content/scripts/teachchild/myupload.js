@@ -106,7 +106,7 @@ $(function() {
             success: function(response) {
                 if (response['code'] == 200) {
                     if (response['result'].length == 0) {
-                        var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                        var is_data = $('.main_content>.weui-loadmore').hasClass('weui-loadmore_line');
                         if(!is_data){
                             $('.weui-footer').show();
                         }
