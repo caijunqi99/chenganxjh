@@ -115,6 +115,7 @@
         // 分页
         var loading = false; //状态标记
         $(document.body).infinite().on("infinite", function(event) {
+            alert('aaa');
             if (loading) return;
             loading = true;
             setTimeout(function() {
@@ -127,6 +128,7 @@
 
         // 下拉刷新
         $(document.body).pullToRefresh(function() {
+            alert('bbb');
             $(document.body).infinite();
             setTimeout(function() {
                 $(document.body).pullToRefreshDone(); // 重置下拉刷新
