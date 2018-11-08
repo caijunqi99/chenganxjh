@@ -404,6 +404,28 @@ class Camera extends AdminControl
 //        halt($start);
         //查询已安装的摄像头
         $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
+        $date=date('H:i',time());
+        foreach($list as $k=>$v){
+            if($v['online']==0){
+                $list[$k]['statuses']=2;
+            }else{
+                if($v['status']==1){
+                    if(!empty($v['begintime'])&&!empty($v['endtime'])){
+                        $begintime=date('H:i',$v['begintime']);
+                        $endtime=date('H:i',$v['endtime']);
+                        if($date<$begintime||$date>$endtime){
+                            $list[$k]['statuses']=2;
+                        }else{
+                            $list[$k]['statuses']=1;
+                        }
+                    }else{
+                        $list[$k]['statuses']=1;
+                    }
+                }else{
+                    $list[$k]['statuses']=2;
+                }
+            }
+        }
         //return $list;exit;
         $list_count = db('camera')->where($where)->count();
         $html = '';
@@ -415,9 +437,9 @@ class Camera extends AdminControl
                 $html .= '<td class="align-center">'.$v["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
                 $html .= '<td class="align-center">'.$v["id"].'</td>';
-                if($v['online'] == 1){
+                if($v['statuses'] == 1){
                     $html .= '<td class="align-center"><b style="color:green;">在线</b></td>';
-                }else if($v['online'] == 0){
+                }else if($v['statuses'] == 2){
                     $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
                 $html .= '<td class="align-center">'.$v["parentid"].'</td>';
