@@ -9,7 +9,9 @@
 .myupload_tabs {
     width: 750px;
     padding-top: 100px;
-    padding-bottom: 20px;
+    background: #fff;
+    position: relative;
+    z-index: 7;
 }
 
 .myupload_tabs_wrap {

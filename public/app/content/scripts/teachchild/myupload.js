@@ -27,18 +27,17 @@ $(function() {
     });
 
     // 下拉刷新
-    $(document.body).pullToRefresh(function() {
-        $(document.body).infinite();
+    $('.content').pullToRefresh(function() {
+        $('.content').infinite();
         setTimeout(function() {
-            var params = Params;
-            params['page'] = 1;
-            GetKejian(params);
-            $(document.body).pullToRefreshDone(); // 重置下拉刷新
-        }, 1000)
+            $('.content').pullToRefreshDone(); // 重置下拉刷新
+        }, 1500)
+        var params = Params;
+        params['page'] = 1;
+        GetKejian(params);
     });
     // 获取课件接口
     function GetKejian(params) {
-        $(document.body).infinite();
         $.ajax({
             url: api + '/teacherchild/myUpload.html',
             type: 'POST',
@@ -70,7 +69,6 @@ $(function() {
 
     // 获取数据
     function getList(type) {
-        $(document.body).infinite();
         let params = {
             key: user_token,
             member_id: user_member_id,
@@ -85,7 +83,11 @@ $(function() {
             data: params,
             success: function(response) {
                 if (response['code'] == 200) {
-                    $('.main_content').html(HTML(response['result']))
+                    if (response['result'].length == 0) {
+                        $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
+                    } else {
+                        $('.main_content').html(HTML(response['result']))
+                    }
                 } else {
                     $.toast(response['message'], 'forbidden');
                     return false;
@@ -117,6 +119,7 @@ $(function() {
                 } else {
                     $('.weui-footer').show();
                     $('.weui-loadmore').hide();
+                    $(document.body).destroyInfinite();
                     $.toast(response['message'], 'forbidden');
                     return false;
                 };

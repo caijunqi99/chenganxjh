@@ -56,14 +56,15 @@
     .head {
         width: 100%;
         height: 74px;
+        -webkit-display: flex;
         display: flex;
-        display: -webkit-flex;
         justify-content: space-between;
         flex-wrap: nowrap;
         position: fixed;
         left: 0;
         top: 0;
-        z-index: 99;
+        z-index: 9;
+        background:#fff;
     }
     
     .head>div.head0 {
@@ -71,15 +72,16 @@
         justify-content: space-between;
         flex-wrap: nowrap;
         margin: 0 auto;
+        -webkit-display: flex;
         display: flex;
-        display: -webkit-flex;
         border-bottom: 1px solid #ededed;
         background: #fff;
+        height: 74px;
     }
     
     .head0>div {
         width: 90px;
-        height: 100%;
+        height: 74px;
         display: flex;
         display: -webkit-flex;
         align-items: center;

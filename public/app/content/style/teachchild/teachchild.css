@@ -354,6 +354,7 @@ a:active {
     overflow: hidden;
     border: 2px solid #ccc;
     box-sizing: border-box;
+    border-radius: 20px;
 }
 
 .content_wrap .img_wrap img {

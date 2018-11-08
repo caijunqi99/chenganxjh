@@ -16,13 +16,21 @@
     <link rel="stylesheet" href="../content/style/find.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
+    <style>
+        .weui-pull-to-refresh__layer {
+            font-size: 22px !important;
+        }
+        .main{
+            margin-top: -50px;
+        }
+    </style>
 </head>
 
 <body class="moodbody">
     <header class="head">
         <div class="head0">
             <div class="menu_bar_box">
-                <a href="javascript:;" class="back_btn" onClick="historyback()">
+                <a href="javascript:;" class="back_btn" onClick="historyback()"style="justify-content: flex-start; padding-left:30px;">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -34,22 +42,27 @@
             </div>
         </div>
     </header>
-
     <!-- 主要内容 -->
     <div class="main">
+        <div class="weui-pull-to-refresh__layer">
+            <div class='weui-pull-to-refresh__arrow'></div>
+            <div class='weui-pull-to-refresh__preloader'></div>
+            <div class="down">下拉刷新</div>
+            <div class="up">释放刷新</div>
+            <div class="refresh">正在刷新</div>
+        </div>
         <div class="moodbanner" style="height:390px;background:url(../content/images/find/mood_banner.jpg) no-repeat center;background-size:cover;margin-bottom:30px;"> </div>
+        <div id="nodata_box"></div>
         <div class="mood_listbox" id="mood_listbox">
         </div>
-
-        <div class="weui-footer" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
-            <span class="weui-over">没有更多信息了</span>
-        </div>
-        <div class="weui-loadmore" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
-            <i class="weui-loading"></i>
-            <span class="weui-loadmore__tips">正在加载</span>
-        </div>
     </div>
-
+    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+        <span class="weui-over">没有更多信息了</span>
+    </div>
+    <div class="weui-loadmore load" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
     <a href="javascript:;" class="addmood_btn" onclick="send_mood();">
         <i class="icon iconfont icon-bianji"></i>
     </a>
@@ -60,143 +73,159 @@
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
     <script>
-        $(function(){
-           $.ajax({
-               type:'POST',
-               url:api+'/Mood/moodlist.html',
-               data: {
-                   key:user_token
-               },
-               dataType: "json",
-               success: function (response) {
-                   var data = response.result[0];
-                   if(response['code'] == 200){
-                       if(data.length>0){
-                           for(var i=0; i<data.length;i++) {
-                               var ml = '';
-                               ml +='<div class="mood_list cont">' +
-                                   '<div class="head_picbox">' +
-                                   '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
-                                   '</div>' +
-                                   '<div class="head_pic">' +
-                                   '<p class="name">'+data[i].member_nickname+'</p>' +
-                                   '<p class="time">'+data[i].pubtime+'</p>' +
-                                   '</div>' +
-                                   '</div>' +
-                                   '<div class="mood_txt">' +
-                                   '<p class="mood_p">'+data[i].content+'</p>' +
-                                   '</div>' +
-                                   '<div class="mood_imgbox">' +
-                                   '<ul class="mood_imglist clearfix">';
-                               if(data[i].image[0] != ''){
-                                   for(var a=0;a<data[i].image.length;a++){
-                                       var img_url = upload_url+'/'+data[i].image[a];
-                                       ml +=  '<li>' +
-                                           '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
-                                           '<img src="'+img_url+'" class="v_hiden" alt="">' +
-                                           '</div>' +
-                                           '</li>';
-                                   }
-                               }
-                               ml += '</ul></div>';
-                               ml +='<div class="thumbs">\n' +
-                                   '                    <div class="thumbs_l">\n' +
-                                   '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
-                                   '                    </div>\n' +
-                                   '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
-                                   '                </div>';
-                               $("#mood_listbox").append(ml);
-                           }
-                       }else{
-                           $('.weui-footer').show();
-                           $('.weui-loadmore').hide();
-                           $(document.body).destroyInfinite()
-                       }
+        var List = [];
+        var Page = 1;
 
-                   }else if(response['code'] == '400'){
-                       $.toast(response['message'],'forbidden');
-                   }else{
-                       $.toast(response['message'],'forbidden');return false;
-                   }
-               }
-           })
+        $.ajax({
+            type:'POST',
+            url:api+'/Mood/moodlist.html',
+            data: {
+                key:user_token,
+                member_id: user_member_id,
+                page: 1
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response['code'] == 200){
+                    if (response['result'].length == 0) {
+                        $("#nodata_box").html('<div class="nodata no_pinglun"><p class="nodata_p">暂无数据</p></div>');
+                    } else {
+                        var data = response['result'][0];
+                        $('#mood_listbox').html(HTML(data));
+                    }
+                }else if(response['code'] == '400'){
+                    $.toast(response['message'],'forbidden');
+                }else{
+                    $.toast(response['message'],'forbidden');return false;
+                }
+            }
+        })
+        // 下拉刷新
+        $('.main').pullToRefresh(function() {
+            $('.main').infinite();
+            setTimeout(function() {
+                $('.main').pullToRefreshDone(); // 重置下拉刷新
+            }, 1500)
+            GetKejian();
         });
 
+        function GetKejian() {
+            $.ajax({
+                type:'POST',
+                url:api+'/Mood/moodlist.html',
+                data: {
+                    key:user_token,
+                    member_id: user_member_id,
+                    page: 1
+                },
+                dataType: "json",
+                success: function (response) {
+                    if(response['code'] == 200){
+                        if (response['result'].length == 0) {
+                            $("#nodata_box").html('<div class="nodata no_pinglun"><p class="nodata_p">暂无数据</p></div>');
+                        } else {
+                            var data = response['result'][0];
+                            $('#mood_listbox').html(HTML(data));
+                        }
+                    }else if(response['code'] == '400'){
+                        $.toast(response['message'],'forbidden');
+                    }else{
+                        $.toast(response['message'],'forbidden');return false;
+                    }
+                }
+            })
+        }
 
-
-        var loading = false;
-        var start = 1;
-        $(document.body).infinite().on("infinite", function() {
+        // 分页
+        var loading = false; //状态标记
+        $(document.body).infinite(200).on("infinite", function(event) {
             if (loading) return;
             loading = true;
             setTimeout(function() {
-                $.ajax({
-                    type:'POST',
-                    url:api+'/Mood/moodlist.html',
-                    data: {
-                        key:user_token,
-                        start:start
-                    },
-                    dataType: "json",
-                    success: function (response) {
+                Page = Page + 1;
+                getPage(Page);
+                loading = false;
+            }, 20)
+        });
+        // 分页
+        function getPage(num) {
+            $('.load').show();
+            $.ajax({
+                type:'POST',
+                url:api+'/Mood/moodlist.html',
+                data: {
+                    key:user_token,
+                    member_id: user_member_id,
+                    start:num
+                },
+                dataType: "json",
+                success: function (response) {
+
+                    if(response['code'] == 200){
                         var data = response.result[0];
-                        if(response.result[1].page_count >start){
-                            start = start+1;
-                            if(response['code'] == 200){
-                                if(data[0] != ''){
-                                    for(var i=0; i<data.length;i++) {
-                                        var ml = '';
-                                        ml +='<div class="mood_list cont">' +
-                                            '<div class="head_picbox">' +
-                                            '<div class="head_piccont" style="background:url('+data[i].rel_member_avatar+') no-repeat center;background-size:cover;">' +
-                                            '</div>' +
-                                            '<div class="head_pic">' +
-                                            '<p class="name">'+data[i].member_nickname+'</p>' +
-                                            '<p class="time">'+data[i].pubtime+'</p>' +
-                                            '</div>' +
-                                            '</div>' +
-                                            '<div class="mood_txt">' +
-                                            '<p class="mood_p">'+data[i].content+'</p>' +
-                                            '</div>' +
-                                            '<div class="mood_imgbox">' +
-                                            '<ul class="mood_imglist clearfix">';
-                                        if(data[i].image[0] != ''){
-                                            for(var a=0;a<data[i].image.length;a++){
-                                                var img_url = upload_url+'/'+data[i].image[a];
-                                                ml +=  '<li>' +
-                                                    '<div class="moodimg" style="background:url('+img_url+') no-repeat center;background-size:cover;">' +
-                                                    '<img src="'+img_url+'" class="v_hiden" alt="">' +
-                                                    '</div>' +
-                                                    '</li>';
-                                            }
-                                        }
-                                        ml += '</ul></div>';
-                                        ml +='<div class="thumbs">\n' +
-                                            '                    <div class="thumbs_l">\n' +
-                                            '                        <a href="mooddetail.html?id='+data[i].id+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
-                                            '                    </div>\n' +
-                                            '                    <div class="thumbs_r">'+data[i].click+'条评论</div>\n' +
-                                            '                </div>';
-                                        $("#mood_listbox").append(ml);
-                                    }
-                                }
-                            }else if(response['code'] == '400'){
-                                $.alert(response['message'],function(){
-                                    goLogin();
-                                });
-                            }else{
-                                $.alert(response['message']);
+                        if (data.length == 0) {
+                            var is_data = $('#mood_listbox>.nodata').hasClass('no_pinglun');
+                            if(!is_data){
+                                $('.weui-footer').show();
                             }
-                        }else{
-                           $('.weui-footer').show();
-                           $('.weui-loadmore').hide();
-                            $(document.body).destroyInfinite()
+                            $('.load').hide();
+                            $(document.body).destroyInfinite();
+                        } else {
+                            $('.load').hide();
+                            $('#mood_listbox').append(HTML(data));
                         }
+                    }else{
+                        $('.weui-footer').show();
+                        $('.load').hide();
+                        $(document.body).destroyInfinite();
+                    }
+
                     }
                 });
-                loading = false;
-            }, 2000);
-        });
+        }
+
+        // HTML模板
+        function HTML(data) {
+            var template = '';
+            for (var i = 0; i < data.length; i++) {
+                template += '<div class="mood_list cont">\n' +
+                    '                <div class="head_picbox">\n' +
+                    '                    <div class="head_piccont" >\n' +
+                    '                        <img src="'+data[i]["rel_member_avatar"]+'"  alt="">\n' +
+                    '                    </div>\n' +
+                    '                    <div class="head_pic">\n' +
+                    '                        <p class="name">'+data[i]["member_nickname"]+'</p>\n' +
+                    '                        <p class="time">'+data[i]["pubtime"]+'</p>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div class="mood_txt">\n' +
+                    '                    <p class="mood_p">'+data[i]["content"]+'</p>\n' +
+                    '                </div>\n' ;
+                if(data[i]["image"][0] != ""){
+                    template += '                <div class="mood_imgbox">\n' +
+                        '                    <ul class="mood_imglist clearfix">\n' +
+                        '                        <!-- 可以多个 -->\n' ;
+                        for(var e =0;e<data[i]["image"].length;e++){
+                            var img = upload_url+'/'+data[i]["image"][e];
+                            template +='                        <li>\n' +
+                                '                            <div class="moodimg" style="background:url('+img+') no-repeat center;background-size:cover;">\n' +
+                                '                            </div>\n' +
+                                '                        </li>\n' ;
+                        }
+
+                    template+=  '                    </ul>\n' +
+                            '                </div>\n' ;
+                }
+                template += '                <div class="thumbs">\n' +
+                    '                    <div class="thumbs_l">\n' +
+                    '                        <a href="mooddetail.html?id='+data[i]["id"]+'"><i class="icon iconfont icon-bubble"></i></a>\n' +
+                    '                    </div>\n' +
+                    '                    <div class="thumbs_r">'+data[i]["click"]+'条评论</div>\n' +
+                    '                </div>\n' +
+                    '            </div>'
+            }
+            return template;
+        }
     </script>
 </body>
 
