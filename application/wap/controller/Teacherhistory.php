@@ -28,18 +28,21 @@ class Teacherhistory extends MobileMember
         $condition['t_del']=1;
         $last_id = input('post.page');
         if($last_id){
-            $last_info = db('teachhistory')->where("t_id <".$last_id." and t_userid=".$member_id." and t_del=1")->order('t_maketime desc,t_id desc')->find();
-            $condition['t_maketime'] = $last_info['t_maketime'];
+            $last_info = db('teachhistory')->where("t_maketime <".$last_id." and t_userid=".$member_id." and t_del=1")->order('t_maketime desc')->find();
+            $strtime = strtotime(date("Y-m-d",$last_info['t_maketime'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $condition['t_maketime'] = array('egt',$strtime);
+            $condition['t_maketime'] = array('lt',$endtime);
             $result = $teachhistory->getHistory($condition);
         }else{
-            $result=$teachhistory->getTeachhistoryList($condition,'',1,'t_maketime desc,t_id desc',10);
+            $result=$teachhistory->getTeachhistoryList($condition,'',1,'t_maketime desc',10);
             if(count($result)==10){
                 foreach($result as $kk=>$vv){
                     $time = $vv['t_maketime'];
                 }
-                $strtime = strtotime(date("Y-m-d 00:00:00",$time));
-                $endtime = strtotime(date("Y-m-d 00:00:00",$time))+24*3600;
-                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime<".$endtime," and t_maketime>=".$strtime)->order('t_maketime desc,t_id desc')->select();
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime<".$endtime." and t_maketime>=".$strtime)->order('t_maketime desc')->select();
                 $result=array_merge($result,$day);
                 $result=array_unique($result, SORT_REGULAR);
             }
@@ -71,7 +74,7 @@ class Teacherhistory extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
-            $last_id = $item['t_id'];
+            $last_id = $item['t_maketime'];
         }
         $datas = !empty($data) ? [$data] : $data;
         if(!empty($datas[0])){
