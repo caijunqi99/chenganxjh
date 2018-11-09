@@ -115,11 +115,12 @@
             });
 
             // 默认获取推荐课件列表
-            GetKejian(Params)
+            GetKejian(Params);
 
             // 分页
             var loading = false; //状态标记
             $(document.body).infinite().on("infinite", function(event) {
+                alert('aa');
                 if (loading) return;
                 loading = true;
                 setTimeout(function() {
@@ -134,12 +135,11 @@
             $(document.body).pullToRefresh(function() {
                 $(document.body).infinite();
                 setTimeout(function() {
-                    var params = Params;
-                    params['page'] = 1;
-                    GetKejian(params);
                     $(document.body).pullToRefreshDone(); // 重置下拉刷新
                 }, 1500)
-
+                var params = Params;
+                params['page'] = 1;
+                GetKejian(params);
             });
 
             // 顶部推荐切换
