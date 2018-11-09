@@ -116,11 +116,21 @@
 
             // 默认获取推荐课件列表
             GetKejian(Params);
-
+// 下拉刷新
+            $(document.body).pullToRefresh(function() {
+                Page = 1;
+                $('.weui-loadmore').hide();
+                $(document.body).infinite();
+                setTimeout(function() {
+                    $(document.body).pullToRefreshDone(); // 重置下拉刷新
+                }, 1500)
+                var params = Params;
+                params['page'] = Page;
+                GetKejian(params);
+            });
             // 分页
             var loading = false; //状态标记
             $(document.body).infinite().on("infinite", function(event) {
-                alert('aa');
                 if (loading) return;
                 loading = true;
                 setTimeout(function() {
@@ -131,16 +141,7 @@
                 }, 20)
             });
 
-            // 下拉刷新
-            $(document.body).pullToRefresh(function() {
-                $(document.body).infinite();
-                setTimeout(function() {
-                    $(document.body).pullToRefreshDone(); // 重置下拉刷新
-                }, 1500)
-                var params = Params;
-                params['page'] = 1;
-                GetKejian(params);
-            });
+
 
             // 顶部推荐切换
             sortTopAction = function(ID, el, type) {
