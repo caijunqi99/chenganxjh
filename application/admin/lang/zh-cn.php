@@ -149,6 +149,8 @@ $lang['ds_snstrace']               = '买家动态';
 $lang['ds_snsmember']              = '会员标签';
 $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
+$lang['ds_importStudent']               = '导入学生列表';
+$lang['ds_robot']               = '机器人管理';
 
 //看孩管理
 $lang['ds_look']                   = '看孩管理';
