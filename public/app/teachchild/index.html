@@ -118,7 +118,6 @@
             GetKejian(Params);
             // 下拉刷新
             $(document.body).pullToRefresh(function() {
-                alert('aaa');
                 Page = 1;
                 $('.weui-loadmore').hide();
                 $(document.body).infinite();
@@ -496,7 +495,6 @@
 
             // 获取课件接口
             function GetKejian(params) {
-                $(document.body).infinite();
                 $.ajax({
                     type: "POST",
                     url: api + '/Teacherhome/lists',
