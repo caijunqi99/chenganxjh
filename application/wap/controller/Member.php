@@ -859,7 +859,7 @@ class Member extends MobileMember
             if(!empty($student['end_time'])){
                 $student['time'] = date('Y-m-d',$student['end_time']);
             }else{
-                $student['time'] = '前往购买套餐';
+                $student['time'] = '请前往购买套餐';
             }
             if(empty($student['s_region'])){
                 $student['s_region'] = $this->getAddress($student['s_provinceid']).' '.$this->getAddress($student['s_cityid']).' '.$this->getAddress($student['s_areaid']);
