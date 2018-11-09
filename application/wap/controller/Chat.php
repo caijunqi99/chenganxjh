@@ -197,7 +197,7 @@ class Chat extends MobileMember
             'member_name'   => $friendInfo['member_name'],
             'member_mobile' => $friendInfo['member_mobile'],
             'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
-            'apply_remark'  => empty($myexits['apply_remark'])?'':$myexits['apply_remark'],
+            'apply_remark'  => empty($frexits['apply_remark'])?'':$frexits['apply_remark'],
             'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
             'area'          => empty($areas)?'':$areas,
             'state'         => $state,
