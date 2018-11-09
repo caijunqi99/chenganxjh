@@ -116,8 +116,9 @@
 
             // 默认获取推荐课件列表
             GetKejian(Params);
-// 下拉刷新
+            // 下拉刷新
             $(document.body).pullToRefresh(function() {
+                alert('aaa');
                 Page = 1;
                 $('.weui-loadmore').hide();
                 $(document.body).infinite();
