@@ -362,6 +362,7 @@ class Camera extends AdminControl
         }
         if (!empty($classname)) {
             $where['classname'] = array('like','%'.$classname.'%');
+            unset($Schoollist);
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
