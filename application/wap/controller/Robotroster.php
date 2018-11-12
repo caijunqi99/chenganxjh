@@ -22,7 +22,7 @@ class Robotroster extends MobileMall
         //db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
         $SNNumber = $input['SNNumber'];
         if(empty($SNNumber)){
-            $ret = array('ret'=>"00001","data"=>'','msg'=>"fail");
+            $ret = array("data"=>'','msg'=>"fail",'ret'=>"00001");
             return json_encode($ret);
         }
         $model_robot = Model("Robot");
@@ -30,15 +30,16 @@ class Robotroster extends MobileMall
         $datas = array();
         $datas['schoolId'] = !empty($data['schoolid'])?$data['schoolid']:"";
         $datas['schoolName'] = !empty($data['name'])?$data['name']:"";
-        $ret = array('ret'=>"00000","data"=>!empty($datas)?$datas:"",'msg'=>"success");
+        $ret = array("data"=>!empty($datas)?$datas:"",'msg'=>"success",'ret'=>"00000");
         return json_encode($ret);
     }
 
     //获取花名册
     public function roster(){
-        $school_id = input('post.school_id');
+        $school_id = input('post.schoolId');
         if(empty($school_id)){
-            output_error('school_id参数有误');
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
         $model_student = Model("Student");
         $data = $model_student->getAllStudent(array('s_schoolid'=>$school_id));
@@ -49,7 +50,17 @@ class Robotroster extends MobileMall
         ];
         $model_roster = Model("Robotroster");
         $model_roster->rosterAdd($insert);
-        output_data($data);
+        $datas = array();
+        foreach($data as $k=>$v){
+            $datas[$k]['uid'] = $v['s_id'];
+            $datas[$k]['userCode'] = $v['s_card'];
+            $datas[$k]['userName'] = $v['s_name'];
+            $datas[$k]['sex'] = $v['s_sex']==2?0:1; //0女 1男
+            $datas[$k]['clazzName'] = $v['classname'];
+            $datas[$k]['clazzId'] = $v['s_classid'];
+        }
+        $ret = array("data"=>!empty($datas)?$datas:[],'msg'=>"success",'ret'=>"00000");
+        return json_encode($ret);
     }
 
 }

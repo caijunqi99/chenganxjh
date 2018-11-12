@@ -18,25 +18,29 @@ class Robotreport extends MobileMall
 
     //单个考勤上报
     public function report(){
-        $school_id = input('post.school_id');
+        $school_id = input('post.schoolId');
         if(empty($school_id)){
-            output_error('school_id参数有误');
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
         $model_school = Model("School");
         $schoolInfo = $model_school->getSchoolInfo(array('schoolid'=>$school_id,'isdel'=>1),"schoolid,name");
         if(empty($schoolInfo)){
-            output_error('无此学校的信息');
+            $ret = array('ret'=>"00002","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
-        $student_id = input('post.student_id');
+        $student_id = input('post.userId');
         if(empty($student_id)){
-            output_error('student_id参数有误');
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
         $student_model = Model("Student");
         $studentInfo = $student_model->getStudentInfo(array('s_id'=>$student_id,'s_del'=>1),"s_id,s_name,s_ownerAccount");
         if(empty($studentInfo)){
-            output_error('无此学生的信息');
+            $ret = array('ret'=>"00003","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
-        $class_id = input('post.class_id');
+        $class_id = input('post.classId');
         $videoName = "robot_".$student_id."_".date("YmdHis",time())."_".time().".mp4";
         $video = $this->ioVideo($videoName);
         if($video){
@@ -70,9 +74,11 @@ class Robotreport extends MobileMall
                         $this->error('给用户发送短信失败 ');
                     }
                 }*/
-                output_data("打卡成功");
+                $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
+                return json_encode($ret);
             }else{
-                output_error('上报考勤失败');
+                $ret = array('ret'=>"00004","data"=>[],'msg'=>"fail");
+                return json_encode($ret);
             }
         }
     }
