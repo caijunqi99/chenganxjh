@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Robotrecord extends MobileMall
+class Robotrecord extends MobileMember
 {
     public function _initialize()
     {
