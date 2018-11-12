@@ -37,28 +37,9 @@ class Camera extends AdminControl
         }
         $where = ' status=2 ';
         if(!empty($_GET)){
-            if(!empty($_GET['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_GET["name"]).'%" ';
-            }
-            if(!empty($_GET['province'])){
-                $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
-            }
-            if(!empty($_GET['city'])){
-                $where .= ' AND city_id = "'.intval($_GET["city"]).'"';
-            }
-            if(!empty($_GET['area'])){
-                $where .= ' AND area_id = "'.intval($_GET["area"]).'"';
-            }
-            if(!empty($_GET['school'])){
-                $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
-            }
-            if(!empty($_GET['grade'])){
-                $where .= ' AND class_area LIKE "%'.trim($_GET["grade"]).'%"';
-            }
-            if(!empty($_GET['class'])){
-                $where .= ' AND class_area LIKE "%'.trim($_GET["class"]).'%"';
-            }
+            $where = $this->_conditions($_GET);
         }
+        
 
 
         $page_count = intval(input('get.page_count')) ? intval(input('get.page_count')) : 1;//每页的条数
@@ -83,29 +64,11 @@ class Camera extends AdminControl
     public function get_list(){
 
         $where = ' status=2 ';
+        
         if(!empty($_POST)){
-            if(!empty($_POST['name'])){
-                $where .= ' AND camera_name LIKE "%'.trim($_POST["name"]).'%" ';
-            }
-            if(!empty($_POST['province'])){
-                $where .= ' AND province_id = "'.intval($_POST["province"]).'"';
-            }
-            if(!empty($_POST['city'])){
-                $where .= ' AND city_id = "'.intval($_POST["city"]).'"';
-            }
-            if(!empty($_POST['area'])){
-                $where .= ' AND area_id = "'.intval($_POST["area"]).'"';
-            }
-            if(!empty($_POST['school'])){
-                $where .= ' AND school_id = "'.intval($_POST["school"]).'"';
-            }
-            if(!empty($_POST['grade'])){
-                $where .= ' AND class_area LIKE "%'.trim($_POST["grade"]).'%"';
-            }
-            if(!empty($_POST['class'])){
-                $where .= ' AND class_area LIKE "%'.trim($_POST["class"]).'%"';
-            }
+            $where = $this->_conditions($_POST);
         }
+        
 
         $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
@@ -240,13 +203,11 @@ class Camera extends AdminControl
             $this->error(lang('ds_assign_right'));
         }
         $where = '';
-        if(!empty($_GET)){
-            $where = $this->_conditions($_GET);
-        }
         
+        $where = $this->_conditions($_GET);
 
         $list_count = db('camera')->where($where)->count();
-
+        // var_dump($list_count);exit;
         //年级类型
         $school_where=[];
         $school_where['schoolid'] = session('admin_school_id');

@@ -128,7 +128,7 @@
 </div>
 <script type="text/javascript">
     function rtmplay(cid){
-        //alert(1);
+        addrtmp(cid,2);
         var rtmpInfo= $('#tr_'+cid).attr('datainfo');
         rtmpInfo =$.parseJSON(rtmpInfo);
         layer.open({
@@ -139,8 +139,7 @@
             skin: 'layui-layer-rim',
             content: $('#LAY'),
             cancel: function(){
-
-
+            addrtmp(cid,1);
             //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
         }
         });
@@ -154,6 +153,16 @@
             poster:rtmpInfo.imageurl
         };
         var player = new ckplayer(videoObject);
+    }
+    function addrtmp(cid,is_rtmp){
+        $.ajax({
+            type:'POST',
+            url:ADMIN_URL+'Monitor/addrtmp',
+            data:{cid:cid,is_rtmp:is_rtmp},
+            success:function(data){
+                return(data);
+            }
+        })
     }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
