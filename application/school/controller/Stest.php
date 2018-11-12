@@ -20,7 +20,7 @@ class Stest extends AdminControl {
 		$this->ClassInsert = [];
 		$this->True_School = [];
 		$this->True_Class = [];
-    	
+    	exit;
 	}
 
 	public function StartTrans(){
