@@ -227,6 +227,11 @@ class Monitor extends AdminControl
         $update=array();
         $update['is_rtmp']=intval(input('post.is_rtmp'));
         $res=$camera_update->editCamera($where,$update);
+        $vlink = new Vomont();
+        $res= $vlink->SetLogin();
+        $accountid=$res['accountid'];
+        $datas=$vlink->Livestatus($accountid);
+        //print_r($datas);exit;
         return $res;
     }
 }
