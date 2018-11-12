@@ -332,9 +332,12 @@ class Camera extends AdminControl
         $Class = model('Classes');
 
         if (isset($where['sc_type']) && !empty($where['sc_type'])) {
+            $schoolid=$where['schoolid'];
+            unset($where['schoolid']);
             $sc_id = db('schooltype')->where($where)->value('sc_id');
             unset($where['sc_type']);
             $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
+            $where['schoolid']=$schoolid;
         }
         $classname = '';
         if (isset($where['classname']) && !empty($where['classname']) ) {
