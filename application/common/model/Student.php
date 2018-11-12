@@ -173,4 +173,10 @@ class Student extends Model {
         return $update;
     }
 
+    public function getAllStudent($condition){
+        return db('student')
+            ->join('__CLASS__ cl','cl.classid=s_classid','LEFT')
+            ->field("s_id,s_name,s_sex,s_classid,s_card,classname")->where($condition)->select();
+    }
+
 }
