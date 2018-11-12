@@ -12,7 +12,7 @@
                 <dt><?php echo $mview['content']; ?></dt>
             </dl>
                     <?php
-                     if($mview['image']!=''){
+                     if($mview['image'][0]!=''){
                      foreach($mview['image'][0] as $v ){ ?>
                        <img src="<?php echo $path.$v; ?>" >&nbsp;&nbsp;&nbsp;
                     <?php
