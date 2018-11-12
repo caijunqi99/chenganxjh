@@ -11,3 +11,7 @@ function axisFomat($str){
 	return $time_list[$str];
 }
 
+function Fomat($time){
+	return date('Y-m-d H:i:s',$time);
+}
+
