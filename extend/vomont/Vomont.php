@@ -84,7 +84,7 @@ class Vomont
     public function Livestatus($accpuntid){
         $SDK      = new CommandSDK();
         $mgsid = $SDK::livestatus;
-        $request = httpRequest($this->http.'msgid='.$mgsid.'&authkey='.$this->authkey.'&accountid='.$accpuntid.'&resid=16779521&streamtype=1&time={"weektime":[{"day":0,"begintime":0,"livelong":86400},{"day":1,"begintime":0,"livelong":86400},{"day":2,"begintime":0,"livelong":86400},{"day":3,"begintime":0,"livelong":86400},{"day":4,"begintime":0,"livelong":86400},{"day":5,"begintime":0,"livelong":86400},{"day":6,"begintime":0,"livelong":86400}]}');
+        $request = httpRequest($this->http.'msgid='.$mgsid.'&authkey='.$this->authkey.'&accountid='.$accpuntid.'&resid=16876545&streamtype=1&time={"weektime":[{"day":0,"begintime":0,"livelong":86400},{"day":1,"begintime":0,"livelong":86400},{"day":2,"begintime":0,"livelong":86400},{"day":3,"begintime":0,"livelong":86400},{"day":4,"begintime":0,"livelong":86400},{"day":5,"begintime":0,"livelong":86400},{"day":6,"begintime":0,"livelong":86400}]}');
         $data = json_decode($request,TRUE);
         return $data;
     }
