@@ -92,7 +92,9 @@
         </table>
         <div style="float: right;">
             <tr class="tfoot">
-                <div id="page"></div>
+                <div id="page">
+                    
+                </div>
             </tr>
         </div>
     </form>
@@ -299,8 +301,7 @@
                     data:{name:name,school:school,grade:grade,class:class_name,page:page,page_count:page_count},
                     success:function(data){
                         data = jQuery.parseJSON(data);
-
-                        // console.log(data.html);
+                        // console.log(data);
                         $('#html').html(data.html);
                         $('#count').html(data.count+'个');
                     }

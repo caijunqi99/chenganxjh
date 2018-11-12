@@ -90,6 +90,12 @@
           <th class="align-center"><span>身份</span></th>
           <th class="align-center"><span>年龄</span></th>
           <th class="align-center"><span>账号</span></th>
+          <!--<th class="align-center"><span fieldname="logins" nc_type="order_by">{$Think.lang.member_index_login_time}</span></th>-->
+          <!--<th class="align-center"><span fieldname="last_login" nc_type="order_by">{$Think.lang.member_index_last_login}</span></th>-->
+          <!-- <th class="align-center">{$Think.lang.member_index_points}</th> -->
+          <!--<th class="align-center">{$Think.lang.member_index_prestore}</th>-->
+          <!-- <th class="align-center">经验值</th> -->
+          <!-- <th class="align-center">级别</th> -->
           <th class="align-center">{$Think.lang.member_index_state}</th>
             <?php if(session('admin_is_super')==1 || in_array('3',$action) || in_array('2',$action)){?>
           <th class="align-center">{$Think.lang.ds_handle}</th>
@@ -111,6 +117,19 @@
             <p class="smallfont">{$Think.lang.member_index_reg_time}:&nbsp;<?php echo $v['member_add_time']; ?></p>
             
               <div class="im">
+                  <!--<span class="email" >-->
+                <!--<?php if($v['member_email'] != ''){ ?>-->
+                <!--<a href="mailto:<?php echo $v['member_email']; ?>" class=" yes" title="{$Think.lang.member_index_email}:<?php echo $v['member_email']; ?>"><?php echo $v['member_email']; ?></a></span>-->
+                <!--<?php }else { ?>-->
+                <!--<a href="JavaScript:void(0);" class="" title="{$Think.lang.member_index_null}" ><?php echo $v['member_email']; ?></a></span>-->
+                <!--<?php } ?>-->
+                <!--<?php if($v['member_ww'] != ''){ ?>-->
+                <!-- <a target="_blank" href="http://web.im.alisoft.com/msg.aw?v=2&uid=<?php echo $v['member_ww'];?>&site=cnalichn&s=11" class="" title="WangWang: <?php echo $v['member_ww'];?>"><img border="0" src="http://web.im.alisoft.com/online.aw?v=2&uid=<?php echo $v['member_ww'];?>&site=cntaobao&s=2&charset=utf-8" /></a> -->
+                <!--<?php } ?>-->
+                <!--<?php if($v['member_qq'] != ''){ ?>                -->
+                <!-- <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $v['member_qq'];?>&site=qq&menu=yes" class=""  title="QQ: <?php echo $v['member_qq'];?>"><img border="0" src="http://wpa.qq.com/pa?p=2:<?php echo $v['member_qq'];?>:52"/></a> -->
+                <!--<?php } ?>-->
+                <!--v3-b11 显示手机号码-->
                <?php if($v['member_mobile'] != ''){ ?>
                <div style="font-size:13px; padding-left:10px">&nbsp;&nbsp;<?php echo $v['member_mobile']; ?></div>
                <?php } ?>
@@ -128,6 +147,15 @@
             ?></td>
           <td class="align-center"><?php echo $v['member_age']; ?></td>
           <td class="align-center"><?php if($v['is_owner']!=0){echo "副账号";}else{echo "主账号";} ?></td>
+          <!--<td class="align-center"><?php echo $v['member_login_num']; ?></td>-->
+          <!--<td class="w150 align-center"><p><?php echo $v['member_login_time']; ?></p>-->
+            <!--<p><?php echo $v['member_login_ip']; ?></p></td>-->
+          <!-- <td class="align-center"><?php echo $v['member_points']; ?></td> -->
+         <!-- <td class="align-center"><p>{$Think.lang.member_index_available}:&nbsp;<strong class="red"><?php echo $v['available_predeposit']; ?></strong>&nbsp;{$Think.lang.currency_zh}</p>
+            <p>{$Think.lang.member_index_frozen}:&nbsp;<strong class="red"><?php echo $v['freeze_predeposit']; ?></strong>&nbsp;{$Think.lang.currency_zh}</p>
+          </td>-->
+          <!-- <td class="align-center"><?php echo $v['member_exppoints'];?></td> -->
+          <!-- <td class="align-center"><?php echo $v['member_grade'];?></td> -->
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
               <?php if(session('admin_is_super')==1 || in_array('3',$action)){?>
