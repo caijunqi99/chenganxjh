@@ -18,7 +18,9 @@ class Robotroster extends MobileMall
 
     //机器人认证
     public function auth(){
-        $SNNumber = input('post.SNNumber');
+        $input = input();
+        //db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
+        $SNNumber = $input['SNNumber'];
         if(empty($SNNumber)){
             output_error('SNNumber参数有误');
         }
@@ -35,6 +37,13 @@ class Robotroster extends MobileMall
         }
         $model_student = Model("Student");
         $data = $model_student->getAllStudent(array('s_schoolid'=>$school_id));
+        $insert = [
+            'school_id' => $school_id,
+            'SNNumber' => input('post.SNNumber')?input('post.SNNumber'):"",
+            'create_time' => time()
+        ];
+        $model_roster = Model("Robotroster");
+        $model_roster->rosterAdd($insert);
         output_data($data);
     }
 
