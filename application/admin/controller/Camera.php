@@ -273,7 +273,6 @@ class Camera extends AdminControl
         }
         if (isset($where['grade']) && !empty($where['grade'])) {
             $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
-            unset($where['school']);
             unset($where['area']);
             unset($where['city']);
             unset($where['province']);
