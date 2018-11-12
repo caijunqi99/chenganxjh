@@ -25,7 +25,7 @@
                 <!--  <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
                  <i class="icon iconfont icon-jiantou3"></i>
                  </a> -->
-                <a href="javascript:;" class="back_btn" onClick="javascript :history.back(-1);">
+                <a href="javascript:;" class="back_btn" onClick="ago_back();">
                     <i class="icon iconfont icon-jiantou3"></i>
                 </a>
             </div>
@@ -357,12 +357,10 @@
                         dataType: "json",
                         success: function(response) {
                             if(response['code'] == 400){
-                                $.toast(response['message'],'forbidden',function(){
-                                    layout();
-                                });
+                                $.toast(response['message'],'forbidden');
                             }else if(response['code'] == 200){
                                 $.toast('绑定成功,请及时购买看孩套餐','',function(){
-                                    historyback();
+                                    location.href=http_url+'app/user/chooselevel.html?pkg_type=1&child_id='+response.result[0]['sid'];
                                 })
                             }else{
                                 $.toast(response['message'],'forbidden');return false;
