@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>想见孩-安全密码</title>
+    <title>想见孩-交易密码</title>
     <meta name="author" content="想见孩" />
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
@@ -28,7 +28,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>安全密码</p>
+                <p>交易密码</p>
             </div>
             <div class="head_r" style="width:130px;">
                 <a href="javascript:;" class="xiugaipwd_btn xiugaipwd hidden">修改密码</a>
@@ -44,19 +44,19 @@
                 <div class="shezhi_cont hidden">
                     <div class="bang_list">
                         <div class="name_box">
-                            <label for="nickname">设置6位安全密码：</label>
+                            <label for="nickname">设置6位交易密码：</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="pwd1"  onkeyup="maxLengths(event)" type="password" placeholder="请输入安全密码" value="" />
+                            <input class="input_txt" id="pwd1"  onkeyup="maxLengths(event)" type="password" placeholder="请输入交易密码" value="" />
                         </div>
                     </div>
 
                     <div class="bang_list">
                         <div class="name_box">
-                            <label for="nickname">确认安全密码：</label>
+                            <label for="nickname">确认交易密码：</label>
                         </div>
                         <div class="input_box">
-                            <input class="input_txt" id="pwd2"   onkeyup="maxLengths(event)" type="password" placeholder="请再一次输入安全密码" value="" />
+                            <input class="input_txt" id="pwd2"   onkeyup="maxLengths(event)" type="password" placeholder="请再一次输入交易密码" value="" />
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
 
                 <div class="bang_list xiugaipwd hidden">
                     <div class="name_box">
-                        <label for="nickname">已成功设置安全密码</label>
+                        <label for="nickname">已成功设置交易密码</label>
                     </div>
                     <div class="input_box">
                     </div>
@@ -92,7 +92,7 @@
 
             maxLengths = function(event) {
                 if (event.target.value.length > 6) {
-                    $.toast('支付密码只能有六位数字','forbidden');
+                    $.toast('交易密码只能有六位数字','forbidden');
                     event.target.value = event.target.value.substring(0, 6);
                 }
             }
@@ -121,9 +121,9 @@
 
             $('.bang_submit').click('on', function() {
                 if ($('#pwd1').val() == '') {
-                    $.toast('请输入安全密码','forbidden');return false;
+                    $.toast('请输入交易密码','forbidden');return false;
                 } else if ($('#pwd2').val() == '') {
-                    $.toast('请再一次输入安全密码','forbidden');return false;
+                    $.toast('请再一次输入交易密码','forbidden');return false;
                 }  else if ($('#pwd2').val() != $('#pwd1').val()) {
                     $.toast('两次密码不一致，请重新输入','forbidden');return false;
                 } else {

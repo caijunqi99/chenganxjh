@@ -1,18 +1,18 @@
 <?php
 
-namespace app\school\controller;
+namespace app\admin\controller;
 
 use think\Lang;
 use think\Validate;
 use vomont\Vomont;
 
-class Camera extends AdminControl
+class Import extends AdminControl
 {
 
     public function _initialize()
     {
         parent::_initialize();
-        Lang::load(APP_PATH . 'school/lang/zh-cn/look.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/student.lang.php');
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
@@ -31,75 +31,110 @@ class Camera extends AdminControl
      * @author 郎志耀
      * @time 20180926
      */
-    public function camera(){
+    public function index(){
+
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $where = ' status=2 ';
         if(!empty($_GET)){
-            $where = $this->_conditions($_GET);
+            if(!empty($_GET['name'])){
+                $where .= ' AND (m_name LIKE "%'.trim($_GET["name"]).'%" OR s_name LIKE "%'.trim($_GET["name"]).'%")';
+            }
+            if(!empty($_GET['province'])){
+                $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
+            }
+            if(!empty($_GET['city'])){
+                $where .= ' AND city_id = "'.intval($_GET["city"]).'"';
+            }
+            if(!empty($_GET['area'])){
+                $where .= ' AND area_id = "'.intval($_GET["area"]).'"';
+            }
+            if(!empty($_GET['school'])){
+                $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
+            }
+            if(!empty($_GET['grade'])){
+                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+            }
+            if(!empty($_GET['class'])){
+                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+            }
         }
-        
-
-
-        $page_count = intval(input('get.page_count')) ? intval(input('get.page_count')) : 1;//每页的条数
-        $start = intval(input('get.page')) ? (intval(input('get.page'))-1)*$page_count : 0;//开始页数
-
-        //查询未绑定的摄像头
-//        $list = db('camera')->where($where)->limit($start,$page_count)->order('sq_time DESC')->select();
-        $list_count = db('camera')->where($where)->count();
-
-//        halt($list);
-
-//        $this->assign('list',$list);
+        //查询绑定总数
+        $list_count = db('import_student')->where($where)->count();
         $this->assign('list_count',$list_count);
-        $this->setAdminCurItem('camera');
-        return $this->fetch('camera');
+        $this->setAdminCurItem('index');
+        return $this->fetch();
     }
     /**
- * @desc 获取分页数据
- * @author langzhiyao
- * @time 20190929
- */
+     * @desc 获取分页数据
+     * @author langzhiyao
+     * @time 20190929
+     */
     public function get_list(){
 
-        $where = ' status=2 ';
-        
+        $where = ' status=1 ';
         if(!empty($_POST)){
-            $where = $this->_conditions($_POST);
+            if(!empty($_POST['name'])){
+                $where .= ' AND (m_name LIKE "%'.trim($_GET["name"]).'%" OR s_name LIKE "%'.trim($_GET["name"]).'%")';
+            }
+            if(!empty($_POST['province'])){
+                $where .= ' AND province_id = "'.intval($_POST["province"]).'"';
+            }
+            if(!empty($_POST['city'])){
+                $where .= ' AND city_id = "'.intval($_POST["city"]).'"';
+            }
+            if(!empty($_POST['area'])){
+                $where .= ' AND area_id = "'.intval($_POST["area"]).'"';
+            }
+            if(!empty($_POST['school'])){
+                $where .= ' AND school_id = "'.intval($_POST["school"]).'"';
+            }
+            if(!empty($_POST['grade'])){
+                $where .= ' AND class_name LIKE "%'.trim($_POST["grade"]).'%"';
+            }
+            if(!empty($_POST['class'])){
+                $where .= ' AND class_name LIKE "%'.trim($_POST["class"]).'%"';
+            }
         }
-        
 
         $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
 
 //        halt($start);
         //查询未绑定的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('sq_time DESC')->select();
-        $list_count = db('camera')->where($where)->count();
+        $list = db('import_student')->where($where)->limit($start,$page_count)->order('time DESC')->select();
+        $list_count = db('import_student')->where($where)->count();
 
         $html = '';
         if(!empty($list)){
             foreach($list as $key=>$value){
                 $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["camera_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["class_area"].'</td>';
-                if($value['is_public_area'] == 1){
-                    $html .= '<td class="align-center">是</td>';
-                }else if($value['is_public_area'] == 2){
-                    $html .= '<td class="align-center">否</td>';
+                $html .= '<td class="align-center">'.$value["m_mobile"].'</td>';
+                $html .= '<td class="align-center">'.$value["m_name"].'</td>';
+                if($value['m_sex'] == 1){
+                    $html .= '<td class="align-center">男</td>';
+                }else if($value['m_sex'] == 2){
+                    $html .= '<td class="align-center">女</td>';
                 }
+                $html .= '<td class="align-center">'.$value["s_name"].'</td>';
+                if($value['s_sex'] == 1){
+                    $html .= '<td class="align-center">男</td>';
+                }else if($value['_sex'] == 2){
+                    $html .= '<td class="align-center">女</td>';
+                }
+                $html .= '<td class="align-center">'.$value["s_card"].'</td>';
                 $html .= '<td class="align-center">'.$value["school_name"].'</td>';
-//                $html .= '<td class="align-center">'.$value["address"].'</td>';
-                $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["sq_time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["sn"].'</td>';
-                $html .= '<td class="align-center">'.$value["key"].'</td>';
-                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
+                $html .= '<td class="align-center">'.$value["class_name"].'</td>';
+                $html .= '<td class="align-center">'.$value["area"].'</td>';
+                $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["time"]).'</td>';
+                $html .= '<td class="align-center">'.$value["t_id"].'</td>';
+                $html .= '<td class="align-center">'.$value["t_price"].'</td>';
+                $html .= '<td class="align-center">'.$value["t_day"].'</td>';
                 $html .= '<td class="align-center">'.$value["content"].'</td>';
-                $html .= '<td class="align-center" style="color:#0FB700;">待绑定</td>';
                 $html .= '<td class="w150 align-center">
                         <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" lay-event="reset">绑定设备信息</a>';
+                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" lay-event="reset">修改</a>';
                 $html .=  '</div></td>';
 
                 $html .= '</tr>';
@@ -107,7 +142,7 @@ class Camera extends AdminControl
         }
         if($html == ''){
             $html .= '<tr class="no_data">
-                    <td colspan="11">没有符合条件的记录</td>
+                    <td colspan="14">没有符合条件的记录</td>
                 </tr>';
         }
 
@@ -203,28 +238,16 @@ class Camera extends AdminControl
             $this->error(lang('ds_assign_right'));
         }
         $where = '';
-        
-        $where = $this->_conditions($_GET);
+        if(!empty($_GET)){
+            $where = $this->_conditions($_GET);
+        }
 
         $list_count = db('camera')->where($where)->count();
-        // var_dump($list_count);exit;
-        //年级类型
-        $school_where=[];
-        $school_where['schoolid'] = session('admin_school_id');
-        $school_type = db('school')->field('typeid')->where($school_where)->find();
-        if(!empty($school_type)){
-            $type = explode(',',$school_type['typeid']);
-            $grade = array();
-            foreach($type as $key=>$val){
-                $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
-            }
-            $this->assign('grade',$grade);
-        }
+
         $this->assign('list_count',$list_count);
         $this->setAdminCurItem('entered');
         return $this->fetch('entered');
     }
-
     /**
      * 摄像头查询过滤
      * @创建时间   2018-11-03T00:39:28+0800
@@ -232,13 +255,11 @@ class Camera extends AdminControl
      * @return [type]                          [description]
      */
     public function _conditions($where){
-        $where['school'] = session('admin_school_id');
         if (isset($where['name']) && !empty($where['name'])) {
             $condition['name'] = array('LIKE','%'.$where['name'].'%');
         }
         $res = array();
         $name = false;
-        // p($where);
         if (isset($where['class']) && !empty($where['class']) ) {
             $class = $this->getResGroupIds(array('classname'=>$where['class']));
             if ($class) {
@@ -268,13 +289,35 @@ class Camera extends AdminControl
                 $res=array_merge($res, $school);
             }
         }
+        if (isset($where['area']) && $where['area'] != 0 ) {
+            $area = $this->getResGroupIds(array('areaid'=>$where['area']));
+            unset($where['city']);
+            unset($where['province']);
+            $name = 'true';
+            if ($area) {
+                $res=array_merge($res, $area);
+            }
+        }
+        if (isset($where['city']) && $where['city'] != 0 ) {
+            $city = $this->getResGroupIds(array('cityid'=>$where['city']));
+            unset($where['province']);
+            $name = 'true';
+            if ($city) {
+                $res=array_merge($res, $city);
+            }
+        }
+        if (isset($where['province']) && $where['province'] != 0 ) {
+            $province = $this->getResGroupIds(array('provinceid'=>$where['province']));
+            $name = 'true';
+            if ($province) {
+                $res=array_merge($res, $province);
+            }
+        }
         if ($name == 'true') {
-            $res =is_array($res[0])?$res[0]:$res;
             $condition['parentid'] = array('in',$res);
         }
         return $condition;
     }
-
     /**
      * 查询学校和班级摄像头
      * @创建时间   2018-11-03T00:39:48+0800
@@ -284,7 +327,7 @@ class Camera extends AdminControl
     public function getResGroupIds($where){
         $School = model('School');
         $Class = model('Classes');
-        
+
         if (isset($where['sc_type']) && !empty($where['sc_type'])) {
             $sc_id = db('schooltype')->where($where)->value('sc_id');
             unset($where['sc_type']);
@@ -295,13 +338,27 @@ class Camera extends AdminControl
             $classname = $where['classname'];
             unset($where['classname']);
         }
-
         $where['res_group_id'] =array('gt',0);
         $Schoollist = $School->getAllAchool($where,'res_group_id');
-
+        // p($where);exit;
+        if (isset($where['provinceid']) && !empty($where['provinceid'])) {
+            $where['school_provinceid'] =$where['provinceid'];
+            unset($where['provinceid']);
+        }
+        if (isset($where['cityid']) && !empty($where['cityid'])) {
+            $where['school_cityid'] =$where['cityid'];
+            unset($where['cityid']);
+        }
+        if (isset($where['areaid']) && !empty($where['areaid'])) {
+            $where['school_areaid'] =$where['areaid'];
+            unset($where['areaid']);
+        }
+        if (isset($where['areaid']) && !empty($where['areaid'])) {
+            $where['school_areaid'] =$where['areaid'];
+            unset($where['areaid']);
+        }
         if (!empty($classname)) {
-            $where['classname'] = $classname;
-            unset($Schoollist);
+            $where['classname'] = array('like','%'.$classname.'%');
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
@@ -320,7 +377,6 @@ class Camera extends AdminControl
             return $res;
         }
     }
-
     /**
      * @desc 获取分页数据
      * @author langzhiyao
@@ -342,13 +398,34 @@ class Camera extends AdminControl
 
         $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
-        
+
 //        halt($start);
-        //查询未绑定的摄像头
+        //查询已安装的摄像头
         $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
-
+        $date=date('H:i',time());
+        foreach($list as $k=>$v){
+            if($v['online']==0){
+                $list[$k]['statuses']=2;
+            }else{
+                if($v['status']==1){
+                    if(!empty($v['begintime'])&&!empty($v['endtime'])){
+                        $begintime=date('H:i',$v['begintime']);
+                        $endtime=date('H:i',$v['endtime']);
+                        if($date<$begintime||$date>$endtime){
+                            $list[$k]['statuses']=2;
+                        }else{
+                            $list[$k]['statuses']=1;
+                        }
+                    }else{
+                        $list[$k]['statuses']=1;
+                    }
+                }else{
+                    $list[$k]['statuses']=2;
+                }
+            }
+        }
+        //return $list;exit;
         $list_count = db('camera')->where($where)->count();
-
         $html = '';
         if(!empty($list)){
             foreach($list as $key=>$v){
@@ -358,9 +435,9 @@ class Camera extends AdminControl
                 $html .= '<td class="align-center">'.$v["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
                 $html .= '<td class="align-center">'.$v["id"].'</td>';
-                if($v['online'] == 1){
+                if($v['statuses'] == 1){
                     $html .= '<td class="align-center"><b style="color:green;">在线</b></td>';
-                }else if($v['online'] == 0){
+                }else if($v['statuses'] == 2){
                     $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
                 $html .= '<td class="align-center">'.$v["parentid"].'</td>';
@@ -372,42 +449,27 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center"><b style="color:green;">是</b></td>';
                 }
                 if($v['status'] == 1){
-                //     $html .= '<td class="align-center">开启</td>';
-                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                    $html .= '<td class="align-center">开启</td>';
                 }else if($v['status'] == 2){
-                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox" onclick="makedefault('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
-                //     $html .= '<td class="align-center">关闭</td>';
+                    $html .= '<td class="align-center">关闭</td>';
                 }
-
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
-                // $html .= '<td class="align-center">开启时间：21:05:39<hr>关闭时间：21:05:39</td>';
-                $start = trim($v['cid'].'_Start');
-                $end = trim($v['cid'].'_End');
-                $defulbegin =empty($v["begintime"])?'':date('H:i:s',$v["begintime"]);
-                $defulend   =empty($v["endtime"])?'':date('H:i:s',$v["endtime"]);
-                $html .= "<td class='align-center'>
-                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onfocus='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <hr>
-                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onfocus='timesss(".'"'.$end.'"'.")' value='".$defulend."' /> 
-                    </td>";
-                    //<a class='layui-btn layui-btn-sm' do='{$start}' onClick='changetime($(this))'>设置</a>
-                    //<a class='layui-btn layui-btn-sm' do='{$end}' onClick='changetime($(this))'>设置</a>
-//                $html .= '<td class="align-center">'.$value["address"].'</td>';
-//                $html .= '<td class="align-center">'.$value["deviceid"].'</td>';
-//                $html .= '<td class="align-center">'.$value["id"].'</td>';
-//                $html .= '<td class="align-center">'.$value["agent_name"].'</td>';
-//                $html .= '<td class="align-center">'.$value["content"].'</td>';
-//                $html .= '<td class="align-center" style="color:#E00515;">已录入</td>';
-//                $html .= '<td class="w150 align-center">
-//                        <div class="layui-table-cell laytable-cell-9-8">
-//                           <a href="javascript:void(0)" onclick="return edit('.$value["id"].');" class="layui-btn  layui-btn-sm" lay-event="reset">修改设备信息</a>';
-//                $html .=  '</div></td>';
-
+                if(!empty($v['begintime'])){
+                    $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]);
+                }else{
+                    $html .= '<td class="align-center">开启时间：未设置';
+                }
+                if(!empty($v['endtime'])) {
+                    $html .= '<hr>关闭时间：' . date('H:i', $v['endtime']) . '</td>';
+                }else{
+                    $html .= '<hr>关闭时间：未设置</td>';
+                }
                 $html .= '</tr>';
             }
         }
         if($html == ''){
             $html .= '<tr class="no_data">
-                    <td colspan="11">没有符合条件的记录</td>
+                    <td colspan="12">没有符合条件的记录</td>
                 </tr>';
         }
 
@@ -446,7 +508,7 @@ class Camera extends AdminControl
             if(empty($data)) {
                 $data = $datas['resources'];
             }else{
-                $data[] = $datas['resources'];
+                $data = array_merge($data,$datas['resources']);
             }
         }
         foreach($data as $k=>$v){
@@ -462,7 +524,11 @@ class Camera extends AdminControl
         $result=$model_camera->getCameraList('','','id');
         $ret=$this->get_diff_array_by_pk($data,$result);
         $sult=$model_camera->cameras_add($ret);
-        return $sult;
+        if($sult){
+            echo json_encode(array('count'=>$sult));
+        }else{
+            echo json_encode(array('count'=>0));
+        }
     }
     function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
         try{
@@ -475,50 +541,20 @@ class Camera extends AdminControl
         }
     }
 
-
-    public function changetime(){
-        $input = input();
-        $cid = $input['cid'];
-        $updata = array(
-            'begintime' =>strtotime($input['starttime']),
-            'endtime' =>strtotime($input['endtime'])
-        );
-        $starttime = 
-        $endtime = 
-        $result = db('camera')->where('cid',$cid)->update($updata);
-        if ($result) {
-            ds_json_encode('200', $msg.'设置成功');
-        }else{
-            ds_json_encode('100', $msg.'设置失败');
-        }
-        
-    }
-
-    public function makedefault(){
-        $input = input();
-        $cid = $input['cid'];
-        $key=$input['status'];
-        if($cid && $key ){
-            $result = db('camera')->where('cid',$cid)->setField('status', $key);
-            if ($result) {
-                ds_json_encode('200', $msg.'设置成功');
-            }else{
-                ds_json_encode('100', $msg.'设置失败');
-            }
-        }else{
-            ds_json_encode('100', '参数错误');;
-        }
-    }
-
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
         $menu_array = array(
             array(
-                'name' => 'entered',
-                'text' => '摄像头列表',
-                'url' => url('School/Camera/entered')
+                'name' => 'index',
+                'text' => '导入失败列表',
+                'url' => url('Admin/Import/index')
+            ),
+            array(
+                'name' => 'success',
+                'text' => '导入成功列表',
+                'url' => url('Admin/Import/success')
             )
         );
         return $menu_array;

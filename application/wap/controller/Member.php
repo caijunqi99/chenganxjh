@@ -503,14 +503,17 @@ class Member extends MobileMember
             'classCard'      =>$classCard,
             's_createtime'   => date('Y-m-d H:i:s',time())
         );
+        $sid = '';
         if(!empty($student)){
             if(!empty($student['s_ownerAccount'])){
                 output_error('该学生已有绑定人，请联系管理员');
             }else{
+                $stu = db('student')->field('s_id')->where(' s_card = "'.$card.'"')->find();
                 $student = db('student')->where(' s_card = "'.$card.'"')->update($data);
+                $sid = $stu['s_id'];
             }
         }else{
-            $student = db('student')->insert($data);
+            $student = db('student')->insertGetId($data);
 
             if(!empty($member['classid'])){
                 $updateMember['classid'] = trim(',',$member['classid'].','.$class_id);
@@ -524,10 +527,10 @@ class Member extends MobileMember
             }
             //给家长绑定学校id和班级id
              db('member')->where('member_id',$member_id)->update($updateMember);
-
+            $sid = $student;
         }   
             if($student){
-                output_data(array('message'=>'绑定成功','sid'=>$student));
+                output_data(array('message'=>'绑定成功','sid'=>$sid));
             }else{
                 output_error('绑定失败');
             }

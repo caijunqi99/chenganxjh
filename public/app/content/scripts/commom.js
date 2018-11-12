@@ -114,4 +114,20 @@ function forbidden(){
     $.toast('该视频已过期且下架，无法观看','forbidden');
 }
 
+function ago_back(){
+    ago = GetQueryString('ago');
+    if(ago==null || ago == 'undefined'){
+        historyback();
+    }else{
+        window.history.back(-1);
+    }
+
+}
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+
 

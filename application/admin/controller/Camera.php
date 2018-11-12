@@ -518,6 +518,7 @@ class Camera extends AdminControl
             $video=$vlink->Resources($accountid,$play);
             $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
             $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
+            $data[$k]['is_rtmp']=1;
             $data[$k]['sq_time']=time();
             $data[$k]['status']=1;
             $data[$k]['is_classroom']=1;

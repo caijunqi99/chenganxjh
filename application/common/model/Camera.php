@@ -49,6 +49,15 @@ class Camera extends Model {
         $sc_id = (int) $param['sc_id'];
         return db('camera')->where('sc_id', $param['sc_id'])->update($param);
     }
+    /**
+     * 编辑分子公司
+     * @param array $condition
+     * @param array $update
+     * @return boolean
+     */
+    public function editCamera($condition, $update) {
+        return db('camera')->where($condition)->update($update);
+    }
 
     /**
      * 获取学校类型列表

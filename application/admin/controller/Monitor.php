@@ -217,5 +217,16 @@ class Monitor extends AdminControl
             return $res;
         }
     }
-
+    /**
+     * 开启rtmp
+    */
+    public function addrtmp(){
+        $camera_update=Model('camera');
+        $where=array();
+        $where['cid']=intval(input('post.cid'));
+        $update=array();
+        $update['is_rtmp']=intval(input('post.is_rtmp'));
+        $res=$camera_update->editCamera($where,$update);
+        return $res;
+    }
 }
