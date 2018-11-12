@@ -100,7 +100,7 @@ class Robot extends Model {
         return db('robot')->where('id', $id)->find();
     }
     public function getOne($condition = array()) {
-        return db('robot')->where($condition)->find();
+        return db('robot')->alias('r')->join('__SCHOOL__ s','s.schoolid=r.schoolid','LEFT')->field('r.*,s.name')->where($condition)->find();
     }
     /**
      * api获取学校类型列表

@@ -22,11 +22,16 @@ class Robotroster extends MobileMall
         //db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
         $SNNumber = $input['SNNumber'];
         if(empty($SNNumber)){
-            output_error('SNNumber参数有误');
+            $ret = array('ret'=>"00001","data"=>'','msg'=>"fail");
+            return json_encode($ret);
         }
         $model_robot = Model("Robot");
-        $data = $model_robot->getOne(array('SNNumber'=>$SNNumber,'isdel'=>1));
-        output_data($data);
+        $data = $model_robot->getOne(array('r.SNNumber'=>$SNNumber,'r.isdel'=>1));
+        $datas = array();
+        $datas['schoolId'] = !empty($data['schoolid'])?$data['schoolid']:"";
+        $datas['schoolName'] = !empty($data['name'])?$data['name']:"";
+        $ret = array('ret'=>"00000","data"=>!empty($datas)?$datas:"",'msg'=>"success");
+        return json_encode($ret);
     }
 
     //获取花名册
