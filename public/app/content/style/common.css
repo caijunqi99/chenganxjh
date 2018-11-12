@@ -574,3 +574,112 @@
         line-height: 30px;
         padding-top: 380px;
     }
+
+
+.signinlist_box {
+    margin-bottom: 20px;
+}
+
+.signinlist>li {
+    width: 50%;
+    float: left;
+}
+
+.signin_item {
+    width: 340px;
+    height: 340px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #eee;
+    background: #fff;
+    padding: 17px;
+    box-sizing: border-box;
+}
+
+.signin_time {
+    height: 70px;
+    line-height: 70px;
+    font-size: 24px;
+    color: #999;
+    padding: 0 10px;
+}
+
+.signin_time span {
+    margin-left: 20px;
+}
+
+.signin_cont_inner {
+    padding: 0 10px;
+}
+
+.signin_status {
+    height: 34px;
+    margin-bottom: 16px;
+}
+
+.status_out {
+    width: 34px;
+    height: 34px;
+    display: block;
+    border-radius: 50%;
+    background: #99e5e4;
+    position: relative;
+}
+
+.status_in {
+    width: 24px;
+    height: 24px;
+    display: block;
+    border-radius: 50%;
+    background: #34ccca;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -12px;
+    margin-top: -12px;
+}
+
+.notsigned .status_out {
+    background-color: #faa7b5;
+}
+
+.notsigned .status_in {
+    background-color: #f64f6b;
+}
+
+.notsigned video {
+    display: none;
+}
+
+.signin_video_box {
+    width: 304px;
+    height: 175px;
+    margin-bottom: 28px;
+}
+
+.signin_item_b {
+    padding-top: 15px;
+    border-top: 1px solid #e1e1e1;
+}
+
+.signin_item_bp {
+    height: 44px;
+    line-height: 44px;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+.signin_item_bp span {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+}
+
+.signin_item_bp span:last-child {
+    text-align: left;
+}
+
+.notsigned .signin_video_box {
+    background: url(../images/find/notsigned_bg.png) no-repeat center;
+}
