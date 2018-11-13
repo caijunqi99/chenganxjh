@@ -236,6 +236,7 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
+        
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
@@ -271,7 +272,7 @@ class Camera extends AdminControl
             $name = 'true';
         }
         if (isset($where['grade']) && !empty($where['grade'])) {
-            $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
+            $grade = $this->getResGroupIds(array('schoolid'=>$where['school'],'sc_type'=>$where['grade']));
             unset($where['school']);
             unset($where['area']);
             unset($where['city']);
@@ -331,9 +332,12 @@ class Camera extends AdminControl
         $Class = model('Classes');
 
         if (isset($where['sc_type']) && !empty($where['sc_type'])) {
+            $schoolid=$where['schoolid'];
+            unset($where['schoolid']);
             $sc_id = db('schooltype')->where($where)->value('sc_id');
             unset($where['sc_type']);
             $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
+            $where['schoolid']=$schoolid;
         }
         $classname = '';
         if (isset($where['classname']) && !empty($where['classname']) ) {
@@ -361,16 +365,23 @@ class Camera extends AdminControl
         }
         if (!empty($classname)) {
             $where['classname'] = array('like','%'.$classname.'%');
+            unset($Schoollist);
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
         $sc_resids=array_column($Schoollist, 'res_group_id');
         if ($sc_resids) {
-            array_push($res, $sc_resids);
+            $res = $sc_resids;
+//            array_push($res, $sc_resids);
         }
         $cl_resids=array_column($Classlist, 'res_group_id');
         if ($cl_resids) {
-            array_push($res, $cl_resids);
+//            array_push($res, $cl_resids);
+            if(empty($res)){
+                $res = $cl_resids;
+            }else{
+                $res = array_merge($res,$cl_resids);
+            }
         }
         $ids = array_merge($sc_resids,$cl_resids);
         if ($ids) {

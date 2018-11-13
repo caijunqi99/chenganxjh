@@ -18,25 +18,29 @@ class Robotreport extends MobileMall
 
     //单个考勤上报
     public function report(){
-        $school_id = input('post.school_id');
+        $school_id = input('post.schoolId');
         if(empty($school_id)){
-            output_error('school_id参数有误');
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
         $model_school = Model("School");
         $schoolInfo = $model_school->getSchoolInfo(array('schoolid'=>$school_id,'isdel'=>1),"schoolid,name");
         if(empty($schoolInfo)){
-            output_error('无此学校的信息');
+            $ret = array('ret'=>"00002","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
-        $student_id = input('post.student_id');
+        $student_id = input('post.userId');
         if(empty($student_id)){
-            output_error('student_id参数有误');
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
         $student_model = Model("Student");
-        $studentInfo = $student_model->getStudentInfo(array('s_id'=>$school_id,'s_del'=>1),"s_id,s_name");
+        $studentInfo = $student_model->getStudentInfo(array('s_id'=>$student_id,'s_del'=>1),"s_id,s_name,s_ownerAccount");
         if(empty($studentInfo)){
-            output_error('无此学生的信息');
+            $ret = array('ret'=>"00003","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
-        $class_id = input('post.class_id');
+        $class_id = input('post.classId');
         $videoName = "robot_".$student_id."_".date("YmdHis",time())."_".time().".mp4";
         $video = $this->ioVideo($videoName);
         if($video){
@@ -55,9 +59,26 @@ class Robotreport extends MobileMall
             $report_model = Model("Robotreport");
             $result = $report_model->report_add($data);
             if($result){
-                output_data("打卡成功");
+                /*$path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+                //打卡成功，给学生家长发送短信提醒
+                $memberInfo = db("member")->field("member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
+                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
+                    if(input('post.ioFlag')==1){
+                        $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    }elseif(input('post.ioFlag')==2){
+                        $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    }
+                    $sms = new \sendmsg\sdk\SmsApi();
+                    $send = $sms->sendSMS($memberInfo['member_mobile'],$content);
+                    if(!$send){
+                        $this->error('给用户发送短信失败 ');
+                    }
+                }*/
+                $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
+                return json_encode($ret);
             }else{
-                output_error('上报考勤失败');
+                $ret = array('ret'=>"00004","data"=>[],'msg'=>"fail");
+                return json_encode($ret);
             }
         }
     }

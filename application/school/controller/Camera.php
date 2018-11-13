@@ -304,6 +304,7 @@ class Camera extends AdminControl
             unset($Schoollist);
         }
         $res = array();
+        $where['schoolid'] = session('admin_school_id');
         $Classlist = $Class->getAllClasses($where,'res_group_id');
         $sc_resids=array_column($Schoollist, 'res_group_id');
         if ($sc_resids) {
