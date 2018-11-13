@@ -27,7 +27,8 @@ class Vlink extends BaseController {
     	$areaid = $input['areaid'];
     	$condition = array(
     		'areaid' => $areaid,
-    		'isdel'  => 1,
+            'isdel'  => 1,
+    		'res_group_id'  => 0,
     	);
 	    $field = 'schoolid as res_group_id,name as res_group_name,areaid';
     	$schoolList = $School->getAllAchool($condition,$field);
