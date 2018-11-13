@@ -1,18 +1,11 @@
 <?php
 
 namespace app\wap\controller;
-vendor('jpush.autoload');
-
 use think\Lang;
-use JPush\Client;
 class Robotsign extends MobileMall
 {
-    private $AppKey;
-    private $MaterSecret;
     public function _initialize()
     {
-        $this->AppKey = '2e49a22da063884527d82e1c';
-        $this->MaterSecret ='e18529474930976be6ef2007';
         parent::_initialize();
         // Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
     }
@@ -21,7 +14,11 @@ class Robotsign extends MobileMall
     public function MemberPush(){
         //uid: 14972856178
         //registrationID:141fe1da9e8ea882e37
-        $client=new Client($this->AppKey,$this->MaterSecret);
+        $Jpush = model('Jpush');
+        $Jpush->JPushInit();
+        $Jpush->MemberPush();
+        
+        p($Jpush);exit;
         $platform = array('ios', 'android');
         $push_payload = $client->push()
             ->setPlatform($platform)
