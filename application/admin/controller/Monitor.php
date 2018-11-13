@@ -237,7 +237,7 @@ class Monitor extends AdminControl
         if($is_rtmp==2) {
             $datas = $vlink->Livestatus($accountid,$ress['id']);
             $update['liveid']=$datas['liveid'];
-            time_sleep_until(time()+20);
+            time_sleep_until(time()+3);
             $channels=$ress['deviceid'].'-'.$ress['channelid'].',';
             $rtmp=$vlink->Resources($accountid,$channels);
             $update['rtmpplayurl']=$rtmp['channels'][0]['rtmpplayurl'];
