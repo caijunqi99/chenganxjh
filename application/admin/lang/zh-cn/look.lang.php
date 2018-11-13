@@ -40,6 +40,8 @@ $lang['look_camera_status']			    = '状态';
 $lang['look_camera_company']			    = '子公司/代理商';
 $lang['look_camera_text']			    = '备注';
 $lang['look_camera_import_ts']			    = '注意：请选择利用摄像头申请表模板填写的excel表进行导入，如果没有严格按模板进行填写导入，会出现数据错误，导致无法使用';
+$lang['operation']                      ='操作';
+$lang['ds_ensure_del']                  ='您确定要删除吗？';
 
 //网络监控
 $lang['look_monitor_title']			    = '网络监控管理';
