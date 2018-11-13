@@ -352,6 +352,7 @@ class Import extends AdminControl
                                 );
                                 $student_id = $model_student->insertGetId($student_array);
                                 if($student_id){
+
                                     //添加订单信息
                                     $this->_logic_buy_1 = \model('buy_1','logic');
                                     switch ($t_id){
@@ -369,7 +370,7 @@ class Import extends AdminControl
                                                 'payment_time'=>time(),
                                                 'finnshed_time'=>time(),
                                                 'pkg_name'=>trim($value['J']).'（线下）',
-                                                'pkg_price'=>round($value['K'],2),
+                                                'pkg_price'=>ncPriceFormatb($value['K']),
                                                 'pkg_length'=>intval($value['L']),
                                                 's_id'=>intval($student_id),
                                                 's_name'=>trim($value['D']),
@@ -377,11 +378,11 @@ class Import extends AdminControl
                                                 'name'=>trim($_SESSION['excel']['school']['name']),
                                                 'classid'=>intval($value['classid']),
                                                 'classname'=>trim($value['I']),
-                                                'order_amount'=>round($value['K'],2),
+                                                'order_amount'=>ncPriceFormatb($value['K']),
                                                 'order_state'=>'40',
                                                 'order_dieline'=>$endTime,
                                                 'option_id'=>intval($_SESSION['excel']['school']['option_id']),
-                                                'over_amount'=>round($value['K'],2),
+                                                'over_amount'=>ncPriceFormatb($value['K']),
                                                 'admin_company_id'=>intval($_SESSION['excel']['school']['admin_company_id']),
                                             );
                                             $order_pay_id =$model_order->insertGetId($see_array);
@@ -402,6 +403,7 @@ class Import extends AdminControl
                                                     );
                                                     $order_pay_time = $model_order_time->insert($see_end);
                                                     if($order_pay_time){
+
                                                         $flag = true;
                                                     }else{
                                                         $flag = false;
@@ -434,7 +436,7 @@ class Import extends AdminControl
                             $sms_tpl = config('sms_tpl');
                             $tempId = $sms_tpl['sms_password_reset'];
                             $sms = new \sendmsg\Sms();
-                            $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                            $pass = '您于'.date('Y-m-d H:i:s',time()).'开通想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
                             $send = $sms->send($member['member_mobile'],$pass,$tempId);
                             if($send){
                                 $model->commit();

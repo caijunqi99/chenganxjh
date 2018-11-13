@@ -28,7 +28,6 @@ class Sms
         $clapi  = new SmsApi();
         //设置您要发送的内容：其中“【】”中括号为运营商签名符号，多签名内容前置添加提交
         $result = $clapi->sendSMS($mobile,$log_msg );
-
         if(!is_null(json_decode($result))){
             
             $output=json_decode($result,true);
