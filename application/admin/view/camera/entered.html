@@ -77,7 +77,7 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="12">
+                <th colspan="13">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
@@ -96,6 +96,7 @@
                 <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
                 <th class="align-center">{$Think.lang.look_camera_sqtime}</th>
                 <th class="align-center">{$Think.lang.look_camera_begintime}</th>
+                <th class="align-center">{$Think.lang.operation}</th>
             </tr>
             </thead>
             <tbody id="html">
@@ -377,5 +378,11 @@
             }
         });
     }
-
+    function del(cid){
+        layer.confirm('是否删除此摄像头？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            window.location.href="{:url('/admin/camera/del')}?cid="+cid;
+        });
+    }
 </script>
