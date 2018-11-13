@@ -223,15 +223,22 @@ class Monitor extends AdminControl
     public function addrtmp(){
         $camera_update=Model('camera');
         $where=array();
-        $where['cid']=intval(input('post.cid'));
+        $cid=intval(input('post.cid'));
+        $where['cid']=$cid;
         $update=array();
-        $update['is_rtmp']=intval(input('post.is_rtmp'));
+        $is_rtmp=intval(input('post.is_rtmp'));
+        $update['is_rtmp']=$is_rtmp;
         $res=$camera_update->editCamera($where,$update);
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
-        $datas=$vlink->Livestatus($accountid);
-        //print_r($datas);exit;
+        if($is_rtmp==2) {
+            $condition=array();
+            $condition['cid']=$cid;
+            $res=$camera_update->getOnePkg($condition);
+            $datas = $vlink->Livestatus($accountid,$res['id']);
+        }
+        print_r($datas);exit;
         return $res;
     }
 }

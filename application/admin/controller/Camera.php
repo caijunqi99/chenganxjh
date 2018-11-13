@@ -371,11 +371,17 @@ class Camera extends AdminControl
         $Classlist = $Class->getAllClasses($where,'res_group_id');
         $sc_resids=array_column($Schoollist, 'res_group_id');
         if ($sc_resids) {
-            array_push($res, $sc_resids);
+            $res = $sc_resids;
+//            array_push($res, $sc_resids);
         }
         $cl_resids=array_column($Classlist, 'res_group_id');
         if ($cl_resids) {
-            array_push($res, $cl_resids);
+//            array_push($res, $cl_resids);
+            if(empty($res)){
+                $res = $cl_resids;
+            }else{
+                $res = array_merge($res,$cl_resids);
+            }
         }
         $ids = array_merge($sc_resids,$cl_resids);
         if ($ids) {
