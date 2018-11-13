@@ -77,7 +77,7 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="13">
+                <th colspan="12">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
@@ -90,7 +90,7 @@
                 <th class="align-center">{$Think.lang.look_camera_id}</th>
                 <th class="align-center">{$Think.lang.look_camera_online}</th>
                 <th class="align-center">{$Think.lang.look_camera_parentid}</th>
-                <th class="align-center">{$Think.lang.look_camera_pimageurl}</th>
+                <!--<th class="align-center">{$Think.lang.look_camera_pimageurl}</th>-->
                 <th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>
                 <th class="align-center">{$Think.lang.look_camera_classroom}</th>
                 <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
@@ -122,6 +122,7 @@
 </div>
 <script type="text/javascript">
     function rtmplay(cid){
+        addrtmp(cid,2);
         var rtmpInfo= $('#tr_'+cid).attr('datainfo');
         rtmpInfo =$.parseJSON(rtmpInfo);
         layer.open({
@@ -130,7 +131,11 @@
             shadeClose: true,
             area: ['644px', '470px'],
             skin: 'layui-layer-rim',
-            content: $('#LAY')
+            content: $('#LAY'),
+            cancel: function(){
+                addrtmp(cid,1);
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
+            }
         });
         var videoObject = {
             container: '#video', //容器的ID或className
@@ -142,6 +147,16 @@
             poster:rtmpInfo.imageurl
         };
         var player = new ckplayer(videoObject);
+    }
+    function addrtmp(cid,is_rtmp){
+        $.ajax({
+            type:'POST',
+            url:ADMIN_URL+'Monitor/addrtmp',
+            data:{cid:cid,is_rtmp:is_rtmp},
+            success:function(data){
+                return(data);
+            }
+        })
     }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
