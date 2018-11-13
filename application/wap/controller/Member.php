@@ -26,6 +26,12 @@ class Member extends MobileMember
     }
 
     public function RefreshPullOldOrder(){
+        $input = input();
+        if (isset($input['registrationID'])) {
+            
+//             uid: 14972856178
+// registrationID:141fe1da9e8ea882e37
+        }
         $oldid = $this->member_info['oldid'];
         if (!$oldid) output_data(array('state'=>'不是老会员'));//不是老会员
         $trans = array(
