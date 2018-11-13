@@ -88,6 +88,16 @@ class Vomont
         $data = json_decode($request,TRUE);
         return $data;
     }
+    /**
+     * 删除直播计划
+    */
+    public function Liveend($accpuntid,$liveid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::liveend;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&liveid={$liveid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
 
 
 

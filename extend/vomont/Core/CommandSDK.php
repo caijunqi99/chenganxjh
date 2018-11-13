@@ -74,6 +74,7 @@ class CommandSDK
     const undoOrganizationUser = 1402;//撤销组织中用户
     const getSpecificResources = 1403;//获取特定资源
     const livestatus=120;//创建直播计划
+    const liveend=122;//删除直播计划
     protected $key = null;
     const error_code = [   // 错误code
         'null'=>'服务器异常',

@@ -228,17 +228,27 @@ class Monitor extends AdminControl
         $update=array();
         $is_rtmp=intval(input('post.is_rtmp'));
         $update['is_rtmp']=$is_rtmp;
-        $res=$camera_update->editCamera($where,$update);
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
+        $condition=array();
+        $condition['cid']=$cid;
+        $ress=$camera_update->getOnePkg($condition);
         if($is_rtmp==2) {
-            $condition=array();
-            $condition['cid']=$cid;
-            $res=$camera_update->getOnePkg($condition);
-            $datas = $vlink->Livestatus($accountid,$res['id']);
+            $datas = $vlink->Livestatus($accountid,$ress['id']);
+            $update['liveid']=$datas['liveid'];
+            if($ress['rtmpplayurl']=='') {
+                time_sleep_until(time() + 3);
+                $channels = $ress['deviceid'] . '-' . $ress['channelid'] . ',';
+                $rtmp = $vlink->Resources($accountid, $channels);
+                $update['rtmpplayurl'] = $rtmp['channels'][0]['rtmpplayurl'];
+            }
+        }else{
+            $datas=$vlink->Liveend($accountid,$ress['liveid']);
+            $update['liveid']='';
         }
-        print_r($datas);exit;
+        $res=$camera_update->editCamera($where,$update);
+        //print_r($res);exit;
         return $res;
     }
 }
