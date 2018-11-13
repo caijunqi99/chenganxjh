@@ -834,12 +834,12 @@ class Import extends AdminControl
             array(
                 'name' => 'index',
                 'text' => '导入失败列表',
-                'url' => url('Admin/Import/index')
+                'url' => url('Admin/import/index')
             ),
             array(
                 'name' => 'success',
                 'text' => '导入成功列表',
-                'url' => url('Admin/Import/success')
+                'url' => url('Admin/import/success')
             )
         );
         return $menu_array;
