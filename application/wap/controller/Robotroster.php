@@ -58,6 +58,7 @@ class Robotroster extends MobileMall
             $datas[$k]['sex'] = $v['s_sex']==2?0:1; //0女 1男
             $datas[$k]['clazzName'] = $v['classname'];
             $datas[$k]['clazzId'] = $v['s_classid'];
+            $datas[$k]['status'] = $v['s_del']==2?0:1;
         }
         $ret = array("data"=>!empty($datas)?$datas:[],'msg'=>"success",'ret'=>"00000");
         return json_encode($ret);
