@@ -75,7 +75,7 @@
             <thead>
             <tr class="thead">
                 <th colspan="14">
-                    <p class="layui-table-tool-temp" >{$Think.lang.student_fail_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
+                    <p class="layui-table-tool-temp" >{$Think.lang.student_success_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                     <div class="layui-table-tool-self">
                         <?php if(session('admin_is_super')==1 || in_array('9',$action)){?>
                         <a class="layui-btn layui-btn-sm" href="{$Think.config.url_domain_root}/static/admin/{$Think.lang.look_camera_download_mb}.xlsx">{$Think.lang.look_camera_download}</a>
@@ -293,7 +293,7 @@
                     page_count = obj.limit;
                 $.ajax({
                     type:'POST',
-                    url:ADMIN_URL+'Import/get_list.html?status=2',
+                    url:ADMIN_URL+'Import/get_list.html?status=1',
                     data:{name:name,province:province,city:city,area:area,school:school,grade:grade,class:class_name,page:page,page_count:page_count},
                     success:function(data){
                         data = jQuery.parseJSON(data);

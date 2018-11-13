@@ -194,6 +194,137 @@ class Common extends AdminControl
 
     }
 
+
+    /**
+     * @desc  学生excel表导入
+     * @author langzhiyao
+     * @time 20180927
+     */
+    public function student_file_upload()
+    {
+        session_start();//开启session
+
+        unset($_SESSION['excel']);//清空session
+
+        $schoolid = intval(input('post.school'));
+        $file = request()->file('file'); // 获取上传的文件
+        if($file==null){
+            exit(json_encode(array('code'=>1,'msg'=>'未上传文件')));
+        }
+        // 获取文件后缀
+        $temp = explode(".", $_FILES["file"]["name"]);
+        $extension = end($temp);
+        // 判断文件是否合法
+        if(!in_array($extension,array("xlsx"))){
+            exit(json_encode(array('code'=>1,'msg'=>'上传文件类型不合法')));
+        }
+        $info = $file->move(ROOT_PATH.'public'.DS.'uploads');
+        // 移动文件到指定目录 没有则创建
+        $file = '/uploads/'.$info->getSaveName();
+        //excel表读取
+        $file_name = ROOT_PATH.'public'.DS.'uploads/'.$info->getSaveName();   //上传文件的地址
+
+        $excel = $this->goods_import($file_name,$extension);
+        $_SESSION['excel']['excel_number'] = count($excel)-1;
+//        halt($excel);
+        //学校信息
+        $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = '.$schoolid.' AND isdel=1')->find();
+        if(empty($school_info)){
+            exit(json_encode(array('code'=>1,'msg'=>'该学校已被删除，请重新选择')));
+        }
+        $school_info['province'] = $this->get_address_name($school_info['provinceid']);
+        $school_info['city'] = $this->get_address_name($school_info['cityid']);
+        $school_info['area'] = $this->get_address_name($school_info['areaid']);
+        $address = $school_info['province'].'-'.$school_info['city'].'-'.$school_info['area'];
+        $school_info['address'] = $address;
+        $_SESSION['excel']['school'] = $school_info;
+        $sc_type = explode(',',$school_info['typeid']);
+//        halt($_SESSION['excel']['school']);
+        //根据添加人获取添加人所属公司
+        $agent_info = $this->get_agent($school_info['option_id']);
+        $_SESSION['excel']['agent'] = $agent_info;
+
+        $success = array();
+        $fail = '';
+        if(!empty($excel)){
+//            halt($excel);
+            if($excel[1]['A'] == '家长手机号' && $excel[1]['B'] == '家长姓名（非必填）' && $excel[1]['C'] == '家长性别（非必填）' && $excel[1]['D'] == '学生姓名' && $excel[1]['E'] == '学生性别（非必填）'
+                && $excel[1]['F'] == '学生身份证号' && $excel[1]['G'] == '所在学校（名称）' && $excel[1]['H'] == '学校类型' && $excel[1]['I'] == '所在班级' && $excel[1]['J'] == '购买套餐名称（非必填）'
+                && $excel[1]['K'] == '套餐价格/元 （非必填）'&& $excel[1]['L'] == '套餐期限 /天（非必填）'&& $excel[1]['M'] == '备注说明（非必填）' ){
+                foreach($excel as $k=>$v){
+                    if($k >1 && count($v) == 13){
+                        if(!empty($v)){
+                            if(empty($v['A'])){
+                                $v['error'] = '家长手机号为空';
+                                $fail[] = $v;
+                            }else if(empty($v['D'])){
+                                $v['error'] = '学生姓名为空';
+                                $fail[] = $v;
+                            }else if(empty($v['F'])){
+                                $v['error'] = '学生身份证号为空';
+                                $fail[] = $v;
+                            }else if($v['J'] != '看孩套餐' && $v['J'] != '重温课堂套餐' && $v['J'] != '教孩套餐'){
+                                $v['error'] = '套餐名称错误';
+                                $fail[] = $v;
+                            }else{
+                                //判断家长手机号是否已存在
+                                $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
+                                if($result){
+                                    $v['error'] = '家长手机号已存在';
+                                    $fail[] = $v;
+                                }else{
+                                    //判断学生ID 是否存在
+                                    $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
+                                    if($is_student){
+                                        $v['error'] = '学生身份证ID已存在';
+                                        $fail[] = $v;
+                                    }else{
+                                        //判断年级
+                                        $is_grade = db('schooltype')->field('sc_id')->where("`sc_type`='".$v['H']."'")->find();
+                                        if($is_grade && in_array($is_grade['sc_id'],$sc_type)){
+                                            $v['sc_id'] = $is_grade['sc_id'];
+                                            //判断班级
+                                            $is_class = db('class')->field('classid')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classname`='".$v['I']."' AND `is_del`=1")->find();
+                                            if($is_class){
+                                                $v['classid'] = $is_class['classid'];
+                                                $success[]= $v;
+                                            }else{
+                                                $v['error'] = '班级不存在';
+                                                $fail[] = $v;
+                                            }
+                                        }else{
+                                            $v['error'] = '学校类型不正确';
+                                            $fail[] = $v;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        unset($v);
+                    }
+                }
+            }else{
+                //表头不对
+                exit(json_encode(array('code'=>1,'msg'=>'上传文件不符合规范，请按模板上传')));
+            }
+        }
+
+        $_SESSION['excel']['excel_true_number'] = count($success);
+        $_SESSION['excel']['excel_false_number'] = count($fail);
+//        halt($res);
+
+        //将符合表的数据存session
+        $_SESSION['excel']['excel_success_data'] = $success;
+        $_SESSION['excel']['excel_fail_data'] = $fail;
+
+
+//        halt($_SESSION['excel']['excel_fail_data']);
+
+        exit(json_encode(array('code'=>0,'msg'=>$file)));
+
+    }
+
     function goods_import($filename, $exts = 'xls') {
         //导入PHPExcel类库，因为PHPExcel没有用命名空间，只能inport导入
 //        import("Org.Util.PHPExcel");
@@ -211,7 +342,7 @@ class Common extends AdminControl
             $PHPReader = new \PHPExcel_Reader_Excel2007();
         }
         //载入文件
-        $PHPExcel = $PHPReader->load($filename, $encode = 'utf-8');
+        $PHPExcel = $PHPReader->load($filename, $encode = 'UTF-8');
         //获取表中的第一个工作表，如果要获取第二个，把0改为1，依次类推
         $currentSheet = $PHPExcel->getSheet(0);
         //获取总列数
