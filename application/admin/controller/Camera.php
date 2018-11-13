@@ -471,6 +471,7 @@ class Camera extends AdminControl
                 }else{
                     $html .= '<hr>关闭时间：未设置</td>';
                 }
+                $html .='<td class="align-center"><a href="javascript:del('.$v["cid"].')" class="layui-btn layui-btn-xs">删除</a></td>';
                 $html .= '</tr>';
             }
         }
@@ -482,6 +483,19 @@ class Camera extends AdminControl
 
         exit(json_encode(array('html'=>$html,'count'=>$list_count)));
 
+    }
+    /**
+     * 摄像头删除
+     */
+    public function del(){
+        $cid=input('param.cid');
+        $model_camera = Model('camera');
+        $result = $model_camera->camera_del($cid);
+        if ($result) {
+                $this->success('删除成功', 'Camera/entered');
+        } else {
+            $this->error('删除失败');
+        }
     }
     /**
      * 自动导入摄像头

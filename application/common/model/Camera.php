@@ -34,9 +34,8 @@ class Camera extends Model {
      * @param array $param 参数内容
      * @return bool 布尔类型的返回结果
      */
-    public function camera_del($sc_id) {
-        $sc_id = (int) $sc_id;
-        return db('camera')->where('sc_id', $sc_id)->delete();
+    public function camera_del($cid) {
+        return db('camera')->where('cid', $cid)->delete();
     }
 
     /**
