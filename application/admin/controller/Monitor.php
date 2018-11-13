@@ -238,7 +238,7 @@ class Monitor extends AdminControl
             $datas = $vlink->Livestatus($accountid,$ress['id']);
             $update['liveid']=$datas['liveid'];
         }else{
-            $datas=$vlink->Liveend($ress['liveid']);
+            $datas=$vlink->Liveend($accountid,$ress['liveid']);
             $update['liveid']='';
         }
         $res=$camera_update->editCamera($where,$update);
