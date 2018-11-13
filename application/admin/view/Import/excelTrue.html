@@ -22,10 +22,10 @@
         </colgroup>
         <thead>
         <tr class="thead">
-            <th colspan="14">
+            <th colspan="15">
                 <p class="layui-table-tool-temp" >{$Think.lang.look_excel_sq_camera_number}：<span style="font-size: 24px;color: #D90909"><?php echo $_SESSION['excel']['excel_number'];?>条</span> </p>
                 <p class="layui-table-tool-temp" >{$Think.lang.look_excel_sq_camera_true_number}：<span style="font-size: 24px;color: #D90909"><?php echo $_SESSION['excel']['excel_true_number'];?>条</span> </p>
-                <p class="layui-table-tool-temp" >{$Think.lang.look_excel_sq_camera_fail_number}：<span style="font-size: 24px;color: #D90909"><?php echo $_SESSION['excel']['excel_false_number'];?>条</span> </p>
+                <!--<p class="layui-table-tool-temp" >{$Think.lang.look_excel_sq_camera_fail_number}：<span style="font-size: 24px;color: #D90909"><?php echo $_SESSION['excel']['excel_false_number'];?>条</span> </p>-->
             </th>
         </tr>
         </thead>
@@ -38,6 +38,7 @@
             <th class="align-center">{$Think.lang.student_sex}</th>
             <th class="align-center">{$Think.lang.student_card}</th>
             <th class="align-center">{$Think.lang.school_name}</th>
+            <th class="align-center">{$Think.lang.school_type}</th>
             <th class="align-center">{$Think.lang.class_name}</th>
             <th class="align-center">{$Think.lang.area_name}</th>
             <th class="align-center">{$Think.lang.import_time}</th>
@@ -54,15 +55,18 @@
             <td><?php echo $v['A'];?></td>
             <td><?php echo $v['B'];?></td>
             <td><?php echo $v['C'];?></td>
+            <td><?php echo $v['D'];?></td>
+            <td><?php echo $v['E'];?></td>
+            <td><?php echo $v['F'];?></td>
             <td><?php echo $_SESSION['excel']['school']['name']; ?></td>
-            <td class="align-center"><?php echo $_SESSION['excel']['school']['province'].'-'.$_SESSION['excel']['school']['city'].'-'.$_SESSION['excel']['school']['area']; ?></td>
-            <td class="align-center"><?php echo $v['F']; ?></td>
-            <td class="align-center"><?php echo $v['G']; ?></td>
             <td class="align-center"><?php echo $v['H']; ?></td>
             <td class="align-center"><?php echo $v['I']; ?></td>
+            <td class="align-center"><?php echo $_SESSION['excel']['school']['address']; ?></td>
+            <td class="align-center"><?php echo $v['time']; ?></td>
             <td class="align-center"><?php echo $v['J']; ?></td>
             <td class="align-center"><?php echo $v['K']; ?></td>
             <td class="align-center"><?php echo $v['L']; ?></td>
+            <td class="align-center"><?php echo $v['M']; ?></td>
         </tr>
         <?php } ?>
         <?php }else { ?>

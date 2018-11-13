@@ -152,31 +152,60 @@ class Import extends AdminControl
         if(!empty($list)){
             foreach($list as $key=>$value){
                 $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["m_mobile"].'</td>';
+                if($value['reason_id'] == 1){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["m_mobile"].'</td>';
+                }else{
+                    $html .= '<td class="align-center" >'.$value["m_mobile"].'</td>';
+                }
                 $html .= '<td class="align-center">'.$value["m_name"].'</td>';
                 if($value['m_sex'] == 1){
                     $html .= '<td class="align-center">男</td>';
                 }else if($value['m_sex'] == 2){
                     $html .= '<td class="align-center">女</td>';
+                }else{
+                    $html .= '<td class="align-center">保密</td>';
                 }
-                $html .= '<td class="align-center">'.$value["s_name"].'</td>';
+                if($value['reason_id'] == 2){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["s_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["s_name"].'</td>';
+                }
+
                 if($value['s_sex'] == 1){
                     $html .= '<td class="align-center">男</td>';
                 }else if($value['_sex'] == 2){
                     $html .= '<td class="align-center">女</td>';
+                }else{
+                    $html .= '<td class="align-center">保密</td>';
                 }
-                $html .= '<td class="align-center">'.$value["s_card"].'</td>';
+                if($value['reason_id'] == 3){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["s_card"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["s_card"].'</td>';
+                }
                 $html .= '<td class="align-center">'.$value["school_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["class_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["area"].'</td>';
+                if($value['reason_id'] == 4){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["school_type"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["school_type"].'</td>';
+                }
+                if($value['reason_id'] == 5){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["class_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["class_name"].'</td>';
+                }
+                $html .= '<td class="align-center">'.$value["address"].'</td>';
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["t_id"].'</td>';
-                $html .= '<td class="align-center">'.$value["t_price"].'</td>';
-                $html .= '<td class="align-center">'.$value["t_day"].'</td>';
-                $html .= '<td class="align-center">'.$value["content"].'</td>';
+                if($value['reason_id'] == 6){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["t_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["t_name"].'</td>';
+                }
+                $html .= '<td class="align-center">'.round($value["t_price"],2).'元</td>';
+                $html .= '<td class="align-center">'.intval($value["t_day"]).'天</td>';
                 $html .= '<td class="w150 align-center">
                         <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" lay-event="reset">修改</a>';
+                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" data-id="'.$value["id"].'" lay-event="reset">修改</a>';
                 $html .=  '</div></td>';
 
                 $html .= '</tr>';
@@ -184,7 +213,7 @@ class Import extends AdminControl
         }
         if($html == ''){
             $html .= '<tr class="no_data">
-                    <td colspan="14">没有符合条件的记录</td>
+                    <td colspan="15">没有符合条件的记录</td>
                 </tr>';
         }
 
@@ -339,14 +368,14 @@ class Import extends AdminControl
                                                 'payment_code'=>'offline',
                                                 'payment_time'=>time(),
                                                 'finnshed_time'=>time(),
-                                                'pkg_name'=>trim($value['J']),
+                                                'pkg_name'=>trim($value['J']).'（线下）',
                                                 'pkg_price'=>round($value['K'],2),
                                                 'pkg_length'=>intval($value['L']),
                                                 's_id'=>intval($student_id),
                                                 's_name'=>trim($value['D']),
                                                 'schoolid'=>intval($_SESSION['excel']['school']['schoolid']),
                                                 'name'=>trim($_SESSION['excel']['school']['name']),
-                                                'classid'=>intval($_SESSION['excel']['classid']),
+                                                'classid'=>intval($value['classid']),
                                                 'classname'=>trim($value['I']),
                                                 'order_amount'=>round($value['K'],2),
                                                 'order_state'=>'40',
@@ -386,12 +415,8 @@ class Import extends AdminControl
                                             }
                                             break;
                                         case 2://重温课堂套餐
-
                                             break;
                                         case 3://教孩套餐
-                                            $teacher_array = array(
-
-                                            );
                                             break;
                                     }
                                 }else{
@@ -411,7 +436,11 @@ class Import extends AdminControl
                             $sms = new \sendmsg\Sms();
                             $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
                             $send = $sms->send($member['member_mobile'],$pass,$tempId);
-                            $model->commit();
+                            if($send){
+                                $model->commit();
+                            }else{
+                                $model->rollback();
+                            }
                         }else{
                             $model->rollback();
                         }
@@ -462,7 +491,8 @@ class Import extends AdminControl
                         'content' => $value['M'],
                         'status' => 2,
                         'time' => time(),
-                        'reason' => $_SESSION['excel']['error'],
+                        'reason' => $value['error'],
+                        'reason_id' => $value['error_id'],
                     );
                     $import_data = $model->insert($data);
                     if($import_data){

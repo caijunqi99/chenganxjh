@@ -18,6 +18,7 @@ $lang['student_name']			    = '学生姓名';
 $lang['student_sex']			    = '学生性别';
 $lang['student_card']			    = '学生身份证号';
 $lang['school_name']			    = '学校名称';
+$lang['school_type']			    = '学校类型';
 $lang['class_name']			    = '所在班级';
 $lang['area_name']			    = '所在地区';
 $lang['import_time']			    = '导入时间';
@@ -35,6 +36,7 @@ $lang['look_excel_sq_camera_number'] = '总共';
 $lang['look_excel_sq_camera_true_number'] = '符合导入的数据';
 $lang['look_excel_sq_camera_fail_number'] = '不符合导入的数据';
 $lang['look_excel_ts'] = '注意：请确认将导入数据的正确性，否则会影响正常使用';
+$lang['look_camera_download_mb']			    = '学生信息导入表';
 //公共的
 $lang['look_address_province'] = '请选择省';
 $lang['look_address_city'] = '请选择市';

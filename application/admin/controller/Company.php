@@ -164,6 +164,7 @@ class Company extends AdminControl {
             $input['o_createtime']=date('Y-m-d H:i:s',time());
             $input['o_remark'] = trim($_POST['o_remark']);
             $input['o_del']=1;
+            $input['is_child']=intval($_POST['is_child']);
             $activity = Model('company');
             $result = $activity->addOrganize($input);
             if ($result) {
@@ -175,7 +176,7 @@ class Company extends AdminControl {
             }
         } else {
             // 角色
-            $gadmin = db('gadmin')->where('gid < 5')->select();
+            $gadmin = db('gadmin')->where('gid < 5')->order('sort ASC')->select();
             $this->assign('gadmin',$gadmin);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();

@@ -129,7 +129,7 @@
             </div>
             <div class="input_box">
                 <input class="input_txt" id="see" onblur="this.blur()" type="text" readonly>
-                <!--<input type="hidden" value="" name="s_id" id="s_id" />-->
+                <input type="hidden" value="" name="s_id" id="s_id" />
             </div>
             <a href="javascript:;" class="scan_bar" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
                 续费
@@ -202,6 +202,7 @@
                                 }else{
                                     $('#sex').val('女');
                                 }
+                                $('#').val(data[0]['s_birthday']);
                                 $('#date').val(data[0]['s_birthday']);
                                 $('#s_card').val(data[0]['s_card']);
                                 $('#city').val(data[0]['s_region']);

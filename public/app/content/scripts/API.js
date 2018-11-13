@@ -8,8 +8,8 @@ var http_url = 'http://vip.xiangjianhai.com:8001/';
 //获取cookie中存储的token,member_id
 
 
-var user_token = $.cookie('token');
-var user_member_id = $.cookie('member_id');
-// var user_token = '6c80b124a28a9aab1208c577114336aa';
-// var user_member_id = 100033;
+// var user_token = $.cookie('token');
+// var user_member_id = $.cookie('member_id');
+var user_token = 'e615ecd8a03941de4bccf369e98ca871';
+var user_member_id = 100033;
 

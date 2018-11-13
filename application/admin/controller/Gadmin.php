@@ -100,7 +100,7 @@ class Gadmin extends AdminControl {
             $this->error(lang('gadmin_no_perms'));
         }
 //        if($this->admin_info['admin_is_super'] != 1) {
-            $list = db('gadmin')->where('company_id', $this->admin_info['admin_company_id'])->paginate(10);
+            $list = db('gadmin')->where('company_id', $this->admin_info['admin_company_id'])->order('sort ASC')->paginate(10);
 //        }else{
 //            $list = db('gadmin')->paginate(10);
 //        }

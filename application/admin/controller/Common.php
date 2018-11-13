@@ -248,35 +248,43 @@ class Common extends AdminControl
         $fail = '';
         if(!empty($excel)){
 //            halt($excel);
-            if($excel[1]['A'] == '家长手机号' && $excel[1]['B'] == '家长姓名（非必填）' && $excel[1]['C'] == '家长性别（非必填）' && $excel[1]['D'] == '学生姓名' && $excel[1]['E'] == '学生性别（非必填）'
-                && $excel[1]['F'] == '学生身份证号' && $excel[1]['G'] == '所在学校（名称）' && $excel[1]['H'] == '学校类型' && $excel[1]['I'] == '所在班级' && $excel[1]['J'] == '购买套餐名称（非必填）'
-                && $excel[1]['K'] == '套餐价格/元 （非必填）'&& $excel[1]['L'] == '套餐期限 /天（非必填）'&& $excel[1]['M'] == '备注说明（非必填）' ){
+            if($excel[2]['A'] == '家长手机号' && $excel[2]['B'] == '家长姓名（非必填）' && $excel[2]['C'] == '家长性别（非必填）' && $excel[2]['D'] == '学生姓名' && $excel[2]['E'] == '学生性别（非必填）'
+                && $excel[2]['F'] == '学生身份证号' && $excel[2]['G'] == '所在学校（名称）' && $excel[2]['H'] == '学校类型' && $excel[2]['I'] == '所在班级' && $excel[2]['J'] == '购买套餐名称（非必填）'
+                && $excel[2]['K'] == '套餐价格/元 （非必填）'&& $excel[2]['L'] == '套餐期限 /天（非必填）'&& $excel[2]['M'] == '备注说明（非必填）' ){
                 foreach($excel as $k=>$v){
-                    if($k >1 && count($v) == 13){
-                        if(!empty($v)){
+                    if($k >2 && count($v) == 13){
+                        if(empty($v['A']) && empty($v['B']) && empty($v['C']) && empty($v['D']) && empty($v['E']) && empty($v['F']) && empty($v['G']) && empty($v['H']) && empty($v['I']) && empty($v['J']) && empty($v['K']) && empty($v['L']) && empty($v['M'])){
+                            unset($v);
+                        }else{
                             if(empty($v['A'])){
                                 $v['error'] = '家长手机号为空';
+                                $v['error_id'] = 1;
                                 $fail[] = $v;
                             }else if(empty($v['D'])){
                                 $v['error'] = '学生姓名为空';
+                                $v['error_id'] = 2;
                                 $fail[] = $v;
                             }else if(empty($v['F'])){
                                 $v['error'] = '学生身份证号为空';
+                                $v['error_id'] = 3;
                                 $fail[] = $v;
                             }else if($v['J'] != '看孩套餐' && $v['J'] != '重温课堂套餐' && $v['J'] != '教孩套餐'){
                                 $v['error'] = '套餐名称错误';
+                                $v['error_id'] = 6;
                                 $fail[] = $v;
                             }else{
                                 //判断家长手机号是否已存在
                                 $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
                                 if($result){
                                     $v['error'] = '家长手机号已存在';
+                                    $v['error_id'] = 1;
                                     $fail[] = $v;
                                 }else{
                                     //判断学生ID 是否存在
                                     $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
                                     if($is_student){
                                         $v['error'] = '学生身份证ID已存在';
+                                        $v['error_id'] = 3;
                                         $fail[] = $v;
                                     }else{
                                         //判断年级
@@ -284,16 +292,19 @@ class Common extends AdminControl
                                         if($is_grade && in_array($is_grade['sc_id'],$sc_type)){
                                             $v['sc_id'] = $is_grade['sc_id'];
                                             //判断班级
-                                            $is_class = db('class')->field('classid')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classname`='".$v['I']."' AND `is_del`=1")->find();
+                                            $is_class = db('class')->field('classid')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classname`='".$v['I']."' AND `isdel`=1")->find();
                                             if($is_class){
                                                 $v['classid'] = $is_class['classid'];
+                                                $V['time'] = date('Y-m-d H:i',time());
                                                 $success[]= $v;
                                             }else{
                                                 $v['error'] = '班级不存在';
+                                                $v['error_id'] = 5;
                                                 $fail[] = $v;
                                             }
                                         }else{
                                             $v['error'] = '学校类型不正确';
+                                            $v['error_id'] = 4;
                                             $fail[] = $v;
                                         }
                                     }
@@ -350,7 +361,7 @@ class Common extends AdminControl
         //获取总行数
         $allRow = $currentSheet->getHighestRow();
         //循环获取表中的数据，$currentRow表示当前行，从哪行开始读取数据，索引值从0开始
-        for ($currentRow = 1; $currentRow <= $allRow; $currentRow++) {
+        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++) {
             //从哪列开始，A表示第一列
             for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++) {
                 //数据坐标
