@@ -534,9 +534,12 @@ class Camera extends AdminControl
         foreach($shu as $v){
             $datas=$vlink->SetPlay($accountid,$v);
             if(empty($data)) {
-                $data = $datas['resources'];
+                $data = !empty($datas['resources'])?$datas['resources']:'';
             }else{
-                $data = array_merge($data,$datas['resources']);
+                if(!empty($datas['resources'])){
+                    $data = array_merge($data,$datas['resources']);
+                }
+
             }
         }
         foreach($data as $k=>$v){
