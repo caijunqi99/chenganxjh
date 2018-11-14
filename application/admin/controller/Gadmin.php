@@ -164,6 +164,7 @@ class Gadmin extends AdminControl {
             $data['gname'] = $_POST['gname'];
             $data['create_uid'] = session('admin_id');
             $data['company_id'] = $admin['admin_company_id'];
+            $data['time'] = time();
             $result = db('gadmin')->insertGetId($data);
             if ($result >0) {
                 if(!empty($_POST['action'])){
@@ -234,6 +235,7 @@ class Gadmin extends AdminControl {
             $data['nav'] = $nav_str;
             $data['gname'] = $_POST['gname'];
             $data['create_uid'] = session('admin_id');
+            $data['time'] = time();
             $update = db('gadmin')->where(array('gid' => $gid))->update($data);
             if ($update) {
                 db('roleperms')->where(array('roleid'=>$gid))->delete();
