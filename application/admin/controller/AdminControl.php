@@ -83,7 +83,10 @@ class AdminControl extends Controller {
         if (empty($this->permission)){
             $gadmin = db('gadmin')->where(array('gid'=>$this->admin_info['admin_gid']))->find();
             $permission = decrypt($gadmin['limits'],MD5_KEY.md5($gadmin['gname']));
-            $this->permission = $permission = explode('|',$permission);
+            $permission = explode('|',$permission);
+            //一定有的权限
+            $arr = array('Index','Dashboard');
+            $this->permission =$permission =array_merge($arr,$permission);
         }else{
             $permission = $this->permission;
         }
@@ -368,7 +371,7 @@ class AdminControl extends Controller {
             case 'Export'://7
                 return '导出';
                 break;
-            case 'Import'://8
+            case 'import'://8
                 return '导入';
                 break;
             case 'DownLoad'://9

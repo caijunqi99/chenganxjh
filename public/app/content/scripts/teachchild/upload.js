@@ -138,10 +138,9 @@ $(function() {
         })
     }
 
-
+    fz_video();
     // 确认上传和取消
     isUpload = function(isTrue) {
-        fz_video();
         if (isTrue == 0) {
             var video_img = video + '?vframe/jpg/offset/1';
             if (video == '') {

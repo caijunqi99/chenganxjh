@@ -70,11 +70,14 @@ class Student extends Model {
      */
     public function checkParentRelation($member_id,$s_id){
 
+        $res = db('member')->where('member_id="'.$member_id.'"')->field('is_owner')->find();
+        if($res['is_owner'] != 0){
+            $member_id = $res['is_owner'];
+        }
         $result = db('student')
         ->field('s_id,s_name')
         ->where('s_id',$s_id)
         ->whereor('s_ownerAccount',$member_id)
-        ->whereor('FIND_IN_SET('.$member_id.',s_viceAccount)')
         ->find();
         if($result){
             return 'true';
@@ -168,6 +171,12 @@ class Student extends Model {
 
         $update = db('student')->where($condition)->limit($limit)->update($data);
         return $update;
+    }
+
+    public function getAllStudent($condition){
+        return db('student')
+            ->join('__CLASS__ cl','cl.classid=s_classid','LEFT')
+            ->field("s_id,s_name,s_sex,s_classid,s_card,classname,s_del")->where($condition)->select();
     }
 
 }

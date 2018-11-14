@@ -12574,7 +12574,7 @@ Point.prototype = {
 		fireEvent(this, eventType, eventArgs, defaultFunction);
 	},
 	/**
-	 * Import events from the series' and point's options. Only do it on
+	 * import events from the series' and point's options. Only do it on
 	 * demand, to save processing time on hovering.
 	 */
 	importEvents: function () {

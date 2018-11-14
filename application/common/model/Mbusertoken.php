@@ -17,7 +17,7 @@ class Mbusertoken extends Model {
      * @return array
      */
     public function getMbUserTokenInfo($condition) {
-        return $this->where($condition)->find();
+        return db('mbusertoken')->where($condition)->find();
     }
 
     public function getMbUserTokenInfoByToken($token) {
@@ -38,7 +38,7 @@ class Mbusertoken extends Model {
      * @return bool 布尔类型的返回结果
      */
     public function addMbUserToken($param) {
-        return $this->insert($param);
+        return db('mbusertoken')->insertGetId($param);
     }
 
     /**
@@ -48,7 +48,7 @@ class Mbusertoken extends Model {
      * @return bool 布尔类型的返回结果
      */
     public function delMbUserToken($condition) {
-        return $this->where($condition)->delete();
+        return db('mbusertoken')->where($condition)->delete();
     }
 
 }

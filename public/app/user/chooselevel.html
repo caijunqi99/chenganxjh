@@ -180,7 +180,8 @@
                                             } else { //pc
                                             };
                                         } else {
-
+                                            $.toast('系统错误', 'forbidden');
+                                            return false;
                                         }
                                     }
                                     //支付宝支付
@@ -306,7 +307,7 @@
             }, "json");
         }
 
-        function payStatus(orderSn) {
+        function payTo(orderSn) {
             location.href = http_url + 'app/user/paysuccess.html?orderSn=' + orderSn;
         }
     </script>

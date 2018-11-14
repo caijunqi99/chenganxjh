@@ -55,4 +55,8 @@ class Membercollect extends Model {
         return db('membercollect')->where($condition)->update($update);
     }
 
+    public function getCollect($condition){
+        return db('membercollect')->where($condition)->order('time desc')->select();
+    }
+
 }

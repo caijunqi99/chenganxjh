@@ -33,25 +33,42 @@
                         <input type="text"  name="account" placeholder="请输入账号/手机号" value="{$account}" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                <!--<div class="layui-inline">-->
+                    <!--<label class="layui-form-label">权限组</label>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<select name="role">-->
+                            <!--<option value="0" >请选择</option>-->
+                            <!--{volist name="gadmin_list" id="vo"}-->
+                                <!--<option value="{$vo.gid}" <?php if($vo['gid']==$role){?>selected="selected"<?php }?>>{$vo.gname}</option>-->
+                            <!--{/volist}-->
+                        <!--</select>-->
+                        <!--<div class="layui-unselect layui-form-select">-->
+                            <!--<div class="layui-select-title">-->
+                                <!--<input type="text" placeholder="请选择" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div>-->
+                            <!--<dl class="layui-anim layui-anim-upbit">-->
+                                <!--<dd lay-value="0" >请选择</dd>-->
+                                <!--{volist name="gadmin_list" id="vo"}-->
+                                    <!--<dd lay-value="{$vo.gid}" <?php if($vo['gid']==$role){?>class="layui-this"<?php }?>>{$vo.gname}{$role}</dd>-->
+                                <!--{/volist}-->
+                            <!--</dl>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="layui-inline">
                     <label class="layui-form-label">权限组</label>
-                    <div class="layui-input-block">
-                        <select name="role">
-                            <option value="0" >请选择</option>
-                            {volist name="gadmin_list" id="vo"}
-                                <option value="{$vo.gid}" <?php if($vo['gid']==$role){?>selected="selected"<?php }?>>{$vo.gname}</option>
+                    <div class="layui-input-inline">
+                        <select name="company" lay-filter="company"  class="select"  lay-verify="type"  id="company">
+                            <option value="0" selected="">请选择公司</option>
+                            <option value="1" <?php if(1==$com){?>selected="selected"<?php }?>>总公司</option>
+                            {volist name="company" id="vo"}
+                            <option value="{$vo.o_id}" <?php if($vo['o_id']==$com){?>selected="selected"<?php }?> >{$vo.o_name}</option>
                             {/volist}
                         </select>
-                        <div class="layui-unselect layui-form-select">
-                            <div class="layui-select-title">
-                                <input type="text" placeholder="请选择" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div>
-                            <dl class="layui-anim layui-anim-upbit">
-                                <dd lay-value="0" >请选择</dd>
-                                {volist name="gadmin_list" id="vo"}
-                                    <dd lay-value="{$vo.gid}" <?php if($vo['gid']==$role){?>class="layui-this"<?php }?>>{$vo.gname}{$role}</dd>
-                                {/volist}
-                            </dl>
-                        </div>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="role" lay-filter="role"  class="select"  lay-verify="type"  id="role">
+                            <option value="0" selected="">请选择角色</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -66,7 +83,10 @@
     <form method="post" id='form_admin' class="layui-form">
         <table class="layui-table"  >
             <colgroup>
-                <col width="150">
+                <col width="200">
+                <col width="200">
+                <col width="200">
+                <col width="400">
                 <col width="200">
                 <col>
             </colgroup>
@@ -75,10 +95,10 @@
                 <th class="align-center">{$Think.lang.admin_index_username}</th>
                 <th class="align-center">{$Think.lang.admin_index_truename}</th>
                 <th class="align-center">{$Think.lang.mob_phone}</th>
-                <th class="align-center">{$Think.lang.admin_index_company}</th>
-                <th class="align-center">{$Think.lang.admin_index_last_login}</th>
+                <!--<th class="align-center">{$Think.lang.admin_index_company}</th>-->
                 <!--<th class="align-center">{$Think.lang.admin_index_login_times}</th>-->
                 <th class="align-center">{$Think.lang.gadmin_name}</th>
+                <th class="align-center">{$Think.lang.admin_index_last_login}</th>
                 <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
                 <th class="align-center">{$Think.lang.ds_handle}</th>
                 <?php }?>
@@ -91,16 +111,16 @@
                 <td class="align-center w50"><?php echo $v['admin_name'];?></td>
                 <td class="align-center w50"><?php echo $v['admin_true_name'];?></td>
                 <td class="align-center w50"><?php echo $v['admin_phone'];?></td>
-                <td class="align-center w150"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>
-                <td class="align-center w150"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
+                <!--<td class="align-center w150"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>-->
                 <!--<td class="align-center w50"><?php echo $v['admin_login_num']; ?></td>-->
                 <?php if($v['admin_is_super']){?>
                     <td class="align-center w50" style="color: #D90909">{$Think.lang.super_admin}</td>
                 <?php }else if($v['gname']){?>
-                    <td class="align-center w50" style="color: #D39600"> <?php echo $v['gname']; ?></td>
+                    <td class="align-center w50" style="color: #D39600"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?>-><?php echo $v['gname']; ?></td>
                 <?php }else{?>
                     <td class="align-center w50" style="color: #0C0C0C"> {$Think.lang.admin_no_role}</td>
                 <?php }?>
+                <td class="align-center w150"><?php echo $v['admin_login_time'] ? date('Y-m-d H:i:s',$v['admin_login_time']) : lang('admin_index_login_null'); ?></td>
                 <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
                 <td class="w150 align-center">
                     <div class="layui-table-cell laytable-cell-9-8" style="height: 32px;">
@@ -148,9 +168,37 @@
 <script type="text/javascript">
     layui.use(['form'], function(){
         var form = layui.form;
+        var company_id = '{$com}';
+        var role_id = '{$role}';
+
+        if(company_id != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_company_role?company_id='+company_id+'&role_id='+role_id,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#role').html(data.role);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+        form.on('select(company)', function(data){
+            //改变市区
+            $('#role').html('<option value="0">请选择角色</option>');
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_company_role?company_id='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#role').html(data.role);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+
     });
-
-
     //关闭
     function close_status(name,id){
         var msg = '{$Think.lang.admin_status_close_before}'+name+'{$Think.lang.admin_status_close_after}';

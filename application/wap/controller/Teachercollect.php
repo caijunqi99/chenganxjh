@@ -27,8 +27,25 @@ class Teachercollect extends MobileMember
         $condition['member_id'] = $member_id;
         $condition['isdel'] = 1;
         $condition['type_id'] = 1;
-        $page = !empty(input('post.page'))?input('post.page'):1;
-        $result = $collect->getMembercollectList($condition,'',$page,'id desc',10);
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('membercollect')->where("time <".$last_id." and member_id=".$member_id." and isdel=1")->order('time desc')->find();
+            $strtime = strtotime(date("Y-m-d",$last_info['time'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $result = $collect->getCollect("member_id=".$member_id." and isdel=1 and type_id=1 and time<".$endtime." and time>=".$strtime);
+        }else{
+            $result=$collect->getMembercollectList($condition,'',1,'time desc',10);
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['time'];
+                }
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $day = db('membercollect')->where("member_id=".$member_id." and isdel=1 and type_id=1 and time<".$endtime." and time>=".$strtime)->order('time desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['time'])){
@@ -58,8 +75,12 @@ class Teachercollect extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
+            $last_id = $item['time'];
         }
         $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($datas);
     }
 

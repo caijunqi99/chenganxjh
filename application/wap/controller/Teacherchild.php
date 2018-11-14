@@ -47,9 +47,34 @@ class Teacherchild extends MobileMember
     //我的视频
     public function myVideos(){
         $member_id = input('post.member_id');
-        $page = !empty(input('post.page'))?input('post.page'):1;
-        $start = ($page-1)*10;
-        $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where(array('delete_state'=>0,'buyer_id'=>$member_id,'order_state'=>"20"))->order('add_time',desc)->limit($start,10)->select();
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('packagesorderteach')->field("order_id,add_time")->where("add_time <".$last_id." and buyer_id=".$member_id." and order_state=20 and delete_state=0")->order('add_time desc')->find();
+            if(!empty($last_info)){
+                $strtime = strtotime(date("Y-m-d",$last_info['add_time'])." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $teach_model = Model('Packagesorderteach');
+                $result = $teach_model->getTeachOrder("buyer_id=".$member_id." and order_state=20 and delete_state=0 and add_time<".$endtime." and add_time>=".$strtime);
+            }else{
+                $result = [];
+            }
+        }else{
+            $cond['delete_state'] = 0;
+            $cond['buyer_id'] = $member_id;
+            $cond['order_state'] = 20;
+            $result = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where($cond)->order('add_time',desc)->limit(0,10)->select();
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['add_time'];
+                }
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $where = "delete_state=0 and buyer_id=".$member_id." and order_state=20 and add_time<".$endtime." and add_time>=".$strtime;
+                $day = db('packagesorderteach')->field("order_id,order_sn,order_name,order_tid,order_dieline,add_time,payment_time,order_amount")->where($where)->order('add_time',desc)->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['add_time'])){
@@ -58,6 +83,7 @@ class Teacherchild extends MobileMember
             $videoinfo = db('teachchild')->where(array('t_id'=>$v['order_tid']))->find();
             $result[$k]['title'] = $videoinfo['t_title'];
             $result[$k]['videoimg'] = $videoinfo['t_videoimg'];
+            $result[$k]['t_picture'] = $videoinfo['t_picture'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
@@ -70,8 +96,12 @@ class Teacherchild extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
+            $last_id = $item['add_time'];
         }
         $data = isset($data)?[$data]:[];
+        if(!empty($data[0])){
+            $data[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($data);
     }
 

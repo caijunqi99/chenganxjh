@@ -40,11 +40,13 @@ $lang['ds_organize_time'] = '添加/修改时间';
 $lang['ds_organize_remark'] = '备注';
 $lang['ds_organize_assign'] = '分配管理员账号';
 $lang['organize_index_title']='输入公司（代理）名称';
-$lang['organize_index_role']='公司（代理）角色';
+$lang['organize_index_role']='公司级别';
 $lang['organize_index_company']='分公司';
 $lang['organize_index_province']='省级代理';
 $lang['organize_index_city']='市级代理';
 $lang['organize_index_special']='特约代理';
+$lang['organize_index_is_child']='是否为分公司';
+$lang['organize_index_address']='管辖地区';
 $lang['organize_index_leading']='联系/负责人';
 $lang['organize_index_enddate']='合同截止日期';
 $lang['organize_index_remark']='备注说明';
@@ -149,6 +151,8 @@ $lang['ds_snstrace']               = '买家动态';
 $lang['ds_snsmember']              = '会员标签';
 $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
+$lang['ds_import']               = '导入学生列表';
+$lang['ds_robot']               = '机器人管理';
 
 //看孩管理
 $lang['ds_look']                   = '看孩管理';

@@ -28,30 +28,21 @@ class Teacherdecide extends MobileMember
         }
         //是否收藏
         $collectinfo = db("membercollect")->where(array('member_id'=>$member_id,'collect_id'=>$video_id,'type_id'=>1,'isdel'=>1))->find();
-        if(!empty($collectinfo)){
-            $data['collect'] = 1;
-        }else{
-            $data['collect'] = 0;
-        }
-        //是否购买
+        $data['collect'] = !empty($collectinfo) ? 1 : 0;
+            //是否购买
         $orderinfo = db('packagesorderteach')->where(array('buyer_id'=>$member_id,'order_tid'=>$video_id,'order_state'=>20))->order('order_id desc')->limit(1)->find();
-
         if(!empty($orderinfo)){
-            if($orderinfo['order_dieline']>time()){
-                $data['buy'] = 1;
-            }else{
-                $data['buy'] = 0;
-            }
+            $data['buy'] = $orderinfo['order_dieline']>time() ? 1 : 0;
         }else{
             $data['buy'] = 0;
         }
         //是否免费
         $free = db('teachchild')->where(array('t_id'=>$video_id))->find();
-        if($free['t_price']!=0){
-            $data['price'] = $free['t_price'];
-        }else{
-            $data['price'] = 0;
-        }
+        $data['price'] = $free['t_price']!=0 ? $free['t_price'] : 0;
+        //是否是自己上传的
+        $data['myself'] = !empty($free['t_userid'])&&($free['t_userid']==$member_id)? 1 : 0;
+        //视频状态
+        $data['t_audit'] = $free['t_audit'];
         output_data($data);
     }
 

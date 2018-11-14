@@ -10,15 +10,15 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
 </head>
 
-<body ontouchstart>
+<body>
     <div class="list_wrap">
 
         <div class="weui-pull-to-refresh__layer">
@@ -70,25 +70,13 @@
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
         </div>
-        <div class="sub-nav">
-            <div class="content">
-                <ul>
-                    <li><a href="history.html"><i class="icon iconfont icon-shizhong"></i>&nbsp;&nbsp;观看历史</a></li>
-                    <li><i class="icon iconfont icon-shoucang"></i>&nbsp;&nbsp;我的收藏</li>
-                    <li><a href="upload.html"><i class="icon iconfont icon-ge_shangchuan"></i>&nbsp;&nbsp;上传视频</a></li>
-                </ul>
-            </div>
-            <s><i></i></s>
-        </div>
     </div>
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
-    <!-- <script src="../content/scripts/pullUpLoading.js"></script> -->
     <script type="text/javascript">
         $(function() {
 
@@ -127,8 +115,19 @@
             });
 
             // 默认获取推荐课件列表
-            GetKejian(Params)
-
+            GetKejian(Params);
+            // 下拉刷新
+            $(document.body).pullToRefresh(function() {
+                Page = 1;
+                $('.weui-loadmore').hide();
+                $(document.body).infinite();
+                setTimeout(function() {
+                    $(document.body).pullToRefreshDone(); // 重置下拉刷新
+                }, 1500)
+                var params = Params;
+                params['page'] = Page;
+                GetKejian(params);
+            });
             // 分页
             var loading = false; //状态标记
             $(document.body).infinite().on("infinite", function(event) {
@@ -142,16 +141,7 @@
                 }, 20)
             });
 
-            // 下拉刷新
-            $(document.body).pullToRefresh(function() {
-                $(document.body).infinite();
-                setTimeout(function() {
-                    var params = Params;
-                    params['page'] = 1;
-                    GetKejian(params);
-                    $(document.body).pullToRefreshDone(); // 重置下拉刷新
-                }, 1000)
-            });
+
 
             // 顶部推荐切换
             sortTopAction = function(ID, el, type) {
@@ -186,7 +176,7 @@
                             var params = {
                                 key: user_token,
                                 type: ID,
-                                type1: top[i]['childTwo'][0]['gc_id'],
+                                /*type1: top[i]['childTwo'][0]['gc_id'],*/
                                 subsume: 1,
                                 page: Page
                             }
@@ -505,7 +495,6 @@
 
             // 获取课件接口
             function GetKejian(params) {
-                $(document.body).infinite();
                 $.ajax({
                     type: "POST",
                     url: api + '/Teacherhome/lists',
@@ -515,7 +504,7 @@
                         if (response['code'] == 200) {
                             $('.main_content').html(HTML(response['result']))
                         } else {
-                            console.log(response['message']);
+                            $.toast(response['message'],'forbidden');return false;
                         }
                     }
                 });

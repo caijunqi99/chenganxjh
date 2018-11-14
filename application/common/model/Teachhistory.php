@@ -28,6 +28,10 @@ class Teachhistory extends Model {
             return $res->items();
         }
     }
+
+    public function getHistory($condition){
+        return db('teachhistory')->where($condition)->order('t_maketime desc')->select();
+    }
     /**
      * 添加课件观看历史
      * @param array $insert

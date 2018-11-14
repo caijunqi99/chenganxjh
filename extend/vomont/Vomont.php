@@ -78,6 +78,26 @@ class Vomont
         $data = json_decode($request,TRUE);
         return $data;
     }
+    /**
+     * 创建直播计划
+    */
+    public function Livestatus($accpuntid,$id){
+        $SDK      = new CommandSDK();
+        $mgsid = $SDK::livestatus;
+        $request = httpRequest($this->http.'msgid='.$mgsid.'&authkey='.$this->authkey.'&accountid='.$accpuntid.'&resid='.$id.'&streamtype=1&time={"weektime":[{"day":0,"begintime":0,"livelong":86400},{"day":1,"begintime":0,"livelong":86400},{"day":2,"begintime":0,"livelong":86400},{"day":3,"begintime":0,"livelong":86400},{"day":4,"begintime":0,"livelong":86400},{"day":5,"begintime":0,"livelong":86400},{"day":6,"begintime":0,"livelong":86400}]}');
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
+    /**
+     * 删除直播计划
+    */
+    public function Liveend($accpuntid,$liveid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::liveend;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&liveid={$liveid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
 
 
 

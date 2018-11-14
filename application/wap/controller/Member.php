@@ -22,11 +22,97 @@ class Member extends MobileMember
             'income' => '0.00',//收入金额
             'reflect' => '0.00',//提现金额
         );
-        
-
-
-
         output_data($self);
+    }
+
+    public function RefreshPullOldOrder(){
+        $input = input();
+        if (isset($input['registrationID'])) {
+            //删除之前绑定该 极光id的数据，
+            db('memberjpush')->where('registrationID',$input['registrationID'])->delete();
+            $jp = db('memberjpush')->where('member_id',$this->member_info['member_id'])->find();
+            if ($jp) {
+                //如果已经存在过记录，只修改极光id
+                db('memberjpush')->where('id', $jp['id'])->setField('registrationID',$input['registrationID']);
+            }else{
+                //如果没有当前用户信息，写入
+                db('memberjpush')->insertGetId(['member_id'=>$this->member_info['member_id'],'registrationID'=>$input['registrationID']]);
+            }
+        }
+        $oldid = $this->member_info['oldid'];
+        if (!$oldid) output_data(array('state'=>'不是老会员'));//不是老会员
+        $trans = array(
+            'member_id'=>$this->member_info['member_id'],
+            'is_trans' =>['gt',0],
+        );
+        $isTrans = db('packagetrans')->where($trans)->find();
+        if ($isTrans) output_data(array('state'=>'已转移完成'));//已转移完成
+        //获取订单
+        $orderCondition=array(
+            'member_member_id' =>$oldid,
+            'status' =>0,
+        );
+        $order = db('aaorder')->where($orderCondition)->select();
+        if ($order) {
+            $TrueOrder=[];
+            foreach ($order as $key => $o) {
+                if($o['status'] == 0)$TrueOrder[]=$o;
+            }
+            if (count($TrueOrder) ==0)output_data(array('state'=>'true'));
+            $sign = [];
+            $packageTime = [];
+            foreach ($TrueOrder as $k => $t) {
+                //获取订单详情
+                $TrueOrder[$k]['orderitem'] = db('aaorderitem')->where('order_order_id',$t['id'])->find();
+                //获取套餐时间
+                $TrueOrder[$k]['allpackageeauthority'] = db('aallpackageeauthority')->where('member_member_id',$oldid)->find();
+                $Student = db('student')->where('oldid',$t['student_student_id'])->field('s_id,s_name')->find();
+                $packageTime[]=array(
+                    'member_id' => $this->member_info['member_id'],
+                    'member_name' => $this->member_info['member_name'],
+                    's_id' => $Student['s_id'],
+                    's_name' => $Student['s_name'],
+                    'start_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['liveBeginTime']),
+                    'end_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['liveDeadTime']),
+                    'up_time' => strtotime($TrueOrder[$k]['allpackageeauthority']['lastTime']),
+                    'up_desc' => $TrueOrder[$k]['allpackageeauthority']['lastTime'].'  '.$TrueOrder[$k]['allpackageeauthority']['name'],
+                    'pkg_type' => 1,
+                    'is_oldorder' => 2,
+                );
+            }
+            $count = count($packageTime);
+            if (!$count==1) {
+                $res = db('packagetime')->insertGetId($packageTime[0]);
+            }else{
+                $start_time = [];
+                $lastTime = [];
+                foreach ($packageTime as $ke => $p){
+                    $start_time[$k] =$p['start_time'];
+                    $lastTime[$ke]  =$p['end_time'];
+                } 
+                $start_time =min($start_time);//最早购买的时间
+                $lastTime = max($lastTime); // 最晚的结束时间
+                $end_time = array_column($packageTime, 'end_time'); 
+                $k = array_search($lastTime, $end_time);
+                $newTime = $packageTime[0];
+                $newTime['start_time'] = $start_time; //使用最早的开始时间
+                $newTime['end_time'] = $packageTime[$k]['end_time'];//使用最晚的结束时间
+                $res = db('packagetime')->insertGetId($newTime);
+            }
+            if($res){
+                $transRes=db('packagetrans')->insertGetId(array(
+                    'member_id' => $this->member_info['member_id'],
+                    'is_trans' => $res,
+                    'transtime' => TIMESTAMP,
+                ));
+            }
+        }
+        if($transRes){
+            output_data(array('state'=>'转移完成'));    
+        }else{
+            output_data(array('state'=>'转移失败'));
+        }
+        
     }
 
     /**
@@ -175,13 +261,13 @@ class Member extends MobileMember
         $order ='';
         switch ($type_id){
             case 1:
-                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorder')->alias('o')->field('o.pkg_name,o.s_id,o.add_time,o.order_state,o.order_amount,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
                 break;
             case 2:
 //                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as add_time')->where($where)->order('order_id DESC')->select();
                 break;
             case 3:
-                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                $order = db('packagesorderteach')->alias('o')->field('o.order_name,o.order_tid,o.add_time,o.order_state,o.order_amount,o.order_state,o.order_dieline,FROM_UNIXTIME(o.add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(o.order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
                 break;
         }
         if(!empty($order)){
@@ -427,16 +513,20 @@ class Member extends MobileMember
             's_areaid'       => $area_id,
             's_region'       => $region,
             's_card'         => $card,
-            'classCard'      =>$classCard
+            'classCard'      =>$classCard,
+            's_createtime'   => date('Y-m-d H:i:s',time())
         );
+        $sid = '';
         if(!empty($student)){
             if(!empty($student['s_ownerAccount'])){
                 output_error('该学生已有绑定人，请联系管理员');
             }else{
+                $stu = db('student')->field('s_id')->where(' s_card = "'.$card.'"')->find();
                 $student = db('student')->where(' s_card = "'.$card.'"')->update($data);
+                $sid = $stu['s_id'];
             }
         }else{
-            $student = db('student')->insert($data);
+            $student = db('student')->insertGetId($data);
 
             if(!empty($member['classid'])){
                 $updateMember['classid'] = trim(',',$member['classid'].','.$class_id);
@@ -450,10 +540,10 @@ class Member extends MobileMember
             }
             //给家长绑定学校id和班级id
              db('member')->where('member_id',$member_id)->update($updateMember);
-
+            $sid = $student;
         }   
             if($student){
-                output_data(array('message'=>'绑定成功','sid'=>$student));
+                output_data(array('message'=>'绑定成功','sid'=>$sid));
             }else{
                 output_error('绑定失败');
             }
@@ -550,7 +640,7 @@ class Member extends MobileMember
             }
             if(!empty($res)){
                 if(!empty($student)){
-                    if(count($student) != 1){
+                    if(count($student) > 1){
                         output_error('该手机号绑定有多个孩子，不能添加');
                     }else{
                         if(!empty($member_student[0]['s_card']) && in_array($member_student[0]['s_card'],$res)){
@@ -731,8 +821,8 @@ class Member extends MobileMember
         }else{
             //副账号 显示起主账号绑定的孩子
             $students = db('student')->alias('s')
-                ->field('s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.schoolid',LEFT)
+                ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
                 ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
                 ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
@@ -785,7 +875,7 @@ class Member extends MobileMember
             if(!empty($student['end_time'])){
                 $student['time'] = date('Y-m-d',$student['end_time']);
             }else{
-                $student['time'] = '前往购买套餐';
+                $student['time'] = '请前往购买套餐';
             }
             if(empty($student['s_region'])){
                 $student['s_region'] = $this->getAddress($student['s_provinceid']).' '.$this->getAddress($student['s_cityid']).' '.$this->getAddress($student['s_areaid']);

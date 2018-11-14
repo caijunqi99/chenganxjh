@@ -27,18 +27,17 @@ $(function() {
     });
 
     // 下拉刷新
-    $(document.body).pullToRefresh(function() {
-        $(document.body).infinite();
+    $('.content').pullToRefresh(function() {
+        $('.content').infinite();
         setTimeout(function() {
-            var params = Params;
-            params['page'] = 1;
-            GetKejian(params);
-            $(document.body).pullToRefreshDone(); // 重置下拉刷新
-        }, 1000)
+            $('.content').pullToRefreshDone(); // 重置下拉刷新
+        }, 1500)
+        var params = Params;
+        params['page'] = 1;
+        GetKejian(params);
     });
     // 获取课件接口
-    function GetKejian() {
-        $(document.body).infinite();
+    function GetKejian(params) {
         $.ajax({
             url: api + '/teacherchild/myUpload.html',
             type: 'POST',
@@ -70,7 +69,6 @@ $(function() {
 
     // 获取数据
     function getList(type) {
-        $(document.body).infinite();
         let params = {
             key: user_token,
             member_id: user_member_id,
@@ -85,7 +83,11 @@ $(function() {
             data: params,
             success: function(response) {
                 if (response['code'] == 200) {
-                    $('.main_content').html(HTML(response['result']))
+                    if (response['result'].length == 0) {
+                        $('.main_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>')
+                    } else {
+                        $('.main_content').html(HTML(response['result']))
+                    }
                 } else {
                     $.toast(response['message'], 'forbidden');
                     return false;
@@ -104,7 +106,7 @@ $(function() {
             success: function(response) {
                 if (response['code'] == 200) {
                     if (response['result'].length == 0) {
-                        var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                        var is_data = $('.main_content>.weui-loadmore').hasClass('weui-loadmore_line');
                         if(!is_data){
                             $('.weui-footer').show();
                         }
@@ -117,6 +119,7 @@ $(function() {
                 } else {
                     $('.weui-footer').show();
                     $('.weui-loadmore').hide();
+                    $(document.body).destroyInfinite();
                     $.toast(response['message'], 'forbidden');
                     return false;
                 };
@@ -129,25 +132,24 @@ $(function() {
         var template = '';
         var img = '';
         for (var i = 0; i < data.length; i++) {
+            template += '<div class="content_wrap" onclick="videoClick(' + data[i]['t_id'] + ')">';
+            template += '<div class="img_wrap">' ;
             if (data[i]['t_audit'] == 1) {
                 img = '../content/images/teachchild/1.png'; //审核中
-                template += '<div class="content_wrap" >';
+                template += '<img class="img_top" src="' + img + '">';
             } else if (data[i]['t_audit'] == 2) {
                 img = '../content/images/teachchild/2.png'; //失败
-                template += '<div class="content_wrap" >';
+                template += '<img class="img_top" src="' + img + '">';
             } else if (data[i]['t_audit'] == 3 && data[i]['t_price'] == 0) {
                 img = '../content/images/teachchild/3.png'; //通过免费
-                template += '<div class="content_wrap" onclick="videoClick(' + data[i]['t_id'] + ')">';
             } else if (data[i]['t_audit'] == 3 && data[i]['t_price'] != 0) {
                 img = '../content/images/teachchild/4.png'; //通过付费
-                template += '<div class="content_wrap" onclick="videoClick(' + data[i]['t_id'] + ')">';
             } else if (data[i]['t_audit'] == 4) {
                 img = '../content/images/teachchild/5.png'; //下架
-                template += '<div class="content_wrap" onclick="videoClick(' + data[i]['t_id'] + ')">';
+                template += '<img class="img_top" src="' + img + '">';
             }
-            template += '<div class="img_wrap">' +
-                '<img class="img_top" src="' + img + '">' +
-                '<img src="' + data[i]['t_videoimg'] + '" alt="' + data[i]['t_url'] + '">' +
+
+            template +=    '<img src="' + data[i]['t_videoimg'] + '" alt="' + data[i]['t_url'] + '">' +
                 '</div>' +
                 '<h3 class="title">' + data[i]['t_title'] + '</h3>' +
                 '<p class="cont">' + data[i]['t_profile'] + '</p>' +

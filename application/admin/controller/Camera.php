@@ -236,6 +236,7 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
+        
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
@@ -271,7 +272,7 @@ class Camera extends AdminControl
             $name = 'true';
         }
         if (isset($where['grade']) && !empty($where['grade'])) {
-            $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
+            $grade = $this->getResGroupIds(array('schoolid'=>$where['school'],'sc_type'=>$where['grade']));
             unset($where['school']);
             unset($where['area']);
             unset($where['city']);
@@ -331,9 +332,12 @@ class Camera extends AdminControl
         $Class = model('Classes');
 
         if (isset($where['sc_type']) && !empty($where['sc_type'])) {
+            $schoolid=$where['schoolid'];
+            unset($where['schoolid']);
             $sc_id = db('schooltype')->where($where)->value('sc_id');
             unset($where['sc_type']);
             $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
+            $where['schoolid']=$schoolid;
         }
         $classname = '';
         if (isset($where['classname']) && !empty($where['classname']) ) {
@@ -361,16 +365,23 @@ class Camera extends AdminControl
         }
         if (!empty($classname)) {
             $where['classname'] = array('like','%'.$classname.'%');
+            unset($Schoollist);
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
         $sc_resids=array_column($Schoollist, 'res_group_id');
         if ($sc_resids) {
-            array_push($res, $sc_resids);
+            $res = $sc_resids;
+//            array_push($res, $sc_resids);
         }
         $cl_resids=array_column($Classlist, 'res_group_id');
         if ($cl_resids) {
-            array_push($res, $cl_resids);
+//            array_push($res, $cl_resids);
+            if(empty($res)){
+                $res = $cl_resids;
+            }else{
+                $res = array_merge($res,$cl_resids);
+            }
         }
         $ids = array_merge($sc_resids,$cl_resids);
         if ($ids) {
@@ -404,6 +415,28 @@ class Camera extends AdminControl
 //        halt($start);
         //查询已安装的摄像头
         $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
+        $date=date('H:i',time());
+        foreach($list as $k=>$v){
+            if($v['online']==0){
+                $list[$k]['statuses']=2;
+            }else{
+                if($v['status']==1){
+                    if(!empty($v['begintime'])&&!empty($v['endtime'])){
+                        $begintime=date('H:i',$v['begintime']);
+                        $endtime=date('H:i',$v['endtime']);
+                        if($date<$begintime||$date>$endtime){
+                            $list[$k]['statuses']=2;
+                        }else{
+                            $list[$k]['statuses']=1;
+                        }
+                    }else{
+                        $list[$k]['statuses']=1;
+                    }
+                }else{
+                    $list[$k]['statuses']=2;
+                }
+            }
+        }
         //return $list;exit;
         $list_count = db('camera')->where($where)->count();
         $html = '';
@@ -415,14 +448,15 @@ class Camera extends AdminControl
                 $html .= '<td class="align-center">'.$v["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
                 $html .= '<td class="align-center">'.$v["id"].'</td>';
-                if($v['online'] == 1){
+                if($v['statuses'] == 1){
                     $html .= '<td class="align-center"><b style="color:green;">在线</b></td>';
-                }else if($v['online'] == 0){
+                }else if($v['statuses'] == 2){
                     $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
                 $html .= '<td class="align-center">'.$v["parentid"].'</td>';
-                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
-                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50"></td>';
+//                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay('.$v['cid'].')">点击播放</a></td>';
+                //<img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50">
                 if($v['is_classroom'] == 1){
                     $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
                 }else if($v['is_classroom'] == 2){
@@ -444,6 +478,7 @@ class Camera extends AdminControl
                 }else{
                     $html .= '<hr>关闭时间：未设置</td>';
                 }
+                $html .='<td class="align-center"><a href="javascript:del('.$v["cid"].')" class="layui-btn layui-btn-xs">删除</a></td>';
                 $html .= '</tr>';
             }
         }
@@ -455,6 +490,19 @@ class Camera extends AdminControl
 
         exit(json_encode(array('html'=>$html,'count'=>$list_count)));
 
+    }
+    /**
+     * 摄像头删除
+     */
+    public function del(){
+        $cid=input('param.cid');
+        $model_camera = Model('camera');
+        $result = $model_camera->camera_del($cid);
+        if ($result) {
+                $this->success('删除成功', 'Camera/entered');
+        } else {
+            $this->error('删除失败');
+        }
     }
     /**
      * 自动导入摄像头
@@ -486,9 +534,12 @@ class Camera extends AdminControl
         foreach($shu as $v){
             $datas=$vlink->SetPlay($accountid,$v);
             if(empty($data)) {
-                $data = $datas['resources'];
+                $data = !empty($datas['resources'])?$datas['resources']:'';
             }else{
-                $data = array_merge($data,$datas['resources']);
+                if(!empty($datas['resources'])){
+                    $data = array_merge($data,$datas['resources']);
+                }
+
             }
         }
         foreach($data as $k=>$v){
@@ -496,6 +547,7 @@ class Camera extends AdminControl
             $video=$vlink->Resources($accountid,$play);
             $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
             $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
+            $data[$k]['is_rtmp']=1;
             $data[$k]['sq_time']=time();
             $data[$k]['status']=1;
             $data[$k]['is_classroom']=1;

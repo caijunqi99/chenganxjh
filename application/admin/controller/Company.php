@@ -48,10 +48,31 @@ class Company extends AdminControl {
         $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
-        //判断登陆角色
+        //判断登陆账号的所属公司
         $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
         if($adminUser['admin_company_id'] != 1){
-            $condition['o_id'] = $adminUser['admin_company_id'];
+            //查询所属地区公司
+//            $condition['o_id'] = $adminUser['admin_company_id'];
+            $company = db('company')->field('o_id,o_role,o_provinceid,o_cityid,o_areaid')->where('o_id="'.$adminUser['admin_company_id'].'"')->find();
+            if(!empty($company)){
+                $roleID = $company['o_role'];
+                switch ($roleID){
+                    case 1://分公司
+                        break;
+                    case 2://省代理商
+                        $condition['o_provinceid']=$company['o_provinceid'];
+                        break;
+                    case 3://市代理商
+                        $condition['o_provinceid']=$company['o_provinceid'];
+                        $condition['o_cityid']=$company['o_cityid'];
+                        break;
+                    case 4://特约代理商
+                        $condition['o_id']=$company['o_id'];
+                        break;
+                }
+            }else{
+                $this->error('该公司不存在/已被删除',url('Admin/Dashboard/index'));
+            }
         }
 
         if (!empty($_POST['search_organize_name'])) {
@@ -143,6 +164,7 @@ class Company extends AdminControl {
             $input['o_createtime']=date('Y-m-d H:i:s',time());
             $input['o_remark'] = trim($_POST['o_remark']);
             $input['o_del']=1;
+            $input['is_child']=intval($_POST['is_child']);
             $activity = Model('company');
             $result = $activity->addOrganize($input);
             if ($result) {
@@ -154,7 +176,7 @@ class Company extends AdminControl {
             }
         } else {
             // 角色
-            $gadmin = db('gadmin')->where('gid < 5')->select();
+            $gadmin = db('gadmin')->where('gid < 5')->order('sort ASC')->select();
             $this->assign('gadmin',$gadmin);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();

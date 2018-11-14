@@ -33,7 +33,7 @@
             <p>学生列表</p>
         </div>
         <div class="head_r">
-            <a href="javascript:;" class="add_student_bar">
+            <a href="javascript:;" class="add_student_bar" style="display:none;">
                 <i class="icon iconfont icon-jiahao"></i>
             </a>
         </div>
@@ -123,22 +123,15 @@
                 <input class="input_txt" id="shibiema" onblur="this.blur()" type="text" readonly>
             </div>
         </div>
-
-        <!--<div class="weui-cell bang_list">
-            <div class="weui-cell__hd name_box"><label class="weui-label">看孩套餐</label></div>
-            <div class="weui-cell__bd">
-                <input class="input_txt color_blue" id="see" onblur="this.blur()" type="text" readonly>
-            </div>
-        </div>-->
         <div class="bang_list">
             <div class="name_box">
                 <label for="shibiema">看孩套餐</label>
             </div>
             <div class="input_box">
                 <input class="input_txt" id="see" onblur="this.blur()" type="text" readonly>
-                <input type="hidden"  name="s_id" id="s_id">
+                <input type="hidden" value="" name="s_id" id="s_id" />
             </div>
-            <a href="javascript:;" class="scan_bar" data-id="" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
+            <a href="javascript:;" class="scan_bar" onClick="see();" style="line-height: 90px;font-size: 24px;margin-left: 13px;display: none">
                 续费
             </a>
         </div>
@@ -156,6 +149,32 @@
 <script src="../content/scripts/regular.js"></script>
 
 <script>
+    /**
+     * @desc 判断是否为副账号
+     */
+    $.ajax({
+        type:'POST',
+        url:api+'/Member/isOwner.html',
+        data:{
+            key:user_token,
+            member_id:user_member_id,
+        },
+        dataType: "json",
+        success: function(response){
+            if(response['code'] == 200){
+                if(response.result[0]['is_owner'] == 0){
+                    $('.add_student_bar').show();
+                }else{
+                    $('.add_student_bar').hide();
+                }
+            }else if(response['code'] == 400){
+                $.toast(response['message'],'forbidden');return false;
+            }else{
+                $.toast(response['message'],'forbidden');return false;
+            }
+        }
+    });
+    
     $.ajax({
         type:'POST',
         url:api+'/Member/getStudents.html',
@@ -167,14 +186,14 @@
         success: function(response){
             if(response['code'] == 200){
                 var data = response.result;
-                if(data != ''){
+                if(data.length >0){
                     $('.no_bounds').hide();
                     $('.container2').show();
                     if(data.length > 1){
                         var tab = '';
                         for(var i=0;i<data.length;i++){
                             if(i == 0){
-                                tab += '<li class="active" data-id="'+data[i]['s_id']+'">\n' +
+                                tab += '<li class="active">\n' +
                                     '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
                                     '                </li>'
                                 $('#bang_name').val(data[0]['s_name']);
@@ -183,6 +202,7 @@
                                 }else{
                                     $('#sex').val('女');
                                 }
+                                // data-id="'+data[i]['s_id']+'"
                                 $('#s_id').val(data[0]['s_id']);
                                 $('#date').val(data[0]['s_birthday']);
                                 $('#s_card').val(data[0]['s_card']);
@@ -191,7 +211,7 @@
                                 $('#classes').val(data[0]['sc_type']);
                                 $('#banji').val(data[0]['classname']);
                                 $('#shibiema').val(data[0]['classCard']);
-                                if(data[0]['time'] != '前往购买套餐'){
+                                if(data[0]['time'] != '请前往购买套餐'){
                                     $('.scan_bar').show();
                                 }else{
                                     $('.scan_bar').hide();
@@ -225,7 +245,7 @@
                                         }else{
                                             $('#sex').val('女');
                                         }
-                                        $('#s_id').val(data[0]['s_id']);
+                                        $('#s_id').val(response.result[0]['s_id']);
                                         $('#date').val(response.result[0]['s_birthday']);
                                         $('#s_card').val(response.result[0]['s_card']);
                                         $('#city').val(response.result[0]['s_region']);
@@ -234,7 +254,7 @@
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
 
-                                        if(response.result[0]['time'] != '前往购买套餐'){
+                                        if(response.result[0]['time'] != '请前往购买套餐'){
                                             $('.scan_bar').show();
                                         }else{
                                             $('.scan_bar').hide();
@@ -268,23 +288,21 @@
                         $('#classes').val(data[0]['sc_type']);
                         $('#banji').val(data[0]['classname']);
                         $('#shibiema').val(data[0]['classCard']);
-                        if(data[0]['time'] != '前往购买套餐'){
+                        if(data[0]['time'] != '请前往购买套餐'){
                             $('.scan_bar').show();
                         }else{
                             $('.scan_bar').hide();
                         }
                         $('#see').val(data[0]['time']);
                     }
-
                 }else{
                     $('.no_bounds').show();
                     $('.container2').hide();
                 }
-
             }else if(response['code'] == 400){
                 $('.no_bounds').show();
                 $('.container2').hide();
-                $.toast('请登录','forbidden');return false;
+                $.toast(response['message'],'forbidden');return false;
             }else{
                 $('.no_bounds').show();
                 $('.container2').hide();
@@ -292,6 +310,10 @@
             }
         }
     })
+
+
+
+
     $('.add_student_bar').click(function(){
         $.ajax({
             type:'POST',
@@ -319,17 +341,15 @@
     //购买套餐
     $('#see').click(function(){
         var sid = $('#s_id').val();
-        if(sid){
-            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
-        }
+        location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
+
     });
     function see(){
         var sid = $('#s_id').val();
-        if(sid){
-            location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
-        }
-
+        location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
     }
+
+
 
 
 </script>

@@ -97,6 +97,7 @@ $(function() {
     });
     $("#new-address-wrapper").on("click", "#varea_info",
     function() {
+        $(this).blur();
         $.areaSelected({
             success: function(e) {
                 city_id = e.area_id_2 == 0 ? e.area_id_1: e.area_id_2;
@@ -213,11 +214,10 @@ $(function() {
                         }
                     })
                 });
-                alert(e.result.address_info);
                 if ($.isEmptyObject(e.result.address_info)) {
                     $.sDialog({
                         skin: "block",
-                        content: "请添加地址222",
+                        content: "请添加地址",
                         okFn: function() {
                             $("#new-address-valve").click()
                         },
@@ -371,7 +371,6 @@ $(function() {
                 success: function(a) {
                     if (a.code==200) {
                         e.address_id = a.result.address_id;
-                        alert(e.address_id);
                         _init(e.address_id);
                         $("#new-address-wrapper,#list-address-wrapper").find(".header-l > a").click()
                     }

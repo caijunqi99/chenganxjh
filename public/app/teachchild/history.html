@@ -10,9 +10,8 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
@@ -21,33 +20,33 @@
         .weui-pull-to-refresh__layer {
             font-size: 22px !important;
             position: relative;
-            top: 80px;
+            top: 20px;
+        }
+        .history_content {
+            margin-top: 10px;
         }
     </style>
 </head>
 
-<body class="history_body">
+<body>
+<header class="head">
+    <div class="head0">
+        <div class="menu_bar_box">
+            <a href="javascript:;" class="back_btn" onClick="historyback();">
+                <i class="icon iconfont icon-jiantou3"></i>
+            </a>
+        </div>
+        <div class="head_title">
+            <p>观看历史</p>
+        </div>
+        <div class="head_r">
+            <span data-select="false" class="history_edit">编辑</span>
+        </div>
+    </div>
+</header>
 
-    <div class="body_content">
-        <header class="head">
-            <div class="head0">
-                <div class="menu_bar_box">
-                    <a href="javascript:;" class="back_btn" onClick="historyback();">
-                        <i class="icon iconfont icon-jiantou3"></i>
-                    </a>
-                    <!-- <a href="javascript:;" class="back_btn" onClick="back('test')">
-		                    <i class="icon iconfont icon-jiantou3"></i>
-		                </a> -->
-                </div>
-                <div class="head_title">
-                    <p>观看历史</p>
-                </div>
-                <div class="head_r">
-                    <span data-select="false" class="history_edit">编辑</span>
-                </div>
-            </div>
-        </header>
 
+    <div class="body_content history_body">
         <div class="weui-pull-to-refresh__layer">
             <div class='weui-pull-to-refresh__arrow'></div>
             <div class='weui-pull-to-refresh__preloader'></div>
@@ -55,28 +54,27 @@
             <div class="up">释放刷新</div>
             <div class="refresh">正在刷新</div>
         </div>
-
         <div class="history_content">
-
+        </div>
+        <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+            <span class="weui-over">没有更多信息了</span>
+        </div>
+        <div class="weui-loadmore load" style="display: none;">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
+        <input type="hidden" value="" id="id" />
+        <!-- 删除 -->
+        <div class="history_delete_wrap">
+            <span onClick="checkedAll(event)" data-select="false">全选</span>
+            <span onClick="Delete()">删除（<i class="delete_num">0</i>）</span>
         </div>
     </div>
-    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
-        <span class="weui-over">没有更多信息了</span>
-    </div>
-    <div class="weui-loadmore load" style="display: none;">
-        <i class="weui-loading"></i>
-        <span class="weui-loadmore__tips">正在加载</span>
-    </div>
-    <!-- 删除 -->
-    <div class="history_delete_wrap">
-        <span onClick="checkedAll(event)" data-select="false">全选</span>
-        <span onClick="Delete()">删除（<i class="delete_num">0</i>）</span>
-    </div>
+
+
 
     <script src="../content/scripts/jquery.min.js"></script>
-    <script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-    <script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-    <script src="../content/plugins/layer/layer.js"></script>
+    <script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
@@ -92,7 +90,7 @@
             data: {
                 key: user_token,
                 member_id: user_member_id,
-                page: 1
+                /*page: 1*/
             },
             success: function(response) {
                 if (response['code'] == 200) {
@@ -105,10 +103,11 @@
                             params[keys[i]] = response['result'][0][keys[i]];
                             List.push(params);
                         }
+                        $('#id').val(response['result'][1]['id']);
                         $('.history_content').html(HTML(List));
                     }
                 } else {
-                    console.log(response['message']);
+                    $.toast(response['message'],'forbidden');return false;
                 }
             }
         })
@@ -119,24 +118,25 @@
             if (loading) return;
             loading = true;
             setTimeout(function() {
-                Page = Page + 1;
+                /*Page = Page + 1;*/
+                Page = $('#id').val();
                 getPage(Page);
                 loading = false;
             }, 20)
         });
 
         // 下拉刷新
-        $(document.body).pullToRefresh(function() {
+        $('.history_body').pullToRefresh(function() {
             $(document.body).infinite();
             setTimeout(function() {
-                GetKejian();
-                $(document.body).pullToRefreshDone(); // 重置下拉刷新
-            }, 1000)
+                $('.history_body').pullToRefreshDone(); // 重置下拉刷新
+            }, 1500)
+            GetKejian();
         });
 
         // 获取课件接口
         function GetKejian() {
-            $(document.body).infinite();
+            $('.weui-footer').hide();
             $.ajax({
                 url: api + '/teacherhistory/lists',
                 type: 'POST',
@@ -144,23 +144,25 @@
                 data: {
                     key: user_token,
                     member_id: user_member_id,
-                    page: 1
+                    /*page: 1*/
                 },
                 success: function(response) {
                     if (response['code'] == 200) {
                         if (response['result'].length == 0) {
                             $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
                         } else {
+                            List = [];
                             let keys = Object.keys(response['result'][0]);
-                            for (var i = 1; i < keys.length; i++) {
-                                let params = new Object();
-                                params[keys[i]] = response['result'][0][keys[i]];
-                                List.push(params);
+                            for (var i = 0; i < keys.length; i++) {
+                                let param = new Object();
+                                param[keys[i]] = response['result'][0][keys[i]];
+                                List.push(param);
                             }
+                            $('#id').val(response['result'][1]['id']);
                             $('.history_content').html(HTML(List));
                         }
                     } else {
-                        console.log(response['message']);
+                        $.toast(response['message'],'forbidden');return false;
                     }
                 }
             })
@@ -241,29 +243,8 @@
                                 $.toast("删除成功",'',function(){
                                     location.reload();
                                 });
-                                /*for (var i = 0; i < IDArr.length; i++) {
-                                    $('.delete' + IDArr[i]).remove();
-                                }
-                                IDArr = [];
-                                number(IDArr.length);
-                                // 关闭操作列表
-                                $('.history_delete_wrap').hide();
-                                $('.history_edit').attr('data-select', 'false');
-                                // 判断是否删除时间
-                                $('.is_delete_time').each(function(index, el) {
-                                    var that = $(this);
-                                    if (that.children('.time_content').html() == '') {
-                                        that.children('.time_title').remove();
-                                    }
-                                    // 判断是否显示暂无数据
-                                    if (that.children('.time_content').html() == '') {
-                                        $('.history_content').html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
-                                    } else {
-                                        return false;
-                                    }
-                                })*/
                             } else {
-                                console.log(response['message'])
+                                $.toast(response['message'],'forbidden');return false;
                             };
                         }
                     })
@@ -283,42 +264,49 @@
 
         // 分页
         function getPage(num) {
-            $('.load').show();
-            $.ajax({
-                url: api + '/teacherhistory/lists',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    key: user_token,
-                    member_id: user_member_id,
-                    page: num
-                },
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        if (response['result'].length == 0) {
-                            var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
-                            if(!is_data){
-                                $('.weui-footer').show();
+            if(num != ''){
+                $(document.body).destroyInfinite();
+                $('.load').show();
+                $.ajax({
+                    url: api + '/teacherhistory/lists',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        key: user_token,
+                        member_id: user_member_id,
+                        page: num
+                    },
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            if (response['result'].length == 0) {
+                                var is_data = $('.history_content>.weui-loadmore').hasClass('weui-loadmore_line');
+                                if(!is_data){
+                                    $('.weui-footer').show();
+                                }
+                            } else {
+                                $(document.body).infinite();
+                                List = [];
+                                let keys = Object.keys(response['result'][0]);
+                                for (var i = 0; i < keys.length; i++) {
+                                    let params = new Object();
+                                    params[keys[i]] = response['result'][0][keys[i]];
+                                    List.push(params);
+                                }
+                                $('#id').val(response['result'][1]['id']);
+                                $('.history_content').append(HTML(List));
                             }
+                            $('.load').hide();
+
+                        } else {
+                            $('.weui-footer').show();
                             $('.load').hide();
                             $(document.body).destroyInfinite();
-                        } else {
-                            let keys = Object.keys(response['result'][0]);
-                            for (var i = 0; i < keys.length; i++) {
-                                let params = new Object();
-                                params[keys[i]] = response['result'][0][keys[i]];
-                                List.push(params);
-                            }
-                            $('.load').hide();
-                            $('.history_content').append(HTML(List));
+                            $.toast(response['message'],'forbidden');return false;
                         }
-                    } else {
-                        $('.weui-footer').show();
-                        $('.load').hide();
-                        console.log(response['message']);
                     }
-                }
-            })
+                })
+            }
+
         }
 
         // HTML模板

@@ -26,8 +26,25 @@ class Teacherhistory extends MobileMember
         $condition=array();
         $condition['t_userid']=$member_id;
         $condition['t_del']=1;
-        $page = !empty(input('post.page'))?input('post.page'):1;
-        $result=$teachhistory->getTeachhistoryList($condition,'',$page,'t_id desc',10);
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('teachhistory')->where("t_maketime <".$last_id." and t_userid=".$member_id." and t_del=1")->order('t_maketime desc')->find();
+            $strtime = strtotime(date("Y-m-d",$last_info['t_maketime'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $result = $teachhistory->getHistory("t_userid=".$member_id." and t_del=1 and t_maketime<".$endtime." and t_maketime>=".$strtime);
+        }else{
+            $result=$teachhistory->getTeachhistoryList($condition,'',1,'t_maketime desc',10);
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['t_maketime'];
+                }
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $day = db('teachhistory')->where("t_userid=".$member_id." and t_del=1 and t_maketime<".$endtime." and t_maketime>=".$strtime)->order('t_maketime desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
         foreach($result as $k=>$v){
             $result[$k]['date'] = date("Y-m-d",$v['t_maketime']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['t_maketime'])){
@@ -55,8 +72,12 @@ class Teacherhistory extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
+            $last_id = $item['t_maketime'];
         }
         $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($datas);
     }
 

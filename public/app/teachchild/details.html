@@ -10,9 +10,8 @@
     <meta id="viewport" name="viewport" content="width=750" />
     <link rel="stylesheet" href="../content/style/reset.css" type="text/css" />
     <link rel="stylesheet" href="../content/plugins/iconfonts/iconfont.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/layer/mobile/need/layer.css" type="text/css" />
-    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/lib/weui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../content/plugins/jqweui/css/jquery-weui.min.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/common.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
@@ -56,29 +55,7 @@
                         <source src="" type="video/mp4">
                     </video>
                 </div>
-                <!--<div class="upload_video">-->
-                    <!--<div class="video" id="CuPlayer">-->
-                        <!--<script type="text/javascript">-->
-                            <!--var vID = "c1"; //vID-->
-                            <!--var vWidth = "750"; //宽度设定，配合CSS实现-->
-                            <!--var vHeight = "400"; //高度设定，配合CSS实现-->
-                            <!--var vFile = "CuSunV4set.xml"; //配置文件地址:支持五种广告设定-->
-                            <!--var vPlayer = "player.swf?v=4.0"; //播放器文件地址-->
-                            <!--var vPic = "pic/pic01.jpg"; //视频缩略图-->
-                            <!--var vAutoPlay = "none"; //是否自动播放-->
-                            <!--var vEndTime = 0; //预览时间(秒数),默认为0-->
-                            <!--var vLogoPath = "images/logo.png"; //Logo地址-->
-                            <!--var vPlayMod = 0; //播放模式优先级,默认=0,html5优先=1,flash优先=2-->
-                            <!--var vMp4url = "http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4"; //视频文件地址推荐用mp4文件(h264编码)-->
-                        <!--</script>-->
-                        <!--<script class="CuPlayerVideo" data-mce-role="CuPlayerVideo" type="text/javascript" src="../content/plugins/CuPlayerV4/player.min.js"></script>-->
-                    <!--</div>poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181031210539_1540991139.mp4?vframe/jpg/offset/1"-->
-                    <!--<video id="video_true" width="750px" height="400px" preload="none" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" poster="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4?vframe/jpg/offset/1">
-                        <source src="http://pgj4a41j8.bkt.clouddn.com/admin_video_20181101000458_1541001898.mp4" type="video/mp4"></source>
-                    </video>-->
-                    <!--<video controls="controls"  width="750px" height="400px" src="http://babylife.qiniudn.com/FtRVyPQHHocjVYjeJSrcwDkApTLQ" webkit-playsinline width="100"></video>-->
-                </div>
-            <!--</div>-->
+               </div>
         </div>
     </div>
 
@@ -88,9 +65,7 @@
 </body>
 
 <script src="../content/scripts/jquery.min.js"></script>
-<script src="../content/plugins/jqweui/lib/fastclick.js"></script>
-<script src="../content/plugins/jqweui/js/jquery-weui.js"></script>
-<script src="../content/plugins/layer/layer.js"></script>
+<script src="../content/plugins/jqweui/js/jquery-weui.min.js"></script>
 <script src="../content/scripts/juqery.cookie.js"></script>
 <script src="../content/scripts/API.js"></script>
 <script src="../content/scripts/commom.js"></script>
@@ -111,15 +86,30 @@
             dataType: "json",
             success: function(res){
                 if(res['code'] == 200){
-                    if(res.result[0]['price'] !=0){
-                        if(res.result[0]['buy'] != 0){
+                    if(res.result[0]['myself'] == 0){
+                        if(res.result[0]['price'] !=0){
+                            if(res.result[0]['buy'] != 0){
+                                $('.video_play_btn').parent().hide();
+                                $("#video").show();
+                            }
+                        }else{
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
+                        }
+                        if(res.result[0]['collect'] == 0){
+                            $('#collect').show();
+                            $('#qxCollect').hide();
+                        }else{
+                            $('#collect').hide();
+                            $('#qxCollect').show();
                         }
                     }else{
                         $('.video_play_btn').parent().hide();
                         $("#video").show();
+                        $('#collect').hide();
+                        $('#qxCollect').hide();
                     }
+
                 }
             }
         });
@@ -157,12 +147,17 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
-                        if(res.result[0]['price'] !=0){
-                            if(res.result[0]['buy'] != 0){
+                        if(res.result[0]['myself'] == 0){
+                            if(res.result[0]['price'] !=0){
+                                if(res.result[0]['buy'] != 0){
+                                    $('.video_play_btn').parent().hide();
+                                    $("#video").show();
+                                }else{
+                                    $.toast("请前往购买", 'forbidden');
+                                }
+                            }else{
                                 $('.video_play_btn').parent().hide();
                                 $("#video").show();
-                            }else{
-                                $.toast("请前往购买", 'forbidden');
                             }
                         }else{
                             $('.video_play_btn').parent().hide();
