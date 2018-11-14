@@ -286,7 +286,7 @@
         laypage.render({
             elem: 'page'
             ,count: '<?php echo $list_count;?>'
-            ,limit:2
+            ,limit:10
             ,layout: ['count', 'prev', 'page', 'next',  'skip']
             ,jump: function(obj){
                 // console.log(obj);
@@ -300,6 +300,18 @@
                         data = jQuery.parseJSON(data);
                         $('#html').html(data.html);
                         $('#count').html(data.count+'个');
+                        $('.edit').click(function(){
+                            var id = $(this).attr('data-id');
+                            //页面层
+                            layer.open({
+                                type: 2,
+                                title:'{$Think.lang.look_camera_import}',
+                                area: ['1000px', '750px'],
+                                fixed: false, //不固定
+                                maxmin: true,
+                                content: ADMIN_URL+'Import/edit.html?id='+id,
+                            });
+                        });
                     }
                 })
 
@@ -319,5 +331,9 @@
             content: ADMIN_URL+'Import/download.html',
         });
     });
+
+
+
+
 
 </script>

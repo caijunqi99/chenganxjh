@@ -257,55 +257,62 @@ class Common extends AdminControl
                             unset($v);
                         }else{
                             if(empty($v['A'])){
-                                $v['error'] = '家长手机号为空';
+                                $v['error'] = '原信息为空'.'（因家长手机号不能为空）';
                                 $v['error_id'] = 1;
                                 $fail[] = $v;
                             }else if(empty($v['D'])){
-                                $v['error'] = '学生姓名为空';
+                                $v['error'] =  '原信息为空'.'（因学生姓名不能为空）';
                                 $v['error_id'] = 2;
                                 $fail[] = $v;
                             }else if(empty($v['F'])){
-                                $v['error'] = '学生身份证号为空';
+                                $v['error'] =  '原信息为空'.'（因学生身份证号不能为空）';
                                 $v['error_id'] = 3;
                                 $fail[] = $v;
                             }else if($v['J'] != '看孩套餐' && $v['J'] != '重温课堂套餐' && $v['J'] != '教孩套餐'){
-                                $v['error'] = '套餐名称错误';
+                                $v['error'] =  '原信息为：'.$v['J'].'（因套餐名称错误）';
                                 $v['error_id'] = 6;
                                 $fail[] = $v;
                             }else{
-                                //判断家长手机号是否已存在
-                                $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
-                                if($result){
-                                    $v['error'] = '家长手机号已存在';
+                                //判断手机号规则
+                                if(!preg_match("/^1[345678]{1}\d{9}$/",$v["A"])){
+                                    $v['error'] =  '原信息为：'.$v['A'].'（因家长手机号格式错误）';
                                     $v['error_id'] = 1;
                                     $fail[] = $v;
                                 }else{
-                                    //判断学生ID 是否存在
-                                    $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
-                                    if($is_student){
-                                        $v['error'] = '学生身份证ID已存在';
-                                        $v['error_id'] = 3;
+                                    //判断家长手机号是否已存在
+                                    $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
+                                    if($result){
+                                        $v['error'] = '原信息为：'.$v['A'].'（因家长手机号已存在）';
+                                        $v['error_id'] = 1;
                                         $fail[] = $v;
                                     }else{
-                                        //判断年级
-                                        $is_grade = db('schooltype')->field('sc_id')->where("`sc_type`='".$v['H']."'")->find();
-                                        if($is_grade && in_array($is_grade['sc_id'],$sc_type)){
-                                            $v['sc_id'] = $is_grade['sc_id'];
-                                            //判断班级
-                                            $is_class = db('class')->field('classid')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classname`='".$v['I']."' AND `isdel`=1")->find();
-                                            if($is_class){
-                                                $v['classid'] = $is_class['classid'];
-                                                $V['time'] = date('Y-m-d H:i',time());
-                                                $success[]= $v;
+                                        //判断学生ID 是否存在
+                                        $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
+                                        if($is_student){
+                                            $v['error'] ='原信息为：'.$v['F'].'（因学生身份证号已存在）';
+                                            $v['error_id'] = 3;
+                                            $fail[] = $v;
+                                        }else{
+                                            //判断年级
+                                            $is_grade = db('schooltype')->field('sc_id')->where("`sc_type`='".$v['H']."'")->find();
+                                            if($is_grade && in_array($is_grade['sc_id'],$sc_type)){
+                                                $v['sc_id'] = $is_grade['sc_id'];
+                                                //判断班级
+                                                $is_class = db('class')->field('classid')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classname`='".$v['I']."' AND `isdel`=1")->find();
+                                                if($is_class){
+                                                    $v['classid'] = $is_class['classid'];
+                                                    $V['time'] = date('Y-m-d H:i',time());
+                                                    $success[]= $v;
+                                                }else{
+                                                    $v['error'] ='原信息为：'.$v['I'].'（因班级不存在）';
+                                                    $v['error_id'] = 5;
+                                                    $fail[] = $v;
+                                                }
                                             }else{
-                                                $v['error'] = '班级不存在';
-                                                $v['error_id'] = 5;
+                                                $v['error'] = '原信息为：'.$v['H'].'（因学校类型不存在）';
+                                                $v['error_id'] = 4;
                                                 $fail[] = $v;
                                             }
-                                        }else{
-                                            $v['error'] = '学校类型不正确';
-                                            $v['error_id'] = 4;
-                                            $fail[] = $v;
                                         }
                                     }
                                 }
@@ -391,7 +398,7 @@ class Common extends AdminControl
         $city_html = '<option value="0">请选择市</option>';
         $area_html = '<option value="0">请选择县/区</option>';
         $school_html = '<option value="0">请选择学校</option>';
-        $grade_html = '<option value="0">请选择年级</option>';
+        $grade_html = '<option value="0">请选择学校类型</option>';
         $class_html = '<option value="0">请选择班级</option>';
         if(!empty($province_id)){
             //学校
@@ -462,7 +469,7 @@ class Common extends AdminControl
         $class_name = trim(input('get.class'));//年级类型ID
 
 
-        $grade_html = '<option value="0">请选择年级</option>';
+        $grade_html = '<option value="0">请选择学校类型</option>';
         $class_html = '<option value="0">请选择班级</option>';
         if(!empty($school_id)){
             /*if(!empty($grade_id)){
@@ -635,6 +642,47 @@ class Common extends AdminControl
         }
 
         exit(json_encode(array('role'=>$role_html)));
+    }
+
+
+    /**
+     * @desc 判断家长手机号是否存在
+     * @author langzhiyao
+     * @time 20181114
+     */
+    public function is_member_mobile(){
+        $mobile = input('get.mobile');
+        $m_id = input('get.m_id');
+        if($m_id){
+            $result = db('member')->field('member_id')->where('member_mobile="'.$mobile.'" AND member_id != "'.$m_id.'"')->find();
+        }else{
+            $result = db('member')->field('member_id')->where('member_mobile="'.$mobile.'"')->find();
+        }
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @desc 判断学生身份证号是否存在
+     * @author langzhiyao
+     * @time 20181114
+     */
+    public function is_student_card(){
+        $card = trim(input('get.card'));
+        $s_id = input('get.s_id');
+        if($s_id){
+            $result = db('student')->field('s_id')->where('s_card="'.$card.'" AND s_id != "'.$s_id.'"')->find();
+        }else{
+            $result = db('student')->field('s_id')->where('s_card="'.$card.'"')->find();
+        }
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

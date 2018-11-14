@@ -61,7 +61,7 @@ $lang['look_address_province'] = '请选择省';
 $lang['look_address_city'] = '请选择市';
 $lang['look_address_area'] = '请选择县/区';
 $lang['look_address_school'] = '请选择学校';
-$lang['look_address_grade'] = '请选择年级';
+$lang['look_address_grade'] = '请选择学校类型';
 $lang['look_address_class'] = '请选择班级';
 
 
