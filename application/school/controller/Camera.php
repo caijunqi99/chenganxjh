@@ -365,8 +365,8 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
                 $html .= '<td class="align-center">'.$v["parentid"].'</td>';
-                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
-                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                //$html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay('.$v['cid'].')">点击播放</a></td>';
                 if($v['is_classroom'] == 1){
                     $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
                 }else if($v['is_classroom'] == 2){
