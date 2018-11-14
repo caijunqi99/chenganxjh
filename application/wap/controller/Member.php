@@ -747,7 +747,7 @@ class Member extends MobileMember
         }
         $where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id')->where($where)->find();
+        $member = db('member')->field('member_id,member_mobile')->where($where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
@@ -768,14 +768,14 @@ class Member extends MobileMember
                 'member_aboutname' => ''
             );
             $res = db('member')->where($jb_where)->update($data);
-            $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $jb_account['member_mobile'] . ']'.'解除绑定，可共同使用想见孩平台';
+            $log_msg = '【'.config('site_name').'】您于'.date("Y-m-d").'被账号'. '[' . $member['member_mobile'] . ']'.'解除绑定';
             if ($res) {
                 $sms = new \sendmsg\Sms();
                 $send = $sms->send($jb_account['member_mobile'],$log_msg);
                 if($send){
-                    output_data(array('message'=>'添加成功'));
+                    output_data(array('message'=>'解帮成功'));
                 }else{
-                    output_error('添加成功，短信发送失败，请联系平台管理员');
+                    output_error('解帮成功，短信发送失败，请联系平台管理员');
                 }
             }else{
                 output_error('已解绑，无需重复操作');
