@@ -171,7 +171,7 @@
     function addrtmp(cid,is_rtmp){
         $.ajax({
             type:'POST',
-            url:SCHOOL_URL+'Monitor/addrtmp',
+            url:ADMIN_URL+'Monitor/addrtmp',
             data:{cid:cid,is_rtmp:is_rtmp},
             success:function(data){
                 return(data);
