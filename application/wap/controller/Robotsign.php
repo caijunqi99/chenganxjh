@@ -9,14 +9,13 @@ class Robotsign extends MobileMall
 {
     public function _initialize()
     {
-        $this->AppKey = '2e49a22da063884527d82e1c';
-        $this->MaterSecret ='e18529474930976be6ef2007';
         parent::_initialize();
         // Lang::load(APP_PATH . 'wap\lang\zh-cn\login.lang.php');
     }
 
     public function memberpush(){
 
+        //使用极光推送
         $md= model('Jpush');
         $md->JPushInit();
         /**
