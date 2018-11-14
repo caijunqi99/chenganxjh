@@ -22,7 +22,7 @@ class Import extends AdminControl
         //获取省份
         $province = db('area')->field('area_id,area_parent_id,area_name')->where('area_parent_id=0')->select();
         //获取学校
-        $school = db('school')->field('schoolid,name')->select();
+        $school = db('school')->field('schoolid,name')->where('isdel=1')->select();
         $this->assign('school',$school);
         $this->assign('province',$province);
     }
@@ -55,10 +55,10 @@ class Import extends AdminControl
                 $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
             }
             if(!empty($_GET['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
             if(!empty($_GET['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
         //查询绑定总数
@@ -96,10 +96,10 @@ class Import extends AdminControl
                 $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
             }
             if(!empty($_GET['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
             if(!empty($_GET['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
         //查询绑定总数
@@ -132,11 +132,11 @@ class Import extends AdminControl
             if(!empty($_POST['school'])){
                 $where .= ' AND school_id = "'.intval($_POST["school"]).'"';
             }
-            if(!empty($_POST['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_POST["grade"]).'%"';
+            if(!empty($_GET['grade'])){
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
-            if(!empty($_POST['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_POST["class"]).'%"';
+            if(!empty($_GET['class'])){
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
 
@@ -538,9 +538,9 @@ class Import extends AdminControl
         $import = db('import_student')->where('id="'.$id.'"')->find();
 
         //学校
-        $school = db('school')->field('schoolid,name')->select();
+        $school_student = db('school')->field('schoolid,name')->where('isdel=1')->select();
 
-        $this->assign('school',$school);
+        $this->assign('school',$school_student);
         $this->assign('import',$import);
         $this->setAdminCurItem('edit');
         return $this->fetch('edit');
@@ -561,7 +561,7 @@ class Import extends AdminControl
         if(!empty($_POST)){
             $id = intval(input('get.id'));
             //学校信息
-            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = '.$_POST['school_id'].' AND isdel=1')->find();
+            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = "'.intval($_POST['school_id']).'" AND isdel=1')->find();
             if(empty($school_info)){
                 output_error(array('msg'=>'该学校已被删除，请重新选择'));
             }
@@ -572,12 +572,12 @@ class Import extends AdminControl
             $school_info['address'] = $address;
             $sc_type = explode(',',$school_info['typeid']);
             //判断年级
-            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".$_POST['sc_id']."'")->find();
-            if(!$is_grade || in_array($is_grade['sc_id'],$sc_type)){
+            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".intval($_POST['sc_id'])."'")->find();
+            if(!$is_grade || !in_array($is_grade['sc_id'],$sc_type)){
                 exit(json_encode(array('code'=>1,'msg'=>'该学校类型已被删除，请重新选择')));
             }
 
-            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classid`='".$_POST['class_id']."' AND `isdel`=1")->find();
+            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".intval($school_info['schoolid'])."' AND `typeid`='".intval($is_grade['sc_id'])."' AND `classid`='".intval($_POST['class_id'])."' AND `isdel`=1")->find();
             if(!$is_class){
                 exit(json_encode(array('code'=>1,'msg'=>'该学校班级已被删除，请重新选择')));
             }
@@ -787,9 +787,9 @@ class Import extends AdminControl
         $import = db('import_student')->where('id="'.$id.'"')->find();
 
         //学校
-        $school = db('school')->field('schoolid,name')->select();
+        $school_student = db('school')->field('schoolid,name')->where('isdel=1')->select();
 
-        $this->assign('school',$school);
+        $this->assign('school',$school_student);
         $this->assign('import',$import);
         $this->setAdminCurItem('editSuccess');
         return $this->fetch('editSuccess');
@@ -806,7 +806,7 @@ class Import extends AdminControl
         if(!empty($_POST)){
             $id = intval(input('get.id'));
             //学校信息
-            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = '.$_POST['school_id'].' AND isdel=1')->find();
+            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = "'.intval($_POST['school_id']).'" AND isdel=1')->find();
             if(empty($school_info)){
                 exit(json_encode(array('code'=>1,'msg'=>'该学校已被删除，请重新选择')));
             }
@@ -817,12 +817,12 @@ class Import extends AdminControl
             $school_info['address'] = $address;
             $sc_type = explode(',',$school_info['typeid']);
             //判断年级
-            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".$_POST['sc_id']."'")->find();
-            if(!$is_grade || in_array($is_grade['sc_id'],$sc_type)){
+            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".intval($_POST['sc_id'])."'")->find();
+            if(!$is_grade || !in_array($is_grade['sc_id'],$sc_type)){
                 exit(json_encode(array('code'=>1,'msg'=>'该学校类型已被删除，请重新选择')));
             }
 
-            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".$school_info['schoolid']."' AND `typeid`='".$is_grade['sc_id']."' AND `classid`='".$_POST['class_id']."' AND `isdel`=1")->find();
+            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".intval($school_info['schoolid'])."' AND `typeid`='".intval($is_grade['sc_id'])."' AND `classid`='".intval($_POST['class_id'])."' AND `isdel`=1")->find();
             if(!$is_class){
                 exit(json_encode(array('code'=>1,'msg'=>'该学校班级已被删除，请重新选择')));
             }

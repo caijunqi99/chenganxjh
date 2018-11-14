@@ -685,4 +685,63 @@ class Common extends AdminControl
         }
     }
 
+    /**
+     * @desc 根据学校id获取年级和班级
+     * @author langzhiyao
+     * @time 20180927
+     */
+    public function get_import_school_info(){
+        $school_id = intval(input('get.school'));
+        $grade_id = trim(input('get.grade'));//年级类型ID
+        $class_id = trim(input('get.class'));//年级类型ID
+
+
+        $grade_html = '<option value="0">请选择学校类型</option>';
+        $class_html = '<option value="0">请选择班级</option>';
+        if(!empty($school_id)){
+            /*if(!empty($grade_id)){
+
+            }*/
+            //班级
+            $grade_where['schoolid'] = $school_id;
+            $grade_class = db('schooltype')->field('sc_id,sc_type')->where(' `sc_id` = "'.$grade_id.'"')->find();
+            $grade_where['typeid'] = $grade_class['sc_id'];
+            $class =  db('class')->field('classid,classname')->where($grade_where)->select();
+            if(!empty($class)){
+                foreach($class as $key=>$value){
+                    if($value['classid'] == $class_id){
+                        $class_html .= '<option value='.$value["classid"].' selected>'.$value["classname"].'</option>';
+                    }else{
+                        $class_html .= '<option value='.$value["classid"].'>'.$value["classname"].'</option>';
+                    }
+
+                }
+            }
+            //年级类型
+            $school_where['schoolid'] = $school_id;
+            $school_type = db('school')->field('typeid')->where($school_where)->find();
+            if(!empty($school_type)){
+                $type = explode(',',$school_type['typeid']);
+                $grade = array();
+                foreach($type as $key=>$val){
+                    $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
+                }
+//                halt($grade);
+                if(!empty($grade)){
+                    foreach($grade as $key=>$value){
+                        if($value['sc_id'] == $grade_id){
+                            $grade_html .= '<option value='.$value["sc_id"].' selected> '.$value["sc_type"].'</option>';
+                        }else{
+                            $grade_html .= '<option value='.$value["sc_id"].'>'.$value["sc_type"].'</option>';
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        exit(json_encode(array('grade'=>$grade_html,'class'=>$class_html)));
+    }
+
 }

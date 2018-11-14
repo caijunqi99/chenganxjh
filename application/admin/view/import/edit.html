@@ -193,7 +193,7 @@
         if(school != 0){
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+grade+'&class='+class_name,
+                url:ADMIN_URL+'Common/get_import_school_info?school='+school+'&grade='+grade+'&class='+class_name,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变年级
@@ -216,7 +216,7 @@
             $('#class').html('<option value="0">{$Think.lang.look_address_class}</option>');
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+data.value,
+                url:ADMIN_URL+'Common/get_import_school_info?school='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变年级
@@ -238,7 +238,7 @@
             var school = $('#school').find('option:selected').val();
             $.ajax({
                 type:'POST',
-                url:ADMIN_URL+'Common/get_school_info?school='+school+'&grade='+data.value,
+                url:ADMIN_URL+'Common/get_import_school_info?school='+school+'&grade='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
                     //改变班级
