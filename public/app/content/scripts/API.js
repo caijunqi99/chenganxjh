@@ -1,3 +1,4 @@
+
 var api = 'http://vip.xiangjianhai.com:8001/index.php/Wap';
 
 var upload_url = 'http://vip.xiangjianhai.com:8001/uploads';
