@@ -26,8 +26,9 @@ class RongCloud
      */
     public function __construct($format = 'json') {
 
-        $appKey = 'k51hidwqknxeb';
-        $appSecret = 'ZzyCuE95RtlpgE';
+        $RongCloudConfig = config('RongCloud');
+        $appKey = $RongCloudConfig['appKey'];
+        $appSecret = $RongCloudConfig['appSecret'];
         $jsonPath = "jsonsource/";
         $this->SendRequest = new SendRequest($appKey, $appSecret, $format);
     }
