@@ -19,7 +19,7 @@ return [
     // 应用调试模式
     'app_debug' => true,
     // 应用Trace
-    'app_trace' => false,
+    'app_trace' => true,
     // 应用模式状态
     'app_status' => '',
     // 是否支持多模块
@@ -64,6 +64,12 @@ return [
     'JPushConfig'=>[
         'AppKey' => '2e49a22da063884527d82e1c',
         'MaterSecret' =>'e18529474930976be6ef2007',
+    ],
+
+    //融云
+    'RongCloud' =>[
+        'appKey' => 'k51hidwqknxeb',
+        'appSecret' => 'ZzyCuE95RtlpgE',
     ],
     // +----------------------------------------------------------------------
     // | 模块设置
