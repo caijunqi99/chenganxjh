@@ -76,6 +76,17 @@ class Classes extends AdminControl {
             'area_info'=>''
         );
         $this->assign('address', $address);
+        //全部学校
+        if($admininfo['admin_id']!=1){
+            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_school['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
+            }
+        }
+        $condition_school['isdel'] = 1;
+        
         //学校类型
         $model_school = model('School');
         $model_schooltype = model('Schooltype');
@@ -93,12 +104,14 @@ class Classes extends AdminControl {
         $condition_school['isdel'] = 1;
         $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
         $left_menu = array_column($school_list, 'schoolid');
+        
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
         foreach ($class_list as $k=>$v){
             $key = array_search($v['schoolid'], $left_menu); 
-            $class_list[$k]['typename'] = db('schooltype')->where('sc_id',$v['typeid'])->value('sc_type');
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
             $class_list[$k]['schoolname'] = $school_list[$key]['name'];
         }
-
         $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
@@ -114,8 +127,7 @@ class Classes extends AdminControl {
         $condition_class['isdel'] = 1;
         $classname = $model_class->getAllClasses($condition_class);
         foreach ($classname as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $classname[$k]['typename'] = $schooltype['sc_type'];
+            $classname[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];   
         }
         $this->assign('classname', $classname);
         $this->setAdminCurItem('index');

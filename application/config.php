@@ -19,7 +19,7 @@ return [
     // 应用调试模式
     'app_debug' => true,
     // 应用Trace
-    'app_trace' => false,
+    'app_trace' => true,
     // 应用模式状态
     'app_status' => '',
     // 是否支持多模块
@@ -58,6 +58,18 @@ return [
         'sms_login'    => 338580, //登陆
         'sms_password' => 338582, //找回密码
         'sms_password_reset' => 341620, //重置密码
+    ],
+
+    // 极光推送
+    'JPushConfig'=>[
+        'AppKey' => '2e49a22da063884527d82e1c',
+        'MaterSecret' =>'e18529474930976be6ef2007',
+    ],
+
+    //融云
+    'RongCloud' =>[
+        'appKey' => 'k51hidwqknxeb',
+        'appSecret' => 'ZzyCuE95RtlpgE',
     ],
     // +----------------------------------------------------------------------
     // | 模块设置

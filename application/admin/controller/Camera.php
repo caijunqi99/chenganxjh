@@ -454,8 +454,13 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
                 }
                 $html .= '<td class="align-center">'.$v["parentid"].'</td>';
-                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
-                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50"></td>';
+//                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
+                if($v['is_rtmp']==2){
+                    $html .= '<td class="align-center">有人正在观看中▪▪▪</td>';
+                }else {
+                    $html .= '<td id="rmt_' . $v['cid'] . '" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay(' . $v['cid'] . ')">点击播放</a></td>';
+                }
+                //<img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50">
                 if($v['is_classroom'] == 1){
                     $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
                 }else if($v['is_classroom'] == 2){
@@ -477,6 +482,7 @@ class Camera extends AdminControl
                 }else{
                     $html .= '<hr>关闭时间：未设置</td>';
                 }
+                $html .='<td class="align-center"><a href="javascript:del('.$v["cid"].')" class="layui-btn layui-btn-xs">删除</a></td>';
                 $html .= '</tr>';
             }
         }
@@ -488,6 +494,19 @@ class Camera extends AdminControl
 
         exit(json_encode(array('html'=>$html,'count'=>$list_count)));
 
+    }
+    /**
+     * 摄像头删除
+     */
+    public function del(){
+        $cid=input('param.cid');
+        $model_camera = Model('camera');
+        $result = $model_camera->camera_del($cid);
+        if ($result) {
+                $this->success('删除成功', 'Camera/entered');
+        } else {
+            $this->error('删除失败');
+        }
     }
     /**
      * 自动导入摄像头
@@ -519,9 +538,12 @@ class Camera extends AdminControl
         foreach($shu as $v){
             $datas=$vlink->SetPlay($accountid,$v);
             if(empty($data)) {
-                $data = $datas['resources'];
+                $data = !empty($datas['resources'])?$datas['resources']:'';
             }else{
-                $data = array_merge($data,$datas['resources']);
+                if(!empty($datas['resources'])){
+                    $data = array_merge($data,$datas['resources']);
+                }
+
             }
         }
         foreach($data as $k=>$v){

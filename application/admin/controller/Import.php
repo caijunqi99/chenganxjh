@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
+use think\Model;
 use think\Validate;
 use vomont\Vomont;
 
@@ -27,7 +28,7 @@ class Import extends AdminControl
     }
 
     /**
-     * @desc 摄像头管理
+     * @desc 导入失败
      * @author 郎志耀
      * @time 20180926
      */
@@ -66,14 +67,55 @@ class Import extends AdminControl
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
+
+    /**
+     * @desc 导入成功
+     * @author 郎志耀
+     * @time 20180926
+     */
+    public function success(){
+
+        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $where = ' status=1 ';
+        if(!empty($_GET)){
+            if(!empty($_GET['name'])){
+                $where .= ' AND (m_name LIKE "%'.trim($_GET["name"]).'%" OR s_name LIKE "%'.trim($_GET["name"]).'%")';
+            }
+            if(!empty($_GET['province'])){
+                $where .= ' AND province_id = "'.intval($_GET["province"]).'"';
+            }
+            if(!empty($_GET['city'])){
+                $where .= ' AND city_id = "'.intval($_GET["city"]).'"';
+            }
+            if(!empty($_GET['area'])){
+                $where .= ' AND area_id = "'.intval($_GET["area"]).'"';
+            }
+            if(!empty($_GET['school'])){
+                $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
+            }
+            if(!empty($_GET['grade'])){
+                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+            }
+            if(!empty($_GET['class'])){
+                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+            }
+        }
+        //查询绑定总数
+        $list_count = db('import_student')->where($where)->count();
+        $this->assign('list_count',$list_count);
+        $this->setAdminCurItem('success');
+        return $this->fetch();
+    }
     /**
      * @desc 获取分页数据
      * @author langzhiyao
      * @time 20190929
      */
     public function get_list(){
-
-        $where = ' status=1 ';
+        $status = intval(input('get.status'));
+        $where = ' status="'.$status.'" ';
         if(!empty($_POST)){
             if(!empty($_POST['name'])){
                 $where .= ' AND (m_name LIKE "%'.trim($_GET["name"]).'%" OR s_name LIKE "%'.trim($_GET["name"]).'%")';
@@ -110,31 +152,60 @@ class Import extends AdminControl
         if(!empty($list)){
             foreach($list as $key=>$value){
                 $html .= '<tr class="hover">';
-                $html .= '<td class="align-center">'.$value["m_mobile"].'</td>';
+                if($value['reason_id'] == 1){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["m_mobile"].'</td>';
+                }else{
+                    $html .= '<td class="align-center" >'.$value["m_mobile"].'</td>';
+                }
                 $html .= '<td class="align-center">'.$value["m_name"].'</td>';
                 if($value['m_sex'] == 1){
                     $html .= '<td class="align-center">男</td>';
                 }else if($value['m_sex'] == 2){
                     $html .= '<td class="align-center">女</td>';
+                }else{
+                    $html .= '<td class="align-center">保密</td>';
                 }
-                $html .= '<td class="align-center">'.$value["s_name"].'</td>';
+                if($value['reason_id'] == 2){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["s_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["s_name"].'</td>';
+                }
+
                 if($value['s_sex'] == 1){
                     $html .= '<td class="align-center">男</td>';
                 }else if($value['_sex'] == 2){
                     $html .= '<td class="align-center">女</td>';
+                }else{
+                    $html .= '<td class="align-center">保密</td>';
                 }
-                $html .= '<td class="align-center">'.$value["s_card"].'</td>';
+                if($value['reason_id'] == 3){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["s_card"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["s_card"].'</td>';
+                }
                 $html .= '<td class="align-center">'.$value["school_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["class_name"].'</td>';
-                $html .= '<td class="align-center">'.$value["area"].'</td>';
+                if($value['reason_id'] == 4){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["school_type"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["school_type"].'</td>';
+                }
+                if($value['reason_id'] == 5){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["class_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["class_name"].'</td>';
+                }
+                $html .= '<td class="align-center">'.$value["address"].'</td>';
                 $html .= '<td class="align-center">'.date('Y-m-d H:i:s',$value["time"]).'</td>';
-                $html .= '<td class="align-center">'.$value["t_id"].'</td>';
-                $html .= '<td class="align-center">'.$value["t_price"].'</td>';
-                $html .= '<td class="align-center">'.$value["t_day"].'</td>';
-                $html .= '<td class="align-center">'.$value["content"].'</td>';
+                if($value['reason_id'] == 6){
+                    $html .= '<td class="align-center" style="color: red;" >'.$value["t_name"].'</td>';
+                }else{
+                    $html .= '<td class="align-center">'.$value["t_name"].'</td>';
+                }
+                $html .= '<td class="align-center">'.round($value["t_price"],2).'元</td>';
+                $html .= '<td class="align-center">'.intval($value["t_day"]).'天</td>';
                 $html .= '<td class="w150 align-center">
                         <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" lay-event="reset">修改</a>';
+                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" data-id="'.$value["id"].'" lay-event="reset">修改</a>';
                 $html .=  '</div></td>';
 
                 $html .= '</tr>';
@@ -142,7 +213,7 @@ class Import extends AdminControl
         }
         if($html == ''){
             $html .= '<tr class="no_data">
-                    <td colspan="14">没有符合条件的记录</td>
+                    <td colspan="15">没有符合条件的记录</td>
                 </tr>';
         }
 
@@ -189,37 +260,251 @@ class Import extends AdminControl
         }
 //        halt($_SESSION['excel']);
         if(!empty($_SESSION['excel'])){
-            $excel = $_SESSION['excel']['excel_data'];
-            if(empty($excel)){
+            $excel_success = $_SESSION['excel']['excel_success_data'];
+            $excel_fail = $_SESSION['excel']['excel_fail_data'];
+            /*if(empty($_SESSION['excel'])){
                 exit(json_encode(array('code'=>1,'msg'=>'没有符合的数据，请重新上传')));
+            }*/
+            //插入成功的数据
+            //开启事务
+            $model = Model('import_student');
+            $model_member = Model('member');
+            $model_student = Model('student');
+            $model_order = Model('packagesorder');
+            $model_order_time = Model('packagetime');
+            $model->startTrans();
+            $flag = false;
+            if(!empty($excel_success)){
+                foreach($excel_success as $key=>$value){
+                    if($value['C'] == '男'){$value['C'] =1;}else{$value['C'] = 2;}//家长性别
+                    if($value['E'] == '男'){$value['E'] =1;}else{$value['E'] = 2;}//学生性别
+                    //套餐ID
+                    switch ($value['J']){
+                        case '看孩套餐':
+                            $t_id = 1;
+                            break;
+                        case '重温课堂套餐':
+                            $t_id = 2;
+                            break;
+                        case '教孩套餐':
+                            $t_id = 3;
+                            break;
+                        default:
+                            $t_id = 4;
+                            break;
+                    }
+                    $res = db('member')->field('member_id')->where(" `member_mobile` = '".$value["A"]."'")->find();
+                    if(!$res){
+                        $data = array(
+                            'm_mobile' => $value['A'],
+                            'm_name' => $value['B'],
+                            'm_sex' => $value['C'],
+                            's_name' => $value['D'],
+                            's_sex' => $value['E'],
+                            's_card' => $value['F'],
+                            'school_id' => $_SESSION['excel']['school']['schoolid'],
+                            'school_name' => $_SESSION['excel']['school']['name'],
+                            'province_id' => $_SESSION['excel']['school']['provinceid'],
+                            'city_id' => $_SESSION['excel']['school']['cityid'],
+                            'area_id' => $_SESSION['excel']['school']['areaid'],
+                            'address' => $_SESSION['excel']['school']['address'],
+                            'sc_id' => $value['sc_id'],
+                            'school_type' => $value['H'],
+                            'classid' => $value['classid'],
+                            'class_name' => $value['I'],
+                            't_id' => $t_id,
+                            't_name' => $value['J'],
+                            't_price' => $value['K'],
+                            't_day' => $value['L'],
+                            'content' => $value['M'],
+                            'status' => 1,
+                            'time' => time(),
+                        );
+                        $import_data = $model->insert($data);
+                        if($import_data){
+                            //为家长开账户并发送短信通知
+                            $pass = getRandomString(6,null,'n');
+                            $member = array();
+                            $member['member_name'] = $value['A'];
+                            $member['member_nickname'] = $value['A'];
+                            $member['member_password'] = md5(trim($pass));;
+                            $member['member_mobile'] = $value['A'];
+                            $member['member_mobile_bind'] = 1;
+                            $member_id = $model_member->insertGetId($member);
+                            if ($member_id) {
+                                //添加学生信息
+                                $student_array=array(
+                                    's_name' => $value['D'],
+                                    's_sex' => $value['E'],
+                                    's_card' => $value['F'],
+                                    's_schoolid' => $_SESSION['excel']['school']['schoolid'],
+                                    's_sctype' => $_SESSION['excel']['sc_id'],//学校类型id
+                                    's_classid' => $_SESSION['excel']['classid'],//班级id
+                                    's_ownerAccount' => $member_id,
+                                    's_provinceid' => $_SESSION['excel']['school']['provinceid'],
+                                    's_cityid' => $_SESSION['excel']['school']['cityid'],
+                                    's_areaid' => $_SESSION['excel']['school']['areaid'],
+                                    's_region' => $_SESSION['excel']['school']['address'],
+                                    'admin_company_id' => $_SESSION['excel']['school']['admin_company_id'],
+                                    'option_id' => session('admin_id'),
+                                    's_createtime' => date('Y-m-d',time()),
+
+                                );
+                                $student_id = $model_student->insertGetId($student_array);
+                                if($student_id){
+
+                                    //添加订单信息
+                                    $this->_logic_buy_1 = \model('buy_1','logic');
+                                    switch ($t_id){
+                                        case 1://看孩套餐
+                                            $pay_sn = $this->_logic_buy_1->makePaySn($member_id);
+                                            //到期时间
+                                            $endTime = time()+$value['L']*24*3600;
+                                            $see_array = array(
+                                                'pay_sn'=>$pay_sn,
+                                                'buyer_id'=>intval($member_id),
+                                                'buyer_name'=>trim($member['member_mobile']),
+                                                'buyer_mobile'=>trim($member['member_mobile']),
+                                                'add_time'=>time(),
+                                                'payment_code'=>'offline',
+                                                'payment_time'=>time(),
+                                                'finnshed_time'=>time(),
+                                                'pkg_name'=>trim($value['J']).'（线下）',
+                                                'pkg_price'=>ncPriceFormatb($value['K']),
+                                                'pkg_length'=>intval($value['L']),
+                                                's_id'=>intval($student_id),
+                                                's_name'=>trim($value['D']),
+                                                'schoolid'=>intval($_SESSION['excel']['school']['schoolid']),
+                                                'name'=>trim($_SESSION['excel']['school']['name']),
+                                                'classid'=>intval($value['classid']),
+                                                'classname'=>trim($value['I']),
+                                                'order_amount'=>ncPriceFormatb($value['K']),
+                                                'order_state'=>'40',
+                                                'order_dieline'=>$endTime,
+                                                'option_id'=>intval($_SESSION['excel']['school']['option_id']),
+                                                'over_amount'=>ncPriceFormatb($value['K']),
+                                                'admin_company_id'=>intval($_SESSION['excel']['school']['admin_company_id']),
+                                            );
+                                            $order_pay_id =$model_order->insertGetId($see_array);
+                                            if($order_pay_id){
+                                                $order_sn = $this->_logic_buy_1->makeOrderSn($order_pay_id);
+                                                $order_pay = $model_order->where('order_id="'.$order_pay_id.'"')->update(array('order_sn'=>$order_sn));
+                                                if($order_pay){
+                                                    $desc = date('Y-m-d H:i',time()).'第一次购买看孩套餐,套餐到期时间:'.date('Y-m-d H:i',$endTime);
+                                                    $see_end = array(
+                                                        'member_id'=>intval($member_id),
+                                                        'member_name'=>trim($member['member_mobile']),
+                                                        's_id'=>intval($student_id),
+                                                        's_name'=>trim($value['D']),
+                                                        'start_time'=>time(),
+                                                        'end_time'=>$endTime,
+                                                        'up_time'=>time(),
+                                                        'up_desc'=>$desc,
+                                                    );
+                                                    $order_pay_time = $model_order_time->insert($see_end);
+                                                    if($order_pay_time){
+
+                                                        $flag = true;
+                                                    }else{
+                                                        $flag = false;
+                                                    }
+
+                                                }else{
+                                                    $flag = false;
+                                                }
+                                            }else{
+                                                $flag = false;
+                                            }
+                                            break;
+                                        case 2://重温课堂套餐
+                                            break;
+                                        case 3://教孩套餐
+                                            break;
+                                    }
+                                }else{
+                                    $flag = false;
+                                }
+                            }else{
+                                $flag=false;
+                            }
+                        }else{
+                            $flag = false;
+                        }
+                        if($flag){
+                            //发送随机密码
+                            //生成数字字符随机 密码
+                            $sms_tpl = config('sms_tpl');
+                            $tempId = $sms_tpl['sms_password_reset'];
+                            $sms = new \sendmsg\Sms();
+                            $pass = '您于'.date('Y-m-d H:i:s',time()).'开通想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                            $send = $sms->send($member['member_mobile'],$pass,$tempId);
+                            if($send){
+                                $model->commit();
+                            }else{
+                                $model->rollback();
+                            }
+                        }else{
+                            $model->rollback();
+                        }
+                    }
+                }
             }
-            foreach($excel as $key=>$value){
-                $res = db('camera')->field('id,sn,key')->where(" `key` = '".$value["G"]."'")->find();
-
-                if($value['C'] == '是'){$value['C'] =1;}else{$value['C'] = 2;}
-
-                if(!$res){
+            //插入失败的数据
+            if(!empty($excel_fail)){
+                foreach($excel_fail as $key=>$value){
+                    if($value['C'] == '男'){$value['C'] =1;}else{$value['C'] = 2;}//家长性别
+                    if($value['E'] == '男'){$value['E'] =1;}else{$value['E'] = 2;}//学生性别
+                    //套餐ID
+                    switch ($value['J']){
+                        case '看孩套餐':
+                            $t_id = 1;
+                            break;
+                        case '重温课堂套餐':
+                            $t_id = 2;
+                            break;
+                        case '教孩套餐':
+                            $t_id = 3;
+                            break;
+                        default:
+                            $t_id = 4;
+                            break;
+                    }
                     $data = array(
-                        'camera_name' => $value['A'],
-                        'class_area' => $value['B'],
-                        'is_public_area' => $value['C'],
+                        'm_mobile' => $value['A'],
+                        'm_name' => $value['B'],
+                        'm_sex' => $value['C'],
+                        's_name' => $value['D'],
+                        's_sex' => $value['E'],
+                        's_card' => $value['F'],
                         'school_id' => $_SESSION['excel']['school']['schoolid'],
                         'school_name' => $_SESSION['excel']['school']['name'],
                         'province_id' => $_SESSION['excel']['school']['provinceid'],
                         'city_id' => $_SESSION['excel']['school']['cityid'],
                         'area_id' => $_SESSION['excel']['school']['areaid'],
                         'address' => $_SESSION['excel']['school']['address'],
-                        'sq_time' => time(),
-                        'sn' => $value['F'],
-                        'key' => $value['G'],
-                        'content' => $value['I'],
-                        'agent_id' => $_SESSION['excel']['agent']['agent_id'],
-                        'agent_name' => $_SESSION['excel']['agent']['agent_name'],
+                        'sc_id' => '',
+                        'school_type' => $value['H'],
+                        'classid' => '',
+                        'class_name' => $value['I'],
+                        't_id' => $t_id,
+                        't_name' => $value['J'],
+                        't_price' => $value['K'],
+                        't_day' => $value['L'],
+                        'content' => $value['M'],
+                        'status' => 2,
+                        'time' => time(),
+                        'reason' => $value['error'],
+                        'reason_id' => $value['error_id'],
                     );
-                    db('camera')->insert($data);
+                    $import_data = $model->insert($data);
+                    if($import_data){
+                        $model->commit();
+                    }else{
+                        $model->rollback();
+                    }
                 }
             }
-            exit(json_encode(array('code'=>0,'msg'=>'导入成功，请前往绑定设备')));
+            exit(json_encode(array('code'=>0,'msg'=>'导入成功')));
         }else{
             exit(json_encode(array('code'=>1,'msg'=>'上传的文件数据失效，请重新上传')));
         }
@@ -549,12 +834,12 @@ class Import extends AdminControl
             array(
                 'name' => 'index',
                 'text' => '导入失败列表',
-                'url' => url('Admin/Import/index')
+                'url' => url('Admin/import/index')
             ),
             array(
                 'name' => 'success',
                 'text' => '导入成功列表',
-                'url' => url('Admin/Import/success')
+                'url' => url('Admin/import/success')
             )
         );
         return $menu_array;

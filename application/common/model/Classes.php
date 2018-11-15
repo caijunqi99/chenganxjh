@@ -27,6 +27,8 @@ class Classes extends Model {
                     ->join('__SCHOOL__ sc','sc.schoolid=c.schoolid','LEFT')
                     ->field('sc.schoolid,sc.name,sc.res_group_id as sc_res_group_id,c.classid as res_group_id,c.classname as res_group_name')
                     ->where('sc.res_group_id = '.$areaid)
+                    ->where('c.res_group_id = 0')
+                    ->where('c.isdel = 1')
                     ->whereor('sc.schoolid = '.$areaid)
                     ->select();
         if (empty($class_info)) {

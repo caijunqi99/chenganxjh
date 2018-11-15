@@ -49,7 +49,22 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="required"><label class="validation" for="type_ides">{$Think.lang.region}:</label></td>
+                <td colspan="2" class="required"><label class="validation" >{$Think.lang.organize_index_is_child}:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform">
+                    <li>
+                        <input name="is_child" type="radio" value="1">
+                        <label>是</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="is_child" value="2" checked="checked">
+                        <label>否</label>
+                    </li>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label class="validation" for="type_ides">{$Think.lang.organize_index_address}:</label></td>
             </tr>
             <tr>
                 <td id="region">

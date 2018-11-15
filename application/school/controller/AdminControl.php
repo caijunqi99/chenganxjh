@@ -420,7 +420,7 @@ class AdminControl extends Controller {
             case 'Export'://7
                 return '导出';
                 break;
-            case 'Import'://8
+            case 'import'://8
                 return '导入';
                 break;
             case 'DownLoad'://9

@@ -40,10 +40,8 @@
             </div>
             <div class="layui-inline">
                 <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
-            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="layui-inline">
-                <a href="javascript:update()" class="layui-btn" data-type="auto" data-method="offset">{$Think.lang.look_camera_update}</a>
             </div>
+            
         </div>
 
         <table class="layui-table">
@@ -54,7 +52,7 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="12">
+                <th colspan="11">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
@@ -67,23 +65,12 @@
                 <th class="align-center">{$Think.lang.look_camera_id}</th>
                 <th class="align-center">{$Think.lang.look_camera_online}</th>
                 <th class="align-center">{$Think.lang.look_camera_parentid}</th>
-                <th class="align-center">{$Think.lang.look_camera_pimageurl}</th>
+                <!--<th class="align-center">{$Think.lang.look_camera_pimageurl}</th>-->
                 <th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>
                 <th class="align-center">{$Think.lang.look_camera_classroom}</th>
                 <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
                 <th class="align-center">{$Think.lang.look_camera_sqtime}</th>
                 <th class="align-center">{$Think.lang.look_camera_begintime}</th>
-                <!--<th class="align-center">{$Think.lang.look_camera_az_area}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_is_public_area}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_school}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_area}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_time}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_sn}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_key}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_company}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_text}</th>-->
-                <!--<th class="align-center">{$Think.lang.look_camera_status}</th>-->
-                <!--<th class="align-center">{$Think.lang.ds_handle}</th>-->
             </tr>
             </thead>
             <tbody id="html">
@@ -142,6 +129,7 @@
                 </script>
 <script type="text/javascript">
     function rtmplay(cid){
+        addrtmp(cid,2);
         var rtmpInfo= $('#tr_'+cid).attr('datainfo');
         rtmpInfo =$.parseJSON(rtmpInfo);
         layer.open({
@@ -153,6 +141,7 @@
           skin: 'layui-layer-rim',
           content: $('#LAY')
           ,cancel: function(){
+                addrtmp(cid,1);
           }
         });
         var videoObject = {
@@ -165,6 +154,16 @@
                 poster:rtmpInfo.imageurl
             };
         var player = new ckplayer(videoObject);
+    }
+    function addrtmp(cid,is_rtmp){
+        $.ajax({
+            type:'POST',
+            url:ADMIN_URL+'Monitor/addrtmp',
+            data:{cid:cid,is_rtmp:is_rtmp},
+            success:function(data){
+                return(data);
+            }
+        })
     }
 
     function timesss(cid) {

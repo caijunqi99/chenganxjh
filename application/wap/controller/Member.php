@@ -26,6 +26,19 @@ class Member extends MobileMember
     }
 
     public function RefreshPullOldOrder(){
+        $input = input();
+        if (isset($input['registrationID'])) {
+            //删除之前绑定该 极光id的数据，
+            db('memberjpush')->where('registrationID',$input['registrationID'])->delete();
+            $jp = db('memberjpush')->where('member_id',$this->member_info['member_id'])->find();
+            if ($jp) {
+                //如果已经存在过记录，只修改极光id
+                db('memberjpush')->where('id', $jp['id'])->setField('registrationID',$input['registrationID']);
+            }else{
+                //如果没有当前用户信息，写入
+                db('memberjpush')->insertGetId(['member_id'=>$this->member_info['member_id'],'registrationID'=>$input['registrationID']]);
+            }
+        }
         $oldid = $this->member_info['oldid'];
         if (!$oldid) output_data(array('state'=>'不是老会员'));//不是老会员
         $trans = array(

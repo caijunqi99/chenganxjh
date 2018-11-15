@@ -1,13 +1,13 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
-<script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
+
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>{$Think.lang.look_camera_title}</h3>
+                <h3>{$Think.lang.student_title}</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -18,7 +18,7 @@
         <div class="layui-form-item">
             <div class="layui-inline">
                 <div class="layui-input-inline">
-                    <input name="name"  autocomplete="off" placeholder="请输入摄像头名称搜索" value="<?php echo $_GET['name'];?>" class="layui-input" type="text">
+                    <input name="name"  autocomplete="off" placeholder="请输入家长/学生姓名" value="<?php echo $_GET['name'];?>" class="layui-input" type="text">
                 </div>
             </div>
             <div class="layui-inline">
@@ -63,12 +63,9 @@
             </div>
             <div class="layui-inline">
                 <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
-            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="layui-inline">
-                <a href="javascript:update()" class="layui-btn" data-type="auto" data-method="offset">{$Think.lang.look_camera_update}</a>
             </div>
-        </div>
 
+        </div>
         <table class="layui-table">
             <colgroup>
                 <col >
@@ -77,30 +74,39 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="12">
-                    <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
+                <th colspan="15">
+                    <p class="layui-table-tool-temp" >{$Think.lang.student_fail_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
+                    <div class="layui-table-tool-self">
+                        <?php if(session('admin_is_super')==1 || in_array('9',$action)){?>
+                        <a class="layui-btn layui-btn-sm" href="{$Think.config.url_domain_root}/static/admin/{$Think.lang.look_camera_download_mb}.xlsx">{$Think.lang.look_camera_download}</a>
+                        <?php }?>
+                        <?php if(session('admin_is_super')==1 || in_array('8',$action)){?>
+                        <a class="layui-btn layui-btn-sm " lay-event="getCheckData" id="Import">{$Think.lang.look_camera_import}</a>
+                        <?php }?>
+                    </div>
                 </th>
             </tr>
             </thead>
             <thead>
             <tr class="thead">
-                <th class="align-center">{$Think.lang.look_camera_name}</th>
-                <th class="align-center">{$Think.lang.look_camera_channelid}</th>
-                <th class="align-center">{$Think.lang.look_camera_deviceid}</th>
-                <th class="align-center">{$Think.lang.look_camera_id}</th>
-                <th class="align-center">{$Think.lang.look_camera_online}</th>
-                <th class="align-center">{$Think.lang.look_camera_parentid}</th>
-                <!--<th class="align-center">{$Think.lang.look_camera_pimageurl}</th>-->
-                <th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>
-                <th class="align-center">{$Think.lang.look_camera_classroom}</th>
-                <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
-                <th class="align-center">{$Think.lang.look_camera_sqtime}</th>
-                <th class="align-center">{$Think.lang.look_camera_begintime}</th>
-                <th class="align-center">{$Think.lang.operation}</th>
+                <th class="align-center">{$Think.lang.member_mobile}</th>
+                <th class="align-center">{$Think.lang.member_name}</th>
+                <th class="align-center">{$Think.lang.member_sex}</th>
+                <th class="align-center">{$Think.lang.student_name}</th>
+                <th class="align-center">{$Think.lang.student_sex}</th>
+                <th class="align-center">{$Think.lang.student_card}</th>
+                <th class="align-center">{$Think.lang.school_name}</th>
+                <th class="align-center">{$Think.lang.school_type}</th>
+                <th class="align-center">{$Think.lang.class_name}</th>
+                <th class="align-center">{$Think.lang.area_name}</th>
+                <th class="align-center">{$Think.lang.import_time}</th>
+                <th class="align-center">{$Think.lang.t_name}</th>
+                <th class="align-center">{$Think.lang.t_price}</th>
+                <th class="align-center">{$Think.lang.t_day}</th>
+                <th class="align-center">{$Think.lang.ds_handle}</th>
             </tr>
             </thead>
             <tbody id="html">
-
             </tbody>
         </table>
         <div style="float: right;">
@@ -110,54 +116,7 @@
         </div>
     </form>
 </div>
-<div class="layui-fluid layui-card-body" id="LAY" style="display: none;">
-    <div class="layui-row layui-col-space10 demo-list">
-        <div class="layui-col-sm4">
-            <!-- 填充内容 -->
-            <div class="layui-card">
-                <div id="video" style="width: 600px; height: 400px;"></div>
-            </div>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
-    function rtmplay(cid){
-        addrtmp(cid,2);
-        var rtmpInfo= $('#tr_'+cid).attr('datainfo');
-        rtmpInfo =$.parseJSON(rtmpInfo);
-        layer.open({
-            type: 1,
-            title: rtmpInfo.name,
-            //shadeClose: true,
-            area: ['644px', '470px'],
-            skin: 'layui-layer-rim',
-            content: $('#LAY'),
-            cancel: function(){
-                addrtmp(cid,1);
-                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
-            }
-        });
-        var videoObject = {
-            container: '#video', //容器的ID或className
-            variable: 'player',//播放函数名称
-            autoplay:false,
-            live:true,
-            debug:true,
-            video: rtmpInfo.rtmpplayurl,
-            poster:rtmpInfo.imageurl
-        };
-        var player = new ckplayer(videoObject);
-    }
-    function addrtmp(cid,is_rtmp){
-        $.ajax({
-            type:'POST',
-            url:ADMIN_URL+'Monitor/addrtmp',
-            data:{cid:cid,is_rtmp:is_rtmp},
-            success:function(data){
-                return(data);
-            }
-        })
-    }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
             laypage = layui.laypage
@@ -327,7 +286,7 @@
         laypage.render({
             elem: 'page'
             ,count: '<?php echo $list_count;?>'
-            ,limit:15
+            ,limit:2
             ,layout: ['count', 'prev', 'page', 'next',  'skip']
             ,jump: function(obj){
                 // console.log(obj);
@@ -335,12 +294,10 @@
                     page_count = obj.limit;
                 $.ajax({
                     type:'POST',
-                    url:ADMIN_URL+'Camera/get_entered_list',
+                    url:ADMIN_URL+'Import/get_list.html?status=1',
                     data:{name:name,province:province,city:city,area:area,school:school,grade:grade,class:class_name,page:page,page_count:page_count},
                     success:function(data){
                         data = jQuery.parseJSON(data);
-
-                        // console.log(data.html);
                         $('#html').html(data.html);
                         $('#count').html(data.count+'个');
                     }
@@ -350,54 +307,17 @@
         });
 
     });
-    function update(){
-        $.ajax({
-            url: "{:url('/Admin/camera/get_camera')}",
-            type: 'GET',
-            dataType: 'json',
-            success:function(sb){
-                if(sb.count !=0) {
-                    layer.open({
-                        type: 1,
-                        area: ['230px', '200px'],
-                        fixed: false, //不固定
-                        shadeClose: true,
-                        shade: 0.4,
-                        maxmin: false, //开启最大化最小化按钮
-                        content: "<div style='padding: 40px 50px;'>已更新" + sb.count + "个摄像头！</div>",
-                        btn: '确定',
-                        shade: 0,
-                        btnAlign: 'c',
-                        yes: function () {
-                            layer.closeAll();
-                            window.location.href = "{:url('/Admin/camera/entered')}";
-                        }
-                    });
-                }else{
-                    layer.open({
-                        type: 1,
-                        area: ['230px', '200px'],
-                        fixed: false, //不固定
-                        shadeClose: true,
-                        shade: 0.4,
-                        maxmin: false, //开启最大化最小化按钮
-                        content: "<div style='padding: 40px 80px;'>暂无更新！</div>",
-                        btn: '确定',
-                        shade: 0,
-                        btnAlign: 'c',
-                        yes: function () {
-                            layer.closeAll();
-                        }
-                    });
-                }
-            }
+
+    $('#Import').click(function(){
+        //页面层
+        layer.open({
+            type: 2,
+            title:'{$Think.lang.look_camera_import}',
+            area: ['1500px', '750px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: ADMIN_URL+'Import/download.html',
         });
-    }
-    function del(cid){
-        layer.confirm('是否删除此摄像头？', {
-            btn: ['删除','取消'] //按钮
-        }, function(){
-            window.location.href="{:url('/admin/camera/del')}?cid="+cid;
-        });
-    }
+    });
+
 </script>

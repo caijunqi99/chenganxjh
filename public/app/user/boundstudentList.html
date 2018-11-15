@@ -193,7 +193,7 @@
                         var tab = '';
                         for(var i=0;i<data.length;i++){
                             if(i == 0){
-                                tab += '<li class="active" data-id="'+data[i]['s_id']+'">\n' +
+                                tab += '<li class="active">\n' +
                                     '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
                                     '                </li>'
                                 $('#bang_name').val(data[0]['s_name']);
@@ -202,6 +202,7 @@
                                 }else{
                                     $('#sex').val('女');
                                 }
+                                // data-id="'+data[i]['s_id']+'"
                                 $('#s_id').val(data[0]['s_id']);
                                 $('#date').val(data[0]['s_birthday']);
                                 $('#s_card').val(data[0]['s_card']);
@@ -244,7 +245,7 @@
                                         }else{
                                             $('#sex').val('女');
                                         }
-                                        $('#s_id').val(data[0]['s_id']);
+                                        $('#s_id').val(response.result[0]['s_id']);
                                         $('#date').val(response.result[0]['s_birthday']);
                                         $('#s_card').val(response.result[0]['s_card']);
                                         $('#city').val(response.result[0]['s_region']);
@@ -340,7 +341,6 @@
     //购买套餐
     $('#see').click(function(){
         var sid = $('#s_id').val();
-
         location.href=http_url+"app/user/chooselevel.html?pkg_type=1&child_id="+sid;
 
     });
