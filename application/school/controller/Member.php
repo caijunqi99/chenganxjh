@@ -13,7 +13,6 @@ class Member extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-//        halt($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
@@ -32,18 +31,19 @@ class Member extends AdminControl {
                 }
             }
             $member_ids = array_unique($member_ids);
-            $fu = db('member')->field("member_id")->where("is_owner in (".implode(',',$member_ids).")")->select();
-            foreach($fu as $F=>$it){
-                $fu_ac[] = $it['member_id'];
+            if(!empty($member_ids)){
+                $fu = db('member')->field("member_id")->where("is_owner in (".implode(',',$member_ids).")")->select();
+                foreach($fu as $F=>$it){
+                    $fu_ac[] = $it['member_id'];
+                }
             }
-            $member_ids = !empty($fu_ac)?array_merge($member_ids,$fu_ac):$member_ids;
+            $member_ids = !empty($fu_ac)&&!empty($member_ids)?array_merge($member_ids,$fu_ac):"";
             $condition['member_id'] = array('in',$member_ids);
         }else{
             $this->error("非法操作");
         }
 
         $model_member = Model('member');
-        // $model_member->ttttt();exit;
         //会员级别
         $member_grade = $model_member->getMemberGradeArr();
         $search_field_value = input('search_field_value');
