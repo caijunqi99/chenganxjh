@@ -13,23 +13,23 @@ class Teachercertify extends AdminControl {
         Lang::load(APP_PATH . 'admin/lang/zh-cn/teacher.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         //获取当前角色对当前子目录的权限
-//        $class_name = strtolower(end(explode('\\',__CLASS__)));
-//        $perm_id = $this->get_permid($class_name);
-//        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
-//        $this->assign('action',$action);
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
-//        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
-//            $this->error(lang('ds_assign_right'));
-//        }
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_teacher = model('Teachercertify');
         $condition = array();
-//        $admininfo = $this->getAdminInfo();
-//        if($admininfo['admin_id']!=1){
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
-//        }
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $model_company = Model("Company");
+            $condition = $model_company->getCondition($admininfo['admin_company_id']);
+        }
         $user = input('param.user');//会员账户
         if ($user) {
             $condition['idcard'] = array('like', "%" . $user . "%");

@@ -18,6 +18,81 @@ class Robotreport extends MobileMall
 
     //单个考勤上报
     public function report(){
+        $input = input();
+        //db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'file'=>$_FILES,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
+        $school_id = trim($input['schoolId'],'"');
+        if(empty($school_id)){
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
+        }
+        $model_school = Model("School");
+        $schoolInfo = $model_school->getSchoolInfo(array('schoolid'=>$school_id,'isdel'=>1),"schoolid,name");
+        if(empty($schoolInfo)){
+            $ret = array('ret'=>"00002","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
+        }
+        $student_id = trim($input['userId'],'"');
+        if(empty($student_id)){
+            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
+        }
+        $student_model = Model("Student");
+        $studentInfo = $student_model->getStudentInfo(array('s_id'=>$student_id,'s_del'=>1),"s_id,s_name,s_ownerAccount");
+        if(empty($studentInfo)){
+            $ret = array('ret'=>"00003","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
+        }
+        if($_FILES){
+            $videoInfo['name'] = "robot_".$student_id."_".date("YmdHis",time())."_".time().".mp4";
+            $videoInfo['type'] = $_FILES['ioVideo']['type'];
+            $videoInfo['tmp_name'] = $_FILES['ioVideo']['tmp_name'];
+            $videoInfo['error'] = $_FILES['ioVideo']['error'];
+            $videoInfo['size'] = $_FILES['ioVideo']['size'];
+            $video = $this->ioVideo($videoInfo);
+        }
+        $data = [
+            'school_id' => $school_id,
+            'student_id' => $student_id,
+            'uType' => trim($input['uType'],'"'),
+            'ioFlag' => trim($input['ioFlag'],'"'),
+            'ioTime' => trim($input['ioTime'],'"'),
+            'bodyTemp' => trim($input['bodyTemp'],'"'),
+            'SNNumber' => trim($input['SNNumber'],'"'),
+            'ioVideo' => !empty($video)?$video:"",
+            'create_time' => time()
+        ];
+        $report_model = Model("Robotreport");
+        $result = $report_model->report_add($data);
+        if($result){
+            /*$path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+            $md = model('Jpush');
+            $md->JPushInit();
+            //打卡成功，1给学生家长发送短信提醒，2极光推送给app发送提醒
+            $memberInfo = db("member")->field("member_id,member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
+            if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
+            $ioFlag = trim($input['bodyTemp'],'"');
+                if($ioFlag==1){
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                }elseif($ioFlag==2){
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                }
+                $sms = new \sendmsg\sdk\SmsApi();
+                $send = $sms->sendSMS($memberInfo['member_mobile'],$content);
+                if(!$send){
+                    $this->error('给用户发送短信失败 ');
+                }
+                $md->MemberPush($memberInfo['member_id'],$content,$title='打卡提醒');
+            }*/
+            $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
+            return json_encode($ret);
+        }else{
+            $ret = array('ret'=>"00004","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
+        }
+    }
+
+    //批量考勤上报
+    public function reportMuli(){
         $school_id = input('post.schoolId');
         if(empty($school_id)){
             $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
@@ -29,74 +104,69 @@ class Robotreport extends MobileMall
             $ret = array('ret'=>"00002","data"=>[],'msg'=>"fail");
             return json_encode($ret);
         }
-        $student_id = input('post.userId');
-        if(empty($student_id)){
-            $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");
-            return json_encode($ret);
-        }
-        $student_model = Model("Student");
-        $studentInfo = $student_model->getStudentInfo(array('s_id'=>$student_id,'s_del'=>1),"s_id,s_name,s_ownerAccount");
-        if(empty($studentInfo)){
-            $ret = array('ret'=>"00003","data"=>[],'msg'=>"fail");
-            return json_encode($ret);
-        }
-        $class_id = input('post.classId');
-        $videoName = "robot_".$student_id."_".date("YmdHis",time())."_".time().".mp4";
-        $video = $this->ioVideo($videoName);
-        if($video){
-            $data = [
+        $data = input();
+        foreach($data['userData'] as $k=>$v){
+            if($_FILES['userData']['name'][$k]){
+                $videoInfo['name'] = "robot".($k+1)."_".$v['userId']."_".date("YmdHis",time())."_".time().".mp4";
+                $videoInfo['type'] = $_FILES['userData']['type'][$k]['ioVideo'];
+                $videoInfo['tmp_name'] = $_FILES['userData']['tmp_name'][$k]['ioVideo'];
+                $videoInfo['error'] = $_FILES['userData']['error'][$k]['ioVideo'];
+                $videoInfo['size'] = $_FILES['userData']['size'][$k]['ioVideo'];
+                $video = $this->ioVideo($videoInfo);
+            }
+            $insertData[] = [
                 'school_id' => $school_id,
-                'class_id' => $class_id,
-                'student_id' => $student_id,
-                'uType' => input('post.uType'),
-                'ioFlag' => input('post.ioFlag'),
-                'ioTime' => input('post.ioTime'),
-                'bodyTemp' => input('post.bodyTemp'),
-                'SNNumber' => input('post.SNNumber'),
-                'ioVideo' => $video,
+                'student_id' => $v['userId'],
+                'attDate' => $data['attDate'],
+                'uType' => $v['uType'],
+                'ioFlag' => $v['ioFlag'],
+                'ioTime' => $v['ioTime'],
+                'bodyTemp' => $v['bodyTemp'],
+                'SNNumber' => $v['SNNumber'],
+                'ioVideo' => !empty($video)?$video:"",
                 'create_time' => time()
             ];
-            $report_model = Model("Robotreport");
-            $result = $report_model->report_add($data);
-            if($result){
-                /*$path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
-                //打卡成功，给学生家长发送短信提醒
-                $memberInfo = db("member")->field("member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
-                if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
-                    if(input('post.ioFlag')==1){
-                        $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
-                    }elseif(input('post.ioFlag')==2){
-                        $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
-                    }
-                    $sms = new \sendmsg\sdk\SmsApi();
-                    $send = $sms->sendSMS($memberInfo['member_mobile'],$content);
-                    if(!$send){
-                        $this->error('给用户发送短信失败 ');
-                    }
-                }*/
-                $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
-                return json_encode($ret);
-            }else{
-                $ret = array('ret'=>"00004","data"=>[],'msg'=>"fail");
-                return json_encode($ret);
-            }
+        }
+        $report_model = Model("Robotreport");
+        $result = $report_model->reportall_add($insertData);
+        if($result){
+            /*$path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+            //打卡成功，给学生家长发送短信提醒
+            $memberInfo = db("member")->field("member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
+            if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
+                if(input('post.ioFlag')==1){
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                }elseif(input('post.ioFlag')==2){
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                }
+                $sms = new \sendmsg\sdk\SmsApi();
+                $send = $sms->sendSMS($memberInfo['member_mobile'],$content);
+                if(!$send){
+                    $this->error('给用户发送短信失败 ');
+                }
+            }*/
+            $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
+            return json_encode($ret);
+        }else{
+            $ret = array('ret'=>"00004","data"=>[],'msg'=>"fail");
+            return json_encode($ret);
         }
     }
 
     /*
-     * 上传打卡视频
+     * 单个上传打卡视频
      * */
-    public function ioVideo($videoName){
+    public function ioVideo($videoInfo){
         //上传路径
         $uploadimg_path = substr(str_replace("\\","/",$_SERVER['SCRIPT_FILENAME']),'0','-9')."uploads/home/robotvideo/";
         //检查是否有该文件夹，如果没有就创建
         if(!is_dir($uploadimg_path)){
             mkdir($uploadimg_path,0777,true);
         }
-        if (!empty($_FILES['ioVideo']['name'])) {
-            $upload = move_uploaded_file($_FILES["ioVideo"]["tmp_name"], $uploadimg_path . $videoName);
+        if (!empty($videoInfo['name'])) {
+            $upload = move_uploaded_file($videoInfo["tmp_name"], $uploadimg_path . $videoInfo['name']);
             if($upload){
-                return $videoName;
+                return $videoInfo['name'];
             }else{
                 output_data("上传打卡视频失败");
             }

@@ -26,12 +26,11 @@ class Classes extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            //$condition['a.admin_company_id'] = $admin['admin_company_id'];
             if(!empty($admininfo['admin_school_id'])){
                 $condition['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition = $model_company->getCondition($admininfo['admin_company_id'],"class");
             }
         }
         $classname = input('param.school_index_classname');//学校名称
@@ -82,6 +81,16 @@ class Classes extends AdminControl {
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
+        //全部学校
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_school['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $model_company = Model("Company");
+                $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
+            }
+        }
+        $condition_school['isdel'] = 1;
         $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
         $left_menu = array_column($school_list, 'schoolid');
         foreach ($class_list as $k=>$v){
@@ -89,22 +98,21 @@ class Classes extends AdminControl {
             $class_list[$k]['typename'] = db('schooltype')->where('sc_id',$v['typeid'])->value('sc_type');
             $class_list[$k]['schoolname'] = $school_list[$key]['name'];
         }
-        //全部学校
-        if($admininfo['admin_id']!=1){
-            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_school['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
-            }
-        }
-        $condition_school['isdel'] = 1;
-        
-        
+
         $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolList', $school_list);
         $this->assign('class_list', $class_list);
-        $classname = $model_class->getAllClasses($condition_school);
+        //全部班级
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_class['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $model_company = Model("Company");
+                $condition_class = $model_company->getCondition($admininfo['admin_company_id'],"class");
+            }
+        }
+        $condition_class['isdel'] = 1;
+        $classname = $model_class->getAllClasses($condition_class);
         foreach ($classname as $k=>$v){
             $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
             $classname[$k]['typename'] = $schooltype['sc_type'];

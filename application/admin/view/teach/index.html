@@ -84,7 +84,7 @@
             <!--<td class="align-center"><?php echo $v['student_name']; ?></td>-->
             <td class="align-center"><?php echo $v['order_name']; ?></td>
             <!--<td class="align-center"><?php echo $v['length']; ?></td>-->
-            <td class="align-center"><?php echo $v['order_amount']; ?></td>
+            <td class="align-center"><?php if(!empty($v['order_amount'])){echo sprintf('%.2f', $v['order_amount']);}else{echo "";} ?></td>
             <td class="align-center"><?php if($v['order_state']==10){echo "待付款";}
             elseif($v['order_state']==20){echo "已付款";}
             elseif($v['order_state']==30){echo "已发货";}
@@ -93,9 +93,9 @@
             <td class="align-center"><?php foreach($payment as $key=>$item){
                 if($item['payment_code']==$v['payment_code']){echo $item['payment_name'];}
                 }  ?></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['order_dieline']); ?></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['add_time']); ?></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['payment_time']); ?></td>
+            <td class="align-center"><?php if(!empty($v['order_dieline'])){echo date("Y-m-d H:i:s",$v['order_dieline']);} ?></td>
+            <td class="align-center"><?php if(!empty($v['add_time'])){echo date("Y-m-d H:i:s",$v['add_time']);} ?></td>
+            <td class="align-center"><?php if(!empty($v['payment_time'])){echo date("Y-m-d H:i:s",$v['payment_time']);} ?></td>
             <!--<td class="align-center"><?php echo $v['order_desc']; ?></td>-->
         </tr>
         <?php } ?>
