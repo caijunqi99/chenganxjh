@@ -67,8 +67,8 @@ class Schooldesc extends MobileMember
 
 //获取学校类型
 function get_schoolType($id){
-        $res = db('schooltype')->where('sc_id="'.$id.'"')->field('sc_name')->find();
-        return $res['sc_name'];
+        $res = db('schooltype')->where('sc_id="'.$id.'"')->field('sc_type')->find();
+        return $res['sc_type'];
 }
 
 }
