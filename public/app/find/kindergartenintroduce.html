@@ -201,9 +201,9 @@ function detailinfo(s_id){
             $("#school_title").text(response["result"][0].name);
             $("#schooladdress").text(response["result"][0].address);
             if (response["result"][0].s_type == 1) {
-                $("#school_type").text("公立"+response["result"][0].school_type);
+                $("#school_type").text("公立---"+response["result"][0].school_type);
             } else {
-                $("#school_type").text("私立"+response["result"][0].school_type);
+                $("#school_type").text("私立---"+response["result"][0].school_type);
             }
             $("#school_info_cont").html(response["result"][0].s_present);
             $("#faculty").html(response["result"][0].s_teacher);
