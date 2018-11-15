@@ -566,11 +566,16 @@ class Member extends MobileMember
         }
         $member_where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_paypwd')->where($member_where)->find();
+        $member = db('member')->field('member_id,member_paypwd,is_owner')->where($member_where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
-        $where = ' is_owner = "'.$member_id.'"';
+        if($member['is_owner'] == 0){
+            $where = ' is_owner = "'.$member_id.'"';
+        }else{
+            $where = ' is_owner = "'.$member['is_owner'].'"';
+        }
+
 
         $account = db('member')->field('member_id,member_aboutname,member_mobile,is_owner')->where($where)->select();
         output_data($account);

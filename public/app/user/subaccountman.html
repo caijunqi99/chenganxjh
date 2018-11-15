@@ -152,6 +152,7 @@
             /**
              * @desc 判断是否为副账号
              */
+            var flag = false;
             $.ajax({
                 type:'POST',
                 url:api+'/Member/isOwner.html',
@@ -159,15 +160,18 @@
                     key:user_token,
                     member_id:user_member_id,
                 },
+                async:false,
                 dataType: "json",
                 success: function(response){
                     if(response['code'] == 200){
                         if(response.result[0]['is_owner'] == 0){
                             $('#open_popup').show();
                             $('.tishi').show();
+                            flag = true;
                         }else{
                             $('#open_popup').hide();
                             $('.tishi').hide();
+                            flag = false;
                         }
                     }else if(response['code'] == 400){
                         $.toast(response['message'],'forbidden');return false;
@@ -290,7 +294,7 @@
                 var template = '';
                 for (var i = 0; i < data.length; i++) {
                     template += '<div class="weui-cells subacc_list">';
-                    if(data[i]['is_owner'] == 0) {
+                    if(flag) {
                         template += '<div class="weui-cell weui-cell_swiped">';
                     }else{
                         template += '<div class="weui-cell">';
@@ -307,7 +311,7 @@
                         '<div class="weui-cell__ft"><span class="paddr10">' + data[i]['member_mobile'] + '</span></div>' +
                         '</div>' +
                         '</div>';
-                    if(data[i]['is_owner'] == 0){
+                    if(flag){
                         template += '<div class="weui-cell__ft">' +
                             '<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" data-id="' + data[i]['member_id'] + '" onclick="Delete(event, this)">删除</a>' +
                             '<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" onclick="Close(this)">关闭</a>' +
