@@ -195,7 +195,11 @@
                         if (response['result'].length == 0) {
                             $('.tishi').hide();
                         } else {
-                            $('.tishi').show();
+                            if(flag){
+                                $('.tishi').show();
+                            }else{
+                                $('.tishi').hide();
+                            }
                         }
 
                         $('.subacc_list_box .container2').html(HTML(response['result']));
