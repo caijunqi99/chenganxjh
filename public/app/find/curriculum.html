@@ -224,7 +224,7 @@ function GetCurriculumInfo(classid,school_id,wek){
             // console.log(response.result[0].content[0].morning.length);
             var contents = response.result[0];
             if (contents == '' || contents == 'undefined') {
-                $("#courses_jobs_2 .week_list").html('ssssss');
+                $("#courses_jobs_2 .week_list").html('暂无数据！');
             }else{
                 $("#courses_jobs_2 .week_list").html(HTML2(response.result[0].content));
             }
