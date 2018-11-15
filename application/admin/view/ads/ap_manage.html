@@ -90,9 +90,9 @@
           <td class="align-center yes-onoff">
               <?php if(session('admin_is_super') == 1 || in_array(13,$action)){?>
                   <?php if($v['is_use'] == '0'){ ?>
-                <a href="JavaScript:void(0);" class=" disabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="0" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+                <a href="JavaScript:void(0);" class=" disabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="0" title="{$Think.lang.ds_editable}"><img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
                 <?php }else { ?>
-                <a href="JavaScript:void(0);" class=" enabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="1" title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+                <a href="JavaScript:void(0);" class=" enabled" ajax_branch="is_use" nc_type="inline_edit" fieldname="is_use" fieldid="<?php echo $v['ap_id']?>" fieldvalue="1" title="{$Think.lang.ds_editable}"><img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
                 <?php } ?></td>
             <?php }?>
             <?php if(session('admin_is_super') == 1 || in_array(2,$action) || in_array(3,$action) || in_array(5,$action)){?>

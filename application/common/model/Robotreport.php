@@ -18,6 +18,10 @@ class Robotreport extends Model {
         return db('robotreport')->insertGetId($param);
     }
 
+    //批量插入
+    public function reportall_add($param) {
+        return db('robotreport')->insertAll($param);
+    }
 
     /**
      * 删除一个

@@ -25,17 +25,8 @@ class Member extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $companyInfo = db('company')->where(array('o_id'=>$admininfo['admin_company_id']))->find();
-            if($companyInfo['o_provinceid']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']!=0){
-                $condition['member_provinceid'] = $companyInfo['o_provinceid'];
-                $condition['member_cityid'] = $companyInfo['o_cityid'];
-                $condition['member_areaid'] = $companyInfo['o_areaid'];
-            }elseif($companyInfo['o_provinceid']!=0 && $companyInfo['o_cityid']!=0 && $companyInfo['o_areaid']==0){
-                $condition['member_provinceid'] = $companyInfo['o_provinceid'];
-                $condition['member_cityid'] = $companyInfo['o_cityid'];
-            }elseif($companyInfo['o_provinceid']!=0 && $companyInfo['o_cityid']==0 && $companyInfo['o_areaid']==0){
-                $condition['member_provinceid'] = $companyInfo['o_provinceid'];
-            }
+            $model_company = Model("Company");
+            $condition = $model_company->getCondition($admininfo['admin_company_id'],"member");
         }
         $model_member = Model('member');
         // $model_member->ttttt();exit;

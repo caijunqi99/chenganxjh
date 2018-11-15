@@ -25,17 +25,14 @@ class School extends AdminControl {
         $model_school = model('School');
         $condition = array();
         $admininfo = $this->getAdminInfo();
-
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
                 $condition['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition = $model_company->getCondition($admininfo['admin_company_id']);
             }
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
-        //$data = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where(array('s.isdel'=>1,'a.admin_company_id'=>$a))->select();
         $schoolname = input('param.schoolname');//学校名称
         if ($schoolname) {
             $condition['name'] = array('like', "%" . $schoolname . "%");
@@ -63,15 +60,6 @@ class School extends AdminControl {
                 $condition['areaid'] = $area_id;
             }
         }
-//        if(!empty($_GET['province'])){
-//            $condition['provinceid'] = intval(input('param.province'));
-//        }
-//        if(!empty($_GET['city'])){
-//            $condition['cityid'] = intval(input('param.city'));
-//        }
-//        if(!empty($_GET['area'])){
-//            $condition['areaid'] = intval(input('param.area'));
-//        }
         $query_start_time = input('param.query_start_time');
         $query_end_time = input('param.query_end_time');
         if ($query_start_time || $query_end_time) {
