@@ -36,7 +36,7 @@ class Schooldesc extends MobileMember
                 if($k == 0){
                     $a .= $this->get_schoolType($v);
                 }else{
-                    $a .= '@'.$this->get_schoolType($v);
+                    $a .= '&'.$this->get_schoolType($v);
                 }
             }
         }
