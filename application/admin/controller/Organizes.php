@@ -96,8 +96,98 @@ class Organizes extends AdminControl
     }
     //所属摄像头个数
     public function cameranum(){
+        $oid=$_GET['o_id'];
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        $model_school = model('School');
+        $conditions = array();
+        $list=array();
+        foreach($admin as $v){
+            $conditions['option_id']=$v['admin_id'];
+            $conditions['isdel']=1;
+            $list+=$model_school->getSchoolList($condition);
+        }
+        $model_camera = model('Camera');
+        foreach($list as $k=>$v){
+            $where['schoolid']=$v['schoolid'];
+            $datas=$this->_conditions($where);
+            if(empty($data)){
+                $data=!empty($datas)?$datas:'';
+            }else{
+                if(!empty($datas['parentid'][1])) {
+                    foreach ($datas['parentid'][1] as $v1) {
+                        $data['parentid'][1][] = $v1;
+                    }
+                }
+            }
+        }
+        if(!empty($data)){
+            $cameraList = $model_camera->getCameraList($data, 10);
+            $this->assign('page', $model_camera->page_info->render());
+            $this->assign('cameraList', $cameraList);
+        }
+
         $this->setAdminCurItem('cameranum');
         return $this->fetch();
+    }
+    /**
+     * 摄像头查询过滤
+     * @创建时间   2018-11-03T00:39:28+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function _conditions($where){
+        $res = array();
+        $name = false;
+        if (isset($where['schoolid']) && $where['schoolid'] != 0 ) {
+            $school = $this->getResGroupIds(array('schoolid'=>$where['schoolid']));
+            $name = 'true';
+            if ($school) {
+                $res=array_merge($res, $school);
+            }
+        }
+        if ($name == 'true') {
+            $condition['parentid'] = array('in',$res);
+        }
+        return $condition;
+    }
+    /**
+     * 查询学校和班级摄像头
+     * @创建时间   2018-11-03T00:39:48+0800
+     * @param  [type]                   $where [description]
+     * @return [type]                          [description]
+     */
+    public function getResGroupIds($where){
+        $School = model('School');
+        $Class = model('Classes');
+        $classname = '';
+        if (isset($where['classid']) && !empty($where['classid']) ) {
+            $classname = $where['classid'];
+            unset($where['classid']);
+        }
+        $where['res_group_id'] =array('gt',0);
+        $Schoollist = $School->getAllAchool($where,'res_group_id');
+        if (!empty($classid)) {
+            $where['classid'] = $classid;
+        }
+        $res = array();
+        $Classlist = $Class->getAllClasses($where,'res_group_id');
+        $sc_resids=array_column($Schoollist, 'res_group_id');
+        if ($sc_resids) {
+            array_push($res, $sc_resids);
+        }
+        $cl_resids=array_column($Classlist, 'res_group_id');
+        if ($cl_resids) {
+            array_push($res, $cl_resids);
+        }
+        $ids = array_merge($sc_resids,$cl_resids);
+        if ($ids) {
+            return $ids;
+        }else{
+            return $res;
+        }
     }
     //所属会员数
     public function membernum(){
