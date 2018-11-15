@@ -16,23 +16,22 @@ class Teachvideo extends AdminControl {
         Lang::load(APP_PATH . 'admin/lang/zh-cn/teacher.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         //获取当前角色对当前子目录的权限
-//        $class_name = strtolower(end(explode('\\',__CLASS__)));
-//        $perm_id = $this->get_permid($class_name);
-//        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
-//        $this->assign('action',$action);
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
     }
 
     public function index() {
-//        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
-//            $this->error(lang('ds_assign_right'));
-//        }
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_teach = model('Teachchild');
         $condition = array();
-//        $admininfo = $this->getAdminInfo();
-//        if($admininfo['admin_id']!=1){
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
-//        }
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $condition['admin_company_id'] = $admininfo['admin_company_id'];
+        }
         $user = input('param.user');//会员账户
         if ($user) {
             $condition['member_mobile'] = array('like', "%" . $user . "%");
@@ -365,6 +364,7 @@ class Teachvideo extends AdminControl {
      * 上传视频
      * */
     public function add() {
+        $admininfo = $this->getAdminInfo();
         $model_class = model('Teachchild');
         if (!request()->isPost()) {
             $teachtype = db('teachtype')->where(array('gc_parent_id'=>0))->select();
@@ -385,16 +385,14 @@ class Teachvideo extends AdminControl {
             $insert_array['t_audit'] = 1;
             $insert_array['member_mobile'] = "后台";
             $insert_array['t_maketime'] = time();
+            $insert_array['admin_id'] = $admininfo['admin_id'];
+            $insert_array['admin_company_id'] = $admininfo['admin_company_id'];
             //上传视频封面图
             if($_FILES['video_filename']['name']){
                 $insert_array['t_picture'] = "home/videoimg/".date("YmdHis",time())."_".time().".png";
                 $this->image($insert_array['t_picture']);
             }
             //上传视频
-//            $videoData = $this->video($_FILES);
-//            $insert_array['t_url'] = $videoData['path'];//视频路径
-//            $insert_array['t_videoimg'] = $videoData['pic'];//默认封面图
-//            $insert_array['t_timelength'] = $videoData['time'];//视频时长
             $insert_array['t_url'] = input('post.path')?input('post.path'):"";//视频路径
             $insert_array['t_videoimg'] = input('post.pic')?input('post.pic'):"";;//默认封面图
             $insert_array['t_timelength'] = input('post.time')?input('post.time'):"";//视频时长
@@ -548,12 +546,14 @@ class Teachvideo extends AdminControl {
                 'url' => url('Admin/Teachvideo/index')
             ),
         );
-        if (request()->action() == 'add' || request()->action() == 'index') {
-            $menu_array[] = array(
-                'name' => 'add',
-                'text' => '上传视频',
-                'url' => url('Admin/Teachvideo/add')
-            );
+        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+            if (request()->action() == 'add' || request()->action() == 'index') {
+                $menu_array[] = array(
+                    'name' => 'add',
+                    'text' => '上传视频',
+                    'url' => url('Admin/Teachvideo/add')
+                );
+            }
         }
         if (request()->action() == 'edit') {
             $menu_array[] = array(

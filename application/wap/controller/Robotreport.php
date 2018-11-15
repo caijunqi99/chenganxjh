@@ -19,7 +19,7 @@ class Robotreport extends MobileMall
     //单个考勤上报
     public function report(){
         $input = input();
-        db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'file'=>$_FILES,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
+        //db('testt')->insertGetId(['content'=>json_encode(['input'=>$input,'file'=>$_FILES,'InputTime'=>date('Y-m-d H:i:s'),'method'=>'Robotroster_auth'])]);
         $school_id = trim($input['schoolId'],'"');
         if(empty($school_id)){
             $ret = array('ret'=>"00001","data"=>[],'msg'=>"fail");

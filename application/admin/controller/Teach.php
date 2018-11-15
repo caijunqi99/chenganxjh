@@ -31,6 +31,12 @@ class Teach extends AdminControl {
         }
         $order = Model('Packagesorderteach');
         $condition = array();
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $model_company = Model("Company");
+            $condition = $model_company->getCondition($admininfo['admin_company_id']);
+        }
+        $condition['delete_state'] = 0;
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
             $condition['buyer_name'] = array('like', "%" . $buyer_name . "%");

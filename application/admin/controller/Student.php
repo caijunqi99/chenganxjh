@@ -27,12 +27,11 @@ class Student extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
             if(!empty($admininfo['admin_school_id'])){
                 $condition['s_schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition = $model_company->getCondition($admininfo['admin_company_id'],"student");
             }
         }
         $studentname = input('param.studentname');//学生名字
@@ -93,11 +92,11 @@ class Student extends AdminControl {
 
         //全部学校
         if($admininfo['admin_id']!=1){
-            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
             if(!empty($admininfo['admin_school_id'])){
                 $condition_school['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
             }
         }
         $condition_school['isdel'] = 1;
@@ -107,8 +106,17 @@ class Student extends AdminControl {
         $schoolLists = array_column($school_list,NULL,'schoolid');
         //全部班级
         $model_class = model('Classes');
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_class['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $model_company = Model("Company");
+                $condition_class = $model_company->getCondition($admininfo['admin_company_id'],"class");
+            }
+        }
+        $condition_class['isdel'] = 1;
         $clfield = 'classid,classname,typeid';
-        $class_list = $model_class->getAllClasses($condition_school,$clfield);
+        $class_list = $model_class->getAllClasses($condition_class,$clfield);
         $classLists = array_column($class_list,NULL,'classid');
         foreach ($class_list as $k=>$v){
             $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
