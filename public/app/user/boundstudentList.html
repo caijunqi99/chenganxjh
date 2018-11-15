@@ -193,7 +193,7 @@
                         var tab = '';
                         for(var i=0;i<data.length;i++){
                             if(i == 0){
-                                tab += '<li class="active">\n' +
+                                tab += '<li data-id="'+data[i]['s_id']+'" class="active">\n' +
                                     '                    <a href="javascript:;">'+data[i]['s_name']+'</a>\n' +
                                     '                </li>'
                                 $('#bang_name').val(data[0]['s_name']);
