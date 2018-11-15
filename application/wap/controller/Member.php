@@ -572,7 +572,7 @@ class Member extends MobileMember
         }
         $where = ' is_owner = "'.$member_id.'"';
 
-        $account = db('member')->field('member_id,member_aboutname,member_mobile')->where($where)->select();
+        $account = db('member')->field('member_id,member_aboutname,member_mobile,is_owner')->where($where)->select();
         output_data($account);
 
 
