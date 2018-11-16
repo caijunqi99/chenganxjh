@@ -22,6 +22,8 @@
     </div>
     
   <form method='post'>
+      <input type="hidden" id="admin_is_super" value='<?php echo session("admin_is_super");?>'>
+      <input type="hidden" id="adminAction" value='<?php echo json_encode($action);?>'>
     <table class="ds-default-table">
         <input type="hidden" name="submit_type" id="submit_type" value="" />
       <thead>
@@ -48,13 +50,19 @@
           <td class="w48 sort"><span title="{$Think.lang.ds_editable}" ajax_branch="goods_class_sort" datatype="number" fieldid="<?php echo $v['gc_id'];?>" fieldname="gc_sort" nc_type="inline_edit" class="editable "><?php echo $v['gc_sort'];?></span></td>
           <td class="w50pre name">
           <span title="{$Think.lang.ds_editable}" required="1" fieldid="<?php echo $v['gc_id'];?>" ajax_branch="goods_class_name" fieldname="gc_name" nc_type="inline_edit" class="editable "><?php echo $v['gc_name'];?></span>
-          <a class="btn-add-nofloat marginleft" href="{:url('/Admin/Teachtype/type_class_add',['gc_parent_id'=>$v.gc_id])}"><span>{$Think.lang.ds_add_sub_class}</span></a>
+              <?php if(session('admin_is_super') ==1 || in_array('1',$action)){ ?>
+              <a class="btn-add-nofloat marginleft" href="{:url('/Admin/Teachtype/type_class_add',['gc_parent_id'=>$v.gc_id])}">
+              <span>{$Think.lang.ds_add_sub_class}</span>
+          </a>
+              <?php } ?>
           </td>
           <td><?php echo $v['type_name'];?></td>
           <td class="w96">
               <!--<a href="{:url('/Admin/Teachtype/nav_edit',['gc_id'=>$v.gc_id])}">设置</a> |-->
-              <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
+              <?php if(session('admin_is_super') ==1 || (in_array('3',$action)&&in_array('2',$action))){ ?>
               <a href="{:url('/Admin/Teachtype/type_class_edit',['gc_id'=>$v.gc_id])}">{$Think.lang.ds_edit}</a> |
+              <?php }elseif(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
+              <a href="{:url('/Admin/Teachtype/type_class_edit',['gc_id'=>$v.gc_id])}">{$Think.lang.ds_edit}</a>
               <?php } ?>
               <?php if(session('admin_is_super') ==1 || in_array('2',$action)){ ?>
               <a href="javascript:if(confirm('{$Think.lang.goods_class_index_ensure_del}'))window.location = '{:url('/Admin/Teachtype/type_class_del',['gc_id'=>$v.gc_id])}';">{$Think.lang.ds_del}</a>
