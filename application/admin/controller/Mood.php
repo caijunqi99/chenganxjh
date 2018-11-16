@@ -11,7 +11,7 @@ use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 
 
-class Find extends AdminControl {
+class Mood extends AdminControl {
 
     const EXPORT_SIZE = 1000;
 
@@ -103,7 +103,7 @@ class Find extends AdminControl {
                 array(
                     'name' => 'index',
                     'text' => '晒心情管理',
-                    'url' => url('Admin/Find/index')
+                    'url' => url('Admin/Mood/index')
                 )
             );
         return $menu_array;
