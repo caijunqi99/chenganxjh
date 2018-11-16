@@ -29,11 +29,14 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+        .main{
+            padding-top: 0;
+        }
     </style>
 </head>
 
 <body class="mdbody">
-    <header class="head">
+    <!--<header class="head">
         <div class="head0">
             <div class="menu_bar_box">
                 <a href="javascript:;" class="back_btn" onClick="historyback()">
@@ -47,7 +50,7 @@
                 <a href="javascript:;" class="role_switch" id="role_switch"><i class="icon iconfont icon-qiehuantuichu"></i></a>
             </div>
         </div>
-    </header>
+    </header>-->
 
     <!-- 主要内容 -->
     <div class="main">
@@ -77,12 +80,14 @@
     <script>
         GetChildList(user_token,'reday');
         
-        
+        change_bus = function(id,name){
+            $('#cooktitle').text(name);
+            GetBusInfo(id);
+        };
 
         // 校车路线模板
         function HTML(data) {
-            console.log(data);
-            
+            // console.log(data);
             var template = '';
             var template2 = '';
             for (i = 0; i < data.length; i++) {

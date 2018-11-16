@@ -29,11 +29,14 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+        .main{
+            padding-top: 0;
+        }
     </style>
 </head>
 
 <body class="infobody">
-    <header class="head">
+    <!--<header class="head">
         <div class="head0">
             <div class="menu_bar_box">
                 <a href="javascript:;" class="back_btn" onClick="historyback()">
@@ -47,7 +50,7 @@
                 <a href="javascript:;" class="role_switch" id="role_switch"><i class="icon iconfont icon-qiehuantuichu"></i></a>
             </div>
         </div>
-    </header>
+    </header>-->
 
     <!-- 主要内容 -->
     <div class="main">
@@ -98,10 +101,12 @@
     <script src="../content/scripts/juqery.cookie.js"></script>
     <script src="../content/scripts/API.js"></script>
     <script src="../content/scripts/commom.js"></script>
-
     <script>
         GetChildList(user_token,'reday');
-        
+        change_current=function(classid,school_id,name){
+            $('#cooktitle').text(name);
+            GetCurriculumInfo(classid,school_id,2);
+        }
         // 上周，本周，下周切换
         function setTab1(name, cursel, n) {
             var school_id =$("#school_id").val();
@@ -110,12 +115,11 @@
             for (i = 1; i <= n; i++) {
                 var menu = $("#" + name + i)
                 var con = $("#" + "courses_" + name + "_" + i)
-                courses_jobs_2
                 if (i == cursel) {
                     contentid = "courses_jobs_" + cursel;
                     $.ajax({
                         type: "POST",
-                        url: api + "/arrangement/index",
+                        url: api + "/arrangement/index.html",
                         data: {
                             key: user_token,
                             class_id: class_id,
@@ -124,7 +128,20 @@
                         },
                         dataType: "json",
                         success: function(response) {
-                            $("#" + contentid + " .week_list").html(HTML2(response.result[0].content))
+                            // console.log(response);
+                            if(response['code'] == 200){
+                                var contents = response.result[0];
+                                if (contents == '' || contents == undefined) {
+                                    $("." + contentid ).show();
+                                    $("." + contentid ).html('暂无数据！')
+                                    $("#" + contentid + " .week_list").html('')
+                                }else{
+                                    $("." + contentid ).hide();
+                                    $("#" + contentid + " .week_list").html(HTML2(response.result[0].content))
+                                }
+                            }
+
+
                         }
                     });
                     menu.addClass("active");
@@ -163,78 +180,94 @@
                         $('#cooktitle').text(d.titles);
                         GetCurriculumInfo(school_class[1],school_class[0],2)
                     },
-                    
+
                     onOpen: function() {
                         // console.log($(".cookbook_title").text());
                         $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
                     },
-                });   
+                });
             }, 500 );
-            
+
         })
 
-                // 食谱详情开关 end
-            /**
- * 获取当前家长的所有孩子列表
- * 包含学校id
- * 包含班级id
- * 包含孩子id
- * @创建时间 2018-11-05T14:05:59+0800
- */
-function GetChildList(key,act,a){
-    if(!key){
-        key = user_token;
-    }
-    $.post(api+"/Students/get_student_info.html", {key: key}, function(data, textStatus, xhr) {
-        if(data.code==200){
-            var result = data.result[0];
-            $("#class_id").val(result.s_classid);
-            $("#school_id").val(result.s_schoolid);
-            $('#childid').val(result.s_id);
-            $('#cooktitle').text(result.name+'--'+result.s_name);
-            var list = data.result;
-            var StudentsList = new Array;
-            for (var i = 0; i < list.length; i++) {
-                var school_class = list[i].s_schoolid+'_'+list[i].s_classid
-                var info = {'title':list[i].name+'--'+list[i].s_name,'value':school_class}
-               StudentsList.push(info);
+        // 食谱详情开关 end
+        /**
+         * 获取当前家长的所有孩子列表
+         * 包含学校id
+         * 包含班级id
+         * 包含孩子id
+         * @创建时间 2018-11-05T14:05:59+0800
+         */
+        function GetChildList(key,act,a){
+            if(!key){
+                key = user_token;
             }
+            $.post(api+"/Students/get_student_info.html", {key: key}, function(data, textStatus, xhr) {
+                if(data.code==200){
+                    var result = data.result[0];
+                    $("#class_id").val(result.s_classid);
+                    $("#school_id").val(result.s_schoolid);
+                    $('#childid').val(result.s_id);
+                    $('#cooktitle').text(result.name+'--'+result.s_name);
+                    var list = data.result;
+                    var StudentsList = new Array;
+                    for (var i = 0; i < list.length; i++) {
+                        var school_class = list[i].s_schoolid+'_'+list[i].s_classid
+                        var info = {'title':list[i].name+'--'+list[i].s_name,'value':school_class}
+                        StudentsList.push(info);
+                    }
 
-            var sssss =JSON.stringify(StudentsList);
-            $("#infos").val(sssss);
-            if (act == 'reday') {
-                GetCurriculumInfo(result.s_classid,result.s_schoolid,2)
-            }
+                    var sssss =JSON.stringify(StudentsList);
+                    $("#infos").val(sssss);
+                    if (act == 'reday') {
+                        GetCurriculumInfo(result.s_classid,result.s_schoolid,2)
+                    }
+                }
+                return data;
+            },'json');
         }
-        return data;
-    },'json');
-}
-function GetCurriculumInfo(classid,school_id,wek){
-    $.ajax({
-        type: "POST",
-        url: api + "/arrangement/index.html",
-        data: {
-            key: user_token,
-            class_id: classid,
-            weektype: wek,
-            school_id: school_id
-        },
-        dataType: "json",
-        success: function(response) {
-            // console.log(response.result[0].content[0].morning.length);
-            var contents = response.result[0];
-            if (contents == '' || contents == 'undefined') {
-                $("#courses_jobs_2 .week_list").html('ssssss');
-            }else{
-                $("#courses_jobs_2 .week_list").html(HTML2(response.result[0].content));
-            }
-            
-            
-        }
-    });
-}
+        function GetCurriculumInfo(classid,school_id,wek){
+            $("#school_id").val(school_id);
+            $("#class_id").val(classid);
+            $.ajax({
+                type: "POST",
+                url: api + "/arrangement/index.html",
+                data: {
+                    key: user_token,
+                    class_id: classid,
+                    weektype: wek,
+                    school_id: school_id
+                },
+                dataType: "json",
+                success: function(response) {
+                    // console.log(response.result[0].content[0].morning.length);
+                    var contents = response.result[0];
+                    if (contents == '' || contents == undefined) {
+                        $('#jobs2').addClass('active').siblings().removeClass('active');
 
- // 模板2
+                        $('#courses_jobs_2').show();
+                        $('#courses_jobs_1').hide();
+                        $('#courses_jobs_3').hide();
+                        $(".courses_jobs_2").show();
+                        $(".courses_jobs_2").html('暂无数据！');
+                        $("#courses_jobs_2 .week_list").html('');
+                    }else{
+
+                        $('#courses_jobs_2').show();
+                        $('#courses_jobs_1').hide();
+                        $('#courses_jobs_3').hide();
+                        $(".courses_jobs_2").hide();
+                        $('#jobs2').addClass('active').siblings().removeClass('active');
+
+                        $("#courses_jobs_2 .week_list").html(HTML2(response.result[0].content));
+                    }
+
+
+                }
+            });
+        }
+
+        // 模板2
         function HTML2(data2) {
             var template2 = '';
             for (j = 0; j < data2.length; j++) {

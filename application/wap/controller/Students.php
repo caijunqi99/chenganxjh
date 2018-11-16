@@ -14,7 +14,11 @@ class Students extends MobileMember{
 
         $member_info = db('member')->where(array("member_id"=>$this->member_info['member_id']))->find();
         $member = $member_info['is_owner']==0 ? $this->member_info['member_id'] : $member_info['is_owner'];
-        $childs = db('student')->alias('s')->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')->field("s_id,s_name,s_schoolid,name,s_classid,cl.classname,cl.classCard")->where(array('s_del'=>1,'s_ownerAccount'=>$member))->select();
+        $childs = db('student')->alias('s')
+            ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
+            ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
+            ->field("s.s_id,s.s_name,s.s_schoolid,sc.name,s.s_classid,cl.classname,cl.classCard")
+            ->where(array('s_del'=>1,'s_ownerAccount'=>$member))->select();
         output_data($childs);
     }
 
