@@ -110,6 +110,7 @@ class Student extends AdminControl {
         $clfield = 'classid,classname,typeid';
         $class_list = $model_class->getAllClasses($condition_school,$clfield);
         $classLists = array_column($class_list,NULL,'classid');
+        
         foreach ($class_list as $k=>$v){
             $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
         }

@@ -92,10 +92,10 @@
                 <td class="yes-onoff align-center">
                     {eq name="val.recommended" value="0"}
                     <a href="JavaScript:void(0);" class=" disabled" ajax_branch='recommended' nc_type="inline_edit" fieldname="recommended" fieldid="{$val.groupbuy_id}" fieldvalue="0" title="{$Think.lang.ds_editable}">
-                        <img src="images/transparent.gif"></a>
+                        <img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
                     {else /}
                     <a href="JavaScript:void(0);" class=" enabled" ajax_branch='recommended' nc_type="inline_edit" fieldname="recommended" fieldid="{$val.groupbuy_id}" fieldvalue="1" title="{$Think.lang.ds_editable}">
-                        <img src="images/transparent.gif"></a>
+                        <img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
                     {/eq}
                 <td class="align-center">{$val.groupbuy_state_text}</td>
                 <td class="align-center">

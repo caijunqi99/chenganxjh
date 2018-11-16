@@ -84,19 +84,8 @@ class Student extends AdminControl {
             'area_info'=>''
         );
         $this->assign('address', $address);
-
-        $model_schooltype = model('Schooltype');
-        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-        $this->assign('schooltype', $schooltype);
-
-        foreach ($student_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
-            $student_list[$k]['typename'] = $schooltype['sc_type'];
-            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
-            $student_list[$k]['classname'] = $classinfo['classname'];
-            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
-            $student_list[$k]['schoolname'] = $school['name'];
-        }
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
 
         //全部学校
         if($admininfo['admin_id']!=1){
@@ -109,13 +98,26 @@ class Student extends AdminControl {
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
-        $school_list = $model_school->getAllAchool($condition_school);
+        $scfield = 'schoolid,name';
+        $school_list = $model_school->getAllAchool($condition_school,$scfield);
+        $schoolLists = array_column($school_list,NULL,'schoolid');
         //全部班级
         $model_class = model('Classes');
-        $class_list = $model_class->getAllClasses($condition_school);
+        $clfield = 'classid,classname,typeid';
+        $class_list = $model_class->getAllClasses($condition_school,$clfield);
+        $classLists = array_column($class_list,NULL,'classid');
+
+        $model_schooltype = model('Schooltype');
+        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
+        $this->assign('schooltype', $schooltype);
+
         foreach ($class_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $class_list[$k]['typename'] = $schooltype['sc_type'];
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
+        }
+        foreach ($student_list as $k=>$v){
+            $student_list[$k]['typename'] = $schooltypeList[$v['s_sctype']]['sc_type'];
+            $student_list[$k]['classname'] = $classLists[$v['s_classid']]['classname'];
+            $student_list[$k]['schoolname'] = $schoolLists[$v['s_schoolid']]['name'];
         }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);

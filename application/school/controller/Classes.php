@@ -81,13 +81,19 @@ class Classes extends AdminControl {
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
+        
+        $model_school = model('School');
+        $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
+        $left_menu = array_column($school_list, 'schoolid');
+
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
 
         foreach ($class_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $class_list[$k]['typename'] = $schooltype['sc_type'];
-            $school = db('school')->where('schoolid',$v['schoolid'])->find();
-            $class_list[$k]['schoolname'] = $school['name'];
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
+            $class_list[$k]['schoolname'] =  $school_list[$key]['name'];
         }
+
         //全部学校
         if($admininfo['admin_id']!=1){
             //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
@@ -105,8 +111,7 @@ class Classes extends AdminControl {
         $this->assign('class_list', $class_list);
         $classname = $model_class->getAllClasses($condition_school);
         foreach ($classname as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $classname[$k]['typename'] = $schooltype['sc_type'];
+            $classname[$k]['typename'] =$schooltypeList[$v['typeid']]['sc_type'];
         }
         $this->assign('classname', $classname);
         $this->setAdminCurItem('index');

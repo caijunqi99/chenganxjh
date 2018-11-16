@@ -106,6 +106,7 @@ class Jpush extends Model {
             $member_info = $model_member->getMemberInfoByID($memberid);
             // 记录推送信息并发送系统提示
             $this->SysMessage($member_info,$alert,$mtitle); 
+            //记录推送消息
             $error['result'] = $response;
         }
         return $error;

@@ -191,14 +191,18 @@ class Chat extends MobileMember
                 $state = 3;
                 break;
         }
-
+        if(!empty($friendInfo['member_avatar'])){
+            $friendInfo['member_avatar'] = UPLOAD_SITE_URL.$friendInfo['member_avatar'];
+        }else{
+            $friendInfo['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+        }
         $output = array(
             'member_id'     => $friendInfo['member_id'],
             'member_name'   => $friendInfo['member_name'],
             'member_mobile' => $friendInfo['member_mobile'],
             'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
             'apply_remark'  => empty($frexits['apply_remark'])?'':$frexits['apply_remark'],
-            'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
+            'avatar'        => $friendInfo['member_avatar'],
             'area'          => empty($areas)?'':$areas,
             'state'         => $state,
         );
