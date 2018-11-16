@@ -573,7 +573,7 @@ class Member extends MobileMember
         if($member['is_owner'] == 0){
             $where = ' is_owner = "'.$member_id.'"';
         }else{
-            $where = ' is_owner = "'.$member['is_owner'].'"';
+            $where = ' (is_owner = "'.$member['is_owner'].'") OR (member_id="'.$member['is_owner'].'")';
         }
 
 
