@@ -162,25 +162,35 @@ class Organizes extends AdminControl
     public function getResGroupIds($where){
         $School = model('School');
         $Class = model('Classes');
+
+
         $classname = '';
-        if (isset($where['classid']) && !empty($where['classid']) ) {
-            $classname = $where['classid'];
-            unset($where['classid']);
+        if (isset($where['classname']) && !empty($where['classname']) ) {
+            $classname = $where['classname'];
+            unset($where['classname']);
         }
         $where['res_group_id'] =array('gt',0);
         $Schoollist = $School->getAllAchool($where,'res_group_id');
-        if (!empty($classid)) {
-            $where['classid'] = $classid;
+        // p($where);exit;
+        if (!empty($classname)) {
+            $where['classname'] = array('like','%'.$classname.'%');
+            unset($Schoollist);
         }
         $res = array();
         $Classlist = $Class->getAllClasses($where,'res_group_id');
         $sc_resids=array_column($Schoollist, 'res_group_id');
         if ($sc_resids) {
-            array_push($res, $sc_resids);
+            $res = $sc_resids;
+//            array_push($res, $sc_resids);
         }
         $cl_resids=array_column($Classlist, 'res_group_id');
         if ($cl_resids) {
-            array_push($res, $cl_resids);
+//            array_push($res, $cl_resids);
+            if(empty($res)){
+                $res = $cl_resids;
+            }else{
+                $res = array_merge($res,$cl_resids);
+            }
         }
         $ids = array_merge($sc_resids,$cl_resids);
         if ($ids) {
@@ -196,6 +206,39 @@ class Organizes extends AdminControl
     }
     //绑定学生数
     public function studentnum(){
+        $oid=$_GET['o_id'];
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        $model_school = model('School');
+        $conditions = array();
+        $list=array();
+        foreach($admin as $v){
+            $conditions['option_id']=$v['admin_id'];
+            $conditions['isdel']=1;
+            $list+=$model_school->getAllAchool($conditions);
+        }
+        foreach($list as $v){
+            $schoolid.=$v['schoolid'].',';
+        }
+        $schoolid=substr($schoolid, 0, -1);
+        $where['s_del'] = 1;
+        $where['s_schoolid']=array('in',$schoolid);
+        $model_student = model('Student');
+        $student_list = $model_student->getStudentList($where, 15);
+        foreach ($student_list as $k=>$v){
+            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
+            $student_list[$k]['typename'] = $schooltype['sc_type'];
+            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
+            $student_list[$k]['classname'] = $classinfo['classname'];
+            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
+            $student_list[$k]['schoolname'] = $school['name'];
+            $member=db('member')->where('member_id',$v['s_ownerAccount'])->find();
+            $student_list[$k]['member_name']=$member['member_name'];
+        }
+        $this->assign('page', $model_student->page_info->render());
+        $this->assign('student_list', $student_list);
         $this->setAdminCurItem('studentnum');
         return $this->fetch();
     }
