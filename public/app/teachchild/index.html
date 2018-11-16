@@ -118,14 +118,13 @@
             GetKejian(Params);
             // 下拉刷新
             $(document.body).pullToRefresh(function() {
-                Page = 1;
                 $('.weui-loadmore').hide();
                 $(document.body).infinite();
                 setTimeout(function() {
                     $(document.body).pullToRefreshDone(); // 重置下拉刷新
                 }, 1500)
                 var params = Params;
-                params['page'] = Page;
+                params['page'] = 1;
                 GetKejian(params);
             });
             // 分页

@@ -76,6 +76,9 @@ class Teachtype extends AdminControl {
      * 分类添加
      */
     public function type_class_add() {
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $model_class = model('Teachtype');
         if (!request()->isPost()) {
             //父类列表，只取到第二级

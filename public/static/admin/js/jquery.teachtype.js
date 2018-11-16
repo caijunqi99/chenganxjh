@@ -13,6 +13,14 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(data) {
                     var src = '';
+                    var admin_is_super = $('#admin_is_super').val();
+                    var adminAction = $('#adminAction').val();
+                    adminAction = $.parseJSON(adminAction);
+                    console.info(adminAction);
+                    console.info(isInArray(adminAction,'1'));
+                    var addsign = "1";
+                    var delsign = "2";
+                    var editsign = "3";
                     for (var i = 0; i < data.length; i++) {
                         var tmp_vertline = "<img class='preimg' src='" + SITE_URL + "/static/admin/images/treetable/vertline.gif'/>";
                         src += "<tr class='" + pr.attr('class') + " row" + id + "'>";
@@ -40,8 +48,10 @@ $(document).ready(function() {
                         }
                         src += " <span title='可编辑下级分类名称' required='1' fieldid='" + data[i].gc_id + "' ajax_branch='goods_class_name' fieldname='gc_name' nc_type='inline_edit' class='editable tooltip'>" + data[i].gc_name + "</span>";
                         //新增下级
-                        if (data[i].deep < 4) {
-                            src += "<a class='btn-add-nofloat marginleft' href='"+SITE_URL+"index.php/Admin/Teachtype/type_class_add.html?gc_parent_id=" + data[i].gc_id + "'><span>新增下级</span></a>";
+                        if(admin_is_super == 1 || isInArray(adminAction,addsign)) {
+                            if (data[i].deep < 4) {
+                                src += "<a class='btn-add-nofloat marginleft' href='" + SITE_URL + "index.php/Admin/Teachtype/type_class_add.html?gc_parent_id=" + data[i].gc_id + "'><span>新增下级</span></a>";
+                            }
                         }
                         src += "</td>";
                         //是否显示
@@ -57,8 +67,14 @@ $(document).ready(function() {
                         src += "<td>" + data[i].type_name + "</td>";
                         //操作
                         src += "<td class='w84'>";
-                        src += "<a href='"+SITE_URL+"index.php/Admin/Teachtype/type_class_edit.html?gc_id=" + data[i].gc_id + "'>编辑</a>";
-                        src += " | <a href=\"javascript:if(confirm('删除该分类将会同时删除该分类的所有下级分类，您确定要删除吗'))window.location = '"+SITE_URL+"index.php/Admin/Teachtype/type_class_del?gc_id=" + data[i].gc_id + "';\">删除</a>";
+                        if(admin_is_super == 1 || isInArray(adminAction,editsign)){
+                            src += "<a href='"+SITE_URL+"index.php/Admin/Teachtype/type_class_edit.html?gc_id=" + data[i].gc_id + "'>编辑</a>";
+                        }
+                        if(admin_is_super == 1 || isInArray(adminAction,editsign)&&isInArray(adminAction,delsign)){
+                            src += " | <a href=\"javascript:if(confirm('删除该分类将会同时删除该分类的所有下级分类，您确定要删除吗'))window.location = '"+SITE_URL+"index.php/Admin/Teachtype/type_class_del?gc_id=" + data[i].gc_id + "';\">删除</a>";
+                        }else if(admin_is_super == 1 || isInArray(adminAction,delsign)){
+                            src += "<a href=\"javascript:if(confirm('删除该分类将会同时删除该分类的所有下级分类，您确定要删除吗'))window.location = '"+SITE_URL+"index.php/Admin/Teachtype/type_class_del?gc_id=" + data[i].gc_id + "';\">删除</a>";
+                        }
                         src += "</td>";
                         src += "</tr>";
                     }
@@ -69,7 +85,7 @@ $(document).ready(function() {
                     $('img[nc_type="flex"]').unbind('click');
                     $('span[nc_type="inline_edit"]').unbind('click');
                     //重现初始化页面
-                    $.getScript(SITE_URL + "static/admin/js//js/jquery.edit.js");
+                    $.getScript(SITE_URL + "static/plugins/jquery.edit.js");
                     $.getScript(SITE_URL + "static/admin/js/jquery.teachtype.js");
 //                    $.getScript(SITE_URL + "/js/admincp.js");
                 },
@@ -82,6 +98,14 @@ $(document).ready(function() {
             $(".row" + $(this).attr('fieldid')).remove();
             $(this).attr('src', $(this).attr('src').replace("tv-collapsable", "tv-expandable"));
             $(this).attr('status', 'open');
+        }
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
         }
     })
 });

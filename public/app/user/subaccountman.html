@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>想见孩-副帐户管理</title>
+    <title>想见孩-关联帐户管理</title>
     <meta name="author" content="想见孩" />
     <meta name="copyright" content="想见孩" />
     <meta name="description" content="想见孩" />
@@ -57,7 +57,7 @@
                 </a>
             </div>
             <div class="head_title">
-                <p>副帐户管理</p>
+                <p>关联帐户管理</p>
             </div>
             <div class="head_r">
                 <a href="javascript:;" data-target="#full" id="open_popup" style="display: none">
@@ -94,7 +94,7 @@
                 <h2 class="demos-second-title add_subacctitle">
                     <a href="javascript:;" class="quit_popup">
                         <i class="icon iconfont icon-jiantou3"></i>
-                    </a> 新增副账户</h2>
+                    </a> 新增关联账户</h2>
             </header>
             <article class="weui-article" style="padding-left:0;padding-right:0;">
                 <section>
@@ -138,17 +138,7 @@
     <script>
 
         $(function() {
-            var num = '';
-            $.ajax({
-                type:'POST',
-                url:api+'/Common/site.html',
-                data:{},
-                dataType: 'json',
-                success: function(response){
-                    $('.subacc_p').html('您最多可以添加'+response.result[4]['value']+'个副账号，副账号和主账号同等权限');
-                    num = response.result[4]['value'];
-                }
-            });
+
             /**
              * @desc 判断是否为副账号
              */
@@ -180,6 +170,26 @@
                     }
                 }
             });
+            var num = '';
+            $.ajax({
+                type:'POST',
+                url:api+'/Common/site.html',
+                data:{
+                    member_id:user_member_id
+                },
+                dataType: 'json',
+                success: function(response){
+                    if(flag){
+                        $('.subacc_p').html('您最多可以添加'+response.result[4]['value']+'个副账号，主账号和副账号同等权限');
+                    }else{
+                        $('.subacc_p').html('副账号不具备添加权限');
+                    }
+
+
+                    num = response.result[4]['value'];
+                }
+            });
+
             // 获取副账户列表
             function list() {
                 $.ajax({
@@ -242,7 +252,7 @@
             // 打开添加副账户popup
             $("#open_popup").click(function() {
                 if ($('.subacc_list').length >= num) {
-                    $.toast('只能添加'+num+'个副帐号，已不能再添加了！','forbidden');return false;
+                    $.toast('只能添加'+num+'个关联帐号，已不能再添加了！','forbidden');return false;
                 } else {
                     $("#full").popup();
                 }
@@ -307,7 +317,7 @@
                         '<div class="weui-cell">' +
                         '<div class="weui-cell__bd">' ;
                     if(data[i]['is_owner'] == 0){
-                        template +=    '<p><span class="acc_sign">主</span>' + data[i]['member_aboutname'] + '</p>' ;
+                        template +=    '<p><span class="acc_sign">主</span>绑定人</p>' ;
                     }else{
                         template +=    '<p><span class="acc_sign acc_sign2">副</span>' + data[i]['member_aboutname'] + '</p>' ;
                     }
