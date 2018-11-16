@@ -144,7 +144,12 @@ class Member extends MobileMember
                     $result['member_avatar'] = '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
                     $result['rel_member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
                 }
-                $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
+                if($result['is_owner'] == 0){
+                    $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
+                }else{
+                    $result['f_account_count'] =db('member')->where('(is_owner = "'.$result["member_id"].'" OR member_id = "'.$result["member_id"].'") AND member_id != "'.$member_id.'"')->count();
+                }
+
                 $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');
                 $result['city_name'] = db('area')->where('area_id = "'.$result["member_cityid"].'"')->value('area_name');
                 $result['area_name'] = db('area')->where('area_id = "'.$result["member_areaid"].'"')->value('area_name');
@@ -573,7 +578,7 @@ class Member extends MobileMember
         if($member['is_owner'] == 0){
             $where = ' is_owner = "'.$member_id.'"';
         }else{
-            $where = ' (is_owner = "'.$member['is_owner'].'") OR (member_id="'.$member['is_owner'].'")';
+            $where = ' (is_owner = "'.$member['is_owner'].'" OR member_id="'.$member['is_owner'].'") AND member_id != "'.$member_id.'"';
         }
 
 
