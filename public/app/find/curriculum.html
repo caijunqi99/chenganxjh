@@ -29,6 +29,12 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+        .error{
+            font-size: 24px;
+            text-align: center;
+            padding-top: 100px;
+            display:none;
+        }
     </style>
 </head>
 
@@ -70,17 +76,20 @@
             </ul>
         </div>
         <div id="courses_jobs_1" class="text_demand" style="display:none;">
+            <p class="courses_jobs_1 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
 
         </div>
         <div id="courses_jobs_2" class="text_demand">
+            <p class="courses_jobs_2 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
         </div>
         <div id="courses_jobs_3" class="text_demand" style="display:none;">
+            <p class="courses_jobs_3 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
@@ -110,12 +119,11 @@
             for (i = 1; i <= n; i++) {
                 var menu = $("#" + name + i)
                 var con = $("#" + "courses_" + name + "_" + i)
-                courses_jobs_2
                 if (i == cursel) {
                     contentid = "courses_jobs_" + cursel;
                     $.ajax({
                         type: "POST",
-                        url: api + "/arrangement/index",
+                        url: api + "/arrangement/index.html",
                         data: {
                             key: user_token,
                             class_id: class_id,
@@ -124,7 +132,20 @@
                         },
                         dataType: "json",
                         success: function(response) {
-                            $("#" + contentid + " .week_list").html(HTML2(response.result[0].content))
+                            // console.log(response);
+                            if(response['code'] == 200){
+                                var contents = response.result[0];
+                                if (contents == '' || contents == undefined) {
+                                    $("." + contentid ).show();
+                                    $("." + contentid ).html('暂无数据！')
+                                    $("#" + contentid + " .week_list").html('')
+                                }else{
+                                    $("." + contentid ).hide();
+                                    $("#" + contentid + " .week_list").html(HTML2(response.result[0].content))
+                                }
+                            }
+
+
                         }
                     });
                     menu.addClass("active");
@@ -210,6 +231,8 @@ function GetChildList(key,act,a){
     },'json');
 }
 function GetCurriculumInfo(classid,school_id,wek){
+    $("#school_id").val(school_id);
+    $("#class_id").val(classid);
     $.ajax({
         type: "POST",
         url: api + "/arrangement/index.html",
@@ -223,9 +246,23 @@ function GetCurriculumInfo(classid,school_id,wek){
         success: function(response) {
             // console.log(response.result[0].content[0].morning.length);
             var contents = response.result[0];
-            if (contents == '' || contents == 'undefined') {
-                $("#courses_jobs_2 .week_list").html('暂无数据！');
+            if (contents == '' || contents == undefined) {
+                $('#jobs2').addClass('active').siblings().removeClass('active');
+
+                $('#courses_jobs_2').show();
+                $('#courses_jobs_1').hide();
+                $('#courses_jobs_3').hide();
+                $(".courses_jobs_2").show();
+                $(".courses_jobs_2").html('暂无数据！');
+                $("#courses_jobs_2 .week_list").html('');
             }else{
+
+                $('#courses_jobs_2').show();
+                $('#courses_jobs_1').hide();
+                $('#courses_jobs_3').hide();
+                $(".courses_jobs_2").hide();
+                $('#jobs2').addClass('active').siblings().removeClass('active');
+
                 $("#courses_jobs_2 .week_list").html(HTML2(response.result[0].content));
             }
             
