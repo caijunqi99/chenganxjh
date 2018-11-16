@@ -108,6 +108,10 @@ class Teacherbuy extends MobileMember
         if(empty($teachInfo)){
             output_error('无此视频的信息！');
         }
+        //传视频的人
+        if(!empty($teachInfo['t_userid'])){
+            $teachercertifyInfo = db("teachercertify")->field("id,provinceid,cityid,areaid")->where(array('member_id'=>$teachInfo['t_userid']))->find();
+        }
         $model = Model('Packagesorderteach');
         //会员信息
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
@@ -122,6 +126,9 @@ class Teacherbuy extends MobileMember
         $order['order_amount'] = $teachInfo['t_price'];
         $order['add_time'] = TIMESTAMP;
         $order['order_tid'] = $tid;
+        $order['provinceid'] = !empty($teachercertifyInfo['provinceid'])?$teachercertifyInfo['provinceid']:"";
+        $order['cityid'] = !empty($teachercertifyInfo['cityid'])?$teachercertifyInfo['cityid']:"";
+        $order['areaid'] = !empty($teachercertifyInfo['areaid'])?$teachercertifyInfo['areaid']:"";
         $order['payment_code'] = $this->payment_code;
         if ($order['payment_code'] == "") {
             $order['payment_code'] = "offline";
