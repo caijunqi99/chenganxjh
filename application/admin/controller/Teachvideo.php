@@ -136,9 +136,9 @@ class Teachvideo extends AdminControl {
     }
 
     public function pass() {
-//        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
-//            $this->error(lang('ds_assign_right'));
-//        }
+        if(session('admin_is_super') !=1 && !in_array(15,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $teacher_id = input('param.t_id');
         if (empty($teacher_id)) {
             $this->error(lang('param_error'));
@@ -187,6 +187,9 @@ class Teachvideo extends AdminControl {
     }
 
     public function edit() {
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $video_id = input('param.video_id');
         if (empty($video_id)) {
             $this->error(lang('param_error'));
@@ -364,6 +367,9 @@ class Teachvideo extends AdminControl {
      * 上传视频
      * */
     public function add() {
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $admininfo = $this->getAdminInfo();
         $model_class = model('Teachchild');
         if (!request()->isPost()) {
@@ -522,6 +528,9 @@ class Teachvideo extends AdminControl {
 
     //删除
     public function del() {
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $video_id = input('param.video_id');
         if (empty($video_id)) {
             $this->error(lang('param_error'));
