@@ -15,17 +15,16 @@ class Mood extends AdminControl {
 
     const EXPORT_SIZE = 1000;
 
-//    public function _initialize()
-//    {
-//        parent::_initialize();
-//        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
-//        //获取当前角色对当前子目录的权限
-//        $class_name = strtolower(end(explode('\\',__CLASS__)));
-//        $perm_id = $this->get_permid($class_name);
-////        halt($perm_id);
-//        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
-//        $this->assign('action',$action);
-//    }
+    public function _initialize()
+    {
+        parent::_initialize();
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
+    }
     /**
      *
      * 晒心情管理列表
@@ -35,12 +34,15 @@ class Mood extends AdminControl {
         $img_path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         //晒心情列表
         $where = array();
-        //判断登陆角色
-        //$adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
-//        if($adminUser['admin_company_id'] != 1){
-//            $condition['o_id'] = $adminUser['admin_company_id'];
-//        }
-//
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $where['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $model_company = Model("Company");
+                $where = $model_company->getCondition($admininfo['admin_company_id']);
+            }
+        }
         if (!empty($_POST['account'])) {
             $member_name=input('param.account');
             $where['member_name']=array('like', '%' . trim($member_name) . '%');
@@ -74,7 +76,7 @@ class Mood extends AdminControl {
         $list = $mood_list->items();
         foreach($list as $k=>$v){
             $member_info = db("member")->where(array("member_id"=>$v['member_id']))->find();
-            $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : $member_id;
+            $member_id = $member_info['is_owner']!=0 ? $member_info['is_owner'] : "";
             $student = db("student")->alias('s')
                 ->join('__SCHOOL__ sc','sc.schoolid=s.s_schoolid','LEFT')
                 ->join('__CLASS__ cl','cl.classid=s.s_classid','LEFT')
