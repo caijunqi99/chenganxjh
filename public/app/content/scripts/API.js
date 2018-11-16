@@ -11,6 +11,6 @@ var http_url = 'http://vip.xiangjianhai.com:8001/';
 
 var user_token = $.cookie('token');
 var user_member_id = $.cookie('member_id');
-// var user_token = 'bbe3bff3bf8e584474e1cb2e9d82a67d';
-// var user_member_id = 100033;
+// var user_token = '43b8d4eb22602732e9e7838c6283ef24';
+// var user_member_id = 37102;
 

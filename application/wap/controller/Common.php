@@ -143,7 +143,7 @@ class Common extends MobileMall
         if(empty($school)){
            output_error('该学校不存在或已被删除，请联系管理员');
         }
-        $arr = '';
+        $arr = array();
         if(!empty($school['typeid'])){
             $type = explode(',',$school['typeid']);
             foreach($type as $key=>$value){
