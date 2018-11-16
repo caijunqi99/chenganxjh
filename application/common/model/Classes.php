@@ -28,6 +28,7 @@ class Classes extends Model {
                     ->field('sc.schoolid,sc.name,sc.res_group_id as sc_res_group_id,c.classid as res_group_id,c.classname as res_group_name')
                     ->where('sc.res_group_id = '.$areaid)
                     ->where('c.res_group_id = 0')
+                    ->where('c.isdel = 1')
                     ->whereor('sc.schoolid = '.$areaid)
                     ->select();
         if (empty($class_info)) {
@@ -59,13 +60,7 @@ class Classes extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getClasslList($condition, $page = '', $field = '*', $class = 'classid desc', $limit = '', $extend = array(), $master = false) {
-        //$list_paginate = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         $list_paginate = db('class')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
-        //$sql =  db('school')->getlastsql();
-        if($condition){
-            //print_r($sql);die;
-        }
-
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
@@ -75,7 +70,6 @@ class Classes extends Model {
     }
 
     public function getAllClasses($condtion,$field="*"){
-        //$result = db('class')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where($condtion)->select();
         $result = db('class')->where($condtion)->field($field)->select();
         return $result;
     }

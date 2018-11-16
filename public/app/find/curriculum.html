@@ -29,6 +29,7 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+
         .main{
             padding-top: 0;
         }
@@ -73,17 +74,20 @@
             </ul>
         </div>
         <div id="courses_jobs_1" class="text_demand" style="display:none;">
+            <p class="courses_jobs_1 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
 
         </div>
         <div id="courses_jobs_2" class="text_demand">
+            <p class="courses_jobs_2 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
         </div>
         <div id="courses_jobs_3" class="text_demand" style="display:none;">
+            <p class="courses_jobs_3 error" style="display: none"></p>
             <div class="cont">
                 <ul class="week_list"></ul>
             </div>
@@ -226,6 +230,7 @@
                 return data;
             },'json');
         }
+
         function GetCurriculumInfo(classid,school_id,wek){
             $("#school_id").val(school_id);
             $("#class_id").val(classid);

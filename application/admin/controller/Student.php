@@ -27,12 +27,11 @@ class Student extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
             if(!empty($admininfo['admin_school_id'])){
                 $condition['s_schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition = $model_company->getCondition($admininfo['admin_company_id'],"student");
             }
         }
         $studentname = input('param.studentname');//学生名字
@@ -88,35 +87,47 @@ class Student extends AdminControl {
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
-
-        foreach ($student_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
-            $student_list[$k]['typename'] = $schooltype['sc_type'];
-            $classinfo = db('class')->where('classid',$v['s_classid'])->find();
-            $student_list[$k]['classname'] = $classinfo['classname'];
-            $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
-            $student_list[$k]['schoolname'] = $school['name'];
-        }
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
 
         //全部学校
         if($admininfo['admin_id']!=1){
-            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
             if(!empty($admininfo['admin_school_id'])){
                 $condition_school['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
             }
         }
         $condition_school['isdel'] = 1;
         $model_school = model('School');
-        $school_list = $model_school->getAllAchool($condition_school);
+        $scfield = 'schoolid,name';
+        $school_list = $model_school->getAllAchool($condition_school,$scfield);
+        $schoolLists = array_column($school_list,NULL,'schoolid');
         //全部班级
         $model_class = model('Classes');
-        $class_list = $model_class->getAllClasses($condition_school);
-        foreach ($class_list as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $class_list[$k]['typename'] = $schooltype['sc_type'];
+        if($admininfo['admin_id']!=1){
+            if(!empty($admininfo['admin_school_id'])){
+                $condition_class['schoolid'] = $admininfo['admin_school_id'];
+            }else{
+                $model_company = Model("Company");
+                $condition_class = $model_company->getCondition($admininfo['admin_company_id'],"class");
+            }
         }
+        $condition_class['isdel'] = 1;
+        $clfield = 'classid,classname,typeid';
+        $class_list = $model_class->getAllClasses($condition_class,$clfield);
+        $classLists = array_column($class_list,NULL,'classid');
+        foreach ($class_list as $k=>$v){
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
+        }
+        foreach ($student_list as $k=>$v){
+            $student_list[$k]['typename'] = $schooltypeList[$v['s_sctype']]['sc_type'];
+            $student_list[$k]['classname'] = $classLists[$v['s_classid']]['classname'];
+            $student_list[$k]['schoolname'] = $schoolLists[$v['s_schoolid']]['name'];
+        }
+
+        
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
         $this->assign('schoolList', $school_list);

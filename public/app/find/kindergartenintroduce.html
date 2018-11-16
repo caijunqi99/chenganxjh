@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="kindergartennature">幼儿园-<span id="school_type"></span></div>
+            <div class="kindergartennature"><span id="school_type"></span></div>
             <div class="cont2 school_info_txt">
                 <div class="container3 school_info">
                     <h3 class="school_info_title">校园简介</h3>
@@ -119,7 +119,7 @@
                     title: "选择学生绑定学校",
                     items: ssss,
                     onChange: function(d) {
-                        console.log();
+                        console.log(d);
                         if(d.values=='undefined' || d.values == null) return;
                         detailinfo(d.values)
                     },
@@ -183,9 +183,9 @@ function detailinfo(s_id){
             $("#school_title").text(response["result"][0].name);
             $("#schooladdress").text(response["result"][0].address);
             if (response["result"][0].s_type == 1) {
-                $("#school_type").text("公立");
+                $("#school_type").text("公立---"+response["result"][0].school_type);
             } else {
-                $("#school_type").text("私立");
+                $("#school_type").text("私立---"+response["result"][0].school_type);
             }
             $("#school_info_cont").html(response["result"][0].s_present);
             $("#faculty").html(response["result"][0].s_teacher);

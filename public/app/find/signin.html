@@ -73,40 +73,6 @@
                 </div>
 
                 <div class="signin_cont_inner" id="signinlists">
-                    <!-- <div class="signinlist_box">
-                        <h2 class="signin_time">2018-11-08<span>周一</span></h2>
-                        <ul class="signinlist clearfix" id="signinlist">
-                            <li>
-                                <div class="signin_item">
-                                    <h3 class="signin_status">
-                                        <span class="status_out"><span class="status_in"></span></span>
-                                    </h3>
-                                    <div class="signin_video_box">
-                                        <video id="video_true" controls controlsList="nodownload" width="100%" height="100%" preload="none" poster="">
-                                            <source src="../video/wangxiaoya.mp4" type="video/mp4">
-                                        </video>
-                                    </div>
-                                    <div class="signin_item_b">
-                                        <p class="signin_item_bp">07:30:00<span>上课打卡</span></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="notsigned">
-                                <div class="signin_item">
-                                    <h3 class="signin_status">
-                                        <span class="status_out"><span class="status_in"></span></span>
-                                    </h3>
-                                    <div class="signin_video_box">
-
-                                    </div>
-                                    <div class="signin_item_b">
-                                        <p class="signin_item_bp">07:30:00<span>放学打卡</span></p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
-
                 </div>
 
             </div>
@@ -218,13 +184,13 @@
                     onChange: function(d) {
                         console.log();
                         if(d.values=='undefined' || d.values == null) return;
-                        $('.cookbook_title').text(d.titles)
+                        // $('.cookbook_title').text(d.titles)
                         GetSignin(d.values)
                     },
                     
                     onOpen: function() {
                         // console.log($(".cookbook_title").text());
-                        $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
+                        // $(".weui-cells_radio p:contains('高一或10年级')").parent().next("div").find(".weui-check").attr("checked", "true");
                     },
                 });   
             }, 500 );
@@ -274,8 +240,11 @@ function GetSignin(s_id){
         dataType: "json",
         success: function(response) {
             // console.log(response["result"][0]);
-            $(".cookbook_title").text(response["result"][1]["name"]);
-            $("#signinlists").html(HTML(response["result"][0]));
+            if(response['code'] == 200){
+                $(".cookbook_title").text(response["result"][1]["name"]);
+                $("#signinlists").html(HTML(response["result"][0]));
+            }
+
         }
     });
 }

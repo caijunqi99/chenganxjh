@@ -49,18 +49,14 @@ class Mlselection extends AdminControl {
                 $condition['isdel'] = 1;
                 $admininfo = $this->getAdminInfo();
                 if($admininfo['admin_id']!=1){
-//                    $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//                    $condition['a.admin_company_id'] = $admin['admin_company_id'];
                       if(!empty($admininfo['admin_school_id'])){
                           $condition['schoolid'] = $admininfo['admin_school_id'];
                       }else{
-                          $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                          $model_company = Model("Company");
+                          $condition = $model_company->getCondition($admininfo['admin_company_id']);
                       }
                 }
-                $model_school = model('School');
-                $school_list = $model_school->getSchoolList($condition);
                 $school_list = db('school')->field('schoolid,name')->where($condition)->select();
-                //$school_list = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field('schoolid,name')->where($condition)->select();
                 $data['school_list'] =$school_list;
                 echo json_encode($data);
                 break;

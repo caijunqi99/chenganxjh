@@ -29,9 +29,8 @@ class Schoolapply extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
-            $condition['admin_company_id'] = $admininfo['admin_company_id'];
+            $model_company = Model("Company");
+            $condition = $model_company->getCondition($admininfo['admin_company_id']);
         }
 
         $schoolname = input('param.schoolname');//学校名称

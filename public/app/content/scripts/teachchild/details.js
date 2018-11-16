@@ -13,10 +13,17 @@ $(function() {
             t_id: GetPar("id")
         },
         success: function(response) {
-            $('#video_image').attr('src',response.result[0]['data']['t_videoimg']);
+            var image = '';
+            if (response.result[0]['data']['t_picture'] == '') {
+                image = response.result[0]['data']['t_videoimg'];
+            } else {
+                image = response.result[0]['data']['t_picture'];
+            }
+            $('#video_image').attr('src',image);
+
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
-            _videoSource.poster = response.result[0]['data']['t_videoimg'];
+            _videoSource.poster = image;
             $('#related').html(HTML(response['result']));
             $.hideLoading();
             /*var videoObject = {
@@ -128,10 +135,17 @@ $(function() {
         var List = '';
         var price = '';
         for (var i = 0; i < data[1]['lists'].length; i++) {
+            var img = '';
+            if (data[1]['lists'][i]['t_picture'] == '') {
+                img = data[1]['lists'][i]['t_videoimg'];
+            } else {
+                img = data[1]['lists'][i]['t_picture'];
+            }
+
             List += '<li class="related_list_li clearBoth">' +
                 '<a href="details.html?id='+data[1]['lists'][i]['t_id']+'" >' +
                 '<div class="img_wrap float_left">' +
-                '<img src="' + data[1]['lists'][i]['t_videoimg'] + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
+                '<img src="' + img + '" alt="' + data[1]['lists'][i]['t_url'] + '">' +
                 '</div>' +
                 '<div class="content_wrap float_left">' +
                 '<p class="title">' + data[1]['lists'][i]['t_title'] + '</p>';

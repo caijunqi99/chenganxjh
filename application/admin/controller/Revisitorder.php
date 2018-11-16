@@ -34,11 +34,11 @@ class Revisitorder extends AdminControl {
 
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
-            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            $condition['a.admin_company_id'] = $admin['admin_company_id'];
+            $model_company = Model("Company");
+            $condition = $model_company->getCondition($admininfo['admin_company_id']);
         }
-
         $condition['pkg_type'] = 2;
+        $condition['delete_state'] = 0;
         $buyer_name = input('get.buyer_name');
         if ($buyer_name) {
             $condition['buyer_mobile'] = array('like', "%" . $buyer_name . "%");

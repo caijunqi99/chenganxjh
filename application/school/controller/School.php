@@ -30,12 +30,10 @@ class School extends AdminControl {
             if(!empty($admininfo['admin_school_id'])){
                 $condition['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
+                $model_company = Model("Company");
+                $condition = $model_company->getCondition($admininfo['admin_company_id']);
             }
-//            $admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-//            $condition['a.admin_company_id'] = $admin['admin_company_id'];
         }
-        //$data = db('school')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->where(array('s.isdel'=>1,'a.admin_company_id'=>$a))->select();
         $schoolname = input('param.schoolname');//学校名称
         if ($schoolname) {
             $condition['name'] = array('like', "%" . $schoolname . "%");
@@ -63,15 +61,6 @@ class School extends AdminControl {
                 $condition['areaid'] = $area_id;
             }
         }
-//        if(!empty($_GET['province'])){
-//            $condition['provinceid'] = intval(input('param.province'));
-//        }
-//        if(!empty($_GET['city'])){
-//            $condition['cityid'] = intval(input('param.city'));
-//        }
-//        if(!empty($_GET['area'])){
-//            $condition['areaid'] = intval(input('param.area'));
-//        }
         $query_start_time = input('param.query_start_time');
         $query_end_time = input('param.query_end_time');
         if ($query_start_time || $query_end_time) {
@@ -149,14 +138,12 @@ class School extends AdminControl {
             $data['cityid'] = $city_id['area_parent_id'];
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['provinceid'] = $province_id['area_parent_id'];
-            //print_r($province_id['area_shortname']);
             if($province_id['area_shortname']){
                 $uniqueCard = "";
                 for($i=0;$i<strlen($province_id['area_shortname']);$i=$i+3){
                     $uniqueCard .= $model_school->getFirstCharter(substr($province_id['area_shortname'],$i,3));
                 }
             }
-            //print_r($uniqueCard);die;
             $number = $model_school -> getNumber($uniqueCard);
             $data['schoolCard'] = $uniqueCard.$number;
             //验证数据  END

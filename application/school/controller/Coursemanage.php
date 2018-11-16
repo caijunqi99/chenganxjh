@@ -24,8 +24,6 @@ class Coursemanage extends AdminControl {
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
                 $condition['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $condition['admin_company_id'] = $admininfo['admin_company_id'];
             }
         }
         $condition['isdel'] = 1;
@@ -63,20 +61,6 @@ class Coursemanage extends AdminControl {
             $schoolid = 6;
         }
         if (!request()->isPost()) {
-            //地区信息
-//            $region_list = db('area')->where('area_parent_id','0')->select();
-//            $this->assign('region_list', $region_list);
-//            $address = array(
-//                'true_name' => '',
-//                'area_id' => '',
-//                'city_id' => '',
-//                'address' => '',
-//                'tel_phone' => '',
-//                'mob_phone' => '',
-//                'is_default' => '',
-//                'area_info'=>''
-//            );
-//            $this->assign('address', $address);
             //学校类型
             $schoolInfo = db('school')->where(array('schoolid'=>$schoolid))->find();
             $type = explode(',',$schoolInfo['typeid']);
@@ -481,15 +465,13 @@ class Coursemanage extends AdminControl {
                 'url' => url('School/Coursemanage/index')
             ),
         );
-//        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
-            if (request()->action() == 'add' || request()->action() == 'index') {
-                $menu_array[] = array(
-                    'name' => 'add',
-                    'text' => '添加课程',
-                    'url' => url('School/Coursemanage/add')
-                );
-            }
-//        }
+        if (request()->action() == 'add' || request()->action() == 'index') {
+            $menu_array[] = array(
+                'name' => 'add',
+                'text' => '添加课程',
+                'url' => url('School/Coursemanage/add')
+            );
+        }
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',

@@ -16,6 +16,36 @@
     <link rel="stylesheet" href="../content/style/user.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
     <script src="../content/scripts/mobile-util.js"></script>
+    <style>
+        .sub_linkicon {
+            margin-left: 15px;
+            position: relative;
+            top: -2px;
+        }
+
+        .acc_sign {
+            width: 34px;
+            height: 34px;
+            display: inline-block;
+            border-radius: 50%;
+            background: #fda214;
+            font-size: 18px;
+            color: #f6f6f6;
+            line-height: 30px;
+            text-align: center;
+            position: relative;
+            top: -5px;
+            margin-right: 15px;
+        }
+
+        .acc_sign2 {
+            background: #4ec3bb;
+        }
+
+        .subacc_list_box .weui-cell__ft a {
+            color: #fff;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,7 +81,7 @@
             </div>
         </div>
 
-        <div class="container2 tishi">
+        <div class="container2 tishi" style="display: none;">
             <p class="subacc_info_p"><i class="icon iconfont icon-tixing"></i> 向左滑动进行删除操作.</p>
         </div>
     </div>
@@ -115,13 +145,14 @@
                 data:{},
                 dataType: 'json',
                 success: function(response){
-                    $('.pay_remarks').html('您最多可以添加'+response.result[4]['value']+'个副账号，副账号和主账号同等权限');
+                    $('.subacc_p').html('您最多可以添加'+response.result[4]['value']+'个副账号，副账号和主账号同等权限');
                     num = response.result[4]['value'];
                 }
             });
             /**
              * @desc 判断是否为副账号
              */
+            var flag = false;
             $.ajax({
                 type:'POST',
                 url:api+'/Member/isOwner.html',
@@ -129,13 +160,18 @@
                     key:user_token,
                     member_id:user_member_id,
                 },
+                async:false,
                 dataType: "json",
                 success: function(response){
                     if(response['code'] == 200){
                         if(response.result[0]['is_owner'] == 0){
                             $('#open_popup').show();
+                            $('.tishi').show();
+                            flag = true;
                         }else{
                             $('#open_popup').hide();
+                            $('.tishi').hide();
+                            flag = false;
                         }
                     }else if(response['code'] == 400){
                         $.toast(response['message'],'forbidden');return false;
@@ -155,13 +191,19 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         if (response['result'].length == 0) {
                             $('.tishi').hide();
                         } else {
-                            $('.tishi').show();
+                            if(flag){
+                                $('.tishi').show();
+                            }else{
+                                $('.tishi').hide();
+                            }
                         }
+
                         $('.subacc_list_box .container2').html(HTML(response['result']));
+
                         $('.weui-cell_swiped').swipeout();
                     }
                 });
@@ -255,22 +297,31 @@
             function HTML(data) {
                 var template = '';
                 for (var i = 0; i < data.length; i++) {
-                    template += '<div class="weui-cells subacc_list">' +
-                        '<div class="weui-cell weui-cell_swiped">' +
-                        '<div class="weui-cell__bd">' +
+                    template += '<div class="weui-cells subacc_list">';
+                    if(flag) {
+                        template += '<div class="weui-cell weui-cell_swiped">';
+                    }else{
+                        template += '<div class="weui-cell">';
+                    }
+                    template +=    '<div class="weui-cell__bd">' +
                         '<div class="weui-cell">' +
-                        '<div class="weui-cell__bd">' +
-                        '<p>' + data[i]['member_aboutname'] + '</p>' +
-                        '</div>' +
+                        '<div class="weui-cell__bd">' ;
+                    if(data[i]['is_owner'] == 0){
+                        template +=    '<p><span class="acc_sign">主</span>' + data[i]['member_aboutname'] + '</p>' ;
+                    }else{
+                        template +=    '<p><span class="acc_sign acc_sign2">副</span>' + data[i]['member_aboutname'] + '</p>' ;
+                    }
+                    template +=     '</div>' +
                         '<div class="weui-cell__ft"><span class="paddr10">' + data[i]['member_mobile'] + '</span></div>' +
                         '</div>' +
-                        '</div>' +
-                        '<div class="weui-cell__ft">' +
-                        '<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" data-id="' + data[i]['member_id'] + '" onclick="Delete(event, this)">删除</a>' +
-                        '<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" onclick="Close(this)">关闭</a>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
+                        '</div>';
+                    if(flag){
+                        template += '<div class="weui-cell__ft">' +
+                            '<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" data-id="' + data[i]['member_id'] + '" onclick="Delete(event, this)">删除</a>' +
+                            '<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" onclick="Close(this)">关闭</a>' +
+                            '</div>' ;
+                    }
+                    template +=   '</div></div>'
                 }
                 return template;
             }

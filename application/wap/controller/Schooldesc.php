@@ -28,6 +28,19 @@ class Schooldesc extends MobileMember
         }
         $school=model('school');
         $logindata = $school->getSchoolById($school_id);
+        //学校类型
+        $type = explode(',',$logindata['typeid']);
+        $a = '';
+        if(!empty($type)){
+            foreach($type as $k=>$v){
+                if($k == 0){
+                    $a .= $this->get_schoolType($v);
+                }else{
+                    $a .= '&'.$this->get_schoolType($v);
+                }
+            }
+        }
+
         $desc=model('Schooldesc');
         $where=array();
         $where['s_sid']=$school_id;
@@ -42,6 +55,7 @@ class Schooldesc extends MobileMember
         $data['name']=$logindata['name'];
         $data['region']=$logindata['region'];
         $data['address']=$logindata['address'];
+        $data['school_type']=$a;
         if($data){
             output_data($data);
         }else{
@@ -51,5 +65,10 @@ class Schooldesc extends MobileMember
 
     }
 
+//获取学校类型
+function get_schoolType($id){
+        $res = db('schooltype')->where('sc_id="'.$id.'"')->field('sc_type')->find();
+        return $res['sc_type'];
+}
 
 }

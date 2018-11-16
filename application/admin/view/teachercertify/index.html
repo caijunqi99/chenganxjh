@@ -69,9 +69,9 @@
             <th class="align-center">{$Think.lang.teacher_index_certime}</th>
             <th class="align-center">{$Think.lang.teacher_index_status}</th>
             <th class="align-center">{$Think.lang.ds_common_save_failreason}</th>
-            <!--<?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('10',$action) || in_array('6',$action))){?>-->
+            <?php  if(session('admin_is_super') ==1 || in_array('15',$action)){?>
             <th class="align-center">{$Think.lang.ds_handle}</th>
-            <!--<?php }?>-->
+            <?php }?>
             <!--<th class="align-center">{$Think.lang.teacher_index_desc}</th>-->
         </tr>
         <tbody>
@@ -106,6 +106,7 @@
                 <!--无-->
                 <!--<?php }  ?>-->
             <!--</td>-->
+            <?php if(session('admin_is_super') ==1 || in_array('15',$action)){ ?>
             <td class="align-center">
                 <?php if($v['status']==1){ ?>
                 <a href="{:url('/admin/teachercertify/pass',['teacher_id'=>$v.id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
@@ -115,6 +116,7 @@
                 无
                 <?php }  ?>
             </td>
+            <?php } ?>
             <!--<td class="align-center"><?php echo $v['desc']; ?></td>-->
         </tr>
         <?php } ?>

@@ -22,7 +22,7 @@ class Import extends AdminControl
         //获取省份
         $province = db('area')->field('area_id,area_parent_id,area_name')->where('area_parent_id=0')->select();
         //获取学校
-        $school = db('school')->field('schoolid,name')->select();
+        $school = db('school')->field('schoolid,name')->where('isdel=1')->select();
         $this->assign('school',$school);
         $this->assign('province',$province);
     }
@@ -55,10 +55,10 @@ class Import extends AdminControl
                 $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
             }
             if(!empty($_GET['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
             if(!empty($_GET['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
         //查询绑定总数
@@ -96,10 +96,10 @@ class Import extends AdminControl
                 $where .= ' AND school_id = "'.intval($_GET["school"]).'"';
             }
             if(!empty($_GET['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["grade"]).'%"';
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
             if(!empty($_GET['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_GET["class"]).'%"';
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
         //查询绑定总数
@@ -132,11 +132,11 @@ class Import extends AdminControl
             if(!empty($_POST['school'])){
                 $where .= ' AND school_id = "'.intval($_POST["school"]).'"';
             }
-            if(!empty($_POST['grade'])){
-                $where .= ' AND class_name LIKE "%'.trim($_POST["grade"]).'%"';
+            if(!empty($_GET['grade'])){
+                $where .= ' AND sc_id = "'.intval($_GET["grade"]).'"';
             }
-            if(!empty($_POST['class'])){
-                $where .= ' AND class_name LIKE "%'.trim($_POST["class"]).'%"';
+            if(!empty($_GET['class'])){
+                $where .= ' AND classid = "'.intval($_GET["class"]).'"';
             }
         }
 
@@ -205,7 +205,7 @@ class Import extends AdminControl
                 $html .= '<td class="align-center">'.intval($value["t_day"]).'天</td>';
                 $html .= '<td class="w150 align-center">
                         <div class="layui-table-cell laytable-cell-9-8">
-                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm" data-id="'.$value["id"].'" lay-event="reset">修改</a>';
+                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm edit" data-id="'.$value["id"].'" lay-event="reset">修改</a>';
                 $html .=  '</div></td>';
 
                 $html .= '</tr>';
@@ -319,16 +319,21 @@ class Import extends AdminControl
                             'content' => $value['M'],
                             'status' => 1,
                             'time' => time(),
+                            'trueTime' => time(),
                         );
-                        $import_data = $model->insert($data);
+                        $import_data = $model->insertGetId($data);
                         if($import_data){
                             //为家长开账户并发送短信通知
                             $pass = getRandomString(6,null,'n');
                             $member = array();
-                            $member['member_name'] = $value['A'];
-                            $member['member_nickname'] = $value['A'];
+                            $member['member_name'] = empty($value['B'])?$value['A']:$value['B'];
+                            $member['member_nickname'] = empty($value['B'])?$value['A']:$value['B'];
                             $member['member_password'] = md5(trim($pass));;
                             $member['member_mobile'] = $value['A'];
+                            $member['member_provinceid'] = $_SESSION['excel']['school']['provinceid'];
+                            $member['member_cityid'] = $_SESSION['excel']['school']['cityid'];
+                            $member['member_areaid'] = $_SESSION['excel']['school']['areaid'];
+                            $member['member_areainfo'] = $_SESSION['excel']['school']['address'];
                             $member['member_mobile_bind'] = 1;
                             $member_id = $model_member->insertGetId($member);
                             if ($member_id) {
@@ -403,12 +408,15 @@ class Import extends AdminControl
                                                     );
                                                     $order_pay_time = $model_order_time->insert($see_end);
                                                     if($order_pay_time){
-
-                                                        $flag = true;
+                                                        $update_import = $model->where('id="'.$import_data.'"')->update(array('m_id'=>$member_id,'s_id'=>$student_id,'order_id'=>$order_pay_id));
+                                                        if($update_import){
+                                                            $flag = true;
+                                                        }else{
+                                                            $flag = false;
+                                                        }
                                                     }else{
                                                         $flag = false;
                                                     }
-
                                                 }else{
                                                     $flag = false;
                                                 }
@@ -419,6 +427,9 @@ class Import extends AdminControl
                                         case 2://重温课堂套餐
                                             break;
                                         case 3://教孩套餐
+                                            break;
+                                        case 4://为空
+                                            $flag = true;
                                             break;
                                     }
                                 }else{
@@ -493,6 +504,7 @@ class Import extends AdminControl
                         'content' => $value['M'],
                         'status' => 2,
                         'time' => time(),
+                        'trueTime' => time(),
                         'reason' => $value['error'],
                         'reason_id' => $value['error_id'],
                     );
@@ -518,313 +530,516 @@ class Import extends AdminControl
      * @author 郎志耀
      * @time 20180926
      */
-    public function entered(){
-        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+    public function edit(){
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
-        $where = '';
-        if(!empty($_GET)){
-            $where = $this->_conditions($_GET);
-        }
+        $id = input('get.id');
+        $import = db('import_student')->where('id="'.$id.'"')->find();
 
-        $list_count = db('camera')->where($where)->count();
+        //学校
+        $school_student = db('school')->field('schoolid,name')->where('isdel=1')->select();
 
-        $this->assign('list_count',$list_count);
-        $this->setAdminCurItem('entered');
-        return $this->fetch('entered');
+        $this->assign('school',$school_student);
+        $this->assign('import',$import);
+        $this->setAdminCurItem('edit');
+        return $this->fetch('edit');
     }
-    /**
-     * 摄像头查询过滤
-     * @创建时间   2018-11-03T00:39:28+0800
-     * @param  [type]                   $where [description]
-     * @return [type]                          [description]
-     */
-    public function _conditions($where){
-        if (isset($where['name']) && !empty($where['name'])) {
-            $condition['name'] = array('LIKE','%'.$where['name'].'%');
-        }
-        $res = array();
-        $name = false;
-        if (isset($where['class']) && !empty($where['class']) ) {
-            $class = $this->getResGroupIds(array('classname'=>$where['class']));
-            if ($class) {
-                $res=array_merge($res, $class);
-            }
-            unset($where);
-            $name = 'true';
-        }
-        if (isset($where['grade']) && !empty($where['grade'])) {
-            $grade = $this->getResGroupIds(array('sc_type'=>$where['grade']));
-            unset($where['school']);
-            unset($where['area']);
-            unset($where['city']);
-            unset($where['province']);
-            $name = 'true';
-            if ($grade) {
-                $res=array_merge($res, $grade);
-            }
-        }
-        if (isset($where['school']) && $where['school'] != 0 ) {
-            $school = $this->getResGroupIds(array('schoolid'=>$where['school']));
-            unset($where['area']);
-            unset($where['city']);
-            unset($where['province']);
-            $name = 'true';
-            if ($school) {
-                $res=array_merge($res, $school);
-            }
-        }
-        if (isset($where['area']) && $where['area'] != 0 ) {
-            $area = $this->getResGroupIds(array('areaid'=>$where['area']));
-            unset($where['city']);
-            unset($where['province']);
-            $name = 'true';
-            if ($area) {
-                $res=array_merge($res, $area);
-            }
-        }
-        if (isset($where['city']) && $where['city'] != 0 ) {
-            $city = $this->getResGroupIds(array('cityid'=>$where['city']));
-            unset($where['province']);
-            $name = 'true';
-            if ($city) {
-                $res=array_merge($res, $city);
-            }
-        }
-        if (isset($where['province']) && $where['province'] != 0 ) {
-            $province = $this->getResGroupIds(array('provinceid'=>$where['province']));
-            $name = 'true';
-            if ($province) {
-                $res=array_merge($res, $province);
-            }
-        }
-        if ($name == 'true') {
-            $condition['parentid'] = array('in',$res);
-        }
-        return $condition;
-    }
-    /**
-     * 查询学校和班级摄像头
-     * @创建时间   2018-11-03T00:39:48+0800
-     * @param  [type]                   $where [description]
-     * @return [type]                          [description]
-     */
-    public function getResGroupIds($where){
-        $School = model('School');
-        $Class = model('Classes');
 
-        if (isset($where['sc_type']) && !empty($where['sc_type'])) {
-            $sc_id = db('schooltype')->where($where)->value('sc_id');
-            unset($where['sc_type']);
-            $where[]=['exp','FIND_IN_SET('.$sc_id.',typeid)'];
-        }
-        $classname = '';
-        if (isset($where['classname']) && !empty($where['classname']) ) {
-            $classname = $where['classname'];
-            unset($where['classname']);
-        }
-        $where['res_group_id'] =array('gt',0);
-        $Schoollist = $School->getAllAchool($where,'res_group_id');
-        // p($where);exit;
-        if (isset($where['provinceid']) && !empty($where['provinceid'])) {
-            $where['school_provinceid'] =$where['provinceid'];
-            unset($where['provinceid']);
-        }
-        if (isset($where['cityid']) && !empty($where['cityid'])) {
-            $where['school_cityid'] =$where['cityid'];
-            unset($where['cityid']);
-        }
-        if (isset($where['areaid']) && !empty($where['areaid'])) {
-            $where['school_areaid'] =$where['areaid'];
-            unset($where['areaid']);
-        }
-        if (isset($where['areaid']) && !empty($where['areaid'])) {
-            $where['school_areaid'] =$where['areaid'];
-            unset($where['areaid']);
-        }
-        if (!empty($classname)) {
-            $where['classname'] = array('like','%'.$classname.'%');
-        }
-        $res = array();
-        $Classlist = $Class->getAllClasses($where,'res_group_id');
-        $sc_resids=array_column($Schoollist, 'res_group_id');
-        if ($sc_resids) {
-            array_push($res, $sc_resids);
-        }
-        $cl_resids=array_column($Classlist, 'res_group_id');
-        if ($cl_resids) {
-            array_push($res, $cl_resids);
-        }
-        $ids = array_merge($sc_resids,$cl_resids);
-        if ($ids) {
-            return $ids;
-        }else{
-            return $res;
-        }
-    }
+
+
+
     /**
-     * @desc 获取分页数据
+     * @desc 失败修改
      * @author langzhiyao
-     * @time 20190929
+     * @time 20181114
      */
-    public function get_entered_list(){
-
-        $where = ' 1=1 ';
-        if(!empty($_POST)){
-            // p($_POST);exit;
-            $cond = array();
-            foreach ($_POST as $key => $p) {
-                if(!in_array($key, ['page','page_count']) && !empty($p))$cond[$key]=$p;
-            }
-            if ($cond) {
-                $where = $this->_conditions($cond);
-            }
+    public function failUpdate(){
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
         }
+        if(!empty($_POST)){
+            $id = intval(input('get.id'));
+            //学校信息
+            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = "'.intval($_POST['school_id']).'" AND isdel=1')->find();
+            if(empty($school_info)){
+                output_error(array('msg'=>'该学校已被删除，请重新选择'));
+            }
+            $school_info['province'] = $this->get_address_name($school_info['provinceid']);
+            $school_info['city'] = $this->get_address_name($school_info['cityid']);
+            $school_info['area'] = $this->get_address_name($school_info['areaid']);
+            $address = $school_info['province'].'-'.$school_info['city'].'-'.$school_info['area'];
+            $school_info['address'] = $address;
+            $sc_type = explode(',',$school_info['typeid']);
+            //判断年级
+            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".intval($_POST['sc_id'])."'")->find();
+            if(!$is_grade || !in_array($is_grade['sc_id'],$sc_type)){
+                exit(json_encode(array('code'=>1,'msg'=>'该学校类型已被删除，请重新选择')));
+            }
 
-        $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
-        $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
+            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".intval($school_info['schoolid'])."' AND `typeid`='".intval($is_grade['sc_id'])."' AND `classid`='".intval($_POST['class_id'])."' AND `isdel`=1")->find();
+            if(!$is_class){
+                exit(json_encode(array('code'=>1,'msg'=>'该学校班级已被删除，请重新选择')));
+            }
+            //开启事务
+            $model = Model('import_student');
+            $model_member = Model('member');
+            $model_student = Model('student');
+            $model_order = Model('packagesorder');
+            $model_order_time = Model('packagetime');
+            $model->startTrans();
+            $flag = false;
+            $t_id = $_POST['t_id'];
+            //套餐ID
+            switch ($t_id){
+                case 1:
+                    $t_name='看孩套餐';
+                    break;
+                case 2:
+                    $t_name = '重温课堂套餐';
+                    break;
+                case 3:
+                    $t_name = '教孩套餐';
+                    break;
+                default:
+                    $t_name = '无套餐';
+                    break;
+            }
+            $data = array(
+                'm_mobile' => $_POST['m_mobile'],
+                'm_name' => $_POST['m_name'],
+                'm_sex' => $_POST['m_sex'],
+                's_name' => $_POST['s_name'],
+                's_sex' => $_POST['s_sex'],
+                's_card' => $_POST['s_card'],
+                'school_id' => $_POST['school_id'],
+                'school_name' => $school_info['name'],
+                'province_id' => $school_info['provinceid'],
+                'city_id' => $school_info['cityid'],
+                'area_id' => $school_info['areaid'],
+                'address' => $school_info['address'],
+                'sc_id' => $is_grade['sc_id'],
+                'school_type' => $is_grade['sc_type'],
+                'classid' => $is_class['classid'],
+                'class_name' => $is_class['classname'],
+                't_id' => $t_id,
+                't_name' => $t_name,
+                't_price' => $_POST['t_price'],
+                't_day' => $_POST['t_day'],
+                'content' => $_POST['content'],
+                'status' => 1,
+                'trueTime' => time(),
+            );
 
-//        halt($start);
-        //查询已安装的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
-        $date=date('H:i',time());
-        foreach($list as $k=>$v){
-            if($v['online']==0){
-                $list[$k]['statuses']=2;
-            }else{
-                if($v['status']==1){
-                    if(!empty($v['begintime'])&&!empty($v['endtime'])){
-                        $begintime=date('H:i',$v['begintime']);
-                        $endtime=date('H:i',$v['endtime']);
-                        if($date<$begintime||$date>$endtime){
-                            $list[$k]['statuses']=2;
-                        }else{
-                            $list[$k]['statuses']=1;
+            $import_data = $model->where('id="'.$id.'"')->update($data);
+            if($import_data){
+                //为家长开账户并发送短信通知
+                $pass = getRandomString(6,null,'n');
+                $member = array();
+                $member['member_name'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                $member['member_nickname'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                $member['member_password'] = md5(trim($pass));;
+                $member['member_mobile'] = $_POST['m_mobile'];
+                $member['member_provinceid'] = $school_info['provinceid'];
+                $member['member_cityid'] = $school_info['cityid'];
+                $member['member_areaid'] = $school_info['areaid'];
+                $member['member_areainfo'] = $school_info['address'];
+                $member['member_mobile_bind'] = 1;
+                $member_id = $model_member->insertGetId($member);
+                if ($member_id) {
+                    //添加学生信息
+                    $student_array=array(
+                        's_name' => $_POST['s_name'],
+                        's_sex' => $_POST['s_sex'],
+                        's_card' => $_POST['s_card'],
+                        's_schoolid' => $_POST['school_id'],
+                        's_sctype' => $is_grade['sc_id'],//学校类型id
+                        's_classid' => $is_class['classid'],//班级id
+                        's_ownerAccount' => $member_id,
+                        's_provinceid' => $school_info['provinceid'],
+                        's_cityid' => $school_info['cityid'],
+                        's_areaid' => $school_info['areaid'],
+                        's_region' => $school_info['address'],
+                        'admin_company_id' => $school_info['admin_company_id'],
+                        'option_id' => session('admin_id'),
+                        's_createtime' => date('Y-m-d',time()),
+
+                    );
+                    $student_id = $model_student->insertGetId($student_array);
+                    if($student_id){
+                        //添加订单信息
+                        $this->_logic_buy_1 = \model('buy_1','logic');
+                        switch ($t_id){
+                            case 1://看孩套餐
+                                $pay_sn = $this->_logic_buy_1->makePaySn($member_id);
+                                //到期时间
+                                $endTime = time()+intval($_POST['t_day'])*24*3600;
+                                $see_array = array(
+                                    'pay_sn'=>$pay_sn,
+                                    'buyer_id'=>intval($member_id),
+                                    'buyer_name'=>trim($member['member_mobile']),
+                                    'buyer_mobile'=>trim($member['member_mobile']),
+                                    'add_time'=>time(),
+                                    'payment_code'=>'offline',
+                                    'payment_time'=>time(),
+                                    'finnshed_time'=>time(),
+                                    'pkg_name'=>trim($t_name).'（线下）',
+                                    'pkg_price'=>ncPriceFormatb($_POST['t_price']),
+                                    'pkg_length'=>intval($_POST['t_day']),
+                                    's_id'=>intval($student_id),
+                                    's_name'=>trim($_POST['s_name']),
+                                    'schoolid'=>intval($school_info['schoolid']),
+                                    'name'=>trim($school_info['name']),
+                                    'classid'=>intval($is_class['classid']),
+                                    'classname'=>trim($is_class['classname']),
+                                    'order_amount'=>ncPriceFormatb($_POST['t_price']),
+                                    'order_state'=>'40',
+                                    'order_dieline'=>$endTime,
+                                    'option_id'=>intval($school_info['option_id']),
+                                    'over_amount'=>ncPriceFormatb($_POST['t_price']),
+                                    'admin_company_id'=>intval($school_info['admin_company_id']),
+                                );
+                                $order_pay_id =$model_order->insertGetId($see_array);
+                                if($order_pay_id){
+                                    $order_sn = $this->_logic_buy_1->makeOrderSn($order_pay_id);
+                                    $order_pay = $model_order->where('order_id="'.$order_pay_id.'"')->update(array('order_sn'=>$order_sn));
+                                    if($order_pay){
+                                        $desc = date('Y-m-d H:i',time()).'第一次购买看孩套餐,套餐到期时间:'.date('Y-m-d H:i',$endTime);
+                                        $see_end = array(
+                                            'member_id'=>intval($member_id),
+                                            'member_name'=>trim($member['member_mobile']),
+                                            's_id'=>intval($student_id),
+                                            's_name'=>trim($_POST['s_name']),
+                                            'start_time'=>time(),
+                                            'end_time'=>$endTime,
+                                            'up_time'=>time(),
+                                            'up_desc'=>$desc,
+                                        );
+                                        $order_pay_time = $model_order_time->insert($see_end);
+                                        if($order_pay_time){
+                                            $update_import = $model->where('id="'.$id.'"')->update(array('m_id'=>$member_id,'s_id'=>$student_id,'order_id'=>$order_pay_id));
+                                            if($update_import){
+                                                $flag = true;
+                                            }else{
+                                                $flag = false;
+                                            }
+                                        }else{
+                                            $flag = false;
+                                        }
+
+                                    }else{
+                                        $flag = false;
+                                    }
+                                }else{
+                                    $flag = false;
+                                }
+                                break;
+                            case 2://重温课堂套餐
+                                break;
+                            case 3://教孩套餐
+                                break;
+                            case 4://为空
+                                $flag = true;
+                                break;
                         }
                     }else{
-                        $list[$k]['statuses']=1;
+                        $flag = false;
                     }
                 }else{
-                    $list[$k]['statuses']=2;
+                    $flag=false;
                 }
+            }else{
+                $flag = false;
+            }
+            if($flag){
+                //发送随机密码
+                //生成数字字符随机 密码
+                $sms_tpl = config('sms_tpl');
+                $tempId = $sms_tpl['sms_password_reset'];
+                $sms = new \sendmsg\Sms();
+                $pass = '您于'.date('Y-m-d H:i:s',time()).'开通想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                $send = $sms->send($member['member_mobile'],$pass,$tempId);
+                if($send){
+                    $model->commit();
+                    exit(json_encode(array('code'=>200,'msg'=>'修改成功')));
+                }else{
+                    $model->rollback();
+                    exit(json_encode(array('code'=>1,'msg'=>'修改失败')));
+                }
+            }else{
+                $model->rollback();
+                exit(json_encode(array('code'=>1,'msg'=>'修改失败')));
             }
         }
-        //return $list;exit;
-        $list_count = db('camera')->where($where)->count();
-        $html = '';
-        if(!empty($list)){
-            foreach($list as $key=>$v){
-                $datainfo = json_encode($v);
-                $html .= "<tr class='hover' id='tr_".$v['cid']."' datainfo='".$datainfo."'>";
-                $html .= '<td class="align-center">'.$v["name"].'</td>';
-                $html .= '<td class="align-center">'.$v["channelid"].'</td>';
-                $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
-                $html .= '<td class="align-center">'.$v["id"].'</td>';
-                if($v['statuses'] == 1){
-                    $html .= '<td class="align-center"><b style="color:green;">在线</b></td>';
-                }else if($v['statuses'] == 2){
-                    $html .= '<td class="align-center"><b style="color:red;">离线</b></td>';
-                }
-                $html .= '<td class="align-center">'.$v["parentid"].'</td>';
-                $html .= '<td class="align-center"><img src="'.$v["imageurl"].'" width="120" height="50"></td>';
-                $html .= '<td id="rmt_'.$v['cid'].'" class="align-center"><img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50"></td>';
-                if($v['is_classroom'] == 1){
-                    $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
-                }else if($v['is_classroom'] == 2){
-                    $html .= '<td class="align-center"><b style="color:green;">是</b></td>';
-                }
-                if($v['status'] == 1){
-                    $html .= '<td class="align-center">开启</td>';
-                }else if($v['status'] == 2){
-                    $html .= '<td class="align-center">关闭</td>';
-                }
-                $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
-                if(!empty($v['begintime'])){
-                    $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]);
-                }else{
-                    $html .= '<td class="align-center">开启时间：未设置';
-                }
-                if(!empty($v['endtime'])) {
-                    $html .= '<hr>关闭时间：' . date('H:i', $v['endtime']) . '</td>';
-                }else{
-                    $html .= '<hr>关闭时间：未设置</td>';
-                }
-                $html .= '</tr>';
-            }
-        }
-        if($html == ''){
-            $html .= '<tr class="no_data">
-                    <td colspan="12">没有符合条件的记录</td>
-                </tr>';
-        }
+    }
 
-        exit(json_encode(array('html'=>$html,'count'=>$list_count)));
 
+    /**
+     * @desc 摄像头 已录入管理
+     * @author 郎志耀
+     * @time 20180926
+     */
+    public function editSuccess(){
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $id = input('get.id');
+        $import = db('import_student')->where('id="'.$id.'"')->find();
+
+        //学校
+        $school_student = db('school')->field('schoolid,name')->where('isdel=1')->select();
+
+        $this->assign('school',$school_student);
+        $this->assign('import',$import);
+        $this->setAdminCurItem('editSuccess');
+        return $this->fetch('editSuccess');
     }
     /**
-     * 自动导入摄像头
+     * @desc 成功修改
+     * @author langzhiyao
+     * @time 20181114
      */
-    public function get_camera(){
-        $model_school = Model('school');
-        $condition=array();
-        $condition['isdel']=1;
-        $school=$model_school->getSchoolList($condition);
-        $shu=array();
-        foreach($school as $v){
-            if($v['res_group_id']!=0){
-                $shu[] = $v['res_group_id'];
-            }
+    public function successUpdate(){
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
         }
-        $model_class=Model('classes');
-        $where=array();
-        $where['isdel']=1;
-        $class=$model_class->getAllClasses($where);
-        foreach($class as $v){
-            if($v['res_group_id']!=0){
-                $shu[]=$v['res_group_id'];
+        if(!empty($_POST)){
+            $id = intval(input('get.id'));
+            //学校信息
+            $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = "'.intval($_POST['school_id']).'" AND isdel=1')->find();
+            if(empty($school_info)){
+                exit(json_encode(array('code'=>1,'msg'=>'该学校已被删除，请重新选择')));
             }
-        }
-        $vlink = new Vomont();
-        $res= $vlink->SetLogin();
-        $accountid=$res['accountid'];
-        $data='';
-        foreach($shu as $v){
-            $datas=$vlink->SetPlay($accountid,$v);
-            if(empty($data)) {
-                $data = $datas['resources'];
+            $school_info['province'] = $this->get_address_name($school_info['provinceid']);
+            $school_info['city'] = $this->get_address_name($school_info['cityid']);
+            $school_info['area'] = $this->get_address_name($school_info['areaid']);
+            $address = $school_info['province'].'-'.$school_info['city'].'-'.$school_info['area'];
+            $school_info['address'] = $address;
+            $sc_type = explode(',',$school_info['typeid']);
+            //判断年级
+            $is_grade = db('schooltype')->field('sc_id,sc_type')->where("`sc_id`='".intval($_POST['sc_id'])."'")->find();
+            if(!$is_grade || !in_array($is_grade['sc_id'],$sc_type)){
+                exit(json_encode(array('code'=>1,'msg'=>'该学校类型已被删除，请重新选择')));
+            }
+
+            $is_class = db('class')->field('classid,classname')->where("`schoolid`='".intval($school_info['schoolid'])."' AND `typeid`='".intval($is_grade['sc_id'])."' AND `classid`='".intval($_POST['class_id'])."' AND `isdel`=1")->find();
+            if(!$is_class){
+                exit(json_encode(array('code'=>1,'msg'=>'该学校班级已被删除，请重新选择')));
+            }
+            //开启事务
+            $model = Model('import_student');
+            $model_member = Model('member');
+            $model_student = Model('student');
+            $model_order = Model('packagesorder');
+            $model_order_time = Model('packagetime');
+            $model->startTrans();
+            $flag = false;
+            //获取m_id和s_id
+            $m_s = $model->field('m_id,s_id,order_id,t_day')->where('id="'.$id.'"')->find();
+            $t_id = $_POST['t_id'];
+            //套餐ID
+            switch ($t_id){
+                case 1:
+                    $t_name='看孩套餐';
+                    break;
+                case 2:
+                    $t_name = '重温课堂套餐';
+                    break;
+                case 3:
+                    $t_name = '教孩套餐';
+                    break;
+                default:
+                    $t_name = '无套餐';
+                    break;
+            }
+            $data = array(
+                'm_mobile' => $_POST['m_mobile'],
+                'm_name' => $_POST['m_name'],
+                'm_sex' => $_POST['m_sex'],
+                's_name' => $_POST['s_name'],
+                's_sex' => $_POST['s_sex'],
+                's_card' => $_POST['s_card'],
+                'school_id' => $_POST['school_id'],
+                'school_name' => $school_info['name'],
+                'province_id' => $school_info['provinceid'],
+                'city_id' => $school_info['cityid'],
+                'area_id' => $school_info['areaid'],
+                'address' => $school_info['address'],
+                'sc_id' => $is_grade['sc_id'],
+                'school_type' => $is_grade['sc_type'],
+                'classid' => $is_class['classid'],
+                'class_name' => $is_class['classname'],
+                't_id' => $t_id,
+                't_name' => $t_name,
+                't_price' => $_POST['t_price'],
+                't_day' => $_POST['t_day'],
+                'content' => $_POST['content'],
+                'status' => 1,
+                'trueTime' => time(),
+            );
+            $import_data = $model->where('id="'.$id.'"')->update($data);
+            if($import_data){
+                if($m_s['m_id']){
+                    //为家长开账户并发送短信通知
+                    $pass = getRandomString(6,null,'n');
+                    $member = array();
+                    $member['member_name'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_nickname'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_password'] = md5(trim($pass));
+                    $member['member_mobile'] = $_POST['m_mobile'];
+                    $member['member_provinceid'] = $school_info['provinceid'];
+                    $member['member_cityid'] = $school_info['cityid'];
+                    $member['member_areaid'] = $school_info['areaid'];
+                    $member['member_areainfo'] = $school_info['address'];
+                    $member['member_mobile_bind'] = 1;
+                    $member_id = $model_member->where('member_id="'.$m_s['m_id'].'"')->update($member);
+                    if ($member_id) {
+                        //添加学生信息
+                        $student_array=array(
+                            's_name' => $_POST['s_name'],
+                            's_sex' => $_POST['s_sex'],
+                            's_card' => $_POST['s_card'],
+                            's_schoolid' => $_POST['school_id'],
+                            's_sctype' => $is_grade['sc_id'],//学校类型id
+                            's_classid' => $is_class['classid'],//班级id
+                            's_ownerAccount' => $m_s['m_id'],
+                            's_provinceid' => $school_info['provinceid'],
+                            's_cityid' => $school_info['cityid'],
+                            's_areaid' => $school_info['areaid'],
+                            's_region' => $school_info['address'],
+                            'admin_company_id' => $school_info['admin_company_id'],
+                            'option_id' => session('admin_id'),
+                            's_createtime' => date('Y-m-d',time()),
+                        );
+                        $student_id = $model_student->where('s_id="'.$m_s['s_id'].'"')->update($student_array);
+                        if($student_id){
+                            //添加订单信息
+                            $this->_logic_buy_1 = \model('buy_1','logic');
+                            switch ($t_id){
+                                case 1://看孩套餐
+                                    $pay_sn = $this->_logic_buy_1->makePaySn($m_s['m_id']);
+                                    $order_endTime =$model_order->field('order_dieline')->where('order_id="'.$m_s['order_id'].'"')->find();
+                                    //到期时间
+                                    if($m_s['t_day'] > $_POST['t_day']){
+                                        //原本的给多了 修改
+                                        $endTime = $order_endTime['order_dieline']-(intval($m_s['t_day'])-intval($_POST['t_day']))*24*3600;
+                                    }else if($m_s['t_day'] < $_POST['t_day']){
+                                        $endTime = $order_endTime['order_dieline']+(intval($_POST['t_day'])-intval($m_s['t_day']))*24*3600;
+                                    }else{
+                                        $endTime = $order_endTime['order_dieline'];
+                                    }
+                                    $see_array = array(
+                                        'pay_sn'=>$pay_sn,
+                                        'buyer_id'=>intval($m_s['m_id']),
+                                        'buyer_name'=>trim($member['member_mobile']),
+                                        'buyer_mobile'=>trim($member['member_mobile']),
+                                        'add_time'=>time(),
+                                        'payment_code'=>'offline',
+                                        'payment_time'=>time(),
+                                        'finnshed_time'=>time(),
+                                        'pkg_name'=>trim($t_name).'（线下）',
+                                        'pkg_price'=>ncPriceFormatb($_POST['t_price']),
+                                        'pkg_length'=>intval($_POST['t_day']),
+                                        's_id'=>intval($m_s['s_id']),
+                                        's_name'=>trim($_POST['s_name']),
+                                        'schoolid'=>intval($school_info['schoolid']),
+                                        'name'=>trim($school_info['name']),
+                                        'classid'=>intval($is_class['classid']),
+                                        'classname'=>trim($is_class['classname']),
+                                        'order_amount'=>ncPriceFormatb($_POST['t_price']),
+                                        'order_state'=>'40',
+                                        'order_dieline'=>$endTime,
+                                        'option_id'=>intval($school_info['option_id']),
+                                        'over_amount'=>ncPriceFormatb($_POST['t_price']),
+                                        'admin_company_id'=>intval($school_info['admin_company_id']),
+                                    );
+                                    $order_pay_id =$model_order->where('order_id="'.$m_s['order_id'].'"')->update($see_array);
+                                    if($order_pay_id){
+                                        $order_sn = $this->_logic_buy_1->makeOrderSn($m_s['order_id']);
+                                        $order_pay = $model_order->where('order_id="'.$m_s['order_id'].'"')->update(array('order_sn'=>$order_sn));
+                                        if($order_pay){
+                                            $order_time = $model_order_time->field('up_desc')->where('s_id="'.$m_s['s_id'].'"')->find();
+                                            $desc = $order_time['up_desc'].'&'.date('Y-m-d H:i',time()).'修改看孩套餐,套餐到期时间:'.date('Y-m-d H:i',$endTime);
+                                            $see_end = array(
+                                                'member_id'=>intval($m_s['m_id']),
+                                                'member_name'=>trim($member['member_mobile']),
+                                                's_id'=>intval($m_s['s_id']),
+                                                's_name'=>trim($_POST['s_name']),
+                                                'start_time'=>time(),
+                                                'end_time'=>$endTime,
+                                                'up_time'=>time(),
+                                                'up_desc'=>$desc,
+                                            );
+                                            $order_pay_time = $model_order_time->where('s_id="'.$m_s['s_id'].'"')->update($see_end);
+                                            if($order_pay_time){
+                                                $flag = true;
+                                            }else{
+                                                $flag = false;
+                                            }
+
+                                        }else{
+                                            $flag = false;
+                                        }
+                                    }else{
+                                        $flag = false;
+                                    }
+                                    break;
+                                case 2://重温课堂套餐
+                                    break;
+                                case 3://教孩套餐
+                                    break;
+                                case 4://为空
+                                    $flag = true;
+                                    break;
+                            }
+                        }else{
+                            $flag = false;
+                        }
+                    }else{
+                        $flag=false;
+                    }
+                }else{
+                    $flag = false;
+                }
             }else{
-                $data = array_merge($data,$datas['resources']);
+                $flag = false;
+            }
+            if($flag){
+                //发送随机密码
+                //生成数字字符随机 密码
+                $sms_tpl = config('sms_tpl');
+                $tempId = $sms_tpl['sms_password_reset'];
+                $sms = new \sendmsg\Sms();
+                $pass = '您于'.date('Y-m-d H:i:s',time()).'修改想见孩账号信息，您的新账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                $send = $sms->send($member['member_mobile'],$pass,$tempId);
+                if($send){
+                    $model->commit();
+                    exit(json_encode(array('code'=>200,'msg'=>'修改成功')));
+                }else{
+                    $model->rollback();
+                    exit(json_encode(array('code'=>1,'msg'=>'修改失败')));
+                }
+            }else{
+                $model->rollback();
+                exit(json_encode(array('code'=>1,'msg'=>'修改失败')));
             }
         }
-        foreach($data as $k=>$v){
-            $play=$v['deviceid'].'-'.$v['channelid'].',';
-            $video=$vlink->Resources($accountid,$play);
-            $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
-            $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
-            $data[$k]['sq_time']=time();
-            $data[$k]['status']=1;
-            $data[$k]['is_classroom']=1;
-        }
-        $model_camera=Model('camera');
-        $result=$model_camera->getCameraList('','','id');
-        $ret=$this->get_diff_array_by_pk($data,$result);
-        $sult=$model_camera->cameras_add($ret);
-        if($sult){
-            echo json_encode(array('count'=>$sult));
-        }else{
-            echo json_encode(array('count'=>0));
-        }
     }
-    function get_diff_array_by_pk($arr1,$arr2,$pk='id'){
-        try{
-            $res=[];
-            foreach($arr2 as $item) $tmpArr[$item[$pk]] = $item;
-            foreach($arr1 as $v) if(! isset($tmpArr[$v[$pk]])) $res[] = $v;
-            return $res;
-        }catch (\Exception $exception){
-            return $arr1;
-        }
+
+
+    /**
+     * @desc 根据ID 获取地址名称
+     * @author langzhiyao
+     * @time 20180928
+     */
+    function get_address_name($id){
+
+        $address_info = db('area')->field('area_id,area_name')->where('area_id= '.$id.'')->find();
+
+        return $address_info['area_name'];
+
     }
+
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
