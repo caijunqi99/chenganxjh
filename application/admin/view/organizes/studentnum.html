@@ -28,13 +28,13 @@
             <?php if(!empty($student_list) && is_array($student_list)){ ?>
             <?php foreach($student_list as $k => $v){ ?>
             <tr class="hover edit">
-                <td class="sort"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*10+$k+1; }?></td>
+                <td class="sort"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
                 <td class="name"><?php echo $v['s_name']; ?></td>
-                <td class="name">{$v.o_name}</td>
+                <td class="name"><?php echo $v['member_name']; ?></td>
                 <td class="name"><?php echo $v['schoolname']; ?></td>
                 <td class="name"><?php echo $v['classname']; ?></td>
                 <td class="picture"><?php echo $v['s_createtime']; ?></td>
-                <td class="align-center">{$v.o_remark}</td>
+                <td class="align-center"><?php echo $v['s_remark']; ?></td>
             </tr>
             <?php } ?>
             <?php }else { ?>
@@ -43,17 +43,17 @@
             </tr>
             <?php } ?>
             </tbody>
-            <tfoot>
-            {notempty name="student_list"}
-            <tr colspan="15" class="tfoot">
-                <td colspan="16">
-                    <div class="pagination"> {$page} </div></td>
-            </tr>
-            {/notempty}
-            </tfoot>
+
         </table>
     </form>
-
+    <tfoot>
+    {notempty name="student_list"}
+    <tr colspan="15" class="tfoot">
+        <td colspan="16">
+            <div class="pagination"> {$page} </div></td>
+    </tr>
+    {/notempty}
+    </tfoot>
 </div>
 
 

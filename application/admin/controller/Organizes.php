@@ -217,7 +217,7 @@ class Organizes extends AdminControl
         foreach($admin as $v){
             $conditions['option_id']=$v['admin_id'];
             $conditions['isdel']=1;
-            $list+=$model_school->getSchoolList($condition);
+            $list+=$model_school->getAllAchool($conditions);
         }
         foreach($list as $v){
             $schoolid.=$v['schoolid'].',';
@@ -234,6 +234,8 @@ class Organizes extends AdminControl
             $student_list[$k]['classname'] = $classinfo['classname'];
             $school = db('school')->where('schoolid',$v['s_schoolid'])->find();
             $student_list[$k]['schoolname'] = $school['name'];
+            $member=db('member')->where('member_id',$v['s_ownerAccount'])->find();
+            $student_list[$k]['member_name']=$member['member_name'];
         }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
