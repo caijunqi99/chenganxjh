@@ -24,7 +24,7 @@ class Member extends AdminControl {
         $condition = array();
         $admininfo = $this->getAdminInfo();
         if(!empty($admininfo['admin_school_id'])){
-            $studentInfo = db('student')->where(array('s_schoolid'=>$admininfo['admin_school_id'],'s_del'=>1))->select();
+            $studentInfo = db('student')->field('s_ownerAccount')->where(array('s_schoolid'=>$admininfo['admin_school_id'],'s_del'=>1))->select();
             foreach($studentInfo as $key=>$item){
                 if(!empty($item['s_ownerAccount'])){
                     $member_ids[] = $item['s_ownerAccount'];
@@ -45,7 +45,7 @@ class Member extends AdminControl {
 
         $model_member = Model('member');
         //会员级别
-        $member_grade = $model_member->getMemberGradeArr();
+        // $member_grade = $model_member->getMemberGradeArr();
         $search_field_value = input('search_field_value');
         $search_field_name = input('search_field_name');
         if ($search_field_value != '') {
@@ -53,28 +53,28 @@ class Member extends AdminControl {
                 case 'member_name':
                     $condition['member_name'] = array('like', '%' . trim($search_field_value) . '%');
                     break;
-                case 'member_email':
-                    $condition['member_email'] = array('like', '%' . trim($search_field_value) . '%');
-                    break;
+                // case 'member_email':
+                    // $condition['member_email'] = array('like', '%' . trim($search_field_value) . '%');
+                    // break;
                 case 'member_mobile':
                     $condition['member_mobile'] = array('like', '%' . trim($search_field_value) . '%');
                     break;
-                case 'member_truename':
-                    $condition['member_truename'] = array('like', '%' . trim($search_field_value) . '%');
-                    break;
+                // case 'member_truename':
+                    // $condition['member_truename'] = array('like', '%' . trim($search_field_value) . '%');
+                    // break;
             }
         }
         $search_state = input('search_state');
         switch ($search_state) {
-            case 'no_informallow':
-                $condition['inform_allow'] = '2';
-                break;
-            case 'no_isbuy':
-                $condition['is_buy'] = '0';
-                break;
-            case 'no_isallowtalk':
-                $condition['is_allowtalk'] = '0';
-                break;
+            // case 'no_informallow':
+            //     $condition['inform_allow'] = '2';
+            //     break;
+            // case 'no_isbuy':
+            //     $condition['is_buy'] = '0';
+            //     break;
+            // case 'no_isallowtalk':
+            //     $condition['is_allowtalk'] = '0';
+            //     break;
             case 'no_memberstate':
                 $condition['member_state'] = '0';
                 break;
@@ -88,15 +88,15 @@ class Member extends AdminControl {
             case 2:
                 $condition['member_identity'] = 2;
                 break;
-            case 3:
-                $condition['member_identity'] = 3;
-                break;
+            // case 3:
+            //     $condition['member_identity'] = 3;
+            //     break;
         }
         //会员等级
-        $search_grade = input('search_grade');
-        if (!empty($search_grade) && $member_grade) {
-            $condition['member_exppoints'] = array(array('egt', $member_grade[$search_grade]['exppoints']), array('lt', $member_grade[$search_grade + 1]['exppoints']), 'and');
-        }
+        // $search_grade = input('search_grade');
+        // if (!empty($search_grade) && $member_grade) {
+        //     $condition['member_exppoints'] = array(array('egt', $member_grade[$search_grade]['exppoints']), array('lt', $member_grade[$search_grade + 1]['exppoints']), 'and');
+        // }
         //排序
         $order = trim(input('get.search_sort'));
         if (empty($order)) {
@@ -115,10 +115,10 @@ class Member extends AdminControl {
             foreach ($member_list as $k => $v) {
                 $member_list[$k]['member_add_time'] = $v['member_add_time'] ? date('Y-m-d H:i:s', $v['member_add_time']) : '';
                 $member_list[$k]['member_login_time'] = $v['member_login_time'] ? date('Y-m-d H:i:s', $v['member_login_time']) : '';
-                $member_list[$k]['member_grade'] = ($t = $model_member->getOneMemberGrade($v['member_exppoints'], false, $member_grade)) ? $t['level_name'] : '';
+                // $member_list[$k]['member_grade'] = ($t = $model_member->getOneMemberGrade($v['member_exppoints'], false, $member_grade)) ? $t['level_name'] : '';
             }
         }
-        $this->assign('member_grade', $member_grade);
+        // $this->assign('member_grade', $member_grade);
         $this->assign('search_sort', $order);
         $this->assign('search_field_name', trim($search_field_name));
         $this->assign('search_field_value', trim($search_field_value));
