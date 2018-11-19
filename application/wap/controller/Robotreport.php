@@ -73,15 +73,17 @@ class Robotreport extends MobileMall
             $ioFlag = trim($input['ioFlag'],'"');
                 if($ioFlag==1){
                     $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    $content_s = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息。';
                 }elseif($ioFlag==2){
                     $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    $content_s = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息。';
                 }
                 $sms = new \sendmsg\sdk\SmsApi();
                 $send = $sms->sendSMS($memberInfo['member_mobile'],$content);
                 if(!$send){
                     $this->error('给用户发送短信失败 ');
                 }
-                $md->MemberPush($memberInfo['member_id'],$content,$title='打卡提醒');
+                $md->MemberPush($memberInfo['member_id'],$content_s,$title='打卡提醒');
             }
             $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
             return json_encode($ret);
