@@ -13,6 +13,7 @@ class Jpush extends Model {
     public function __construct()
     {   
         $config = config('JPushConfig');
+        p($config);
         $this->AppKey = $config['AppKey'];
         $this->MaterSecret =$config['MaterSecret'];
         
@@ -32,43 +33,42 @@ class Jpush extends Model {
     public function MemberPush($memberid,$alert='',$mtitle='打卡提醒'){
         $error = [];
         $error['code'] = 300;
-        if(!$memberid || !is_numeric($memberid)){
-            $error['error']= '用户ID参数错误！';
-            return $error;
-        }
-        if(empty($alert)){
-            $error['error']= '提示消息不能为空！';
-            return $error;
-        }
-        //获取当前登陆平台类型--暂不需要
-        // $client_type = db('mbusertoken')->where('member_id',$memberid)->value('client_type');
-        //获取登陆人当前手机唯一极光ID
-        $registrationID = db('memberjpush')->where('member_id',$memberid)->value('registrationID');
-        if(!$registrationID){
-            $error['error']= '获取不到当前用户手机信息！可以停止推送';
-            return $error;
-        }
+        // if(!$memberid || !is_numeric($memberid)){
+        //     $error['error']= '用户ID参数错误！';
+        //     return $error;
+        // }
+        // if(empty($alert)){
+        //     $error['error']= '提示消息不能为空！';
+        //     return $error;
+        // }
+        // //获取当前登陆平台类型--暂不需要
+        // // $client_type = db('mbusertoken')->where('member_id',$memberid)->value('client_type');
+        // //获取登陆人当前手机唯一极光ID
+        // $registrationID = db('memberjpush')->where('member_id',$memberid)->value('registrationID');
+        // if(!$registrationID){
+        //     $error['error']= '获取不到当前用户手机信息！可以停止推送';
+        //     return $error;
+        // }
         //设置推送平台，all ，苹果，安卓，winPhone
         $platform = array('ios', 'android');
         // $alert = '您的孩子二霞于xx-xx-xx xx:xx:xx 在某某学校打卡成功！';
-        $regId = array(
-            $registrationID
-        );
+        $regId = ['191e35f7e06a6528b97','140fe1da9ef8f22abe2'];
+        p($regId);
         $ios_notification = array(
-            'sound' => '打卡提醒',
+            'sound' => $mtitle,
             'badge' => 2,
             'content-available' => true,
             'category' => 'jiguang',
             'extras' => array(
-                'name' => '某某某',
+                'action' => 'RobotSign',
                 'jiguang'
             ),
         );
         $android_notification = array(
-            'title' => '打卡提醒',
+            'title' => $mtitle,
             'builder_id' => 2,
             'extras' => array(
-                'name' => '某某某',
+                'action' => 'RobotSign',
                 'jiguang'
             ),
         );

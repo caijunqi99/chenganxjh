@@ -1,10 +1,8 @@
 <?php
 
 namespace app\wap\controller;
-vendor('jpush.autoload');
 
 use think\Lang;
-use JPush\Client;
 class Robotsign extends MobileMall
 {
     public function _initialize()
