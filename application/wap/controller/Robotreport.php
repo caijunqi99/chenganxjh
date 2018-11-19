@@ -68,7 +68,7 @@ class Robotreport extends MobileMall
             $md = model('Jpush');
             $md->JPushInit();
             //打卡成功，1给学生家长发送短信提醒，2极光推送给app发送提醒
-            $memberInfo = db("member")->field("member_id,member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
+            $memberInfo = db("member")->field("member_id,member_mobile,member_name")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
             if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
             $ioFlag = trim($input['ioFlag'],'"');
                 if($ioFlag==1){
@@ -84,6 +84,16 @@ class Robotreport extends MobileMall
                     $this->error('给用户发送短信失败 ');
                 }
                 $md->MemberPush($memberInfo['member_id'],$content_s,$title='打卡提醒');
+                //发送站内信,提示修改密码
+                $model_message = Model('message');
+                $insert_arr = array();
+                $insert_arr['from_member_id'] = 0;
+                $insert_arr['member_id'] = $memberInfo['member_id'];
+                $insert_arr['to_member_name'] = !empty($memberInfo['member_name'])?$memberInfo['member_name']:"想见孩用户";
+                $insert_arr['message_title'] = '打卡提醒';
+                $insert_arr['msg_content'] = $content_s;
+                $insert_arr['message_type'] = 1;
+                $model_message->saveMessage($insert_arr);
             }
             $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
             return json_encode($ret);
