@@ -10,7 +10,7 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <h2>{$Think.lang.organize_studentnum_num}0个</h2>
+    <h2>{$Think.lang.organize_studentnum_num}<?php echo count($student_list); ?>个</h2>
     <form method="post" enctype="multipart/form-data" name="form1" action="">
         <table class="ds-default-table">
             <thead>
@@ -25,35 +25,35 @@
             </tr>
             </thead>
             <tbody>
-            {notempty name="organize_list"}
-            {volist name="organize_list" id="v"}
+            <?php if(!empty($student_list) && is_array($student_list)){ ?>
+            <?php foreach($student_list as $k => $v){ ?>
             <tr class="hover edit">
-                <td class="sort">{$v.o_id}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="picture">{$v.o_createtime}</td>
-                <td class="align-center">{$v.o_remark}</td>
+                <td class="sort"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
+                <td class="name"><?php echo $v['s_name']; ?></td>
+                <td class="name"><?php echo $v['member_name']; ?></td>
+                <td class="name"><?php echo $v['schoolname']; ?></td>
+                <td class="name"><?php echo $v['classname']; ?></td>
+                <td class="picture"><?php echo $v['s_createtime']; ?></td>
+                <td class="align-center"><?php echo $v['s_remark']; ?></td>
             </tr>
-            {/volist}
-            {else /}
+            <?php } ?>
+            <?php }else { ?>
             <tr class="no_data">
                 <td colspan="10">{$Think.lang.ds_no_record}</td>
             </tr>
-            {/notempty}
+            <?php } ?>
             </tbody>
-            <tfoot>
-            {notempty name="organize_list"}
-            <tr colspan="15" class="tfoot">
-                <td colspan="16">
-                    <div class="pagination"> {$page} </div></td>
-            </tr>
-            {/notempty}
-            </tfoot>
+
         </table>
     </form>
-
+    <tfoot>
+    {notempty name="student_list"}
+    <tr colspan="15" class="tfoot">
+        <td colspan="16">
+            <div class="pagination"> {$page} </div></td>
+    </tr>
+    {/notempty}
+    </tfoot>
 </div>
 
 
