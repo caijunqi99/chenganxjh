@@ -448,10 +448,17 @@ class Order extends Model
     {
         $model_order = Model('Packagesorder');
         
-        
+        $memberInfo = db('member')->where('member_id',$order_info['buyer_id'])->find();
+        if ($memberInfo['is_owner'] == 0) {
+            $identity = '主账号';
+        }else{
+            $memberInfo = db('member')->where('member_id',$memberInfo['is_owner'])->find();
+            $identity = '副账号';
+        }
+
         $PkgTime = model('Packagetime');
         $condition=array(
-            'member_id'=>$order_info['buyer_id'],
+            'member_id'=>$memberInfo['member_id'],
             's_id'=>$order_info['s_id'],
             'pkg_type'=>$order_info['pkg_type']
         );
@@ -463,19 +470,20 @@ class Order extends Model
             'end_time' => $end_time,
             'up_time' => time(),
         );  
+        
         try {
             $model_order->startTrans();
             if(!$packagetime){//第一次购买套餐
-                $pdata['member_id'] = $order_info['buyer_id'];
-                $pdata['member_name'] = $order_info['buyer_name'];
+                $pdata['member_id'] = $memberInfo['member_id'];
+                $pdata['member_name'] = $memberInfo['member_name'];
                 $pdata['s_id'] = $order_info['s_id'];
                 $pdata['s_name'] = $order_info['s_name'];
                 $pdata['pkg_type'] = $order_info['pkg_type'];
                 $pdata['start_time'] = $post['finnshed_time'];
-                $pdata['up_desc'] = date('Y-m-d H:i',$post['finnshed_time']).'第一次购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+                $pdata['up_desc'] = date('Y-m-d H:i',$post['finnshed_time']).' '.$identity.'['.$memberInfo['member_name'].']:'.'第一次购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
                 $PkgTime->pkg_add($pdata);
             }else{ //更新套餐时间
-                $pdata['up_desc'] = $packagetime['up_desc'].'&'.date('Y-m-d H:i',$post['finnshed_time']).'购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
+                $pdata['up_desc'] = $packagetime['up_desc'].'&'.date('Y-m-d H:i',$post['finnshed_time']).' '.$identity.'['.$memberInfo['member_name'].']:'.'购买'.$pkgtype.'套餐,套餐到期时间:'.date('Y-m-d H:i',$end_time);
                 $pdata['id'] =$packagetime['id'];
                 $PkgTime->pkg_update($pdata);
 
