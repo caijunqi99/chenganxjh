@@ -70,7 +70,7 @@ class Robotreport extends MobileMall
             //打卡成功，1给学生家长发送短信提醒，2极光推送给app发送提醒
             $memberInfo = db("member")->field("member_id,member_mobile")->where(array('member_id'=>$studentInfo['s_ownerAccount']))->find();
             if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
-            $ioFlag = trim($input['bodyTemp'],'"');
+            $ioFlag = trim($input['ioFlag'],'"');
                 if($ioFlag==1){
                     $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
                 }elseif($ioFlag==2){
