@@ -50,6 +50,7 @@ $(function() {
                 if (!hasMore) {
                     get_footer()
                 }
+                console.log(e.result);
                 if (e.result.order_group_list.length <= 0) {
                     $("#footer").addClass("posa")
                 } else {
