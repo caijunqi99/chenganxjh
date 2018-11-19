@@ -287,7 +287,8 @@
                     $('#Discount').text('已优惠' + Discount + '元')
                     var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
                     var name = $('.active .level_item_p1').text();
-                    $('#pkgdesc').text('您已选择' + type + name + '套餐')
+                    // $('#pkgdesc').text('您已选择' + type + name + '套餐')
+                    $('#pkgdesc').text('您已选择' + name)
                 } else {
                     $('.choosed_info').html(data.message);
                 }
