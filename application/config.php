@@ -66,11 +66,18 @@ return [
         'MaterSecret' =>'e18529474930976be6ef2007',
     ],
 
-    //融云
+    //融云--开发环境
+    // 'RongCloud' =>[
+    //     'appKey' => 'k51hidwqknxeb',
+    //     'appSecret' => 'ZzyCuE95RtlpgE',
+    // ],
+
+    //融云--生产环境
     'RongCloud' =>[
-        'appKey' => 'k51hidwqknxeb',
-        'appSecret' => 'ZzyCuE95RtlpgE',
+        'appKey' => 'tdrvipkstqo75',
+        'appSecret' => '9vJg28fBPwFxZn',
     ],
+
     // +----------------------------------------------------------------------
     // | 模块设置
     // +----------------------------------------------------------------------
