@@ -249,7 +249,8 @@ class TeacherPayment extends MobileMall
             $member_model = Model("Member");
             $member = $member_model->getMemberInfoByID($teacher_id);
             $teacher_new_price = sprintf('%.4f', $member['total_predeposit']+$teacher_price);
-            $teacher = $member_model->editMember(array('member_id'=>$teacher_id),array('total_predeposit'=>$teacher_new_price));
+            $teacher_fen_price = sprintf('%.4f', $member['fencheng_predeposit']+$teacher_price);
+            $teacher = $member_model->editMember(array('member_id'=>$teacher_id),array('total_predeposit'=>$teacher_new_price,'fencheng_predeposit'=>$teacher_fen_price));
             if(empty($teacher)){
                 output_error('教师分成失败');
             }
