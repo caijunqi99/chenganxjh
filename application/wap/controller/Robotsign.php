@@ -1,10 +1,8 @@
 <?php
 
 namespace app\wap\controller;
-vendor('jpush.autoload');
 
 use think\Lang;
-use JPush\Client;
 class Robotsign extends MobileMall
 {
     public function _initialize()
@@ -26,7 +24,7 @@ class Robotsign extends MobileMall
         $input = input();
         $phone = $input['member_mobile'];
         $member_id = db('member')->where('member_mobile',$phone)->value('member_id');
-        $alert = '推送测试';
+        $alert = '12345678ddddddd';
         $pushResult = $md->MemberPush($member_id,$alert,$title='打卡提醒');
 
         p($pushResult);
