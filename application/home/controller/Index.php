@@ -23,7 +23,7 @@ class Index extends BaseMall {
         $this->assign('recommend_list', model('goods')->getGoodsCommonOnlineList(array('goods_commend'=>1)));
         //限时折扣
         $this->assign('promotion_list', model('pxianshigoods')->getXianshiGoodsCommendList(4));
-        $this->assign('new_list',  model('goods')->getGoodsOnlineList('','','','goods_salenum desc ,goods_addtime desc',6));
+        $this->assign('new_list',  model('goods')->getGoodsOnlineList(array(),'*',0,'goods_salenum desc ,goods_addtime desc',6));
         $this->assign('groupbuy_list', model('groupbuy')->getGroupbuyCommendedList(5));
 
         //楼层数据
