@@ -20,10 +20,11 @@ class Stest extends AdminControl {
 		$this->ClassInsert = [];
 		$this->True_School = [];
 		$this->True_Class = [];
-    	exit;
+		exit;
 	}
 
 	public function StartTrans(){
+		exit;
 		@set_time_limit(0);
     	$this->SchoolTrans();
 	}
@@ -560,6 +561,18 @@ class Stest extends AdminControl {
     	echo '学生录入结束-----------------------------------------------------------------<br>';
     }
 
+
+
+    public function StudentChecking(){
+    	$Student = db('student')->field('s_id,s_name,oldid')->where('s_ownerAccount=1')->select();
+    	$Student1 = db('student_copy')->field('s_id,s_name,oldid')->where('s_ownerAccount=1')->select();
+    	$aaa = [];
+    	foreach ($Student1 as $key => $s) {
+    		$aaa[] = db('studentbindstudentmember')->where('student_bindStudentMember_id',$s['oldid'])->select();
+    	}
+    	p($Student);
+    	p($aaa);
+    }
     /**
      * 订单录入
      * @创建时间 2018-11-04T21:30:35+0800

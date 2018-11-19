@@ -134,9 +134,9 @@ $(function(){
           
 
           <td class="align-center yes-onoff"><?php if($v['pkg_enabled'] == '2'){ ?>
-            <a href="JavaScript:void(0);" class=" disabled" ajax_branch="pkg_enabled" nc_type="inline_edit" fieldname="pkg_enabled" fieldid="<?php echo $v['pkg_id']?>" fieldvalue="1" i_val='1' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+            <a href="JavaScript:void(0);" class=" disabled" ajax_branch="pkg_enabled" nc_type="inline_edit" fieldname="pkg_enabled" fieldid="<?php echo $v['pkg_id']?>" fieldvalue="1" i_val='1' title="{$Think.lang.ds_editable}"><img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
             <?php }else { ?>
-            <a href="JavaScript:void(0);" class=" enabled" ajax_branch="pkg_enabled" nc_type="inline_edit" fieldname="pkg_enabled" fieldid="<?php echo $v['pkg_id']?>" fieldvalue="2" i_val='2' title="{$Think.lang.ds_editable}"><img src="images/transparent.gif"></a>
+            <a href="JavaScript:void(0);" class=" enabled" ajax_branch="pkg_enabled" nc_type="inline_edit" fieldname="pkg_enabled" fieldid="<?php echo $v['pkg_id']?>" fieldvalue="2" i_val='2' title="{$Think.lang.ds_editable}"><img src="{$Think.config.url_domain_root}static/admin/images/transparent.gif"></a>
             <?php } ?></td>
           <td class="align-center">
               <a class="layui-btn layui-btn-sm" href="javascript:course_edit('edit','<?php echo $v['pkg_id'];?>')" >{$Think.lang.ds_edit}</a>

@@ -81,6 +81,22 @@ class Classes extends AdminControl {
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
+<<<<<<< HEAD
+=======
+        
+        $model_school = model('School');
+        $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
+        $left_menu = array_column($school_list, 'schoolid');
+
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
+
+        foreach ($class_list as $k=>$v){
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
+            $class_list[$k]['schoolname'] =  $school_list[$key]['name'];
+        }
+
+>>>>>>> wangzhixue
         //全部学校
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
@@ -114,8 +130,7 @@ class Classes extends AdminControl {
         $condition_class['isdel'] = 1;
         $classname = $model_class->getAllClasses($condition_class);
         foreach ($classname as $k=>$v){
-            $schooltype = db('schooltype')->where('sc_id',$v['typeid'])->find();
-            $classname[$k]['typename'] = $schooltype['sc_type'];
+            $classname[$k]['typename'] =$schooltypeList[$v['typeid']]['sc_type'];
         }
         $this->assign('classname', $classname);
         $this->setAdminCurItem('index');
