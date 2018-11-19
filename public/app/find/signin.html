@@ -29,6 +29,31 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+        .video_full {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 99;
+            background: rgba(0, 0, 0, 1);
+        }
+
+        .video_close {
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            display: block;
+            background: rgba(0, 0, 0, .4);
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 100;
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -86,6 +111,17 @@
     <script src="../content/scripts/commom.js"></script>
     <script>
     GetChildList(user_token,'reday');
+
+    function full_video(video_obj) {
+        video_obj.addClass("video_full");
+        $(document.body).append("<span class='video_close' onclick='videoclose()'>X</span>");
+    }
+
+    function videoclose() {
+        $("video").get(0).pause();
+        $("video").eq(0).removeClass("video_full");
+        $(".video_close").hide();
+    }
         // $.ajax({
         //     type: "POST",
         //     url: api + "/robotrecord/record",
@@ -119,7 +155,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].come == undefined) {
                     template += '<source src="">'
                 } else {
