@@ -23,6 +23,10 @@ class Robotsign extends MobileMall
          * alert 提示信息
          * title 提醒标题
          */
+        $input = input();
+        $phone = $input['member_mobile'];
+        $member_id = db('member')->where('member_mobile',$phone)->value('member_id');
+        $alert = '推送测试';
         $pushResult = $md->MemberPush($member_id,$alert,$title='打卡提醒');
 
         p($pushResult);

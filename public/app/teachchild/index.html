@@ -122,7 +122,8 @@
                 $(document.body).infinite();
                 setTimeout(function() {
                     $(document.body).pullToRefreshDone(); // 重置下拉刷新
-                }, 1500)
+                }, 1500);
+                Page = 1;
                 var params = Params;
                 params['page'] = 1;
                 GetKejian(params);
@@ -435,16 +436,6 @@
                 Params = params;
             }
 
-            // 显示更多
-            // $('.icon-gengduo').on('click', function(event){
-            // 	if(event.target.dataset.select == 'false'){
-            // 		$('.sub-nav').show();
-            // 		event.target.dataset.select = 'true';
-            // 	}else {
-            // 		$('.sub-nav').hide();
-            // 		event.target.dataset.select = 'false';
-            // 	}
-            // })
 
             // 隐藏筛选框
             function hideFilterBox() {

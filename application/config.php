@@ -62,8 +62,8 @@ return [
 
     // 极光推送
     'JPushConfig'=>[
-        'AppKey' => '2e49a22da063884527d82e1c',
-        'MaterSecret' =>'e18529474930976be6ef2007',
+        'AppKey' => 'ce129f3556e2afdbc8f0d3e5',
+        'MaterSecret' =>'5d097548273791232ff5d1cc',
     ],
 
     //融云
