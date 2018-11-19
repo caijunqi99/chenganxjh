@@ -8,7 +8,7 @@ define('MD5_KEY', 'a2382918dbb49c8643f19bc3ab90ecf9');
  */
 define('CHARSET','UTF-8');
 
-define('HTTP_URL','101.201.75.83:8080/?');
+define('HTTP_URL','114.116.142.79:8080/?');
 
 define('BASE_SITE_URL', $config['url_domain_root']);
 define('UPLOAD_SITE_URL',BASE_SITE_URL.'uploads');
