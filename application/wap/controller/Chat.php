@@ -136,16 +136,19 @@ class Chat extends MobileMember
             case '3'://对方已忽略过我发送的好友申请
                 $state = 3;
                 break;
-            default://双方没有关系
-                $state = 4;
-                break;
+        }
+        if(!empty($friendInfo['member_avatar'])){
+            $friendInfo['member_avatar'] = UPLOAD_SITE_URL.$friendInfo['member_avatar'];
+        }else{
+            $friendInfo['member_avatar'] = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
         }
         $output = array(
             'member_id'     => $friendInfo['member_id'],
             'member_name'   => $friendInfo['member_name'],
+            'member_mobile' => $friendInfo['member_mobile'],
             'friend_remark' => empty($myexits['friend_remark'])?'':$myexits['friend_remark'],
-            'member_mobile'        => $friendInfo['member_mobile'],
-            'avatar'        => getMemberAvatarForID($friendInfo['member_id']),
+            'apply_remark'  => empty($frexits['apply_remark'])?'':$frexits['apply_remark'],
+            'avatar'        => $friendInfo['member_avatar'],
             'area'          => empty($areas)?'':$areas,
             'state'         => $state,
         );

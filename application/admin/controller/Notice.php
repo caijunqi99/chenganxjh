@@ -20,6 +20,12 @@ class Notice extends AdminControl
         Lang::load(APP_PATH.'admin/lang/zh-cn/notice.lang.php');
     }
 
+
+    
+    public function noticeManage(){
+        echo 1111;
+    }
+
     /**
      * 会员通知
      */
@@ -113,6 +119,9 @@ class Notice extends AdminControl
     protected function getAdminItemList()
     {
         $menu_array=array(
+            array(
+                'name'=>'noticeManage','text'=>'公告管理','url'=>url('Notice/noticeManage')
+            )
             array(
                 'name'=>'notice','text'=>'发送通知','url'=>url('Notice/notice')
             )

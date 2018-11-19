@@ -29,3 +29,5 @@ $lang['notice_index_title']				= '通知标题';
 $lang['notice_index_content']			= '通知内容';
 $lang['notice_index_member_error']		= '指定会员发送，会员名不能为空且一行一个会员名';
 $lang['notice_index_help1']				= '分批发送，一次发送通知操作被自动分为多批次进行，你可以设置每批发送的通知数';
+
+$lang['noticeManage']			= '公告管理';

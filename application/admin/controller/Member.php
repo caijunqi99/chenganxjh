@@ -249,6 +249,17 @@ class Member extends AdminControl {
                 $tempId = $sms_tpl['sms_password_reset'];
                 $sms = new \sendmsg\Sms();
                 $send = $sms->send($memberInfo['member_mobile'],$sendmsg);
+                //发送站内信,提示修改密码
+                $model_message = Model('message');
+                $insert_arr = array();
+                $insert_arr['from_member_id'] = 0;
+                $insert_arr['member_id'] = $memberInfo['member_id'];
+                $insert_arr['to_member_name'] = $memberInfo['member_name'];
+                $insert_arr['message_title'] = '重置密码';
+                $insert_arr['msg_content'] = '系统于'.date('Y-m-d',time()).'为您重置了登陆密码,密码会以短信的方式发送给您,此密码为随机生成，系统将不会记录您的密码，请登陆之后自行修改。';
+                $insert_arr['message_type'] = 1;
+                $model_message->saveMessage($insert_arr);
+
                 if($send){
                     $sign = true;
                     $msg='密码重置成功';

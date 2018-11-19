@@ -716,6 +716,7 @@ a.quit_popup i {
     text-overflow: ellipsis;
     padding-right: 100px;
     position: relative;
+    z-index: 2;
 }
 
 .orderforms_h2 span.nopay {
@@ -743,6 +744,7 @@ a.quit_popup i {
     text-overflow: ellipsis;
     padding-right: 80px;
     position: relative;
+    z-index: 2;
 }
 
 .orderforms_p5 span {
