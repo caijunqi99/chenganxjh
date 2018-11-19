@@ -95,10 +95,12 @@ class Jpush extends Model {
             $response = $push_payload->send();
             $error['code'] = 200;
         } catch (\JPush\Exceptions\APIConnectionException $e) {
-            $error['ConnectionErr'] =$e;
+            $A = json_encode($e);
+            $error['ConnectionErr'] =json_decode($A,TRUE);
             $error['error'] ='连接失败！';
         } catch (\JPush\Exceptions\APIRequestException $e) {
-            $error['RequestErr'] = $e;
+            $A = json_encode($e);
+            $error['RequestErr'] = json_decode($A,TRUE);
             $error['error'] ='请求失败！';
         }
         if($error['code']==200 && $response['http_code']==200){

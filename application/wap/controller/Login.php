@@ -107,7 +107,7 @@ class Login extends MobileMall
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
-                $logindata['is_owner'] = $member['is_owner'];                
+                $logindata['is_owner'] = $member['is_owner']==0?0:1;                
                 $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']);
                 if ($register) {
                     //发送随机密码
@@ -117,6 +117,18 @@ class Login extends MobileMall
                     $sms = new \sendmsg\Sms();
                     $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
                     $send = $sms->send($member['member_mobile'],$pass,$tempId);
+
+                    //发送站内信,提示修改密码
+                    $model_message = Model('message');
+                    $insert_arr = array();
+                    $insert_arr['from_member_id'] = 0;
+                    $insert_arr['member_id'] = $member['member_id'];
+                    $insert_arr['to_member_name'] = $member['member_name'];
+                    $insert_arr['message_title'] = '账号注册成功';
+                    $insert_arr['msg_content'] = '您于'.date('Y-m-d H:i',time()).'注册成为 '.config('site_name').' 会员,请尽快修改密码!';
+                    $insert_arr['message_type'] = 1;
+                    $model_message->saveMessage($insert_arr);
+
                 }
                 output_data($logindata);
             }else {
