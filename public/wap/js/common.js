@@ -978,5 +978,5 @@ function GetQueryString(name)
 }
 
 function payTo(){
-    location.href='http://vip.xiangjianhai.com:8001/wap/tmpl/member/order_list.html?ago=1';
+    location.href=WapSiteUrl+'/tmpl/member/order_list.html?ago=1';
 }

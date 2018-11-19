@@ -31,7 +31,8 @@ $(function() {
         $('.content').infinite();
         setTimeout(function() {
             $('.content').pullToRefreshDone(); // 重置下拉刷新
-        }, 1500)
+        }, 1500);
+        Page = 1;
         var params = Params;
         params['page'] = 1;
         GetKejian(params);
