@@ -29,6 +29,31 @@
         .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
             font-size: 30px;
         }
+        .video_full {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 99;
+            background: rgba(0, 0, 0, 1);
+        }
+
+        .video_close {
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            display: block;
+            background: rgba(0, 0, 0, .4);
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 100;
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+            border-radius: 50%;
+        }
         .main{
             padding-top: 0;
         }
@@ -90,6 +115,21 @@
     <script>
     GetChildList(user_token,'reday');
 
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: api + "/robotrecord/record",
+        //     data: {
+        //         key: user_token,
+        //         student_id: 1
+        //     },
+        //     dataType: "json",
+        //     success: function(response) {
+        //         console.log(response["result"][0]);
+        //         $(".cookbook_title").text(response["result"][1]["name"]);
+        //         $("#signinlists").html(HTML(response["result"][0]));
+        //     }
+        // });
         // 打卡html模板
         function HTML(data) {
             var template = '';
@@ -109,7 +149,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].come == undefined) {
                     template += '<source src="">'
                 } else {
@@ -136,7 +176,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].leave == undefined) {
                     template += '<source src="">'
                 } else {
@@ -157,7 +197,17 @@
             }
             return template;
         }
+    function full_video(video_obj) {
+        video_obj.addClass("video_full");
+        var close_id = video_obj.attr('data-id');
+        $(document.body).append("<span class='video_close' onclick='videoclose("+close_id+")' >X</span>");
+    }
 
+    function videoclose(id) {
+        $("video").get(id).pause();
+        $("video").eq(id).removeClass("video_full");
+        $(".video_close").hide();
+    }
         // 切换孩子
 
         // $("#role_switch").select({
