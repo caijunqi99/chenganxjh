@@ -60,7 +60,13 @@ return [
         'sms_password_reset' => 341620, //重置密码
     ],
 
-    // 极光推送
+    // // 极光推送--想见孩
+    // 'JPushConfig'=>[
+    //     'AppKey' => '2e49a22da063884527d82e1c',
+    //     'MaterSecret' =>'e18529474930976be6ef2007',
+    // ],
+
+    // 极光推送--爱孩
     'JPushConfig'=>[
         'AppKey' => 'ce129f3556e2afdbc8f0d3e5',
         'MaterSecret' =>'5d097548273791232ff5d1cc',

@@ -13,6 +13,7 @@ class Jpush extends Model {
     public function __construct()
     {   
         $config = config('JPushConfig');
+        p($config);
         $this->AppKey = $config['AppKey'];
         $this->MaterSecret =$config['MaterSecret'];
         
@@ -51,24 +52,22 @@ class Jpush extends Model {
         //设置推送平台，all ，苹果，安卓，winPhone
         $platform = array('ios', 'android');
         // $alert = '您的孩子二霞于xx-xx-xx xx:xx:xx 在某某学校打卡成功！';
-        $regId = array(
-            $registrationID
-        );
+        $regId = [$registrationID];
         $ios_notification = array(
-            'sound' => '打卡提醒',
+            'sound' => $mtitle,
             'badge' => 2,
             'content-available' => true,
             'category' => 'jiguang',
             'extras' => array(
-                'name' => '某某某',
+                'action' => 'RobotSign',
                 'jiguang'
             ),
         );
         $android_notification = array(
-            'title' => '打卡提醒',
+            'title' => $mtitle,
             'builder_id' => 2,
             'extras' => array(
-                'name' => '某某某',
+                'action' => 'RobotSign',
                 'jiguang'
             ),
         );
