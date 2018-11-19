@@ -13,7 +13,7 @@ class Admin extends Model {
      * @param obj $obj_page 分页对象
      * @return array 数组类型的返回结果
      */
-    public function getAdminList($condition, $obj_page) {
+    public function getAdminList($condition, $obj_page='') {
         $result = db('admin')->where($condition)->select();
         return $result;
     }
