@@ -55,7 +55,7 @@ class Robotreport extends MobileMall
             'student_id' => $student_id,
             'uType' => trim($input['uType'],'"'),
             'ioFlag' => trim($input['ioFlag'],'"'),
-            'ioTime' => trim($input['ioTime'],'"'),
+            'ioTime' => substr(trim($input['ioTime'],'"'), 0, -3),
             'bodyTemp' => trim($input['bodyTemp'],'"'),
             'SNNumber' => trim($input['SNNumber'],'"'),
             'ioVideo' => !empty($video)?$video:"",

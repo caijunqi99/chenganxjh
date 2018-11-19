@@ -370,6 +370,17 @@ class Member extends MobileMember
             );
             $result = db('member')->where($where)->update($data);
             if($result){
+                //发送站内信,提示修改密码
+                $model_message = Model('message');
+                $insert_arr = array();
+                $insert_arr['from_member_id'] = 0;
+                $insert_arr['member_id'] = $this->member_info['member_id'];
+                $insert_arr['to_member_name'] = $this->member_info['member_name'];
+                $insert_arr['message_title'] = '密码修改成功';
+                $insert_arr['msg_content'] = '您于 '.date('Y-m-d H:i',time()).' 成功修改密码';
+                $insert_arr['message_type'] = 1;
+                $model_message->saveMessage($insert_arr);
+
                 output_data(array('message'=>'修改成功'));
             }else{
                 output_error('新密码和原密码一致，请重新修改');
@@ -442,6 +453,16 @@ class Member extends MobileMember
         $result = db('member')->where($where)->update($data);
 
         if($result){
+            //发送站内信,提示修改支付密码
+            $model_message = Model('message');
+            $insert_arr = array();
+            $insert_arr['from_member_id'] = 0;
+            $insert_arr['member_id'] = $this->member_info['member_id'];
+            $insert_arr['to_member_name'] = $this->member_info['member_name'];
+            $insert_arr['message_title'] = '支付密码修改成功';
+            $insert_arr['msg_content'] = '您于 '.date('Y-m-d H:i',time()).' 成功修改支付密码,此密码将会在用余额支付的时候使用!';
+            $insert_arr['message_type'] = 1;
+            $model_message->saveMessage($insert_arr);
             output_data(array('message'=>'设置成功'));
         }else{
             output_error('新密码不能和原密码一样，请重新输入');
@@ -548,6 +569,17 @@ class Member extends MobileMember
             $sid = $student;
         }   
             if($student){
+                //发送站内信--未写
+                // $model_message = Model('message');
+                $insert_arr = array();
+                $insert_arr['from_member_id'] = 0;
+                $insert_arr['member_id'] = $this->member_info['member_id'];
+                $insert_arr['to_member_name'] = $this->member_info['member_name'];
+                $insert_arr['message_title'] = '学生绑定';
+                // $insert_arr['msg_content'] = '您于 '.date('Y-m-d H:i',time()).' 绑定';
+                $insert_arr['message_type'] = 1;
+                // $model_message->saveMessage($insert_arr);
+
                 output_data(array('message'=>'绑定成功','sid'=>$sid));
             }else{
                 output_error('绑定失败');
