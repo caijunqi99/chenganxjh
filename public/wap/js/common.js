@@ -1,3 +1,4 @@
+// setCookie('key','7f0120cf2b6e5626e24df64cddc163f9')
 function getQueryString(e) {
     var t = new RegExp("(^|&)" + e + "=([^&]*)(&|$)");
     var a = window.location.search.substr(1).match(t);
