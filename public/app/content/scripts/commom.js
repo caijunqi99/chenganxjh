@@ -77,6 +77,7 @@ function reLoad(){
 //教孩视频详情
 function videoClick(id){
     var url = http_url+"app/teachchild/details.html?id="+id;
+    // location.href = url;
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
         window.webkit.messageHandlers.videoClick.postMessage(url);
     } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
