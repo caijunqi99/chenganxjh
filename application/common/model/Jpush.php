@@ -13,7 +13,6 @@ class Jpush extends Model {
     public function __construct()
     {   
         $config = config('JPushConfig');
-        p($config);
         $this->AppKey = $config['AppKey'];
         $this->MaterSecret =$config['MaterSecret'];
         
