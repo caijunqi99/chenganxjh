@@ -149,7 +149,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" onplay="full_video($(this),i*2)" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].come == undefined) {
                     template += '<source src="">'
                 } else {
@@ -176,7 +176,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" onplay="full_video($(this),(i+1)*2-1)" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].leave == undefined) {
                     template += '<source src="">'
                 } else {
@@ -197,9 +197,10 @@
             }
             return template;
         }
-    function full_video(video_obj,id) {
+    function full_video(video_obj) {
         video_obj.addClass("video_full");
-        $(document.body).append("<span class='video_close' onclick='videoclose(id)'>X</span>");
+        var close_id = video_obj.attr('data-id');
+        $(document.body).append("<span class='video_close' onclick='videoclose("+close_id+")' >X</span>");
     }
 
     function videoclose(id) {
