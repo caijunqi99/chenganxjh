@@ -109,7 +109,7 @@ class TeacherPayment extends MobileMall
 
                 $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
                 if ($result) {
-                    $this->money($callback_info['total_fee'],$order_info['order_tid']);
+                    $this->money($callback_info['total_fee'],$order_info['order_id']);
                     echo 'SUCCESS';die;
                 }
             }
