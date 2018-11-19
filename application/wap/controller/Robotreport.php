@@ -64,7 +64,7 @@ class Robotreport extends MobileMall
         $report_model = Model("Robotreport");
         $result = $report_model->report_add($data);
         if($result){
-            /*$path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+            $path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
             $md = model('Jpush');
             $md->JPushInit();
             //打卡成功，1给学生家长发送短信提醒，2极光推送给app发送提醒
@@ -82,7 +82,7 @@ class Robotreport extends MobileMall
                     $this->error('给用户发送短信失败 ');
                 }
                 $md->MemberPush($memberInfo['member_id'],$content,$title='打卡提醒');
-            }*/
+            }
             $ret = array("data"=>"打卡成功",'msg'=>"success",'ret'=>"00000");
             return json_encode($ret);
         }else{
