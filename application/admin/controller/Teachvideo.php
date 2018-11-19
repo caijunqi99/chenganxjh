@@ -151,7 +151,7 @@ class Teachvideo extends AdminControl {
                 $teachercertify = db('teachercertify')->where(array('member_id'=>$teachinfo['t_userid']))->find();
                 $teachinfo['name'] = $teachercertify['username'];
             }
-            $path = "http://vip.xiangjianhai.com:8001/uploads/";
+            $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
             $this->assign('path', $path);
             $this->assign('teachinfo', $teachinfo);
             $this->setAdminCurItem('pass');
