@@ -227,6 +227,7 @@ class Organizes extends AdminControl
         $where['s_schoolid']=array('in',$schoolid);
         $model_student = model('Student');
         $student_list = $model_student->getStudentList($where, 15);
+        $students= $model_student->getStudentList($where);
         foreach ($student_list as $k=>$v){
             $schooltype = db('schooltype')->where('sc_id',$v['s_sctype'])->find();
             $student_list[$k]['typename'] = $schooltype['sc_type'];
@@ -239,6 +240,7 @@ class Organizes extends AdminControl
         }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
+        $this->assign('count',count($students));
         $this->setAdminCurItem('studentnum');
         return $this->fetch();
     }
