@@ -35,7 +35,7 @@ class Member extends Model
         if($result['is_owner'] == 0){
             return db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
         }else{
-            return db('member')->where('(is_owner = "'.$result["member_id"].'" OR member_id = "'.$result["member_id"].'") AND member_id != "'.$member_id.'"')->count();
+            return db('member')->where('(is_owner = "'.$result["member_id"].'" OR member_id = "'.$result["is_owner"].'") AND member_id != "'.$member_id.'"')->count();
         }
     }
 

@@ -854,21 +854,23 @@ class Member extends MobileMember
             //主账号绑定的孩子
             $students = db('student')->alias('s')
                 ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
-                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
-                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid','LEFT')
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype','LEFT')
+                ->join('__CLASS__ c','c.classid = s.s_classid','LEFT')
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id','LEFT')
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
+                ->group('s.s_id')
                 ->select();
         }else{
             //副账号 显示起主账号绑定的孩子
             $students = db('student')->alias('s')
                 ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
-                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid',LEFT)
-                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype',LEFT)
-                ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
-                ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
+                ->join('__SCHOOL__ sc','sc.schoolid = s.s_schoolid','LEFT')
+                ->join('__SCHOOLTYPE__ st','st.sc_id = s.s_sctype','LEFT')
+                ->join('__CLASS__ c','c.classid = s.s_classid','LEFT')
+                ->join('__PACKAGETIME__ p','p.s_id = s.s_id','LEFT')
                 ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
+                ->group('s.s_id')
                 ->select();
         }
 
@@ -912,6 +914,7 @@ class Member extends MobileMember
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
                 ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_id = "'.$sid.'"')
+                ->group('s.s_id')
                 ->find();
         if(!empty($student)){
             if(!empty($student['end_time'])){
