@@ -859,6 +859,7 @@ class Member extends MobileMember
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
                 ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member_id.'"')
+                ->group('s.s_id')
                 ->select();
         }else{
             //副账号 显示起主账号绑定的孩子
@@ -869,6 +870,7 @@ class Member extends MobileMember
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
                 ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_ownerAccount = "'.$member['is_owner'].'"')
+                ->group('s.s_id')
                 ->select();
         }
 
@@ -912,6 +914,7 @@ class Member extends MobileMember
                 ->join('__CLASS__ c','c.classid = s.s_classid',LEFT)
                 ->join('__PACKAGETIME__ p','p.s_id = s.s_id',LEFT)
                 ->where('s.s_id = "'.$sid.'"')
+                ->group('s.s_id')
                 ->find();
         if(!empty($student)){
             if(!empty($student['end_time'])){
