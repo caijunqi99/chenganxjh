@@ -56,7 +56,7 @@ class Teachercertify extends AdminControl {
             $memberinfo = db('member')->where(array('member_id'=>$v['member_id']))->find();
             $teacher_list[$k]['member_add_time'] = $memberinfo['member_add_time'];
         }
-        $path = "http://vip.xiangjianhai.com:8001/uploads/";
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
         $this->assign('path', $path);
         $this->assign('page', $model_teacher->page_info->render());
         $this->assign('teacher_list', $teacher_list);
@@ -77,7 +77,7 @@ class Teachercertify extends AdminControl {
             $teachinfo = $model_teacher->getOneById($teacher_id);
             $memberinfo = db('member')->where(array('member_id'=>$teachinfo['member_id']))->find();
             $teachinfo['member_add_time'] = $memberinfo['member_add_time'];
-            $path = "http://vip.xiangjianhai.com:8001/uploads/";
+            $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
             $this->assign('path', $path);
             $this->assign('teachinfo', $teachinfo);
             $this->setAdminCurItem('pass');
