@@ -201,6 +201,23 @@ class Organizes extends AdminControl
     }
     //所属会员数
     public function membernum(){
+        $oid=$_GET['o_id'];
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        $model_school = model('School');
+        $conditions = array();
+        $list=array();
+        foreach($admin as $v){
+            $conditions['option_id']=$v['admin_id'];
+            $conditions['isdel']=1;
+            $list+=$model_school->getAllAchool($conditions);
+        }
+        foreach($list as $v){
+            $schoolid.=$v['schoolid'].',';
+        }
+        $schoolid=substr($schoolid, 0, -1);
         $this->setAdminCurItem('membernum');
         return $this->fetch();
     }
