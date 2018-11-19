@@ -115,16 +115,7 @@
     <script>
     GetChildList(user_token,'reday');
 
-    function full_video(video_obj) {
-        video_obj.addClass("video_full");
-        $(document.body).append("<span class='video_close' onclick='videoclose()'>X</span>");
-    }
 
-    function videoclose() {
-        $("video").get(0).pause();
-        $("video").eq(0).removeClass("video_full");
-        $(".video_close").hide();
-    }
         // $.ajax({
         //     type: "POST",
         //     url: api + "/robotrecord/record",
@@ -185,7 +176,7 @@
                     '<span class="status_out"><span class="status_in"></span></span>' +
                     '</h3>' +
                     '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" width="100%" height="100%" preload="none" poster="">'
+                    '<video controls controlsList="nodownload" onplay="full_video($(this))" width="100%" height="100%" preload="none" poster="">'
                 if (data[i].leave == undefined) {
                     template += '<source src="">'
                 } else {
@@ -206,7 +197,16 @@
             }
             return template;
         }
+    function full_video(video_obj) {
+        video_obj.addClass("video_full");
+        $(document.body).append("<span class='video_close' onclick='videoclose()'>X</span>");
+    }
 
+    function videoclose() {
+        $("video").get(0).pause();
+        $("video").eq(0).removeClass("video_full");
+        $(".video_close").hide();
+    }
         // 切换孩子
 
         // $("#role_switch").select({
