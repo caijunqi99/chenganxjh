@@ -26,6 +26,9 @@ class Memberwallet extends MobileMember
         }
         $member_Model = Model("Member");
         $data = $member_Model->getMemberInfo(array('member_id'=>$member_id),"member_id,total_predeposit");
+        if(empty($data)){
+            output_error('无此会员');
+        }
         if(!empty($data['total_predeposit'])){
             $data['total_predeposit'] = sprintf("%.2f",$data['total_predeposit']);
         }
