@@ -218,6 +218,25 @@ class Organizes extends AdminControl
             $schoolid.=$v['schoolid'].',';
         }
         $schoolid=substr($schoolid, 0, -1);
+        if($schoolid!='') {
+            $where['is_del'] = 1;
+            $where['schoolid'] = array('in', $schoolid);
+            $member = Model('member');
+            $member_list = $member->getMemberList($where, '*',15);
+            $members=$member->getMemberList($where);
+            foreach ($member_list as $k=>$v) {
+                $classinfo = db('class')->where('classid', $v['classid'])->find();
+                $member_list[$k]['classname'] = $classinfo['classname'];
+                $school = db('school')->where('schoolid', $v['schoolid'])->find();
+                $member_list[$k]['schoolname'] = $school['name'];
+            }
+            $this->assign('count',count($members));
+            $this->assign('page', $member->page_info->render());
+        }else{
+            $member_list=array();
+            $this->assign('count',0);
+        }
+        $this->assign('member_list', $member_list);
         $this->setAdminCurItem('membernum');
         return $this->fetch();
     }
