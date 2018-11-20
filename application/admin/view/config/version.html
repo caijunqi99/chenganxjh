@@ -1,0 +1,99 @@
+{include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+    .layui-form-item .layui-input-inline {
+        width: 450px;
+    }
+    .ncap-form-default textarea{
+        width: 450px;
+    }
+</style>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>通用设置/APP</h3>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div class="explanation" id="explanation" style="width:100%;box-sizing: border-box;">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>版本号必须大于以前版本，升级内容可以为空，为空表示没有升级内容，且下载地址必须正确</li>
+        </ul>
+    </div>
+    <form method="post" enctype="multipart/form-data" name="form1" class="layui-form">
+
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_android_num}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="teacher_children" value="{$list_config.version_android_num}" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_ios_num}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="teacher_children" value="{$list_config.version_ios_num}" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_android_download}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="teacher_children" value="{$list_config.version_android_download}" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_ios_download}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="teacher_children" value="{$list_config.version_ios_download}" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_android_content}</label>
+                    <div class="layui-input-inline">
+                        <textarea placeholder="请输入内容" class="layui-textarea">{$list_config.version_android_content}</textarea>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{$Think.lang.version_ios_content}</label>
+                    <div class="layui-input-inline">
+                        <textarea placeholder="请输入内容" class="layui-textarea">{$list_config.version_android_content}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+

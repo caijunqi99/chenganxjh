@@ -68,6 +68,64 @@ class Config extends AdminControl {
     }
 
     /**
+     * @desc 版本管理
+     * @author langzhiyao
+     * @time 20181120
+     */
+    public function version(){
+
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $model_config = model('config');
+        if (!request()->isPost()) {
+            $list_config = rkcache('config', true);
+
+//            halt($list_config);
+            $this->assign('list_config', $list_config);
+            /* 设置卖家当前栏目 */
+            $this->setAdminCurItem('version');
+            return $this->fetch();
+        } else {
+            $config = db('config')->find();
+            $ios_version = explode('.',$config['version_ios_num']);
+            $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+
+            $android_version = explode('.',$config['version_android_num']);
+            $android_num = $android_version[0]*100+$android_version[1]*10+$android_version[2];
+
+            $update_array['version_ios_num'] = input('post.version_ios_num');
+            $update_array['version_android_num'] = input('post.version_android_num');
+            //得到传过来的版本号
+            $new_ios_version = explode('.',$update_array['version_ios_num']);
+            $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+
+            $new_android_version = explode('.',$update_array['version_android_num']);
+            $new_android_num = $new_android_version[0]*100+$new_android_version[1]*10+$new_android_version[2];
+            //判断
+            if($ios_num >$new_ios_num){
+                $this->error('IOS版本号低于旧版本');
+            }
+            if($android_num > $new_android_num){
+                $this->error('Android版本号低于旧版本');
+            }
+            $update_array['version_android_download'] = input('post.version_android_download');
+            $update_array['version_ios_download'] = input('post.version_ios_download');
+            $update_array['version_android_content'] = input('post.version_android_content');
+            $update_array['version_ios_content'] = input('post.version_ios_content');
+
+            $result = $model_config->updateConfig($update_array);
+            if ($result) {
+                dkcache('config');
+                $this->log(lang('ds_edit').lang('web_set'),1);
+                $this->success(lang('ds_common_save_succ'), 'Config/index');
+            }else{
+                $this->log(lang('ds_edit').lang('web_set'),0);
+            }
+        }
+    }
+
+    /**
      * @return mixed
      * @desc 站点设置
      */
@@ -213,6 +271,11 @@ class Config extends AdminControl {
                 'name' => 'index',
                 'text' => '时长/分成/副账号设置',
                 'url' => url('Admin/Config/index')
+            ),
+            array(
+                'name' => 'version',
+                'text' => '版本管理',
+                'url' => url('Admin/Config/version')
             ),
 //            array(
 //                'name' => 'base',
