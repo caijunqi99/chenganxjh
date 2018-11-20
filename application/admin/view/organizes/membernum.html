@@ -10,31 +10,31 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <h2>{$Think.lang.organize_membernum_num}0个</h2>
+    <h2>{$Think.lang.organize_membernum_num}{$count}个</h2>
     <form method="post" enctype="multipart/form-data" name="form1" action="">
         <table class="ds-default-table">
             <thead>
             <tr class="thead">
                 <th class="w272">{$Think.lang.ds_number}</th>
                 <th class="w172">{$Think.lang.organize_membernum_name}</th>
+                <th class="w172">{$Think.lang.mob_phone}</th>
                 <th class="w272 align-center">{$Think.lang.organize_membernum_school}</th>
                 <th class="w172">{$Think.lang.organize_membernum_class}</th>
                 <th class="w172">{$Think.lang.organize_membernum_area}</th>
                 <th class="w172">{$Think.lang.ds_organize_time}</th>
-                <th class="w172">{$Think.lang.ds_organize_remark}</th>
             </tr>
             </thead>
             <tbody>
-            {notempty name="organize_list"}
-            {volist name="organize_list" id="v"}
+            {notempty name="member_list"}
+            {volist name="member_list" id="v" key="k"}
             <tr class="hover edit">
-                <td class="sort">{$v.o_id}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="picture">{$v.o_createtime}</td>
-                <td class="align-center">{$v.o_remark}</td>
+                <td class="sort"><?php if(!$_GET['page']){  echo $k; }else{ echo ($_GET['page']-1)*15+$k; }?></td>
+                <td class="name">{$v.member_name}</td>
+                <td class="name">{$v.member_mobile}</td>
+                <td class="name">{$v.schoolname}</td>
+                <td class="name">{$v.classname}</td>
+                <td class="name">{$v.member_areainfo}</td>
+                <td class="picture"><?php echo date('Y-m-d H:i:s',$v['member_add_time']); ?></td>
             </tr>
             {/volist}
             {else /}
@@ -43,17 +43,16 @@
             </tr>
             {/notempty}
             </tbody>
-            <tfoot>
-            {notempty name="organize_list"}
-            <tr colspan="15" class="tfoot">
-                <td colspan="16">
-                    <div class="pagination"> {$page} </div></td>
-            </tr>
-            {/notempty}
-            </tfoot>
         </table>
     </form>
-
+    <tfoot>
+    {notempty name="member_list"}
+    <tr colspan="15" class="tfoot">
+        <td colspan="16">
+            <div class="pagination"> {$page} </div></td>
+    </tr>
+    {/notempty}
+    </tfoot>
 </div>
 
 

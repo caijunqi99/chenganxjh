@@ -17,7 +17,7 @@ class Member extends Model
      * @return array
      */
     public function getMemberInfo($condition, $field = '*', $master = false)
-    {   
+    {
         $condition['is_del'] = isset($condition['is_del'])?$condition['is_del']:1;
         $res = db('member')->field($field)->where($condition)->master($master)->find();
         return $res;
@@ -30,12 +30,11 @@ class Member extends Model
      */
     public function getMemberViceAccount($member_id){
         $where = ' m.member_id = "'.$member_id.'"';
-        $result = db('member')->alias('m')->field('m.member_id,m.member_nickname,m.member_avatar,m.member_identity,m.is_owner,m.member_age,m.member_sex,m.member_email,m.member_provinceid,m.member_cityid,m.member_areaid,m.member_jobid')->where($where)->find();
-
+        $result = db('member')->alias('m')->field('m.member_id,m.is_owner')->where($where)->find();
         if($result['is_owner'] == 0){
-            return db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
+            return $this->where('is_owner = "'.$result["member_id"].'"')->count();
         }else{
-            return db('member')->where('(is_owner = "'.$result["member_id"].'" OR member_id = "'.$result["is_owner"].'") AND member_id != "'.$member_id.'"')->count();
+            return $this->where('(is_owner = "'.$result["is_owner"].'" AND member_id != "'.$member_id.'") OR member_id = "'.$result["is_owner"].'" ')->count();
         }
     }
 
@@ -64,13 +63,13 @@ class Member extends Model
      * @param string $order
      */
     public function getMemberList($condition = array(), $field = '*', $page = 0, $order = 'member_id desc')
-    {   
+    {
         $condition['is_del'] = isset($condition['is_del'])?$condition['is_del']:1;
         if ($page) {
             $member_list = db('member')->field($field)->where($condition)
-            // ->join('__SCHOOLTYPE__ b','','LEFT')
-            ->order($order)
-            ->paginate($page,false,['query' => request()->param()]);
+                // ->join('__SCHOOLTYPE__ b','','LEFT')
+                ->order($order)
+                ->paginate($page,false,['query' => request()->param()]);
             $this->page_info = $member_list;
             return $member_list->items();
         }
@@ -703,9 +702,10 @@ class Member extends Model
         }
     }
 
-    public function getfby_member_id($member_id, $field = 'inviter_id')
+    public function getfby_member_id($member_id, $field='inviter_id')
     {
         $where['member_id']=$member_id;
-       return db('member')->field($field)->where($where)->find();
+        return db('member')->field($field)->where($where)->find();
     }
+
 }
