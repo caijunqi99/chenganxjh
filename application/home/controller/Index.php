@@ -8,6 +8,7 @@ class Index extends BaseMall {
 
     public function _initialize() {
         parent::_initialize();
+        $this->redirect('Sellerlogin/login');
         Lang::load(APP_PATH . 'home/lang/zh-cn/index.lang.php');
         Lang::load(APP_PATH . 'home/lang/zh-cn/sellergroupbuy.lang.php');
     }
