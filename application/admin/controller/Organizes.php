@@ -201,6 +201,42 @@ class Organizes extends AdminControl
     }
     //所属会员数
     public function membernum(){
+        $oid=$_GET['o_id'];
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        $model_school = model('School');
+        $conditions = array();
+        $list=array();
+        foreach($admin as $v){
+            $conditions['option_id']=$v['admin_id'];
+            $conditions['isdel']=1;
+            $list+=$model_school->getAllAchool($conditions);
+        }
+        foreach($list as $v){
+            $schoolid.=$v['schoolid'].',';
+        }
+        $schoolid=substr($schoolid, 0, -1);
+        if($schoolid!='') {
+            $where['is_del'] = 1;
+            $where['schoolid'] = array('in', $schoolid);
+            $member = Model('member');
+            $member_list = $member->getMemberList($where, '*',15);
+            $members=$member->getMemberList($where);
+            foreach ($member_list as $k=>$v) {
+                $classinfo = db('class')->where('classid', $v['classid'])->find();
+                $member_list[$k]['classname'] = $classinfo['classname'];
+                $school = db('school')->where('schoolid', $v['schoolid'])->find();
+                $member_list[$k]['schoolname'] = $school['name'];
+            }
+            $this->assign('count',count($members));
+            $this->assign('page', $member->page_info->render());
+        }else{
+            $member_list=array();
+            $this->assign('count',0);
+        }
+        $this->assign('member_list', $member_list);
         $this->setAdminCurItem('membernum');
         return $this->fetch();
     }
