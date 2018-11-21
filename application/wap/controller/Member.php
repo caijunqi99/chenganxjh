@@ -147,7 +147,7 @@ class Member extends MobileMember
                 if($result['is_owner'] == 0){
                     $result['f_account_count'] =db('member')->where('is_owner = "'.$result["member_id"].'"')->count();
                 }else{
-                    $result['f_account_count'] =db('member')->where('(is_owner = "'.$result["member_id"].'" OR member_id = "'.$result["member_id"].'") AND member_id != "'.$member_id.'"')->count();
+                    $result['f_account_count'] =db('member')->where('(is_owner = "'.$result["is_owner"].'" OR member_id = "'.$result["is_owner"].'") AND member_id != "'.$member_id.'"')->count();
                 }
 
                 $result['province_name'] = db('area')->where('area_id = "'.$result["member_provinceid"].'"')->value('area_name');

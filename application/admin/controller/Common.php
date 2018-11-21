@@ -744,4 +744,107 @@ class Common extends AdminControl
         exit(json_encode(array('grade'=>$grade_html,'class'=>$class_html)));
     }
 
+
+    /**
+     * @desc 判断渠道名称是否存在
+     * @author langzhiyao
+     * @time 20181114
+     */
+    public function is_channel_name(){
+        $channel_name = trim(input('get.channel_name'));
+        $id = input('get.id');
+        if($id){
+            $result = db('channel')->field('id')->where('channel_name="'.$channel_name.'" AND id != "'.$id.'"')->find();
+        }else{
+            $result = db('channel')->field('id')->where('channel_name="'.$channel_name.'"')->find();
+        }
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @desc 判断渠道标识是否存在
+     * @author langzhiyao
+     * @time 20181114
+     */
+    public function is_channel(){
+        $channel = trim(input('get.channel'));
+        $id = input('get.id');
+        if($id){
+            $result = db('channel')->field('id')->where('channel="'.$channel.'" AND id != "'.$id.'"')->find();
+        }else{
+            $result = db('channel')->field('id')->where('channel="'.$channel.'"')->find();
+        }
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @desc  apk上传
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function apk_file_upload()
+    {
+        $file = request()->file('file'); // 获取上传的文件
+        if($file==null){
+            exit(json_encode(array('code'=>1,'msg'=>'未上传文件')));
+        }
+        // 获取文件后缀
+        $temp = explode(".", $_FILES["file"]["name"]);
+        $extension = end($temp);
+        // 判断文件是否合法
+        if(!in_array($extension,array("apk"))){
+            exit(json_encode(array('code'=>1,'msg'=>'上传文件类型不合法')));
+        }
+        $info = $file->move(ROOT_PATH.'public'.DS.'uploads'.DS.'apk');
+        // 移动文件到指定目录 没有则创建
+        $file = '/uploads/'.$info->getSaveName();
+
+        exit(json_encode(array('code'=>0,'msg'=>$file)));
+    }
+
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_version(){
+        $type = intval(input('post.type'));
+        $config = db('config')->find();
+        if($type == 1){
+            $android_version = explode('.',$config['version_android_num']);
+            $android_num = $android_version[0]*100+$android_version[1]*10+$android_version[2];
+            //得到传过来的版本号
+            $update_array['version_android_num'] = input('post.version_android_num');
+            $new_android_version = explode('.',$update_array['version_android_num']);
+            $new_android_num = $new_android_version[0]*100+$new_android_version[1]*10+$new_android_version[2];
+            if($android_num > $new_android_num){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            $ios_version = explode('.',$config['version_ios_num']);
+            $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+            $update_array['version_ios_num'] = input('post.version_ios_num');
+            //得到传过来的版本号
+            $new_ios_version = explode('.',$update_array['version_ios_num']);
+            $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+            //判断
+            if($ios_num >$new_ios_num){
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+    }
+
 }
