@@ -217,7 +217,7 @@
                                 $('#classes').val(data[0]['sc_type']);
                                 $('#banji').val(data[0]['classname']);
                                 $('#shibiema').val(data[0]['classCard']);
-                                if(data[0]['version']){
+                                if(data[0]['is_version']){
                                     if(data[0]['time'] != '请前往购买套餐'){
                                         $('.scan_bar').show();
                                     }else{
@@ -265,7 +265,7 @@
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
 
-                                        if(response.result[0]['version']){
+                                        if(response.result[0]['is_version']){
                                             if(response.result[0]['time'] != '请前往购买套餐'){
                                                 $('.scan_bar').show();
                                             }else{
@@ -303,7 +303,7 @@
                         $('#classes').val(data[0]['sc_type']);
                         $('#banji').val(data[0]['classname']);
                         $('#shibiema').val(data[0]['classCard']);
-                        if(data[0]['version']){
+                        if(data[0]['is_version']){
                             if(data[0]['time'] != '请前往购买套餐'){
                                 $('.scan_bar').show();
                             }else{
