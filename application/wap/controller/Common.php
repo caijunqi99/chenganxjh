@@ -270,7 +270,30 @@ class Common extends MobileMall
 
         $site = db('config')->where(' id >710')->select();
         output_data($site);
+    }
+
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_version(){
+        //获取原有版本号
+        $old_version = db('version_update')->field('version_num')->order('id DESC')->find();
+        $ios_version = explode('.',$old_version['version_num']);
+        $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+        //得到传过来的版本号
+        $version = trim(input('post.version'));
+        $new_ios_version = explode('.',$version);
+        $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+        //判断
+        if($ios_num >= $new_ios_num ){
+            return true;
+        }else{
+            return false;
+        }
 
 
     }
+
 }
