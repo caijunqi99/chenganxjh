@@ -296,4 +296,32 @@ class Common extends MobileMall
 
     }
 
+    /**
+     * @desc 获取版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function get_version(){
+        $type = intval(input('post.type'));
+        if(empty($type)){
+           output_error('缺少参数type');
+        }
+        $result = '';
+        if($type == 1){
+            //android
+            $result = db('version_update')->where('type=1')->order('id DESC')->find();
+        }else{
+            //ios
+            $result = db('version_update')->where('type=2')->order('id DESC')->find();
+        }
+        if($result){
+            output_data($result);
+        }else{
+            output_error('获取失败');
+        }
+
+
+
+    }
+
 }
