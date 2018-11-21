@@ -236,7 +236,6 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
-        
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
