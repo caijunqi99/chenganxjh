@@ -176,7 +176,7 @@ class Student extends Model {
     public function getAllStudent($condition){
         return db('student')
             ->join('__CLASS__ cl','cl.classid=s_classid','LEFT')
-            ->field("s_id,s_name,s_sex,s_classid,s_card,classname,s_del")->where($condition)->select();
+            ->field("s_id,s_name,s_sex,s_classid,s_card,classname,s_del,s_ownerAccount")->where($condition)->select();
     }
 
 }
