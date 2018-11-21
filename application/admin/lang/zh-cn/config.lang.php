@@ -213,8 +213,8 @@ $lang['city_agent'] = '市代理商';
 $lang['teacher'] = '教师';
 
 //版本升级
-$lang['version_android'] = 'Android';
-$lang['version_ios'] = 'IOS';
+$lang['version_android'] = 'Android版本更新记录';
+$lang['version_ios'] = 'IOS版本更新记录';
 $lang['version_android_num'] = 'Android版本号';
 $lang['version_ios_num'] = 'IOS版本号';
 $lang['version_android_download'] = 'Android下载地址';
