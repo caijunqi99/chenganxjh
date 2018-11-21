@@ -68,6 +68,275 @@ class Config extends AdminControl {
     }
 
     /**
+     * @desc 渠道标识管理
+     * @author langzhiyao
+     * @time 20181120
+     */
+    public function channel(){
+
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $list_count = db('channel')->count();
+
+        $this->assign('list_count',$list_count);
+        /* 设置卖家当前栏目 */
+        $this->setAdminCurItem('channel');
+        return $this->fetch();
+
+    }
+
+    /**
+     * @desc 获取渠道标识列表
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function get_channel_list(){
+
+        $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 10;//每页的条数
+        $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
+
+//        halt($start);
+        //查询未绑定的摄像头
+        $list = db('channel')->limit($start,$page_count)->order('time DESC')->select();
+        $list_count = db('channel')->count();
+
+        $html = '';
+        if(!empty($list)){
+            foreach($list as $key=>$value){
+                $html .= '<tr class="hover">';
+                $html .= '<td class="align-center" >'.($key+1).'</td>';
+                $html .= '<td class="align-center">'.$value["channel_name"].'</td>';
+                $html .= '<td class="align-center">'.$value["channel"].'</td>';
+                $html .= '<td class="align-center">'.date('Y-m-d H:i',$value["time"]).'</td>';
+                $html .= '<td class="align-center">'.$value["description"].'</td>';
+
+                $html .= '<td class="w150 align-center">
+                        <div class="layui-table-cell laytable-cell-9-8">
+                           <a href="javascript:void(0)"  class="layui-btn  layui-btn-sm edit" data-id="'.$value["id"].'" lay-event="reset">修改</a>';
+                $html .=  '</div></td>';
+
+                $html .= '</tr>';
+            }
+        }else{
+            $html = '<tr class="no_data">
+                    <td colspan="15">没有符合条件的记录</td>
+                </tr>';
+        }
+
+        exit(json_encode(array('html'=>$html,'count'=>$list_count)));
+
+    }
+
+    /**
+     * @desc 添加渠道标识
+     * @author langzhiyao
+     * @time 20181120
+     */
+    public function add_channel(){
+        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        if (!request()->isPost()) {
+            $this->setAdminCurItem('edit_channel');
+            return $this->fetch();
+        }else{
+            $data = array(
+                'channel_name' => trim(input('post.channel_name')),
+                'channel' => trim(input('post.channel')),
+                'description'=>trim(input('post.description')),
+                'time'=>time()
+            );
+            $result = db('channel')->insert($data);
+            if($result){
+                exit(json_encode(array('code'=>200,'msg'=>'添加成功')));
+            }else{
+                exit(json_encode(array('code'=>0,'msg'=>'添加失败')));
+            }
+        }
+    }
+
+    /**
+     * @desc 修改渠道标识
+     * @author langzhiyao
+     * @time 20181120
+     */
+    public function edit_channel(){
+        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $id = intval(input('get.id'));
+        if (!request()->isPost()) {
+            $channel = db('channel')->where('id="' . $id . '"')->find();
+            $this->assign('channel', $channel);
+            $this->setAdminCurItem('edit_channel');
+            return $this->fetch();
+        }else{
+            $data = array(
+                'channel_name' => trim(input('post.channel_name')),
+                'channel' => trim(input('post.channel')),
+                'description'=>trim(input('post.description')),
+                'time'=>time()
+            );
+            $result = db('channel')->where('id="'.$id.'"')->update($data);
+            if($result){
+                exit(json_encode(array('code'=>200,'msg'=>'修改成功')));
+            }else{
+                exit(json_encode(array('code'=>0,'msg'=>'修改失败')));
+            }
+        }
+    }
+
+    /**
+     * @desc 版本管理
+     * @author langzhiyao
+     * @time 20181120
+     */
+    public function version(){
+
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
+        $list_count = db('version_update')->where('type=1')->count();
+        $list_count2 = db('version_update')->where('type=2')->count();
+
+        $this->assign('list_count',$list_count);
+        $this->assign('list_count2',$list_count2);
+        $this->setAdminCurItem('version');
+        return $this->fetch();
+
+    }
+
+    /**
+     * @desc 获取分页数据
+     * @author langzhiyao
+     * @time 20190929
+     */
+    public function get_version_list(){
+        $type = intval(input('get.type'));
+        $where = ' type="'.$type.'" ';
+
+
+        $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 10;//每页的条数
+        $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
+
+//        halt($start);
+        //查询
+        $list = db('version_update')->where($where)->limit($start,$page_count)->order('time DESC')->select();
+        $list_count = db('version_update')->where($where)->count();
+
+        $html = '';
+        if(!empty($list)){
+            if($type == 1){
+                foreach($list as $key=>$value){
+                    $html .= '<tr class="hover">';
+                    $html .= '<td class="align-center" >'.($key+1).'</td>';
+                    $html .= '<td class="align-center">'.$value["content"].'</td>';
+                    if($value['mode'] == 1){
+                        $html .= '<td class="align-center">建议更新</td>';
+                    }else if($value['mode'] == 2){
+                        $html .= '<td class="align-center">强制更新</td>';
+                    }
+                    $html .= '<td class="align-center">'.$value["version_num"].'</td>';
+                    $html .= '<td class="align-center">'.$value["channel"].'</td>';
+                    $html .= '<td class="align-center">'.$value["package_name"].'</td>';
+                    $html .= '<td class="align-center">'.date('Y-m-d H;i',$value["time"]).'</td>';
+                    $html .= '</tr>';
+                }
+            }else{
+                foreach($list as $key=>$value){
+                    $html .= '<tr class="hover">';
+                    $html .= '<td class="align-center" >'.($key+1).'</td>';
+                    $html .= '<td class="align-center">'.$value["content"].'</td>';
+                    if($value['mode'] == 1){
+                        $html .= '<td class="align-center">建议更新</td>';
+                    }else if($value['mode'] == 2){
+                        $html .= '<td class="align-center">强制更新</td>';
+                    }
+                    $html .= '<td class="align-center">'.$value["version_num"].'</td>';
+                    $html .= '<td class="align-center">'.$value["url"].'</td>';
+                    $html .= '<td class="align-center">'.date('Y-m-d H;i',$value["time"]).'</td>';
+                    $html .= '</tr>';
+                }
+            }
+
+        }else{
+            $html .= '<tr class="no_data">
+                    <td colspan="15">没有符合条件的记录</td>
+                </tr>';
+        }
+
+        exit(json_encode(array('html'=>$html,'count'=>$list_count)));
+
+    }
+
+
+    /**
+     * @desc Android版本号添加
+     * @time 20181121
+     * @author langzhiyao
+     */
+    public function android_version(){
+            $channel = db('channel')->select();
+            $this->assign('channel',$channel);
+            $this->setAdminCurItem('android_version');
+            return $this->fetch();
+    }
+
+    /**
+     * @desc IOS版本号添加
+     * @time 20181121
+     * @author langzhiyao
+     */
+        public function ios_version(){
+            $this->setAdminCurItem('ios_version');
+            return $this->fetch();
+        }
+
+    /**
+     * @desc 更新版本
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function updateVersion(){
+        $type = intval(input('post.type'));
+        if($type == 1){
+            $data = array(
+                'type'=>$type,
+                'version_num' => trim(input('post.version_num')),
+                'mode' => intval(input('post.mode')),
+                'channel'=>trim(input('post.channel')),
+                'package_name'=>trim(input('post.package_name')),
+                'content'=>trim(input('post.description')),
+                'time'=> time()
+            );
+            $result = db('version_update')->insert($data);
+            if($result){
+                exit(json_encode(array('code'=>200,'msg'=>'Android版本更新成功')));
+            }else{
+                exit(json_encode(array('code'=>-1,'msg'=>'Android版本更新失败')));
+            }
+        }else{
+            $data = array(
+                'type'=>$type,
+                'version_num' => trim(input('post.version_num')),
+                'mode' => intval(input('post.mode')),
+                'url'=>trim(input('post.url')),
+                'content'=>trim(input('post.description')),
+                'time'=>time()
+            );
+            $result = db('version_update')->insert($data);
+            if($result){
+                exit(json_encode(array('code'=>200,'msg'=>'IOS版本更新成功')));
+            }else{
+                exit(json_encode(array('code'=>-1,'msg'=>'IOS版本更新失败')));
+            }
+        }
+
+    }
+
+
+    /**
      * @return mixed
      * @desc 站点设置
      */
@@ -213,6 +482,16 @@ class Config extends AdminControl {
                 'name' => 'index',
                 'text' => '时长/分成/副账号设置',
                 'url' => url('Admin/Config/index')
+            ),
+            array(
+                'name' => 'channel',
+                'text' => '渠道标识管理',
+                'url' => url('Admin/Config/channel')
+            ),
+            array(
+                'name' => 'version',
+                'text' => '版本管理',
+                'url' => url('Admin/Config/version')
             ),
 //            array(
 //                'name' => 'base',

@@ -4,7 +4,8 @@ namespace JPush\Exceptions;
 class APIRequestException extends JPushException {
     private $http_code;
     private $headers;
-
+    public $code;
+    public $message;
     private static $expected_keys = array('code', 'message');
 
     function __construct($response){

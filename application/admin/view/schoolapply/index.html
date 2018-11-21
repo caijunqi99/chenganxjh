@@ -125,7 +125,7 @@
             <td class="align-center"><?php echo $v['username']; ?></td>
             <td class="align-center"><?php echo $v['phone']; ?></td>
             <td class="align-center"><?php echo $v['message']; ?></td>
-            <td class="align-center"><?php echo $v['createtime']; ?></td>
+            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['createtime']); ?></td>
             <td class="align-center">
                 <?php if(session('admin_is_super') ==1 || in_array('3',$action)){ ?>
                 <?php if($v['status']==1){ ?>

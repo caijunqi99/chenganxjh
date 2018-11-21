@@ -5,7 +5,9 @@ class ServiceNotAvaliable extends JPushException {
 
     private $http_code;
     private $headers;
-
+    public $code;
+    public $message;
+    
     function __construct($response){
         $this->http_code = $response['http_code'];
         $this->headers = $response['headers'];
