@@ -59,12 +59,32 @@ class Teacherhome extends MobileMall
             $parentType[$key] =  $item;
         }
         $data = array();
-        $data['navigate'] = [
-            "subsume" => ["name"=>"综合","child"=>["综合","价格最高","价格最低"]],
-            'free' => ["name"=>"查看免费"],
-            'fees' => ["name"=>"查看付费"],
-            "select" => ['name'=>"筛选"]
-        ];
+
+        $version = trim(input('post.version'));
+        if($version){
+            $is_version = $this->is_version($version);
+            if($is_version){
+                $data['navigate'] = [
+                    "subsume" => ["name"=>"综合","child"=>["综合","价格最高","价格最低"]],
+                    'free' => ["name"=>"查看免费"],
+                    'fees' => ["name"=>"查看付费"],
+                    "select" => ['name'=>"筛选"]
+                ];
+            }else{
+                $data['navigate'] = [
+                    "subsume" => ["name"=>"综合","child"=>["综合","价格最高","价格最低"]],
+                    'free' => ["name"=>"查看免费"],
+                    "select" => ['name'=>"筛选"]
+                ];
+            }
+        }else{
+            $data['navigate'] = [
+                "subsume" => ["name"=>"综合","child"=>["综合","价格最高","价格最低"]],
+                'free' => ["name"=>"查看免费"],
+                'fees' => ["name"=>"查看付费"],
+                "select" => ['name'=>"筛选"]
+            ];
+        }
 //        $data['categorize'] = $parentType;
         $data['categorize'][] = array("gc_name"=>"推荐","childTwo"=>[]);
 
@@ -85,6 +105,15 @@ class Teacherhome extends MobileMall
 
         $page = !empty(input('post.page')) ? input('post.page'): 1;
         $where = "t_audit=3 and t_del=1";
+
+        $version = trim(input('post.version'));
+        if($version) {
+            $is_version = $this->is_version($version);
+            if(!$is_version){
+                $where .= " and t_price=0";
+            }
+        }
+
         if(!empty(input('post.type'))) {
             $where .= " and t_type=".input('post.type');
         }
@@ -136,5 +165,29 @@ class Teacherhome extends MobileMall
             output_data($list);
         }
     }
+
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_version($version){
+        //获取原有版本号
+        $old_version = db('version_update')->field('version_num')->where('type=2')->order('id DESC')->find();
+        $ios_version = explode('.',$old_version['version_num']);
+        $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+        //得到传过来的版本号
+        $new_ios_version = explode('.',$version);
+        $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+        //判断
+        if($ios_num >= $new_ios_num ){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
 
 }
