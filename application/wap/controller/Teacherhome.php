@@ -173,7 +173,7 @@ class Teacherhome extends MobileMall
      */
     public function is_version($version){
         //获取原有版本号
-        $old_version = db('version_update')->field('version_num')->order('id DESC')->find();
+        $old_version = db('version_update')->field('version_num')->where('type=2')->order('id DESC')->find();
         $ios_version = explode('.',$old_version['version_num']);
         $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
         //得到传过来的版本号
