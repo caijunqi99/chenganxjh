@@ -219,11 +219,32 @@ class Organizes extends AdminControl
         }
         $schoolid=substr($schoolid, 0, -1);
         if($schoolid!='') {
-            $where['is_del'] = 1;
-            $where['schoolid'] = array('in', $schoolid);
+            $where['s_del'] = 1;
+            $where['s_schoolid']=array('in',$schoolid);
+            $model_student = model('Student');
+            $students= $model_student->getAllStudent($where);
             $member = Model('member');
-            $member_list = $member->getMemberList($where, '*',15);
-            $members=$member->getMemberList($where);
+            foreach($students as $v){
+                if(!empty($v['s_ownerAccount'])) {
+                    $wherees['is_owner']=$v['s_ownerAccount'];
+                    $res=$member->getMemberList($wherees);
+                    if(!in_array($v['s_ownerAccount'],$id)) {
+                        $id[] = $v['s_ownerAccount'];
+                    }
+                    if(!empty($res)){
+                        foreach($res as $v){
+                            if(!in_array($v['member_id'],$id)) {
+                                $id[] = $v['member_id'];
+                            }
+                        }
+                    }
+                }
+            }
+            $member_id=implode(",",$id);
+            $wheres['is_del'] = 1;
+            $wheres['member_id'] = array('in', $member_id);
+            $member_list = $member->getMemberList($wheres, '*',15);
+            $members=$member->getMemberList($wheres);
             foreach ($member_list as $k=>$v) {
                 $classinfo = db('class')->where('classid', $v['classid'])->find();
                 $member_list[$k]['classname'] = $classinfo['classname'];

@@ -174,24 +174,10 @@
             }
         }
     });
-
+    var version = '';
     //判断版本号
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
-        var version = $.cookie('version');
-        $.ajax({
-            type:'POST',
-            url:api+'/common/is_version',
-            data:{
-                version:version
-            },
-            success:function(response){
-                if(response){
-                    $('.scan_bar').show();
-                }
-            }
-        });
-    }else{
-        $('.scan_bar').show();
+         version = $.cookie('version');
     }
     
     $.ajax({
@@ -200,6 +186,7 @@
         data:{
             key:user_token,
             member_id:user_member_id,
+            version:version
         },
         dataType: "json",
         success: function(response){
@@ -230,12 +217,16 @@
                                 $('#classes').val(data[0]['sc_type']);
                                 $('#banji').val(data[0]['classname']);
                                 $('#shibiema').val(data[0]['classCard']);
-                                if(data[0]['time'] != '请前往购买套餐'){
-                                    $('.scan_bar').show();
+                                if(data[0]['is_version']){
+                                    if(data[0]['time'] != '请前往购买套餐'){
+                                        $('.scan_bar').show();
+                                    }else{
+                                        $('.scan_bar').hide();
+                                    }
+                                    $('#see').val(data[0]['time']);
                                 }else{
-                                    $('.scan_bar').hide();
+                                    $('#see').val('暂无');
                                 }
-                                $('#see').val(data[0]['time']);
 
                             }else{
                                 tab += '<li data-id="'+data[i]['s_id']+'">\n' +
@@ -254,6 +245,7 @@
                                 data:{
                                     key:user_token,
                                     sid:sid,
+                                    version:version
                                 },
                                 dataType: "json",
                                 success: function(response){
@@ -273,12 +265,16 @@
                                         $('#banji').val(response.result[0]['classname']);
                                         $('#shibiema').val(response.result[0]['classCard']);
 
-                                        if(response.result[0]['time'] != '请前往购买套餐'){
-                                            $('.scan_bar').show();
+                                        if(response.result[0]['is_version']){
+                                            if(response.result[0]['time'] != '请前往购买套餐'){
+                                                $('.scan_bar').show();
+                                            }else{
+                                                $('.scan_bar').hide();
+                                            }
+                                            $('#see').val(response.result[0]['time']);
                                         }else{
-                                            $('.scan_bar').hide();
+                                            $('#see').val('暂无');
                                         }
-                                        $('#see').val(response.result[0]['time']);
                                     }else if(response['code'] == 400){
                                         $('.no_bounds').show();
                                         $('.container2').hide();
@@ -307,12 +303,16 @@
                         $('#classes').val(data[0]['sc_type']);
                         $('#banji').val(data[0]['classname']);
                         $('#shibiema').val(data[0]['classCard']);
-                        if(data[0]['time'] != '请前往购买套餐'){
-                            $('.scan_bar').show();
+                        if(data[0]['is_version']){
+                            if(data[0]['time'] != '请前往购买套餐'){
+                                $('.scan_bar').show();
+                            }else{
+                                $('.scan_bar').hide();
+                            }
+                            $('#see').val(data[0]['time']);
                         }else{
-                            $('.scan_bar').hide();
+                            $('#see').val('暂无');
                         }
-                        $('#see').val(data[0]['time']);
                     }
                 }else{
                     $('.no_bounds').show();

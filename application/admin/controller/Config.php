@@ -240,7 +240,7 @@ class Config extends AdminControl {
                     $html .= '<td class="align-center">'.$value["version_num"].'</td>';
                     $html .= '<td class="align-center">'.$value["channel"].'</td>';
                     $html .= '<td class="align-center">'.$value["package_name"].'</td>';
-                    $html .= '<td class="align-center">'.date('Y-m-d H;i',$value["time"]).'</td>';
+                    $html .= '<td class="align-center">'.date('Y-m-d H:i',$value["time"]).'</td>';
                     $html .= '</tr>';
                 }
             }else{
@@ -300,38 +300,45 @@ class Config extends AdminControl {
      */
     public function updateVersion(){
         $type = intval(input('post.type'));
-        if($type == 1){
-            $data = array(
-                'type'=>$type,
-                'version_num' => trim(input('post.version_num')),
-                'mode' => intval(input('post.mode')),
-                'channel'=>trim(input('post.channel')),
-                'package_name'=>trim(input('post.package_name')),
-                'content'=>trim(input('post.description')),
-                'time'=> time()
-            );
-            $result = db('version_update')->insert($data);
-            if($result){
-                exit(json_encode(array('code'=>200,'msg'=>'Android版本更新成功')));
+        $version = trim(input('post.version_num'));
+        $res = $this->is_version($version,$type);
+        if($res){
+            if($type == 1){
+                $data = array(
+                    'type'=>$type,
+                    'version_num' => trim(input('post.version_num')),
+                    'mode' => intval(input('post.mode')),
+                    'channel'=>trim(input('post.channel')),
+                    'package_name'=>trim(input('post.package_name')),
+                    'content'=>trim(input('post.description')),
+                    'time'=> time()
+                );
+                $result = db('version_update')->insert($data);
+                if($result){
+                    exit(json_encode(array('code'=>200,'msg'=>'Android版本更新成功')));
+                }else{
+                    exit(json_encode(array('code'=>-1,'msg'=>'Android版本更新失败')));
+                }
             }else{
-                exit(json_encode(array('code'=>-1,'msg'=>'Android版本更新失败')));
+                $data = array(
+                    'type'=>$type,
+                    'version_num' => trim(input('post.version_num')),
+                    'mode' => intval(input('post.mode')),
+                    'url'=>trim(input('post.url')),
+                    'content'=>trim(input('post.description')),
+                    'time'=>time()
+                );
+                $result = db('version_update')->insert($data);
+                if($result){
+                    exit(json_encode(array('code'=>200,'msg'=>'IOS版本更新成功')));
+                }else{
+                    exit(json_encode(array('code'=>-1,'msg'=>'IOS版本更新失败')));
+                }
             }
         }else{
-            $data = array(
-                'type'=>$type,
-                'version_num' => trim(input('post.version_num')),
-                'mode' => intval(input('post.mode')),
-                'url'=>trim(input('post.url')),
-                'content'=>trim(input('post.description')),
-                'time'=>time()
-            );
-            $result = db('version_update')->insert($data);
-            if($result){
-                exit(json_encode(array('code'=>200,'msg'=>'IOS版本更新成功')));
-            }else{
-                exit(json_encode(array('code'=>-1,'msg'=>'IOS版本更新失败')));
-            }
+            exit(json_encode(array('code'=>-1,'msg'=>'版本号低于原来版本号，无法进行更新')));
         }
+
 
     }
 
@@ -470,7 +477,39 @@ class Config extends AdminControl {
     }
 
 
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_version($version,$type){
+        $ver = db('version_update')->where('type="'.$type.'"')->order('id DESC')->find();
+        if($type == 1){
+            $android_version = explode('.',$ver['version_num']);
+            $android_num = $android_version[0]*100+$android_version[1]*10+$android_version[2];
+            //得到传过来的版本号
+            $new_android_version = explode('.',$version);
+            $new_android_num = $new_android_version[0]*100+$new_android_version[1]*10+$new_android_version[2];
+            if($android_num >= $new_android_num){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            $ios_version = explode('.',$ver['version_num']);
+            $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+            //得到传过来的版本号
+            $new_ios_version = explode('.',$version);
+            $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+            //判断
+            if($ios_num >$new_ios_num){
+                return false;
+            }else{
+                return true;
+            }
+        }
 
+    }
 
 
     /**

@@ -842,6 +842,9 @@ class Member extends MobileMember
         if(empty($member_id)){
             output_error('缺少参数id');
         }
+        $version = trim(input('post.version'));
+
+
 
         $where = ' member_id = "'.$member_id.'"';
 
@@ -882,7 +885,11 @@ class Member extends MobileMember
                 }else{
                     $students[$k]['time'] = '请前往购买套餐';
                 }
-
+                if($version){
+                    $students[$k]['is_version'] = $this->is_version($version);
+                }else{
+                    $students[$k]['is_version'] = true;
+                }
                 if(empty($v['s_region'])){
                     $students[$k]['s_region'] = $this->getAddress($v['s_provinceid']).' '.$this->getAddress($v['s_cityid']).' '.$this->getAddress($v['s_areaid']);
                 }
@@ -906,6 +913,7 @@ class Member extends MobileMember
         if(empty($token)){
             output_error('缺少参数sid');
         }
+        $version = trim(input('post.version'));
         //获取绑定孩子
             $student = db('student')->alias('s')
                 ->field('s.s_id,s.s_name,s.s_sex,s.s_birthday,s.s_card,s.s_provinceid,s.s_cityid,s.s_areaid,s.s_region,s.classCard,s.s_schoolid,s.s_classid,s.s_sctype,sc.name,c.classname,st.sc_type,p.end_time')
@@ -922,6 +930,12 @@ class Member extends MobileMember
             }else{
                 $student['time'] = '请前往购买套餐';
             }
+            if($version){
+                $student['is_version'] = $this->is_version($version);
+            }else{
+                $student['is_version'] = true;
+            }
+
             if(empty($student['s_region'])){
                 $student['s_region'] = $this->getAddress($student['s_provinceid']).' '.$this->getAddress($student['s_cityid']).' '.$this->getAddress($student['s_areaid']);
             }
@@ -964,6 +978,30 @@ function getAddress($addressID){
 
     return $res['area_name'];
 }
+
+
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_version($version){
+        //获取原有版本号
+        $old_version = db('version_update')->field('version_num')->where('type=2')->order('id DESC')->find();
+        $ios_version = explode('.',$old_version['version_num']);
+        $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+        //得到传过来的版本号
+        $new_ios_version = explode('.',$version);
+        $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+        //判断
+        if($ios_num >= $new_ios_num ){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
 
 }
 
