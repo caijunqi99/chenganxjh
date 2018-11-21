@@ -40,6 +40,14 @@ class Robotsign extends MobileMall
         }
     }
 
+    public function SqlinTest(){
+        p(input());
+        $model = model('member');
+        $member = $model->where(input())->select();
+        p($model->getlastsql());
+        p($member);
+    }
+
     
     
 
