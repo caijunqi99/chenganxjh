@@ -843,9 +843,7 @@ class Member extends MobileMember
             output_error('缺少参数id');
         }
         $version = trim(input('post.version'));
-        if(empty($version)){
-            output_error('缺少参数version');
-        }
+
 
 
         $where = ' member_id = "'.$member_id.'"';
