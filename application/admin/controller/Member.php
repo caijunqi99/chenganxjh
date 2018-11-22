@@ -11,7 +11,8 @@ class Member extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/member.lang.php');
         //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
 //        halt($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
@@ -129,29 +130,19 @@ class Member extends AdminControl {
             $data = array(
                 'member_name'      => input('post.member_name'),
                 'member_password'  => input('post.member_password'),
-                'member_email'     => input('post.member_email'),
+                'member_mobile'     => input('post.member_mobile'),
                 'member_truename'  => input('post.member_truename'),
                 'member_sex'       => input('post.member_sex'),
                 'member_identity'  => input('post.member_identity'),
                 'member_nickname'  => input('post.member_nickname'),
-                // 'member_qq'     => input('post.member_qq'),
+                'member_mobile_bind'     => 1,
                 // 'member_ww'     => input('post.member_ww'),
                 'member_add_time'  => TIMESTAMP,
                 'member_login_num' => 0,
                 'inform_allow'     => 1, //默认允许举报商品
             );
-            //验证数据  BEGIN
-            $rule = [
-                ['member_name', 'require|length:3,12|unique:member', '用户名必填|用户名长度在3到12位|用户名已存在'],
-                ['member_password', 'require', '密码为必填'],
-                ['member_email', 'email', '邮箱格式错误']
-            ];
-            $validate = new Validate($rule);
-            $validate_result = $validate->check($data);
-            if (!$validate_result) {
-                $this->error($validate->getError());
-            }
-            //验证数据  END
+
+             //验证数据  END
             $result = $model_member->addMember($data);
             if ($result) {
                 $this->success(lang('member_add_succ'), 'Member/member');

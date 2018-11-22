@@ -19,7 +19,8 @@ class Vrsorder extends AdminControl {
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
@@ -48,21 +49,17 @@ class Vrsorder extends AdminControl {
         }
         $payment_code = input('get.payment_code');
         if (!empty($payment_code)) {
-            $condition['payment_code'] = $payment_code=="wxpay_app" ? "wxpay_h5" :$payment_code;
+            $condition['payment_code'] = $payment_code;
         }
         $order_list = $order->getOrderList($condition, 15);
         foreach ($order_list as $key=>$item) {
-            $studentinfo = db('student')->where(array('s_id'=>$item['student_id']))->find();
+            $studentinfo = db('student')->where(array('s_id'=>$item['s_id']))->find();
             $order_list[$key]['student_name'] = $studentinfo['s_name'];
         }
         $payment = db('mbpayment')->select();
-        foreach($payment as $k=>$v){
-            if($v['payment_code']=="wxpay_app"){
-                $payment[$k]['payment_code'] = "wxpay_h5";
-            }
-        }
         $this->assign('payment', $payment);
         $this->assign('order_list', $order_list);
+        
         $this->assign('page', $order->page_info->render());
         $this->setAdminCurItem('index');
         return $this->fetch();

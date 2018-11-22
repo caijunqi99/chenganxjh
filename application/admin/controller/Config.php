@@ -11,7 +11,8 @@ class Config extends AdminControl {
         Lang::load(APP_PATH . 'admin/lang/zh-cn/config.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
@@ -308,6 +309,7 @@ class Config extends AdminControl {
                     'type'=>$type,
                     'version_num' => trim(input('post.version_num')),
                     'mode' => intval(input('post.mode')),
+                    'url' => trim(input('post.url')),
                     'channel'=>trim(input('post.channel')),
                     'package_name'=>trim(input('post.package_name')),
                     'content'=>trim(input('post.description')),
