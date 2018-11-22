@@ -12,7 +12,8 @@ class Student extends AdminControl {
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
@@ -118,7 +119,8 @@ class Student extends AdminControl {
         $clfield = 'classid,classname,typeid';
         $class_list = $model_class->getAllClasses($condition_class,$clfield);
         $classLists = array_column($class_list,NULL,'classid');
-        
+        p($schooltypeList);
+        p($student_list);exit;
         foreach ($class_list as $k=>$v){
             $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
         }
