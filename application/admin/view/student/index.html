@@ -98,6 +98,7 @@
         <tr class="thead">
             <!--<th>&nbsp;</th>-->
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
+            <th colspan="align-center">{$Think.lang.student_index_id}</th>
             <th colspan="align-center">{$Think.lang.school_index_studentname}</th>
             <th colspan="align-center">{$Think.lang.school_edit_sex}</th>
             <th class="align-center">{$Think.lang.school_index_classname}</th>
@@ -116,6 +117,7 @@
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
+            <td class="align-center"><?php echo $v['s_id']; ?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php if($v['s_sex']==1){echo "男";}elseif($v['s_sex']==2){echo "女";} ?></td>
             <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
