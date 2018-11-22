@@ -21,18 +21,18 @@ $(function() {
             }
             $('#video_image').attr('src',image);
 
-            var _videoSource = document.getElementById("video_true");
+           /* var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
-            _videoSource.poster = image;
+            _videoSource.poster = image;*/
             var browser = getExplorerInfo();
-            alert(browser.version);
-            alert(toNum(browser.version));
-            alert(browser.type);
-            /*if(58<browser.version && browser.type == 'Chrome'){
-
-                alert('aaa');
-                _videoSource.controlslist = 'nodownload';
-            }*/
+            var minVersion = toNum(54.0);
+            var maxVersion = toNum(58.0);
+            var Version = toNum(browser.version);
+            if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }else{
+                $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }
 
            /* var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
