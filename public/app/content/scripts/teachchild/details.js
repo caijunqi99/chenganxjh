@@ -28,6 +28,7 @@ $(function() {
             var minVersion = toNum(54.0);
             var maxVersion = toNum(58.0);
             var Version = toNum(browser.version);
+            alert(Version);
             if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
                 $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
             }else{
