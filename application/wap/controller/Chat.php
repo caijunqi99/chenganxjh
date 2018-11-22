@@ -293,7 +293,7 @@ class Chat extends MobileMember
         $where =array(
             'member_id' =>array('in',$ids)
         );
-        $field ='member_id,member_name,member_mobile';
+        $field ='member_id,member_name,member_mobile,member_avatar';
         $memberList = $Member->getMemberList($where,$field);
         $output =$this->mergeMember($friendlist,$memberList);
         output_data($output);
@@ -308,7 +308,7 @@ class Chat extends MobileMember
                 'member_id'     => $memberList[$key]['member_id'],
                 'member_name'   => $memberList[$key]['member_name'],
                 'member_mobile' => $memberList[$key]['member_mobile'],
-                'avatar'        => getMemberAvatarForID($memberList[$key]['member_id']),
+                'avatar'        => AvatarFormat($memberList[$key]['member_avatar']),
                 'state'         => $v['relation_state'],
                 'creat_time'    => $v['creat_time'],
                 'friend_remark' => $v['friend_remark'],
@@ -502,7 +502,7 @@ class Chat extends MobileMember
         $where =array(
             'member_id' =>array('in',$ids)
         );
-        $field ='member_id,member_name,member_mobile';
+        $field ='member_id,member_name,member_mobile,member_avatar';
         $memberList = $Member->getMemberList($where,$field);
 
         $output =array();
@@ -513,7 +513,7 @@ class Chat extends MobileMember
                 'member_id'     => $memberList[$key]['member_id'],
                 'member_name'   => $memberList[$key]['member_name'],
                 'member_mobile' => $memberList[$key]['member_mobile'],
-                'avatar'        => getMemberAvatarForID($memberList[$key]['member_id']),
+                'avatar'        => AvatarFormat($memberList[$key]['member_avatar']),
                 'creat_time'    => $v['creat_time'],
                 'friend_remark' => $v['friend_remark'],
             );
@@ -755,7 +755,7 @@ class Chat extends MobileMember
         if(!$groupInfo)output_error('没有此群的信息，可能已经被群主解散！');
         $MemberList = $Group->get_chatgroupmember_List(array('group_id'=>$groupId));
         if($MemberList)foreach ($MemberList as $k => &$v) {
-            $v['member_avatar']  = getMemberAvatarForID($v['member_id']);
+            $v['member_avatar']  = AvatarFormat($v['member_id']);
             $v['group_owner_id']  = $groupInfo['group_owner_id'];
         }
         unset($v);
