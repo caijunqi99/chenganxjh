@@ -64,14 +64,12 @@
             <th colspan="align-center">{$Think.lang.school_index_names}</th>
             <th colspan="align-center">{$Think.lang.school_index_extend}</th>
             <th class="align-center">{$Think.lang.school_index_order}</th>
-            <!--<th class="align-center">{$Think.lang.school_index_sing}</th>-->
             <th class="align-center">{$Think.lang.school_index_price}</th>
             <th class="align-center">{$Think.lang.school_index_orderstatus}</th>
             <th class="align-center">{$Think.lang.school_index_paytype}</th>
             <th class="align-center">{$Think.lang.school_order_dieline}</th>
             <th class="align-center">{$Think.lang.school_order_createtime}</th>
             <th class="align-center">{$Think.lang.school_index_paytime}</th>
-            <!--<th class="align-center">{$Think.lang.school_index_desc}</th>-->
         </tr>
         <tbody>
         <?php if(!empty($order_list) && is_array($order_list)){ ?>
@@ -81,7 +79,6 @@
             <td class="align-center"><?php echo $v['buyer_mobile']; ?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php echo $v['pkg_name']; ?></td>
-            <!--<td class="align-center"><?php echo $v['length']; ?></td>-->
             <td class="align-center"><?php if(!empty($v['order_amount'])){echo sprintf('%.2f', $v['order_amount']);}else{echo "";} ?></td>
             <td class="align-center"><?php if($v['order_state']==10){echo "待支付";}
             elseif($v['order_state']==40){echo "已支付";}?></td>
@@ -93,7 +90,6 @@
             <td class="align-center"><?php if(!empty($v['order_dieline'])){echo date("Y-m-d H:i:s",$v['order_dieline']);} ?></td>
             <td class="align-center"><?php if(!empty($v['add_time'])){echo date("Y-m-d H:i:s",$v['add_time']);} ?></td>
             <td class="align-center"><?php if(!empty($v['payment_time'])){echo date("Y-m-d H:i:s",$v['payment_time']);} ?></td>
-            <!--<td class="align-center"><?php echo $v['order_desc']; ?></td>-->
         </tr>
         <?php } ?>
         <?php }else { ?>

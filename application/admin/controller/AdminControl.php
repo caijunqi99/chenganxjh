@@ -22,6 +22,7 @@ class AdminControl extends Controller {
 //            dump($this->permission);exit;
         }
         $this->setMenuList();
+        $_GET['page'] = isset($_GET['page'])?$_GET['page']:1;
     }
 
     /**
