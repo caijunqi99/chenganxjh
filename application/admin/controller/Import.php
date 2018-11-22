@@ -3,8 +3,6 @@
 namespace app\admin\controller;
 
 use think\Lang;
-use think\Model;
-use think\Validate;
 use vomont\Vomont;
 
 class Import extends AdminControl
@@ -15,7 +13,8 @@ class Import extends AdminControl
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/student.lang.php');
         //获取当前角色对当前子目录的权限
-        $class_name = strtolower(end(explode('\\',__CLASS__)));
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
@@ -73,7 +72,7 @@ class Import extends AdminControl
      * @author 郎志耀
      * @time 20180926
      */
-    public function success(){
+    public function successin(){
 
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
@@ -106,7 +105,7 @@ class Import extends AdminControl
         $list_count = db('import_student')->where($where)->count();
         $this->assign('list_count',$list_count);
         $this->setAdminCurItem('success');
-        return $this->fetch();
+        return $this->fetch('success');
     }
     /**
      * @desc 获取分页数据
@@ -1052,9 +1051,9 @@ class Import extends AdminControl
                 'url' => url('Admin/import/index')
             ),
             array(
-                'name' => 'success',
+                'name' => 'successin',
                 'text' => '导入成功列表',
-                'url' => url('Admin/import/success')
+                'url' => url('Admin/import/successin')
             )
         );
         return $menu_array;
