@@ -20,40 +20,19 @@ $(function() {
                 image = response.result[0]['data']['t_picture'];
             }
             $('#video_image').attr('src',image);
-
-           /* var videoObject = {
-                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-                poster:image,//封面图片
-                video:response.result[0]['data']['t_url']//视频地址
-            };
-            var player=new ckplayer(videoObject);*/
-
-
-            var _videoSource = document.getElementById("video_true");
-            _videoSource.src = response.result[0]['data']['t_url'];
-            _videoSource.poster = image;
+            var browser = getExplorerInfo();
+            var minVersion = toNum(54.0);
+            var maxVersion = toNum(58.0);
+            var Version = toNum(browser.version);
+            if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                $(document.body).append('<link rel="stylesheet" href="../content/style/video.css" type="text/css" />');
+                $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }else{
+                $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }
             $('#related').html(HTML(response['result']));
             $.hideLoading();
-            /*var videoObject = {
-                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-                autoplay: true, //是否自动播放
-                video:response.result[0]['data']['t_url']//视频地址
-            };
-            var player = new ckplayer(videoObject);*/
 
-           /* var vID = "c1"; //vID
-            var vWidth = "750"; //宽度设定，配合CSS实现
-            var vHeight = "400"; //高度设定，配合CSS实现
-            var vFile = "CuSunV4set.xml"; //配置文件地址:支持五种广告设定
-            var vPlayer = "player.swf?v=4.0"; //播放器文件地址
-            var vPic = "pic/pic01.jpg"; //视频缩略图
-            var vAutoPlay = "none"; //是否自动播放
-            var vEndTime = 0; //预览时间(秒数),默认为0
-            var vLogoPath = "images/logo.png"; //Logo地址
-            var vPlayMod = 0; //播放模式优先级,默认=0,html5优先=1,flash优先=2
-            var vMp4url = response.result[0]['data']['t_url']; //视频文件地址推荐用mp4文件(h264编码)*/
 
         }
     })
@@ -222,4 +201,45 @@ function pay(t_id){
 
 function msg_switch(obj) {
     obj.toggleClass("open");
+}
+
+function getExplorerInfo() {
+    var explorer = window.navigator.userAgent.toLowerCase();
+    //ie 
+    if (explorer.indexOf("msie") >= 0) {
+        var ver = explorer.match(/msie ([\d.]+)/)[1];
+        return { type: "IE", version: ver };
+    }
+    //firefox 
+    else if (explorer.indexOf("firefox") >= 0) {
+        var ver = explorer.match(/firefox\/([\d.]+)/)[1];
+        return { type: "Firefox", version: ver };
+    }
+    //Chrome
+    else if (explorer.indexOf("chrome") >= 0) {
+        var ver = explorer.match(/chrome\/([\d.]+)/)[1];
+        return { type: "Chrome", version: ver };
+    }
+    //Opera
+    else if (explorer.indexOf("opera") >= 0) {
+        var ver = explorer.match(/opera.([\d.]+)/)[1];
+        return { type: "Opera", version: ver };
+    }
+    //Safari
+    else if (explorer.indexOf("Safari") >= 0) {
+        var ver = explorer.match(/version\/([\d.]+)/)[1];
+        return { type: "Safari", version: ver };
+    }
+}
+//计算版本号大小,转化大小
+function toNum(a){
+    var a=a.toString();
+    var c=a.split('.');
+    var num_place=["","0","00","000","0000"],r=num_place.reverse();
+    for (var i=0;i<c.length;i++){
+        var len=c[i].length;
+        c[i]=r[len]+c[i];
+    }
+    var res= c.join('');
+    return res;
 }

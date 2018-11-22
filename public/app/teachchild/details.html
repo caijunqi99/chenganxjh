@@ -16,16 +16,7 @@
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
-    <!--<script type="text/javascript" src="../content/plugins/ckplayer/ckplayer.js"></script>-->
     <script src="../content/scripts/mobile-util.js"></script>
-    <style>
-        video::-webkit-media-controls-enclosure {
-            overflow:hidden;
-        }
-        video::-webkit-media-controls-panel {
-            width: calc(100% + 30px);
-        }
-    </style>
 </head>
 
 <body>
@@ -46,7 +37,6 @@
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
                 <div id="video" style="width: 750px; height: auto;margin:0 auto 30px">
-                    <video id="video_true" controls="controls" width="100%" preload="none"  poster=""></video>
                 </div>
 
                </div>
@@ -80,7 +70,9 @@
             dataType: "json",
             success: function(res){
                 if(res['code'] == 200){
+                    //判断是否是自己上传的视频
                     if(res.result[0]['myself'] == 0){
+                        //判断是否免费
                         if(res.result[0]['price'] !=0){
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
@@ -90,6 +82,7 @@
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
                         }
+                        //判断是否收藏
                         if(res.result[0]['collect'] == 0){
                             $('#collect').show();
                             $('#qxCollect').hide();
@@ -141,8 +134,11 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
+                        //判断是否自己上传
                         if(res.result[0]['myself'] == 0){
+                            //判断是否免费
                             if(res.result[0]['price'] !=0){
+                                //判断是否购买
                                 if(res.result[0]['buy'] != 0){
                                     $('.video_play_btn').parent().hide();
                                     $("#video").show();
