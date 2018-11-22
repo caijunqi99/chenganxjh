@@ -309,6 +309,7 @@ class Config extends AdminControl {
                     'type'=>$type,
                     'version_num' => trim(input('post.version_num')),
                     'mode' => intval(input('post.mode')),
+                    'url' => trim(input('post.url')),
                     'channel'=>trim(input('post.channel')),
                     'package_name'=>trim(input('post.package_name')),
                     'content'=>trim(input('post.description')),

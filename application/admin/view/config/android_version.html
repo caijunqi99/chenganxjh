@@ -72,6 +72,7 @@
                 <div class="layui-upload">
                     <div class="layui-col-md5">
                         <input name="package_name"  placeholder="选择apk进行上传" class="layui-input" readonly />
+                        <input name="url"  type="hidden" value="" />
                     </div>
                     <button type="button" class="layui-btn layui-btn-normal" id="upload-change" >选择并上传</button>
                     <input class="layui-upload-file" accept="undefined" name="file" type="text">
@@ -104,8 +105,8 @@
                 , url: ADMIN_URL + 'Common/apk_file_upload.html' //上传接口
                 , accept: 'file' //普通文件
                 , method: 'POST'
-                , auto: false  //是否自主上传
-                , bindAction: '#true'  //确认上传按钮
+                , auto: true  //是否自主上传
+                // , bindAction: '#true'  //确认上传按钮
                 , exts: 'apk' //只允许上传文件类型
                 , size: 0
                 ,choose: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
@@ -117,6 +118,7 @@
                 }
                 , done: function (res) {
                     // console.log(res);
+                    $('input[name=url]').val(res.msg);
                     parent.layer.closeAll('loading');
                     //上传完毕回调
                     if(res.code == 0){
@@ -138,6 +140,7 @@
             var version_num = $('#version_num').val();
             var mode = $('#mode').find('option:selected').val();
             var channel = $('#channel').find('option:selected').val();
+            var url = $('input[name=url]').val();
             var package_name = $('input[name=package_name]').val();
             var description = $('#description').val();
             if(version_num == ''){
@@ -147,12 +150,15 @@
             if(package_name == ''){
                 layer.msg('请上传APK文件包',{icon:2,time:2000});return false;
             }
+            if(url == ''){
+                layer.msg('apk地址为空',{icon:2,time:2000});return false;
+            }
 
 
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Config/updateVersion.html',
-                data:{type:type,version_num:version_num,mode:mode,channel:channel,package_name:package_name,description:description},
+                data:{type:type,version_num:version_num,mode:mode,channel:channel,url:url,package_name:package_name,description:description},
                 dataType: 'json',
                 success: function(response){
                     if(response['code'] == 200){
