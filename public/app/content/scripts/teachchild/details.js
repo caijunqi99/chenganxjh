@@ -20,16 +20,21 @@ $(function() {
                 image = response.result[0]['data']['t_picture'];
             }
             $('#video_image').attr('src',image);
-            var browser = getExplorerInfo();
-            var minVersion = toNum(54.0);
-            var maxVersion = toNum(58.0);
-            var Version = toNum(browser.version);
-            if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
-                $(document.body).append('<link rel="stylesheet" href="../content/style/video.css" type="text/css" />');
-                $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
-            }else{
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
                 $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            } else  {
+                var browser = getExplorerInfo();
+                var minVersion = toNum(54.0);
+                var maxVersion = toNum(58.0);
+                var Version = toNum(browser.version);
+                if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                    $(document.body).append('<link rel="stylesheet" href="../content/style/video.css" type="text/css" />');
+                    $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+                }else{
+                    $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+                }
             }
+
             $('#related').html(HTML(response['result']));
             $.hideLoading();
 

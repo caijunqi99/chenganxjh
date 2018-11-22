@@ -117,53 +117,51 @@
                 }
                 , done: function (res) {
                     // console.log(res);
-                    parent.layer.closeAll('loading');
                     //上传完毕回调
                     if(res.code == 0){
-                        layer.full(index);
+                        var type=1;
+                        var version_num = $('#version_num').val();
+                        var mode = $('#mode').find('option:selected').val();
+                        var channel = $('#channel').find('option:selected').val();
+                        var url = res.msg;
+                        var package_name = $('input[name=package_name]').val();
+                        var description = $('#description').val();
+                        if(version_num == ''){
+                            parent.layer.msg('请填写版本号',{icon:2,time:2000});return false;
+                        }
+
+                        if(package_name == ''){
+                            parent.layer.msg('请上传APK文件包',{icon:2,time:2000});return false;
+                        }
+                        if(url == ''){
+                            parent.layer.msg('apk地址为空',{icon:2,time:2000});return false;
+                        }
+
+
+                        $.ajax({
+                            type:'POST',
+                            url:ADMIN_URL+'Config/updateVersion.html',
+                            data:{type:type,version_num:version_num,mode:mode,channel:channel,url:url,package_name:package_name,description:description},
+                            dataType: 'json',
+                            success: function(response){
+                                if(response['code'] == 200){
+                                    layer.msg(response['msg'],{icon:1,time:2000},function(){
+                                        parent.layer.close(index);
+                                    })
+                                }else{
+                                    parent.layer.msg(response['msg'],{icon:2});return false;
+                                }
+                            }
+                        })
                     }else{
                         parent.layer.msg(res.msg,{icon:2});
                     }
                 }
                 , error: function () {
                     //请求异常回调
-                    parent.layer.closeAll('loading');
                     parent.layer.msg('网络异常，请稍后重试！');
                 }
             });
-        });
-
-        $('#true').click(function(){
-            var type=1;
-            var version_num = $('#version_num').val();
-            var mode = $('#mode').find('option:selected').val();
-            var channel = $('#channel').find('option:selected').val();
-            var package_name = $('input[name=package_name]').val();
-            var description = $('#description').val();
-            if(version_num == ''){
-                layer.msg('请填写版本号',{icon:2,time:2000});return false;
-            }
-
-            if(package_name == ''){
-                layer.msg('请上传APK文件包',{icon:2,time:2000});return false;
-            }
-
-
-            $.ajax({
-                type:'POST',
-                url:ADMIN_URL+'Config/updateVersion.html',
-                data:{type:type,version_num:version_num,mode:mode,channel:channel,package_name:package_name,description:description},
-                dataType: 'json',
-                success: function(response){
-                    if(response['code'] == 200){
-                        layer.msg(response['msg'],{icon:1,time:2000},function(){
-                            parent.layer.close(index);
-                        })
-                    }else{
-                        layer.msg(response['msg'],{icon:2});return false;
-                    }
-                }
-            })
         });
     });
 </script>
