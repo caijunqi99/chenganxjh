@@ -48,7 +48,7 @@ class Teach extends AdminControl {
         }
         $payment_code = input('get.payment_code');
         if (!empty($payment_code)) {
-            $condition['payment_code'] = $payment_code=="wxpay_app" ? "wxpay_h5" :$payment_code;
+            $condition['payment_code'] = $payment_code;
         }
         $order_list = $order->getOrderList($condition, 15);
         foreach ($order_list as $key=>$item) {
@@ -56,11 +56,6 @@ class Teach extends AdminControl {
             $order_list[$key]['student_name'] = $studentinfo['s_name'];
         }
         $payment = db('mbpayment')->select();
-        foreach($payment as $k=>$v){
-            if($v['payment_code']=="wxpay_app"){
-                $payment[$k]['payment_code'] = "wxpay_h5";
-            }
-        }
         $this->assign('payment', $payment);
         $this->assign('order_list', $order_list);
         $this->assign('page', $order->page_info->render());
