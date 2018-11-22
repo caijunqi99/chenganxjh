@@ -810,41 +810,6 @@ class Common extends AdminControl
         exit(json_encode(array('code'=>0,'msg'=>$file)));
     }
 
-    /**
-     * @desc 判断版本号
-     * @author langzhiyao
-     * @time 20181121
-     */
-    public function is_version(){
-        $type = intval(input('post.type'));
-        $config = db('config')->find();
-        if($type == 1){
-            $android_version = explode('.',$config['version_android_num']);
-            $android_num = $android_version[0]*100+$android_version[1]*10+$android_version[2];
-            //得到传过来的版本号
-            $update_array['version_android_num'] = input('post.version_android_num');
-            $new_android_version = explode('.',$update_array['version_android_num']);
-            $new_android_num = $new_android_version[0]*100+$new_android_version[1]*10+$new_android_version[2];
-            if($android_num > $new_android_num){
-                return false;
-            }else{
-                return true;
-            }
-        }else{
-            $ios_version = explode('.',$config['version_ios_num']);
-            $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
-            $update_array['version_ios_num'] = input('post.version_ios_num');
-            //得到传过来的版本号
-            $new_ios_version = explode('.',$update_array['version_ios_num']);
-            $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
-            //判断
-            if($ios_num >$new_ios_num){
-                return false;
-            }else{
-                return true;
-            }
-        }
 
-    }
 
 }
