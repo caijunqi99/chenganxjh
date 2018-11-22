@@ -21,6 +21,15 @@ $(function() {
             }
             $('#video_image').attr('src',image);
 
+           /* var videoObject = {
+                container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+                variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                poster:image,//封面图片
+                video:response.result[0]['data']['t_url']//视频地址
+            };
+            var player=new ckplayer(videoObject);*/
+
+
             var _videoSource = document.getElementById("video_true");
             _videoSource.src = response.result[0]['data']['t_url'];
             _videoSource.poster = image;
