@@ -168,7 +168,7 @@ class Login extends MobileMall
             if($token) {
                 $logindata = array();
                 $logindata['key']=$token;
-                $logindata['avator'] = getMemberAvatarForID($member['member_id']);
+                $logindata['avator'] = AvatarFormat($member['member_id']);
                 $logindata['user_name'] = $member['member_name'];
                 $logindata['member_mobile'] = $member['member_mobile'];
                 $logindata['member_identity'] = $member['member_identity'];

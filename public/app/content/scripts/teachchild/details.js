@@ -21,6 +21,19 @@ $(function() {
             }
             $('#video_image').attr('src',image);
 
+           /* var _videoSource = document.getElementById("video_true");
+            _videoSource.src = response.result[0]['data']['t_url'];
+            _videoSource.poster = image;*/
+            var browser = getExplorerInfo();
+            var minVersion = toNum(54.0);
+            var maxVersion = toNum(58.0);
+            var Version = toNum(browser.version);
+            if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }else{
+                $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
+            }
+
            /* var videoObject = {
                 container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
                 variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
@@ -29,10 +42,6 @@ $(function() {
             };
             var player=new ckplayer(videoObject);*/
 
-
-            var _videoSource = document.getElementById("video_true");
-            _videoSource.src = response.result[0]['data']['t_url'];
-            _videoSource.poster = image;
             $('#related').html(HTML(response['result']));
             $.hideLoading();
             /*var videoObject = {
@@ -222,4 +231,45 @@ function pay(t_id){
 
 function msg_switch(obj) {
     obj.toggleClass("open");
+}
+
+function getExplorerInfo() {
+    var explorer = window.navigator.userAgent.toLowerCase();
+    //ie 
+    if (explorer.indexOf("msie") >= 0) {
+        var ver = explorer.match(/msie ([\d.]+)/)[1];
+        return { type: "IE", version: ver };
+    }
+    //firefox 
+    else if (explorer.indexOf("firefox") >= 0) {
+        var ver = explorer.match(/firefox\/([\d.]+)/)[1];
+        return { type: "Firefox", version: ver };
+    }
+    //Chrome
+    else if (explorer.indexOf("chrome") >= 0) {
+        var ver = explorer.match(/chrome\/([\d.]+)/)[1];
+        return { type: "Chrome", version: ver };
+    }
+    //Opera
+    else if (explorer.indexOf("opera") >= 0) {
+        var ver = explorer.match(/opera.([\d.]+)/)[1];
+        return { type: "Opera", version: ver };
+    }
+    //Safari
+    else if (explorer.indexOf("Safari") >= 0) {
+        var ver = explorer.match(/version\/([\d.]+)/)[1];
+        return { type: "Safari", version: ver };
+    }
+}
+//计算版本号大小,转化大小
+function toNum(a){
+    var a=a.toString();
+    var c=a.split('.');
+    var num_place=["","0","00","000","0000"],r=num_place.reverse();
+    for (var i=0;i<c.length;i++){
+        var len=c[i].length;
+        c[i]=r[len]+c[i];
+    }
+    var res= c.join('');
+    return res;
 }
