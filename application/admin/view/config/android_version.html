@@ -89,7 +89,7 @@
             </div>
         </div>
         <div style="margin: 20px;margin-left: 245px;">
-            <button type="button" class="layui-btn" id="true" >确认修改</button>
+            <button type="button" class="layui-btn" id="true" style="display: none">确认修改</button>
         </div>
     </form>
 </div>
@@ -121,6 +121,7 @@
                     //上传完毕回调
                     if(res.code == 0){
                         $('input[name=url]').val(res.msg);
+                        $('#true').show();
                     }else{
                         parent.layer.msg(res.msg,{icon:2});
                     }
