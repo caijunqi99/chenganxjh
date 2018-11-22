@@ -58,7 +58,10 @@ class Company extends AdminControl {
             if(!empty($company)){
                 $roleID = $company['o_role'];
                 switch ($roleID){
-                    case 1://分公司
+                    case 1://县区代理
+                        $condition['o_provinceid']=$company['o_provinceid'];
+                        $condition['o_cityid']=$company['o_cityid'];
+                        $condition['o_areaid']=$company['o_areaid'];
                         break;
                     case 2://省代理商
                         $condition['o_provinceid']=$company['o_provinceid'];
