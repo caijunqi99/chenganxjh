@@ -1,5 +1,18 @@
 <?php
 
+function AvatarFormat($avatar){
+    if (is_numeric($avatar)) {
+        $avatar = db('member')->where('member_id',$avatar)->value('member_avatar');
+    }
+    if(!empty($avatar)){
+        $avatar = UPLOAD_SITE_URL.$avatar;
+    }else{
+        $avatar = UPLOAD_SITE_URL . '/' . ATTACH_COMMON . '/' . 'default_user_portrait.png';
+    }
+    return $avatar;
+}
+
+
 function CalculationTime($order_info,$packagetime){
     $nowTime = !empty($packagetime['end_time'])?$packagetime['end_time']:$order_info['finnshed_time'];
     
