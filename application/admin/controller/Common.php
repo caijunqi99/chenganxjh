@@ -805,7 +805,7 @@ class Common extends AdminControl
         }
         $info = $file->move(ROOT_PATH.'public'.DS.'uploads'.DS.'apk');
         // 移动文件到指定目录 没有则创建
-        $file = ROOT_PATH.'/uploads/'.DS.'apk'.$info->getSaveName();
+        $file = UPLOAD_SITE_URL.DS.'apk'.$info->getSaveName();
 
         exit(json_encode(array('code'=>0,'msg'=>$file)));
     }
