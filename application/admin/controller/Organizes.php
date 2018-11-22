@@ -59,6 +59,27 @@ class Organizes extends AdminControl
         $model_organize = Model('company');
         $oid=$_GET['o_id'];
         $organize_info = $model_organize->getOrganizeInfo(array('o_id' => $oid));
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        foreach($admin as $v){
+            $admin_id.=$v['admin_id'].',';
+        }
+        $admin_id=substr($admin_id, 0, -1);
+        $order = Model('Packagesorder');
+        $condition = array();
+        $condition['pkg_type']=1;
+        $condition['delete_state'] = 0;
+        $condition['order_state']=40;
+        $condition['option_id']=array('in',$admin_id);
+        $packlist=$order->getOrderList($condition);
+        //看孩订单价格
+        $num=0;
+        foreach($packlist as $v){
+            $num=$num+$v['order_amount'];
+        }
+        $this->assign('num',$num);
         $this->assign('organize_info', $organize_info);
         $this->setAdminCurItem('company');
         return $this->fetch();
