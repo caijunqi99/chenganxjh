@@ -1057,6 +1057,7 @@ class Import extends AdminControl
                 'url' => url('Admin/import/success')
             )
         );
+        
         return $menu_array;
     }
 
