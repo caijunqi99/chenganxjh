@@ -19,7 +19,14 @@
     <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
 
     <script src="../content/scripts/mobile-util.js"></script>
-
+    <style>
+        video::-webkit-media-controls-enclosure {
+            overflow:hidden;
+        }
+        video::-webkit-media-controls-panel {
+            width: calc(100% + 20px);
+        }
+    </style>
 </head>
 
 <body>
