@@ -30,8 +30,10 @@ $(function() {
             var Version = toNum(browser.version);
             alert(Version);
             if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                $(document.body).append('<link rel="stylesheet" href="../content/style/video.css" type="text/css" />');
                 $('#video').html('<video id="video_true" controls="controls" src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
             }else{
+
                 $('#video').html('<video id="video_true" controls="controls" controlslist ="nodownload"  src="'+response.result[0]['data']['t_url']+'"  width="750px" preload="none"  poster="'+image+'"></video>')
             }
 
