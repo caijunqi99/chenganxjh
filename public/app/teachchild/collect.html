@@ -141,6 +141,10 @@
 
         // 下拉刷新
         $('.history_body').pullToRefresh(function() {
+            $('.history_delete_wrap').hide();
+            $('.history_check_all').hide();
+            $('.weui-check').removeAttr('checked');
+            $('.history_edit').attr('data-select','false');
             $(document.body).infinite();
             setTimeout(function() {
                 $('.history_body').pullToRefreshDone(); // 重置下拉刷新
