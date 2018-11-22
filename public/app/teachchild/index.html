@@ -37,7 +37,7 @@
                 <div class="body_content clearBoth">
                     <li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
                     <li class="float_left isfree" onclick="sortPrice(0)">查看免费</li>
-                    <li class="float_left isfree" onclick="sortPrice(1)">查看付费</li>
+                    <li class="float_left isfree" onclick="sortPrice(1)" style="display: none" id="pay">查看付费</li>
                     <p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
                 </div>
             </div>
@@ -79,7 +79,6 @@
     <script src="../content/scripts/commom.js"></script>
     <script type="text/javascript">
         $(function() {
-
             var Index = '';
             var filterParams = {
                 key: '',
@@ -95,24 +94,63 @@
                 page: Page,
             };
 
-            // 默认获取列表
-            $.ajax({
-                type: "POST",
-                url: api + '/teacherhome/index',
-                dataType: "json",
-                async: false,
-                data: {
-                    key: user_token
-                },
-                success: function(response) {
-                    if (response['code'] == 200) {
-                        $('.sort_tabs_top').html(SortTop(response['result'][0]));
-                        Index = response;
-                    } else {
-                        console.log(response['message']);
+            //判断版本号
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                var version = $.cookie('version');
+                $.ajax({
+                    type:'POST',
+                    url:api+'/common/is_version',
+                    data:{
+                        version:version
+                    },
+                    success:function(response){
+                        if(response){
+                            $('#pay').show();
+                        }
                     }
-                }
-            });
+                });
+                // 默认获取列表
+                $.ajax({
+                    type: "POST",
+                    url: api + '/teacherhome/index',
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        key: user_token,
+                        version:version
+                    },
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            $('.sort_tabs_top').html(SortTop(response['result'][0]));
+                            Index = response;
+                        } else {
+                            console.log(response['message']);
+                        }
+                    }
+                });
+            }else{
+                $('#pay').show();
+                // 默认获取列表
+                $.ajax({
+                    type: "POST",
+                    url: api + '/teacherhome/index',
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        key: user_token,
+                        version:''
+                    },
+                    success: function(response) {
+                        if (response['code'] == 200) {
+                            $('.sort_tabs_top').html(SortTop(response['result'][0]));
+                            Index = response;
+                        } else {
+                            console.log(response['message']);
+                        }
+                    }
+                });
+            }
+
 
             // 默认获取推荐课件列表
             GetKejian(Params);
@@ -485,19 +523,39 @@
 
             // 获取课件接口
             function GetKejian(params) {
-                $.ajax({
-                    type: "POST",
-                    url: api + '/Teacherhome/lists',
-                    dataType: "json",
-                    data: params,
-                    success: function(response) {
-                        if (response['code'] == 200) {
-                            $('.main_content').html(HTML(response['result']))
-                        } else {
-                            $.toast(response['message'],'forbidden');return false;
+                //判断版本号
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    params['version'] = $.cookie('version');
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Teacherhome/lists',
+                        dataType: "json",
+                        data: params,
+                        success: function(response) {
+                            if (response['code'] == 200) {
+                                $('.main_content').html(HTML(response['result']))
+                            } else {
+                                $.toast(response['message'],'forbidden');return false;
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    params['version'] = '';
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Teacherhome/lists',
+                        dataType: "json",
+                        data: params,
+                        success: function(response) {
+                            if (response['code'] == 200) {
+                                $('.main_content').html(HTML(response['result']))
+                            } else {
+                                $.toast(response['message'],'forbidden');return false;
+                            }
+                        }
+                    });
+                }
+
             }
 
             //选项卡模板
@@ -620,28 +678,56 @@
             // 分页
             function getPage(params) {
                 $('.weui-loadmore').show();
-                $.ajax({
-                    type: "POST",
-                    url: api + '/Teacherhome/lists',
-                    dataType: "json",
-                    data: params,
-                    success: function(response) {
-                        if (response['code'] == 200) {
-                            if (response['result'].length == 0) {
-                                $(document.body).destroyInfinite();
+                //判断版本号
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    params['version'] = $.cookie('version');
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Teacherhome/lists',
+                        dataType: "json",
+                        data: params,
+                        success: function (response) {
+                            if (response['code'] == 200) {
+                                if (response['result'].length == 0) {
+                                    $(document.body).destroyInfinite();
+                                    $('.weui-footer').show();
+                                    $('.weui-loadmore').hide();
+                                } else {
+                                    $('.weui-loadmore').hide();
+                                    $('.main_content').append(HTML(response['result']))
+                                }
+                            } else {
                                 $('.weui-footer').show();
                                 $('.weui-loadmore').hide();
-                            } else {
-                                $('.weui-loadmore').hide();
-                                $('.main_content').append(HTML(response['result']))
+                                console.log(response['message']);
                             }
-                        } else {
-                            $('.weui-footer').show();
-                            $('.weui-loadmore').hide();
-                            console.log(response['message']);
                         }
-                    }
-                });
+                    });
+                }else{
+                    params['version'] = '';
+                    $.ajax({
+                        type: "POST",
+                        url: api + '/Teacherhome/lists',
+                        dataType: "json",
+                        data: params,
+                        success: function (response) {
+                            if (response['code'] == 200) {
+                                if (response['result'].length == 0) {
+                                    $(document.body).destroyInfinite();
+                                    $('.weui-footer').show();
+                                    $('.weui-loadmore').hide();
+                                } else {
+                                    $('.weui-loadmore').hide();
+                                    $('.main_content').append(HTML(response['result']))
+                                }
+                            } else {
+                                $('.weui-footer').show();
+                                $('.weui-loadmore').hide();
+                                console.log(response['message']);
+                            }
+                        }
+                    });
+                }
             }
         })
     </script>
