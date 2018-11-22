@@ -15,7 +15,6 @@
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
-        //ajax.open("POST", "http://www.chenganxjh.com/index.php/Admin/Teachvideo/video_data");
         ajax.open("POST", "{:url('Admin/Teachvideo/video_data')}");
         ajax.send(formdata);
     }
@@ -238,7 +237,7 @@
                     required: '{$Think.lang.school_add_price_null}'
                 },
                 video_author: {
-                    required: '作者不能为空，可随意起名'
+                    required: '作者不能为空，可自定义起名'
                 },
                 status: {
                     required: '请上传视频'

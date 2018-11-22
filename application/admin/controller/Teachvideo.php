@@ -84,13 +84,16 @@ class Teachvideo extends AdminControl {
         $condition['t_del'] = 1;
         $teacher_list = $model_teach->getTeachchildList($condition, 15);
         foreach($teacher_list as $k=>$v){
-            if($v['member_mobile']=="后台"){
-                $teacher_list[$k]['username'] = "后台";
-            }else{
-                $relinfo = db('teachercertify')->where(array('member_id'=>$v['t_userid']))->find();
-                $teacher_list[$k]['username'] = $relinfo['username'];
+            if($v['t_typename'] && $v['t_type2name'] && $v['t_type3name'] && $v['t_type4name']){
+                $type = $v['t_typename'].'-'.$v['t_type2name'].'-'.$v['t_type3name'].'-'.$v['t_type4name'];
+            }elseif($v['t_typename'] && $v['t_type2name'] && $v['t_type3name']){
+                $type = $v['t_typename'].'-'.$v['t_type2name'].'-'.$v['t_type3name'];
+            }elseif($v['t_typename'] && $v['t_type2name']){
+                $type = $v['t_typename'].'-'.$v['t_type2name'];
+            }elseif($v['t_typename']){
+                $type = $v['t_typename'];
             }
-            $teacher_list[$k]['type'] = $this->type($v);
+            $teacher_list[$k]['type'] = $type;
         }
         $teachtype = db('teachtype')->where(array('gc_parent_id'=>0))->select();
         $this->assign('teachtype', $teachtype);
@@ -102,31 +105,7 @@ class Teachvideo extends AdminControl {
         return $this->fetch();
     }
 
-    public function type($data){
-        if(!empty($data['t_type'])){
-            $last = db('teachtype')->where(array('gc_id'=>$data['t_type']))->find();
-        }
-        if(!empty($data['t_type2'])){
-            $last2 = db('teachtype')->where(array('gc_id'=>$data['t_type2']))->find();
-        }
-        if(!empty($data['t_type3'])){
-            $last3 = db('teachtype')->where(array('gc_id'=>$data['t_type3']))->find();
-        }
-        if(!empty($data['t_type4'])){
-            $last4 = db('teachtype')->where(array('gc_id'=>$data['t_type4']))->find();
-        }
-        if($last4 && $last3 && $last2 && $last){
-            $type = $last['gc_name'].'-'.$last2['gc_name'].'-'.$last3['gc_name'].'-'.$last4['gc_name'];
-        }elseif($last3 && $last2 && $last){
-            $type = $last['gc_name'].'-'.$last2['gc_name'].'-'.$last3['gc_name'];
-        }elseif($last2 && $last){
-            $type = $last['gc_name'].'-'.$last2['gc_name'];
-        }elseif($last){
-            $type = $last['gc_name'];
-        }
-        return $type;
-    }
-
+    //视频分类搜索
     public function fand_type(){
         $gc_id = intval(input('post.gc_id'));
         if($gc_id){
@@ -135,6 +114,7 @@ class Teachvideo extends AdminControl {
         }
     }
 
+    //审核页面
     public function pass() {
         if(session('admin_is_super') !=1 && !in_array(15,$this->action )){
             $this->error(lang('ds_assign_right'));
@@ -144,46 +124,21 @@ class Teachvideo extends AdminControl {
             $this->error(lang('param_error'));
         }
         $model_teacher = model('Teachchild');
-        if (!request()->isPost()) {
-            $teachinfo = $model_teacher->getTeachchildInfo(array('t_id'=>$teacher_id));
-            $teachinfo['type'] = $this->type($teachinfo);
-            if($teachinfo['t_userid']){
-                $teachercertify = db('teachercertify')->where(array('member_id'=>$teachinfo['t_userid']))->find();
-                $teachinfo['name'] = $teachercertify['username'];
-            }
-            $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
-            $this->assign('path', $path);
-            $this->assign('teachinfo', $teachinfo);
-            $this->setAdminCurItem('pass');
-            return $this->fetch();
-        } else {
-            $data = array(
-
-                'name' => input('post.school_name'),
-                'areaid' => input('post.area_id'),
-                'region' => input('post.area_info'),
-                'typeid' => implode(",",$_POST['school_type']),
-                'address' => input('post.school_address'),
-                'common_phone' => input('post.school_phone'),
-                'username' => input('post.school_username'),
-                'dieline' => input('post.school_dieline'),
-                'desc' => input('post.school_desc'),
-                'createtime' => date('Y-m-d H:i:s',time())
-
-            );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['provinceid'] = $province_id['area_parent_id'];
-            //print_r($school_id);die;
-            //验证数据  END
-            $result = $model_school->editSchool($data,array('schoolid'=>$school_id));
-            if ($result) {
-                $this->success('编辑成功', 'School/member');
-            } else {
-                $this->error('编辑失败');
-            }
+        $teachinfo = $model_teacher->getTeachchildInfo(array('t_id'=>$teacher_id));
+        if($teachinfo['t_typename'] && $teachinfo['t_type2name'] && $teachinfo['t_type3name'] && $teachinfo['t_type4name']){
+            $teachinfo['type'] = $teachinfo['t_typename'].'-'.$teachinfo['t_type2name'].'-'.$teachinfo['t_type3name'].'-'.$teachinfo['t_type4name'];
+        }elseif($teachinfo['t_typename'] && $teachinfo['t_type2name'] && $teachinfo['t_type3name']){
+            $teachinfo['type'] = $teachinfo['t_typename'].'-'.$teachinfo['t_type2name'].'-'.$teachinfo['t_type3name'];
+        }elseif($teachinfo['t_typename'] && $teachinfo['t_type2name']){
+            $teachinfo['type'] = $teachinfo['t_typename'].'-'.$teachinfo['t_type2name'];
+        }elseif($teachinfo['t_typename']){
+            $teachinfo['type'] = $teachinfo['t_typename'];
         }
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $this->assign('path', $path);
+        $this->assign('teachinfo', $teachinfo);
+        $this->setAdminCurItem('pass');
+        return $this->fetch();
     }
 
     public function edit() {
@@ -246,60 +201,12 @@ class Teachvideo extends AdminControl {
         }
     }
 
-
-    /**
-     * ajax操作
-     */
-    public function ajax() {
-        $branch = input('param.branch');
-
-        switch ($branch) {
-            /**
-             * 验证学校名是否重复
-             */
-            case 'check_user_name':
-                $school_member = Model('school');
-                $condition['name'] = input('param.school_name');
-                $condition['areaid'] = array('eq', intval(input('get.area_id')));
-                $condition['isdel'] = 1;
-                $list = $school_member->getSchoolInfo($condition);
-                if (empty($list)) {
-                    echo 'true';
-                    exit;
-                } else {
-                    echo 'false';
-                    exit;
-                }
-                break;
-            /**
-             * 验证班级名是否重复
-             */
-            case 'check_class_name':
-                $class_member = Model('classes');
-                $condition['classname'] = input('param.class_name');
-                $condition['schoolid'] = input('param.school_id');
-                $condition['isdel'] = 1;
-                $list = $class_member->getClassInfo($condition);
-                if (empty($list)) {
-                    echo 'true';
-                    exit;
-                } else {
-                    echo 'false';
-                    exit;
-                }
-                break;
-        }
-    }
-
-    /**
-     * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
-     */
+    //审核
     public function drop() {
-//        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
-//            $this->error(lang('ds_assign_right'));
-//        }
+        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $admininfo = $this->getAdminInfo();
-
         $teacher_id = input('param.t_id');
         $status = input('param.t_audit');
         $phone = input('param.phone');
@@ -443,58 +350,15 @@ class Teachvideo extends AdminControl {
         }
     }
 
-    /*
-     * 上传视频
-     * 保存在七牛云上
-     * */
-    public function video($data){
-        //获取文件的名字//
-        //$key = $data['video_file']['name'];
-        $key = "admin_video_".date("YmdHis",time())."_".time().".mp4";
-        $filePath=$data['video_file']['tmp_name'];
-        //获取token值
-        $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
-        $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
-        $WAILIAN='avatar.xiangjianhai.com';
-        // 初始化签权对象
-        $auth = new Auth($accessKey, $secretKey);
-        $bucket = 'avatar';
-        // 生成上传Token
-        $token = $auth->uploadToken($bucket);
-        $uploadMgr = new UploadManager();
-        // 调用 UploadManager 的 putFile 方法进行文件的上传。
-        list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
-        // 获取视频的时长
-        // 第一步先获取到到的是关于视频所有信息的json字符串
-        $shichang = file_get_contents('http://'.$WAILIAN.'/'.$key.'?avinfo');
-        // 第二部转化为对象
-        $shi =json_decode($shichang);
-        // 第三部从中取出视频的时长
-        $chang = $shi->format->duration;
-        // 获取封面
-        $vpic = 'http://'.$WAILIAN.'/'.$key.'?vframe/jpg/offset/1';
-        $path ='http://'.$WAILIAN.'/'.$ret['key'];
-        $data = [
-            'path' => $path,
-            'pic' =>$vpic,
-            'time'=>$chang,
-        ];
-        return $data;
-    }
-
+    //上传视频到七牛
     public function video_data(){
-        $fileName = $_FILES["file1"]["name"]; // The file name
         $fileTmpLoc = $_FILES["file1"]["tmp_name"]; // File in the PHP tmp folder
-        $fileType = $_FILES["file1"]["type"]; // The type of file it is
-        $fileSize = $_FILES["file1"]["size"]; // File size in bytes
-        $fileErrorMsg = $_FILES["file1"]["error"]; // 0 for false... and 1 for true
         if (!$fileTmpLoc) { // if file not chosen
             echo "ERROR: Please browse for a file before clicking the upload button.";
             exit();
         }
         //获取文件的名字//
         $key = "admin_video_".date("YmdHis",time())."_".time().".mp4";
-        $filePath=$fileTmpLoc;
         //获取token值
         $accessKey = 'V0Su976FmQMUBKKf9TLZIYao34G-l6RN_7zxhfFV';
         $secretKey = 'xvVkqpveV8myyeHYP4c_tghcPRUKUmvc2EqbOumG';
@@ -506,7 +370,7 @@ class Teachvideo extends AdminControl {
         $token = $auth->uploadToken($bucket);
         $uploadMgr = new UploadManager();
         // 调用 UploadManager 的 putFile 方法进行文件的上传。
-        list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+        list($ret, $err) = $uploadMgr->putFile($token, $key, $fileTmpLoc);
         // 获取视频的时长
         // 第一步先获取到到的是关于视频所有信息的json字符串
         $shichang = file_get_contents('http://'.$WAILIAN.'/'.$key.'?avinfo');
@@ -542,6 +406,21 @@ class Teachvideo extends AdminControl {
         } else {
             $this->error('删除失败');
         }
+    }
+
+    //图片大图
+    public function view()
+    {
+        $video_id = input('param.id');
+        if (empty($video_id)) {
+            $this->error(lang('param_error'));
+        }
+        $video_info = db("teachchild")->field("t_title,t_picture,t_videoimg,t_type")->where(array('t_id'=>$video_id))->find();
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/";
+        $this->assign('path',$path);
+        $this->assign('video_info', $video_info);
+        $this->setAdminCurItem('view');
+        return $this->fetch();
     }
 
     /**
