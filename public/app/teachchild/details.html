@@ -16,21 +16,7 @@
     <link rel="stylesheet" href="../content/style/teachchild/teachchild.css" type="text/css" />
     <link rel="stylesheet" href="../content/style/teachchild/details.css" type="text/css" />
     <link rel="shortcut icon" href="../content/images/ico.ico" type="image/x-icon" />
-    <link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
-
     <script src="../content/scripts/mobile-util.js"></script>
-    <style>
-        video::-internal-media-controls-download-button {
-            display: none;
-        }
-        video::-webkit-media-controls {
-            overflow: hidden !important;
-        }
-        video::-webkit-media-controls-enclosure {
-            width: calc(100% + 32px);
-            margin-left: auto;
-        }
-    </style>
 </head>
 
 <body>
@@ -50,11 +36,9 @@
                     <img id="video_image" src="" />
                     <a href="javascript:;" class="video_play_btn"></a>
                 </div>
-                <div id="video" style="width:100%; height: auto;margin-bottom: 30px;">
-                    <video id="video_true" controls controlsList="nodownload" width="750px" height="400px" preload="none"  poster="">
-                        <source src="" type="video/mp4">
-                    </video>
+                <div id="video" style="width: 750px; height: auto;margin:0 auto 30px">
                 </div>
+
                </div>
         </div>
     </div>
@@ -86,7 +70,9 @@
             dataType: "json",
             success: function(res){
                 if(res['code'] == 200){
+                    //判断是否是自己上传的视频
                     if(res.result[0]['myself'] == 0){
+                        //判断是否免费
                         if(res.result[0]['price'] !=0){
                             if(res.result[0]['buy'] != 0){
                                 $('.video_play_btn').parent().hide();
@@ -96,6 +82,7 @@
                             $('.video_play_btn').parent().hide();
                             $("#video").show();
                         }
+                        //判断是否收藏
                         if(res.result[0]['collect'] == 0){
                             $('#collect').show();
                             $('#qxCollect').hide();
@@ -147,8 +134,11 @@
                 dataType: "json",
                 success: function(res){
                     if(res['code'] == 200){
+                        //判断是否自己上传
                         if(res.result[0]['myself'] == 0){
+                            //判断是否免费
                             if(res.result[0]['price'] !=0){
+                                //判断是否购买
                                 if(res.result[0]['buy'] != 0){
                                     $('.video_play_btn').parent().hide();
                                     $("#video").show();
