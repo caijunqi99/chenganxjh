@@ -16,11 +16,29 @@ class Common extends MobileMall
 
     public function navicon(){
         $type = intval(input('post.type',1));
+        $version = intval(input('post.version'));
 //        $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where('type',$type)->select();
-        $condition = array(
-            'type'=>$type,
-            'is_show'=>2
-        );
+        if(!empty($version)){
+            $res = $this->is_common_version($version);
+            if($res){
+                $condition = array(
+                    'type'=>$type,
+                    'is_show'=>2
+                );
+            }else{
+                $condition = array(
+                    'type'=>$type,
+                    'is_show'=>2,
+                    'id'=>array('neq',1)
+                );
+            }
+        }else{
+            $condition = array(
+                'type'=>$type,
+                'is_show'=>2
+            );
+        }
+
         $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where($condition)->select();
 
         foreach($navlist as $k=>&$v){
@@ -319,7 +337,27 @@ class Common extends MobileMall
         }else{
             output_error('获取失败');
         }
+    }
 
+    /**
+     * @desc 判断版本号
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function is_common_version($version){
+        //获取原有版本号
+        $old_version = db('version_update')->field('version_num')->where('type=2')->order('id DESC')->find();
+        $ios_version = explode('.',$old_version['version_num']);
+        $ios_num = $ios_version[0]*100+$ios_version[1]*10+$ios_version[2];
+        //得到传过来的版本号
+        $new_ios_version = explode('.',$version);
+        $new_ios_num = $new_ios_version[0]*100+$new_ios_version[1]*10+$new_ios_version[2];
+        //判断
+        if($ios_num >= $new_ios_num ){
+            return true;
+        }else{
+            return false;
+        }
 
 
     }
