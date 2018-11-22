@@ -121,7 +121,7 @@ class Notice extends AdminControl
         $menu_array=array(
             array(
                 'name'=>'noticeManage','text'=>'公告管理','url'=>url('Notice/noticeManage')
-            )
+            ),
             array(
                 'name'=>'notice','text'=>'发送通知','url'=>url('Notice/notice')
             )

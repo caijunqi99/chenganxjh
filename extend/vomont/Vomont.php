@@ -98,7 +98,17 @@ class Vomont
         $data = json_decode($request,TRUE);
         return $data;
     }
-
+    /**
+     * 创建存储计划
+    */
+    public function AaaStorage($accpuntid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::AaaStorage;
+        $a=$this->http.'msgid='.$msgid.'&authkey='.$this->authkey.'&accountid='.$accpuntid.'&resid=16781313&streamtype=0&time={"weektime":[{"day":0,"timedata":111111111111111111111111111111111111111111111111},{"day":1,"timedata":111111111111111111111111111111111111111111111111},{"day":2,"timedata":111111111111111111111111111111111111111111111111},{"day":3,"timedata":111111111111111111111111111111111111111111111111},{"day":4,"timedata":111111111111111111111111111111111111111111111111},{"day":5,"timedata":111111111111111111111111111111111111111111111111},{"day":6,"timedata":111111111111111111111111111111111111111111111111}]}';
+        //$request = httpRequest($this->http.'msgid='.$msgid.'&authkey='.$this->authkey.'&accountid='.$accpuntid.'&resid=16781313&streamtype=0&time={"weektime":[{"day":0,"timedata":111111111111111111111111111111111111111111111111},{"day":1,"timedata":111111111111111111111111111111111111111111111111},{"day":2,"timedata":111111111111111111111111111111111111111111111111},{"day":3,"timedata":111111111111111111111111111111111111111111111111},{"day":4,"timedata":111111111111111111111111111111111111111111111111},{"day":5,"timedata":111111111111111111111111111111111111111111111111},{"day":6,"timedata":111111111111111111111111111111111111111111111111}]}');
+        //$data = json_decode($request,TRUE);
+        return $a;
+    }
 
 
 

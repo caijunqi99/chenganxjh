@@ -59,6 +59,27 @@ class Organizes extends AdminControl
         $model_organize = Model('company');
         $oid=$_GET['o_id'];
         $organize_info = $model_organize->getOrganizeInfo(array('o_id' => $oid));
+        $model_admin = Model('admin');
+        $condition = array();
+        $condition['admin_company_id']=$oid;
+        $admin=$model_admin->getAdminList($condition);
+        foreach($admin as $v){
+            $admin_id.=$v['admin_id'].',';
+        }
+        $admin_id=substr($admin_id, 0, -1);
+        $order = Model('Packagesorder');
+        $condition = array();
+        $condition['pkg_type']=1;
+        $condition['delete_state'] = 0;
+        $condition['order_state']=40;
+        $condition['option_id']=array('in',$admin_id);
+        $packlist=$order->getOrderList($condition);
+        //看孩订单价格
+        $num=0;
+        foreach($packlist as $v){
+            $num=$num+$v['order_amount'];
+        }
+        $this->assign('num',$num);
         $this->assign('organize_info', $organize_info);
         $this->setAdminCurItem('company');
         return $this->fetch();
@@ -219,11 +240,32 @@ class Organizes extends AdminControl
         }
         $schoolid=substr($schoolid, 0, -1);
         if($schoolid!='') {
-            $where['is_del'] = 1;
-            $where['schoolid'] = array('in', $schoolid);
+            $where['s_del'] = 1;
+            $where['s_schoolid']=array('in',$schoolid);
+            $model_student = model('Student');
+            $students= $model_student->getAllStudent($where);
             $member = Model('member');
-            $member_list = $member->getMemberList($where, '*',15);
-            $members=$member->getMemberList($where);
+            foreach($students as $v){
+                if(!empty($v['s_ownerAccount'])) {
+                    $wherees['is_owner']=$v['s_ownerAccount'];
+                    $res=$member->getMemberList($wherees);
+                    if(!in_array($v['s_ownerAccount'],$id)) {
+                        $id[] = $v['s_ownerAccount'];
+                    }
+                    if(!empty($res)){
+                        foreach($res as $v){
+                            if(!in_array($v['member_id'],$id)) {
+                                $id[] = $v['member_id'];
+                            }
+                        }
+                    }
+                }
+            }
+            $member_id=implode(",",$id);
+            $wheres['is_del'] = 1;
+            $wheres['member_id'] = array('in', $member_id);
+            $member_list = $member->getMemberList($wheres, '*',15);
+            $members=$member->getMemberList($wheres);
             foreach ($member_list as $k=>$v) {
                 $classinfo = db('class')->where('classid', $v['classid'])->find();
                 $member_list[$k]['classname'] = $classinfo['classname'];
