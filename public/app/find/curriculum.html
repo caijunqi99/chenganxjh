@@ -143,7 +143,7 @@
                                 var contents = response.result[0];
                                 if (contents == '' || contents == undefined) {
                                     $("." + contentid ).show();
-                                    $("." + contentid ).html('暂无数据！')
+                                    $("." + contentid ).html('该学校暂未添加课程！')
                                     $("#" + contentid + " .week_list").html('')
                                 }else{
                                     $("." + contentid ).hide();
@@ -260,7 +260,7 @@
                         $('#courses_jobs_1').hide();
                         $('#courses_jobs_3').hide();
                         $(".courses_jobs_2").show();
-                        $(".courses_jobs_2").html('暂无数据！');
+                        $(".courses_jobs_2").html('该学校暂未添加课程！');
                         $("#courses_jobs_2 .week_list").html('');
                     }else{
 
