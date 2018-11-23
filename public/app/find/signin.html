@@ -115,86 +115,205 @@
     <script>
     GetChildList(user_token,'reday');
 
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: api + "/robotrecord/record",
-        //     data: {
-        //         key: user_token,
-        //         student_id: 1
-        //     },
-        //     dataType: "json",
-        //     success: function(response) {
-        //         console.log(response["result"][0]);
-        //         $(".cookbook_title").text(response["result"][1]["name"]);
-        //         $("#signinlists").html(HTML(response["result"][0]));
-        //     }
-        // });
         // 打卡html模板
         function HTML(data) {
             var template = '';
-            console.log(data);
-            
-            for (i = 0; i < data.length; i++) {
-                template += '<div class="signinlist_box">' +
-                    '<h2 class="signin_time">' + data[i]["ioDate"] + '<span>' + data[i]["week"] + '</span></h2>' +
-                    '<ul class="signinlist clearfix" id="signinlist">'
-                if (data[i].come == undefined) {
-                    template += '<li class="notsigned">'
-                } else {
-                    template += '<li>'
+            // console.log(data);
+
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                for (i = 0; i < data.length; i++) {
+                    template += '<div class="signinlist_box">' +
+                        '<h2 class="signin_time">' + data[i]["ioDate"] + '<span>' + data[i]["week"] + '</span></h2>' +
+                        '<ul class="signinlist clearfix" id="signinlist">'
+                    if (data[i].come == undefined) {
+                        template += '<li class="notsigned">'
+                    } else {
+                        template += '<li>'
+                    }
+                    template += '<div class="signin_item">' +
+                        '<h3 class="signin_status">' +
+                        '<span class="status_out"><span class="status_in"></span></span>' +
+                        '</h3>' +
+                        '<div class="signin_video_box">' +
+                        '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
+                    if (data[i].come == undefined) {
+                        template += '<source src="">'
+                    } else {
+                        template += '<source src="' + data[i]["come"]["ioVideo"] + '">'
+                    }
+                    template += '</video>' +
+                        '</div>' +
+                        '<div class="signin_item_b">'
+                    if (data[i].come == undefined) {
+                        template += '<p class="signin_item_bp"><span>上学打卡</span><span></span></p>'
+                    } else {
+                        template += '<p class="signin_item_bp"><span>上学打卡</span><span>' + data[i]["come"]["ioTime"] + '</span></p>'
+                    }
+                    template += '</div>' +
+                        '</div>' +
+                        '</li>'
+                    if (data[i].leave == undefined) {
+                        template += '<li class="notsigned">'
+                    } else {
+                        template += '<li>'
+                    }
+                    template += '<div class="signin_item">' +
+                        '<h3 class="signin_status">' +
+                        '<span class="status_out"><span class="status_in"></span></span>' +
+                        '</h3>' +
+                        '<div class="signin_video_box">' +
+                        '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
+                    if (data[i].leave == undefined) {
+                        template += '<source src="">'
+                    } else {
+                        template += '<source src="' + data[i]["leave"]["ioVideo"] + '">'
+                    }
+                    template += '</video>' +
+                        '</div>' +
+                        '<div class="signin_item_b">'
+                    if (data[i].leave == undefined) {
+                        template += '<p class="signin_item_bp"><span>放学打卡</span><span></span></p>'
+                    } else {
+                        template += '<p class="signin_item_bp"><span>放学打卡</span><span>' + data[i]["leave"]["ioTime"] + '</span></p>'
+                    }
+                    template += '</div>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>'
                 }
-                template += '<div class="signin_item">' +
-                    '<h3 class="signin_status">' +
-                    '<span class="status_out"><span class="status_in"></span></span>' +
-                    '</h3>' +
-                    '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
-                if (data[i].come == undefined) {
-                    template += '<source src="">'
-                } else {
-                    template += '<source src="' + data[i]["come"]["ioVideo"] + '">'
+            } else  {
+                var browser = getExplorerInfo();
+                var minVersion = toNum(54.0);
+                var maxVersion = toNum(58.0);
+                var Version = toNum(browser.version);
+                if(minVersion<Version && Version<maxVersion && browser.type == 'Chrome'){
+                    $(document.body).append('<link rel="stylesheet" href="../content/style/video.css" type="text/css" />');
+                    for (i = 0; i < data.length; i++) {
+                        template += '<div class="signinlist_box">' +
+                            '<h2 class="signin_time">' + data[i]["ioDate"] + '<span>' + data[i]["week"] + '</span></h2>' +
+                            '<ul class="signinlist clearfix" id="signinlist">'
+                        if (data[i].come == undefined) {
+                            template += '<li class="notsigned">'
+                        } else {
+                            template += '<li>'
+                        }
+                        template += '<div class="signin_item">' +
+                            '<h3 class="signin_status">' +
+                            '<span class="status_out"><span class="status_in"></span></span>' +
+                            '</h3>' +
+                            '<div class="signin_video_box">' +
+                            '<video controls onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
+                        if (data[i].come == undefined) {
+                            template += '<source src="">'
+                        } else {
+                            template += '<source src="' + data[i]["come"]["ioVideo"] + '">'
+                        }
+                        template += '</video>' +
+                            '</div>' +
+                            '<div class="signin_item_b">'
+                        if (data[i].come == undefined) {
+                            template += '<p class="signin_item_bp"><span>上学打卡</span><span></span></p>'
+                        } else {
+                            template += '<p class="signin_item_bp"><span>上学打卡</span><span>' + data[i]["come"]["ioTime"] + '</span></p>'
+                        }
+                        template += '</div>' +
+                            '</div>' +
+                            '</li>'
+                        if (data[i].leave == undefined) {
+                            template += '<li class="notsigned">'
+                        } else {
+                            template += '<li>'
+                        }
+                        template += '<div class="signin_item">' +
+                            '<h3 class="signin_status">' +
+                            '<span class="status_out"><span class="status_in"></span></span>' +
+                            '</h3>' +
+                            '<div class="signin_video_box">' +
+                            '<video controls onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
+                        if (data[i].leave == undefined) {
+                            template += '<source src="">'
+                        } else {
+                            template += '<source src="' + data[i]["leave"]["ioVideo"] + '">'
+                        }
+                        template += '</video>' +
+                            '</div>' +
+                            '<div class="signin_item_b">'
+                        if (data[i].leave == undefined) {
+                            template += '<p class="signin_item_bp"><span>放学打卡</span><span></span></p>'
+                        } else {
+                            template += '<p class="signin_item_bp"><span>放学打卡</span><span>' + data[i]["leave"]["ioTime"] + '</span></p>'
+                        }
+                        template += '</div>' +
+                            '</li>' +
+                            '</ul>' +
+                            '</div>'
+                    }
+                }else{
+                    for (i = 0; i < data.length; i++) {
+                        template += '<div class="signinlist_box">' +
+                            '<h2 class="signin_time">' + data[i]["ioDate"] + '<span>' + data[i]["week"] + '</span></h2>' +
+                            '<ul class="signinlist clearfix" id="signinlist">'
+                        if (data[i].come == undefined) {
+                            template += '<li class="notsigned">'
+                        } else {
+                            template += '<li>'
+                        }
+                        template += '<div class="signin_item">' +
+                            '<h3 class="signin_status">' +
+                            '<span class="status_out"><span class="status_in"></span></span>' +
+                            '</h3>' +
+                            '<div class="signin_video_box">' +
+                            '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+i*2+'" width="100%" height="100%" preload="none" poster="">'
+                        if (data[i].come == undefined) {
+                            template += '<source src="">'
+                        } else {
+                            template += '<source src="' + data[i]["come"]["ioVideo"] + '">'
+                        }
+                        template += '</video>' +
+                            '</div>' +
+                            '<div class="signin_item_b">'
+                        if (data[i].come == undefined) {
+                            template += '<p class="signin_item_bp"><span>上学打卡</span><span></span></p>'
+                        } else {
+                            template += '<p class="signin_item_bp"><span>上学打卡</span><span>' + data[i]["come"]["ioTime"] + '</span></p>'
+                        }
+                        template += '</div>' +
+                            '</div>' +
+                            '</li>'
+                        if (data[i].leave == undefined) {
+                            template += '<li class="notsigned">'
+                        } else {
+                            template += '<li>'
+                        }
+                        template += '<div class="signin_item">' +
+                            '<h3 class="signin_status">' +
+                            '<span class="status_out"><span class="status_in"></span></span>' +
+                            '</h3>' +
+                            '<div class="signin_video_box">' +
+                            '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
+                        if (data[i].leave == undefined) {
+                            template += '<source src="">'
+                        } else {
+                            template += '<source src="' + data[i]["leave"]["ioVideo"] + '">'
+                        }
+                        template += '</video>' +
+                            '</div>' +
+                            '<div class="signin_item_b">'
+                        if (data[i].leave == undefined) {
+                            template += '<p class="signin_item_bp"><span>放学打卡</span><span></span></p>'
+                        } else {
+                            template += '<p class="signin_item_bp"><span>放学打卡</span><span>' + data[i]["leave"]["ioTime"] + '</span></p>'
+                        }
+                        template += '</div>' +
+                            '</li>' +
+                            '</ul>' +
+                            '</div>'
+                    }
                 }
-                template += '</video>' +
-                    '</div>' +
-                    '<div class="signin_item_b">'
-                if (data[i].come == undefined) {
-                    template += '<p class="signin_item_bp"><span>上学打卡</span><span></span></p>'
-                } else {
-                    template += '<p class="signin_item_bp"><span>上学打卡</span><span>' + data[i]["come"]["ioTime"] + '</span></p>'
-                }
-                template += '</div>' +
-                    '</div>' +
-                    '</li>'
-                if (data[i].leave == undefined) {
-                    template += '<li class="notsigned">'
-                } else {
-                    template += '<li>'
-                }
-                template += '<div class="signin_item">' +
-                    '<h3 class="signin_status">' +
-                    '<span class="status_out"><span class="status_in"></span></span>' +
-                    '</h3>' +
-                    '<div class="signin_video_box">' +
-                    '<video controls controlsList="nodownload" onplay="full_video($(this))" data-id="'+((i+1)*2-1)+'" width="100%" height="100%" preload="none" poster="">'
-                if (data[i].leave == undefined) {
-                    template += '<source src="">'
-                } else {
-                    template += '<source src="' + data[i]["leave"]["ioVideo"] + '">'
-                }
-                template += '</video>' +
-                    '</div>' +
-                    '<div class="signin_item_b">'
-                if (data[i].leave == undefined) {
-                    template += '<p class="signin_item_bp"><span>放学打卡</span><span></span></p>'
-                } else {
-                    template += '<p class="signin_item_bp"><span>放学打卡</span><span>' + data[i]["leave"]["ioTime"] + '</span></p>'
-                }
-                template += '</div>' +
-                    '</li>' +
-                    '</ul>' +
-                    '</div>'
             }
+
+            
+
             return template;
         }
     function full_video(video_obj) {
@@ -208,21 +327,7 @@
         $("video").eq(id).removeClass("video_full");
         $(".video_close").hide();
     }
-        // 切换孩子
 
-        // $("#role_switch").select({
-        //     title: "选择学校",
-        //     items: ["高一或10年级", "小神童第二儿童幼儿园"],
-        //     onChange: function(d) {
-        //         console.log(this, d);
-        //     },
-        //     onClose: function() {
-
-        //     },
-        //     onOpen: function() {
-
-        //     },
-        // });
         $(function(){
             setTimeout(function(){
                 var ssss = $('#infos').val();
