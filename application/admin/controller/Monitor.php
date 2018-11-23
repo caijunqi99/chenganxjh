@@ -64,7 +64,7 @@ class Monitor extends AdminControl
                 $this->assign('page', $camera_model->page_info->render());
             }
         }
-        if(!empty($_GET)){
+        if($_GET['page']!=1){
             $cond = array();
             foreach ($_GET as $key => $p) {
                 if (!in_array($key, ['page', 'page_count']) && !empty($p)) $cond[$key] = $p;
