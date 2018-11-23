@@ -79,7 +79,7 @@
             <td class="align-center"><a href="javascript:imageBig({$v.id},1)"><img src="{$path}{$v.cardimg}" height="60px"></a></td>
             <td class="align-center w50"><a href="javascript:imageBig({$v.id},2)"><img src="{$path}{$v.cardimg_fan}" height="60px"></a></td>
             <td class="align-center"><a href="javascript:imageBig({$v.id},3)"><img src="{$path}{$v.certificate}" height="60px"></a></td>
-            <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['member_add_time']); ?></td>
+            <td class="align-center"><?php if(!empty($v['member_add_time'])){echo date("Y-m-d H:i:s",$v['member_add_time']);}else{echo "无录入";} ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['createtime']); ?></td>
             <td class="align-center"><?php if($v['status']==1){
                                     echo "待审核";

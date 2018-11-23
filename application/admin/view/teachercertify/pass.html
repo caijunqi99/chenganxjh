@@ -27,7 +27,7 @@
                     {$Think.lang.teacher_index_region}：{$teachinfo.region}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.teacher_index_regiest}：<?php echo  date("Y-m-d H:i:s",$teachinfo['member_add_time']) ?><br>
+                <dt>{$Think.lang.teacher_index_regiest}：<?php if(!empty($teachinfo['member_add_time'])){echo  date("Y-m-d H:i:s",$teachinfo['member_add_time']);}else{echo "无录入";} ?><br>
                     {$Think.lang.teacher_index_certime}：<?php echo date("Y-m-d H:i:s",$teachinfo['createtime']) ?></dt>
             </dl>
          <dl>
