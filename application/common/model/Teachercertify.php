@@ -49,7 +49,10 @@ class Teachercertify extends Model {
      */
     public function getTeacherList($condition = array(), $page = '', $orderby = 'id desc') {
         if ($page) {
-            $result = db('teachercertify')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
+            $result = db('teachercertify')->alias('s')
+                    ->join('__MEMBER__ me','me.member_id=s.member_id','LEFT')
+                    ->field('s.id,s.username,s.idcard,s.cardimg,s.cardimg_fan,s.certificate,s.createtime,s.status,s.failreason,me.member_add_time')
+                    ->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
             return $result->items();
         } else {

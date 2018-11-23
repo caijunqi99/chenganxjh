@@ -16,7 +16,6 @@
         </div>
     </div>
 
-    <!--<form method="get" name="formSearch" id="formSearch" class="layui-form">-->
     <form method="get" name="formSearch" id="formSearch">
         <table class="search-form">
             <tbody>
@@ -90,7 +89,6 @@
             <th class="align-center">{$Think.lang.teacher_index_videoname}</th>
             <th class="align-center">{$Think.lang.teacher_index_videotype}</th>
             <th class="align-center">{$Think.lang.teacher_index_videoupload}</th>
-            <!--<th class="align-center">{$Think.lang.teacher_index_videousertype}</th>-->
             <th class="align-center">{$Think.lang.teacher_index_relname}</th>
             <th class="align-center">{$Think.lang.teacher_index_uploadtime}</th>
             <th class="align-center">{$Think.lang.teacher_index_optiontime}</th>
@@ -111,16 +109,15 @@
         <?php foreach($teach_list as $k => $v){ ?>
         <tr class="hover member">
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
-            <?php if($v['t_picture']){ ?>
-                <td class="align-center"><img src="<?php echo $img_path.$v['t_picture']; ?>" alt="" width="80px" height="40px"></td>
-            <?php }else{ ?>
-                <td class="align-center"><img src="<?php echo $v['t_videoimg']; ?>" alt="" width="80px" height="40px"></td>
+            <?php if(!empty($v['t_picture'])){ ?>
+                <td class="align-center"><a href="javascript:imageBig({$v.t_id})"><img src="{$img_path}{$v.t_picture}" height="60px"></a></td>
+            <?php }elseif(!empty($v['t_videoimg'])){ ?>
+                <td class="align-center"><a href="javascript:imageBig({$v.t_id})"><img src="{$v.t_videoimg}" height="60px"></a></td>
             <?php } ?>
             <td class="align-center"><?php echo $v['t_title']; ?></td>
             <td class="align-center"><?php echo $v['type']; ?></td>
             <td class="align-center"><?php echo $v['member_mobile']; ?></td>
-            <!--<td class="align-center">。。。</td>-->
-            <td class="align-center"><?php echo $v['username']; ?></td>
+            <td class="align-center"><?php if($v['member_mobile']=="后台"){echo "后台";}else{echo $v['username'];} ?></td>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['t_maketime']); ?></td>
             <td class="align-center"><?php if($v['option_time']!=""){echo date("Y-m-d H:i:s",$v['option_time']);} ?></td>
             <td class="align-center"><?php if($v['t_audit']==1){
@@ -130,15 +127,6 @@
                                     }elseif($v['t_audit']==3){
                                     echo "审核通过";
                                     } ?></td>
-            <!--<td class="align-center">-->
-                <!--<?php if($v['status']==1){ ?>-->
-                <!--<a href="{:url('/admin/teachercertify/drop',['teacher_id'=>$v.id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>-->
-                <!--<?php }elseif($v['status']==2){  ?>-->
-                <!--<a href="{:url('/admin/teachercertify/drop',['teacher_id'=>$v.id])}" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_repass}</a>-->
-                <!--<?php }else{ ?>-->
-                <!--无-->
-                <!--<?php }  ?>-->
-            <!--</td>-->
             <?php if(session('admin_is_super') ==1 || in_array('15',$action)){ ?>
             <td class="align-center"> <?php if($v['t_recommend']==1){ ?>
                 <a href="{:url('/admin/teachvideo/recom',['t_id'=>$v.t_id,'t_recommend'=>2])}" class="layui-btn layui-btn-xs">推荐</a>
@@ -191,6 +179,19 @@
     
 </div>
 <script type="text/javascript">
+    function imageBig(id) {
+        var urls=ADMIN_URL+'teachvideo/view?id='+id;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '图片详情',
+            area: ['70%', '80%'],
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
+        });
+    }
     function fand_type2(_sef) {
         var gc_id = $(_sef).val();
         if(gc_id){

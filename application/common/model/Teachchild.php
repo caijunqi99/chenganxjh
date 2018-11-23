@@ -23,7 +23,14 @@ class Teachchild extends Model {
         if($limit) {
             return db('teachchild')->where($condition)->field($field)->order($order)->page($page)->limit($limit)->select();
         }else{
-            $res= db('teachchild')->where($condition)->field($field)->order($order)->paginate($page,false,['query' => request()->param()]);
+            $res= db('teachchild')->alias('s')
+                ->join('__TEACHERCERTIFY__ te','te.member_id=s.t_userid','LEFT')
+                ->join('__TEACHTYPE__ ty','ty.gc_id=s.t_type','LEFT')
+                ->join('__TEACHTYPE__ ts','ts.gc_id=s.t_type2','LEFT')
+                ->join('__TEACHTYPE__ tr','tr.gc_id=s.t_type3','LEFT')
+                ->join('__TEACHTYPE__ tu','tu.gc_id=s.t_type4','LEFT')
+                ->field('s.*,te.username,ty.gc_name as "t_typename",ts.gc_name as "t_type2name",tr.gc_name as "t_type3name",tu.gc_name as "t_type4name"')
+                ->where($condition)->order($order)->paginate($page,false,['query' => request()->param()]);
             $this->page_info=$res;
             return $res->items();
         }
@@ -51,7 +58,14 @@ class Teachchild extends Model {
      * @return array
      */
     public function getTeachchildInfo($condition, $field = '*') {
-        return db('teachchild')->field($field)->where($condition)->find();
+        return db('teachchild')->alias('s')
+                ->join('__TEACHERCERTIFY__ te','te.member_id=s.t_userid','LEFT')
+                ->join('__TEACHTYPE__ ty','ty.gc_id=s.t_type','LEFT')
+                ->join('__TEACHTYPE__ ts','ts.gc_id=s.t_type2','LEFT')
+                ->join('__TEACHTYPE__ tr','tr.gc_id=s.t_type3','LEFT')
+                ->join('__TEACHTYPE__ tu','tu.gc_id=s.t_type4','LEFT')
+                ->field('s.*,te.username as "name",ty.gc_name as "t_typename",ts.gc_name as "t_type2name",tr.gc_name as "t_type3name",tu.gc_name as "t_type4name"')
+                ->where($condition)->find();
     }
     /**
      * 编辑课件

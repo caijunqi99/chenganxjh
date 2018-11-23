@@ -65,21 +65,10 @@
         </div>
         <ul>
             <li>只可修改视频信息，如需修改视频，请重新上传。</li>
+            <li>视频封面图不传的话，默认不修改。</li>
         </ul>
     </div>
     <br>
-    <!--<tr class="noborder">-->
-        <!--<td colspan="2" class="required"><label for="video_name">上传视频:</label></td>-->
-    <!--</tr>-->
-    <!--<tr class="noborder">-->
-        <!--<td class="vatop rowform">-->
-            <!--<input type="file" name="file1" id="file1"><br>-->
-            <!--<input type="button" value="点击上传视频" onclick="uploadFile()">-->
-            <!--<progress id="progressBar" value="0" max="100" style="width:300px;"></progress>-->
-            <!--<h3 id="status"></h3>-->
-            <!--<p id="loaded_n_total"></p></td>-->
-        <!--<td class="vatop tips"></td>-->
-    <!--</tr>-->
     <form id="user_form" enctype="multipart/form-data" method="post">
 
         <table class="ds-default-table">
@@ -94,27 +83,9 @@
             <tr class="noborder">
                 <td class="vatop rowform">
                     <input type="file" name="video_filename" id="video_filename" value="" />
-                    <!--<img src="{$path}{$video_info.t_picture}" onclick="$('#video_filename').click()" width="120" height="50" id="img">-->
                 </td>
                 <td class="vatop tips"></td>
             </tr>
-            <!--<script>-->
-                <!--$('#video_filename').change(function() {-->
-                    <!--img = getObjectURL($(this)[0].files[0]);-->
-                    <!--$('#img').attr('src',img ); // 或 this.files[0] this->input-->
-                <!--});-->
-                <!--function getObjectURL(file) {-->
-                    <!--var url = null ;-->
-                    <!--if (window.createObjectURL!=undefined) { // basic-->
-                        <!--url = window.createObjectURL(file) ;-->
-                    <!--} else if (window.URL!=undefined) { // mozilla(firefox)-->
-                        <!--url = window.URL.createObjectURL(file) ;-->
-                    <!--} else if (window.webkitURL!=undefined) { // webkit or chrome-->
-                        <!--url = window.webkitURL.createObjectURL(file) ;-->
-                    <!--}-->
-                    <!--return url ;-->
-                <!--}-->
-            <!--</script>-->
             <tr class="noborder">
                 <td colspan="2" class="required"><label for="video_name">作者:</label></td>
             </tr>
@@ -208,11 +179,6 @@
             if ($("#user_form").valid()) {
                 $("#user_form").submit();
             }
-//            var pas1 =  $("#status").text();
-//            var objFile = $("#file1").val();
-//            if(pas1=="" || (objFile!="" && pas1!="上传成功")){
-//                alert("请确认已选择视频文件，“点击上传视频”，并等待上传");exit;
-//            }
         });
         $('#user_form').validate({
 
@@ -259,7 +225,7 @@
                     required: '{$Think.lang.school_add_price_null}'
                 },
                 video_author: {
-                    required: '作者不能为空，可随意起名'
+                    required: '作者不能为空，可自定义起名'
                 },
                 status: {
                     required: '请上传视频'
