@@ -22,32 +22,10 @@
             <dl>
                 <dt>身份证号：{$teachinfo.idcard}</dt>
             </dl>
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_sex}：{if condition="$teachinfo.sex eq 1"}-->
-                    <!--男-->
-                    <!--{/if}-->
-                    <!--{if condition="$teachinfo.sex eq 2"}-->
-                    <!--女-->
-                    <!--{/if}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
-                    <!--{$Think.lang.teacher_index_birthday}：{$teachinfo.birthday}-->
-                <!--</dt>-->
-            <!--</dl>-->
             <dl>
                 <dt>
                     {$Think.lang.teacher_index_region}：{$teachinfo.region}</dt>
             </dl>
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_school}：{$teachinfo.affiliat}</dt>-->
-            <!--</dl>-->
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_address}：{$teachinfo.address}</dt>-->
-            <!--</dl>-->
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_job}：{$teachinfo.job}</dt>-->
-            <!--</dl>-->
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_email}：{$teachinfo.email}</dt>-->
-            <!--</dl>-->
             <dl>
                 <dt>{$Think.lang.teacher_index_regiest}：<?php echo  date("Y-m-d H:i:s",$teachinfo['member_add_time']) ?><br>
                     {$Think.lang.teacher_index_certime}：<?php echo date("Y-m-d H:i:s",$teachinfo['createtime']) ?></dt>
@@ -62,7 +40,7 @@
                 已认证
                 {else}
                 未认证
-                {/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.idcard}</dt>
+                {/if}&nbsp;&nbsp;&nbsp;&nbsp;({$teachinfo.idcard})</dt>
         </dl>
             <dl>
                 <dt>{$Think.lang.teacher_index_name}：
@@ -70,16 +48,8 @@
                     已认证
                     {else}
                     未认证
-                    {/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.username}</dt>
+                    {/if}&nbsp;&nbsp;&nbsp;&nbsp;({$teachinfo.username})</dt>
             </dl>
-            <!--<dl>-->
-                <!--<dt>{$Think.lang.teacher_index_idcard}：-->
-                    <!--{if condition="$teachinfo.idcard"}-->
-                    <!--已认证-->
-                    <!--{else}-->
-                    <!--未认证-->
-                    <!--{/if}&nbsp;&nbsp;&nbsp;&nbsp;{$teachinfo.idcard}</dt>-->
-            <!--</dl>-->
             <dl>
                 <dt>{$Think.lang.teacher_index_certificateid}：{if condition="$teachinfo.certificate"}
                     已认证
@@ -88,12 +58,11 @@
                     {/if}</dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.teacher_index_cardimg}：<img src="<?php echo $path.$teachinfo['cardimg']; ?>" alt="" width="80px" height="40px">
-                                                                <img src="<?php echo $path.$teachinfo['cardimg_fan']; ?>" alt="" width="80px" height="40px"></dt>
+                <dt>{$Think.lang.teacher_index_cardimg}：<a href="javascript:imageBig({$teachinfo.id},1)"><img src="{$path}{$teachinfo.cardimg}" height="60px"></a>
+                    <a href="javascript:imageBig({$teachinfo.id},2)"><img src="{$path}{$teachinfo.cardimg_fan}" height="60px"></a></dt>
             </dl>
             <dl>
-                <dt>{$Think.lang.teacher_index_certificate}：<img src="<?php echo $path.$teachinfo['certificate']; ?>" alt="" width="80px" height="40px">
-                    <img src="<?php echo $path.$teachinfo['certificate_fan']; ?>" alt="" width="80px" height="40px"></dt>
+                <dt>{$Think.lang.teacher_index_certificate}：<a href="javascript:imageBig({$teachinfo.id},3)"><img src="{$path}{$teachinfo.certificate}" height="60px"></a></dt>
             </dl>
             <dl>
                 <a href="javascript:dd({$teachinfo.id})" class="layui-btn layui-btn-xs">{$Think.lang.teacher_index_pass}</a>
@@ -129,6 +98,20 @@
             shade: 0.4,
             maxmin: false, //开启最大化最小化按钮
             content: $("#courForm")
+        });
+    }
+
+    function imageBig(id,type) {
+        var urls=ADMIN_URL+'teachercertify/view?id='+id+"&type="+type;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '图片详情',
+            area: ['70%', '80%'],
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
         });
     }
 </script>
