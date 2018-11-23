@@ -104,7 +104,7 @@ class Import extends AdminControl
         //查询绑定总数
         $list_count = db('import_student')->where($where)->count();
         $this->assign('list_count',$list_count);
-        $this->setAdminCurItem('success');
+        $this->setAdminCurItem('successin');
         return $this->fetch('success');
     }
     /**
@@ -1058,5 +1058,6 @@ class Import extends AdminControl
         );
         return $menu_array;
     }
+
 
 }

@@ -101,6 +101,7 @@ $lang['member_index_buy_deny']		= '禁止购买';
 $lang['member_index_talk_deny']		= '禁止发表言论';
 $lang['member_index_login_deny']	= '禁止登录';
 $lang['member_index_login']			= '登录';
+$lang['student_index_id']			= '学生ID';
 /**
  * 编辑
  */
