@@ -339,6 +339,8 @@
                             filterParams['key'] = user_token;
                             filterParams['type'] = parentID;
                             filterParams['type1'] = ID;
+                            filterParams['type2'] = '';
+                            filterParams['type3'] = '';
                             // 遍历菜单获取第二列的内容
                             for (var i = 0; i < Index['result'][0]['categorize'].length; i++) {
                                 if (parentID == Index['result'][0]['categorize'][i]['gc_id']) {
@@ -368,6 +370,7 @@
                 $('.subject').html('');
                 $('.subject span').removeClass('action');
                 filterParams['type2'] = ID;
+                filterParams['type3'] = '';
                 for (var i = 0; i < Index['result'][0]['categorize'].length; i++) {
                     if (topID == Index['result'][0]['categorize'][i]['gc_id']) {
                         for (var s = 0; s < Index['result'][0]['categorize'][i]['childTwo'].length; s++) {
@@ -624,8 +627,10 @@
             // 第一列
             function stageList(data) {
                 var template = '';
-                for (var i = 0; i < data.length; i++) {
-                    template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '">' + data[i]['gc_name'] + '</span>';
+                if(data){
+                    for (var i = 0; i < data.length; i++) {
+                        template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '">' + data[i]['gc_name'] + '</span>';
+                    }
                 }
                 return template;
             }
@@ -633,8 +638,10 @@
             // 第二列
             function gradeList(data, topID) {
                 var template = '';
-                for (var i = 0; i < data.length; i++) {
-                    template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '" onclick="gradeListAction(' + data[i]['gc_parent_id'] + ',' + data[i]['gc_id'] + ', this, ' + topID + ')">' + data[i]['gc_name'] + '</span>';
+                if(data){
+                    for (var i = 0; i < data.length; i++) {
+                        template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '" onclick="gradeListAction(' + data[i]['gc_parent_id'] + ',' + data[i]['gc_id'] + ', this, ' + topID + ')">' + data[i]['gc_name'] + '</span>';
+                    }
                 }
                 return template;
             }
@@ -642,8 +649,10 @@
             // 第三列
             function subjectList(data) {
                 var template = '';
-                for (var i = 0; i < data.length; i++) {
-                    template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '" onclick="subjectListAction(' + data[i]['gc_parent_id'] + ',' + data[i]['gc_id'] + ', this)">' + data[i]['gc_name'] + '</span>';
+                if(data){
+                    for (var i = 0; i < data.length; i++) {
+                        template += '<span data-id="' + data[i]['gc_id'] + '" data-parentid="' + data[i]['gc_parent_id'] + '" onclick="subjectListAction(' + data[i]['gc_parent_id'] + ',' + data[i]['gc_id'] + ', this)">' + data[i]['gc_name'] + '</span>';
+                    }
                 }
                 return template;
             }
