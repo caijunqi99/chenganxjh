@@ -111,12 +111,10 @@
                 <td class="align-center w50"><?php echo $v['admin_name'];?></td>
                 <td class="align-center w50"><?php echo $v['admin_true_name'];?></td>
                 <td class="align-center w50"><?php echo $v['admin_phone'];?></td>
-                <!--<td class="align-center w150"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?></td>-->
-                <!--<td class="align-center w50"><?php echo $v['admin_login_num']; ?></td>-->
                 <?php if($v['admin_is_super']){?>
                     <td class="align-center w50" style="color: #D90909">{$Think.lang.super_admin}</td>
                 <?php }else if($v['gname']){?>
-                    <td class="align-center w50" style="color: #D39600"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?>-><?php echo $v['gname']; ?></td>
+                    <td class="align-center w50" style="color: #D39600"><?php if($v['admin_company_id'] == 1){echo '总公司';}else{echo $v['o_name'];}?>-><?php if(!empty($v['admin_school_id'])){echo $v['name'].'->';}?><?php echo $v['gname']; ?></td>
                 <?php }else{?>
                     <td class="align-center w50" style="color: #0C0C0C"> {$Think.lang.admin_no_role}</td>
                 <?php }?>
