@@ -237,9 +237,9 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
-        $vlink = new Vomont();
-        $res= $vlink->SetLogin();
-        $accountid=$res['accountid'];
+        //$vlink = new Vomont();
+        //$res= $vlink->SetLogin();
+        //$accountid=$res['accountid'];
         //$a=$vlink->AaaStorage($accountid);
         //print_r($a);exit;
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
