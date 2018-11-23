@@ -32,8 +32,10 @@ class Member extends MobileMember
             db('memberjpush')->where('registrationID',$input['registrationID'])->delete();
             $jp = db('memberjpush')->where('member_id',$this->member_info['member_id'])->find();
             if ($jp) {
-                //如果已经存在过记录，只修改极光id
-                db('memberjpush')->where('id', $jp['id'])->setField('registrationID',$input['registrationID']);
+                if ($jp['registrationID']!=$input['registrationID']) {
+                    //如果已经存在过记录，只修改极光id
+                    db('memberjpush')->where('id', $jp['id'])->setField('registrationID',$input['registrationID']);
+                }
             }else{
                 //如果没有当前用户信息，写入
                 db('memberjpush')->insertGetId(['member_id'=>$this->member_info['member_id'],'registrationID'=>$input['registrationID']]);
