@@ -50,7 +50,14 @@ class Admin extends AdminControl {
             }
         }
 
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->order('a.admin_id DESC')->paginate(10,false,['query' => request()->param()]);
+        $admin_list = db('admin')->alias('a')
+            ->field('a.*,g.gid,g.gname,o.o_id,o.o_name,s.schoolid,s.name')
+            ->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')
+            ->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')
+            ->join('__SCHOOL__ s', 's.schoolid = a.admin_school_id', 'LEFT')
+            ->where($where)
+            ->order('a.admin_id DESC')
+            ->paginate(10,false,['query' => request()->param()]);
 
 //        halt($admin_list);
         //获取所创建的角色
@@ -106,7 +113,6 @@ class Admin extends AdminControl {
         } else {
             $model_admin = Model('admin');
             $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
             if(session('admin_is_super') == 1){
@@ -115,7 +121,23 @@ class Admin extends AdminControl {
                 $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
                 $param['admin_company_id'] = $company_id['admin_company_id'];
             }
+            //判断是不是超级管理员
+            $gid = $_POST['gid'];
+            /*if($gid == '-1'){
+                if($_POST['admin_company_id'] == 1){
+                    $this->error('总公司已存在超级管理员，添加失败');
+                }else{
+                    //判断代理商/学校是否存在超级管理员
+                    $is_agent_superAdmin = db('admin')->field('admin_company_id,admin_is_super')->where('admin_is_super=2 AND admin_company_id="'.$param["admin_company_id"].'"');
+                    if($is_agent_superAdmin){
+                        $this->error('该代理商已存在超级管理员，添加失败');
+                    }else{
+                     $gid = 2;
+                    }
+                }
+            }*/
 
+            $param['admin_gid'] = $gid;
             $param['admin_phone'] = $_POST['admin_phone'];
             $param['admin_true_name'] = $_POST['admin_truename'];
             $param['admin_department'] = $_POST['admin_department'];
@@ -255,8 +277,9 @@ class Admin extends AdminControl {
                 break;
             case 'get_gadmin':
                 $condition['company_id'] = input('post.id');
-                $result = db('gadmin')->field('gname,gid')->where($condition)->select();
+                $result = db('gadmin')->field('gname,gid')->where($condition)->order('sort ASC')->select();
                 $html = '<option value="" selected>请选择所属角色</option>';
+//                $html .= '<option value="-1" >超级管理员</option>';
                 if(!empty($result)){
                     foreach($result as $key=>$value){
                         $html .= '<option value="'.$value["gid"].'">'.$value["gname"].'</option>';
