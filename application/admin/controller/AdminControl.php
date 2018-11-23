@@ -306,7 +306,8 @@ class AdminControl extends Controller {
             $ginfo['limits'] = explode('|', $hlimit);
             $ginfo['nav'] = explode('|', $nlimit);
             $nav = "'" . join("','", $ginfo['nav']) . "'"; //大类
-            $limits = "'" . join("','", $ginfo['limits']) . "'";//小类
+            $limits = "'" . join("','", $ginfo['limits']) . "'";//中类
+
 //            halt($limits);
             //获取父级所有栏目
             $_limit = db('perms')->field('permid,name,text')->where("pid=0 AND name IN ($nav) AND permid != 1  AND status=1")->select();
@@ -323,17 +324,17 @@ class AdminControl extends Controller {
                             $_limit[$key]['child'][$k]['op'] = null;
                             $_limit[$key]['child'][$k]['act'] = ucfirst($v['name']);
                             $_limit[$key]['child'][$k]['action'] = explode(',',$_limit[$key]['child'][$k]['action']);
-                            if(!empty($_limit[$key]['child'][$k]['action'])){
-                                $array = array();
-                                if(!empty($v['action'])){
-                                    $actions= db('actions')->where("actid in ($v[action])")->select();
-                                    foreach ($actions as $kk=>$vv){
-                                        $array['id']=$vv['actid'];
-                                        $array['actname']=$this->get_action($vv['actname']);
-                                        $_limit[$key]['child'][$k]['action'][$kk] = $array;
-                                    }
-                                }
 
+                            //该角色拥有的小类
+                            $operation = db('roleperms')->where('roleid="'.$this->admin_info['admin_gid'].'" AND permsid="'.$v["permid"].'"')->find();
+                            if(!empty($operation)){
+                                $array = array();
+                                $actions= db('actions')->where("actid in ($operation[action])")->select();
+                                foreach ($actions as $kk=>$vv){
+                                    $array['id']=$vv['actid'];
+                                    $array['actname']=$this->get_action($vv['actname']);
+                                    $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                }
                             }
                         }
                     }
