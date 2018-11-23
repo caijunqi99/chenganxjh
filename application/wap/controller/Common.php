@@ -16,8 +16,9 @@ class Common extends MobileMall
 
     public function navicon(){
         $type = intval(input('post.type',1));
-        $version = intval(input('post.version'));
+        $version = trim(input('post.version'));
 //        $navlist = db('navaicon')->field('icon_name,icon_1,icon_2,icon_3,link,link_type,group_type,group_name,icon_sign,icon_type')->where('type',$type)->select();
+
         if(!empty($version)){
             $res = $this->is_common_version($version);
             if($res){
