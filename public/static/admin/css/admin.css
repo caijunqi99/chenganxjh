@@ -254,7 +254,7 @@ input.readonly , textarea.readonly, textarea.readonly:focus ,textarea.readonly:h
 
 
 /*注释说明帮助*/
-.explanation { color: #0ba4da !important; background-color: rgba(79, 192, 232, 0.11) !important; display: block; width: 99%; height: 100%; padding: 6px 9px; border-radius: 5px; position: relative; overflow: hidden;  }
+.explanation { color: #0ba4da !important; background-color: rgba(79, 192, 232, 0.11) !important; display: block; width: 99%; height: 100%; padding: 52px 9px 6px; border-radius: 5px; position: relative; overflow: hidden;  }
 .explanation:before{content: "";background-image: url(../images/wave.png); width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;border-radius: 5px;background-repeat: no-repeat;background-size: cover;}
 .explanation .title { white-space: nowrap; margin: 8px 0; position: relative; cursor: pointer;height:20px;}
 .explanation .title h4 { font-size: 14px; font-weight: normal; line-height: 20px; height: 20px; display: inline-block; float:left;margin-left:16px;}
