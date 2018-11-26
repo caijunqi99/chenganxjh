@@ -14,7 +14,7 @@ class Admin extends AdminControl {
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
 //        halt($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
@@ -22,11 +22,11 @@ class Admin extends AdminControl {
      * 管理员列表
      */
     public function admin() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
-        if(session('admin_is_super') == 1){
+        if(session('school_admin_is_super') == 1){
             $where = ' a.admin_del_status=1';
         }else{
             $where = 'a.create_uid='.$admin_id.' AND a.admin_del_status=1';
@@ -63,7 +63,7 @@ class Admin extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
-        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('1',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
@@ -92,7 +92,7 @@ class Admin extends AdminControl {
             $param['admin_gid'] = $_POST['gid'];
             $param['admin_password'] = md5($_POST['admin_password']);
             $param['create_uid'] = $admin_id;
-            if(session('admin_is_super') == 1){
+            if(session('school_admin_is_super') == 1){
                 $param['admin_company_id'] = $_POST['admin_company_id'];
             }else{
                 $company_id = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
@@ -243,7 +243,7 @@ class Admin extends AdminControl {
      * 设置管理员权限
      */
     public function admin_edit() {
-        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('3',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $admin_userid = $this->admin_info['admin_id'];
@@ -302,7 +302,7 @@ class Admin extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('1',$this->action)){
             $menu_array = array(
                 array(
                     'name' => 'admin',

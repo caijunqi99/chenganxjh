@@ -14,12 +14,12 @@ class School extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function member() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $model_school = model('School');
@@ -93,7 +93,7 @@ class School extends AdminControl {
     }
 
     public function add() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
@@ -157,7 +157,7 @@ class School extends AdminControl {
     }
 
     public function addclass() {
-        if(session('admin_is_super') !=1 && !in_array(10,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(10,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $school_id = input('param.school_id');
@@ -220,7 +220,7 @@ class School extends AdminControl {
     }
 
     public function edit() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $school_id = input('param.school_id');
@@ -333,7 +333,7 @@ class School extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $school_id = input('param.school_id');
@@ -356,7 +356,7 @@ class School extends AdminControl {
      * 管理员添加
      */
     public function admin_add() {
-        if(session('admin_is_super') !=1 && !in_array(6,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(6,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $admin_id = $this->admin_info['admin_id'];
@@ -389,7 +389,7 @@ class School extends AdminControl {
                 'url' => url('School/School/member')
             ),
         );
-        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+        if(session('school_admin_is_super') ==1 || in_array(1,$this->action )){
             if (request()->action() == 'add' || request()->action() == 'member') {
                 $menu_array[] = array(
                     'name' => 'add',

@@ -53,7 +53,7 @@
                     <dl>
                         <dt>{$Think.lang.pkg_axis}</dt>
                         <dd>
-                            <input type="text" name="pkg_length" id="pkg_length" class="txt" value="{$pkg_info.pkg_length|default='1'}">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " placeholder="只能输入数字" name="pkg_length" id="pkg_length" value="{$pkg_info.pkg_length|default='1'}"/>
                             <select name="pkg_axis">
                                 <?php foreach($axis_list as $k => $v){ ?>
                                 <option {if condition="$k eq $pkg_info.pkg_axis  "}selected{/if} value="<?php echo $k;?>"><?php echo $v ; ?></option>

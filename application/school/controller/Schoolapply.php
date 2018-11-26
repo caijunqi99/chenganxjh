@@ -16,12 +16,12 @@ class Schoolapply extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function index() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $model_schoolapply = model('Schoolapply');
@@ -116,7 +116,7 @@ class Schoolapply extends AdminControl {
      * 处理
      */
     public function deal() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $admininfo = $this->getAdminInfo();
@@ -162,7 +162,7 @@ class Schoolapply extends AdminControl {
      */
     public function excel() {
 
-        if(session('admin_is_super') !=1 && !in_array(7,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(7,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
 
