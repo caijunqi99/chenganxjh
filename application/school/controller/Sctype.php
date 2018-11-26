@@ -15,12 +15,12 @@ class Sctype extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function sctype_manage(){
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $pkg = model('Schooltype');
@@ -33,7 +33,7 @@ class Sctype extends AdminControl {
     }
 
     public function sctype_edit(){
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (request()->isPost()) {
@@ -84,7 +84,7 @@ class Sctype extends AdminControl {
      * 删除套餐
      */
     public function sctype_del() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $Sctype = Model('Schooltype');

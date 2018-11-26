@@ -42,11 +42,11 @@ class AdminControl extends Controller {
      */
     protected final function systemLogin() {
         $admin_info = array(
-            'admin_id' => session('admin_id'),
-            'admin_name' => session('admin_name'),
-            'admin_gid' => session('admin_gid'),
-            'admin_is_super' => session('admin_is_super'),
-            'admin_company_id' => session('admin_company_id'),
+            'admin_id' => session('school_admin_id'),
+            'admin_name' => session('school_admin_name'),
+            'admin_gid' => session('school_admin_gid'),
+            'admin_is_super' => session('school_admin_is_super'),
+            'admin_company_id' => session('school_admin_company_id'),
             'admin_school_id' => session('admin_school_id'),
             'login_identity' => session('login_identity')
         );
@@ -211,8 +211,8 @@ class AdminControl extends Controller {
      */
     protected final function log($lang = '', $state = 1, $admin_name = '', $admin_id = 0) {
         if ($admin_name == '') {
-            $admin_name = session('admin_name');
-            $admin_id = session('admin_id');
+            $admin_name = session('school_admin_name');
+            $admin_id = session('school_admin_id');
         }
         $data = array();
         if (is_null($state)) {

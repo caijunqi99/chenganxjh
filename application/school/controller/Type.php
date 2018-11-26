@@ -17,12 +17,12 @@ class Type extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function index() {
-        if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $type_list = db('type')->paginate(10,false,['query' => request()->param()]);
@@ -39,7 +39,7 @@ class Type extends AdminControl {
      */
 
     public function type_add() {
-        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('1',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         if (!(request()->isPost())) {
@@ -168,7 +168,7 @@ class Type extends AdminControl {
     }
 
     public function type_edit() {
-        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('3',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $type_id = input('param.type_id');
@@ -441,7 +441,7 @@ class Type extends AdminControl {
      */
 
     public function type_drop() {
-        if(session('admin_is_super') !=1 && !in_array('2',$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array('2',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $type_id = input('param.type_id');
@@ -474,7 +474,7 @@ class Type extends AdminControl {
                 'url' => url('School/Type/index')
             ),
         );
-        if(session('admin_is_super') ==1 || in_array('1',$this->action)){
+        if(session('school_admin_is_super') ==1 || in_array('1',$this->action)){
             if (request()->action() == 'type_add' || request()->action() == 'index') {
                 $menu_array[] = array(
                     'name' => 'type_add',
@@ -483,7 +483,7 @@ class Type extends AdminControl {
                 );
             }
         }
-        if(session('admin_is_super') ==1 || in_array('3',$this->action)){
+        if(session('school_admin_is_super') ==1 || in_array('3',$this->action)){
             if (request()->action() == 'type_edit') {
                 $menu_array[] = array(
                     'name' => 'type_edit',
