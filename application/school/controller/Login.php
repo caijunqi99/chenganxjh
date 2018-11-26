@@ -14,7 +14,7 @@ class Login extends Controller {
     }
 
     public function index() {
-        if (session('admin_id')) {
+        if (session('school_admin_id')) {
             $this->success('已经登录', 'School/Index/index');
         }
         if (request()->isPost()) {
@@ -62,11 +62,11 @@ class Login extends Controller {
                         db('admin')->where('admin_id', $admin_info['admin_id'])->update($update_info);
 
                         //设置 session
-                        session('admin_id', $admin_info['admin_id']);
-                        session('admin_name', $admin_info['admin_name']);
-                        session('admin_gid', $admin_info['admin_gid']);
-                        session('admin_is_super', $admin_info['admin_is_super']);
-                        session('admin_company_id', $admin_info['admin_company_id']);
+                        session('school_admin_id', $admin_info['admin_id']);
+                        session('school_admin_name', $admin_info['admin_name']);
+                        session('school_admin_gid', $admin_info['admin_gid']);
+                        session('school_admin_is_super', $admin_info['admin_is_super']);
+                        session('school_admin_company_id', $admin_info['admin_company_id']);
                         session('admin_school_id', $admin_info['admin_school_id']);
                         session('login_identity', 'school');
 
