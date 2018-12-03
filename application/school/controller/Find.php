@@ -23,7 +23,7 @@ class Find extends AdminControl {
 //        $class_name = strtolower(end(explode('\\',__CLASS__)));
 //        $perm_id = $this->get_permid($class_name);
 ////        halt($perm_id);
-//        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+//        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
 //        $this->assign('action',$action);
 //    }
     /**

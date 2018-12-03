@@ -60,8 +60,17 @@
             </div>
         </div>
         <div class="container3">
+
             <div class="schoolbus_cont">
                 <img class="schoolbus_img" src="../content/images/find/schoolbus_img.png" alt="">
+                <!-- 没有数据时显示 -->
+                <div class="no_cook_cont" id="no_cook_cont" style="display: none">
+                    <div class="nofootbox">
+                        <p class="nofootbox_p">
+                            该学校暂未添加校车
+                        </p>
+                    </div>
+                </div>
                 <div id="schoolbus_list_box">
                    
                 </div>
@@ -87,7 +96,7 @@
 
         // 校车路线模板
         function HTML(data) {
-            // console.log(data);
+            console.log(data);
             var template = '';
             var template2 = '';
             for (i = 0; i < data.length; i++) {
@@ -241,7 +250,13 @@ function GetBusInfo(s_id){
         success: function(response) {
             // console.log(response);
             // return;
-            $("#schoolbus_list_box").html(HTML(response["result"]));
+            var schoolbus = HTML(response["result"]);
+            if(schoolbus){
+                $("#schoolbus_list_box").html(schoolbus);
+            }else{
+                $("#no_cook_cont").show();
+                $("#schoolbus_list_box").hide();
+            }
         }
     });
 }

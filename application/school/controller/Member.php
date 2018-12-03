@@ -13,12 +13,12 @@ class Member extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function member() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $condition = array();
@@ -130,7 +130,7 @@ class Member extends AdminControl {
     }
 
     public function add() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
@@ -175,7 +175,7 @@ class Member extends AdminControl {
     }
 
     public function edit() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         //注：pathinfo地址参数不能通过get方法获取，查看“获取PARAM变量”
@@ -242,7 +242,7 @@ class Member extends AdminControl {
      * @return [type] [description]
      */
     public function password_reset(){
-        if(session('admin_is_super') !=1 && !in_array(12,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(12,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         $member_id = input('post.uid');
@@ -337,7 +337,7 @@ class Member extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
         //注：pathinfo地址参数不能通过get方法获取，查看“获取PARAM变量”
@@ -357,7 +357,7 @@ class Member extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action)){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action)){
             $menu_array = array(
                 array(
                     'name' => 'member',

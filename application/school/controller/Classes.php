@@ -14,12 +14,12 @@ class Classes extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function index() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $model_class = model('Classes');
@@ -81,22 +81,6 @@ class Classes extends AdminControl {
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
         $this->assign('schooltype', $schooltype);
-<<<<<<< HEAD
-=======
-        
-        $model_school = model('School');
-        $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
-        $left_menu = array_column($school_list, 'schoolid');
-
-        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
-        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
-
-        foreach ($class_list as $k=>$v){
-            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
-            $class_list[$k]['schoolname'] =  $school_list[$key]['name'];
-        }
-
->>>>>>> wangzhixue
         //全部学校
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
@@ -106,13 +90,18 @@ class Classes extends AdminControl {
                 $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
             }
         }
-        $condition_school['isdel'] = 1;
+        
+        $model_school = model('School');
         $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
-        $left_menu = array_column($school_list, 'schoolid');
+        $left_menu = array_column($school_list,NULL, 'schoolid');
+
+        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
+        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
+        
+        $condition_school['isdel'] = 1;
         foreach ($class_list as $k=>$v){
-            $key = array_search($v['schoolid'], $left_menu); 
-            $class_list[$k]['typename'] = db('schooltype')->where('sc_id',$v['typeid'])->value('sc_type');
-            $class_list[$k]['schoolname'] = $school_list[$key]['name'];
+            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
+            $class_list[$k]['schoolname'] = $left_menu[$v['schoolid']]['name'];
         }
 
         $this->assign('page', $model_class->page_info->render());
@@ -138,7 +127,7 @@ class Classes extends AdminControl {
     }
 
     public function add() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
@@ -204,7 +193,7 @@ class Classes extends AdminControl {
     }
 
     public function edit() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $class_id = input('param.class_id');
@@ -270,7 +259,7 @@ class Classes extends AdminControl {
     }
 
     public function addstudent(){
-        if(session('admin_is_super') !=1 && !in_array(11,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(11,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $class_id = input('get.class_id');
@@ -357,7 +346,7 @@ class Classes extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $class_id = input('param.class_id');
@@ -388,7 +377,7 @@ class Classes extends AdminControl {
                 'url' => url('School/Classes/index')
             ),
         );
-        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+        if(session('school_admin_is_super') ==1 || in_array(1,$this->action )){
             if (request()->action() == 'add' || request()->action() == 'index') {
                 $menu_array[] = array(
                     'name' => 'add',

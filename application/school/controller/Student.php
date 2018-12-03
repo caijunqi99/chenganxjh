@@ -14,12 +14,12 @@ class Student extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
 
     public function index() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $model_student = model('Student');
@@ -83,9 +83,6 @@ class Student extends AdminControl {
             'area_info'=>''
         );
         $this->assign('address', $address);
-        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
-        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
-
         //全部学校
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
@@ -100,29 +97,18 @@ class Student extends AdminControl {
         $scfield = 'schoolid,name';
         $school_list = $model_school->getAllAchool($condition_school,$scfield);
         $schoolLists = array_column($school_list,NULL,'schoolid');
+
         //全部班级
         $model_class = model('Classes');
-<<<<<<< HEAD
-        if($admininfo['admin_id']!=1){
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_class['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $model_company = Model("Company");
-                $condition_class = $model_company->getCondition($admininfo['admin_company_id'],"class");
-            }
-        }
         $condition_class['isdel'] = 1;
         $class_list = $model_class->getAllClasses($condition_class);
-=======
-        $clfield = 'classid,classname,typeid';
-        $class_list = $model_class->getAllClasses($condition_school,$clfield);
         $classLists = array_column($class_list,NULL,'classid');
 
         $model_schooltype = model('Schooltype');
         $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
+        $schooltypeList=array_column($schooltype,NULL,'sc_id');
         $this->assign('schooltype', $schooltype);
 
->>>>>>> wangzhixue
         foreach ($class_list as $k=>$v){
             $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
         }
@@ -140,7 +126,7 @@ class Student extends AdminControl {
     }
 
     public function add() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
@@ -198,7 +184,7 @@ class Student extends AdminControl {
     }
 
     public function edit() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $student_id = input('param.student_id');
@@ -313,7 +299,7 @@ class Student extends AdminControl {
      * 重要提示，删除会员 要先确定删除店铺,然后删除会员以及会员相关的数据表信息。这个后期需要完善。
      */
     public function drop() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $student_id = input('param.student_id');
@@ -361,7 +347,7 @@ class Student extends AdminControl {
                 'url' => url('School/Student/index')
             ),
         );
-        if(session('admin_is_super') ==1 || in_array(1,$this->action )){
+        if(session('school_admin_is_super') ==1 || in_array(1,$this->action )){
             if (request()->action() == 'add' || request()->action() == 'index') {
                 $menu_array[] = array(
                     'name' => 'add',

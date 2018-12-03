@@ -13,7 +13,7 @@ class Gadmin extends AdminControl {
         //获取当前角色对当前子目录的权限
         $class_name = strtolower(end(explode('\\',__CLASS__)));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('school_admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
     /**
@@ -96,7 +96,7 @@ class Gadmin extends AdminControl {
      * 权限组
      */
     public function gadmin() {
-        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
 
@@ -111,7 +111,7 @@ class Gadmin extends AdminControl {
      * 添加权限组
      */
     public function gadmin_add() {
-        if(session('admin_is_super') !=1 && !in_array(1,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (!request()->isPost()) {
@@ -156,7 +156,7 @@ class Gadmin extends AdminControl {
             $data['limits'] = encrypt($limit_str, MD5_KEY . md5($_POST['gname']));
             $data['nav'] = encrypt($nav_str, MD5_KEY . md5($_POST['gname']));
             $data['gname'] = $_POST['gname'];
-            $data['create_uid'] = session('admin_id');
+            $data['create_uid'] = session('school_admin_id');
             $result = db('gadmin')->insertGetId($data);
             if ($result >0) {
                 if(!empty($_POST['action'])){
@@ -183,7 +183,7 @@ class Gadmin extends AdminControl {
      * 设置权限组权限
      */
     public function gadmin_set() {
-        if(session('admin_is_super') !=1 && !in_array(3,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $gid = intval(input('param.gid'));
@@ -226,7 +226,7 @@ class Gadmin extends AdminControl {
             $data['limits'] = $limit_str;
             $data['nav'] = $nav_str;
             $data['gname'] = $_POST['gname'];
-            $data['create_uid'] = session('admin_id');
+            $data['create_uid'] = session('school_admin_id');
             $update = db('gadmin')->where(array('gid' => $gid))->update($data);
             if ($update) {
                 db('roleperms')->where(array('roleid'=>$gid))->delete();
@@ -254,7 +254,7 @@ class Gadmin extends AdminControl {
      * 组删除
      */
     public function gadmin_del() {
-        if(session('admin_is_super') !=1 && !in_array(2,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(2,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         if (is_numeric(input('param.gid'))) {
@@ -284,7 +284,7 @@ class Gadmin extends AdminControl {
      * @time 2018/09/19
      */
     public function gadmin_member(){
-        if(session('admin_is_super') !=1 && !in_array(5,$this->action )){
+        if(session('school_admin_is_super') !=1 && !in_array(5,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
         $gid = intval(input('param.gid'));
@@ -301,7 +301,7 @@ class Gadmin extends AdminControl {
      * 获取卖家栏目列表,针对控制器下的栏目
      */
     protected function getAdminItemList() {
-        if(session('admin_is_super') ==1 || in_array('1',$this->action)) {
+        if(session('school_admin_is_super') ==1 || in_array('1',$this->action)) {
             $menu_array = array(
                 array(
                     'name' => 'gadmin',
