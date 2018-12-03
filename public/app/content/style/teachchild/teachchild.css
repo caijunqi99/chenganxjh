@@ -658,3 +658,26 @@ a:active {
     text-align: center;
     line-height: 0;
 }
+.history_content_wrap {
+    margin-top: 0;
+}
+
+.history_content_wrap.delete103 {
+    padding: 15px 0;
+}
+
+.weui-cells:after {}
+
+.history_img_wrap {
+    height: 120px;
+}
+
+.history_img_wrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.cont_wrap p {
+    height: 40px;
+    line-height: 40px;
+}
