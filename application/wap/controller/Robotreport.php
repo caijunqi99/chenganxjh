@@ -64,7 +64,7 @@ class Robotreport extends MobileMall
         $report_model = Model("Robotreport");
         $result = $report_model->report_add($data);
         if($result){
-            $path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+            $short_url = $this->get_short_url($video);
             $md = model('Jpush');
             $md->JPushInit();
             //打卡成功，1给学生家长发送短信提醒，2极光推送给app发送提醒
@@ -72,10 +72,10 @@ class Robotreport extends MobileMall
             if(preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $memberInfo['member_mobile'])){
             $ioFlag = trim($input['ioFlag'],'"');
                 if($ioFlag==1){
-                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息，详情请点击'.$short_url.'。点击链接可以查看孩子打卡视频画面。';
                     $content_s = '您的孩子'.date("Y-m-d H:i:s",time()).'已进入学校，请及时关注孩子信息。';
                 }elseif($ioFlag==2){
-                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$path.$video.'。点击链接可以查看孩子打卡视频画面。';
+                    $content = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息，详情请点击'.$short_url.'。点击链接可以查看孩子打卡视频画面。';
                     $content_s = '您的孩子'.date("Y-m-d H:i:s",time()).'已离开学校，请及时关注孩子信息。';
                 }
                 $sms = new \sendmsg\sdk\SmsApi();
@@ -84,7 +84,7 @@ class Robotreport extends MobileMall
                     $this->error('给用户发送短信失败 ');
                 }
                 $md->MemberPush($memberInfo['member_id'],$content_s,$title='打卡提醒');
-                //发送站内信,提示修改密码
+                //发送站内信,打卡提示
                 $model_message = Model('message');
                 $insert_arr = array();
                 $insert_arr['from_member_id'] = 0;
@@ -183,6 +183,29 @@ class Robotreport extends MobileMall
                 output_data("上传打卡视频失败");
             }
         }
+    }
+
+    public function get_short_url($data){
+        $result = db("robotreport")->field("id")->where(array('ioVideo'=>$data))->find();
+        $url = "http://".$_SERVER['HTTP_HOST']."/wap/r";//地址
+        $code = $this->generate_password(5);
+        $report_model = Model("Robotreport");
+        $report_model->report_update(array('code'=>$code),array('id'=>$result['id']));
+        return $url."?q=".$code;
+    }
+
+    function generate_password($length = 5) {
+        // 密码字符集，可任意添加你需要的字符
+        $chars = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+        $password = '';
+        for ($i = 0; $i < $length; $i++) {
+            // 这里提供两种字符获取方式
+            // 第一种是使用 substr 截取$chars中的任意一位字符；
+            // 第二种是取字符数组 $chars 的任意元素
+            // $password .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+            $password .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+        return $password;
     }
 
 }
