@@ -32,6 +32,7 @@ class Config extends AdminControl {
         if (!request()->isPost()) {
             $list_config = rkcache('config', true);
             $list_config['teacher_pay_scale'] = json_decode($list_config['teacher_pay_scale']);
+            $list_config['re_class_pay_scale'] = json_decode($list_config['re_class_pay_scale']);
 
 //            halt($list_config['teacher_pay_scale']->province_agent);
             $this->assign('list_config', $list_config);
@@ -40,23 +41,35 @@ class Config extends AdminControl {
             return $this->fetch();
         } else {
 
-            $p_s_t = floatval(input('post.province_agent'))+floatval(input('post.city_agent'))+floatval(input('post.teacher'));
+            $p_s_t = floatval(input('post.city_agent'))+floatval(input('post.area_agent'))+floatval(input('post.teacher'));
+            $r_s_t = floatval(input('post.reClass_city_agent'))+floatval(input('post.reClass_area_agent'))+floatval(input('post.reClass_agent'));
             if($p_s_t >= 100){
                 //分配错误
                 $this->error('教孩在线支付分成比例已超出100%，请重新分配');
             }
-            $hq = 100-$p_s_t;
-            $scale = array(
-                'zb'=>$hq,
-                'province_agent' =>floatval(input('post.province_agent')),
+            if($r_s_t >= 100){
+                //分配错误
+                $this->error('重温课堂在线支付分成比例已超出100%，请重新分配');
+            }
+            $teacher_scale = array(
                 'city_agent' =>floatval(input('post.city_agent')),
+                'area_agent' =>floatval(input('post.area_agent')),
                 'teacher' =>floatval(input('post.teacher')),
+            );
+            $re_class_scale = array(
+                'city_agent' =>floatval(input('post.reClass_city_agent')),
+                'area_agent' =>floatval(input('post.reClass_area_agent')),
+                'agent' =>floatval(input('post.reClass_agent')),
             );
             $update_array['teacher_children'] = input('post.teacher_children');
             $update_array['revisit_class'] = input('post.revisit_class');
             $update_array['teacher_children_video'] = input('post.teacher_children_video');
             $update_array['f_account_num'] = input('post.f_account_num');
-            $update_array['teacher_pay_scale'] = json_encode($scale);
+            //教孩在线支付分成比例
+            $update_array['teacher_pay_scale'] = json_encode($teacher_scale);
+            //重温课堂在线支付分成比例
+            $update_array['re_class_pay_scale'] = json_encode($re_class_scale);
+
             $result = $model_config->updateConfig($update_array);
             if ($result) {
                 dkcache('config');
