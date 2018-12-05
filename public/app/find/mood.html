@@ -88,7 +88,10 @@
             success: function (response) {
                 if(response['code'] == 200){
                     if (response['result'].length == 0) {
-                        $("#nodata_box").html('<div class="nodata no_pinglun"><p class="nodata_p">暂无数据</p></div>');
+                        var is_data = $('#mood_listbox>.nodata').hasClass('no_pinglun');
+                        if(!is_data){
+                            $('.weui-footer').show();
+                        }
                     } else {
                         var data = response['result'][0];
                         $('#mood_listbox').html(HTML(data));
@@ -102,7 +105,8 @@
         })
         // 下拉刷新
         $('.main').pullToRefresh(function() {
-            $('.main').infinite();
+            $('.weui-footer').hide();
+            $(document.body).infinite(200);
             setTimeout(function() {
                 $('.main').pullToRefreshDone(); // 重置下拉刷新
             }, 1500)
@@ -122,7 +126,10 @@
                 success: function (response) {
                     if(response['code'] == 200){
                         if (response['result'].length == 0) {
-                            $("#nodata_box").html('<div class="nodata no_pinglun"><p class="nodata_p">暂无数据</p></div>');
+                            var is_data = $('#mood_listbox>.nodata').hasClass('no_pinglun');
+                            if(!is_data){
+                                $('.weui-footer').show();
+                            }
                         } else {
                             var data = response['result'][0];
                             $('#mood_listbox').html(HTML(data));

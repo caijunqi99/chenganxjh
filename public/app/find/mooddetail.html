@@ -31,11 +31,15 @@
             </div>
             <div class="head_r" style="width:130px;">
                 <!-- 自己的动态详情显示删除 -->
-                <a href="javascript:;" class="md_del_btn" style="display: none;">删除</a>
+                <a href="javascript:;" class="md_del_btn" style="display: none;">
+                    <i class="icon iconfont icon-tubiaozhizuo-" style="font-size: 30px;"></i>
+                    <!--删除-->
+                </a>
                 <!-- 别人的动态详情 显示举报 -->
-                <!--<a href="javascript:;" class="md_jubao_btn">
-                    <i class="icon iconfont icon-gengduo"></i>
-                </a>-->
+                <a href="javascript:;" class="md_jubao_btn" style="display: none;">
+                    <i class="icon iconfont icon-icon_tip_off" style="font-size: 30px;"></i>
+                    <!--举报-->
+                </a>
             </div>
         </div>
     </header>
@@ -82,6 +86,8 @@
                         var mood = response.result.mood;
                         if(mood.member_id == user_member_id){
                             $('.md_del_btn').show();
+                        }else{
+                            $('.md_jubao_btn').show();
                         }
                         var view = response.result.view;
                         var mood_html = '';

@@ -204,6 +204,7 @@ $lang['goods_verify_notice'] ='店铺发布的商品是否需要通过商家的�
 //分成/时长/副账号设置
 $lang['teacher_children'] = '教孩视频（观看有效时间）';
 $lang['revisit_class'] = '重温课堂（观看有效时间）';
+$lang['revisit_class_price'] = '重温课堂（片段价格）';
 $lang['teacher_pay_scale'] = '教孩在线支付分成比例';
 $lang['re_class_pay_scale'] = '重温课堂在线支付分成比例';
 $lang['teacher_children_video'] = '教孩上传视频录制时长设置';
