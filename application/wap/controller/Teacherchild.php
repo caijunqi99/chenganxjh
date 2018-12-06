@@ -86,6 +86,7 @@ class Teacherchild extends MobileMember
             $result[$k]['t_picture'] = $videoinfo['t_picture'];
             $result[$k]['videourl'] = $videoinfo['t_url'];
             $result[$k]['author'] = $videoinfo['t_author'];
+            $result[$k]['order_amount'] = sprintf('%.2f', $videoinfo['order_amount']);
             $result[$k]['order_dieline'] = date("Y-m-d H:i:s",$v['order_dieline']);
             $result[$k]['payment_time'] = date("Y-m-d H:i:s",$v['payment_time']);
             if($v['order_dieline']>time()){
