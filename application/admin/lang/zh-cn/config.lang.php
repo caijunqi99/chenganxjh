@@ -205,11 +205,14 @@ $lang['goods_verify_notice'] ='店铺发布的商品是否需要通过商家的�
 $lang['teacher_children'] = '教孩视频（观看有效时间）';
 $lang['revisit_class'] = '重温课堂（观看有效时间）';
 $lang['teacher_pay_scale'] = '教孩在线支付分成比例';
+$lang['re_class_pay_scale'] = '重温课堂在线支付分成比例';
 $lang['teacher_children_video'] = '教孩上传视频录制时长设置';
 $lang['f_account_num'] = '副账号数量设置';
 $lang['zb'] = '总部';
 $lang['province_agent'] = '省代理商';
 $lang['city_agent'] = '市代理商';
+$lang['area_agent'] = '县区代理商';
+$lang['agent'] = '特约代理商';
 $lang['teacher'] = '教师';
 
 //版本升级

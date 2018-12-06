@@ -75,27 +75,43 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">{$Think.lang.teacher_pay_scale}</label>
-                    <div class="layui-form-mid layui-word-aux">{$Think.lang.zb}</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="HQ" lay-verify="required|number" value="{$list_config.teacher_pay_scale->zb}" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">%</div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-form-mid layui-word-aux">{$Think.lang.province_agent}</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="province_agent" lay-verify="required|number" value="{$list_config.teacher_pay_scale->province_agent}" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">%</div>
-                    <div class="layui-form-mid">-</div>
                     <div class="layui-form-mid layui-word-aux">{$Think.lang.city_agent}</div>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="text" name="city_agent" lay-verify="required|number" value="{$list_config.teacher_pay_scale->city_agent}" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux">%</div>
                     <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.area_agent}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="area_agent" lay-verify="required|number" value="{$list_config.teacher_pay_scale->area_agent}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
                     <div class="layui-form-mid layui-word-aux">{$Think.lang.teacher}</div>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="text" name="teacher" lay-verify="required|number" value="{$list_config.teacher_pay_scale->teacher}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.re_class_pay_scale}</label>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.city_agent}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="reClass_city_agent" lay-verify="required|number" value="{$list_config.re_class_pay_scale->city_agent}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.area_agent}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="reClass_area_agent" lay-verify="required|number" value="{$list_config.re_class_pay_scale->area_agent}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">%</div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-form-mid layui-word-aux">{$Think.lang.agent}</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="reClass_agent" lay-verify="required|number" value="{$list_config.re_class_pay_scale->agent}" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux">%</div>
                 </div>
