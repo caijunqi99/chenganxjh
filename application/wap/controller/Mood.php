@@ -83,7 +83,7 @@ class Mood extends MobileMember{
             foreach ($lh_member as $key=>$value){
                 $str .= $value['lh_member_id'].',';
             }
-            $string = trim($str,',');
+            $string = explode(',',trim($str,','));
 
             $where['m.member_id']=array('not in ',$string);
         }
