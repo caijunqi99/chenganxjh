@@ -69,8 +69,9 @@ class Mood extends MobileMember{
         if(empty($member_id)){
             output_error('会员id不能为空');
         }
-        $where = array();
-        $where['m.del']=1;
+//        $where = array();
+//        $where['m.del']=1;
+        $where = ' m.del =1 ';
         $start = 0;
         $page_num = 5;
         if(input('post.start')){
@@ -80,15 +81,13 @@ class Mood extends MobileMember{
         $lh_member = db('moodlh')->where('member_id="'.$member_id.'"')->select();
         $str = '';
         if(!empty($lh_member)){
-            var_dump($lh_member);
             foreach ($lh_member as $key=>$value){
                 $str .= $value['lh_member_id'].',';
             }
         }
         if(!empty($str)){
-            $string = explode(',',trim($str,','));
-            var_dump($string);
-            $where['m.member_id']=array('not in ',$string);
+            $string = "'".trim($str,',')."'";
+            $where .= ' AND m.member_id not in ('.$string.')';
         }
 
         $mood_list = db('mood')->alias('m')
