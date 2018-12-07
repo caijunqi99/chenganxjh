@@ -86,10 +86,10 @@ class Mood extends MobileMember{
             }
         }
         if(!empty($str)){
-            $string = "'".trim($str,',')."'";
+            $string = trim($str,',');
             $where .= ' AND m.member_id not in ('.$string.')';
         }
-
+//        var_dump($where);
         $mood_list = db('mood')->alias('m')
             ->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')
             ->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')
