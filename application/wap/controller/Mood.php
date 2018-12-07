@@ -77,7 +77,7 @@ class Mood extends MobileMember{
             $start =$page_num*intval(input('post.start'));
         }
         //查询被该会员拉黑的会员
-       /* $lh_member = db('moodlh')->where('member_id="'.$member_id.'"')->select();
+        $lh_member = db('moodlh')->where('member_id="'.$member_id.'"')->select();
         if(!empty($lh_member)){
             $str = '';
             foreach ($lh_member as $key=>$value){
@@ -86,8 +86,8 @@ class Mood extends MobileMember{
             $string = trim($str,',');
             $is_lh_id =  '('.$string.')';
 
-            $where['m.member_id']=array('NOT IN',$is_lh_id);
-        }*/
+            $where['m.member_id']=array('NOT IN ',$is_lh_id);
+        }
 
         $mood_list = db('mood')->alias('m')
             ->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')
