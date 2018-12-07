@@ -74,7 +74,7 @@
     <script src="../content/scripts/commom.js"></script>
     <script>
         var List = [];
-        var Page = 1;
+        var Page = 0;
 
         $.ajax({
             type:'POST',
@@ -82,7 +82,6 @@
             data: {
                 key:user_token,
                 member_id: user_member_id,
-                page: 1
             },
             dataType: "json",
             success: function (response) {
@@ -109,7 +108,8 @@
             $(document.body).infinite(200);
             setTimeout(function() {
                 $('.main').pullToRefreshDone(); // 重置下拉刷新
-            }, 1500)
+            }, 1500);
+            Page = 0;
             GetKejian();
         });
 
@@ -120,7 +120,6 @@
                 data: {
                     key:user_token,
                     member_id: user_member_id,
-                    page: 1
                 },
                 dataType: "json",
                 success: function (response) {
