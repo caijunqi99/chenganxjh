@@ -80,11 +80,14 @@ class Mood extends MobileMember{
         $lh_member = db('moodlh')->where('member_id="'.$member_id.'"')->select();
         $str = '';
         if(!empty($lh_member)){
+            var_dump($lh_member);
             foreach ($lh_member as $key=>$value){
                 $str .= $value['lh_member_id'].',';
             }
+        }
+        if(!empty($str)){
             $string = explode(',',trim($str,','));
-
+            var_dump($string);
             $where['m.member_id']=array('not in ',$string);
         }
 
