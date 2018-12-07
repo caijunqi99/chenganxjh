@@ -86,7 +86,6 @@ class Mood extends MobileMember{
             $string = trim($str,',');
 
             $is_lh_id =  '('.$string.')';
-            halt($is_lh_id);
 //            $where['m.member_id']=array('NOT IN ',$is_lh_id);
         }
 
