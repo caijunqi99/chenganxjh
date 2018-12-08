@@ -439,6 +439,7 @@ tfoot label { +display: inline-block; +float:left; +line-height:38px; /* IE */}
 .info-panel dl dt { text-align: center; padding: 20px 0 20px 0;}
 .info-panel dl dt .ico { width: 60px; height: 60px; margin: 0 auto; border: solid 2px #75CCEF; border-radius: 32px; position: relative; z-index: 1; }
 .info-panel dl dt .ico i { background: url(../images/bg_position.gif) no-repeat; width: 32px; height: 32px; margin: -16px auto auto -16px; position: absolute; z-index: 1; top: 50%; left: 50%;}
+
 .info-panel dl.member dt .ico i { background-position: -250px -520px;}
 .info-panel dl.shop dt .ico i { background-position: -282px -520px;}
 .info-panel dl.goods dt .ico i { background-position: -314px -520px;}
@@ -1037,6 +1038,14 @@ a.btn-add-nofloat {
 .foot_list.foot_t{padding:0;}
 .foot_list.foot_t>div{padding:0;}
 .footinput{}
+
+.info-panel dl dt .ico i.myicons1{background: url(../images/teacher.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons2{background: url(../images/teacherVideo.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons3{background: url(../images/agent.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons4{background: url(../images/school.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons5{background: url(../images/camera.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons6{background: url(../images/robot.png) no-repeat center;}
+.info-panel dl dt .ico i.myicons7{background: url(../images/blueTooth.png) no-repeat center;}
 
 
 

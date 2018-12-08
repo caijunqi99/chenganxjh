@@ -82,4 +82,14 @@ class Teachchild extends Model {
         return db('teachchild')->where($condition)->delete();
     }
 
+    /**
+     * 视频数量
+     * @param array $condition
+     * @return int
+     */
+    public function getVideoCount($condition)
+    {
+        return db('teachchild')->where($condition)->count();
+    }
+
 }

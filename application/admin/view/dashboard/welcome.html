@@ -28,16 +28,118 @@
             <dt>
             <div class="ico"><i></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_member"></em></span></sub></div>
             <h3>{$Think.lang.ds_member}</h3>
-            <h5>{$Think.lang.dashboard_wel_member_des}</h5>
+            <!--<h5>{$Think.lang.dashboard_wel_member_des}</h5>-->
             </dt>
             <dd>
                 <ul>
-                    <li class="w50pre normal lbn"><a href="{:url('Member/member')}">{$Think.lang.dashboard_wel_new_add}<sub><em id="statistics_week_add_member"></em></sub></a></li>
-                    <li class="w50pre none"><a href="{:url('Predeposit/pdcash_list')}">{$Think.lang.dashboard_wel_predeposit_get}<sub><em id="statistics_cashlist">0</em></sub></a></li>
+                    <!--<li class="w50pre normal lbn"><a href="{:url('Member/member')}">{$Think.lang.dashboard_wel_new_add}<sub><em id="statistics_week_add_member"></em></sub></a></li>
+                    <li class="w50pre none"><a href="{:url('Predeposit/pdcash_list')}">{$Think.lang.dashboard_wel_predeposit_get}<sub><em id="statistics_cashlist">0</em></sub></a></li>-->
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_member_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_member_month">100</em></sub></a></li>
                 </ul>
             </dd>
         </dl>
-        <dl class="shop">
+        <dl class="teacher">
+            <dt>
+                <div class="ico"><i class="myicons1"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_teacher"></em></span></sub></div>
+                <h3>教师管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_teacher_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_teacher_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="teacherVideo">
+            <dt>
+                <div class="ico"><i class="myicons2"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_teacherVideo"></em></span></sub></div>
+                <h3>教孩视频管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_teacherVideo_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_teacherVideo_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="agent">
+            <dt>
+                <div class="ico"><i class="myicons3"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_agent"></em></span></sub></div>
+                <h3>代理商管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_agent_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_agent_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="school">
+            <dt>
+                <div class="ico"><i class="myicons4"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_school"></em></span></sub></div>
+                <h3>学校管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_school_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_school_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="trade">
+            <dt>
+                <div class="ico"><i></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_trade"></em></span></sub></div>
+                <h3>商城订单管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_trade_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_trade_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="camera">
+            <dt>
+                <div class="ico"><i class="myicons5"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_camera"></em></span></sub></div>
+                <h3>摄像头管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_camera_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_camera_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="robot">
+            <dt>
+                <div class="ico"><i class="myicons6"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_robot"></em></span></sub></div>
+                <h3>机器人管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_robot_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_robot_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="blueTooth">
+            <dt>
+                <div class="ico"><i class="myicons7"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_blueTooth"></em></span></sub></div>
+                <h3>蓝牙防丢系统管理</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <li class="w50pre normal lbn"><a>当日<sub><em id="statistics_blueTooth_day">10</em></sub></a></li>
+                    <li class="w50pre normal lbn"><a>当月<sub><em id="statistics_blueTooth_month">100</em></sub></a></li>
+                </ul>
+            </dd>
+        </dl>
+
+
+
+
+       <!-- <dl class="shop">
             <dt>
             <div class="ico"><i></i><sub title="{$Think.lang.dashboard_wel_count_store_add}"><span><em id="statistics_store"></em></span></sub></div>
             <h3>{$Think.lang.ds_store}</h3>
@@ -100,9 +202,9 @@
                     <li class="w17pre none"><a href="{:url('Delivery/index',['sign'=>'verify'])}">服务站<sub><em id="statistics_delivery_point">0</em></sub></a></li>
                 </ul>
             </dd>
-        </dl>
+        </dl>-->
 
-        <?php if (config('cms_isuse') != null) {?>
+        <!--<?php if (config('cms_isuse') != null) {?>
         <dl class="cms">
             <dt>
             <div class="ico"><i></i></div>
@@ -149,7 +251,7 @@
                 </ul>
             </dd>
         </dl>
-        <?php }?>
+        <?php }?>-->
         <div class="clear"></div>
     </div>
     <!--<div class="info-system">
