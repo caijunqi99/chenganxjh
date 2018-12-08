@@ -197,7 +197,25 @@
                 // 举报
                 $(".md_jubao_btn").click(function() {
                     $.confirm("您确定要举报吗?", "举报", function() {
-                        $.toast("举报成功!",'');
+                        $.ajax({
+                            type:'POST',
+                            url:api+'/mood/mood_jubao.html',
+                            data:{
+                                member_id:user_member_id,
+                                key:user_token,
+                                id:id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response['code'] == 200){
+                                    $.toast('举报成功','',function(){
+                                        location.href=http_url+'app/find/mood.html';
+                                    });
+                                }else{
+                                    $.toast(response['message'],'forbidden');
+                                }
+                            }
+                        })
                     }, function() {
                         //取消操作
                     });

@@ -292,6 +292,41 @@ class Mood extends MobileMember{
         }
     }
     /**
+     * 心情举报
+     */
+    public function mood_jubao()
+    {
+        $id = intval(input('post.id'));
+        $member_id = intval(input('post.member_id'));
+        if (empty($member_id)) {
+            output_error('会员id不能为空');
+        }
+        $mood_admin = Model('mood');
+        $res = $mood_admin->getOneById($id);
+        if (!empty($res)) {
+            if ($res['member_id'] == $member_id) {
+                output_error('不能举报自己');
+            } else {
+                if ($res['status'] == 0) {
+                    $where = array();
+                    $where['id']=$id;
+                    $update_array = array();
+                    $update_array['status'] = 1;
+                    $list = $mood_admin->editMood($where, $update_array);
+                    if (!empty($list)) {
+                        output_data(array('message' => '举报成功'));
+                    } else {
+                        output_error('举报失败');
+                    }
+                } else {
+                    output_error('已经被举报，等待处理中');
+                }
+            }
+        } else {
+            output_error('无此心情，该心情已被删除');
+        }
+    }
+    /**
      * 心情屏蔽
      */
     public function mood_lh()
