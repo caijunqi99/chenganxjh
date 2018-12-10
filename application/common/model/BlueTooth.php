@@ -32,9 +32,36 @@ class BlueTooth extends Model {
         return db('bluetooth')->insertGetId($param);
     }
 
+    /**
+     * @param $condition
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function blueTooth_edit($condition,$param){
+        $result = db('bluetooth')->where($condition)->update($param);
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     public function getList($condition){
         return db('bluetooth')->where($condition)->select();
+    }
+
+    /**
+     * @desc 解除连接蓝牙
+     * @author langzhiyao
+     */
+    public function blueTooth_del($condition){
+
+        return db('bluetooth')->where($condition)->delete();
+
+
     }
 
 }
