@@ -20,12 +20,12 @@ class Bluetooth extends MobileMember
     public function bind_blueTooth(){
         $member_id  = intval(input('post.member_id'));
         $append_id  = intval(input('post.append_id'));
-        $name  = intval(input('post.name'));
-        $distance  = intval(input('post.distance'));
-        $voice  = intval(input('post.voice'));
+        $name  = trim(input('post.name'));
+        $distance  = trim(input('post.distance'));
+        $voice  = trim(input('post.voice'));
         $openVibrator  = intval(input('post.openVibrator'));
         $status  = intval(input('post.status'));
-        if (empty($member_id) || empty($append_id) || empty($name) || empty($distance) || empty($voice)) {
+        if (empty($member_id) || empty($append_id) || empty($name)) {
             output_error('参数有误');
         }
         //判断是否已绑定

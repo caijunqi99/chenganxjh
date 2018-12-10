@@ -10,11 +10,11 @@ class BlueTooth extends Model {
     public function getBlueToothCount($condition){
         /*$str = db('blueTooth')->where($condition)->group('appid')->having($this->count('appid')>1);
         $condition['appid'] = array('in',$str);*/
-        return db('blueTooth')->where($condition)->count();
+        return db('bluetooth')->where($condition)->count();
     }
 
     public function isset_blueTooth($condition){
-        $result = db('blueTooth')->where($condition)->find();
+        $result = db('bluetooth')->where($condition)->find();
         if($result){
             return true;
         }else{
@@ -29,12 +29,12 @@ class BlueTooth extends Model {
      * @return bool 布尔类型的返回结果
      */
     public function blueTooth_add($param) {
-        return db('blueTooth')->insertGetId($param);
+        return db('bluetooth')->insertGetId($param);
     }
 
 
     public function getList($condition){
-        return db('blueTooth')->where($condition)->select();
+        return db('bluetooth')->where($condition)->select();
     }
 
 }
