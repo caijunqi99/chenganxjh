@@ -19,7 +19,7 @@ class Bluetooth extends MobileMember
      */
     public function bind_blueTooth(){
         $member_id  = intval(input('post.member_id'));
-        $append_id  = intval(input('post.append_id'));
+        $append_id  = trim(input('post.append_id'));
         $name  = trim(input('post.name'));
         $distance  = trim(input('post.distance'));
         $voice  = trim(input('post.voice'));
