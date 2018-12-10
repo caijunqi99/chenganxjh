@@ -25,7 +25,7 @@ class Bluetooth extends MobileMember
         $voice  = intval(input('post.voice'));
         $openVibrator  = intval(input('post.openVibrator'));
         $status  = intval(input('post.status'));
-        if (empty($member_id) || empty($append_id) || empty($name) || empty($distance) || empty($voice) || empty($openVibrator) || empty($status)) {
+        if (empty($member_id) || empty($append_id) || empty($name) || empty($distance) || empty($voice)) {
             output_error('参数有误');
         }
         //判断是否已绑定
