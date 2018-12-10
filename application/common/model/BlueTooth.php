@@ -32,4 +32,9 @@ class BlueTooth extends Model {
         return db('blueTooth')->insertGetId($param);
     }
 
+
+    public function getList($condition){
+        return db('blueTooth')->where($condition)->select();
+    }
+
 }

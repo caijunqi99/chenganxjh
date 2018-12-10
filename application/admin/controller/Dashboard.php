@@ -209,7 +209,7 @@ class Dashboard extends AdminControl {
          * @desc 蓝牙防丢数量
          * @author langzhiyao
          */
-        $model_blueTooth = Model('BlueTooth');
+        $model_blueTooth = Model('Bluetooth');
         // 总数
 //        $statistics['blueTooth'] = $model_blueTooth->getBlueToothCount(array());
 /*        //当日新增

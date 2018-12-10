@@ -4,7 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 
-class BlueTooth extends MobileMember
+class Bluetooth extends MobileMember
 {
 
     public function _initialize()
@@ -53,6 +53,19 @@ class BlueTooth extends MobileMember
             output_error('已连接');
         }
 
+
+    }
+
+    public function getBlueTooth(){
+        $member_id  = intval(input('post.member_id'));
+        if (empty($member_id)) {
+            output_error('参数有误');
+        }
+        $model_blueTooth = Model('blueTooth');
+
+        $result = $model_blueTooth->getList(array('userId'=>$member_id));
+
+        output_data($result);
 
     }
 
