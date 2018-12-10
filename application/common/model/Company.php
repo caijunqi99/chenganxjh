@@ -159,4 +159,14 @@ class Company extends Model {
         return $condition;
     }
 
+    /**
+     * 数量
+     * @param array $condition
+     * @return int
+     */
+    public function getAgentCount($condition)
+    {
+        return db('company')->where($condition)->count();
+    }
+
 }

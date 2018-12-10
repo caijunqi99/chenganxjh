@@ -95,6 +95,16 @@ class Camera extends Model {
         return $list;
     }
 
+    /**
+     * 数量
+     * @param array $condition
+     * @return int
+     */
+    public function getCameraCount($condition)
+    {
+        return db('camera')->where($condition)->count();
+    }
+
 }
 
 ?>

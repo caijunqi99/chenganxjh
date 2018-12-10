@@ -111,7 +111,8 @@ class Dashboard extends AdminControl {
 
         $endThismonth=mktime(23,59,59,date('m'),date('t'),date('Y'));
         /**
-         * 会员
+         * @desc 会员
+         * @author langzhiyao
          */
         $model_member = Model('member');
         // 会员总数
@@ -127,8 +128,8 @@ class Dashboard extends AdminControl {
         $statistics['member_month'] = $model_member->getMemberCount(array('member_identity'=>1,'member_add_time' => array('elt', $endThismonth),'member_add_time' => array('egt', $beginThismonth)));
 
         /**
-         * 教师
-         * langzhiyao
+         * @desc 教师
+         * @author langzhiyao
          */
         // 总数
         $statistics['teacher'] = $model_member->getMemberCount(array('member_identity'=>2));
@@ -138,8 +139,8 @@ class Dashboard extends AdminControl {
         $statistics['teacher_month'] = $model_member->getMemberCount(array('member_identity'=>2,'member_add_time' => array('elt', $endThismonth),'member_add_time' => array('egt', $beginThismonth)));
 
         /**
-         * 教师视频
-         * langzhiyao
+         * @desc 教师视频
+         * @author langzhiyao
          */
         $model_teacherVideo = Model('teachchild');
         // 总数
@@ -149,7 +150,72 @@ class Dashboard extends AdminControl {
         //本月新增
         $statistics['teacherVideo_month'] = $model_teacherVideo->getVideoCount(array('t_maketime' => array('elt', $endThismonth),'t_maketime' => array('egt', $beginThismonth)));
 
-
+        /**
+         * @desc 代理商
+         * @author langzhiyao
+         */
+        $model_agent = Model('Company');
+        // 总数
+        $statistics['agent'] = $model_agent->getAgentCount(array());
+        //当日新增
+        $statistics['agent_day'] = $model_agent->getAgentCount(array('o_createtime' => array('elt', date('Y-m-d H:i:s',$endToday)),'o_createtime' => array('egt', date('Y-m-d H:i:s',$beginToday))));
+        //本月新增
+        $statistics['agent_month'] = $model_agent->getAgentCount(array('o_createtime' => array('elt', date('Y-m-d H:i:s',$endThismonth)),'o_createtime' => array('egt', date('Y-m-d H:i:s',$beginThismonth))));
+        /**
+         * @desc 学校
+         * @author langzhiyao
+         */
+        $model_school = Model('School');
+        // 总数
+        $statistics['school'] = $model_school->getSchoolCount(array());
+        //当日新增
+        $statistics['school_day'] = $model_school->getSchoolCount(array('createtime' => array('elt', date('Y-m-d H:i:s',$endToday)),'createtime' => array('egt', date('Y-m-d H:i:s',$beginToday))));
+        //本月新增
+        $statistics['school_month'] = $model_school->getSchoolCount(array('createtime' => array('elt', date('Y-m-d H:i:s',$endThismonth)),'createtime' => array('egt', date('Y-m-d H:i:s',$beginThismonth))));
+        /**
+         * @desc 商城订单数量
+         * @author langzhiyao
+         */
+        $model_order = Model('Order');
+        // 总数
+        $statistics['trade'] = $model_order->getOrderCount(array());
+        //当日新增
+        $statistics['trade_day'] = $model_order->getOrderCount(array('add_time' => array('elt',$endToday),'add_time' => array('egt',$beginToday)));
+        //本月新增
+        $statistics['trade_month'] = $model_order->getOrderCount(array('add_time' => array('elt', $endThismonth),'add_time' => array('egt', $beginThismonth)));
+        /**
+         * @desc 摄像头数量
+         * @author langzhiyao
+         */
+        $model_camera = Model('Camera');
+        // 总数
+        $statistics['camera'] = $model_camera->getCameraCount(array());
+        //当日新增
+        $statistics['camera_day'] = $model_camera->getCameraCount(array('sq_time' => array('elt',$endToday),'sq_time' => array('egt',$beginToday)));
+        //本月新增
+        $statistics['camera_month'] = $model_camera->getCameraCount(array('sq_time' => array('elt', $endThismonth),'sq_time' => array('egt', $beginThismonth)));
+        /**
+         * @desc 机器人数量
+         * @author langzhiyao
+         */
+        $model_robot = Model('Robot');
+        // 总数
+        $statistics['robot'] = $model_robot->getRobotCount(array());
+        //当日新增
+        $statistics['robot_day'] = $model_robot->getRobotCount(array('creattime' => array('elt',$endToday),'creattime' => array('egt',$beginToday)));
+        //本月新增
+        $statistics['robot_month'] = $model_robot->getRobotCount(array('creattime' => array('elt', $endThismonth),'creattime' => array('egt', $beginThismonth)));
+        /**
+         * @desc 蓝牙防丢数量
+         * @author langzhiyao
+         */
+        $model_blueTooth = Model('BlueTooth');
+        // 总数
+//        $statistics['blueTooth'] = $model_blueTooth->getBlueToothCount(array());
+/*        //当日新增
+        $statistics['blueTooth_day'] = $model_blueTooth->getBlueToothCount(array('add_time' => array('elt',$endToday),'add_time' => array('egt',$beginToday)));
+        //本月新增
+        $statistics['blueTooth_month'] = $model_blueTooth->getBlueToothCount(array('add_time' => array('elt', $endThismonth),'add_time' => array('egt', $beginThismonth)));*/
         /**
          * 店铺
         $model_store = Model('store');
@@ -182,7 +248,6 @@ class Dashboard extends AdminControl {
          */
         /**
          * 交易
-         */
         $model_order = Model('order');
         $model_refund_return = Model('refundreturn');
         $model_vr_refund = Model('vrrefund');
@@ -200,6 +265,7 @@ class Dashboard extends AdminControl {
         // 待仲裁
         $statistics['complain_handle_list'] = $model_complain->getComplainCount(array('complain_state' => 40));
 
+         */
         /**
          * 运营
         // 抢购数量
