@@ -11,10 +11,6 @@ class Login extends Controller {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'school/lang/zh-cn/login.lang.php');
-        if(!config('site_state')) {
-            echo config('closed_reason');
-            exit;
-        }
     }
 
     public function index() {
