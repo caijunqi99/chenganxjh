@@ -10,6 +10,10 @@ class Index extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'school/lang/zh-cn/index.lang.php');
+        if(!config('site_state')) {
+            echo config('closed_reason');
+            exit;
+        }
     }
 
     public function index() {

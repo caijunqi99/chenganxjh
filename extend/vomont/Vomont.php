@@ -104,7 +104,7 @@ class Vomont
     public function AaaStorage($accpuntid,$resid){
         $SDK      = new CommandSDK();
         $msgid = $SDK::AaaStorage;
-        $request = httpRequest($this->http.'msgid='.$msgid.'&accountid='.$accpuntid.'&authkey='.$this->authkey.'&resid='.$resid.'&streamtype=0&time={"weektime":[{"day":0,"timedata":"000000000011111111111111111111111100000000000000"},{"day":1,"timedata":"000000000011111111111111111111111100000000000000"},{"day":2,"timedata":"000000000011111111111111111111111100000000000000"},{"day":3,"timedata":"000000000011111111111111111111111100000000000000"},{"day":4,"timedata":"000000000011111111111111111111111100000000000000"},{"day":5,"timedata":"000000000011111111111111111111111100000000000000"},{"day":6,"timedata":"000000000011111111111111111111111100000000000000"}]}');
+        $request = httpRequest($this->http.'msgid='.$msgid.'&accountid='.$accpuntid.'&authkey='.$this->authkey.'&resid='.$resid.'&streamtype=0&time={"weektime":[{"day":0,"timedata":"00000000001111111111111111111111111111000000000"},{"day":1,"timedata":"00000000001111111111111111111111111111000000000"},{"day":2,"timedata":"00000000001111111111111111111111111111000000000"},{"day":3,"timedata":"00000000001111111111111111111111111111000000000"},{"day":4,"timedata":"00000000001111111111111111111111111111000000000"},{"day":5,"timedata":"00000000001111111111111111111111111111000000000"},{"day":6,"timedata":"00000000001111111111111111111111111111000000000"}]}');
         $data = json_decode($request,TRUE);
         return $data;
     }

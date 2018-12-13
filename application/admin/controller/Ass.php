@@ -58,14 +58,6 @@ class Ass extends AdminControl
                 $rsp = \AssetService::ProcessAsset($req);
                 $result=$rsp->getBody();
                 $b=json_decode($result,true);
-
-
-
-
-
-
-
-
                 $req = new \AssetReviewReq();
                 $review = new \Review();
                 $review->setInterval(5);
@@ -81,33 +73,34 @@ class Ass extends AdminControl
                     $req = new \PublishAssetReq();
                     $req ->setAssetId(array($b['asset_id']));
 
-                $rsp = "";
-                try {
-                    $rsp = \AssetService::PublishAsset($req);
-                    $res=$rsp->getBody();
-                    $c=json_decode($res,true);
-                    print_r($c);
-                } catch (\Exception $e) {
-                    echo $e;
-                }
+                    $rsp = "";
+                    try {
+                        $rsp = \AssetService::PublishAsset($req);
+                        $rsp->getBody();
+
+                            $req = new \QueryAssetDetailReq();
+                            $req ->setAssetId($b['asset_id']);
+                            $req ->setCategories(array('base_info','review_info'));
+                            $rsp = "";
+                            try {
+                                $rsp = \AssetService::QueryAssetDetail($req);
+                                $res=$rsp->getBody();
+                                $c=json_decode($res,true);
+                                $c['base_info']['image_url']="http://video.xiangjianhai.com/asset/".$c['asset_id']."/cover/Cover0.jpg";
+                                print_r($c);exit;
+                            } catch (\Exception $e) {
+                                echo $e;
+                            }
+
+                    } catch (\Exception $e) {
+                        echo $e;
+                    }
 
                 } catch (\Exception $e) {
                     echo $e;
                 }
 
-//                    $req = new \QueryAssetDetailReq();
-//                $req ->setAssetId($b['asset_id']);
-//                $req ->setCategories(array('base_info','review_info'));
-//                $rsp = "";
-//                try {
-//                    $rsp = \AssetService::QueryAssetDetail($req);
-//                    $res=$rsp->getBody();
-//                    $c=json_decode($res,true);
-//                    $c['base_info']['image_url']="http://video.xiangjianhai.com/asset/".$c['asset_id']."/cover/Cover0.jpg";
-//                    print_r($c);exit;
-//                } catch (\Exception $e) {
-//                    echo $e;
-//                }
+
             } catch (\Exception $e) {
                 echo $e;
             }

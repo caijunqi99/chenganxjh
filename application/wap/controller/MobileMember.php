@@ -6,6 +6,10 @@ class MobileMember extends MobileHome {
 
     public function _initialize() {
         parent::_initialize();
+        if(!config('site_state')) {
+            output_error(config('closed_reason'), array('login' => '0'),400);
+            exit;
+        }
         $agent = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($agent, "MicroMessenger") && request()->controller() == 'Wxauto') {
             $this->wxconfig = db('wxconfig')->find();
