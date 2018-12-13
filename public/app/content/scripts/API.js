@@ -12,7 +12,7 @@ var http_url = 'http://admin.xiangjianhai.com/';
 
 var user_token = $.cookie('token');
 var user_member_id = $.cookie('member_id');
-// var user_token = '80e676871fcc6f3ee4d0d7b531d49228';
+// var user_token = 'abf1ffc4a643916737751d2fe661d4d2';
 // var user_member_id = 37102;
 
 

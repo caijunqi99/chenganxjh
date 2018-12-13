@@ -40,6 +40,8 @@
                             <option value="0" >请选择</option>
                             <option value="1" <?php if($del==1){ ?>selected<?php } ?>>正常</option>
                             <option value="2" <?php if($del==2){ ?>selected<?php } ?>>禁用</option>
+                            <option value="3" <?php if($del==3){ ?>selected<?php } ?>>被举报未处理</option>
+                            <option value="4" <?php if($del==4){ ?>selected<?php } ?>>被举报已处理</option>
                         </select>
                     </div>
                 </div>
@@ -92,12 +94,18 @@
                 <td class="align-center w50"><?php echo $k+1;?></td>
                 <td class="align-center w50"><a href="javascript:dd({$v.id})"><?php echo $v['content'];?></a></td>
                 <td class="align-center w50"><?php if($v['image'][0]!=''){ ?><a href="javascript:dd({$v.id})"><img src="{$path}{$v.image.0}"></a><?php } ?></td>
-                <td class="align-center w50">
-                    <?php if($v['del']==1){
-                    echo '正常' ;
-                    }else{
-                    echo '禁用';
-                    } ?>
+                <td class="align-center w150">
+                    <?php
+                     if($v['del']==1 && $v['status'] == 0){
+                        echo '正常' ;
+                    }else if($v['del'] == 2){
+                        echo '禁用';
+                    }else if($v['del']==1 && $v['status'] == 1){
+                        echo '被举报未处理' ;
+                    }else if($v['del']==2 && $v['status'] == 1){
+                        echo '被举报已处理';
+                    }
+                    ?>
                 </td>
                 <td class="align-center w50"><?php echo $v['member_name'];?></td>
                 <td class="align-center w50"><?php if($v['member_identity']==1){ echo '家长'; }else if($v['member_identity']==2){ echo '教师'; }else{ echo '其他';}?></td>
