@@ -117,6 +117,7 @@ class Dashboard extends AdminControl {
         $model_member = Model('member');
         // 会员总数
         $statistics['member'] = $model_member->getMemberCount(array('member_identity'=>1));
+
         // 新增会员数
 //        $statistics['week_add_member'] = $model_member->getMemberCount(array('member_add_time' => array('egt', $tmp_time)));
         // 预存款提现
@@ -209,7 +210,7 @@ class Dashboard extends AdminControl {
          * @desc 蓝牙防丢数量
          * @author langzhiyao
          */
-        $model_blueTooth = Model('Bluetooth');
+//        $model_blueTooth = Model('Bluetooth');
         // 总数
 //        $statistics['blueTooth'] = $model_blueTooth->getBlueToothCount(array());
 /*        //当日新增
