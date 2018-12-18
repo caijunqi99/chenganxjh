@@ -245,7 +245,7 @@ class Common extends AdminControl
         $_SESSION['excel']['agent'] = $agent_info;
 
         $success = array();
-        $fail = '';
+        $fail = array();
         if(!empty($excel)){
 //            halt($excel);
             if($excel[2]['A'] == '家长手机号' && $excel[2]['B'] == '家长姓名（非必填）' && $excel[2]['C'] == '家长性别（非必填）' && $excel[2]['D'] == '学生姓名' && $excel[2]['E'] == '学生性别（非必填）'
@@ -264,11 +264,13 @@ class Common extends AdminControl
                                 $v['error'] =  '原信息为空'.'（因学生姓名不能为空）';
                                 $v['error_id'] = 2;
                                 $fail[] = $v;
-                            }else if(empty($v['F'])){
+                            }
+                            /*else if(empty($v['F'])){
                                 $v['error'] =  '原信息为空'.'（因学生身份证号不能为空）';
                                 $v['error_id'] = 3;
                                 $fail[] = $v;
-                            }else if($v['J'] != '看孩套餐' && $v['J'] != '重温课堂套餐' && $v['J'] != '教孩套餐'){
+                            }*/
+                            else if($v['J'] != '看孩套餐' && $v['J'] != '重温课堂套餐' && $v['J'] != '教孩套餐'){
                                 $v['error'] =  '原信息为：'.$v['J'].'（因套餐名称错误）';
                                 $v['error_id'] = 6;
                                 $fail[] = $v;
@@ -280,19 +282,19 @@ class Common extends AdminControl
                                     $fail[] = $v;
                                 }else{
                                     //判断家长手机号是否已存在
-                                    $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
+                                  /*  $result = db('member')->field('member_id')->where("`member_mobile`='".$v["A"]."'")->find();
                                     if($result){
                                         $v['error'] = '原信息为：'.$v['A'].'（因家长手机号已存在）';
                                         $v['error_id'] = 1;
                                         $fail[] = $v;
-                                    }else{
+                                    }else{*/
                                         //判断学生ID 是否存在
-                                        $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
-                                        if($is_student){
-                                            $v['error'] ='原信息为：'.$v['F'].'（因学生身份证号已存在）';
-                                            $v['error_id'] = 3;
-                                            $fail[] = $v;
-                                        }else{
+//                                        $is_student = db('student')->field('s_id')->where("`s_card`='".$v['F']."'")->find();
+//                                        if($is_student){
+//                                            $v['error'] ='原信息为：'.$v['F'].'（因学生身份证号已存在）';
+//                                            $v['error_id'] = 3;
+//                                            $fail[] = $v;
+//                                        }else{
                                             //判断年级
                                             $is_grade = db('schooltype')->field('sc_id')->where("`sc_type`='".$v['H']."'")->find();
                                             if($is_grade && in_array($is_grade['sc_id'],$sc_type)){
@@ -313,8 +315,8 @@ class Common extends AdminControl
                                                 $v['error_id'] = 4;
                                                 $fail[] = $v;
                                             }
-                                        }
-                                    }
+//                                        }
+//                                    }
                                 }
                             }
                         }

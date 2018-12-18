@@ -32,7 +32,7 @@ class Member extends AdminControl {
             }
             $member_ids = array_unique($member_ids);
             if(!empty($member_ids)){
-                $fu = db('member')->field("member_id")->where("is_owner in (".implode(',',$member_ids).")")->select();
+                $fu = db('member')->field("member_id")->where("member_id in (".implode(',',$member_ids).")")->select();
                 foreach($fu as $F=>$it){
                     $fu_ac[] = $it['member_id'];
                 }

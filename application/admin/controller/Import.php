@@ -264,6 +264,7 @@ class Import extends AdminControl
             /*if(empty($_SESSION['excel'])){
                 exit(json_encode(array('code'=>1,'msg'=>'没有符合的数据，请重新上传')));
             }*/
+
             //插入成功的数据
             //开启事务
             $model = Model('import_student');
@@ -277,6 +278,18 @@ class Import extends AdminControl
                 foreach($excel_success as $key=>$value){
                     if($value['C'] == '男'){$value['C'] =1;}else{$value['C'] = 2;}//家长性别
                     if($value['E'] == '男'){$value['E'] =1;}else{$value['E'] = 2;}//学生性别
+                    //生成学生身份证号
+                    $s_card01 = '370213'.rand(2013,2015);
+                    $s_card02 = rand(1,12);
+                    if($s_card02 <10){
+                        $s_card02 = '0'.$s_card02;
+                    }
+                    $s_card03 = rand(1,28);
+                    if($s_card03 <10){
+                        $s_card03 = '0'.$s_card03;
+                    }
+                    $s_card04 = rand(1000,9999);
+                    $s_card = $s_card01.$s_card02.$s_card03.$s_card04;
                     //套餐ID
                     switch ($value['J']){
                         case '看孩套餐':
@@ -293,14 +306,16 @@ class Import extends AdminControl
                             break;
                     }
                     $res = db('member')->field('member_id')->where(" `member_mobile` = '".$value["A"]."'")->find();
-                    if(!$res){
+//                    if(!$res){
+
                         $data = array(
                             'm_mobile' => $value['A'],
                             'm_name' => $value['B'],
                             'm_sex' => $value['C'],
                             's_name' => $value['D'],
                             's_sex' => $value['E'],
-                            's_card' => $value['F'],
+//                            's_card' => $value['F'],
+                            's_card' => $s_card,
                             'school_id' => $_SESSION['excel']['school']['schoolid'],
                             'school_name' => $_SESSION['excel']['school']['name'],
                             'province_id' => $_SESSION['excel']['school']['provinceid'],
@@ -322,28 +337,35 @@ class Import extends AdminControl
                         );
                         $import_data = $model->insertGetId($data);
                         if($import_data){
-                            //为家长开账户并发送短信通知
-                            $pass = getRandomString(6,null,'n');
-                            $member = array();
-                            $member['member_name'] = empty($value['B'])?$value['A']:$value['B'];
-                            $member['member_nickname'] = empty($value['B'])?$value['A']:$value['B'];
-                            $member['member_password'] = md5(trim($pass));;
-                            $member['member_mobile'] = $value['A'];
-                            $member['member_provinceid'] = $_SESSION['excel']['school']['provinceid'];
-                            $member['member_cityid'] = $_SESSION['excel']['school']['cityid'];
-                            $member['member_areaid'] = $_SESSION['excel']['school']['areaid'];
-                            $member['member_areainfo'] = $_SESSION['excel']['school']['address'];
-                            $member['member_mobile_bind'] = 1;
-                            $member_id = $model_member->insertGetId($member);
+                            if($res){
+                                $member_id = $res['member_id'];
+                            }else{
+                                //为家长开账户并发送短信通知
+//                                $pass = getRandomString(6,null,'n');
+                                $pass = '123456';
+                                $member = array();
+                                $member['member_name'] = empty($value['B'])?$value['A']:$value['B'];
+                                $member['member_nickname'] = empty($value['B'])?$value['A']:$value['B'];
+                                $member['member_password'] = md5(trim($pass));;
+                                $member['member_mobile'] = $value['A'];
+                                $member['member_provinceid'] = $_SESSION['excel']['school']['provinceid'];
+                                $member['member_cityid'] = $_SESSION['excel']['school']['cityid'];
+                                $member['member_areaid'] = $_SESSION['excel']['school']['areaid'];
+                                $member['member_areainfo'] = $_SESSION['excel']['school']['address'];
+                                $member['member_mobile_bind'] = 1;
+                                $member_id = $model_member->insertGetId($member);
+
+                            }
                             if ($member_id) {
                                 //添加学生信息
                                 $student_array=array(
                                     's_name' => $value['D'],
                                     's_sex' => $value['E'],
-                                    's_card' => $value['F'],
+//                                    's_card' => $value['F'],
+                                    's_card' => $s_card,
                                     's_schoolid' => $_SESSION['excel']['school']['schoolid'],
-                                    's_sctype' => $_SESSION['excel']['sc_id'],//学校类型id
-                                    's_classid' => $_SESSION['excel']['classid'],//班级id
+                                    's_sctype' => $value['sc_id'],//学校类型id
+                                    's_classid' => $value['classid'],//班级id
                                     's_ownerAccount' => $member_id,
                                     's_provinceid' => $_SESSION['excel']['school']['provinceid'],
                                     's_cityid' => $_SESSION['excel']['school']['cityid'],
@@ -442,21 +464,22 @@ class Import extends AdminControl
                         }
                         if($flag){
                             //发送随机密码
+
                             //生成数字字符随机 密码
                             $sms_tpl = config('sms_tpl');
                             $tempId = $sms_tpl['sms_password_reset'];
                             $sms = new \sendmsg\Sms();
                             $pass = '您于'.date('Y-m-d H:i:s',time()).'开通想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
-                            $send = $sms->send($member['member_mobile'],$pass,$tempId);
-                            if($send){
+//                            $send = $sms->send($member['member_mobile'],$pass,$tempId);
+//                            if($send){
                                 $model->commit();
-                            }else{
-                                $model->rollback();
-                            }
+//                            }else{
+//                                $model->rollback();
+//                            }
                         }else{
                             $model->rollback();
                         }
-                    }
+//                    }
                 }
             }
             //插入失败的数据
@@ -464,6 +487,18 @@ class Import extends AdminControl
                 foreach($excel_fail as $key=>$value){
                     if($value['C'] == '男'){$value['C'] =1;}else{$value['C'] = 2;}//家长性别
                     if($value['E'] == '男'){$value['E'] =1;}else{$value['E'] = 2;}//学生性别
+                    //生成学生身份证号
+                    $s_card01 = '370213'.rand(2013,2015);
+                    $s_card02 = rand(1,12);
+                    if($s_card02 <10){
+                        $s_card02 = '0'.$s_card02;
+                    }
+                    $s_card03 = rand(1,28);
+                    if($s_card03 <10){
+                        $s_card03 = '0'.$s_card03;
+                    }
+                    $s_card04 = rand(1000,9999);
+                    $s_card = $s_card01.$s_card02.$s_card03.$s_card04;
                     //套餐ID
                     switch ($value['J']){
                         case '看孩套餐':
@@ -485,7 +520,8 @@ class Import extends AdminControl
                         'm_sex' => $value['C'],
                         's_name' => $value['D'],
                         's_sex' => $value['E'],
-                        's_card' => $value['F'],
+//                        's_card' => $value['F'],
+                        's_card' => $s_card,
                         'school_id' => $_SESSION['excel']['school']['schoolid'],
                         'school_name' => $_SESSION['excel']['school']['name'],
                         'province_id' => $_SESSION['excel']['school']['provinceid'],
@@ -632,19 +668,26 @@ class Import extends AdminControl
 
             $import_data = $model->where('id="'.$id.'"')->update($data);
             if($import_data){
-                //为家长开账户并发送短信通知
-                $pass = getRandomString(6,null,'n');
-                $member = array();
-                $member['member_name'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
-                $member['member_nickname'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
-                $member['member_password'] = md5(trim($pass));;
-                $member['member_mobile'] = $_POST['m_mobile'];
-                $member['member_provinceid'] = $school_info['provinceid'];
-                $member['member_cityid'] = $school_info['cityid'];
-                $member['member_areaid'] = $school_info['areaid'];
-                $member['member_areainfo'] = $school_info['address'];
-                $member['member_mobile_bind'] = 1;
-                $member_id = $model_member->insertGetId($member);
+                $result = db('member')->field('member_id')->where("`member_mobile`='".trim($_POST['m_mobile'])."'")->find();
+                if($result){
+                    $member_id = $result['member_id'];
+                }else{
+                    //为家长开账户并发送短信通知
+//                    $pass = getRandomString(6,null,'n');
+                    $pass = '123456';
+                    $member = array();
+                    $member['member_name'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_nickname'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_password'] = md5(trim($pass));;
+                    $member['member_mobile'] = $_POST['m_mobile'];
+                    $member['member_provinceid'] = $school_info['provinceid'];
+                    $member['member_cityid'] = $school_info['cityid'];
+                    $member['member_areaid'] = $school_info['areaid'];
+                    $member['member_areainfo'] = $school_info['address'];
+                    $member['member_mobile_bind'] = 1;
+                    $member_id = $model_member->insertGetId($member);
+                }
+
                 if ($member_id) {
                     //添加学生信息
                     $student_array=array(
