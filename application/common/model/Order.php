@@ -190,7 +190,9 @@ class Order extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getOrderListForAdmin($condition, $page = '',  $limit = '', $extend = array(), $master = false) {
-        $list = db('order')->where($condition)->order('order_id desc')->limit($page==1?0:$page,$limit)->select();
+        $list = db('order')->where($condition)->order('order_id desc')->paginate($limit,false,['var_page'=>'page']);
+        $count = $list->total();
+        $list = $list->items();
         if (empty($list))
             return array();
         $order_list = array();
@@ -221,7 +223,8 @@ class Order extends Model {
             }
         }
 
-        return $order_list;
+        $orders= ['list'=>$order_list,'count'=>$count];
+        return $orders;
     }
 
     /**

@@ -211,18 +211,25 @@ class Membercommon extends AdminControl {
         $OrderType = input('OrderType');
         if ($OrderType) {
             $where = ' buyer_id = "'.$member_id.'" AND delete_state = 0 ';
+            $limit = input('limit',30);
             switch ($OrderType) {
                 case 'witch'://看孩订单
-                    $order = db('packagesorder')->field('pkg_name,s_id,add_time,order_state,order_amount,order_dieline,pkg_length,pkg_axis,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                    $order = db('packagesorder')->field('pkg_name,s_id,add_time,order_state,order_amount,order_dieline,pkg_length,pkg_axis,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
+                    $count = $order->total();
+                    $order = $order->items();
                     break;
                 case 'teach'://教孩订单
-                    $order = db('packagesorderteach')->field('order_name,order_tid,add_time,order_state,order_amount,order_state,order_dieline,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->select();
+                    $order = db('packagesorderteach')->field('order_name,order_tid,add_time,order_state,order_amount,order_state,order_dieline,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
+                    $count = $order->total();
+                    $order = $order->items();
                     break;
                 case 'rewitch'://重温课堂
                     # code...
                     break;
                 case 'shoporder'://商城订单
                     $order=$this->order_list($member_id);
+                    $count = $order['count'];
+                    $order = $order['list'];
                     $newOrder =[];
                     foreach ($order as $key => $v) {
                         $newOrder[$key]['goods_name'] = $v['order_list'][0]['extend_order_goods'][0]['goods_name'];
@@ -234,7 +241,6 @@ class Membercommon extends AdminControl {
                         $newOrder[$key]['pay_amount'] = $v['pay_amount'];
                         $newOrder[$key]['order_sn'] = $v['order_list'][0]['order_sn'];
                     }
-                    $count = db('order')->where('buyer_id',$member_id)->count();
                     exit(json_encode(array('code' => '0', 'count' => $count,'data'=>$newOrder,'msg'=>'')));
                     break;
             }
@@ -250,9 +256,15 @@ class Membercommon extends AdminControl {
                     $order[$key]['is_gq'] = 0;
                 }
                 if (isset($value['add_time']))$order[$key]['add_time']=Fomat($value['add_time']);
+                if (isset($value['order_state'])) {
+                    if($value['order_state']==10)$order[$key]['order_state'] = "待支付";
+                    if($value['order_state']==20)$order[$key]['order_state'] = "已支付";
+                    if($value['order_state']==40)$order[$key]['order_state'] = "已完成";
+                }
+                if($value['endTime']=='1970-01-01')$order[$key]['endTime'] = "无";
 
             }
-            exit(json_encode(array('code' => '0', 'count' => count($order),'data'=>$order,'msg'=>'')));
+            exit(json_encode(array('code' => '0', 'count' =>$count,'data'=>$order,'msg'=>'')));
         }
 
         $this->setAdminCurItem('ChildrenOrders');
@@ -318,7 +330,8 @@ class Membercommon extends AdminControl {
         $page = intval(input('page',1));
         $limit = intval(input('limit'));
         $order_list_array = $model_order->getOrderListForAdmin($condition,$page,$limit,array('order_goods'));
-        // $order_list_array = $model_order->getOrderListForAdmin($condition, 5, '*', 'order_id desc', '', array('order_goods'));
+        $count = $order_list_array['count'];
+        $order_list_array = $order_list_array['list'];
         $order_group_list = $order_pay_sn_array = array();
         foreach ($order_list_array as $value) {
             //显示取消订单
@@ -361,12 +374,15 @@ class Membercommon extends AdminControl {
             $value['pay_sn'] = strval($key);
             $new_order_group_list[] = $value;
         }
-        return $new_order_group_list;
+        $orders= ['list'=>$new_order_group_list,'count'=>$count];
+        return $orders;
         output_data(array('order_group_list' => $new_order_group_list), mobile_page($model_order->page_info));
     }
 
 
     public function Export_step(){
+        echo '已关闭该功能！';
+        exit;
         $student = db('import_student')->where('id','gt',24)->select();
         $this->createExcel($student);
     }
