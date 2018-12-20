@@ -55,8 +55,8 @@ class Banks extends Model {
      * @param  [type]                   $card [description]
      * @return [type]                         [description]
      */
-    public function getOneBanksByCard($condition) {
-        return db('banks')->where($condition)->find();
+    public function getOneBanksByCard($condition,$order='bank_id ASC') {
+        return db('banks')->where($condition)->order($order)->find();
     }
 
     /**

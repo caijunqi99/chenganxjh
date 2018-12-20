@@ -190,6 +190,9 @@ class Memberwallet extends MobileMember
         if (empty($bid) || $bid < 1) output_error('参数错误！');
         $Bank = model('Banks');
         $bank = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'bank_id'=>$bid));
+        if (!$bank) {
+            $bank = $Bank->getOneBanksByCard(array('member_id'=>$member_id));
+        }
         output_data($bank);
     }
 

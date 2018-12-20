@@ -210,21 +210,37 @@ class Membercommon extends AdminControl {
         $member_id = intval(input('member_id'));
         $OrderType = input('OrderType');
         if ($OrderType) {
-            $where = ' buyer_id = "'.$member_id.'" AND delete_state = 0 ';
             $limit = input('limit',30);
             switch ($OrderType) {
                 case 'witch'://看孩订单
-                    $order = db('packagesorder')->field('pkg_name,s_id,add_time,order_state,order_amount,order_dieline,pkg_length,pkg_axis,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
+                    $witchWhere = [
+                        'buyer_id' => $member_id,
+                        'delete_state' =>0,
+                        'pkg_type' => 1//1为看孩套餐
+                    ];
+                    $order = db('packagesorder')->field('pkg_name,s_id,add_time,order_state,order_amount,order_dieline,pkg_length,pkg_axis,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($witchWhere)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
                     $count = $order->total();
                     $order = $order->items();
                     break;
                 case 'teach'://教孩订单
-                    $order = db('packagesorderteach')->field('order_name,order_tid,add_time,order_state,order_amount,order_state,order_dieline,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($where)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
+                    $teachWhere = [
+                        'buyer_id' => $member_id,
+                        'delete_state' =>0,
+                        // 'pkg_type' => 1
+                    ];
+                    $order = db('packagesorderteach')->field('order_name,order_tid,add_time,order_state,order_amount,order_state,order_dieline,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($teachWhere)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
                     $count = $order->total();
                     $order = $order->items();
                     break;
                 case 'rewitch'://重温课堂
-                    # code...
+                    $rewitchWhere = [
+                        'buyer_id' => $member_id,
+                        'delete_state' =>0,
+                        'pkg_type' => 2 //2为回顾套餐
+                    ];
+                    $order = [];
+                    $count = 0;
+
                     break;
                 case 'shoporder'://商城订单
                     $order=$this->order_list($member_id);
