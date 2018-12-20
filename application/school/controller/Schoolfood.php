@@ -30,7 +30,7 @@ class Schoolfood extends AdminControl {
             $week = array(0=>"日",1=>"一",2=>"二",3=>"三",4=>"四",5=>"五",6=>"六");
             foreach($busList as $k=>$v){
                 $day = explode(',',$v['bus_repeat']);
-                $wes = "";
+                $wes = [];
                 foreach($day as $ke=>$item){
                     $wes[] = $week[$item];
                 }

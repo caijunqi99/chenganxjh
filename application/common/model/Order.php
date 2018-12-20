@@ -180,6 +180,54 @@ class Order extends Model {
     }
 
     /**
+     * 取得订单列表(所有)
+     * @param unknown $condition
+     * @param string $page
+     * @param string $field
+     * @param string $order
+     * @param string $limit
+     * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
+     * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
+     */
+    public function getOrderListForAdmin($condition, $page = '',  $limit = '', $extend = array(), $master = false) {
+        $list = db('order')->where($condition)->order('order_id desc')->paginate($limit,false,['var_page'=>'page']);
+        $count = $list->total();
+        $list = $list->items();
+        if (empty($list))
+            return array();
+        $order_list = array();
+        foreach ($list as $order) {
+            if (isset($order['order_state'])) {
+                $order['state_desc'] = orderState($order);
+            }
+            if (isset($order['payment_code'])) {
+                $order['payment_name'] = orderPaymentName($order['payment_code']);
+            }
+            if (!empty($extend))
+                $order_list[$order['order_id']] = $order;
+        }
+        if (empty($order_list))
+            $order_list = $list;
+        //追加返回商品信息
+        if (in_array('order_goods', $extend)) {
+            //取商品列表
+            $order_goods_list = db('ordergoods')->where('order_id', 'in', array_keys($order_list))->select();
+
+            if (!empty($order_goods_list)) {
+                foreach ($order_goods_list as $value) {
+
+                    $order_list[$value['order_id']]['extend_order_goods'][] = $value;
+                }
+            } else {
+                $order_list[$value['order_id']]['extend_order_goods']= array();
+            }
+        }
+
+        $orders= ['list'=>$order_list,'count'=>$count];
+        return $orders;
+    }
+
+    /**
      * 取得(买/卖家)订单某个数量缓存
      * @param string $type 买/卖家标志，允许传入 buyer、store
      * @param int $id   买家ID、店铺ID
