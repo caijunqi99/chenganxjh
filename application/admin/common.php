@@ -51,6 +51,11 @@ function getHideBankCardNum($bank) {
     return '未设置';
 }
 
+/**
+ * 隐藏身份证后四位
+ * @创建时间  2018-12-19T18:30:05+0800
+ * @param [type]                   $card [description]
+ */
 function CardFomat($card){
 	if ($card) {
 		$card = substr($card,0,-4);
@@ -59,6 +64,11 @@ function CardFomat($card){
     return '未设置';
 }
 
+/**
+ * 隐藏手机号中间4位
+ * @创建时间  2018-12-19T18:30:16+0800
+ * @param [type]                   $mobile [description]
+ */
 function MobileFormat($mobile) {
 	
 	if ($mobile) {
