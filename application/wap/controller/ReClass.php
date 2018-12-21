@@ -9,7 +9,7 @@
 namespace app\wap\controller;
 
 
-class Reclass extends MobileMember
+class ReClass extends MobileMember
 {
     public function _initialize()
     {
