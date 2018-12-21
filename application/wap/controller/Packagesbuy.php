@@ -249,7 +249,8 @@ class Packagesbuy extends MobileMember
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
-            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+//            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'reClass';
             $param['notifyUrl'] = WAP_SITE_URL . '/payment/wx_notify_h5.html';
             $api = new \wxpay_app();
             $api->get_payform($param);
@@ -260,7 +261,8 @@ class Packagesbuy extends MobileMember
             $param['orderSn'] = $order_pay_info['pay_sn'];;
             $param['orderFee'] = $order_pay_info['order_amount'];
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
-            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+//            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'reClass';
             $param['notifyUrl'] = WAP_SITE_URL . '/payment/alipay_notify_app.html';
             $api = new \alipay_app();
             $api->get_payform($param);

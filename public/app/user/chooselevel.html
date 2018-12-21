@@ -126,6 +126,11 @@
         var child_id = GetQueryString('child_id');
         $(function() {
             if (pkg_type && child_id) {
+                if(pkg_type == 1){
+                    $('.head_title p').html('看孩套餐');
+                }else{
+                    $('.head_title p').html('重温课堂套餐');
+                }
                 GetPackagesList(pkg_type);
                 GetPaymentList();
                 GetNowPackageTime(child_id);
