@@ -13,7 +13,7 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-
+    
     <form method="get" name="formSearch" id="formSearch">
         <table class="search-form">
             <tbody>
@@ -47,9 +47,14 @@
                         
                     </td>
                 </tr>
+
             </tbody>
         </table>
     </form>
+    <script type="text/javascript">
+      
+
+    </script>
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -59,6 +64,10 @@
             <li>平台会员管理，包括家长和教师个人基础信息</li>
         </ul>
     </div>
+    <br/>
+    <!-- <div style="text-align:right;">
+      <a class="btns layui-btn layui-btn-sm"  href="{:url('Membercommon/export_step')}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a>
+    </div> -->
 
     <table class="ds-default-table">
       <thead>
@@ -111,6 +120,10 @@
           
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
+            <?php if(session('admin_is_super') ==1 || in_array(4,$action)){?>
+              <a href="javascript:dd({$v.member_id})" data-method="setTop" class="layui-btn layui-btn-sm">{$Think.lang.ds_view}</a>
+              <?php }?>
+
               <?php if(session('admin_is_super')==1 || in_array('3',$action)){?>
               <a class="layui-btn layui-btn-sm" href="{:url('/admin/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a>
               <?php }?>
@@ -128,6 +141,19 @@
         <?php } ?>
       </tbody>
       <script type="text/javascript">
+        function dd(id) {
+            var urls=ADMIN_URL+'Membercommon/MemberInfo?member_id='+id;
+            //多窗口模式，层叠置顶
+            layer.open({
+                type: 2,
+                title: '公司信息',
+                area: ['80%', '80%'],
+                shadeClose: true,
+                shade: 0.4,
+                maxmin: false, //开启最大化最小化按钮
+                content: urls
+            });
+        }
         function member_drop(id){
           layer.confirm('是否删除此用户？', {
             btn: ['删除','取消'] //按钮

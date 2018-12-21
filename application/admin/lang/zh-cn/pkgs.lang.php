@@ -8,6 +8,8 @@ $lang['packages_manage']   = '套餐管理';
 $lang['pkgs_manage']       = '套餐列表';
 $lang['witch_manage']      = '看孩儿套餐';
 $lang['witch_back_manage'] = '回放套餐';
+$lang['revisit_manage'] = '重温课堂套餐';
+$lang['revisit_manage_price'] = '重温课堂片段价格';
 $lang['pkgs_edit']         = '套餐操作';
 $lang['uptime']         = '编辑时间';
 

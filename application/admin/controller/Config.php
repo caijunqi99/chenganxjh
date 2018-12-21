@@ -63,6 +63,7 @@ class Config extends AdminControl {
             );
             $update_array['teacher_children'] = input('post.teacher_children');
             $update_array['revisit_class'] = input('post.revisit_class');
+            $update_array['revisit_class_price'] = input('post.revisit_class_price');
             $update_array['teacher_children_video'] = input('post.teacher_children_video');
             $update_array['f_account_num'] = input('post.f_account_num');
             //教孩在线支付分成比例

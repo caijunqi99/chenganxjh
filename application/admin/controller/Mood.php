@@ -51,7 +51,18 @@ class Mood extends AdminControl {
         }
         if(!empty($_POST['del'])){
             $del=input('param.del');
-            $where['del']=$del;
+            if($del == 1){
+                $where['del']=$del;
+                $where['status']=0;
+            }else if($del == 2){
+                $where['del']=$del;
+            }else if($del == 3){
+                $where['del']=1;
+                $where['status']=1;
+            }else if($del == 4){
+                $where['status']=1;
+                $where['del']=2;
+            }
             $this->assign('del',$del);
         }
         $stime = input('param.stime')?strtotime(input('param.stime')):0;

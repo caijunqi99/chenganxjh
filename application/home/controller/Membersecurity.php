@@ -197,6 +197,7 @@ class Membersecurity extends BaseMember
         }
         elseif ($type == 'mobile') {
             $sms = new \sendmsg\Sms();
+            p($message);exit;
             $result = $sms->send($member_info["member_mobile"], $message);
         }
         if ($result) {

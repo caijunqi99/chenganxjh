@@ -61,6 +61,10 @@
 </div>
 <script type="text/javascript">
   $('#subsss').click(function() {
+    var gname = $('#footinput').val();
+    if (!gname) { alert('年级名称不能为空！');$('#footinput').focus();return false;}
+    var food_content = $('input[name="food_content[0][]"]').val();
+    if (!food_content || food_content==undefined) {alert('食谱不能为空！');return false;}
     $('#form1').submit();
   });
 </script>
