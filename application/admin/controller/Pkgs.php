@@ -43,7 +43,7 @@ class Pkgs extends AdminControl {
                 $this->setAdminCurItem('witch_manage');
             }else{
                 $condition['pkg_type']= 2 ;
-                $this->setAdminCurItem('witch_back_manage');
+                $this->setAdminCurItem('revisit_manage');
             }
             if ($search_name != '') {
                 $condition['pkg_name'] = array('like', '%' . trim($search_name) . '%');
@@ -237,9 +237,14 @@ class Pkgs extends AdminControl {
                 'url' => url('Admin/Pkgs/pkgs_manage',['pkg_type'=>1])
             )
         );
-        $menu_array[] = array(
+        /*$menu_array[] = array(
              'name' => 'witch_back_manage',
                 'text' => lang('witch_back_manage'),
+                'url' => url('Admin/Pkgs/pkgs_manage',['pkg_type'=>2])
+        );*/
+        $menu_array[] = array(
+             'name' => 'revisit_manage',
+                'text' => lang('revisit_manage'),
                 'url' => url('Admin/Pkgs/pkgs_manage',['pkg_type'=>2])
         );
         $menu_array[] = array(

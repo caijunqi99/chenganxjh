@@ -280,12 +280,16 @@
                 'pkginfo': pkginfo
             }, function(data, textStatus, xhr) {
                 if (data.code == 200) {
-                    $('.date').text(data.result[0].end_time)
+                    $('.date').text(data.result[0].end_time);
                     pkginfo = $.parseJSON(pkginfo);
-                    $('#price').text(pkginfo.pkg_price)
+                    $('#price').text(pkginfo.pkg_price);
                     var Discount = pkginfo.pkg_cprice - pkginfo.pkg_price;
-                    $('#Discount').text('已优惠' + Discount + '元')
-                    var type = pkginfo.pkg_type == 1 ? '看孩' : '回放';
+                    $('#Discount').text('已优惠' + Discount + '元');
+                    if(pkginfo.pkg_type == 1){
+                        var  type = '看孩';
+                    }else if(type == 2){
+                        var  type = '重温课堂';
+                    }
                     var name = $('.active .level_item_p1').text();
                     // $('#pkgdesc').text('您已选择' + type + name + '套餐')
                     $('#pkgdesc').text('您已选择' + name)
