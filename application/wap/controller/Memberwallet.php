@@ -4,6 +4,7 @@ namespace app\wap\controller;
 
 use think\Lang;
 use think\Model;
+use think\Validate;
 
 class Memberwallet extends MobileMember
 {
@@ -43,6 +44,90 @@ class Memberwallet extends MobileMember
         output_data($self);
     }
 
+    /**
+     * 获取可提现金额
+     * @创建时间 2018-12-06T11:59:39+0800
+     */
+    public function GetAvailableCash(){
+        $self = array(
+            'available_predeposit' =>ncPriceFormatb($this->member_info['available_predeposit']),
+            'freeze_predeposit' =>ncPriceFormatb($this->member_info['freeze_predeposit']),
+        );
+        output_data($self);
+    }
+
+    /**
+     * 申请提现
+     * @创建时间   2018-12-06T15:32:06+0800
+     * @return [type]                   [description]
+     */
+    public function StartAddCash() {
+        $member_id = $this->member_info['member_id'];
+        if (request()->isPost()) {
+            $obj_validate = new Validate();
+            $pdc_amount=abs(floatval(input('pdc_amount')));
+            if(!$pdc_amount) output_error('提现金额不能为空或至少大于0！');
+            $bid = intval(input('post.bid'));
+            if (empty($bid) || $bid < 1) output_error('参数错误！');
+            $Bank = model('Banks');
+            $bankInfo = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'bank_id'=>$bid));
+            if(empty($bankInfo))output_error('此银行卡信息已被删除，或参数错误！');
+            $data=[
+                'pdc_amount' =>$pdc_amount,
+                'pdc_bank_name'  =>$bankInfo['bank_name'].$bankInfo['bank_info'],
+                'pdc_bank_no'  =>$bankInfo['bank_card'],
+                'pdc_bank_user'  =>$bankInfo['true_name'],
+                'password'      =>input("password")
+            ];
+            $rule=[
+                ['pdc_amount','require|min:0.01','提现金额为大于或者等于0.01的数字'],
+                ['pdc_bank_name','require','请填写收款银行'],
+                ['pdc_bank_no','require','请填写收款账号'],
+                ['pdc_bank_user','require','请填写收款人姓名'],
+                ['password','require','请输入支付密码']
+            ];
+
+            $error = $obj_validate->check($data,$rule);
+            if (!$error) output_error($obj_validate->getError());
+
+            $model_pd = Model('predeposit');
+            $model_member = Model('member');
+            $member_info = $model_member->getMemberInfoByID($member_id);
+            //验证支付密码
+            if (md5(input('password')) != $member_info['member_paypwd']) output_error('支付密码错误！');
+            //验证金额是否足够
+            if (floatval($member_info['available_predeposit']) < $pdc_amount) output_error('预存款金额不足！');
+            try {
+                $model_pd->startTrans();
+                $pdc_sn = $model_pd->makeSn();
+                $data = array();
+                $data['pdc_sn'] = $pdc_sn;
+                $data['pdc_member_id'] = $member_info['member_id'];
+                $data['pdc_member_name'] = $member_info['member_name'];
+                $data['pdc_amount'] = $pdc_amount;
+                $data['pdc_bank_name'] = $bankInfo['bank_name'].$bankInfo['bank_info'];
+                $data['pdc_bank_no'] = $bankInfo['bank_card'];
+                $data['pdc_bank_user'] = $bankInfo['true_name'];
+                $data['pdc_add_time'] = TIMESTAMP;
+                $data['pdc_payment_state'] = 0;
+                $data['available_predeposit'] = $member_info['available_predeposit']-$pdc_amount;//记录余额
+                $insert = $model_pd->addPdCash($data);
+                if (!$insert) output_error('提现申请失败！');
+                //冻结可用预存款
+                $data = array();
+                $data['member_id'] = $member_info['member_id'];
+                $data['member_name'] = $member_info['member_name'];
+                $data['amount'] = $pdc_amount;
+                $data['order_sn'] = $pdc_sn;
+                $model_pd->changePd('cash_apply', $data);
+                $model_pd->commit();
+                output_data(array('state'=>'ok','msg'=>'您的提现申请已成功提交，请等待系统处理！'));
+            } catch (Exception $e) {
+                $model_pd->rollback();
+                output_error($e->getMessage());
+            }
+        }
+    }
 
     /**
      * 统一发送身份验证码
@@ -82,18 +167,44 @@ class Memberwallet extends MobileMember
         }
     }
 
+    
+    /**
+     * 获取默认银行卡信息
+     * @创建时间 2018-12-05T10:42:07+0800
+     */
+    public function GetDefaultMemberCard(){
+        $member_id = $this->member_info['member_id'];
+        $Bank = model('Banks');
+        $bank = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'is_default'=>1));
+        output_data($bank);
+        
+    }
 
     /**
-     * 银行卡列表
+     * 获取单条银行卡信息
+     * @创建时间 2018-12-05T10:42:07+0800
+     */
+    public function GetOneMemberCard(){
+        $member_id = $this->member_info['member_id'];
+        $bid = trim(input('post.bid'));
+        if (empty($bid) || $bid < 1) output_error('参数错误！');
+        $Bank = model('Banks');
+        $bank = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'bank_id'=>$bid));
+        output_data($bank);
+    }
+
+    /**
+     * 银行卡列表-所有
      * @创建时间 2018-12-04T14:51:15+0800
      */
     public function MemberBankCards(){
-
-        $input = input();
-        $card = input('post.card');
-        import('Banks', EXTEND_PATH);
-        $result = \Banks::bankInfo($card);
-        output_data(array('result'=>$result));
+        $member_id = $this->member_info['member_id'];
+        $Bank = model('Banks');
+        $result=[];
+        $CardList = $Bank->getAllBanks(array('member_id'=>$member_id));
+        $result['count'] = count($CardList);
+        $result['CardList'] = $CardList;
+        output_data($result);
     }
 
     /**
@@ -101,6 +212,39 @@ class Memberwallet extends MobileMember
      * @创建时间 2018-12-04T14:51:23+0800
      */
     public function AddMemberBankCard(){
+        $member_id = $this->member_info['member_id'];
+        $bankCard = trim(input('post.bank_card'));
+        if (empty($bankCard)) output_error('银行卡号不能为空');
+        $true_name = trim(input('post.true_name'));
+        if (empty($true_name)) output_error('持卡人姓名不能为空');
+        $bank_name = trim(input('post.bank_name'));
+        if (empty($bank_name))output_error('银行名称不能为空');
+        $bank_info = trim(input('post.bank_info'));
+        if (empty($bank_info)) output_error('开户行地址不能为空');
+
+        $Bank = model('Banks');
+        $bank = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'bank_card'=>$bankCard));
+        if ($bank) output_error('当前卡号已存在');
+        $Cardadd = array(
+            'member_id'      => $member_id,
+            'true_name'      => $true_name,
+            'bank_info'      => $bank_info,
+            'default_mobile' => input('post.default_mobile'),
+            'is_default'     => input('post.is_default'),
+            'bank_card'      => $bankCard,
+            'bank_name'      => $bank_name,
+            'creattime'      => time(),
+            'updatetime'     => time(),
+        );
+        if ($Cardadd['is_default']==1) {
+            $Bank->SetBanks(array('member_id'=>$member_id),'is_default',0);
+        }
+        $result = $Bank->addBanks($Cardadd);
+        if ($result) {
+            output_data(array('state'=>'ok','msg'=>'绑定成功'));
+        }else{
+            output_error('绑定失败，请重试！');
+        }
 
     }
 
@@ -109,6 +253,42 @@ class Memberwallet extends MobileMember
      * @创建时间 2018-12-04T14:51:30+0800
      */
     public function EditMemberBankCard(){
+        $member_id = $this->member_info['member_id'];
+        $bid = trim(input('post.bid'));
+        if (empty($bid) || $bid < 1) output_error('参数错误！');
+        $bankCard = trim(input('post.bank_card'));
+        if (empty($bankCard)) output_error('银行卡号不能为空');
+        $true_name = trim(input('post.true_name'));
+        if (empty($true_name)) output_error('持卡人姓名不能为空');
+        $bank_name = trim(input('post.bank_name'));
+        if (empty($bank_name))output_error('银行名称不能为空');
+        $bank_info = trim(input('post.bank_info'));
+        if (empty($bank_info)) output_error('开户行地址不能为空');
+
+        $Bank = model('Banks');
+        $bank = $Bank->getOneBanks($bid);
+        if(!$bank)output_error('当前银行卡信息不存在，或已经删除！');
+        $bankinfo = $Bank->getOneBanksByCard(array('member_id'=>$member_id,'bank_card'=>$bankCard));
+        if (!empty($bankinfo) && $bankinfo['bank_id'] != $bid)output_error('当前银行卡号已存在，不能重复添加！');
+
+        $CardEdit = array(
+            'true_name'      => $true_name,
+            'bank_info'      => $bank_info,
+            'default_mobile' => input('post.default_mobile'),
+            'is_default'     => input('post.is_default'),
+            'bank_card'      => $bankCard,
+            'bank_name'      => $bank_name,
+            'updatetime'     => time(),
+        );
+        if ($CardEdit['is_default']==1) {
+            $Bank->SetBanks(array('member_id'=>$member_id),'is_default',0);
+        }
+        $result = $Bank->editBanks($CardEdit,array('bank_id'=>$bid));
+        if ($result) {
+            output_data(array('state'=>'ok','msg'=>'修改成功！'));
+        }else{
+            output_error('修改失败，请重试！');
+        }
 
     }
 
@@ -117,6 +297,17 @@ class Memberwallet extends MobileMember
      * @创建时间 2018-12-04T14:51:38+0800
      */
     public function DelMemberBankCard(){
+        $member_id = $this->member_info['member_id'];
+        $bid = trim(input('post.bid'));
+        if (empty($bid) || $bid < 1) output_error('参数错误！');
+        $Bank = model('Banks');
+        $bank = $Bank->getOneBanks($bid);
+        if (!empty($bank)) {
+            $Bank->delBanks(array('member_id'=>$member_id,'bank_id'=>$bid));
+            output_data(array('state'=>'ok','msg'=>'删除成功！'));
+        }else{
+            output_error('此银行卡信息已删除或不是你的银行卡！');
+        }
 
     }
 
@@ -125,7 +316,18 @@ class Memberwallet extends MobileMember
      * @创建时间 2018-12-04T14:51:47+0800
      */
     public function SetDefautOfBankCard(){
-
+        $member_id = $this->member_info['member_id'];
+        $bid = trim(input('post.bid'));
+        if (empty($bid) || $bid < 1) output_error('参数错误！');
+        $is_default = input('post.is_default');
+        $Bank = model('Banks');
+        if ($is_default==1) {
+            $Bank->SetBanks(array('member_id'=>$member_id),'is_default',0);
+            $Bank->SetBanks(array('bank_id'=>$bid),'is_default',1);
+        }else{
+            $Bank->SetBanks(array('bank_id'=>$bid),'is_default',0);
+        }
+        output_data(array('state'=>'ok','msg'=>'操作成功！'));
     }
 
 

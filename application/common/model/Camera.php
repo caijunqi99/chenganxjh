@@ -66,6 +66,7 @@ class Camera extends Model {
      * @return array 二维数组
      */
     public function getCameraList($condition, $page = '', $field = '*', $school = 'cid desc', $limit = '', $extend = array(), $master = false) {
+        $condition = $this->_Condition($condition);
         $list_paginate = db('camera')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
@@ -73,6 +74,20 @@ class Camera extends Model {
         if (empty($list))
             return array();
         return $list;
+    }
+
+    public function _Condition($where){
+        $condition = [];
+        if (isset($where['class_id'])) {
+            $res_group_id = db('class')->where('classid',$where['class_id'])->value('res_group_id');
+            unset($where);
+            $condition['parentid'] = array('in',[$res_group_id]);
+        }
+        if (isset($where['school_id'])) {
+            $res_group_ids = db('class')->field('res_group_id')->where('schoolid',$where['school_id'])->select();
+            $condition['parentid'] = array('in',$res_group_ids);
+        }
+        return $condition;
     }
 
 

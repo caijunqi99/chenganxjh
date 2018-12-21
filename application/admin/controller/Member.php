@@ -129,7 +129,7 @@ class Member extends AdminControl {
             $model_member = Model('member');
             $data = array(
                 'member_name'      => input('post.member_name'),
-                'member_password'  => input('post.member_password'),
+                'member_password'  => md5(input('post.member_password')),
                 'member_mobile'     => input('post.member_mobile'),
                 'member_truename'  => input('post.member_truename'),
                 'member_sex'       => input('post.member_sex'),
