@@ -1,6 +1,6 @@
 {include file="public/header" /}
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
-
+<script src="{$Think.config.url_domain_root}static/ckplayer/ckplayer.js"></script>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -84,15 +84,15 @@
             </tr>
             </thead>
             <tbody>
-            <?php if(!empty($admin_list) && is_array($admin_list)){ ?>
-            <?php foreach($admin_list as $k => $v){ ?>
+            <?php if(!empty($list) && is_array($list)){ ?>
+            <?php foreach($list as $k => $v){ ?>
             <tr class="hover">
-                <td class="align-center"><?php echo $v['admin_name'];?></td>
-                <td class="align-center"><?php echo $v['admin_true_name'];?></td>
-                <td class="align-center"><?php echo $v['admin_phone'];?></td>
+                <td class="align-center"><?php echo $v['name'];?></td>
+                <td class="align-center"><?php echo $v['classname'];?></td>
+                <td class="align-center"><?php echo $v['school_region'];?></td>
                 <td class="align-center">
                     <div class="layui-table-cell laytable-cell-9-8">
-                      <a href="javascript:void(0)" onclick="return reset_pwd();" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.look_revisit_black}</a>
+                      <a href="javascript:void(0)" onclick="reset_pwd(<?php echo $v['id']; ?>);" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.look_revisit_black}</a>
                     </div>
                 </td>
             </tr>
@@ -103,17 +103,65 @@
             </tr>
             <?php } ?>
             </tbody>
-            <tfoot>
-            <?php if(!empty($admin_list) && is_array($admin_list)){ ?>
-            <tr class="tfoot">
-                {$page}
-            </tr>
-            <?php } ?>
-            </tfoot>
+
         </table>
+        <tfoot>
+        <?php if(!empty($list) && is_array($list)){ ?>
+        <tr class="tfoot">
+            {$page}
+        </tr>
+        <?php } ?>
+        </tfoot>
     </form>
 </div>
+<form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
+    <div class="layui-form-item">
+        <input type="hidden" id="id" value="">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择日期</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="test1" placeholder="请选择时间">
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" id="course" onclick="que()">确认</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+</form>
 <script type="text/javascript">
+    function reset_pwd(id){
+        $('#id').val(id);
+        layer.open({
+            type: 1,
+            title: '请选择要查看重温课堂时间段',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '300px'],
+            content: $('#courForm')
+        });
+    }
+    function que(){
+        layer.closeAll();
+        var id=$('#id').val();
+        var time=$('#test1').val();
+        var urls=ADMIN_URL+'revisitclass/lists?id='+id+'&time='+time;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '播放列表',
+            area: ['80%', '80%'],
+            shadeClose: false,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
+        });
+    }
     layui.use(['form'], function(){
         var form = layui.form;
         //省
@@ -206,5 +254,12 @@
             })
         });
     });
-
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#test1'
+        });
+    });
 </script>
+

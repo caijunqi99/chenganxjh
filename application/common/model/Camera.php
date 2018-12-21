@@ -109,6 +109,21 @@ class Camera extends Model {
             return array();
         return $list;
     }
+    /**
+     * 重温课堂列表
+     *
+     * @param array $condition 查询条件
+     * @param obj $page 分页对象
+     * @return array 二维数组
+     */
+    public function getCameraLists($where, $field = '*',$page = 0) {
+        $list_paginate =db('camera')->alias('c')->field($field)->join('class a','c.parentid=a.res_group_id')->join('school s','a.schoolid=s.schoolid')->where($where)->limit($start,$page_count)->order('cid DESC')->paginate($page,false,['query' => request()->param()]);
+        $this->page_info = $list_paginate;
+        $list = $list_paginate->items();
+        if (empty($list))
+            return array();
+        return $list;
+    }
 
     /**
      * 数量

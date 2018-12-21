@@ -237,11 +237,6 @@ class Camera extends AdminControl
      * @time 20180926
      */
     public function entered(){
-        //$vlink = new Vomont();
-        //$res= $vlink->SetLogin();
-        //$accountid=$res['accountid'];
-        //$a=$vlink->AaaStorage($accountid);
-        //print_r($a);exit;
         if(session('admin_is_super') !=1 && !in_array('4',$this->action)){
             $this->error(lang('ds_assign_right'));
         }
@@ -467,9 +462,11 @@ class Camera extends AdminControl
                 //}
                 //<img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50">
                 if($v['is_classroom'] == 1){
-                    $html .= '<td class="align-center"><b style="color:red;">否</b></td>';
+                    //$html .= '<td class="align-center"><b style="color:red;">否</b></td>';
+                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }else if($v['is_classroom'] == 2){
-                    $html .= '<td class="align-center"><b style="color:green;">是</b></td>';
+                    //$html .= '<td class="align-center"><b style="color:green;">是</b></td>';
+                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }
                 if($v['status'] == 1){
                     $html .= '<td class="align-center">开启</td>';
@@ -579,6 +576,30 @@ class Camera extends AdminControl
             return $res;
         }catch (\Exception $exception){
             return $arr1;
+        }
+    }
+    public function makedefault(){
+        $input = input();
+        $cid = $input['cid'];
+        $key=$input['classroom'];
+        $id=$input['id'];
+        if($cid && $key ){
+            $result = db('camera')->where('cid',$cid)->setField('is_classroom', $key);
+            $vlink = new Vomont();
+            $res= $vlink->SetLogin();
+            $accountid=$res['accountid'];
+            if($key==2) {
+                $vlink->AaaStorage($accountid, $id);
+            }else{
+                $vlink->DelStorage($accountid, $id);
+            }
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
         }
     }
 
