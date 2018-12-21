@@ -30,7 +30,7 @@ class Teachvideo extends AdminControl {
         $model_teach = model('Teachchild');
         $condition = array();
         $admininfo = $this->getAdminInfo();
-        if($admininfo['admin_id']!=1){
+        if($admininfo['admin_company_id'] != 1 && $admininfo['admin_id'] != 1){
             $condition['admin_company_id'] = $admininfo['admin_company_id'];
         }
         $user = input('param.user');//会员账户

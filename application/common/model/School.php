@@ -228,4 +228,14 @@ class School extends Model {
         return $number;
     }
 
+    /**
+     * 数量
+     * @param array $condition
+     * @return int
+     */
+    public function getSchoolCount($condition)
+    {
+        return db('school')->where($condition)->count();
+    }
+
 }

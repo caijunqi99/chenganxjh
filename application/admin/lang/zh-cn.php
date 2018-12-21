@@ -153,6 +153,7 @@ $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
 $lang['ds_import']               = '导入学生列表';
 $lang['ds_robot']               = '机器人管理';
+$lang['ds_entering']               = '线下转账资金录入管理';
 
 //看孩管理
 $lang['ds_look']                   = '看孩管理';

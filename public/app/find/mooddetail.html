@@ -29,13 +29,22 @@
             <div class="head_title">
                 <p>动态详情</p>
             </div>
-            <div class="head_r" style="width:130px;">
+            <div class="head_r">
                 <!-- 自己的动态详情显示删除 -->
-                <a href="javascript:;" class="md_del_btn" style="display: none;">删除</a>
+                <a href="javascript:;" class="md_del_btn" style="display: none;">
+                    <i class="icon iconfont icon-tubiaozhizuo-" style="font-size: 30px;"></i>
+                    <!--删除-->
+                </a>
+                <!-- 别人的动态详情 拉黑 -->
+                <a href="javascript:;" class="md_lahei_btn" style="display: none;">
+                    <i class="icon iconfont icon-blacklist" style="font-size: 30px;"></i>
+                    <!--举报-->
+                </a>
                 <!-- 别人的动态详情 显示举报 -->
-                <!--<a href="javascript:;" class="md_jubao_btn">
-                    <i class="icon iconfont icon-gengduo"></i>
-                </a>-->
+                <a href="javascript:;" class="md_jubao_btn" style="display: none;">
+                    <i class="icon iconfont icon-jubao" style="font-size: 30px;"></i>
+                    <!--举报-->
+                </a>
             </div>
         </div>
     </header>
@@ -81,7 +90,12 @@
                     success: function (response) {
                         var mood = response.result.mood;
                         if(mood.member_id == user_member_id){
+                            $('.head_r').css('width','80px');
                             $('.md_del_btn').show();
+                        }else{
+                            $('.head_r').css('width','130px');
+                            $('.md_lahei_btn').show();
+                            $('.md_jubao_btn').show();
                         }
                         var view = response.result.view;
                         var mood_html = '';
@@ -154,10 +168,54 @@
                         //取消操作
                     });
                 });
+                // 拉黑
+                $(".md_lahei_btn").click(function() {
+                    $.confirm("您确定要屏蔽该用户所有动态吗?", "屏蔽", function() {
+                        $.ajax({
+                            type:'POST',
+                            url:api+'/mood/mood_lh.html',
+                            data:{
+                                member_id:user_member_id,
+                                key:user_token,
+                                id:id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response['code'] == 200){
+                                    $.toast('屏蔽成功','',function(){
+                                        location.href=http_url+'app/find/mood.html';
+                                    });
+                                }else{
+                                    $.toast(response['message'],'forbidden');
+                                }
+                            }
+                        })
+                    }, function() {
+                        //取消操作
+                    });
+                });
                 // 举报
                 $(".md_jubao_btn").click(function() {
                     $.confirm("您确定要举报吗?", "举报", function() {
-                        $.toast("举报成功!",'');
+                        $.ajax({
+                            type:'POST',
+                            url:api+'/mood/mood_jubao.html',
+                            data:{
+                                member_id:user_member_id,
+                                key:user_token,
+                                id:id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response['code'] == 200){
+                                    $.toast('举报成功','',function(){
+                                        location.href=http_url+'app/find/mood.html';
+                                    });
+                                }else{
+                                    $.toast(response['message'],'forbidden');
+                                }
+                            }
+                        })
                     }, function() {
                         //取消操作
                     });

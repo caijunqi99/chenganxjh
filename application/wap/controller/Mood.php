@@ -65,14 +65,38 @@ class Mood extends MobileMember{
      *所有用户心情列表
      */
     public function  moodlist(){
-        $where = array();
-        $where['m.del']=1;
+        $member_id = intval(input('post.member_id'));
+        if(empty($member_id)){
+            output_error('会员id不能为空');
+        }
+//        $where = array();
+//        $where['m.del']=1;
+        $where = ' m.del =1 ';
         $start = 0;
         $page_num = 5;
         if(input('post.start')){
             $start =$page_num*intval(input('post.start'));
         }
-        $mood_list = db('mood')->alias('m')->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->limit($start,$page_num)->order('id desc')->select();
+        //查询被该会员拉黑的会员
+        $lh_member = db('moodlh')->where('member_id="'.$member_id.'"')->select();
+        $str = '';
+        if(!empty($lh_member)){
+            foreach ($lh_member as $key=>$value){
+                $str .= $value['lh_member_id'].',';
+            }
+        }
+        if(!empty($str)){
+            $string = trim($str,',');
+            $where .= ' AND m.member_id not in ('.$string.')';
+        }
+//        var_dump($where);
+        $mood_list = db('mood')->alias('m')
+            ->field('m.*,b.member_nickname,b.member_avatar,b.member_name,b.member_mobile')
+            ->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')
+            ->where($where)
+            ->limit($start,$page_num)
+            ->order('id desc')
+            ->select();
         $mood_count = db('mood')->alias('m')->where($where)->count();
         $page_count = ceil(intval($mood_count)/intval($page_num));
         $ar = array('page_count'=>$page_count);
@@ -244,7 +268,7 @@ class Mood extends MobileMember{
         $mood_admin = Model('mood');
         $res = $mood_admin->getOneById($id);
         if (!empty($res)) {
-            if ($res['member_id'] = $member_id) {
+            if ($res['member_id'] == $member_id) {
                 if ($res['del'] == 1) {
                     $where = array();
                     $where['id']=$id;
@@ -261,10 +285,83 @@ class Mood extends MobileMember{
                     output_error('已经被删除了');
                 }
             } else {
-                output_error('不能删除');
+                output_error('不能删除他人动态');
             }
         } else {
-            output_error('无此心情');
+            output_error('无此心情，该心情已被删除');
+        }
+    }
+    /**
+     * 心情举报
+     */
+    public function mood_jubao()
+    {
+        $id = intval(input('post.id'));
+        $member_id = intval(input('post.member_id'));
+        if (empty($member_id)) {
+            output_error('会员id不能为空');
+        }
+        $mood_admin = Model('mood');
+        $res = $mood_admin->getOneById($id);
+        if (!empty($res)) {
+            if ($res['member_id'] == $member_id) {
+                output_error('不能举报自己');
+            } else {
+                if ($res['status'] == 0) {
+                    $where = array();
+                    $where['id']=$id;
+                    $update_array = array();
+                    $update_array['status'] = 1;
+                    $list = $mood_admin->editMood($where, $update_array);
+                    if (!empty($list)) {
+                        output_data(array('message' => '举报成功'));
+                    } else {
+                        output_error('举报失败');
+                    }
+                } else {
+                    output_error('已经被举报，等待处理中');
+                }
+            }
+        } else {
+            output_error('无此心情，该心情已被删除');
+        }
+    }
+    /**
+     * 心情屏蔽
+     */
+    public function mood_lh()
+    {
+        $id = intval(input('post.id'));
+        $member_id = intval(input('post.member_id'));
+        if (empty($member_id)) {
+            output_error('会员id不能为空');
+        }
+        $mood_admin = Model('mood');
+        $res = $mood_admin->getOneById($id);
+        if (!empty($res)) {
+            if ($res['member_id'] != $member_id) {
+                //查看该发布动态会员是否已经被拉黑
+                $is_lh = db('moodlh')->where('member_id="'.$member_id.'" AND lh_member_id="'.$res["member_id"].'"')->find();
+                if (!$is_lh) {
+                    $data = array(
+                        'member_id'=>$member_id,
+                        'lh_member_id'=>$res['member_id'],
+                        'time' => time()
+                    );
+                    $result = db('moodlh')->insert($data);
+                    if (!empty($result)) {
+                        output_data(array('message' => '已屏蔽此用户'));
+                    } else {
+                        output_error('屏蔽此用户失败');
+                    }
+                } else {
+                    output_error('该用户已被您屏蔽，无法重复操作');
+                }
+            } else {
+                output_error('不能屏蔽自己的动态');
+            }
+        } else {
+            output_error('无此心情，该心情已被删除');
         }
     }
     /**

@@ -391,36 +391,49 @@ class Common extends AdminControl
         $province_id = intval(input('get.province'));
         $city_id = intval(input('get.city'));
         $area_id = intval(input('get.area'));
+        $agent_id = intval(input('get.agent'));
         $school_id = intval(input('get.school'));
-
-
 
         $city_html = '<option value="0">请选择市</option>';
         $area_html = '<option value="0">请选择县/区</option>';
+        $agent_html = '<option value="0">请选择公司</option>';
         $school_html = '<option value="0">请选择学校</option>';
         $grade_html = '<option value="0">请选择学校类型</option>';
         $class_html = '<option value="0">请选择班级</option>';
+        //学校
+        $school_where['isdel'] = 1;
+        //代理商
+        $agent_where['o_del'] = 1;
+        if(!empty($agent_id)){
+            //学校
+            $school_where['admin_company_id'] = $agent_id;
+        }
         if(!empty($province_id)){
             //学校
             $school_where['provinceid'] = $province_id;
+            //代理商
+            $agent_where['o_provinceid'] = $province_id;
             if(!empty($city_id)){
                 $school_where['cityid'] = $city_id;
+                $agent_where['o_cityid'] = $city_id;
                 if(!empty($area_id)){
                     $school_where['areaid'] = $area_id;
+                    $agent_where['o_areaid'] = $area_id;
                 }
-            }
-            //县区
-            $area_where['area_parent_id'] = $city_id;
-            $area = db('area')->field('area_id,area_parent_id,area_name')->where($area_where)->select();
-            if(!empty($area)){
-                foreach($area as $key=>$value){
-                    if($value['area_id'] == $area_id){
-                        $area_html .='<option value='.$value["area_id"].' selected>'.$value["area_name"].'</option>';
-                    }else{
-                        $area_html .='<option value='.$value["area_id"].'>'.$value["area_name"].'</option>';
+                //县区
+                $area_where['area_parent_id'] = $city_id;
+                $area = db('area')->field('area_id,area_parent_id,area_name')->where($area_where)->select();
+                if(!empty($area)){
+                    foreach($area as $key=>$value){
+                        if($value['area_id'] == $area_id){
+                            $area_html .='<option value='.$value["area_id"].' selected>'.$value["area_name"].'</option>';
+                        }else{
+                            $area_html .='<option value='.$value["area_id"].'>'.$value["area_name"].'</option>';
+                        }
                     }
                 }
             }
+
             //市区
             $city_where['area_parent_id'] = $province_id;
             $city = db('area')->field('area_id,area_parent_id,area_name')->where($city_where)->select();
@@ -433,7 +446,7 @@ class Common extends AdminControl
                     }
                 }
             }
-
+            //学校
             $school = db('school')->field('schoolid,name')->where($school_where)->select();
             if(!empty($school)){
                 foreach($school as $key=>$value){
@@ -442,20 +455,38 @@ class Common extends AdminControl
                     }else{
                         $school_html .='<option value='.$value["schoolid"].' >'.$value["name"].'</option>';
                     }
-
+                }
+            }
+            //代理商
+            $agent = db('company')->field('o_id,o_name')->where($agent_where)->select();
+            if(!empty($agent)){
+                foreach($agent as $key=>$value){
+                    if($value['o_id'] == $agent_id){
+                        $agent_html .='<option value='.$value["o_id"].' selected>'.$value["o_name"].'</option>';
+                    }else{
+                        $agent_html .='<option value='.$value["o_id"].' >'.$value["o_name"].'</option>';
+                    }
                 }
             }
 
         }else{
-            $school = db('school')->field('schoolid,name')->select();
+            //学校
+            $school = db('school')->field('schoolid,name')->where('isdel=1')->select();
             if(!empty($school)){
                 foreach($school as $key=>$value){
                     $school_html .='<option value='.$value["schoolid"].'>'.$value["name"].'</option>';
                 }
             }
+            //代理商
+            $agent = db('company')->field('o_id,o_name')->where('o_del=1')->select();
+            if(!empty($agent)){
+                foreach($agent as $key=>$value){
+                    $agent_html .='<option value='.$value["o_id"].'>'.$value["o_name"].'</option>';
+                }
+            }
         }
 
-        exit(json_encode(array('city'=>$city_html,'area'=>$area_html,'school'=>$school_html,'grade'=>$grade_html,'class'=>$class_html)));
+        exit(json_encode(array('city'=>$city_html,'area'=>$area_html,'agent'=>$agent_html,'school'=>$school_html,'grade'=>$grade_html,'class'=>$class_html)));
     }
 
     /**
@@ -808,6 +839,20 @@ class Common extends AdminControl
         $file = UPLOAD_SITE_URL.DS.'apk'.DS.$info->getSaveName();
 
         exit(json_encode(array('code'=>0,'msg'=>$file)));
+    }
+
+    /**
+     * @desc 根据学校ID获取学校信息
+     * @author langzhiyao
+     * @time 20181212
+     */
+    public function get_school(){
+        $school_id = intval(input('get.school'));
+        $result = '';
+        if(!empty($school_id)){
+            $result = db('school')->where('schoolid="'.$school_id.'"')->find();
+        }
+        echo json_encode(array('info'=>$result));exit;
     }
 
 
