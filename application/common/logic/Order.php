@@ -335,7 +335,7 @@ class Order extends Model
             'order_sn' => $order_info['order_sn'],
             'order_url' => url('memberorder/show_order', array('order_id' => $order_id))
         );
-         \mall\queue\QueueClient::push('sendMemberMsg', $param);
+        \mall\queue\QueueClient::push('sendMemberMsg', $param);
         return ds_callback(true, '操作成功');
     }
 
@@ -357,7 +357,7 @@ class Order extends Model
 
             $update = $model_order->editOrderPay($data, array('pay_sn' => $order_list[0]['pay_sn']));
             if (!$update) {
-                 Exception('更新支付单状态失败');
+                Exception('更新支付单状态失败');
             }
 
             $model_pd = Model('predeposit');
@@ -447,7 +447,7 @@ class Order extends Model
     public function changePackageOrder($order_info, $role, $user = '', $post = array())
     {
         $model_order = Model('Packagesorder');
-        
+
         $memberInfo = db('member')->where('member_id',$order_info['buyer_id'])->find();
         if ($memberInfo['is_owner'] == 0) {
             $identity = '主账号';
@@ -465,12 +465,12 @@ class Order extends Model
         $packagetime = $PkgTime->getOnePkg($condition);
         $order_info['finnshed_time'] = empty($order_info['finnshed_time'])?time():$order_info['finnshed_time'];
         $end_time = CalculationTime($order_info,$packagetime);
-        $pkgtype = $order_info['pkg_type']==1?'看孩':'回放';
+        $pkgtype = $order_info['pkg_type']==1?'看孩':'重温课堂';
         $pdata = array(
             'end_time' => $end_time,
             'up_time' => time(),
-        );  
-        
+        );
+
         try {
             $model_order->startTrans();
             if(!$packagetime){//第一次购买套餐
@@ -493,16 +493,16 @@ class Order extends Model
             $condition['order_id'] = $order_info['order_id'];
             $post['order_dieline']= $end_time;
             $update = $model_order->editOrder($post, $condition);
-            
+
             if (!$update) {
-                 Exception('更新支付单状态失败');
+                Exception('更新支付单状态失败');
             }
 
             $model_order->commit();
         } catch (Exception $e) {
             $model_order->rollback();
             return ds_callback(false, $e->getMessage());
-        }        
+        }
         $order_id = $order_info['order_id'];
 
         //发送站内信
@@ -515,7 +515,7 @@ class Order extends Model
         $insert_arr['msg_content'] = '您于'.date('Y-m-d H:i',$post['finnshed_time']).'购买'.$pkgtype.'套餐，此套餐主副账号通用,套餐到期时间:'.date('Y-m-d H:i',$end_time);
         $insert_arr['message_type'] = 1;
         $model_message->saveMessage($insert_arr);
-        
+
         // 支付成功发送买家消息 -----暂时不需要发送
         // $param = array();
         // $param['code'] = 'package_buy_success';
