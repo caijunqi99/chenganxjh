@@ -371,7 +371,7 @@ class AdminControl extends Controller {
                             $_limit[$key]['child'][$k]['op'] = null;
                             $_limit[$key]['child'][$k]['act'] = ucfirst($v['name']);
                             $_limit[$key]['child'][$k]['action'] = explode(',',$_limit[$key]['child'][$k]['action']);
-                            if(!empty($_limit[$key]['child'][$k]['action'])){
+                            /*if(!empty($_limit[$key]['child'][$k]['action'])){
                                 $array = array();
                                 if(!empty($v['action'])){
                                     $actions= db('actions')->where("actid in ($v[action])")->select();
@@ -381,7 +381,17 @@ class AdminControl extends Controller {
                                         $_limit[$key]['child'][$k]['action'][$kk] = $array;
                                     }
                                 }
-
+                            }*/
+                            //该角色拥有的小类
+                            $operation = db('roleperms')->where('roleid="'.$this->admin_info['admin_gid'].'" AND permsid="'.$v["permid"].'"')->find();
+                            if(!empty($operation)){
+                                $array = array();
+                                $actions= db('actions')->where("actid in ($operation[action])")->select();
+                                foreach ($actions as $kk=>$vv){
+                                    $array['id']=$vv['actid'];
+                                    $array['actname']=$this->get_action($vv['actname']);
+                                    $_limit[$key]['child'][$k]['action'][$kk] = $array;
+                                }
                             }
                         }
                     }
