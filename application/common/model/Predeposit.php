@@ -473,8 +473,12 @@ class Predeposit extends Model {
      * @param string $order
      */
     public function getPdCashList($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '') {
-//        db('pdcash')->where($condition)->field($fields)->order($order)->limit($limit)->page($pagesize)->select();
-        $pdcash_list_paginate = db('pdcash')->where($condition)->field($fields)->order($order)->paginate($pagesize,false,['query' => request()->param()]);
+        $pdcash_list_paginate = db('pdcash')->alias('s')
+                                ->join('__MEMBER__ me','me.member_id=s.pdc_member_id','LEFT')
+                                ->where($condition)
+                                ->field('s.*,me.member_identity,member_areainfo,member_add_time')
+                                ->order($order)
+                                ->paginate($pagesize,false,['query' => request()->param()]);
         $this->page_info = $pdcash_list_paginate;
         return $pdcash_list_paginate->items();
     }
@@ -513,4 +517,10 @@ class Predeposit extends Model {
         return db('pdcash')->where($condition)->delete();
     }
 
+    //提现总额
+    public function getAllCount(){
+        $sql = "select sum(pdc_amount) as num from x_pdcash";
+        $result = $this->query($sql);
+        return $result;
+    }
 }

@@ -167,6 +167,10 @@ $lang['ds_teachercertify']            = '教师认证申请';
 $lang['ds_teachtype']            = '视频分类管理';
 $lang['ds_teachvideo']            = '视频管理';
 
+//资金管理
+$lang['ds_management']                   = '资金管理';
+$lang['ds_platform']            = '平台账号资金管理';
+
 //商品
 $lang['ds_shops']                  = '商城管理';
 $lang['ds_goodsclass']             = '商品分类';
