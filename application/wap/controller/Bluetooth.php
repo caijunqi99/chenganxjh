@@ -47,7 +47,7 @@ class Bluetooth extends MobileMember
             if($res){
                 output_data(array('message'=>'连接成功'));
             }else{
-             output_error('连接失败，请重新连接');
+                output_error('连接失败，请重新连接');
             }
         }else{
             output_error('已连接');

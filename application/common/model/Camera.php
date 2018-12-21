@@ -90,7 +90,6 @@ class Camera extends Model {
         return $condition;
     }
 
-
     /**
      * 根据id查询一条记录
      *

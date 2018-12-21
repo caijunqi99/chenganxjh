@@ -121,7 +121,7 @@ class Mood extends MobileMember{
     }
     /**
      * 添加心情
-    */
+     */
     public function moodadd(){
         $member_id = intval(input('post.member_id'));
         if(empty($member_id)){
@@ -165,7 +165,7 @@ class Mood extends MobileMember{
             output_error('发布失败');
         }
     }
-    
+
     public function uploadThump(){
         if(!empty($_FILES)){
             if($_FILES["mood"]["size"] < 8*1024*1024){
@@ -199,7 +199,7 @@ class Mood extends MobileMember{
                     // p($base_url.'smallmood/' . $inmUrl);exit;
                     $image->thumb(110, 110)->save($small_url. $imgUlr);
                     $small_name_dir ='/' . ATTACH_PATH . '/mood/smallmood/' . $imgUlr;
-                    
+
                     $result = array();
                     $result[0] = array(
                         'big_name_dir' => $big_name_dir,//原图相对路径
@@ -207,7 +207,7 @@ class Mood extends MobileMember{
                         'big_imageinfo' => getimagesize($big_url. $imgUlr),//原图详情
                         'small_name_dir' => $small_name_dir, //压缩后的图片相对路径
                         'small_file_dir' => $small_url. $imgUlr,//压缩后的图片绝对路径
-                        'small_imageinfo' => getimagesize($small_url. $imgUlr), //压缩图详情 
+                        'small_imageinfo' => getimagesize($small_url. $imgUlr), //压缩图详情
                         'error' =>$file_object->getError() //上传错误，正常为空
                     );
                     output_data($result);
@@ -243,7 +243,7 @@ class Mood extends MobileMember{
                     mkdir($uploadimg_path."home/smallmood/",0777,true);
                 }
                 // 按照原图的比例生成一个最大为600*600的缩略图替换原图
-                 //p($uploadimg_path. $data['file']['small']);exit;
+                //p($uploadimg_path. $data['file']['small']);exit;
                 $image->thumb(160, 210)->save($uploadimg_path. $data['file']['small']);
                 if ($upload) {
                     return $upload;
@@ -366,7 +366,7 @@ class Mood extends MobileMember{
     }
     /**
      * 心情回复
-    */
+     */
     public function moodview(){
         $memberid = intval(input('post.memberid'));
         $mid = intval(input('post.mid'));
@@ -400,7 +400,7 @@ class Mood extends MobileMember{
     }
     /**
      * 心情详情页
-    */
+     */
     public function mooddetail(){
         $where = array();
         $where['id']=intval(input('post.id'));
