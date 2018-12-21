@@ -400,4 +400,34 @@
             window.location.href="{:url('/admin/camera/del')}?cid="+cid;
         });
     }
+    function makedefault(cid,id) {
+        var statu = $('#dp_' + cid).attr('statu');
+        if (statu == 1) {
+            classroom = 2;
+            var msg = '确实设置该摄像头为重温课堂摄像头吗？';
+        } else {
+            classroom = 1;
+            var msg = '确实取消该摄像头为重温课堂摄像头吗？';
+        }
+        layer.confirm(msg, {
+            btn: ['再考虑一下','确定'] //按钮
+            ,title:'{$Think.lang.admin_index_title}'}, function(){
+            layer.msg('取消操作', {time: 2000,icon: 2});
+        }, function() {
+            $.post("{:url('/admin/camera/makedefault')}", {
+                'cid': cid,
+                'classroom': classroom,
+                'id':id
+            }, function (data, textStatus, xhr) {
+                if (statu == 2) {
+                    $('#dp_' + cid).removeClass('layui-form-checked');
+                    $('#dp_' + cid).attr('statu', classroom);
+                } else {
+                    $('#dp_' + cid).addClass('layui-form-checked');
+                    $('#dp_' + cid).attr('statu', classroom);
+                }
+            }, 'json');
+            console.log(statu)
+        });
+    }
 </script>
