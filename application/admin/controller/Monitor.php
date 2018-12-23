@@ -253,4 +253,5 @@ class Monitor extends AdminControl
         $res=$camera_update->editCamera($where,$update);
         return $res;
     }
+
 }

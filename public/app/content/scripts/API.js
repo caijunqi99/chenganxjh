@@ -1,9 +1,9 @@
 
-var api = 'http://vip.xiangjianhai.com:8001/index.php/Wap';
+var api = 'http://admin.xiangjianhai.com/index.php/Wap';
 
-var upload_url = 'http://vip.xiangjianhai.com:8001/uploads';
+var upload_url = 'http://admin.xiangjianhai.com/uploads';
 
-var http_url = 'http://vip.xiangjianhai.com:8001/';
+var http_url = 'http://admin.xiangjianhai.com/';
 
 
 
@@ -12,7 +12,8 @@ var http_url = 'http://vip.xiangjianhai.com:8001/';
 
 var user_token = $.cookie('token');
 var user_member_id = $.cookie('member_id');
-// var user_token = 'cbbae36066778269e0293aaeca10a8b9';
+
+// var user_token = 'abf1ffc4a643916737751d2fe661d4d2';
 // var user_member_id = 37102;
 
 

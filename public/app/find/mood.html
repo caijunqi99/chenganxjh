@@ -55,14 +55,16 @@
         <div id="nodata_box"></div>
         <div class="mood_listbox" id="mood_listbox">
         </div>
+
+        <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
+            <span class="weui-over">没有更多信息了</span>
+        </div>
+        <div class="weui-loadmore load" style="display: none;">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
     </div>
-    <div class="weui-footer nodata_bottom_ziding" style="display: none;font-size: 22px;color: #999999;margin-bottom: 50px;">
-        <span class="weui-over">没有更多信息了</span>
-    </div>
-    <div class="weui-loadmore load" style="display: none;">
-        <i class="weui-loading"></i>
-        <span class="weui-loadmore__tips">正在加载</span>
-    </div>
+
     <a href="javascript:;" class="addmood_btn" onclick="send_mood();">
         <i class="icon iconfont icon-bianji"></i>
     </a>
@@ -101,7 +103,7 @@
                     $.toast(response['message'],'forbidden');return false;
                 }
             }
-        })
+        });
         // 下拉刷新
         $('.main').pullToRefresh(function() {
             $('.weui-footer').hide();
@@ -114,6 +116,7 @@
         });
 
         function GetKejian() {
+            $('.weui-footer').hide();
             $.ajax({
                 type:'POST',
                 url:api+'/Mood/moodlist.html',
@@ -130,6 +133,7 @@
                                 $('.weui-footer').show();
                             }
                         } else {
+                            console.log(response);
                             var data = response['result'][0];
                             $('#mood_listbox').html(HTML(data));
                         }
@@ -139,7 +143,7 @@
                         $.toast(response['message'],'forbidden');return false;
                     }
                 }
-            })
+            });
         }
 
         // 分页
@@ -166,7 +170,6 @@
                 },
                 dataType: "json",
                 success: function (response) {
-
                     if(response['code'] == 200){
                         var data = response.result[0];
                         if (data.length == 0) {

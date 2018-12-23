@@ -23,23 +23,23 @@ class Packagesbuy extends MobileMember
 //        $condition['payment_code'] = $payment_code == 'wxpay_h5'?'wxpay_app':$payment_code;
         $condition['payment_code'] = $payment_code;
         $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo($condition);
-        
+
 //        if (!$mb_payment_info && $payment_code == 'wxpay_h5') {
 //            $mb_payment_info = $model_mb_payment->getMbPaymentOpenInfo(array('payment_code'=>'wxpay_h5'));
 //        }
         if (!$mb_payment_info) {
             output_error('支付方式未开启');
         }
-            $this->payment_code = $payment_code;
-            $this->payment_config = $mb_payment_info['payment_config'];
-            $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
-            
-            
+        $this->payment_code = $payment_code;
+        $this->payment_config = $mb_payment_info['payment_config'];
+        $inc_file = APP_PATH . DIR_APP . DS . 'api' . DS . 'payment' . DS . $this->payment_code . DS . $this->payment_code . '.php';
 
-            if (!is_file($inc_file)) {
-                output_error('支付接口出错，请联系管理员！');
-            }
-            require_once($inc_file);
+
+
+        if (!is_file($inc_file)) {
+            output_error('支付接口出错，请联系管理员！');
+        }
+        require_once($inc_file);
         $this->_logic_buy_1 = \model('buy_1','logic');
     }
 
@@ -58,7 +58,7 @@ class Packagesbuy extends MobileMember
         }else{
             output_error('还未购买套餐！');
         }
-        
+
 
     }
     /**
@@ -73,23 +73,23 @@ class Packagesbuy extends MobileMember
         $field = 'pkg_id,pkg_length,pkg_axis,pkg_length,pkg_name,pkg_price,pkg_cprice,pkg_sort,pkg_type,pkg_desc';
         $list = $pkg->getPkgLists($condition,'');
         foreach ($list as $k => &$v) {
-          /*  $str = $v['pkg_length'].'个月';
-            switch ($v['pkg_axis']) {
-                case 'quarter':
-                    $str = ($v['pkg_length']*3).'个月';
-                    break;
-                case 'half':
-                    $str = ($v['pkg_length']*6).'个月';
-                    break;
-                case 'year':
-                    $str = ($v['pkg_length']*12).'个月';
-                    break;
-                
-                default:
-                    $str = $v['pkg_length'].'个月';
-                    break;
-            }
-            $v['pkg_title'] = $str;*/
+            /*  $str = $v['pkg_length'].'个月';
+              switch ($v['pkg_axis']) {
+                  case 'quarter':
+                      $str = ($v['pkg_length']*3).'个月';
+                      break;
+                  case 'half':
+                      $str = ($v['pkg_length']*6).'个月';
+                      break;
+                  case 'year':
+                      $str = ($v['pkg_length']*12).'个月';
+                      break;
+
+                  default:
+                      $str = $v['pkg_length'].'个月';
+                      break;
+              }
+              $v['pkg_title'] = $str;*/
             $v['pkg_title'] = $v['pkg_name'];
 
         }
@@ -118,15 +118,15 @@ class Packagesbuy extends MobileMember
         }
         if(in_array($this->member_info['client_type'],array('ios','android'))){
             foreach ($payment_list as $k => $v) {
-               if(!strpos($payment_list[$k]['payment_code'],'app')){
-                   unset($payment_list[$k]);
-               }
-               if ($payment_list[$k]->payment_code== 'wxpay_app'){
+                if(!strpos($payment_list[$k]['payment_code'],'app')){
+                    unset($payment_list[$k]);
+                }
+                if ($payment_list[$k]->payment_code== 'wxpay_app'){
                     $payment_list[$k]->payment_title = 'wxpay_h5';
-               }
-               if ($payment_list[$k]->payment_code=='alipay_app'){
+                }
+                if ($payment_list[$k]->payment_code=='alipay_app'){
                     $payment_list[$k]->payment_title = 'alipay_app';
-               }
+                }
             }
         }
         output_data(array_values($payment_list));
@@ -210,10 +210,10 @@ class Packagesbuy extends MobileMember
             output_error('没有当前孩子信息！');
         }
         $Relation = $Children->checkParentRelation($this->member_info['member_id'],$chind_id);
-       if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
+        if($Relation=='false')output_error('您不是此孩子的家长，不能购买当前套餐！');
         //加入学生学校班级信息
-        if(is_array($childinfo))$order += $childinfo;        
-        $order['order_amount'] = $packageInfo['pkg_price'];        
+        if(is_array($childinfo))$order += $childinfo;
+        $order['order_amount'] = $packageInfo['pkg_price'];
         try {
             $model = Model('Packagesorder');
             $model->startTrans();
@@ -229,9 +229,9 @@ class Packagesbuy extends MobileMember
         }
         $this->orderInfo['order_sn'] = $this->_logic_buy_1->makeOrderSn($order_pay_id);
         //写入平台流水号
-        $model->editOrder(array('order_sn'=>$this->orderInfo['order_sn']), array('order_id'=>$order_pay_id)); 
+        $model->editOrder(array('order_sn'=>$this->orderInfo['order_sn']), array('order_id'=>$order_pay_id));
         //app支付
-        $this->_app_pay($this->orderInfo);        
+        $this->_app_pay($this->orderInfo);
     }
 
     /**
@@ -249,7 +249,8 @@ class Packagesbuy extends MobileMember
             $param['orderSn'] = $order_pay_info['pay_sn'];
             $param['orderFee'] = (100 * $order_pay_info['order_amount']);
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
-            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+//            $param['orderAttach'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'reClass';
             $param['notifyUrl'] = WAP_SITE_URL . '/payment/wx_notify_h5.html';
             $api = new \wxpay_app();
             $api->get_payform($param);
@@ -260,7 +261,8 @@ class Packagesbuy extends MobileMember
             $param['orderSn'] = $order_pay_info['pay_sn'];;
             $param['orderFee'] = $order_pay_info['order_amount'];
             $param['orderInfo'] = config('site_name') . '订单' . $order_pay_info['pay_sn'];
-            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+//            $param['order_type'] = $order_pay_info['pkg_type'] = "teachchild";
+            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'reClass';
             $param['notifyUrl'] = WAP_SITE_URL . '/payment/alipay_notify_app.html';
             $api = new \alipay_app();
             $api->get_payform($param);
@@ -268,28 +270,28 @@ class Packagesbuy extends MobileMember
             exit;
         }
 
-       /* // 使用h5支付 wxpay_h5
-        if ($this->payment_code == 'wxpay_h5') {
-            $param['orderFee'] = 1;//(100 * $order_pay_info['order_amount']);
-            $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-            $api = new \wxpay_h5();
-            $api->setConfigs($param);
-            $mweburl = $api->get_payurl($this);
-            if ($mweburl['result_code']=='SUCCESS') {
-                $redirect_url = urlencode('vip.xiangjianhai.com');
-                $mweburl['mweb_url'] .='&redirect_url='.$redirect_url;
-            }
-            output_data($mweburl);
-            exit;
-        }
-        
-        //alipay and so on
-        $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
-        $param['orderFee'] = 0.0100;//$order_pay_info['order_amount'];//
-        $payment_api = new $this->payment_code($param);
-        $return = $payment_api->getSubmitUrl($param);
-        echo $return;
-        exit;*/
+        /* // 使用h5支付 wxpay_h5
+         if ($this->payment_code == 'wxpay_h5') {
+             $param['orderFee'] = 1;//(100 * $order_pay_info['order_amount']);
+             $param['orderAttach'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
+             $api = new \wxpay_h5();
+             $api->setConfigs($param);
+             $mweburl = $api->get_payurl($this);
+             if ($mweburl['result_code']=='SUCCESS') {
+                 $redirect_url = urlencode('vip.xiangjianhai.com');
+                 $mweburl['mweb_url'] .='&redirect_url='.$redirect_url;
+             }
+             output_data($mweburl);
+             exit;
+         }
+
+         //alipay and so on
+         $param['order_type'] = $order_pay_info['pkg_type']==1?'witching':'teaching';
+         $param['orderFee'] = 0.0100;//$order_pay_info['order_amount'];//
+         $payment_api = new $this->payment_code($param);
+         $return = $payment_api->getSubmitUrl($param);
+         echo $return;
+         exit;*/
     }
 
     public function notify_url(){
@@ -316,7 +318,7 @@ class Packagesbuy extends MobileMember
     }
 
 
-    
+
     /**
      * 验证密码
      */
@@ -354,5 +356,5 @@ class Packagesbuy extends MobileMember
         output_error('支付密码验证失败');
     }
 
-    
+
 }

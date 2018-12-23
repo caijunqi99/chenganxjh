@@ -616,5 +616,4 @@ class Camera extends AdminControl
         );
         return $menu_array;
     }
-
 }
