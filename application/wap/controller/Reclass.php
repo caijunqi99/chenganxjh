@@ -21,6 +21,13 @@ class Reclass extends MobileMall
         $endtime=intval(input('post.endtime'));
         $time=strtotime("-4 month");
 
+        //列外
+        if($begintime==''){
+            $begintime=strtotime(date('Y-m-d'.'07:00:00',time()));
+        }
+        if($endtime==''){
+            $endtime=strtotime(date('Y-m-d'.'17:00:00',time()));
+        }
 
         if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
@@ -28,6 +35,8 @@ class Reclass extends MobileMall
         if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             $endtime='';
         }
+
+
         $id=$id.",";
         $vlink = new Vomont();
         $res= $vlink->SetLogin();

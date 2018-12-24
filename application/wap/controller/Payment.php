@@ -250,6 +250,20 @@ class Payment extends MobileMall
             $log_buyer_name = $orderInfo['buyer_name'];
             $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
 
+
+            $log_model = Model("Pdlog");
+            $member_model = Model("Member");
+            $memberInfo = $member_model->getMemberInfoByID($orderInfo['buyer_id']);
+            $reClass_data = [
+                "lg_member_id" => $orderInfo['buyer_id'],
+                "lg_member_name" => $memberInfo['member_mobile'],
+                "lg_type" => "order_pay",
+                "lg_av_amount" => $orderInfo['order_amount'],
+                "lg_add_time" => time(),
+                "lg_desc" => "看孩套餐，用户支付成功。订单编号：".$orderInfo['order_sn']
+            ];
+            $log_model->addLog($reClass_data);
+
         }
 
 

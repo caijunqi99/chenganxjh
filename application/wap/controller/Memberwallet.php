@@ -364,7 +364,19 @@ class Memberwallet extends MobileMember
      * @创建时间 2018-12-24T11:40:00+0800
      */
     public function MemberPdList(){
+        $condition = array();
+        $condition['lg_member_id'] = $this->member_info['member_id'];
 
+
+        $limit = input('limit');//每页多少条
+        $result = db('pdlog')->where($condition)->order('lg_id desc')->paginate($limit,false,['var_page'=>'page']);
+        $list = $result->items();
+        $data=array(
+            'count'=>$result->total(),
+            'log_list'=>$result->items(),
+            'currentPage'=>$result->currentPage(),
+        );
+        output_data($data);
     }
 
 }
