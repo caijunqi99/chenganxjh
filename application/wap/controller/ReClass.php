@@ -16,6 +16,7 @@ class Reclass extends MobileMall
 
     //重温课堂首页
     public function index(){
+        echo 'aaa';exit;
         $id = intval(input('post.id'));
         $begintime=intval(input('post.begintime'));
         $endtime=intval(input('post.endtime'));
@@ -40,12 +41,6 @@ class Reclass extends MobileMall
 
     //重温课堂购买片段页
     public function fragment(){
-
-    }
-
-
-    //重温课堂购买套餐页
-    public function package(){
 
     }
 }
