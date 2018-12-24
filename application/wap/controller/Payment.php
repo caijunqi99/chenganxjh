@@ -111,7 +111,7 @@ class Payment extends MobileMall
                         //分成
                         $this->money($callback_info['total_fee'],$order_info['order_id']);
                     }
-                    echo 'success';
+                    echo 'SUCCESS';
                     exit;
                 }
             }
@@ -157,7 +157,7 @@ class Payment extends MobileMall
                     $this->money($input['total_fee']/100,$order_info['order_id']);
                 }
 
-                echo 'success';
+                echo 'SUCCESS';
                 exit;
             }
         }
