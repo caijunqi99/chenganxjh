@@ -238,9 +238,10 @@ class Membercommon extends AdminControl {
                         'delete_state' =>0,
                         'pkg_type' => 2 //2为回顾套餐
                     ];
+                    $result = db('packagesorder')->field('pkg_name,s_id,add_time,order_state,order_amount,order_dieline,pkg_length,pkg_axis,FROM_UNIXTIME(add_time,\'%Y-%m-%d\') as starTime,FROM_UNIXTIME(order_dieline,\'%Y-%m-%d\') as endTime')->where($witchWhere)->order('order_id DESC')->paginate($limit,false,['var_page'=>'page']);
+                    
                     $order = [];
                     $count = 0;
-
                     break;
                 case 'shoporder'://商城订单
                     $order=$this->order_list($member_id);

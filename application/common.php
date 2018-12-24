@@ -6,6 +6,33 @@ require __DIR__ . '/common_global.php';
 require __DIR__ . '/common_goods.php';
 
 /**
+ * 二维数组排序
+ * @创建时间   2018-12-24T11:33:15+0800
+ * @param  array                    $arr   [要排序的数组]
+ * @param  string                   $v     [以数组中的某一个键值排序]
+ * @param  string                   $order [正序 asc,倒序 desc]
+ * @return [array]                          [返回排序后的数组]
+ */
+function vsort($arr=[],$v='',$order='asc'){
+    if (empty($arr)) return $arr;
+    if (empty($v)) return '请确认排序键值！';
+    $list = array_column($arr,$v);
+    switch ($order) {
+        case 'asc':
+            $order = SORT_ASC;
+            break;
+        case 'desc':
+            $order = SORT_DESC;
+            break;
+        default:
+            $order = SORT_ASC;
+            break;
+    }
+    array_multisort($list,$order,$arr);
+    return $arr;
+}
+
+/**
  * 生成随机数字字符串组合
  * @param  integer $len   [description]
  * @param  [type]  $chars [description]

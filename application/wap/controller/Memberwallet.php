@@ -333,6 +333,40 @@ class Memberwallet extends MobileMember
         output_data(array('state'=>'ok','msg'=>'操作成功！'));
     }
 
+    /**
+     * 获取提现明细列表
+     * @创建时间 2018-12-24T11:38:34+0800
+     */
+    public function MemberCashList(){
+        $condition = array();
+        $condition['pdc_member_id'] = $this->member_info['member_id'];
+
+        $sn_search = input('sn_search');
+        if (!empty($sn_search)) {
+            $condition['pdc_sn'] = $sn_search;
+        }
+        $paystate_search = input('paystate_search');
+        if (isset($paystate_search)) {
+            $condition['pdc_payment_state'] = intval($paystate_search);
+        }
+        $limit = input('limit');//每页多少条
+        $result = db('pdcash')->where($condition)->order('pdc_id desc')->paginate($limit,false,['var_page'=>'page']);
+        $cash_list = $result->items();
+        $data=array(
+            'count'=>$result->total(),
+            'cash_list'=>$result->items(),
+            'currentPage'=>$result->currentPage(),
+        );
+        output_data($data);
+    }
+
+    /**
+     * 获取用户明细列表
+     * @创建时间 2018-12-24T11:40:00+0800
+     */
+    public function MemberPdList(){
+
+    }
 
 }
 
