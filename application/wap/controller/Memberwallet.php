@@ -366,16 +366,43 @@ class Memberwallet extends MobileMember
     public function MemberPdList(){
         $condition = array();
         $condition['lg_member_id'] = $this->member_info['member_id'];
-
-
-        $limit = input('limit');//每页多少条
-        $result = db('pdlog')->where($condition)->order('lg_id desc')->paginate($limit,false,['var_page'=>'page']);
-        $list = $result->items();
-        $data=array(
-            'count'=>$result->total(),
-            'log_list'=>$result->items(),
-            'currentPage'=>$result->currentPage(),
-        );
+        $member_id = $this->member_info['member_id'];
+//        $member_id = 1;
+//        $condition['lg_member_id'] = 1;
+        $last_id = input('post.page');
+        if($last_id){
+            $last_info = db('pdlog')->where("lg_add_time <".$last_id." and lg_member_id=".$member_id."")->order('lg_add_time desc')->find();
+            $strtime = strtotime(date("Y-m-d",$last_info['lg_add_time'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $where=" lg_member_id=".$member_id." and lg_add_time<".$endtime." and lg_add_time>=".$strtime;
+            $result = db('pdlog')->where($where)->order('lg_add_time desc')->select();
+        }else{
+            $result=db('pdlog')->where($condition)->order('lg_add_time desc')->limit('0,10')->select();
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['lg_add_time'];
+                }
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $day = db('pdlog')->where("lg_member_id=".$member_id." and lg_add_time<".$endtime." and lg_add_time>=".$strtime)->order('lg_add_time desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
+        foreach($result as $k=>$v){
+            $result[$k]['date'] = date("Y-m-d",$v['lg_add_time']);
+            if(date("Y-m-d",time()) == date("Y-m-d",$v['lg_add_time'])){
+                $result[$k]['date'] = "今天";
+            }
+        }
+        foreach($result as $key=>$item){
+            $data[$item['date']][] = $item;
+            $last_id = $item['lg_add_time'];
+        }
+        $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+        }
         output_data($data);
     }
 
