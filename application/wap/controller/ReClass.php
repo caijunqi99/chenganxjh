@@ -18,6 +18,7 @@ class ReClass extends MobileMember
     }
     //重温课堂首页
     public function index(){
+        echo 'aaa';exit;
         $id = intval(input('post.id'));
         $begintime=intval(input('post.begintime'));
         $endtime=intval(input('post.endtime'));
