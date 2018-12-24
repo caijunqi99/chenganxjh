@@ -44,10 +44,4 @@ class ReClass extends MobileMember
     public function fragment(){
 
     }
-
-
-    //重温课堂购买套餐页
-    public function package(){
-
-    }
 }
