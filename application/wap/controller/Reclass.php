@@ -20,10 +20,12 @@ class Reclass extends MobileMall
         $begintime=intval(input('post.begintime'));
         $endtime=intval(input('post.endtime'));
         $time=strtotime("-4 month");
-        if($begintime<$time){
+
+
+        if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
         }
-        if($endtime<$time){
+        if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             $endtime='';
         }
         $id=$id.",";

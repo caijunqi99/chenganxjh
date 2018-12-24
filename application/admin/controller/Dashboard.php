@@ -99,6 +99,10 @@ class Dashboard extends AdminControl {
         $beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
 
         $endToday=mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+        //php获取昨日起始时间戳和结束时间戳
+        /*$beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
+
+        $endYesterday=mktime(0,0,0,date('m'),date('d'),date('Y'))-1;*/
 
         // 本周开始时间点
         $tmp_time = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - (date('w') == 0 ? 7 : date('w') - 1) * 24 * 60 * 60;
