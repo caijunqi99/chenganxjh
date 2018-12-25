@@ -400,6 +400,9 @@ class AdminControl extends Controller {
             case 'Undercarriage'://16
                 return '违规下架';
                 break;
+            case 'CashWithdrawal'://17
+                return '提现';
+                break;
 
         }
     }

@@ -171,6 +171,9 @@ $lang['ds_teachvideo']            = '视频管理';
 //资金管理
 $lang['ds_management']                   = '资金管理';
 $lang['ds_platform']            = '平台账号资金管理';
+$lang['ds_membercash']            = '会员提现管理';
+$lang['ds_companycash']            = '代理商提现管理';
+$lang['ds_companybanks']            = '绑定银行卡管理';
 
 //商品
 $lang['ds_shops']                  = '商城管理';
