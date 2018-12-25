@@ -93,7 +93,7 @@ class Lookchild extends MobileMall
                 $condition=array();
                 $condition['parentid']=$classid;
                 $conditions['parentid']=$schoolid;
-                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,privilege,type,usernum,status,begintime,endtime');
+                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,privilege,type,usernum,is_classroom,status,begintime,endtime');
                 $date=date('H:i',time());
                 foreach($html as $k=> $v){
                     if($v['online']==0){
@@ -133,29 +133,7 @@ class Lookchild extends MobileMall
         $result = db('packagesorder')->where('pay_sn="'.$orderSn.'" AND buyer_id="'.$member_id.'"')->field('pkg_pirce,s_id')->find();
         output_data($result);
     }
-    //重温课堂
-    public function view(){
-        $id = intval(input('post.id'));
-        $begintime=intval(input('post.begintime'));
-        $endtime=intval(input('post.endtime'));
-        $time=strtotime("-4 month");
-        if($begintime<$time){
-            $begintime='';
-        }
-        if($endtime<$time){
-            $endtime='';
-        }
-        $id=$id.",";
-        $vlink = new Vomont();
-        $res= $vlink->SetLogin();
-        $accountid=$res['accountid'];
-        $res=$vlink->Videotape($accountid,$id,$begintime,$endtime);
-        foreach($res['videos'] as $k=> $v){
-            $res['videos'][$k]['begin']=date('Y-m-d H:i',$v['begintime']);
-            $res['videos'][$k]['end']=date('Y-m-d H:i',$v['endtime']);
-        }
-        output_data($res['videos']);
-    }
+
 
 
 }
