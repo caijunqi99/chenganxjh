@@ -5,9 +5,35 @@ require __DIR__ . '/common_global.php';
 /* 商品相关调用 */
 require __DIR__ . '/common_goods.php';
 
+
+/**
+ * 根据数组中某一个键值分组
+ * @Author 老王
+ * @创建时间   2018-12-24
+ * @param  array                    $arr 要分组的数组
+ * @param  string                   $key 分组的键名
+ * @return array                        [description]
+ */
+function array_group_by($arr=array(), $key=''){
+    $grouped = array();
+    foreach ($arr as $value) {
+        $grouped[$value[$key]][] = $value;
+    }
+    if (func_num_args() > 2) {
+        $args = func_get_args();
+        foreach ($grouped as $key => $value) {
+            $parms = array_merge($value, array_slice($args, 2, func_num_args()));
+            $grouped[$key] = call_user_func_array('array_group_by', $parms);
+        }
+    }
+    return $grouped;
+}
+
+
 /**
  * 二维数组排序
- * @创建时间   2018-12-24T11:33:15+0800
+ * @Author 老王
+ * @创建时间   2018-12-24
  * @param  array                    $arr   [要排序的数组]
  * @param  string                   $v     [以数组中的某一个键值排序]
  * @param  string                   $order [正序 asc,倒序 desc]
