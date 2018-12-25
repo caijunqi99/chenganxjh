@@ -394,7 +394,7 @@ class Memberwallet extends MobileMember
         }
         foreach($result as $k=>$v){
             $result[$k]['add_time'] = date("H:i:s",$v['lg_add_time']);
-            $result[$k]['lg_av_amount'] = sprintf("%.2f",$v['lg_av_amount']);;
+            $result[$k]['lg_av_amount'] = sprintf("%.2f",$v['lg_av_amount']);
 
             $result[$k]['date'] = date("Y-m-d",$v['lg_add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['lg_add_time'])){

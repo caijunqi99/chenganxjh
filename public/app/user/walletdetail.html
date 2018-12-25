@@ -122,7 +122,7 @@
                     for (var s = 0; s < data[i][Time[0]].length; s++) {
                         content += '<li>\n' +
                             '                        <div class="wallet_list wallet_t">\n' +
-                            '                            <div>'+ data[i][Time[0]][s]['lg_av_amount']+'元</div>\n' ;
+                            '                            <div><span style="font-size: 40px;">'+ data[i][Time[0]][s]['lg_av_amount']+'</span>元</div>\n' ;
                                 if(data[i][Time[0]][s]['status'] ==1){
                                     content +=' <div class="income">收入</div>\n';
                                 }else if(data[i][Time[0]][s]['status'] ==2){
@@ -130,7 +130,7 @@
                                 }
                         content +='                        </div>\n' +
                             '                        <div class="wallet_list wallet_b">\n' +
-                            '                            <div>xxx*******xxx</div>\n' +
+                            '                            <div></div>\n' +
                             '                            <div>'+ data[i][Time[0]][s]['add_time']+'</div>\n' +
                             '                        </div>\n' +
                             '                        </li>';
