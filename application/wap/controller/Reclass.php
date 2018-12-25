@@ -66,13 +66,12 @@ class Reclass extends MobileMall
                     $rr[$ke]['list']=$va;
             }
             $rr = array_reverse(array_values($rr));
-            $datas = !empty($rr) ? $rr : $rr;
             $res=array();
-            $res['content'] = $datas;
+            $res['content'] = $rr;
             $res['time'] = !empty($last_time)?$last_time:"";
-
+            $datas = !empty($res) ? [$res] : $res;
         }
-        output_data($res);
+        output_data($datas);
     }
 
     //重温课堂购买片段页
