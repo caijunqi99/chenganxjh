@@ -369,9 +369,9 @@ class Memberwallet extends MobileMember
         $member_id = $this->member_info['member_id'];
 //        $member_id = 1;
 //        $condition['lg_member_id'] = 1;
-        $last_id = input('post.page');
-        if($last_id){
-            $last_info = db('pdlog')->where("lg_add_time <".$last_id." and lg_member_id=".$member_id."")->order('lg_add_time desc')->find();
+        $last_time = input('post.page');
+        if($last_time){
+            $last_info = db('pdlog')->where("lg_add_time <".$last_time." and lg_member_id=".$member_id."")->order('lg_add_time desc')->find();
             $strtime = strtotime(date("Y-m-d",$last_info['lg_add_time'])." 00:00:00");
             $endtime = $strtime+24*3600;
             $where=" lg_member_id=".$member_id." and lg_add_time<".$endtime." and lg_add_time>=".$strtime;
@@ -397,11 +397,11 @@ class Memberwallet extends MobileMember
         }
         foreach($result as $key=>$item){
             $data[$item['date']][] = $item;
-            $last_id = $item['lg_add_time'];
+            $last_time = $item['lg_add_time'];
         }
         $datas = !empty($data) ? [$data] : $data;
         if(!empty($datas[0])){
-            $datas[1]['id'] = !empty($last_id)?$last_id:"";
+            $datas[1]['time'] = !empty($last_time)?$last_time:"";
         }
         output_data($data);
     }

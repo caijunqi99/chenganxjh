@@ -38,21 +38,33 @@ class Reclass extends MobileMall
             $is_buy_tc= db('packagetime')->where('member_id="'.$member_id.'" AND pkg_type=2')->find();
             if(!empty($is_buy_tc) && $is_buy_tc['end_time'] <time()){
                 foreach($video as $k=> $v){
+                    //按日期分组
+                    $video[$k]['date'] = date("Y-m-d",$v['begintime']);
                     $video[$k]['begin']=date('Y-m-d H:i',$v['begintime']);
                     $video[$k]['end']=date('Y-m-d H:i',$v['endtime']);
                     $video[$k]['is_buy'] = 1;
                 }
             }else{
                 foreach($video as $k=> $v){
+                    //按日期分组
+                    $video[$k]['date'] = date("Y-m-d",$v['begintime']);
                     $video[$k]['begin']=date('Y-m-d H:i',$v['begintime']);
                     $video[$k]['end']=date('Y-m-d H:i',$v['endtime']);
                     //判断是否购买片段
                     $video[$k]['is_buy'] = 2;
                 }
             }
+            foreach($video as $key=>$item){
+                $data[$item['date']][] = $item;
+                $last_time = $item['begintime'];
+            }
+            $datas = !empty($data) ? [$data] : $data;
+            if(!empty($datas[0])){
+                $datas[1]['time'] = !empty($last_time)?$last_time:"";
+            }
 
         }
-        output_data($video);
+        output_data($datas);
     }
 
     //重温课堂购买片段页
