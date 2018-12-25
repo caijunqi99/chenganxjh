@@ -351,6 +351,8 @@ class Memberwallet extends MobileMember
         $limit = input('limit');//每页多少条
         $result = db('pdcash')->where($condition)->order('pdc_id desc')->paginate($limit,false,['var_page'=>'page']);
         $cash_list = $result->items();
+        //按时间排序 倒序
+        // $cash_list=vsort($cash_list,$v='pdc_add_time',$order='desc');
         // foreach ($cash_list as $k => $v) {
             // $cash_list[$k]['grouptime'] = date('Y-m-d',$v['pdc_add_time']);
         // }
