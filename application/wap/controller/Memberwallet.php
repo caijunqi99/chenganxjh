@@ -372,8 +372,6 @@ class Memberwallet extends MobileMember
         $condition = array();
         $condition['lg_member_id'] = $this->member_info['member_id'];
         $member_id = $this->member_info['member_id'];
-//        $member_id = 1;
-//        $condition['lg_member_id'] = 1;
         $last_time = input('post.page');
         if($last_time){
             $last_info = db('pdlog')->where("lg_add_time <".$last_time." and lg_member_id=".$member_id."")->order('lg_add_time desc')->find();
