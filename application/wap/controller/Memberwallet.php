@@ -393,6 +393,7 @@ class Memberwallet extends MobileMember
             }
         }
         foreach($result as $k=>$v){
+            $result[$k]['add_time'] = date("H:i:s",$v['lg_add_time']);
             $result[$k]['date'] = date("Y-m-d",$v['lg_add_time']);
             if(date("Y-m-d",time()) == date("Y-m-d",$v['lg_add_time'])){
                 $result[$k]['date'] = "今天";
@@ -406,7 +407,7 @@ class Memberwallet extends MobileMember
         if(!empty($datas[0])){
             $datas[1]['time'] = !empty($last_time)?$last_time:"";
         }
-        output_data($data);
+        output_data($datas);
     }
 
 }

@@ -23,7 +23,7 @@
 
     <!-- 主要内容 -->
     <div class="main" style="padding-top: 0px;">
-        <p class="wallet_p">2018-09-12</p>
+      <!--  <p class="wallet_p">2018-09-12</p>
         <div class="wallet_cont">
             <ul class="wallet_ul">
                 <li>
@@ -73,7 +73,7 @@
                     </div>
                 </li>
             </ul>
-        </div>
+        </div>-->
     </div>
 
 
@@ -84,9 +84,11 @@
     <script src="../content/scripts/API.js"></script>
     <script>
         $(function() {
+            var List = [];
+            var Page = 1;
             $.ajax({
                 type:'POST',
-                url:api+'Memberwallet/MemberPdList.html',
+                url:api+'/Memberwallet/MemberPdList.html',
                 data:{
                     key:user_token,
                     member_id:user_member_id
@@ -120,13 +122,17 @@
                     for (var s = 0; s < data[i][Time[0]].length; s++) {
                         content += '<li>\n' +
                             '                        <div class="wallet_list wallet_t">\n' +
-                            '                            <div>'+ data[i][Time[0]][s]['lg_av_amount']+'元</div>\n' +
-                            '                        <div>提现</div>\n' +
+                            '                            <div>'+ data[i][Time[0]][s]['lg_av_amount']+'元</div>\n' ;
+                                if(data[i][Time[0]][s]['status'] ==1){
+                                    content +=' <div class="income">收入</div>\n';
+                                }else if(data[i][Time[0]][s]['status'] ==2){
+                                    content +='<div>提现</div>\n';
+                                }
+                        content +='                        </div>\n' +
+                            '                        <div class="wallet_list wallet_b">\n' +
+                            '                            <div>xxx*******xxx</div>\n' +
+                            '                            <div>'+ data[i][Time[0]][s]['add_time']+'</div>\n' +
                             '                        </div>\n' +
-                            /*'                        <div class="wallet_list wallet_b">\n' +
-                            '                            <div>68*******321</div>\n' +
-                            '                            <div>09:20:12</div>\n' +
-                            '                        </div>\n' +*/
                             '                        </li>';
 
                     }
