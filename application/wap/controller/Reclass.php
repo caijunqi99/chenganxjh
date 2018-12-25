@@ -21,6 +21,9 @@ class Reclass extends MobileMall
         $endtime=intval(input('post.endtime'));
         $time=strtotime("-4 month");
         $member_id=intval(input('post.member_id'));
+
+//        $begintime=strtotime(date('Y-m-d'.'07:00:00',time()));
+//        $endtime=strtotime(date('Y-m-d'.'17:00:00',time()));
         if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
         }
@@ -58,13 +61,18 @@ class Reclass extends MobileMall
                 $data[$item['date']][] = $item;
                 $last_time = $item['begintime'];
             }
-            $datas = !empty($data) ? [$data] : $data;
-            if(!empty($datas[0])){
-                $datas[1]['time'] = !empty($last_time)?$last_time:"";
+            foreach ($data as $ke=>$va){
+                    $rr[$ke]['date'] = $ke;
+                    $rr[$ke]['list']=$va;
             }
+            $rr = array_reverse(array_values($rr));
+            $datas = !empty($rr) ? $rr : $rr;
+            $res=array();
+            $res['content'] = $datas;
+            $res['time'] = !empty($last_time)?$last_time:"";
 
         }
-        output_data($datas);
+        output_data($res);
     }
 
     //重温课堂购买片段页
