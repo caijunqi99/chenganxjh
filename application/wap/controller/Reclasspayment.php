@@ -109,12 +109,13 @@ class Reclasspayment extends MobileMall
 
                 $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
                 if ($result) {
+                    $this->money($input['total_fee']/100,$order_info['order_id']);
                     echo 'SUCCESS';die;
                 }
             }
         }
         //验证失败
-        echo "FAIL";exit;
+        echo "fail";exit;
 
     }
 
@@ -151,7 +152,7 @@ class Reclasspayment extends MobileMall
                 echo 'SUCCESS';die;
             }
         }
-        echo 'FAIL';die;
+        echo 'fail';die;
     }
 
     //视频有效期
