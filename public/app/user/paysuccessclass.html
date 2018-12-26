@@ -54,10 +54,22 @@
 <script>
     $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
     $('.pay_finish_btn').click(function(){
-        alert('返回到重温课堂首页，需要你们写方法');return false;
+        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+            window.webkit.messageHandlers.backClick.postMessage('back!!');
+        } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+            Android.backToApp();
+        } else { //pc
+            window.history.back(-1);
+        };
     })
     $('.back_btn').click(function(){
-        alert('返回到重温课堂首页，需要你们写方法');return false;
+        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+            window.webkit.messageHandlers.backClick.postMessage('back!!');
+        } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+            Android.backToApp();
+        } else { //pc
+            window.history.back(-1);
+        };
     })
 </script>
 </body>
