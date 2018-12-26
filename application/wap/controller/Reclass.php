@@ -22,13 +22,15 @@ class Reclass extends MobileMall
         $time=strtotime("-4 month");
         $member_id=intval(input('post.member_id'));
 
-//        $begintime=strtotime(date('Y-m-d'.'07:00:00',time()));
-//        $endtime=strtotime(date('Y-m-d'.'17:00:00',time()));
         if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
+        }else{
+            $begintime=intval(input('post.begintime'))-1;
         }
         if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             $endtime='';
+        }else{
+            $endtime=intval(input('post.endtime'))+1;
         }
         $resid=$id.",";
         $vlink = new Vomont();
@@ -46,6 +48,18 @@ class Reclass extends MobileMall
                     $video[$k]['begin']=date('Y-m-d H:i',$v['begintime']);
                     $video[$k]['end']=date('Y-m-d H:i',$v['endtime']);
                     $video[$k]['is_buy'] = 1;
+                    //判断是否购买片段
+                    $re = db('packagesorderreclass')->where('order_resid="'.$id.'" AND start_time>="'.$v["begintime"].'" AND end_time<="'.$v["endtime"].'" ')->find();
+                    if(!empty($re)){
+                        if($re['order_dieline']>$is_buy_tc['end_time']){
+                            $video[$k]['Due_time'] = $re['order_dieline'];
+                        }else{
+                            $video[$k]['Due_time'] = $is_buy_tc['end_time'];
+                        }
+                    }else{
+                        $video[$k]['Due_time'] = $is_buy_tc['end_time'];
+                    }
+
                 }
             }else{
                 foreach($video as $k=> $v){
@@ -57,8 +71,10 @@ class Reclass extends MobileMall
                     $re = db('packagesorderreclass')->where('order_resid="'.$id.'" AND start_time>="'.$v["begintime"].'" AND end_time<="'.$v["endtime"].'" ')->find();
                     if(!empty($re) && $re['order_dieline']>time()){
                         $video[$k]['is_buy'] = 1;
+                        $video[$k]['Due_time'] = $re['order_dieline'];
                     }else{
                         $video[$k]['is_buy'] = 2;
+                        $video[$k]['Due_time'] = '';
                     }
                 }
             }
@@ -104,11 +120,13 @@ class Reclass extends MobileMall
         if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             output_error('片段的结束时间错误！');
         }
+        $begintime2=intval(input('post.begintime'))-1;
+        $endtime2=intval(input('post.endtime'))+1;
         $id=$resid.",";
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
-        $res=$vlink->Videotape($accountid,$id,$begintime,$endtime);
+        $res=$vlink->Videotape($accountid,$id,$begintime2,$endtime2);
         $video = $res['videos'];
         if(empty($video)){
             output_error('无此片段的信息！');
