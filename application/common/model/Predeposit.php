@@ -513,4 +513,11 @@ class Predeposit extends Model {
         return db('pdcash')->where($condition)->delete();
     }
 
+    //提现总额
+    public function getAllCount(){
+        $sql = "select sum(pdc_amount) as num from x_pdcash";
+        $result = $this->query($sql);
+        return $result;
+    }
+
 }
