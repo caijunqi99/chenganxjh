@@ -333,6 +333,87 @@ class Memberwallet extends MobileMember
         output_data(array('state'=>'ok','msg'=>'操作成功！'));
     }
 
+    /**
+     * 获取提现明细列表
+     * @创建时间 2018-12-24T11:38:34+0800
+     */
+    public function MemberCashList(){
+        $condition = array();
+        $condition['pdc_member_id'] = $this->member_info['member_id'];
+
+        $sn_search = input('sn_search');
+        if (!empty($sn_search)) {
+            $condition['pdc_sn'] = $sn_search;
+        }
+        $paystate_search = input('paystate_search');
+        if (isset($paystate_search)) {
+            $condition['pdc_payment_state'] = intval($paystate_search);
+        }
+        $limit = input('limit');//每页多少条
+        $result = db('pdcash')->where($condition)->order('pdc_id desc')->paginate($limit,false,['var_page'=>'page']);
+        $cash_list = $result->items();
+        //按时间排序 倒序
+        // $cash_list=vsort($cash_list,$v='pdc_add_time',$order='desc');
+        // foreach ($cash_list as $k => $v) {
+            // $cash_list[$k]['grouptime'] = date('Y-m-d',$v['pdc_add_time']);
+        // }
+        //以时间分组
+        // $cash_list=array_group_by($cash_list,'grouptime');
+        $data=array(
+            'count'=>$result->total(),
+            'cash_list'=>$cash_list,
+            'currentPage'=>$result->currentPage(),
+        );
+        output_data($data);
+    }
+
+    /**
+     * 获取用户明细列表
+     * @创建时间 2018-12-24T11:40:00+0800
+     */
+    public function MemberPdList(){
+        $condition = array();
+        $condition['lg_member_id'] = $this->member_info['member_id'];
+        $member_id = $this->member_info['member_id'];
+        $last_time = input('post.page');
+        if($last_time){
+            $last_info = db('pdlog')->where("lg_add_time <".$last_time." and lg_member_id=".$member_id."")->order('lg_add_time desc')->find();
+            $strtime = strtotime(date("Y-m-d",$last_info['lg_add_time'])." 00:00:00");
+            $endtime = $strtime+24*3600;
+            $where=" lg_member_id=".$member_id." and lg_add_time<".$endtime." and lg_add_time>=".$strtime;
+            $result = db('pdlog')->where($where)->order('lg_add_time desc')->select();
+        }else{
+            $result=db('pdlog')->where($condition)->order('lg_add_time desc')->limit('0,10')->select();
+            if(count($result)==10){
+                foreach($result as $kk=>$vv){
+                    $time = $vv['lg_add_time'];
+                }
+                $strtime = strtotime(date("Y-m-d",$time)." 00:00:00");
+                $endtime = $strtime+24*3600;
+                $day = db('pdlog')->where("lg_member_id=".$member_id." and lg_add_time<".$endtime." and lg_add_time>=".$strtime)->order('lg_add_time desc')->select();
+                $result=array_merge($result,$day);
+                $result=array_unique($result, SORT_REGULAR);
+            }
+        }
+        foreach($result as $k=>$v){
+            $result[$k]['add_time'] = date("H:i:s",$v['lg_add_time']);
+            $result[$k]['lg_av_amount'] = sprintf("%.2f",$v['lg_av_amount']);;
+
+            $result[$k]['date'] = date("Y-m-d",$v['lg_add_time']);
+            if(date("Y-m-d",time()) == date("Y-m-d",$v['lg_add_time'])){
+                $result[$k]['date'] = "今天";
+            }
+        }
+        foreach($result as $key=>$item){
+            $data[$item['date']][] = $item;
+            $last_time = $item['lg_add_time'];
+        }
+        $datas = !empty($data) ? [$data] : $data;
+        if(!empty($datas[0])){
+            $datas[1]['time'] = !empty($last_time)?$last_time:"";
+        }
+        output_data($datas);
+    }
 
 }
 
