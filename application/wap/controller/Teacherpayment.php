@@ -226,12 +226,12 @@ class TeacherPayment extends MobileMall
     }
 
     /*
-     * 教孩视频支付成功 给教师，市代，省代，总后台分成
+     * 教孩视频支付成功 给教师，市代，县代，总后台分成
      * 分成比例在后台设置 config表-》code=teacher_pay_scale
      * 如果没有市代，市代应得的分成给总后台
-     * 如果没有省代，省代应得的分成给总后台
+     * 如果没有县代，省代应得的分成给总后台
      * 教师分成金额存储member表，代理商分成金额存储company表
-     * 每次分成，金额增加日志存pdlog表
+     * Pdlog会员日志表，Companylog代理商日志表，Adminpdlog总后台日志表
      *
      * */
     public function money($price,$order_id){
