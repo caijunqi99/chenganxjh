@@ -162,7 +162,7 @@
             //取消操作
         });
     });
-    function payStatus(orderSn){
+    function payTo(orderSn){
         $.ajax({
             type:'POST',
             url:api+'/Reclasspayment/getOrderByOrdersn.html',
@@ -173,7 +173,7 @@
             dataType: "json",
             success: function(response){
                 if(response['code'] == 200){
-                    location.href=http_url+'app/user/paysuccessclass.html?id='+response.result[0]['order_tid']+'&over_amount='+response.result[0]['over_amount'];
+                    location.href=http_url+'app/user/paysuccessclass.html?over_amount='+response.result[0]['over_amount'];
                 }else if(response['code'] == 400){
                     $.toast('请前往登陆','forbidden',function () {
                         layout();
