@@ -80,6 +80,13 @@ $lang['company_phone']='手机号码不能为空';
 $lang['company_phoneerror']='请输入正确的手机号';
 $lang['company_area']='所在地区不能为空';
 
+//资金管理
+$lang['ds_management']='资金管理';
+$lang['ds_platform']='平台账号资金管理';
+$lang['ds_membercash']='会员提现管理';
+$lang['ds_companycash']='代理商提现管理';
+$lang['ds_companybanks']='绑定银行卡管理';
+
 //发现
 $lang['ds_find']='发现';
 $lang['ds_mood']='晒心情';
@@ -167,13 +174,6 @@ $lang['ds_teachlist']                   = '教孩管理';
 $lang['ds_teachercertify']            = '教师认证申请';
 $lang['ds_teachtype']            = '视频分类管理';
 $lang['ds_teachvideo']            = '视频管理';
-
-//资金管理
-$lang['ds_management']                   = '资金管理';
-$lang['ds_platform']            = '平台账号资金管理';
-$lang['ds_membercash']            = '会员提现管理';
-$lang['ds_companycash']            = '代理商提现管理';
-$lang['ds_companybanks']            = '绑定银行卡管理';
 
 //商品
 $lang['ds_shops']                  = '商城管理';
@@ -554,3 +554,4 @@ $lang['ds_schoolbus']     = '校车管理';
 $lang['ds_schoolfood']     = '食谱管理';
 
 ?>
+
