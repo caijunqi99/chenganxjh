@@ -23,12 +23,12 @@ class Memberwallet extends MobileMember
             output_error('会员id不能为空');
         }
         $member_Model = Model("Member");
-        $data = $member_Model->getMemberInfo(array('member_id'=>$member_id),"member_id,total_predeposit");
+        $data = $member_Model->getMemberInfo(array('member_id'=>$member_id),"member_id,available_predeposit");
         if(empty($data)){
             output_error('无此会员');
         }
-        if(!empty($data['total_predeposit'])){
-            $data['total_predeposit'] = sprintf("%.2f",$data['total_predeposit']);
+        if(!empty($data['available_predeposit'])){
+            $data['available_predeposit'] = sprintf("%.2f",$data['available_predeposit']);
         }
         output_data($data);
     }
@@ -351,6 +351,8 @@ class Memberwallet extends MobileMember
         $limit = input('limit');//每页多少条
         $result = db('pdcash')->where($condition)->order('pdc_id desc')->paginate($limit,false,['var_page'=>'page']);
         $cash_list = $result->items();
+        //按时间排序 倒序
+        // $cash_list=vsort($cash_list,$v='pdc_add_time',$order='desc');
         // foreach ($cash_list as $k => $v) {
             // $cash_list[$k]['grouptime'] = date('Y-m-d',$v['pdc_add_time']);
         // }
