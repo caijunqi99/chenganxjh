@@ -9,7 +9,10 @@
 namespace app\wap\controller;
 
 
-class Payment extends MobileMall
+use SebastianBergmann\Comparator\MockObjectComparatorTest;
+use think\Model;
+
+class Reclasspayment extends MobileMall
 {
     public function _initialize()
     {
@@ -84,14 +87,13 @@ class Payment extends MobileMall
         $input = input();
         $pay_sn = explode('-', $input['out_trade_no']);
         $data['pay_sn'] = $pay_sn['0'];
-        $Package = model('Packagesorder');
+        $Package = model('packagesorderreclass');
         $order_info = $Package->getOrderInfo($data);
 
         $this->notify_url($input,$order_info);
 
         if (!empty($order_info) && $input) {
             $callback_info = $payment_api->verify_notify($input);
-
             if ($callback_info['trade_status'] == '1') {
                 //验证成功
                 $update = array(
@@ -100,25 +102,21 @@ class Payment extends MobileMall
                     'finnshed_time' => time(),
                     'pd_amount' => 0, //预存款支付金额
                     'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
-                    'order_state' => 40 ,//订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                    'order_state' => 20 ,//订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
                     'over_amount' => $callback_info['total_fee'], //最终支付金额
+                    'order_dieline' => $this->time()
                 );
 
-                $result = $this->_update_order($update, $order_info);
-
-                if ($result['code']) {
-                    if($order_info['pkg_type'] == 2){
-                        //分成
-                        $this->money($callback_info['total_fee'],$order_info['order_id']);
-                    }
-                    echo 'SUCCESS';
-                    exit;
+                $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+                if ($result) {
+                    $this->money($input['total_fee']/100,$order_info['order_id']);
+                    echo 'SUCCESS';die;
                 }
             }
         }
         //验证失败
-        echo "fail";
-        exit;
+        echo "fail";exit;
+
     }
 
     /**
@@ -129,7 +127,7 @@ class Payment extends MobileMall
         $this->payment_code = 'wxpay_h5';
         $api = $this->_get_payment_api();
         $input = $this->xmlToArray(file_get_contents('php://input'));
-        $Package = model('Packagesorder');
+        $Package = model('packagesorderreclass');
         $data =array();
         $data['pay_sn'] = $input['out_trade_no'];
         $order_info = $Package->getOrderInfo($data);
@@ -137,8 +135,6 @@ class Payment extends MobileMall
 
         if ($order_info && $input['result_code']=="SUCCESS") {
             //验证订单
-
-
             //验证成功
             $update = array(
                 'out_pay_sn' => $input['transaction_id'],
@@ -146,25 +142,24 @@ class Payment extends MobileMall
                 'finnshed_time' => time(),
                 'pd_amount' => 0, //预存款支付金额
                 'evaluation_state' => 0, //评价状态 0未评价，1已评价，2已过期未评价
-                'order_state' => 40, //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
+                'order_state' => 20, //订单状态：0(已取消)10(默认):未付款;20:已付款;40:已完成;
                 'over_amount' => $input['total_fee']/100, //最终支付金额
+                'order_dieline' => $this->time()
             );
-            $result = $this->_update_order($update, $order_info);
-
-            if ($result['code']) {
-                if($order_info['pkg_type'] == 2){
-                    //分成
-                    $this->money($input['total_fee']/100,$order_info['order_id']);
-                }
-
-                echo 'SUCCESS';
-                exit;
+            $result = $Package->editOrder($update, array('order_id'=>$order_info['order_id']));
+            if ($result) {
+                $this->money($input['total_fee']/100,$order_info['order_id']);
+                echo 'SUCCESS';die;
             }
         }
-        echo 'fail';
-        exit;
+        echo 'fail';die;
+    }
 
-
+    //视频有效期
+    public function time(){
+        $config = db('config')->where(array('code'=>"revisit_class"))->find();
+        $time = strtotime("+".$config['value']." hour");
+        return $time;
     }
 
     /**
@@ -186,10 +181,6 @@ class Payment extends MobileMall
             if (!$updateSuccess) {
                 // @todo
                 // 直接退出 等待下次通知
-                echo 'fail';
-                exit;
-            }else{
-                echo 'success';
                 exit;
             }
         }
@@ -234,59 +225,19 @@ class Payment extends MobileMall
         return $payment_info['payment_config'];
     }
 
-    /**
-     * 更新订单状态
-     */
-    private function _update_order($input, $orderInfo)
-    {
-        $model_order = model('Packagesorder');
-        $logic_payment = model('payment', 'logic');
-        $paymentCode = $this->payment_code;
-        if ($orderInfo) {
-            $result = $logic_payment->updatePackageOrder($input, $orderInfo, $paymentCode);
-
-
-            $log_buyer_id = $orderInfo['buyer_id'];
-            $log_buyer_name = $orderInfo['buyer_name'];
-            $log_desc = '套餐购买' . orderPaymentName($paymentCode) . '成功支付，支付单号：' . $orderInfo['pay_sn'];
-
-            if($orderInfo['pkg_type'] == 1){
-                $log_model = Model("Pdlog");
-                $member_model = Model("Member");
-                $memberInfo = $member_model->getMemberInfoByID($orderInfo['buyer_id']);
-
-                $reClass_data = [
-                    "lg_member_id" => $orderInfo['buyer_id'],
-                    "lg_member_name" => $memberInfo['member_mobile'],
-                    "lg_type" => "order_pay",
-                    "lg_av_amount" => $orderInfo['order_amount'],
-                    "lg_add_time" => time(),
-                    "lg_desc" => "看孩套餐，用户支付成功。订单编号：".$orderInfo['order_sn']
-                ];
-                $log_model->addLog($reClass_data);
-            }
-
-        }
-
-
-        return $result;
-    }
-
-
-
     /*
-    * 重温课堂支付成功 给特约，县/区代，市代，总后台分成
-    * 分成比例在后台设置 config表-》code=re_class_pay_scale
-    * 如果没有特约，特约应得的分成给总后台
-    * 如果没有县/区，县/区应得的分成给总后台
-    * 如果没有市代，省代应得的分成给总后台
-    * 代理商分成金额存储company表
-    * 每次分成，金额增加日志存pdlog表
-    *
-    * */
+   * 重温课堂支付成功 给特约，县/区代，市代，总后台分成
+   * 分成比例在后台设置 config表-》code=re_class_pay_scale
+   * 如果没有特约，特约应得的分成给总后台
+   * 如果没有县/区，县/区应得的分成给总后台
+   * 如果没有市代，省代应得的分成给总后台
+   * 代理商分成金额存储company表
+   * 每次分成，金额增加日志存pdlog表
+   *
+   * */
     public function money($price,$order_id){
         //订单信息
-        $Package = model('Packagesorder');
+        $Package = model('packagesorderreclass');
         $order_info = $Package->getOrderInfo(array('order_id'=>$order_id));
         $log_model = Model("Pdlog");
         $member_model = Model("Member");
@@ -297,7 +248,7 @@ class Payment extends MobileMall
             "lg_type" => "order_pay",
             "lg_av_amount" => $price,
             "lg_add_time" => time(),
-            "lg_desc" => "重温课堂套餐，用户支付成功。订单编号：".$order_info['order_sn']
+            "lg_desc" => "重温课堂片段，用户支付成功。订单编号：".$order_info['order_sn']
         ];
         $log_model->addLog($reClass_data);
 
@@ -322,7 +273,7 @@ class Payment extends MobileMall
                     "lg_type" => "share_ty_payment",
                     "lg_av_amount" => $agent_price,
                     "lg_add_time" => time(),
-                    "lg_desc" => "重温课堂套餐，用户支付成功给特约代理商分成。订单编号：".$order_info['order_sn']
+                    "lg_desc" => "重温课堂片段，用户支付成功给特约代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
                 $companylog_model->addLog($agent_data);
@@ -344,7 +295,7 @@ class Payment extends MobileMall
                     "lg_type" => "share_area_payment",
                     "lg_av_amount" => $area_price,
                     "lg_add_time" => time(),
-                    "lg_desc" => "重温课堂套餐，用户支付成功给县区代理商分成。订单编号：".$order_info['order_sn']
+                    "lg_desc" => "重温课堂片段，用户支付成功给县区代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
                 $companylog_model->addLog($city_data);
@@ -366,7 +317,7 @@ class Payment extends MobileMall
                     "lg_type" => "share_city_payment",
                     "lg_av_amount" => $city_price,
                     "lg_add_time" => time(),
-                    "lg_desc" => "重温课堂套餐，用户支付成功给市代理商分成。订单编号：".$order_info['order_sn']
+                    "lg_desc" => "重温课堂片段，用户支付成功给市代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
                 $companylog_model->addLog($city_data);
@@ -388,10 +339,29 @@ class Payment extends MobileMall
                 "lg_type" => "share_admin_payment",
                 "lg_av_amount" => $admin_price,
                 "lg_add_time" => time(),
-                "lg_desc" => "重温课堂套餐，用户支付成功,给总后台分成。订单编号：".$order_info['order_sn']
+                "lg_desc" => "重温课堂片段，用户支付成功,给总后台分成。订单编号：".$order_info['order_sn']
             ];
             $adminpdlog_model = Model("Adminpdlog");
             $adminpdlog_model->addLog($admin_data);
         }
     }
-}                  
+
+    public function getOrderByOrdersn(){
+        $order_sn = input('param.order_sn');
+        if(!$order_sn){
+            output_error('参数有误');
+        }
+        $model_teach = Model("packagesorderreclass");
+        $result = $model_teach->getOrderInfo(array('pay_sn'=>$order_sn),'','order_id,order_sn,pay_sn,order_resid,order_dieline,add_time,payment_time,order_amount,over_amount');
+        if(!empty($result)){
+            $result['add_time'] = $result['add_time']!=""?date("Y-m-d H:i:s",$result['add_time']):"";
+            $result['order_dieline'] = $result['order_dieline']!=""?date("Y-m-d H:i:s",$result['order_dieline']):"";
+            $result['payment_time'] = $result['payment_time']!=""?date("Y-m-d H:i:s",$result['payment_time']):"";
+            $result['over_amount'] = $result['over_amount']!=""?number_format($result['over_amount'],2):"";
+            $result['order_amount'] = $result['order_amount']!=""?number_format($result['order_amount'],2):"";
+        }
+        output_data($result);
+    }
+
+
+}
