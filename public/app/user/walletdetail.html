@@ -124,7 +124,9 @@
                             '                        <div class="wallet_list wallet_t">\n' +
                             '                            <div><span style="font-size: 40px;">'+ data[i][Time[0]][s]['lg_av_amount']+'</span>元</div>\n' ;
                                 if(data[i][Time[0]][s]['status'] ==1){
-                                    content +=' <div class="income">收入</div>\n';
+                                    content +=' <div>支出</div>\n';
+                                }else if(data[i][Time[0]][s]['status'] ==2){
+                                    content +='<div  class="income">收入</div>\n';
                                 }else if(data[i][Time[0]][s]['status'] ==2){
                                     content +='<div>提现</div>\n';
                                 }

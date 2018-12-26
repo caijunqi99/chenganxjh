@@ -52,13 +52,9 @@ class Reclass extends MobileMember
 
         if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
-        }else{
-            $begintime=intval(input('post.begintime'))-1;
         }
         if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             $endtime='';
-        }else{
-            $endtime=intval(input('post.endtime'))+1;
         }
         $resid=$id.",";
         $vlink = new Vomont();
@@ -148,13 +144,11 @@ class Reclass extends MobileMember
         if((!empty($endtime) && $endtime<$time) || empty($endtime)){
             output_error('片段的结束时间错误！');
         }
-        $begintime2=intval(input('post.begintime'))-1;
-        $endtime2=intval(input('post.endtime'))+1;
         $id=$resid.",";
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
-        $res=$vlink->Videotape($accountid,$id,$begintime2,$endtime2);
+        $res=$vlink->Videotape($accountid,$id,$begintime,$endtime);
         $video = $res['videos'];
         if(empty($video)){
             output_error('无此片段的信息！');
@@ -162,8 +156,17 @@ class Reclass extends MobileMember
         $model = Model('packagesorderreclass');
         //会员信息
         $memberinfo = db('member')->where(array('member_id'=>$member_id))->find();
+        //获取摄像头表中的parentid  然后在获取class表中的schoolid  然后在获取学校信息
+        $camera = db('camera')->field('parentid')->where('id="'.$resid.'"')->find();
+        $school = '';
+        if(!empty($camera)){
+            $class = db('class')->field('schoolid')->where('res_group_id="'.$camera['parentid'].'"')->find();
+            if(!empty($class)){
+                $school= db('school')->where('schoolid="'.$class["schoolid"].'"')->find();
+            }
+        }
         //片段价格
-        $site = db('config')->where(' id =723')->find();
+        $site = db('config')->where(' id=723')->find();
         //生成基本订单信息
         $order = array();
         $order['buyer_id'] = $member_id;
@@ -177,9 +180,13 @@ class Reclass extends MobileMember
         $order['order_resid'] = $resid;
         $order['start_time'] = $begintime;
         $order['end_time'] = $endtime;
-        $order['provinceid'] = !empty($memberinfo['member_provinceid'])?$memberinfo['member_provinceid']:"";
-        $order['cityid'] = !empty($memberinfo['member_cityid'])?$memberinfo['member_cityid']:"";
-        $order['areaid'] = !empty($memberinfo['member_areaid'])?$memberinfo['member_areaid']:"";
+        //学校地区及所属公司
+        $order['provinceid'] = !empty($school)?$school['provinceid']:"";
+        $order['cityid'] = !empty($school)?$school['cityid']:"";
+        $order['areaid'] = !empty($school)?$school['areaid']:"";
+        $order['admin_company_id'] = !empty($school)?$school['admin_company_id']:"";
+
+
         $order['payment_code'] = $this->payment_code;
         if ($order['payment_code'] == "") {
             $order['payment_code'] = "offline";
