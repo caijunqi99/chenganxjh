@@ -73,8 +73,8 @@ class Reclass extends MobileMember
                 foreach($video as $k=> $v){
                     //按日期分组
                     $video[$k]['date'] = date("Y-m-d",$v['begintime']);
-                    $video[$k]['begin']=date('Y-m-d H:i',$v['begintime']);
-                    $video[$k]['end']=date('Y-m-d H:i',$v['endtime']);
+                    $video[$k]['begin']=date('H:i',$v['begintime']);
+                    $video[$k]['end']=date('H:i',$v['endtime']);
                     $video[$k]['is_buy'] = 1;
                     //判断是否购买片段
                     $re = db('packagesorderreclass')->where('order_resid="'.$id.'" AND start_time>="'.$v["begintime"].'" AND end_time<="'.$v["endtime"].'"  AND order_state=20  ')->find();
@@ -93,8 +93,8 @@ class Reclass extends MobileMember
                 foreach($video as $k=> $v){
                     //按日期分组
                     $video[$k]['date'] = date("Y-m-d",$v['begintime']);
-                    $video[$k]['begin']=date('Y-m-d H:i',$v['begintime']);
-                    $video[$k]['end']=date('Y-m-d H:i',$v['endtime']);
+                    $video[$k]['begin']=date('H:i',$v['begintime']);
+                    $video[$k]['end']=date('H:i',$v['endtime']);
                     //判断是否购买片段
                     $re = db('packagesorderreclass')->where('order_resid="'.$id.'" AND start_time>="'.$v["begintime"].'" AND end_time<="'.$v["endtime"].'" AND order_state=20 ')->find();
                     if(!empty($re) && $re['order_dieline']>time()){
