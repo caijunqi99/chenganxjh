@@ -7,9 +7,28 @@ use think\Validate;
 
 class Companycash extends AdminControl {
 
+    public function _initialize() {
+        parent::_initialize();
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        //获取当前角色对当前子目录的权限
+        $class_name=explode('\\',__CLASS__);
+        $class_name = strtolower(end($class_name));
+        $perm_id = $this->get_permid($class_name);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
+        $this->assign('action',$action);
+    }
+
     //代理商提现
     public function index(){
+        if(session('admin_is_super') !=1 && !in_array(4,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $condition = array();
+        $admininfo = $this->getAdminInfo();
+        if($admininfo['admin_id']!=1){
+            $condition['o_id'] = $admininfo['admin_company_id'];
+        }
         $status = input('param.status');//状态
         if ($status!="") {
             $condition['status'] = $status;
@@ -45,6 +64,9 @@ class Companycash extends AdminControl {
 
     //代理商提现，后台标识
     public function company_option(){
+        if(session('admin_is_super') !=1 && !in_array(15,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $pdc_id = input('param.pdc_id');
         $status = input('param.status');
         $id = input('param.id');
@@ -75,6 +97,9 @@ class Companycash extends AdminControl {
 
     //提现
     public function cash(){
+        if(session('admin_is_super') ==1 || !in_array(17,$this->action )){
+            $this->error(lang('ds_assign_right'));
+        }
         $admininfo = $this->getAdminInfo();
         $admininfo['admin_company_id']=2;
         $admininfo['admin_id']=2;
@@ -156,13 +181,13 @@ class Companycash extends AdminControl {
                 'url' => url('Admin/Companycash/index')
             )
         );
-        //        if(session('admin_is_super') !=1){
-        $menu_array[] = array(
-            'name' => 'cash',
-            'text' => '提现',
-            'url' => url('Admin/Companycash/cash')
-        );
-//        }
+        if(session('admin_is_super') !=1 && in_array(17,$this->action )){
+            $menu_array[] = array(
+                'name' => 'cash',
+                'text' => '提现',
+                'url' => url('Admin/Companycash/cash')
+            );
+        }
 
         return $menu_array;
     }

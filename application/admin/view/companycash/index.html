@@ -65,7 +65,9 @@
             <th class="align-center">账户余额（元）</th>
             <th class="align-center">提现金额（元）</th>
             <th class="align-center">状态</th>
+            <?php if(session('admin_is_super') ==1 || in_array('15',$action)){ ?>
             <th class="align-center">操作</th>
+            <?php } ?>
             <th class="align-center">提现时间</th>
             <th class="align-center">提现编号</th>
         </tr>
@@ -83,6 +85,7 @@
             <td class="align-center"><?php if(!empty($v['available_predeposit'])){echo sprintf("%.2f",$v['available_predeposit']);} ?></td>
             <td class="align-center"><?php echo $v['pdc_amount']; ?></td>
             <td class="align-center"><?php if($v['status']==1){echo "未知";}elseif($v['status']==2){echo "成功";}elseif($v['status']==3){echo "失败";} ?></td>
+            <?php if(session('admin_is_super') ==1 || in_array('15',$action)){ ?>
             <td class="align-center"><?php if($v['status']==1){ ?>
                 <a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>2,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">成功</a>
                 <a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>3,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">失败</a>
@@ -90,6 +93,7 @@
                 无操作
                 <?php } ?>
             </td>
+            <?php } ?>
             <td class="align-center"><?php echo date("Y-m-d H:i:s",$v['pdc_add_time']); ?></td>
             <td class="align-center"><?php echo $v['pdc_sn']; ?></td>
         </tr>
