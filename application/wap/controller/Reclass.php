@@ -52,10 +52,12 @@ class Reclass extends MobileMember
 
         if((!empty($begintime) && $begintime<$time) || empty($begintime)){
             $begintime='';
+        }else{
+            $endtime=$begintime+24*3600;
         }
-        if((!empty($endtime) && $endtime<$time) || empty($endtime)){
-            $endtime='';
-        }
+//        if((!empty($endtime) && $endtime<$time) || empty($endtime)){
+//            $endtime='';
+//        }
         $resid=$id.",";
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
