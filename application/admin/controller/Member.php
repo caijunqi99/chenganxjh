@@ -176,7 +176,7 @@ class Member extends AdminControl {
                 'member_sex'         => input('post.member_sex'),
                 // 'member_qq'       => input('post.member_qq'),
                 // 'member_ww'       => input('post.member_ww'),
-                'inform_allow'       => input('post.inform_allow'),
+//                'inform_allow'       => input('post.inform_allow'),
                 'is_buy'             => input('post.isbuy'),
                 'is_allowtalk'       => input('post.allowtalk'),
                 'member_state'       => input('post.memberstate'),
