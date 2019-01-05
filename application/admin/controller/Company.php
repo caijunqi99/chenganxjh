@@ -369,19 +369,27 @@ class Company extends AdminControl {
         }
         $admin_id = $this->admin_info['admin_id'];
             $model_admin = Model('admin');
-            $param['admin_name'] = $_POST['admin_name'];
-            $param['admin_gid'] = $_POST['gid'];
-            $param['admin_password'] = md5($_POST['admin_password']);
-            $param['create_uid'] = $admin_id;
-            $param['admin_company_id']=$_POST['oid'];
-            $param['admin_status']=1;
-            $param['admin_del_status']=1;
-            $rs = $model_admin->addAdmin($param);
-            if ($rs) {
-                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
-            } else {
-                echo json_encode(['m'=>true,'ms'=>lang('co_organize_succ')]);
+            $where=array();
+            $where['admin_company_id']=$_POST['oid'];
+            $where['admin_del_status']=1;
+            $result=$model_admin->getAdminList($where);
+            if(!empty($result)) {
+                echo json_encode(['m' => false, 'ms' =>'已添加过超级管理员:'.$result[0]['admin_name'].'，不能再次添加!']);
+            }else {
+                $param['admin_name'] = $_POST['admin_name'];
+                $param['admin_gid'] = $_POST['gid'];
+                $param['admin_password'] = md5($_POST['admin_password']);
+                $param['create_uid'] = $admin_id;
+                $param['admin_company_id'] = $_POST['oid'];
+                $param['admin_status'] = 1;
+                $param['admin_del_status'] = 1;
+                $rs = $model_admin->addAdmin($param);
+                if ($rs) {
+                    $this->log(lang('ds_add') . lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
+                    echo json_encode(['m' => true, 'ms' => lang('co_organize_succ')]);
+                } else {
+                    echo json_encode(['m' => true, 'ms' => lang('co_organize_succ')]);
+                }
             }
 
     }
