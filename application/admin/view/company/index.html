@@ -240,11 +240,13 @@
                     dataType: 'json',
                     data: {'admin_name': admin_name,'admin_password':admin_password,'gid':gid,'oid':oid},
                     success:function(sb){
-                        if (sb.m) {
+                        if (sb.m==true) {
                             layer.msg(sb.ms, {icon: 16,time: 500},function(){
                                 window.location.href="{:url('/Admin/Company/index')}";
                             });
-
+                        }else{
+                            alert(sb.ms);
+                            window.location.href="{:url('/Admin/Company/index')}";
                         }
                     }
                 });

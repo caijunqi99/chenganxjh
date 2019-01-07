@@ -49,6 +49,11 @@ class Organizes extends AdminControl
                 'text' => '绑定学生总数',
                 'url' => url('Admin/Organizes/studentnum',array('o_id'=>$oid))
             ),
+            array(
+                'name' => 'money',
+                'text' => '资金交易',
+                'url' => url('Admin/Organizes/money',array('o_id'=>$oid))
+            ),
         );
         return $menu_array;
     }
@@ -327,6 +332,13 @@ class Organizes extends AdminControl
         $role=$_GET['role_id'];
         $this->assign('role',$role);
         $this->setAdminCurItem('admin');
+        return $this->fetch();
+    }
+    //资金交易
+    public function money(){
+        $oid = $_GET['o_id'];
+        $company = db("company")->alias("c")->join('__COMPANYBANKS__ com','c.o_id = com.company_id','LEFT')->field("c.total_amount,c.freeze_amount,com.bank_name,com.bank_card")->where(array("o_id"=>$oid))->find();
+        $this->setAdminCurItem('money');
         return $this->fetch();
     }
 }
