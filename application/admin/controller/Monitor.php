@@ -237,7 +237,7 @@ class Monitor extends AdminControl
         $ress=$camera_update->getOnePkg($condition);
         if($is_rtmp==2) {
             $datas = $vlink->Livestatus($accountid,$ress['id']);
-            if($datas['result']==0) {
+            if($datas['result']!=123) {
                 $update['liveid'] = $datas['liveid'];
             }
             if($ress['rtmpplayurl']=='') {
