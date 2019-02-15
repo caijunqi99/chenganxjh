@@ -232,6 +232,7 @@ class TeacherPayment extends MobileMall
      * 如果没有县代，省代应得的分成给总后台
      * 教师分成金额存储member表，代理商分成金额存储company表
      * Pdlog会员日志表，Companylog代理商日志表，Adminpdlog总后台日志表
+     * status 1：支出；2：收入；3：提现
      *
      * */
     public function money($price,$order_id){
@@ -247,6 +248,7 @@ class TeacherPayment extends MobileMall
             "lg_type" => "order_pay",
             "lg_av_amount" => $price,
             "lg_add_time" => time(),
+            "status" => 1,
             "lg_desc" => "教孩视频，用户支付成功。订单编号：".$order_info['order_sn']
         ];
         $log_model->addLog($teacher_data);
@@ -270,6 +272,7 @@ class TeacherPayment extends MobileMall
                 "lg_type" => "share_payment",
                 "lg_av_amount" => $teacher_price,
                 "lg_add_time" => time(),
+                "status" => 2,
                 "lg_desc" => "教孩视频，用户支付成功给教师分成。订单编号：".$order_info['order_sn']
             ];
             $log_model->addLog($teacher_data);
@@ -290,6 +293,7 @@ class TeacherPayment extends MobileMall
                     "lg_type" => "share_city_payment",
                     "lg_av_amount" => $city_price,
                     "lg_add_time" => time(),
+                    "status" => 2,
                     "lg_desc" => "教孩视频，用户支付成功给市代理商分成。"
                 ];
                 $companylog_model = Model("Companylog");
@@ -311,6 +315,7 @@ class TeacherPayment extends MobileMall
                     "lg_type" => "share_province_payment",
                     "lg_av_amount" => $area_price,
                     "lg_add_time" => time(),
+                    "status" => 2,
                     "lg_desc" => "教孩视频，用户支付成功给县代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
@@ -332,6 +337,7 @@ class TeacherPayment extends MobileMall
                 "lg_type" => "share_admin_payment",
                 "lg_av_amount" => $admin_price,
                 "lg_add_time" => time(),
+                "status" => 3,
                 "lg_desc" => "教孩视频，用户支付成功,给总后台分成。订单编号：".$order_info['order_sn']
             ];
             $adminpdlog_model = Model("Adminpdlog");

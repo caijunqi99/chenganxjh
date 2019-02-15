@@ -275,9 +275,15 @@ class School extends AdminControl {
             $data['cityid'] = $city_id['area_parent_id'];
             $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
             $data['provinceid'] = $province_id['area_parent_id'];
-            //print_r($school_id);die;
             //验证数据  END
             $result = $model_school->editSchool($data,array('schoolid'=>$school_id));
+            //修改学校信息的同时 要修改班级和学生的地区
+            $model_class = Model('classes');
+            $data_class = array("school_provinceid"=>$data['provinceid'],"school_cityid"=>$data['cityid'],"school_areaid"=>input('post.area_id'),"school_region"=>input('post.area_info'));
+            $model_class->editClass($data_class,array('schoolid'=>$school_id));
+            $model_student = Model('student');
+            $data_student = array("s_provinceid"=>$data['provinceid'],"s_cityid"=>$data['cityid'],"s_areaid"=>input('post.area_id'),"s_region"=>input('post.area_info'));
+            $model_student->editStudent($data_student,array('s_schoolid'=>$school_id));
             if ($result) {
                 $this->success('编辑成功', 'School/member');
             } else {
