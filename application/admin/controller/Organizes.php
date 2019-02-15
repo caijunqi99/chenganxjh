@@ -49,6 +49,11 @@ class Organizes extends AdminControl
                 'text' => '绑定学生总数',
                 'url' => url('Admin/Organizes/studentnum',array('o_id'=>$oid))
             ),
+            array(
+                'name' => 'money',
+                'text' => '资金交易',
+                'url' => url('Admin/Organizes/money',array('o_id'=>$oid))
+            ),
         );
         return $menu_array;
     }
@@ -327,6 +332,31 @@ class Organizes extends AdminControl
         $role=$_GET['role_id'];
         $this->assign('role',$role);
         $this->setAdminCurItem('admin');
+        return $this->fetch();
+    }
+    //资金交易
+    public function money(){
+        $oid = $_GET['o_id'];
+        $company = db("company")->alias("c")
+            ->join('__COMPANYBANKS__ com','c.o_id = com.company_id','LEFT')
+            ->field("c.total_amount,c.freeze_amount,c.o_role,c.o_provinceid,c.o_cityid,c.o_areaid,com.bank_name,com.bank_card")
+            ->where(array("o_id"=>$oid))->find();
+        $condition = array();
+        //1，县区代理；2，省级代理；3，市级代理；4，特约代理
+        if($company['o_role']==1){
+            $condition['member_provinceid'] = $company['o_provinceid'];
+            $condition['member_cityid'] = $company['o_cityid'];
+            $condition['member_areaid'] = $company['o_areaid'];
+        }elseif($company['o_role']==2){
+            $condition['member_provinceid'] = $company['o_provinceid'];
+        }elseif($company['o_role']==3){
+            $condition['member_provinceid'] = $company['o_provinceid'];
+            $condition['member_cityid'] = $company['o_cityid'];
+        }
+        $result = db('adminpdlog')->where($condition)->select();
+        $this->assign('company', $company);
+        $this->assign('result', $result);
+        $this->setAdminCurItem('money');
         return $this->fetch();
     }
 }

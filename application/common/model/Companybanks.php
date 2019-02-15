@@ -12,8 +12,17 @@ class Companybanks extends Model {
      * @param  [type]                   $condition [description]
      * @return [type]                              [description]
      */
-    public function getAllBanks($condition){
-        return db('companybanks')->where($condition)->order('updatetime desc')->select();
+    public function getAllBanks($condition, $page = '', $field = '*', $class = 'bank_id desc', $limit = '', $extend = array(), $master = false) {
+        $list_paginate = db('companybanks')->alias("s")
+            ->join('__COMPANY__ com','s.company_id=com.o_id')
+            ->field("s.*,com.o_name")
+            ->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $this->page_info = $list_paginate;
+        $list = $list_paginate->items();
+
+        if (empty($list))
+            return array();
+        return $list;
     }
 
     /**
@@ -50,7 +59,7 @@ class Companybanks extends Model {
     }
 
     /**
-     * 根据卡号获取银行卡信息
+     * 根据条件获取银行卡信息
      * @创建时间   2018-12-04T18:29:55+0800
      * @param  [type]                   $card [description]
      * @return [type]                         [description]
