@@ -39,7 +39,7 @@ class Camera extends AdminControl
         if(!empty($_GET)){
             $where = $this->_conditions($_GET);
         }
-        
+
 
 
         $page_count = intval(input('get.page_count')) ? intval(input('get.page_count')) : 1;//每页的条数
@@ -64,11 +64,11 @@ class Camera extends AdminControl
     public function get_list(){
 
         $where = ' status=2 ';
-        
+
         if(!empty($_POST)){
             $where = $this->_conditions($_POST);
         }
-        
+
 
         $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
@@ -203,7 +203,7 @@ class Camera extends AdminControl
             $this->error(lang('ds_assign_right'));
         }
         $where = '';
-        
+
         $where = $this->_conditions($_GET);
 
         $list_count = db('camera')->where($where)->count();
@@ -284,7 +284,7 @@ class Camera extends AdminControl
     public function getResGroupIds($where){
         $School = model('School');
         $Class = model('Classes');
-        
+
         if (isset($where['sc_type']) && !empty($where['sc_type'])) {
             $sc_id = db('schooltype')->where($where)->value('sc_id');
             unset($where['sc_type']);
@@ -343,7 +343,7 @@ class Camera extends AdminControl
 
         $page_count = intval(input('post.page_count')) ? intval(input('post.page_count')) : 1;//每页的条数
         $start = intval(input('post.page')) ? (intval(input('post.page'))-1)*$page_count : 0;//开始页数
-        
+
 //        halt($start);
         //查询未绑定的摄像头
         $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
@@ -484,15 +484,15 @@ class Camera extends AdminControl
             'begintime' =>strtotime($input['starttime']),
             'endtime' =>strtotime($input['endtime'])
         );
-        $starttime = 
-        $endtime = 
+        $starttime =
+        $endtime =
         $result = db('camera')->where('cid',$cid)->update($updata);
         if ($result) {
             ds_json_encode('200', $msg.'设置成功');
         }else{
             ds_json_encode('100', $msg.'设置失败');
         }
-        
+
     }
 
     public function makedefault(){
@@ -510,7 +510,42 @@ class Camera extends AdminControl
             ds_json_encode('100', '参数错误');;
         }
     }
-
+    /**
+     * 开启rtmp
+     */
+    public function addrtmp(){
+        $camera_update=Model('camera');
+        $where=array();
+        $cid=intval(input('post.cid'));
+        $where['cid']=$cid;
+        $update=array();
+        $is_rtmp=intval(input('post.is_rtmp'));
+        $update['is_rtmp']=$is_rtmp;
+        $vlink = new Vomont();
+        $res= $vlink->SetLogin();
+        $accountid=$res['accountid'];
+        $condition=array();
+        $condition['cid']=$cid;
+        $ress=$camera_update->getOnePkg($condition);
+        if($is_rtmp==2) {
+            $datas = $vlink->Livestatus($accountid,$ress['id']);
+            if($datas['result']!=123) {
+                $update['liveid'] = $datas['liveid'];
+            }
+            if($ress['rtmpplayurl']=='') {
+                time_sleep_until(time() + 3);
+                $channels = $ress['deviceid'] . '-' . $ress['channelid'] . ',';
+                $rtmp = $vlink->Resources($accountid, $channels);
+                $update['rtmpplayurl'] = $rtmp['channels'][0]['rtmpplayurl'];
+            }
+        }else{
+            $datas=$vlink->Liveend($accountid,$ress['liveid']);
+            $update['liveid']='';
+        }
+        $res=$camera_update->editCamera($where,$update);
+        //print_r($res);exit;
+        return $res;
+    }
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
@@ -524,5 +559,4 @@ class Camera extends AdminControl
         );
         return $menu_array;
     }
-
 }
