@@ -59,9 +59,11 @@
                     <div class="layui-input-inline">
                         <select name="company" lay-filter="company"  class="select"  lay-verify="type"  id="company">
                             <option value="0" selected="">请选择公司</option>
-                            <option value="1" <?php if(1==$com){?>selected="selected"<?php }?>>总公司</option>
+                            <?php if(session('admin_is_super')==1){?>
+                                <option value="1" <?php if(1==$com){?>selected="selected"<?php }?>>总公司</option>
+                            <?php }?>
                             {volist name="company" id="vo"}
-                            <option value="{$vo.o_id}" <?php if($vo['o_id']==$com){?>selected="selected"<?php }?> >{$vo.o_name}</option>
+                                <option value="{$vo.o_id}" <?php if($vo['o_id']==$com){?>selected="selected"<?php }?> >{$vo.o_name}</option>
                             {/volist}
                         </select>
                     </div>

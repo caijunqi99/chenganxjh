@@ -22,7 +22,7 @@
                     <input name="name"  autocomplete="off" placeholder="请输入摄像头名称搜索" value="<?php echo $_GET['name'];?>" class="layui-input" type="text">
                 </div>
             </div>
-            
+
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="grade" lay-filter="grade"  class="select"  lay-verify="type"  id="grade">
@@ -41,7 +41,7 @@
             <div class="layui-inline">
                 <button class="layui-btn" data-type="reload">{$Think.lang.look_camera_search}</button>
             </div>
-            
+
         </div>
 
         <table class="layui-table">
@@ -80,7 +80,7 @@
         <div style="float: right;">
             <tr class="tfoot">
                 <div id="page">
-                    
+
                 </div>
             </tr>
         </div>
@@ -125,7 +125,7 @@
   </div>
 </form>
 <script type="text/javascript">
-                    
+
                 </script>
 <script type="text/javascript">
     function rtmplay(cid){
@@ -158,7 +158,7 @@
     function addrtmp(cid,is_rtmp){
         $.ajax({
             type:'POST',
-            url:ADMIN_URL+'Camera/addrtmp',
+            url:ADMIN_URL+'Monitor/addrtmp',
             data:{cid:cid,is_rtmp:is_rtmp},
             success:function(data){
                 return(data);
@@ -171,8 +171,8 @@
         cid = foo[0];
         act = foo[1];
         $('#cameraid').val(cid);
-        
-        
+
+
         var starttime =$('#picktimeStart'+cid).val();
         var endtime =$('#picktimeEnd'+cid).val();
         console.log(starttime,endtime)
@@ -252,7 +252,7 @@
             if (replay=='true') { //每天
 
             }else{ //自定义
-                
+
             }
           });
         //关键字搜索
@@ -355,4 +355,3 @@
     }
 
 </script>
-
