@@ -17,6 +17,7 @@ class Stest extends AdminControl {
 	public $RandTime ;
 	public $StartTime ='2019-02-21 06:00:00';
 	public $Endtime = '2019-02-21 22:00:00';
+
 	function __construct(){
 		$this->SchoolInsertInfo = [];
 		$this->SchoolInsert = [];
@@ -254,9 +255,10 @@ DELETE FROM x_packagesorder WHERE `order_id`>2028;
 						'member_password'       => md5(123456), //密码 
 						'member_mobile'         => $mobile, //手机号
 						'member_mobile_bind'    => 1, //是否绑定手机
-						'member_add_time'       => strtotime($this->randomDate($this->StartTime,$this->Endtime)), //创建时间,
-						'member_edit_time'      => strtotime($this->randomDate($this->StartTime,$this->Endtime)), //创建时间, //修改时间
-						'member_old_login_time' => strtotime($this->randomDate($this->StartTime,$this->Endtime)), //创建时间, //会员上次登录时间
+
+						'member_add_time'       => $this->randomDate($this->StartTime,$this->Endtime), //创建时间,
+						'member_edit_time'      => $this->randomDate($this->StartTime,$this->Endtime), //创建时间, //修改时间
+						'member_old_login_time' => $this->randomDate($this->StartTime,$this->Endtime), //创建时间, //会员上次登录时间
 						'is_true'               => 2, 
 						'member_provinceid'     => $scinfo['provinceid'], //省
 						'member_cityid'         => $scinfo['cityid'], //市
