@@ -5,6 +5,88 @@ require __DIR__ . '/common_global.php';
 /* 商品相关调用 */
 require __DIR__ . '/common_goods.php';
 
+/**
+ * 随机生成手机号
+ * @Author   Mr.Wang
+ * @DateTime 2019-02-20
+ * @param    integer    $num [生成手机号数量]
+ * @return   [type]          [description]
+ */
+function randMobile($num = 1){
+     //手机号2-3为数组
+     $numberPlace = array(30,31,32,33,34,35,36,37,38,39,50,51,58,59,89);
+     for ($i = 0; $i < $num; $i++){
+      $mobile = 1;
+      $mobile .= $numberPlace[rand(0,count($numberPlace)-1)];
+      $mobile .= str_pad(rand(0,99999999),8,0,STR_PAD_LEFT);
+      $result[] = $mobile;
+     }
+     if($num==1){
+        $count = db('member')->where(['member_mobile'=>$mobile])->count();
+        if ($count) {
+            return randMobile($num = 1);
+        }else{
+            return $result[0];    
+        }
+     }else{
+        return $result;   
+     }
+}
+
+/**
+ * 随机分配人数
+ * @Author   Mr.Wang
+ * @DateTime 2019-02-20
+ * @param    [type]     $total [待划分的数字]
+ * @param    [type]     $div   [分成的份数]
+ * @param    [type]     $area  [各份数间允许的最大差值]
+ */
+function RandDistribution($total,$div,$area = 10){
+     
+    $average = round($total / $div);
+    $sum = 0;
+    $result = array_fill( 1, $div, 0 );
+     
+    for( $i = 1; $i < $div; $i++ ){
+         //根据已产生的随机数情况，调整新随机数范围，以保证各份间差值在指定范围内
+         if( $sum > 0 ){
+          $max = 0;
+          $min = 0 - round( $area / 2 );
+         }elseif( $sum < 0 ){
+          $min = 0;
+          $max = round( $area / 2 );
+         }else{
+          $max = round( $area / 2 );
+          $min = 0 - round( $area / 2 );
+         }
+         
+         //产生各份的份额
+         $random = rand( $min, $max );
+         $sum += $random;
+         $result[$i] = $average + $random;
+    }
+     
+    //最后一份的份额由前面的结果决定，以保证各份的总和为指定值
+    $result[$div] = $average - $sum;
+    return $result;
+}
+
+/**
+ * 随机生成中文名字 去除复姓
+ * @Author   Mr.Wang
+ * @DateTime 2019-02-19
+ */
+function CreatRandName(){
+    $rand = new randChinaName();
+    $rand->rndChinaName();
+    $xing = $rand->getXing();
+    $ming = $rand->getMing();
+    return $rand->getName(2);
+}
+
+function GetRand(){
+    return new randChinaName();
+}
 
 /**
  * 根据数组中某一个键值分组

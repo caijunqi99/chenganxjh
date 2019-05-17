@@ -273,7 +273,6 @@ class Reclasspayment extends MobileMall
                     "lg_type" => "share_ty_payment",
                     "lg_av_amount" => $agent_price,
                     "lg_add_time" => time(),
-                    "status"   =>2,
                     "lg_desc" => "重温课堂片段，用户支付成功给特约代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
@@ -296,7 +295,6 @@ class Reclasspayment extends MobileMall
                     "lg_type" => "share_area_payment",
                     "lg_av_amount" => $area_price,
                     "lg_add_time" => time(),
-                    "status"   =>2,
                     "lg_desc" => "重温课堂片段，用户支付成功给县区代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
@@ -319,7 +317,6 @@ class Reclasspayment extends MobileMall
                     "lg_type" => "share_city_payment",
                     "lg_av_amount" => $city_price,
                     "lg_add_time" => time(),
-                    "status"   =>2,
                     "lg_desc" => "重温课堂片段，用户支付成功给市代理商分成。订单编号：".$order_info['order_sn']
                 ];
                 $companylog_model = Model("Companylog");
@@ -342,7 +339,6 @@ class Reclasspayment extends MobileMall
                 "lg_type" => "share_admin_payment",
                 "lg_av_amount" => $admin_price,
                 "lg_add_time" => time(),
-                "status"   =>3,
                 "lg_desc" => "重温课堂片段，用户支付成功,给总后台分成。订单编号：".$order_info['order_sn']
             ];
             $adminpdlog_model = Model("Adminpdlog");

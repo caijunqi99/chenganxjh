@@ -45,16 +45,6 @@
         <a href="javascript:;" class="pay_finish_btn">完成</a>
     </div>
 </div>
-<!--
-<div class="main">
-    <div class="container2">
-        <div class="pay_finish payfail"></div>
-        <p class="payfail_p1"> 购买失败 !</p>
-    </div>
-    <div class="pay_finish_btnbox">
-        <a href="javascript:;" class="repayments_btn">重新支付</a>
-    </div>
-</div>-->
 
 
 <script src="../content/scripts/jquery.min.js"></script>
@@ -62,14 +52,7 @@
 <script src="../content/scripts/API.js"></script>
 <script src="../content/scripts/commom.js"></script>
 <script>
-    var price = GetQueryString('over_amount');
-    if(price == ''){
-        var htm = ' <div class="pay_finish payfail"></div>\n' +
-            '        <p class="payfail_p1"> 购买失败 !</p>';
-        $('.container2').html(htm);
-    }else{
-        $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
-    }
+    $('.pay_p2').html('实付￥'+GetQueryString('over_amount'));
     $('.pay_finish_btn').click(function(){
         if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
             window.webkit.messageHandlers.backClick.postMessage('back!!');
