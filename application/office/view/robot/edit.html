@@ -1,0 +1,114 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>会员管理</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+
+    <form id="user_form" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="form_submit" value="ok" />
+        <input type="hidden" name="id" value="<?php echo $robot_array['id'];?>" />
+        <table class="ds-default-table">
+            <tbody>
+                <tr>
+                    <td colspan="2" class="required"><label for="member_truename">机器人ID:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><input type="text" value="<?php echo $robot_array['SNNumber'];?>" id="SNNumber" name="SNNumber" class="txt"></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr>
+               <tr class="noborder">
+                    <td colspan="2" class="required"><label for="school_region">学校所在地区:</label></td>
+                </tr>
+                <tr>
+                    <td id="region">
+                        {notempty name="$robot_array.areaid"}
+                        <span>{$robot_array.region}</span>
+                        <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
+                        <select style="display:none;">
+                            <option value="0">请选择分类</option>
+                            {volist name="region_list" id="region"}
+                            <option value="{$region.area_id}">{$region.area_name}</option>
+                            {/volist}
+                        </select>
+                        {else}
+                        <select>
+                            <option value="0">请选择分类</option>
+                            {volist name="region_list" id="region"}
+                            <option value="{$region.area_id}">{$region.area_name}</option>
+                            {/volist}
+                        </select>
+                        {/notempty}
+
+                    </td>
+                </tr>
+                <tr class="noborder">
+                    <td colspan="2" class="required"><label>选择学校:</label></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder">
+                    <td id="school_list">
+                        <select name="school_name" id="school_id" class="querySelect">
+                            <option value="">请选择学校名称</option>
+                            {volist name="schoolname" id="name"}
+                            <option value="{$name.schoolid}" {if condition="$robot_array.schoolid eq $name.schoolid"} selected {/if}>{$name.name}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                    <td class="vatop tips"></td>
+                </tr>                    
+
+
+                <tr>
+                    <td colspan="2" class="required"><label>使用状态:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><ul>
+
+                                <input type="radio" <?php if($robot_array['isdel'] == 1){ ?>checked="checked"<?php } ?> value="1" name="isdel" id="isdel">
+                                       <label for="isdel">使用</label>
+
+                                <input type="radio" <?php if($robot_array['isdel'] == 2){ ?>checked="checked"<?php } ?> value="2" name="isdel" id="isdel">
+                                       <label for="isdel">禁止</label>
+                        </ul></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="required"><label class="desc">备注:</label></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="vatop rowform"><input type="text" value="<?php echo $robot_array['desc'];?>" id="desc" name="desc" class="txt"></td>
+                    <td class="vatop tips"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><a href="JavaScript:void(0);" class="btn" id="submitBtn"><span>{$Think.lang.ds_submit}</span></a></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+
+<script src="{$Think.config.url_domain_root}static/common/js/mlselection3.js"></script>
+<script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+    <script type="text/javascript">
+        $(function() {
+	         regionInit("region");
+            $("#submitBtn").click(function() {
+                    $("#user_form").submit();
+            });
+        });
+    </script> 
+</div>    

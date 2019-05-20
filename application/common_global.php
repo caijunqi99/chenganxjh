@@ -21,6 +21,7 @@ define('DIR_CMS','cms');
 define('DIR_CIRCLE','circle');
 define('DIR_MICROSHOP','microshop');
 define('DIR_ADMIN','admin');
+define('DIR_OFFICE','office');
 define('DIR_API','api');
 define('DIR_MOBILE','mobile');
 define('DIR_APP','wap');

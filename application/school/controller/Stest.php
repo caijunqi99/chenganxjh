@@ -15,8 +15,8 @@ class Stest extends AdminControl {
 	public $True_Class;
 	public $RecodeNum = 2000;
 	public $RandTime ;
-	public $StartTime ='2019-02-21 06:00:00';
-	public $Endtime = '2019-02-21 22:00:00';
+	public $StartTime ='2019-05-17 06:00:00';
+	public $Endtime = '2019-05-21 22:00:00';
 
 	function __construct(){
 		$this->SchoolInsertInfo = [];
@@ -25,7 +25,7 @@ class Stest extends AdminControl {
 		$this->ClassInsert = [];
 		$this->True_School = [];
 		$this->True_Class = [];
-		exit;
+		// exit;
 		$this->RandTime =$this->randomDate($this->StartTime,$this->Endtime );
 		// $name = CreatRandName();
 	}
@@ -40,7 +40,7 @@ DELETE FROM x_packagesorder WHERE `order_id`>2028;
  * @DateTime 2019-02-20
  */
 	public function InsertDate(){
-		exit;
+		// exit;
 		@set_time_limit(0);
 		$starttime = explode(' ',microtime());
 		$schoolNum = ceil($this->RecodeNum / 300) ;
