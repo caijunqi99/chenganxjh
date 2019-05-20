@@ -23,7 +23,7 @@ class Mood extends AdminControl {
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
-        $this->action = $action = $this->get_role_perms(session('office_gid') ,$perm_id);
+        $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
     /**
@@ -40,15 +40,16 @@ class Mood extends AdminControl {
             if(!empty($admininfo['admin_school_id'])){
                 $where['schoolid'] = $admininfo['admin_school_id'];
             }else{
-                $model_company = Model("Company");
-                $where = $model_company->getCondition($admininfo['admin_company_id']);
+                $where['admin_company_id'] = $admininfo['admin_company_id'];
             }
         }
+
         if (!empty($_POST['account'])) {
             $member_name=input('param.account');
             $where['member_name']=array('like', '%' . trim($member_name) . '%');
             $this->assign('member_name',$member_name);
         }
+
         if(!empty($_POST['del'])){
             $del=input('param.del');
             if($del == 1){
@@ -84,6 +85,7 @@ class Mood extends AdminControl {
             $etime=date('Y-m-d',$etime);
             $this->assign('etime',$etime);
         }
+
         $mood_list = db('mood')->alias('m')->join('__MEMBER__ b', 'b.member_id = m.member_id', 'LEFT')->where($where)->order('id desc')->paginate(15,false,['query' => request()->param()]);
         $list = $mood_list->items();
         foreach($list as $k=>$v){
@@ -117,7 +119,7 @@ class Mood extends AdminControl {
                 array(
                     'name' => 'index',
                     'text' => '晒心情管理',
-                    'url' => url('office/Mood/index')
+                    'url' => url('Office/Mood/index')
                 )
             );
         return $menu_array;

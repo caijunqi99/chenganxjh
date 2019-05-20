@@ -414,7 +414,7 @@ class AdminControl extends Controller {
      * @time 2018/09/18
      */
     function get_role_perms($roleid,$perm_id){
-            $result = db('roleperms')->field('action')->where(" roleid=$roleid AND permsid=$perm_id")->find();
+            $result = db('roleperms')->field('action')->where(['roleid'=>$roleid,'permsid'=>$perm_id])->find();
             $action = '';
             if(!empty($result['action'])){
                 $action = explode(',',$result['action']);

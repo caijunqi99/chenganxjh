@@ -21,32 +21,32 @@ class Membercommon extends AdminControl {
             array(
                 'name' => 'MemberInfo',
                 'text' => '个人资料',
-                'url' => url('office/Membercommon/MemberInfo',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/MemberInfo',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'RelationMember',
                 'text' => '关联账号',
-                'url' => url('office/Membercommon/RelationMember',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/RelationMember',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenBind',
                 'text' => '绑定学生',
-                'url' => url('office/Membercommon/ChildrenBind',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/ChildrenBind',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenCamera',
                 'text' => '班级摄像头',
-                'url' => url('office/Membercommon/ChildrenCamera',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/ChildrenCamera',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenOrders',
                 'text' => '订单信息',
-                'url' => url('office/Membercommon/ChildrenOrders',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/ChildrenOrders',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'MemberCapital',
                 'text' => '资金记录',
-                'url' => url('office/Membercommon/MemberCapital',array('member_id'=>$member_id))
+                'url' => url('Office/Membercommon/MemberCapital',array('member_id'=>$member_id))
             ),
         );
         return $menu_array;
@@ -171,7 +171,7 @@ class Membercommon extends AdminControl {
                         $list[$key]['statusess']= '<b style="color:red;">离线</b>';
                     }
                     $datainfo = json_encode($v);
-                    $list[$key]['clic']="<a datainfo='".$datainfo."' id='rmt_" . $v['cid'] . "' href='javascript:;' onClick='rtmplay(" . $v['cid'] . ")'><img height='25px' src='/static/Admin/images/doplayer.png'></a>";
+                    $list[$key]['clic']="<a datainfo='".$datainfo."' id='rmt_" . $v['cid'] . "' href='javascript:;' onClick='rtmplay(" . $v['cid'] . ")'><img height='25px' src='/static/admin/images/doplayer.png'></a>";
                     if($v['is_classroom'] == 1){
                         $list[$key]['is_classrooms']= '<b style="color:red;">否</b>';
                     }else if($v['is_classroom'] == 2){

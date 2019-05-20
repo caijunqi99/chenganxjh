@@ -143,37 +143,37 @@ class Studentinfo extends AdminControl {
             array(
                 'name' => 'index',
                 'text' => '学生信息',
-                'url' => url('office/Studentinfo/index',array('student_id'=>$student_id))
+                'url' => url('Office/Studentinfo/index',array('student_id'=>$student_id))
             ),
             array(
                 'name' => 'lists',
                 'text' => '绑定家长账号',
-                'url' => url('office/Studentinfo/lists',array('student_id'=>$student_id))
+                'url' => url('Office/Studentinfo/lists',array('student_id'=>$student_id))
             ),
             array(
                 'name' => 'order',
                 'text' => '看孩订单',
-                'url' => url('office/Studentinfo/order',array('student_id'=>$student_id))
+                'url' => url('Office/Studentinfo/order',array('student_id'=>$student_id))
             ),
 //            array(
 //                'name' => 'teachorder',
 //                'text' => '教孩订单',
-//                'url' => url('office/Studentinfo/teachorder',array('student_id'=>$student_id))
+//                'url' => url('Office/Studentinfo/teachorder',array('student_id'=>$student_id))
 //            ),
             array(
                 'name' => 'reviveorder',
                 'text' => '重温课堂订单',
-                'url' => url('office/Studentinfo/reviveorder',array('student_id'=>$student_id))
+                'url' => url('Office/Studentinfo/reviveorder',array('student_id'=>$student_id))
             ),
 //            array(
 //                'name' => 'shopping',
 //                'text' => '商城订单',
-//                'url' => url('office/Studentinfo/shopping',array('student_id'=>$student_id))
+//                'url' => url('Office/Studentinfo/shopping',array('student_id'=>$student_id))
 //            )
 //            array(
 //                'name' => 'order',
 //                'text' => '已购套餐',
-//                'url' => url('office/Studentinfo/order',array('student_id'=>$student_id))
+//                'url' => url('Office/Studentinfo/order',array('student_id'=>$student_id))
 //            ),
 
         );

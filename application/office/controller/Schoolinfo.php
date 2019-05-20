@@ -9,7 +9,7 @@ class Schoolinfo extends AdminControl {
 
     public function _initialize() {
         parent::_initialize();
-        Lang::load(APP_PATH . 'office/lang/zh-cn/school.lang.php');
+        Lang::load(APP_PATH . 'Office/lang/zh-cn/school.lang.php');
     }
 
     public function index(){
@@ -135,17 +135,17 @@ class Schoolinfo extends AdminControl {
             array(
                 'name' => 'index',
                 'text' => '学校信息',
-                'url' => url('office/Schoolinfo/index',array('school_id'=>$schoolid))
+                'url' => url('Office/Schoolinfo/index',array('school_id'=>$schoolid))
             ),
             array(
                 'name' => 'list',
                 'text' => '所属班级',
-                'url' => url('office/Schoolinfo/lists',array('school_id'=>$schoolid))
+                'url' => url('Office/Schoolinfo/lists',array('school_id'=>$schoolid))
             ),
             array(
                 'name' => 'camera',
                 'text' => '摄像头个数',
-                'url' => url('office/Schoolinfo/camera',array('school_id'=>$schoolid))
+                'url' => url('Office/Schoolinfo/camera',array('school_id'=>$schoolid))
             ),
         );
         return $menu_array;

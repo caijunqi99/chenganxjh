@@ -70,7 +70,7 @@ class Membercash extends AdminControl {
             array(
                 'name' => 'index',
                 'text' => '管理',
-                'url' => url('office/Membercash/index')
+                'url' => url('Office/Membercash/index')
             )
         );
 

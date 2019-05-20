@@ -94,17 +94,17 @@ class Classesinfo extends AdminControl {
             array(
                 'name' => 'index',
                 'text' => '班级信息',
-                'url' => url('office/Classesinfo/index',array('class_id'=>$class_id))
+                'url' => url('Office/Classesinfo/index',array('class_id'=>$class_id))
             ),
             array(
                 'name' => 'lists',
                 'text' => '班级所属的学生',
-                'url' => url('office/Classesinfo/lists',array('class_id'=>$class_id))
+                'url' => url('Office/Classesinfo/lists',array('class_id'=>$class_id))
             ),
             array(
                 'name' => 'camera',
                 'text' => '班级所属的摄像头',
-                'url' => url('office/Classesinfo/camera',array('class_id'=>$class_id))
+                'url' => url('Office/Classesinfo/camera',array('class_id'=>$class_id))
             ),
 
         );

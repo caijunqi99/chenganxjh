@@ -15,6 +15,8 @@ class Login extends Controller {
 
     public function index() {
         if (session('office_id')) {
+            
+            $this->redirect('office/Index/index');
             $this->success('已经登录', 'office/Index/index');
         }
         if (request()->isPost()) {
