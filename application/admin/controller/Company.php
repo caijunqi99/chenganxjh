@@ -18,7 +18,6 @@ class Company extends AdminControl {
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
         $perm_id = $this->get_permid($class_name);
-//        halt($perm_id);
         $this->action = $action = $this->get_role_perms(session('admin_gid') ,$perm_id);
         $this->assign('action',$action);
     }
@@ -31,6 +30,7 @@ class Company extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
+        $admin_company_id = $this->admin_info['admin_company_id'];//登录账号所属公司
         //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
         $this->assign('region_list', $region_list);
@@ -49,12 +49,9 @@ class Company extends AdminControl {
         $model_organize = Model('company');
         $condition = array();
         $condition['o_del']=1;
-        //判断登陆账号的所属公司
-        $adminUser = db('admin')->field('admin_company_id')->where('admin_id = "'.session("admin_id").'"')->find();
-        if($adminUser['admin_company_id'] != 1){
+        if($admin_company_id != 1){
             //查询所属地区公司
-//            $condition['o_id'] = $adminUser['admin_company_id'];
-            $company = db('company')->field('o_id,o_role,o_provinceid,o_cityid,o_areaid')->where('o_id="'.$adminUser['admin_company_id'].'"')->find();
+            $company = db('company')->field('o_id,o_role,o_provinceid,o_cityid,o_areaid')->where('o_id="'.$admin_company_id.'"')->find();
             if(!empty($company)){
                 $roleID = $company['o_role'];
                 switch ($roleID){
@@ -104,6 +101,7 @@ class Company extends AdminControl {
             }
         }
         $organize_list = $model_organize->getOrganizeList($condition, "*",15);
+
         $this->assign('page', $model_organize->page_info->render());
         $this->assign('organize_list', $organize_list);
         $this->setAdminCurItem('index');

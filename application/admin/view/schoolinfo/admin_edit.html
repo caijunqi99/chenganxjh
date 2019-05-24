@@ -5,19 +5,15 @@
 <div class="page">
     <div class="fixed-bar">
         <div class="item-title">
-            <div class="subject">
-                <h3>权限设置</h3>
-                <h5></h5>
-            </div>
             {include file="public/admin_items" /}
         </div>
     </div>
-    <form method="post" id="add_form">
+    <form method="post" id="admin_form">
         <div  class="ncap-form-default">
             <dl>
                 <dt>{$Think.lang.admin_index_username}</dt>
                 <dd>
-                    <input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
+                    <input id="admin_name" name="admin_name" value="{$admin.admin_name}" class="input-txt" type="text">
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_username_tip}</p>
                 </dd>
@@ -26,10 +22,10 @@
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
                     <select name="gid" id="gid">
-                        <option value="" selected>{$Think.lang.admin_add_role_chose}</option>
-                        <option value="{$admin_company_role}" >{$Think.lang.super_admin}</option>
+                        <option value="" <?php if(empty($admin['admin_gid'])){?>selected<?php }?>>{$Think.lang.admin_add_role_chose}</option>
+                        <option value="5" <?php if($admin['admin_gid'] == 5){?>selected<?php }?>>{$Think.lang.super_admin}</option>
                         <?php foreach((array)$gadmin as $v){?>
-                        <option value="<?php echo $v['gid'];?>"><?php echo $v['gname'];?></option>
+                        <option value="<?php echo $v['gid'];?>" <?php if($v['gid']==$admin['admin_gid']){?>selected<?php }?>><?php echo $v['gname'];?></option>
                         <?php }?>
                     </select>
                     <span class="err"></span>
@@ -37,25 +33,25 @@
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.admin_index_password}</dt>
+                <dt>{$Think.lang.admin_edit_admin_pw}</dt>
                 <dd>
-                    <input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
+                    <input id="new_pw" name="new_pw" value="" class="input-txt" type="password">
                     <span class="err"></span>
-                    <p class="notic">{$Think.lang.admin_add_password_tip}</p>
+                    <p class="notic">{$Think.lang.admin_edit_pwd_tip1}</p>
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.admin_rpassword}</dt>
+                <dt>{$Think.lang.admin_edit_admin_pw2}</dt>
                 <dd>
-                    <input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
+                    <input id="new_pw2" name="new_pw2" value="" class="input-txt" type="password">
                     <span class="err"></span>
-                    <p class="notic">{$Think.lang.admin_add_password_tip}</p>
+                    <p class="notic">{$Think.lang.admin_edit_pwd_tip1}</p>
                 </dd>
             </dl>
             <dl>
                 <dt>{$Think.lang.mob_phone}</dt>
                 <dd>
-                    <input id="admin_phone" name="admin_phone" value="" class="input-txt" type="text">
+                    <input id="admin_phone" name="admin_phone" value="{$admin.admin_phone}" class="input-txt" type="text">
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_phone_tip}</p>
                 </dd>
@@ -63,7 +59,7 @@
             <dl>
                 <dt>{$Think.lang.admin_index_truename}</dt>
                 <dd>
-                    <input id="admin_truename" name="admin_truename" value="" class="input-txt" type="text">
+                    <input id="admin_truename" name="admin_truename" value="{$admin.admin_true_name}" class="input-txt" type="text">
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_truename_tip}</p>
                 </dd>
@@ -71,7 +67,7 @@
             <dl>
                 <dt>{$Think.lang.admin_index_department}</dt>
                 <dd>
-                    <input id="admin_department" name="admin_department" value="" class="input-txt" type="text">
+                    <input id="admin_department" name="admin_department" value="{$admin.admin_department}" class="input-txt" type="text">
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_department_tip}</p>
                 </dd>
@@ -79,11 +75,12 @@
             <dl>
                 <dt>{$Think.lang.admin_index_description}</dt>
                 <dd>
-                    <textarea id="admin_description" name="admin_description" > </textarea>
+                    <textarea id="admin_description" name="admin_description" >{$admin.admin_description} </textarea>
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_description_tip}</p>
                 </dd>
             </dl>
+
             <dl>
                 <dt></dt>
                 <dd><a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
@@ -94,22 +91,23 @@
 
 <script>
 
-//按钮先执行验证再提交表
-    $(document).ready(function() {
-        //按钮先执行验证再提交表单
+
+    //按钮先执行验证再提交表单
+    $(function() {
         $("#submitBtn").click(function() {
-            if ($("#add_form").valid()) {
-                $("#add_form").submit();
+            if ($("#admin_form").valid()) {
+                $("#admin_form").submit();
             }
         });
+    });
+    $(document).ready(function() {
+        var admin_id = "{$admin.admin_id}";
         jQuery.validator.addMethod("isMobile", function(value, element) {
             var length = value.length;
-            var mobile = /^1[345678]\d{9}$/;
+            var mobile = /^1[345678]\d{9}$/;/*/^1(3|4|5|7|8)\d{9}$/*/
             return this.optional(element) || (length == 11 && mobile.test(value));
         });
-
-
-        $("#add_form").validate({
+        $("#admin_form").validate({
             errorPlacement: function(error, element) {
                 error.appendTo(element.nextAll('span.err'));
             },
@@ -119,12 +117,12 @@
                     minlength: 5,
                     maxlength: 20,
                     remote: {
-                        url: ADMIN_URL+'Admin/ajax.html?branch=check_admin_name',
+                        url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_name_edit',
                         type: 'get',
                         data: {
                             admin_name: function() {
                                 return $('#admin_name').val();
-                            }
+                            },admin_id:admin_id
                         }
                     }
                 },
@@ -132,23 +130,23 @@
                     required: true,
                     isMobile:true,
                     remote: {
-                        url: ADMIN_URL+'Admin/ajax.html?branch=check_admin_phone',
+                        url: ADMIN_URL+'/Admin/ajax.html?branch=check_admin_phone_edit',
                         type: 'get',
                         data: {
                             admin_phone: function() {
                                 return $('#admin_phone').val();
-                            }
+                            },admin_id:admin_id
                         }
                     }
                 },
-                admin_password: {
-                    required: true,
+                new_pw: {
                     minlength: 6,
                     maxlength: 20
                 },
-                admin_rpassword: {
-                    required: true,
-                    equalTo: '#admin_password'
+                new_pw2: {
+                    minlength: 6,
+                    maxlength: 20,
+                    equalTo: '#new_pw'
                 },
                 gid: {
                     required: true
@@ -166,17 +164,17 @@
                     isMobile: '{$Think.lang.admin_edit_valid_phone}',
                     remote: '{$Think.lang.admin_add_admin_phone_not_exists}'
                 },
-                admin_password: {
-                    required: '{$Think.lang.admin_add_password_null}',
+                new_pw: {
                     minlength: '{$Think.lang.admin_add_password_max}',
                     maxlength: '{$Think.lang.admin_add_password_max}'
                 },
-                admin_rpassword: {
-                    required: '{$Think.lang.admin_add_password_null}',
+                new_pw2: {
+                    minlength: '{$Think.lang.admin_add_password_max}',
+                    maxlength: '{$Think.lang.admin_add_password_max}',
                     equalTo: '{$Think.lang.admin_edit_repeat_error}'
                 },
                 gid: {
-                    required: '{$Think.lang.admin_add_gid_null}',
+                    required : '{$Think.lang.admin_add_gid_null}',
                 }
             }
         });

@@ -56,9 +56,13 @@ class Login extends Controller {
             if (is_array($admin_info) and !empty($admin_info)) {
                 if($admin_info['admin_status'] == 1){
                     if(!empty($admin_info['admin_gid']) || $admin_info['admin_is_super'] == 1){
-                        if($admin_info['admin_gid']==5){
-                            $this->success('学校管理员，请使用学校后台登陆');
-                        }else{
+                        if($admin_info['admin_school_id']==0 && $admin_info['admin_company_id']==1){
+                            $this->success('该账号不属于代理商，请确认账号角色！！！');
+                        }else if($admin_info['admin_school_id']!=0 && $admin_info['admin_company_id']!=1){
+                            $this->success('该账号不属于代理商，请确认账号角色！！！');
+                        }else if($admin_info['admin_school_id']!=0 && $admin_info['admin_company_id']==1){
+                            $this->success('该账号不属于代理商，请确认账号角色！！！');
+                        }else if($admin_info['admin_school_id']==0 && $admin_info['admin_company_id']!=1){
                             //更新 admin 最新信息
                             $update_info = array(
                                 'admin_login_num' => ($admin_info['admin_login_num'] + 1),

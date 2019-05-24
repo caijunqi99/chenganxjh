@@ -23,30 +23,11 @@
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.admin_index_company}</dt>
-                <dd>
-                    <?php if($company_id == 1){?>
-                        <select name="admin_company_id">
-                            <option value="" selected>{$Think.lang.admin_add_company_chose}</option>
-                            <option value="1" <?php if(1==$admin['admin_company_id']){?>selected<?php }?>>总公司</option>
-                            <?php foreach((array)$company as $v){?>
-                            <option value="<?php echo $v['o_id'];?>" <?php if($v['o_id']==$admin['admin_company_id']){?>selected<?php }?>><?php echo $v['o_name'];?></option>
-                            <?php }?>
-                        </select>
-                    <?php }else{?>
-                        <span><?php echo $company['o_name']?></span>
-                        <input  name="admin_company_id" value="<?php echo $company['o_id']?>" type="hidden">
-                    <?php }?>
-
-                    <span class="err"></span>
-                    <p class="notic">{$Think.lang.admin_add_company_id_tip}</p>
-                </dd>
-            </dl>
-            <dl>
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
                     <select name="gid" id="gid">
                         <option value="" <?php if(empty($admin['admin_gid'])){?>selected<?php }?>>{$Think.lang.admin_add_role_chose}</option>
+                        <option value="{$admin_company_role}" <?php if(!empty($admin['admin_gid']) && $admin['admin_gid'] == $admin_company_role){?>selected<?php }?>>{$Think.lang.super_admin}</option>
                         <?php foreach((array)$gadmin as $v){?>
                             <option value="<?php echo $v['gid'];?>" <?php if($v['gid']==$admin['admin_gid']){?>selected<?php }?>><?php echo $v['gname'];?></option>
                         <?php }?>
@@ -113,18 +94,6 @@
 </div>
 
 <script>
-
-    $('select[name=admin_company_id]').change(function(){
-        var id = $(this).find('option:selected').val();
-        $.ajax({
-            type:'POST',
-            url:ADMIN_URL+'/Office/ajax.html?branch=get_gadmin',
-            data:{id:id},
-            success: function(response){
-                $("#gid").html(response);
-            }
-        })
-    })
 //按钮先执行验证再提交表单
                     $(function() {
                         $("#submitBtn").click(function() {
@@ -150,7 +119,7 @@
                                     minlength: 5,
                                     maxlength: 20,
                                     remote: {
-                                        url: ADMIN_URL+'/Office/ajax.html?branch=check_admin_name_edit',
+                                        url: ADMIN_URL+'Admin/ajax.html?branch=check_admin_name_edit',
                                         type: 'get',
                                         data: {
                                             admin_name: function() {
@@ -163,7 +132,7 @@
                                     required: true,
                                     isMobile:true,
                                     remote: {
-                                        url: ADMIN_URL+'/Office/ajax.html?branch=check_admin_phone_edit',
+                                        url: ADMIN_URL+'Admin/ajax.html?branch=check_admin_phone_edit',
                                         type: 'get',
                                         data: {
                                             admin_phone: function() {
@@ -182,9 +151,6 @@
                                     equalTo: '#new_pw'
                                 },
                                 gid: {
-                                    required: true
-                                },
-                                admin_company_id: {
                                     required: true
                                 }
                             },
@@ -211,9 +177,6 @@
                                 },
                                 gid: {
                                     required : '{$Think.lang.admin_add_gid_null}',
-                                },
-                                admin_company_id: {
-                                    required: '{$Think.lang.admin_add_company_id_null}',
                                 }
                             }
                         });

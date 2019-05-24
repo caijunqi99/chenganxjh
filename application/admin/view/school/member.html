@@ -16,26 +16,19 @@
         </div>
     </div>
 
-    <!--<form method="get" name="formSearch" id="formSearch" class="layui-form">-->
     <form method="get" name="formSearch" id="formSearch">
         <table class="search-form">
             <tbody>
                <tr>
                    <td> <label>{$Think.lang.school_name}：</label></td>
                    <td><input type="text" name="schoolname" value="{$Think.get.schoolname}"></td>
-                   <!--<td><input type="text" class="layui-input" name="schoolname" value="{$Think.get.schoolname}"></td>-->
-
                    <td> <select name="school_type" lay-verify="type" class="select">
                             <option value="">{$Think.lang.school_index_type}</option>
                             {volist name="schoolType" id="type"}
                             <option value="{$type.sc_id}" {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if}>{$type.sc_type}</option>
                             {/volist}
                         </select></td>
-
-
                    <td>  <label for="school_region">{$Think.lang.school_index_region}：</label></td>
-
-
                    <td id="region">
                         <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
                         <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
@@ -58,24 +51,7 @@
                         </select>
                         {/notempty}
                    </td>
-                   <!--<td>-->
-                       <!--<select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">-->
-                       <!--<option value="0" selected>请选择省</option>-->
-                           <!--{volist name="region_list" id="region"}-->
-                       <!--<option value="{$region.area_id}" {if condition='$Think.get.province eq $region.area_id'}selected='selected'{/if}>{$region.area_name}</option>-->
-                       <!--{/volist}-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                       <!--<select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">-->
-                       <!--<option value="0">请选择市</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
-                   <!--<td>-->
-                        <!--<select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">-->
-                        <!--<option value="0">请选择区</option>-->
-                        <!--</select>-->
-                   <!--</td>-->
+
                      <td class="layui-inline">   <input type="submit" class="submit" value="搜索">
                         <a href="{:url('School/member')}" class="btns"><span>{$Think.lang.ds_cancel_search}</span></a>
                         </td>
@@ -100,8 +76,6 @@
             <th class="align-center">{$Think.lang.school_index_region}</th>
             <th class="align-center">{$Think.lang.school_index_address}</th>
             <th class="align-center">{$Think.lang.school_index_unique}</th>
-            <!--<th class="align-center">{$Think.lang.school_index_phone}</th>-->
-            <!--<th class="align-center">{$Think.lang.school_index_username}</th>-->
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
             <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('10',$action) || in_array('6',$action))){?>
@@ -117,8 +91,6 @@
             <td class="align-center"><?php echo $v['region']; ?></td>
             <td class="align-center"><?php echo $v['address']; ?></td>
             <td class="align-center"><?php echo $v['schoolCard']; ?></td>
-            <!--<td class="align-center"><?php echo $v['common_phone']; ?></td>-->
-            <!--<td class="align-center"><?php echo $v['username']; ?></td>-->
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
@@ -162,41 +134,6 @@
     {$page}
     
 </div>
-
-<form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
-    <div  class="ncap-form-default">
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_username}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_username_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_password}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_rpassword}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <input type="hidden" name="role" id="role" value="{$role}">
-        <input type="hidden" name="admin_company_id" id="admin_company_id" value="">
-        <dl>
-            <dd>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
-        </dl>
-    </div>
-
-</form>
 <script type="text/javascript">
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
@@ -403,22 +340,21 @@
 
         });
     }
-function jia(role,admin_company_id){
-            $('#role').val(role);
-            $('#admin_company_id').val(admin_company_id);
-            //var urls=ADMIN_URL+'organizes/admin?role_id='+id;
-            //多窗口模式，层叠置顶
-            layer.open({
-                type: 1,
-                title: '分配管理员账号',
-                area: ['700px', '450px'],
-                fixed: false, //不固定
-                shadeClose: true,
-                shade: 0.4,
-                maxmin: false, //开启最大化最小化按钮
-                content: $("#courForm")
-            });
-        }
+
+    function jia(admin_school_id,admin_company_id){
+        var urls=ADMIN_URL+'schoolinfo/admin_add?school_id='+admin_school_id+'&company_id='+admin_company_id;
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '分配管理员账号',
+            area: ['800px', '600px'],
+            fixed: false, //不固定
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
+        });
+    }
     $(function() {
         regionInit("region");
     });

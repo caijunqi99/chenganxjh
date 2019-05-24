@@ -99,8 +99,11 @@ class Gadmin extends AdminControl {
         if(session('school_admin_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
+        $company_id=$this->admin_info['admin_company_id'];
+        $school_id = $this->admin_info['admin_school_id'];
 
-        $list = db('gadmin')->where('create_uid',$this->admin_info['admin_id'])->paginate(10);
+//        $list = db('gadmin')->where('create_uid',$this->admin_info['admin_id'])->paginate(10);
+        $list = db('gadmin')->where('company_id="'.$company_id.'" AND school_id="'.$school_id.'"')->paginate(10);
         $this->assign('list', $list->items());
         $this->assign('page', $list->render());
         $this->setAdminCurItem('gadmin');
@@ -114,6 +117,8 @@ class Gadmin extends AdminControl {
         if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
+        $company_id=$this->admin_info['admin_company_id'];
+        $school_id = $this->admin_info['admin_school_id'];
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
                 $gid = intval($this->admin_info['admin_gid']);
@@ -157,6 +162,9 @@ class Gadmin extends AdminControl {
             $data['nav'] = encrypt($nav_str, MD5_KEY . md5($_POST['gname']));
             $data['gname'] = $_POST['gname'];
             $data['create_uid'] = session('school_admin_id');
+            $data['company_id'] = $company_id;
+            $data['school_id'] = $school_id;
+            $data['time'] = time();
             $result = db('gadmin')->insertGetId($data);
             if ($result >0) {
                 if(!empty($_POST['action'])){

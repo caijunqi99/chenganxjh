@@ -93,7 +93,21 @@ class Organizes extends AdminControl
     public function personnel(){
         $where = ' a.admin_del_status=1';
         $where .=' and a.admin_company_id='.$_GET['o_id'] ;
-        $admin_list = db('admin')->alias('a')->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')->where($where)->paginate(10,false,['query' => request()->param()]);
+        $admin_list = db('admin')
+                        ->alias('a')
+                        ->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')
+                        ->join('__COMPANY__ o', 'o.o_id = a.admin_company_id', 'LEFT')
+                        ->where($where)
+                        ->order('a.admin_login_time DESC')
+                        ->paginate(10,false,['query' => request()->param()]);
+        //获取该公司的超级管理员权限
+        $company_role= db('company')
+            ->alias('c')
+            ->join('__GADMIN__ g', 'g.gid = c.o_role', 'LEFT')
+            ->where("c.o_id='".$_GET['o_id']."'")
+            ->field('c.o_role,g.gname')
+            ->find();
+        $this->assign('company_role',$company_role);
         $this->assign('admin_list', $admin_list->items());
         $this->assign('page', $admin_list->render());
         $this->setAdminCurItem('personnel');
@@ -327,13 +341,6 @@ class Organizes extends AdminControl
         $this->setAdminCurItem('studentnum');
         return $this->fetch();
     }
-    //分配管理员账号
-    public function admin(){
-        $role=$_GET['role_id'];
-        $this->assign('role',$role);
-        $this->setAdminCurItem('admin');
-        return $this->fetch();
-    }
     //资金交易
     public function money(){
         $oid = $_GET['o_id'];
@@ -358,5 +365,87 @@ class Organizes extends AdminControl
         $this->assign('result', $result);
         $this->setAdminCurItem('money');
         return $this->fetch();
+    }
+    /**
+     * 管理员添加
+     */
+    public function admin_add() {
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $admin_id = $this->admin_info['admin_id'];
+        $admin_company_id = $_GET['o_id'];//添加账号所属公司
+        if (!request()->isPost()) {
+            //获取公司角色ID
+            $company_role_id = db('company')->where('o_id="'.$admin_company_id.'"')->value('o_role');
+            //获取所创建的角色
+            $gadmin_list = db('gadmin')->field('gid,company_id,gname')->where('company_id= '.$admin_company_id.' AND gid>5')->select();
+            $this->assign('gadmin_list',$gadmin_list);
+            $this->assign('company_role_id',$company_role_id);
+            $this->setAdminCurItem('admin_add');
+            return $this->fetch('admin_add');
+        } else {
+            $model_admin = Model('admin');
+            $param['admin_name'] = $_POST['admin_name'];
+            $param['admin_password'] = md5($_POST['admin_password']);
+            $param['create_uid'] = $admin_id;
+            $param['admin_company_id'] = $admin_company_id;
+            $param['admin_gid'] = trim($_POST['gid']);
+            $rs = $model_admin->addAdmin($param);
+            if ($rs) {
+                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
+//                $this->success(lang('ds_common_save_succ'), url('Admin/Company/index'));
+                echo json_encode(array('message'=>lang('ds_common_save_succ'),'status'=>200));exit;
+            } else {
+                $this->error(lang('ds_common_save_fail'));
+            }
+        }
+    }
+    /**
+     * 管理员修改
+     */
+    public function admin_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $admin_company_id = $_GET['o_id'];//修改账号所属公司
+        $admin_id = intval(input('param.admin_id'));
+        if (request()->isPost()) {
+            //没有更改密码
+            if ($_POST['new_pw'] != '') {
+                $data['admin_password'] = md5($_POST['new_pw']);
+            }
+            $data['admin_name'] = trim($_POST['admin_name']);
+            $data['admin_gid'] = intval($_POST['gid']);
+            $data['admin_phone'] = trim($_POST['admin_phone']);
+            $data['admin_true_name'] = trim($_POST['admin_truename']);
+            $data['admin_department'] = trim($_POST['admin_department']);
+            $data['admin_description'] = trim($_POST['admin_description']);
+            //查询管理员信息
+            $admin_model = Model('admin');
+            $result = $admin_model->updateAdmin($data,$admin_id);
+            if ($result >=0) {
+                $this->log(lang('ds_edit').lang('limit_admin') . '[ID:' . $admin_id . ']', 1);
+                $this->success(lang('admin_edit_success'), url('Admin/organizes/personnel?o_id='.$admin_company_id));
+            } else {
+                $this->error(lang('admin_edit_fail'), url('Admin/organizes/admin_edit?admin_id='.$admin_id.'&o_id='.$admin_company_id));
+            }
+        } else {
+            //查询用户信息
+            $admin_model = Model('admin');
+            $admin = $admin_model->getOneAdmin($admin_id);
+            if (!is_array($admin) || count($admin) <= 0) {
+                $this->error(lang('admin_edit_admin_error'), url('Admin/organizes/personnel?o_id='.$admin_company_id));
+            }
+            //获取该公司的超级管理员权限
+            $company_role_id = db('company')->where("o_id='".$admin_company_id."'")->value('o_role');
+            //得到该公司创建的权限组
+            $gadmin = db('gadmin')->field('gname,gid')->where("company_id = '".$admin_company_id."' AND gid>5")->select();
+            $this->assign('gadmin', $gadmin);
+            $this->assign('company_role_id',$company_role_id);
+            $this->assign('admin', $admin);
+            $this->setAdminCurItem('personnel');
+            return $this->fetch('admin_edit');
+        }
     }
 }

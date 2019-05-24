@@ -135,87 +135,36 @@
     </form>
     <div class="clear"></div>
 </div>
-<form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm">
-    <input type="hidden" id="role" value="">
-    <input type="hidden" id="oid" value="">
-    <div  class="ncap-form-default">
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_username}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_username_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_password}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_rpassword}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <input type="hidden" name="gid" value="{$role}">
-        <dl>
-            <dt></dt>
-            <dd>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
-        </dl>
-    </div>
-
-</form>
 <script type="text/javascript" src="{:config('url_domain_root')}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script>
     function dd(id) {
         var urls=ADMIN_URL+'organizes/company?o_id='+id;
-                //多窗口模式，层叠置顶
-                layer.open({
-                    type: 2,
-                    title: '公司信息',
-                    area: ['80%', '80%'],
-                    shadeClose: true,
-                    shade: 0.4,
-                    maxmin: false, //开启最大化最小化按钮
-                    content: urls
-                });
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 2,
+            title: '公司信息',
+            area: ['80%', '80%'],
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            content: urls
+        });
     }
-//    function jia(id){
-//        var urls=ADMIN_URL+'organizes/admin?role_id='+id;
-//        //多窗口模式，层叠置顶
-//        layer.open({
-//            type: 2,
-//            title: '分配管理员账号',
-//            area: ['700px', '450px'],
-//            fixed: false, //不固定
-//            shadeClose: true,
-//            shade: 0.4,
-//            maxmin: false, //开启最大化最小化按钮
-//            content: urls
-//        });
-//    }
-        function jia(role,oid){
-            $('#role').val(role);
-            $('#oid').val(oid);
-            //var urls=ADMIN_URL+'organizes/admin?role_id='+id;
+    function jia(role,oid){
+            var urls=ADMIN_URL+'organizes/admin_add?role_id='+role+'&o_id='+oid;
             //多窗口模式，层叠置顶
             layer.open({
-                type: 1,
+                type: 2,
                 title: '分配管理员账号',
-                area: ['700px', '450px'],
+                area: ['800px', '600px'],
                 fixed: false, //不固定
                 shadeClose: true,
                 shade: 0.4,
                 maxmin: false, //开启最大化最小化按钮
-                content: $("#courForm")
-            });
-        }
+                content: urls
+        });
+    }
+
     $(function() {
         regionInit("region");
     });
