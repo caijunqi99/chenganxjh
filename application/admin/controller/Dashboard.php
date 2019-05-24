@@ -27,7 +27,7 @@ class Dashboard extends AdminControl {
         //     'domain'=>$_SERVER['HTTP_HOST'], 
         //     'version'=>$curent_version, 
         // );
-        // $service_url = "http://service.csdeshang.com/index.php/Home/Version/checkDsmall.html?".http_build_query($vaules);
+        // $service_url = http_build_query($vaules);
         // $service_info = @file_get_contents($service_url);
         // $version_message = json_decode($service_info);
         // $this->assign('version_message', $version_message);

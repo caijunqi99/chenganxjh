@@ -7,6 +7,7 @@ define('MD5_KEY', 'a2382918dbb49c8643f19bc3ab90ecf9');
  * 
  */
 define('CHARSET','UTF-8');
+define('TATX',TRUE);
 
 define('HTTP_URL','114.116.142.79:8080/?');
 

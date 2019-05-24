@@ -78,8 +78,12 @@ class Login extends Controller {
                             session('office_company_id', $admin_info['admin_company_id']);
                             session('office_school_id', $admin_info['admin_school_id']);
                             session('login_identity', 'office');
-
-                            $this->success('登录成功', 'office/Index/index');
+                            if ($admin_info['admin_gid']==0) {
+                                $this->success('登录成功', 'admin/Index/index');
+                            }else{
+                                $this->success('登录成功', 'office/Index/index');    
+                            }
+                            
                         }
                     }else{
                         $this->success('该会员没有角色，请联系超级管理员');

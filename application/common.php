@@ -1440,7 +1440,7 @@ function write_file($filepath, $data, $mode = null,$type=false)
     }
     if (!$type) {
         $data = var_export($data, true);
-        $data = "<?php defined('DSMALL') or exit('Access Invalid!'); return " . $data . ";";    
+        $data = "<?php defined('TATX') or exit('Access Invalid!'); return " . $data . ";";    
     }
     $mode = $mode == 'append' ? FILE_APPEND : null;
     if (false === file_put_contents($filepath, ($data), $mode)) {
