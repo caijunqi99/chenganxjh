@@ -12,8 +12,14 @@ class AdminControl extends Controller {
     protected $admin_info;
 
     protected $permission;
-    public function _initialize() {
-        $this->admin_info = $this->systemLogin();
+    public function _initialize($ControllerNmae = '') {
+        //个别不需要验证当前登陆身份的控制器
+        $OverLimit = ['Mlselection'];
+        if (!empty($ControllerNmae) && in_array($ControllerNmae, $OverLimit)) {
+            
+        }else{
+            $this->admin_info = $this->systemLogin();
+        }
         $config_list = rkcache('config', true);
         config($config_list);
         if ($this->admin_info['admin_id'] != 1) {
