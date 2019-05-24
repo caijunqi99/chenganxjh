@@ -82,7 +82,7 @@ final class Email{
 			return false;
 		}
 
-		fputs($fp, 'EHLO'." dsmall\r\n");
+		fputs($fp, 'EHLO'.$this->site_name."\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250) {
 			$this->resultLog($this->email_server.':'.$this->email_port." HELO/EHLO - $lastmessage");
@@ -239,7 +239,7 @@ final class Email{
 		}
 		$header = "From: $from{$this->email_delimiter}";
 		$header .= "X-Priority: 3{$this->email_delimiter}";
-		$header .= "X-Mailer: csdeshang {$this->email_delimiter}";
+		$header .= "X-Mailer: ".$_SERVER['HTTP_HOST']." {$this->email_delimiter}";
 		$header .= "MIME-Version: 1.0{$this->email_delimiter}";
 		$header .= "Content-type: text/html; ";
 		$header .= "charset=".'UTF-8'."{$this->email_delimiter}";

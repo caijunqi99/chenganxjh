@@ -69,8 +69,11 @@ class Login extends Controller {
                         session('school_admin_company_id', $admin_info['admin_company_id']);
                         session('admin_school_id', $admin_info['admin_school_id']);
                         session('login_identity', 'school');
-
-                        $this->success('登录成功', 'School/Index/index');
+                        if ($admin_info['admin_gid']==0) {
+                            $this->success('登录成功', 'admin/Index/index');
+                        }else{
+                            $this->success('登录成功', 'school/Index/index');    
+                        }
                     }else{
                         $this->success('必须是学校管理员，才能登陆学校后台');
                     }
