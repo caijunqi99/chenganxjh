@@ -9,6 +9,7 @@ class Schoolinfo extends AdminControl {
 
     public function _initialize() {
         parent::_initialize();
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
     }
 
@@ -32,6 +33,22 @@ class Schoolinfo extends AdminControl {
         }
         $this->assign('schooltype', $type);
         $this->setAdminCurItem('index');
+        return $this->fetch();
+    }
+    //公司人员信息
+    public function personnel(){
+        $where = ' a.admin_del_status=1';
+        $where .=' and a.admin_school_id='.$_GET['school_id'] ;
+        $admin_list = db('admin')
+            ->alias('a')
+            ->join('__GADMIN__ g', 'g.gid = a.admin_gid', 'LEFT')
+            ->join('__SCHOOL__ s', 's.schoolid = a.admin_school_id', 'LEFT')
+            ->where($where)
+            ->order('a.admin_login_time DESC')
+            ->paginate(10,false,['query' => request()->param()]);
+        $this->assign('admin_list', $admin_list->items());
+        $this->assign('page', $admin_list->render());
+        $this->setAdminCurItem('personnel');
         return $this->fetch();
     }
 
@@ -124,7 +141,83 @@ class Schoolinfo extends AdminControl {
             return $res;
         }
     }
-
+    /**
+     * 管理员添加
+     */
+    public function admin_add() {
+        if(session('admin_is_super') !=1 && !in_array('1',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $admin_id = $this->admin_info['admin_id'];
+        $admin_school_id = $_GET['school_id'];//添加账号所属学校
+        $admin_company_id = $_GET['company_id'];//添加账号所属学校的所属公司
+        if (!request()->isPost()) {
+            //获取所创建的角色
+            $gadmin_list = db('gadmin')->field('gid,school_id,gname')->where('school_id= '.$admin_school_id.' AND company_id='.$admin_company_id.' AND gid>5')->select();
+            $this->assign('gadmin_list',$gadmin_list);
+            $this->setAdminCurItem('admin_add');
+            return $this->fetch('admin_add');
+        } else {
+            $model_admin = Model('admin');
+            $param['admin_name'] = $_POST['admin_name'];
+            $param['admin_password'] = md5($_POST['admin_password']);
+            $param['create_uid'] = $admin_id;
+            $param['admin_company_id'] = $admin_company_id;
+            $param['admin_school_id'] = $admin_school_id;
+            $param['admin_gid'] = trim($_POST['gid']);
+            $rs = $model_admin->addAdmin($param);
+            if ($rs) {
+                $this->log(lang('ds_add').lang('limit_admin') . '[' . $_POST['admin_name'] . ']', 1);
+                echo json_encode(array('message'=>lang('ds_common_save_succ'),'status'=>200));exit;
+            } else {
+                $this->error(lang('ds_common_save_fail'));
+            }
+        }
+    }
+    /**
+     * 管理员修改
+     */
+    public function admin_edit() {
+        if(session('admin_is_super') !=1 && !in_array('3',$this->action)){
+            $this->error(lang('ds_assign_right'));
+        }
+        $admin_school_id = $_GET['school_id'];//账号所属学校
+        $admin_id = intval(input('param.admin_id'));
+        if (request()->isPost()) {
+            //没有更改密码
+            if ($_POST['new_pw'] != '') {
+                $data['admin_password'] = md5($_POST['new_pw']);
+            }
+            $data['admin_name'] = trim($_POST['admin_name']);
+            $data['admin_gid'] = intval($_POST['gid']);
+            $data['admin_phone'] = trim($_POST['admin_phone']);
+            $data['admin_true_name'] = trim($_POST['admin_truename']);
+            $data['admin_department'] = trim($_POST['admin_department']);
+            $data['admin_description'] = trim($_POST['admin_description']);
+            //查询管理员信息
+            $admin_model = Model('admin');
+            $result = $admin_model->updateAdmin($data,$admin_id);
+            if ($result >=0) {
+                $this->log(lang('ds_edit').lang('limit_admin') . '[ID:' . $admin_id . ']', 1);
+                $this->success(lang('admin_edit_success'), url('Admin/schoolinfo/personnel?school_id='.$admin_school_id));
+            } else {
+                $this->error(lang('admin_edit_fail'), url('Admin/schoolinfo/admin_edit?admin_id='.$admin_id.'&school_id='.$admin_school_id));
+            }
+        } else {
+            //查询用户信息
+            $admin_model = Model('admin');
+            $admin = $admin_model->getOneAdmin($admin_id);
+            if (!is_array($admin) || count($admin) <= 0) {
+                $this->error(lang('admin_edit_admin_error'), url('Admin/schoolinfo/personnel?school_id='.$admin_school_id));
+            }
+            //得到该公司创建的权限组
+            $gadmin = db('gadmin')->field('gname,gid')->where("school_id = '".$admin_school_id."' AND gid>5")->select();
+            $this->assign('gadmin', $gadmin);
+            $this->assign('admin', $admin);
+            $this->setAdminCurItem('personnel');
+            return $this->fetch('admin_edit');
+        }
+    }
 
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
@@ -136,6 +229,11 @@ class Schoolinfo extends AdminControl {
                 'name' => 'index',
                 'text' => '学校信息',
                 'url' => url('Admin/Schoolinfo/index',array('school_id'=>$schoolid))
+            ),
+            array(
+                'name' => 'personnel',
+                'text' => '学校管理员列表',
+                'url' => url('Admin/Schoolinfo/personnel',array('school_id'=>$schoolid))
             ),
             array(
                 'name' => 'list',

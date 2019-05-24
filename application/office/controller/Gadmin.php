@@ -100,11 +100,8 @@ class Gadmin extends AdminControl {
         if(session('office_is_super') !=1 && !in_array(4,$this->action )){
             $this->error(lang('gadmin_no_perms'));
         }
-//        if($this->admin_info['admin_is_super'] != 1) {
-            $list = db('gadmin')->where('company_id', $this->admin_info['admin_company_id'])->order('sort ASC')->paginate(10);
-//        }else{
-//            $list = db('gadmin')->paginate(10);
-//        }
+        $admin_company_id = $this->admin_info['admin_company_id'];
+        $list = db('gadmin')->where('company_id="'.$admin_company_id.'" AND school_id=0')->order('sort ASC')->paginate(10);
         $this->assign('list', $list->items());
         $this->assign('page', $list->render());
         $this->setAdminCurItem('gadmin');
@@ -118,14 +115,13 @@ class Gadmin extends AdminControl {
         if(session('office_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
+        $admin_company_id = $this->admin_info['admin_company_id'];
         //查询用户信息
         $admin_model = Model('admin');
         $admin = $admin_model->getOneAdmin(session('office_id'));
         if (!request()->isPost()) {
             if($this->admin_info['admin_is_super'] != 1){
-                $gid = intval($this->admin_info['admin_gid']);
-//                halt($gid);
-                $ginfo = db('gadmin')->where('gid', $gid)->find();
+                $ginfo = db('gadmin')->where('company_id='.$admin_company_id.' AND school_id=0')->find();
                 if (empty($ginfo)) {
                     $this->error(lang('admin_set_admin_not_exists'));
                 }

@@ -64,6 +64,7 @@ $lang['admin_index_not_allow_del']	= '该账号为系统管理员,不得删除';
 $lang['admin_index_login_null']		= '此管理员未登录过';
 $lang['admin_index_username']		= '账号';
 $lang['admin_index_company']	    = '所属公司';
+$lang['admin_index_school']	         = '所属学校';
 $lang['admin_index_department']	    = '所属部门';
 $lang['admin_index_password']		= '密码';
 $lang['admin_rpassword']			= '确认密码';

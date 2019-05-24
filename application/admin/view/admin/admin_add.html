@@ -23,30 +23,13 @@
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.admin_index_company}</dt>
-                <dd>
-                    <?php if($company_id == 1){?>
-                        <select name="admin_company_id">
-                            <option value="" selected>{$Think.lang.admin_add_company_chose}</option>
-                            <option value="1">总公司</option>
-                            <?php foreach((array)$company as $v){?>
-                            <option value="<?php echo $v['o_id'];?>"><?php echo $v['o_name'];?></option>
-                            <?php }?>
-                        </select>
-                    <?php }else{?>
-                         <span><?php echo $company['o_name']?></span>
-                        <input  name="admin_company_id" value="<?php echo $company['o_id']?>" type="hidden">
-                    <?php }?>
-                    <span class="err"></span>
-                    <p class="notic">{$Think.lang.admin_add_company_id_tip}</p>
-                </dd>
-            </dl>
-            <dl>
                 <dt>{$Think.lang.gadmin_name}</dt>
                 <dd>
                     <select name="gid" id="gid">
                         <option value="" selected>{$Think.lang.admin_add_role_chose}</option>
-
+                        <?php foreach((array)$gadmin_list as $v){?>
+                        <option value="<?php echo $v['gid'];?>" ><?php echo $v['gname'];?></option>
+                        <?php }?>
                     </select>
                     <span class="err"></span>
                     <p class="notic">{$Think.lang.admin_add_gid_tip}</p>
@@ -109,19 +92,6 @@
 </div>
 
 <script>
-
-    $('select[name=admin_company_id]').change(function(){
-        var id = $(this).find('option:selected').val();
-        $.ajax({
-            type:'POST',
-            url:ADMIN_URL+'/Admin/ajax.html?branch=get_gadmin',
-            data:{id:id},
-            dataType:'json',
-            success: function(response){
-                $("#gid").html(response);
-            }
-        })
-    })
 //按钮先执行验证再提交表
     $(document).ready(function() {
         //按钮先执行验证再提交表单
@@ -180,9 +150,6 @@
                 },
                 gid: {
                     required: true
-                },
-                admin_company_id: {
-                    required: true
                 }
             },
             messages: {
@@ -208,9 +175,6 @@
                 },
                 gid: {
                     required: '{$Think.lang.admin_add_gid_null}',
-                },
-                admin_company_id: {
-                    required: '{$Think.lang.admin_add_company_id_null}',
                 }
             }
         });

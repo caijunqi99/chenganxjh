@@ -53,7 +53,7 @@ class Login extends Controller {
 //            halt($admin_info);
             if (is_array($admin_info) and !empty($admin_info)) {
                 if($admin_info['admin_status'] == 1){
-                    if($admin_info['admin_gid'] == 5){
+                    if($admin_info['admin_school_id'] != 0){
                         //更新 admin 最新信息
                         $update_info = array(
                             'admin_login_num' => ($admin_info['admin_login_num'] + 1),
@@ -72,7 +72,7 @@ class Login extends Controller {
 
                         $this->success('登录成功', 'School/Index/index');
                     }else{
-                        $this->success('必须是学校管理员，才能登陆学校后台');
+                        $this->success('该账号不属于学校管理员，请确认账号角色！！!');
                     }
                 }else{
                     $this->success('帐号已被禁用，请联系超级管理员');
