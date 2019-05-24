@@ -66,7 +66,7 @@ class AdminControl extends Controller {
         $menu_list = $this->menuList();
 
         $menu_list=$this->parseMenu($menu_list);
-        if($menu_list['school']){
+        /*if($menu_list['school']){
             $menu_list["school"]['children']['schoolbus'] = [
                 "permid" => 127,
                 "pid" => 27,
@@ -111,7 +111,7 @@ class AdminControl extends Controller {
                 "sort" => 99,
                 "status" => 1
             ];
-        }
+        }*/
         $this->assign('menu_list', $menu_list);
     }
 
