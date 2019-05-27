@@ -134,7 +134,6 @@ $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
 $lang['ds_student'] = '学生管理';
 $lang['ds_schoolapply'] = '学校申请审核';
-$lang['ds_classlocation'] = '位置班级管理';
 $lang['ds_coursemanage'] = '课程管理';
 $lang['school_time'] = '更新时间';
 $lang['school_province'] = '省';
