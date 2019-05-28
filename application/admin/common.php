@@ -1,9 +1,16 @@
 <?php
 
 function p($arr){
-	echo "<pre>";
-	print_r($arr);
-	echo "</pre>";
+    if ($arr) {
+        echo "<pre>";
+        print_r($arr);
+        echo "</pre>";
+    }else{
+        echo "<pre>";
+        var_dump($arr);
+        echo "</pre>";
+    }
+    
 }
 
 function axisFomat($str){
