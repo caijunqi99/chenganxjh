@@ -444,6 +444,7 @@ class Camera extends AdminControl
             foreach($list as $key=>$v){
                 $datainfo = json_encode($v);
                 $html .= "<tr class='hover' id='tr_".$v['cid']."' datainfo='".$datainfo."'>";
+                $html .= "<td class='align-center'><input type='checkbox' lay-skin='primary' name='cityId' class='cityId' lay-filter='c_one'  value='".$v['cid']."' ></td>";
                 $html .= '<td class="align-center">'.$v["name"].'</td>';
                 $html .= '<td class="align-center">'.$v["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
@@ -458,7 +459,7 @@ class Camera extends AdminControl
                 //if($v['is_rtmp']==2){
                     //$html .= '<td class="align-center">有人正在观看中▪▪▪</td>';
                 //}else {
-                    $html .= '<td id="rmt_' . $v['cid'] . '" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay(' . $v['cid'] . ')">点击播放</a></td>';
+                    //$html .= '<td id="rmt_' . $v['cid'] . '" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay(' . $v['cid'] . ')">点击播放</a></td>';
                 //}
                 //<img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50">
                 if($v['is_classroom'] == 1){
@@ -577,6 +578,40 @@ class Camera extends AdminControl
         }catch (\Exception $exception){
             return $arr1;
         }
+    }
+    public function changetime(){
+        $input = input();
+        $cid = $input['cid'];
+        $updata = array(
+            'begintime' =>strtotime($input['starttime']),
+            'endtime' =>strtotime($input['endtime'])
+        );
+        $starttime =
+        $endtime =
+        $result = db('camera')->where('cid',$cid)->update($updata);
+        if ($result) {
+            ds_json_encode('200', $msg.'设置成功');
+        }else{
+            ds_json_encode('100', $msg.'设置失败');
+        }
+
+    }
+    public function changetimes(){
+        $input = input();
+        $cid['cid'] =array('in',$input['cid']);
+        $updata = array(
+            'begintime' =>strtotime($input['starttime']),
+            'endtime' =>strtotime($input['endtime'])
+        );
+        $starttime =
+        $endtime =
+        $result = db('camera')->where($cid)->update($updata);
+        if ($result) {
+            ds_json_encode('200', $msg.'设置成功');
+        }else{
+            ds_json_encode('100', $msg.'设置失败');
+        }
+
     }
     public function makedefault(){
         $input = input();
