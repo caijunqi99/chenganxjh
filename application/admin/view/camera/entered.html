@@ -67,6 +67,9 @@
             <div class="layui-inline">
                 <a href="javascript:update()" class="layui-btn" data-type="auto" data-method="offset">{$Think.lang.look_camera_update}</a>
             </div>
+            <div class="layui-inline">
+                <input type='botton' class="layui-btn" data-type="reload" id='' onclick='timess1()' value='批量设置开启关闭时间'/>
+            </div>
         </div>
 
         <table class="layui-table">
@@ -77,13 +80,14 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="12">
+                <th colspan="11">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
             </thead>
             <thead>
             <tr class="thead">
+                <th class="align-center"><input type="checkbox" lay-skin="primary" id="c_all" lay-filter="c_all"></th>
                 <th class="align-center">{$Think.lang.look_camera_name}</th>
                 <th class="align-center">{$Think.lang.look_camera_channelid}</th>
                 <th class="align-center">{$Think.lang.look_camera_deviceid}</th>
@@ -91,7 +95,7 @@
                 <th class="align-center">{$Think.lang.look_camera_online}</th>
                 <th class="align-center">{$Think.lang.look_camera_parentid}</th>
                 <!--<th class="align-center">{$Think.lang.look_camera_pimageurl}</th>-->
-                <th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>
+                <!--<th class="align-center">{$Think.lang.look_camera_rtmpplayurl}</th>-->
                 <th class="align-center">{$Think.lang.look_camera_classroom}</th>
                 <th class="align-center">{$Think.lang.look_camera_cstatus}</th>
                 <th class="align-center">{$Think.lang.look_camera_sqtime}</th>
