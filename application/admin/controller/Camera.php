@@ -470,21 +470,21 @@ class Camera extends AdminControl
                     $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }
                 if($v['status'] == 1){
-                    $html .= '<td class="align-center">开启</td>';
+                    //$html .= '<td class="align-center">开启</td>';
+                    $html .= '<td class="align-center"><a id="dps_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefaults('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }else if($v['status'] == 2){
-                    $html .= '<td class="align-center">关闭</td>';
+                    //$html .= '<td class="align-center">关闭</td>';
+                    $html .= '<td class="align-center"><a id="dps_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox" onclick="makedefaults('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
-                if(!empty($v['begintime'])){
-                    $html .= '<td class="align-center">开启时间：'.date('H:i',$v["begintime"]);
-                }else{
-                    $html .= '<td class="align-center">开启时间：未设置';
-                }
-                if(!empty($v['endtime'])) {
-                    $html .= '<hr>关闭时间：' . date('H:i', $v['endtime']) . '</td>';
-                }else{
-                    $html .= '<hr>关闭时间：未设置</td>';
-                }
+                $start = trim($v['cid'].'_Start');
+                $end = trim($v['cid'].'_End');
+                $defulbegin =empty($v["begintime"])?'':date('H:i:s',$v["begintime"]);
+                $defulend   =empty($v["endtime"])?'':date('H:i:s',$v["endtime"]);
+                $html .= "<td class='align-center'>
+                    开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onfocus='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <hr>
+                    关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onfocus='timesss(".'"'.$end.'"'.")' value='".$defulend."' />
+                    </td>";
                 $html .='<td class="align-center"><a href="javascript:del('.$v["cid"].')" class="layui-btn layui-btn-xs">删除</a></td>';
                 $html .= '</tr>';
             }
@@ -628,6 +628,21 @@ class Camera extends AdminControl
             }else{
                 $vlink->DelStorage($accountid, $id);
             }
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
+        }
+    }
+    public function makedefaults(){
+        $input = input();
+        $cid = $input['cid'];
+        $key=$input['status'];
+        if($cid && $key ){
+            $result = db('camera')->where('cid',$cid)->setField('status', $key);
             if ($result) {
                 ds_json_encode('200', $msg.'设置成功');
             }else{
