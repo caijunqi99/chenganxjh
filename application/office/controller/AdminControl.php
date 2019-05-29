@@ -12,15 +12,22 @@ class AdminControl extends Controller {
     protected $admin_info;
 
     protected $permission;
-    public function _initialize() {
-        $this->admin_info = $this->systemLogin();
+    public function _initialize($ControllerNmae = '') {
+        //个别不需要验证当前登陆身份的控制器
+        $OverLimit = ['Mlselection','Common'];
+        if (!empty($ControllerNmae) && in_array($ControllerNmae, $OverLimit)) {
+            
+        }else{
+            $this->admin_info = $this->systemLogin();
+            if ($this->admin_info['admin_id'] != 1) {
+                // 验证权限
+                $this->checkPermission();
+    //            dump($this->permission);exit;
+            }
+        }
         $config_list = rkcache('config', true);
         config($config_list);
-        if ($this->admin_info['admin_id'] != 1) {
-            // 验证权限
-            $this->checkPermission();
-//            dump($this->permission);exit;
-        }
+        
         $this->setMenuList();
         $_GET['page'] = isset($_GET['page'])?$_GET['page']:1;
     }

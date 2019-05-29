@@ -92,10 +92,15 @@ class School extends AdminControl {
         return $this->fetch();
     }
 
+    public function uploads(){
+        $this->assign('school_id',input('sid'));
+        return $this->fetch('uploads');
+    }
+
+
+
     public function add() {
-        if(session('office_is_super') !=1 && !in_array(1,$this->action )){
-            $this->error(lang('ds_assign_right'));
-        }
+        
         if (!request()->isPost()) {
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
@@ -409,7 +414,7 @@ class School extends AdminControl {
                 'url' => url('office/School/member')
             ),
         );
-        if(session('office_is_super') ==1 || in_array(1,$this->action )){
+        // if(session('office_is_super') ==1 || in_array(1,$this->action )){
             if (request()->action() == 'add' || request()->action() == 'member') {
                 $menu_array[] = array(
                     'name' => 'add',
@@ -417,7 +422,7 @@ class School extends AdminControl {
                     'url' => url('office/School/add')
                 );
             }
-        }
+        // }
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',

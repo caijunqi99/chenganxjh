@@ -67,6 +67,29 @@ class Schoolinfo extends AdminControl {
         return $this->fetch();
     }
 
+    public function position(){
+        $schoolid = 1;//input('param.school_id');
+        $Model = model('Position');
+        $positionlist = $Model->getpositionClass(['p.school_id'=>$schoolid],10);
+        $this->assign('page', $Model->page_info->render());
+        $this->assign('positionList', $positionlist);
+        $this->assign('positionCount', $Model->getpositionCount(['school_id'=>$schoolid]));
+        $this->setAdminCurItem('position');
+        return $this->fetch();
+
+    }
+
+    
+
+    public function getCameraNum(){
+        //查询摄像头数量
+        $schoolid = 1;//input('param.school_id');
+        $Model = model('Position');
+        //更新摄像头数量
+        //
+        echo json_encode(['num'=>3,'msg'=>'已更新']);
+    }
+
     /**
      * 摄像头查询过滤
      * @创建时间   2018-11-03T00:39:28+0800
@@ -146,6 +169,11 @@ class Schoolinfo extends AdminControl {
                 'name' => 'camera',
                 'text' => '摄像头个数',
                 'url' => url('Office/Schoolinfo/camera',array('school_id'=>$schoolid))
+            ),
+            array(
+                'name' => 'position',
+                'text' => '教学楼位置',
+                'url' => url('Office/Schoolinfo/position',array('school_id'=>$schoolid))
             ),
         );
         return $menu_array;
