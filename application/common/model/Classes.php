@@ -13,7 +13,11 @@ class Classes extends Model {
      * @return unknown
      */
     public function getClassInfo($condition = array(), $extend = array(), $fields = '*', $class = '', $group = '') {
-        $class_info = db('class')->field($fields)->where($condition)->group($group)->order($class)->find();
+        $class_info = db('class')
+                      ->alias('c')
+                      ->join('__POSITION__ po','po.id=c.position_id','LEFT')
+                      ->field('c.*,po.position')
+                      ->where($condition)->group($group)->order($class)->find();
         if (empty($class_info)) {
             return array();
         }
@@ -60,7 +64,13 @@ class Classes extends Model {
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
     public function getClasslList($condition, $page = '', $field = '*', $class = 'classid desc', $limit = '', $extend = array(), $master = false) {
-        $list_paginate = db('class')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+        $list_paginate = db('class')
+                         ->alias('c')
+                         ->join('__POSITION__ po','po.id=c.position_id','LEFT')
+                         ->field('c.*,po.position')
+                         ->where($condition)
+                         ->order($class)
+                         ->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
