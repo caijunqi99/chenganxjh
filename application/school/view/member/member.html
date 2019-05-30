@@ -97,7 +97,7 @@
           <!-- <th class="align-center">经验值</th> -->
           <!-- <th class="align-center">级别</th> -->
           <th class="align-center">{$Think.lang.member_index_state}</th>
-            <?php if(session('admin_is_super')==1 || in_array('3',$action) || in_array('2',$action)){?>
+            <?php if(session('admin_is_super')==1 || in_array('3',$action) || in_array('2',$action) || in_array('4',$action)){?>
           <th class="align-center">{$Think.lang.ds_handle}</th>
             <?php }?>
         </tr>
@@ -158,6 +158,9 @@
           <!-- <td class="align-center"><?php echo $v['member_grade'];?></td> -->
           <td class="align-center"><?php echo $v['member_state'] == 1?lang('member_edit_allow'):lang('member_edit_deny'); ?></td>
           <td class="align-center">
+              <?php if(session('admin_is_super') ==1 || in_array(4,$action)){?>
+              <a href="javascript:dd({$v.member_id})" data-method="setTop" class="layui-btn layui-btn-sm">{$Think.lang.ds_view}</a>
+              <?php }?>
               <?php if(session('admin_is_super')==1 || in_array('3',$action)){?>
               <a class="layui-btn layui-btn-sm" href="{:url('/school/member/edit',['member_id'=>$v.member_id])}">{$Think.lang.ds_edit}</a>
               <?php }?>
@@ -181,6 +184,19 @@
           }, function(){
             window.location.href="{:url('/school/member/drop')}?member_id="+id;
           });
+        }
+        function dd(id) {
+            var urls=ADMIN_URL+'Membercommon/MemberInfo?member_id='+id;
+            //多窗口模式，层叠置顶
+            layer.open({
+                type: 2,
+                title: '公司信息',
+                area: ['80%', '80%'],
+                shadeClose: true,
+                shade: 0.4,
+                maxmin: false, //开启最大化最小化按钮
+                content: urls
+            });
         }
       </script>
       <tfoot class="tfoot">
