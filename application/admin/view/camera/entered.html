@@ -80,7 +80,7 @@
             </colgroup>
             <thead>
             <tr class="thead">
-                <th colspan="11">
+                <th colspan="12">
                     <p class="layui-table-tool-temp" >{$Think.lang.look_camera_wait_an_number}：<span style="font-size: 24px;color: #D90909" id="count"></span> </p>
                 </th>
             </tr>
@@ -124,6 +124,52 @@
         </div>
     </div>
 </div>
+<form class="layui-form" onsubmit="return false;" style="display: none;" id="timeForm">
+    <div class="layui-form-item">
+        <input type="hidden" id="cameraid" value="">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <input type="text" placeholder="HH:mm" class="layui-input" id="starttime" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <input type="text" placeholder="HH:mm" class="layui-input" id="endtime" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="changetime()">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<form class="layui-form" onsubmit="return false;" style="display: none;" id="timeForms">
+    <div class="layui-form-item">
+        <input type="hidden" id="cameraids" value="">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <input type="text" placeholder="HH:mm" class="layui-input" id="starttimes" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <input type="text" placeholder="HH:mm" class="layui-input" id="endtimes" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="changetimes()">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
 <script type="text/javascript">
     function rtmplay(cid){
         addrtmp(cid,2);
@@ -162,10 +208,179 @@
             }
         })
     }
-    layui.use(['form','laypage', 'layer'], function(){
+
+    //批量
+    function timess1(){
+        var obj = document.getElementsByName("cityId");
+        var check_val = [];
+        for(k in obj){
+            if(obj[k].checked){
+                check_val.push(obj[k].value);
+            }
+        }
+        if(check_val!='') {
+            $('#cameraids').val(check_val);
+            layer.open({
+                type: 1,
+                title: '开始结束时间设置',
+                // shadeClose: true,
+                shade: false,
+                area: ['350px', '300px'],
+                skin: 'layui-layer-rim',
+                content: $('#timeForms')
+                ,cancel: function(){
+
+                }
+            });
+        }else{
+            alert('请先选择摄像头！');
+        }
+    }
+
+
+
+    function timesss(cid) {
+        var foo = cid.split('_');
+        cid = foo[0];
+        act = foo[1];
+        $('#cameraid').val(cid);
+        var starttime =$('#picktimeStart'+cid).val();
+        var endtime =$('#picktimeEnd'+cid).val();
+        console.log(starttime,endtime)
+        $('#starttime').val(starttime);
+        $('#endtime').val(endtime);
+        layer.open({
+            type: 1,
+            title: '开始结束时间设置',
+            // shadeClose: true,
+            shade: false,
+            area: ['350px', '300px'],
+            skin: 'layui-layer-rim',
+            content: $('#timeForm')
+            ,cancel: function(){
+
+            }
+        });
+        return;
+    }
+    function changetime(){
+        var cid = $('#cameraid').val();
+        var starttime = $('#starttime').val();
+        var endtime = $('#endtime').val();
+        $.post("{:url('/Admin/camera/changetime')}", {'cid': cid,'starttime':starttime,'endtime':endtime}, function(data, textStatus, xhr) {
+            if (data.code==200) {
+                $('#picktimeStart'+cid).val(starttime);
+                $('#picktimeEnd'+cid).val(endtime);
+                layer.closeAll();
+                layer.msg(data.message);
+
+            }else{
+                layer.msg(data.message);
+            }
+
+        },'json');
+    }
+    function changetimes(){
+        var cid = $('#cameraids').val();
+        var starttime = $('#starttimes').val();
+        var endtime = $('#endtimes').val();
+        $.post("{:url('/Admin/camera/changetimes')}", {'cid': cid,'starttime':starttime,'endtime':endtime}, function(data, textStatus, xhr) {
+            if (data.code==200) {
+                var s=cid.split(',');
+                $.each(s, function(i,val){
+                    $('#picktimeStart'+ val).val(starttime);
+                    $('#picktimeEnd'+ val).val(endtime);
+                });
+                layer.closeAll();
+                layer.msg(data.message);
+
+            }else{
+                layer.msg(data.message);
+            }
+
+        },'json');
+    }
+    function makedefault(cid,id) {
+        var statu = $('#dp_' + cid).attr('statu');
+        if (statu == 1) {
+            classroom = 2;
+            var msg = '确实设置该摄像头为重温课堂摄像头吗？';
+        } else {
+            classroom = 1;
+            var msg = '确实取消该摄像头为重温课堂摄像头吗？';
+        }
+        layer.confirm(msg, {
+            btn: ['再考虑一下','确定'] //按钮
+            ,title:'{$Think.lang.admin_index_title}'}, function(){
+            layer.msg('取消操作', {time: 2000,icon: 2});
+        }, function() {
+            $.post("{:url('/admin/camera/makedefault')}", {
+                'cid': cid,
+                'classroom': classroom,
+                'id':id
+            }, function (data, textStatus, xhr) {
+                if (statu == 2) {
+                    $('#dp_' + cid).removeClass('layui-form-checked');
+                    $('#dp_' + cid).attr('statu', classroom);
+                } else {
+                    $('#dp_' + cid).addClass('layui-form-checked');
+                    $('#dp_' + cid).attr('statu', classroom);
+                }
+            }, 'json');
+            console.log(statu)
+        });
+    }
+    function makedefaults(cid) {
+        var statu = $('#dps_'+cid).attr('statu');
+
+        if(statu ==1){
+            status = 2;
+            var msg = '确实禁用该摄像头？';
+        }else{
+            status = 1;
+            var msg = '确实启用该摄像头？';
+        }
+        layer.confirm(msg, {
+            btn: ['再考虑一下','确定'] //按钮
+            ,title:'{$Think.lang.admin_index_title}'}, function(){
+            layer.msg('取消操作', {time: 2000,icon: 2});
+        }, function() {
+            $.post("{:url('/admin/camera/makedefaults')}", {
+                'cid': cid,
+                'status': status
+            }, function (data, textStatus, xhr) {
+                if(statu ==1){
+                    $('#dps_'+cid).removeClass('layui-form-checked');
+                    $('#dps_'+cid).attr('statu',status);
+                }else{
+                    $('#dps_'+cid).addClass('layui-form-checked');
+                    $('#dps_'+cid).attr('statu',status);
+                }
+            }, 'json');
+            //console.log(statu)
+        });
+    }
+    layui.use(['form','laypage', 'layer','laydate'], function(){
         var form = layui.form,
             laypage = layui.laypage
             ,layer = layui.layer;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#starttime'
+            ,type: 'time'
+        });
+        laydate.render({
+            elem: '#endtime'
+            ,type: 'time'
+        });
+        laydate.render({
+            elem: '#starttimes'
+            ,type: 'time'
+        });
+        laydate.render({
+            elem: '#endtimes'
+            ,type: 'time'
+        });
         //关键字搜索
         var name = '<?php if(!empty($_GET["name"])){echo $_GET["name"];}?>';
         //省 市 区
@@ -347,10 +562,43 @@
                         // console.log(data.html);
                         $('#html').html(data.html);
                         $('#count').html(data.count+'个');
+                        form.render('checkbox');
                     }
                 })
 
             }
+        });
+        form.on('checkbox(c_all)', function (data) {
+            var a = data.elem.checked;
+            if (a == true) {
+                $(".cityId").prop("checked", true);
+                form.render('checkbox');
+            } else {
+                $(".cityId").prop("checked", false);
+                form.render('checkbox');
+            }
+
+        });
+        form.on('checkbox(c_one)', function (data) {
+            var item = $(".cityId");
+            //alert(item.length);exit;
+            for (var i = 0; i < item.length; i++) {
+                if (item[i].checked == false) {
+                    $("#c_all").prop("checked", false);
+                    form.render('checkbox');
+                    break;
+                }
+            }
+            //如果都勾选了  勾上全选
+            var  all=item.length;
+            for (var i = 0; i < item.length; i++) {
+                if (item[i].checked == true) {
+                    all--;
+                }
+            };
+            if(all==0){
+                $("#c_all").prop("checked", true);
+                form.render('checkbox');}
         });
 
     });
