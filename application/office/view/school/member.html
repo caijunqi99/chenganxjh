@@ -122,6 +122,9 @@
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">
+
+                <a href="javascript:uploadsPosition({$v.schoolid});" class="layui-btn layui-btn-xs " >导入教室位置</a>
+
                 <?php if(session('office_is_super') ==1 || in_array('4',$action)){ ?>
                 <a href="javascript:dd({$v.schoolid})" class="layui-btn layui-btn-xs">{$Think.lang.ds_view}</a>
                 <?php } ?>
@@ -198,6 +201,17 @@
 
 </form>
 <script type="text/javascript">
+    
+    function uploadsPosition(sid){
+        layer.open({
+            type: 2,
+            title:'导入学校教室位置信息',
+            area: ['900px', '600px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: ADMIN_URL+'School/uploads.html?sid='+sid,
+        });
+    }
     layui.use(['form','laypage', 'layer'], function(){
         var form = layui.form,
             laypage = layui.laypage
