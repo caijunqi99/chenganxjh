@@ -95,6 +95,17 @@ class Classes extends Model {
     }
 
     /**
+     * 批量添加班级
+     * @创建时间   2019-05-29
+     * @param  [type]     $data [description]
+     * @return [type]           [description]
+     */
+    public function class_add($data) {
+        $insert = db('class')->insertAll($data);
+        return $insert;
+    }
+
+    /**
      * 添加订单日志
      */
     public function addOrderLog($data) {

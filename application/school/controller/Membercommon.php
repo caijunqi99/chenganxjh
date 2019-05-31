@@ -21,32 +21,32 @@ class Membercommon extends AdminControl {
             array(
                 'name' => 'MemberInfo',
                 'text' => '个人资料',
-                'url' => url('Admin/Membercommon/MemberInfo',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/MemberInfo',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'RelationMember',
                 'text' => '关联账号',
-                'url' => url('Admin/Membercommon/RelationMember',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/RelationMember',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenBind',
                 'text' => '绑定学生',
-                'url' => url('Admin/Membercommon/ChildrenBind',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/ChildrenBind',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenCamera',
                 'text' => '班级摄像头',
-                'url' => url('Admin/Membercommon/ChildrenCamera',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/ChildrenCamera',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'ChildrenOrders',
                 'text' => '订单信息',
-                'url' => url('Admin/Membercommon/ChildrenOrders',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/ChildrenOrders',array('member_id'=>$member_id))
             ),
             array(
                 'name' => 'MemberCapital',
                 'text' => '资金记录',
-                'url' => url('Admin/Membercommon/MemberCapital',array('member_id'=>$member_id))
+                'url' => url('School/Membercommon/MemberCapital',array('member_id'=>$member_id))
             ),
         );
         return $menu_array;
