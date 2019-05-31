@@ -62,7 +62,6 @@
             </div>
         </div>
     </form>
-
     <form method="post" id='form_admin' class="layui-form">
         <table class="layui-table"  >
             <colgroup>
@@ -76,10 +75,10 @@
                 <th class="align-center">{$Think.lang.admin_index_truename}</th>
                 <th class="align-center">{$Think.lang.mob_phone}</th>
                 <th class="align-center">{$Think.lang.gadmin_name}</th>
-                <th class="align-center">{$Think.lang.admin_index_last_login}</th>X
-                <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){?>
+                <th class="align-center">{$Think.lang.admin_index_last_login}</th>
+                <?php if(session('admin_is_super')==1 || in_array('13',$action) || in_array('2',$action) || in_array('3',$action) || in_array('12',$action)){ ?>
                 <th class="align-center">{$Think.lang.ds_handle}</th>
-                <?php }?>
+                <?php } ?>
             </tr>
             </thead>
             <tbody>
