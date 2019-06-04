@@ -246,7 +246,7 @@ function trim(str) {
 }
 //弹出框登录
 function login_dialog(){
-    CUR_DIALOG = ajax_form('login','登录',SITE_URL+'/Home/Login/login.html?inajax=1',360,1);
+    CUR_DIALOG = ajax_form('login','登录',SITE_URL+'/Home/Login/index.html?inajax=1',360,1);
 }
 
 /* 显示Ajax表单 */

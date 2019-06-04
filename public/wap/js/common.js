@@ -37,7 +37,7 @@ function delCookie(e) {
 }
 function checkLogin(e) {
     if (e == 0) {
-        // location.href = WapSiteUrl + "/tmpl/member/login.html";
+        // location.href = WapSiteUrl + "/tmpl/member/index.html";
         goLogin();
         return false
     } else {

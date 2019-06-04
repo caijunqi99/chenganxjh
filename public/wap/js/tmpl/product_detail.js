@@ -208,7 +208,7 @@ $(function() {
                         if (!e) {
                             goLogin();
                             return false
-                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                            // window.location.href = WapSiteUrl + "/tmpl/member/index.html";
                         }
                         var t = parseInt($(".buy-num").val());
                         if (!e) {
@@ -337,7 +337,7 @@ $(function() {
                             if (!e || e == 'null') {
                                 goLogin();
                                 return false
-                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                                // window.location.href = WapSiteUrl + "/tmpl/member/index.html"
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {

@@ -2,7 +2,7 @@ $(function() {
     var e = getCookie("key");
     var e = getCookie("key");
     if (!e) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+        window.location.href = WapSiteUrl + "/tmpl/member/index.html";
         return
     }
     loadSeccode();

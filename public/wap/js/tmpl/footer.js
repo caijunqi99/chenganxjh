@@ -4,7 +4,7 @@ $(function() {
     if (a) {
         e += '<a href="' + WapSiteUrl + '/tmpl/member/member.html">我的商城</a>' + '<a id="logoutbtn" href="javascript:void(0);">注销</a>' + '<a href="' + WapSiteUrl + '/tmpl/member/member_feedback.html">反馈</a>'
     } else {
-        e += '<a href="' + WapSiteUrl + '/tmpl/member/login.html">登录</a>' + '<a href="' + WapSiteUrl + '/tmpl/member/register.html">注册</a>' + '<a href="' + WapSiteUrl + '/tmpl/member/login.html">反馈</a>'
+        e += '<a href="' + WapSiteUrl + '/tmpl/member/index.html">登录</a>' + '<a href="' + WapSiteUrl + '/tmpl/member/register.html">注册</a>' + '<a href="' + WapSiteUrl + '/tmpl/member/index.html">反馈</a>'
     }
     e += '<a href="javascript:void(0);" class="gotop">返回顶部</a>' + "</div>" + "</div>";
     
@@ -45,7 +45,7 @@ if(WeiXinOauth){
     if(key==null){
         var ua = window.navigator.userAgent.toLowerCase();
         if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-            window.location.href=ApiUrl+"/Wxauto/login.html?ref="+encodeURIComponent(window.location.href);
+            window.location.href=ApiUrl+"/Wxauto/index.html?ref="+encodeURIComponent(window.location.href);
         }
     }
 }
