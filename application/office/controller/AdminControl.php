@@ -84,7 +84,7 @@ class AdminControl extends Controller {
         if ($this->admin_info['admin_is_super'] == 1) return true;
 
         $act = request()->controller();
-        //halt($act);
+        halt($act);
         $op = request()->action();
 //        halt($op);
 //        halt($this->permission);
