@@ -359,21 +359,20 @@ class Importorder extends AdminControl
                             if ($member_id) {
                                 //添加学生信息
                                 $student_array=array(
-                                    's_name' => $value['D'],
-                                    's_sex' => $value['E'],
-//                                    's_card' => $value['F'],
-                                    's_card' => $s_card,
-                                    's_schoolid' => $_SESSION['excel']['school']['schoolid'],
-                                    's_sctype' => $value['sc_id'],//学校类型id
-                                    's_classid' => $value['classid'],//班级id
-                                    's_ownerAccount' => $member_id,
-                                    's_provinceid' => $_SESSION['excel']['school']['provinceid'],
-                                    's_cityid' => $_SESSION['excel']['school']['cityid'],
-                                    's_areaid' => $_SESSION['excel']['school']['areaid'],
-                                    's_region' => $_SESSION['excel']['school']['address'],
+                                    's_name'           => $value['D'],
+                                    's_sex'            => $value['E'],
+                                    's_card'           => $s_card,
+                                    's_schoolid'       => $_SESSION['excel']['school']['schoolid'],
+                                    's_sctype'         => $value['sc_id'],//学校类型id
+                                    's_classid'        => $value['classid'],//班级id
+                                    's_ownerAccount'   => $member_id,
+                                    's_provinceid'     => $_SESSION['excel']['school']['provinceid'],
+                                    's_cityid'         => $_SESSION['excel']['school']['cityid'],
+                                    's_areaid'         => $_SESSION['excel']['school']['areaid'],
+                                    's_region'         => $_SESSION['excel']['school']['address'],
                                     'admin_company_id' => $_SESSION['excel']['school']['admin_company_id'],
-                                    'option_id' => session('admin_id'),
-                                    's_createtime' => date('Y-m-d',time()),
+                                    'option_id'        => session('admin_id'),
+                                    's_createtime'     => date('Y-m-d',time()),
 
                                 );
                                 $student_id = $model_student->insertGetId($student_array);
@@ -387,29 +386,29 @@ class Importorder extends AdminControl
                                             //到期时间
                                             $endTime = time()+$value['L']*24*3600;
                                             $see_array = array(
-                                                'pay_sn'=>$pay_sn,
-                                                'buyer_id'=>intval($member_id),
-                                                'buyer_name'=>trim($member['member_mobile']),
-                                                'buyer_mobile'=>trim($member['member_mobile']),
-                                                'add_time'=>time(),
-                                                'payment_code'=>'offline',
-                                                'payment_time'=>time(),
-                                                'finnshed_time'=>time(),
-                                                'pkg_name'=>trim($value['J']).'（线下）',
-                                                'pkg_price'=>ncPriceFormatb($value['K']),
-                                                'pkg_length'=>intval($value['L']),
-                                                's_id'=>intval($student_id),
-                                                's_name'=>trim($value['D']),
-                                                'schoolid'=>intval($_SESSION['excel']['school']['schoolid']),
-                                                'name'=>trim($_SESSION['excel']['school']['name']),
-                                                'classid'=>intval($value['classid']),
-                                                'classname'=>trim($value['I']),
-                                                'order_amount'=>ncPriceFormatb($value['K']),
-                                                'order_state'=>'40',
-                                                'order_dieline'=>$endTime,
-                                                'option_id'=>intval($_SESSION['excel']['school']['option_id']),
-                                                'over_amount'=>ncPriceFormatb($value['K']),
-                                                'admin_company_id'=>intval($_SESSION['excel']['school']['admin_company_id']),
+                                                'pay_sn'           =>$pay_sn,
+                                                'buyer_id'         =>intval($member_id),
+                                                'buyer_name'       =>trim($member['member_mobile']),
+                                                'buyer_mobile'     =>trim($member['member_mobile']),
+                                                'add_time'         =>time(),
+                                                'payment_code'     =>'offline',
+                                                'payment_time'     =>time(),
+                                                'finnshed_time'    =>time(),
+                                                'pkg_name'         =>trim($value['J']).'（线下）',
+                                                'pkg_price'        =>ncPriceFormatb($value['K']),
+                                                'pkg_length'       =>intval($value['L']),
+                                                's_id'             =>intval($student_id),
+                                                's_name'           =>trim($value['D']),
+                                                'schoolid'         =>intval($_SESSION['excel']['school']['schoolid']),
+                                                'name'             =>trim($_SESSION['excel']['school']['name']),
+                                                'classid'          =>intval($value['classid']),
+                                                'classname'        =>trim($value['I']),
+                                                'order_amount'     =>ncPriceFormatb($value['K']),
+                                                'order_state'      =>'40',
+                                                'order_dieline'    =>$endTime,
+                                                'option_id'        =>intval($_SESSION['excel']['school']['option_id']),
+                                                'over_amount'      =>ncPriceFormatb($value['K']),
+                                                'admin_company_id' =>intval($_SESSION['excel']['school']['admin_company_id']),
                                             );
                                             $order_pay_id =$model_order->insertGetId($see_array);
                                             if($order_pay_id){
@@ -418,14 +417,14 @@ class Importorder extends AdminControl
                                                 if($order_pay){
                                                     $desc = date('Y-m-d H:i',time()).'第一次购买看孩套餐,套餐到期时间:'.date('Y-m-d H:i',$endTime);
                                                     $see_end = array(
-                                                        'member_id'=>intval($member_id),
-                                                        'member_name'=>trim($member['member_mobile']),
-                                                        's_id'=>intval($student_id),
-                                                        's_name'=>trim($value['D']),
-                                                        'start_time'=>time(),
-                                                        'end_time'=>$endTime,
-                                                        'up_time'=>time(),
-                                                        'up_desc'=>$desc,
+                                                        'member_id'   =>intval($member_id),
+                                                        'member_name' =>trim($member['member_mobile']),
+                                                        's_id'        =>intval($student_id),
+                                                        's_name'      =>trim($value['D']),
+                                                        'start_time'  =>time(),
+                                                        'end_time'    =>$endTime,
+                                                        'up_time'     =>time(),
+                                                        'up_desc'     =>$desc,
                                                     );
                                                     $order_pay_time = $model_order_time->insert($see_end);
                                                     if($order_pay_time){
@@ -717,29 +716,29 @@ class Importorder extends AdminControl
                                 //到期时间
                                 $endTime = time()+intval($_POST['t_day'])*24*3600;
                                 $see_array = array(
-                                    'pay_sn'=>$pay_sn,
-                                    'buyer_id'=>intval($member_id),
-                                    'buyer_name'=>trim($member['member_mobile']),
-                                    'buyer_mobile'=>trim($member['member_mobile']),
-                                    'add_time'=>time(),
-                                    'payment_code'=>'offline',
-                                    'payment_time'=>time(),
-                                    'finnshed_time'=>time(),
-                                    'pkg_name'=>trim($t_name).'（线下）',
-                                    'pkg_price'=>ncPriceFormatb($_POST['t_price']),
-                                    'pkg_length'=>intval($_POST['t_day']),
-                                    's_id'=>intval($student_id),
-                                    's_name'=>trim($_POST['s_name']),
-                                    'schoolid'=>intval($school_info['schoolid']),
-                                    'name'=>trim($school_info['name']),
-                                    'classid'=>intval($is_class['classid']),
-                                    'classname'=>trim($is_class['classname']),
-                                    'order_amount'=>ncPriceFormatb($_POST['t_price']),
-                                    'order_state'=>'40',
-                                    'order_dieline'=>$endTime,
-                                    'option_id'=>intval($school_info['option_id']),
-                                    'over_amount'=>ncPriceFormatb($_POST['t_price']),
-                                    'admin_company_id'=>intval($school_info['admin_company_id']),
+                                    'pay_sn'           =>$pay_sn,
+                                    'buyer_id'         =>intval($member_id),
+                                    'buyer_name'       =>trim($member['member_mobile']),
+                                    'buyer_mobile'     =>trim($member['member_mobile']),
+                                    'add_time'         =>time(),
+                                    'payment_code'     =>'offline',
+                                    'payment_time'     =>time(),
+                                    'finnshed_time'    =>time(),
+                                    'pkg_name'         =>trim($t_name).'（线下）',
+                                    'pkg_price'        =>ncPriceFormatb($_POST['t_price']),
+                                    'pkg_length'       =>intval($_POST['t_day']),
+                                    's_id'             =>intval($student_id),
+                                    's_name'           =>trim($_POST['s_name']),
+                                    'schoolid'         =>intval($school_info['schoolid']),
+                                    'name'             =>trim($school_info['name']),
+                                    'classid'          =>intval($is_class['classid']),
+                                    'classname'        =>trim($is_class['classname']),
+                                    'order_amount'     =>ncPriceFormatb($_POST['t_price']),
+                                    'order_state'      =>'40',
+                                    'order_dieline'    =>$endTime,
+                                    'option_id'        =>intval($school_info['option_id']),
+                                    'over_amount'      =>ncPriceFormatb($_POST['t_price']),
+                                    'admin_company_id' =>intval($school_info['admin_company_id']),
                                 );
                                 $order_pay_id =$model_order->insertGetId($see_array);
                                 if($order_pay_id){
@@ -895,29 +894,29 @@ class Importorder extends AdminControl
                     break;
             }
             $data = array(
-                'm_mobile' => $_POST['m_mobile'],
-                'm_name' => $_POST['m_name'],
-                'm_sex' => $_POST['m_sex'],
-                's_name' => $_POST['s_name'],
-                's_sex' => $_POST['s_sex'],
-                's_card' => $_POST['s_card'],
-                'school_id' => $_POST['school_id'],
+                'm_mobile'    => $_POST['m_mobile'],
+                'm_name'      => $_POST['m_name'],
+                'm_sex'       => $_POST['m_sex'],
+                's_name'      => $_POST['s_name'],
+                's_sex'       => $_POST['s_sex'],
+                's_card'      => $_POST['s_card'],
+                'school_id'   => $_POST['school_id'],
                 'school_name' => $school_info['name'],
                 'province_id' => $school_info['provinceid'],
-                'city_id' => $school_info['cityid'],
-                'area_id' => $school_info['areaid'],
-                'address' => $school_info['address'],
-                'sc_id' => $is_grade['sc_id'],
+                'city_id'     => $school_info['cityid'],
+                'area_id'     => $school_info['areaid'],
+                'address'     => $school_info['address'],
+                'sc_id'       => $is_grade['sc_id'],
                 'school_type' => $is_grade['sc_type'],
-                'classid' => $is_class['classid'],
-                'class_name' => $is_class['classname'],
-                't_id' => $t_id,
-                't_name' => $t_name,
-                't_price' => $_POST['t_price'],
-                't_day' => $_POST['t_day'],
-                'content' => $_POST['content'],
-                'status' => 1,
-                'trueTime' => time(),
+                'classid'     => $is_class['classid'],
+                'class_name'  => $is_class['classname'],
+                't_id'        => $t_id,
+                't_name'      => $t_name,
+                't_price'     => $_POST['t_price'],
+                't_day'       => $_POST['t_day'],
+                'content'     => $_POST['content'],
+                'status'      => 1,
+                'trueTime'    => time(),
             );
             $import_data = $model->where('id="'.$id.'"')->update($data);
             if($import_data){
@@ -925,33 +924,33 @@ class Importorder extends AdminControl
                     //为家长开账户并发送短信通知
                     $pass = getRandomString(6,null,'n');
                     $member = array();
-                    $member['member_name'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
-                    $member['member_nickname'] = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
-                    $member['member_password'] = md5(trim($pass));
-                    $member['member_mobile'] = $_POST['m_mobile'];
-                    $member['member_provinceid'] = $school_info['provinceid'];
-                    $member['member_cityid'] = $school_info['cityid'];
-                    $member['member_areaid'] = $school_info['areaid'];
-                    $member['member_areainfo'] = $school_info['address'];
+                    $member['member_name']        = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_nickname']    = empty($_POST['m_name'])?$_POST['m_mobile']:$_POST['m_name'];
+                    $member['member_password']    = md5(trim($pass));
+                    $member['member_mobile']      = $_POST['m_mobile'];
+                    $member['member_provinceid']  = $school_info['provinceid'];
+                    $member['member_cityid']      = $school_info['cityid'];
+                    $member['member_areaid']      = $school_info['areaid'];
+                    $member['member_areainfo']    = $school_info['address'];
                     $member['member_mobile_bind'] = 1;
                     $member_id = $model_member->where('member_id="'.$m_s['m_id'].'"')->update($member);
                     if ($member_id) {
                         //添加学生信息
                         $student_array=array(
-                            's_name' => $_POST['s_name'],
-                            's_sex' => $_POST['s_sex'],
-                            's_card' => $_POST['s_card'],
-                            's_schoolid' => $_POST['school_id'],
-                            's_sctype' => $is_grade['sc_id'],//学校类型id
-                            's_classid' => $is_class['classid'],//班级id
-                            's_ownerAccount' => $m_s['m_id'],
-                            's_provinceid' => $school_info['provinceid'],
-                            's_cityid' => $school_info['cityid'],
-                            's_areaid' => $school_info['areaid'],
-                            's_region' => $school_info['address'],
+                            's_name'           => $_POST['s_name'],
+                            's_sex'            => $_POST['s_sex'],
+                            's_card'           => $_POST['s_card'],
+                            's_schoolid'       => $_POST['school_id'],
+                            's_sctype'         => $is_grade['sc_id'],//学校类型id
+                            's_classid'        => $is_class['classid'],//班级id
+                            's_ownerAccount'   => $m_s['m_id'],
+                            's_provinceid'     => $school_info['provinceid'],
+                            's_cityid'         => $school_info['cityid'],
+                            's_areaid'         => $school_info['areaid'],
+                            's_region'         => $school_info['address'],
                             'admin_company_id' => $school_info['admin_company_id'],
-                            'option_id' => session('admin_id'),
-                            's_createtime' => date('Y-m-d',time()),
+                            'option_id'        => session('admin_id'),
+                            's_createtime'     => date('Y-m-d',time()),
                         );
                         $student_id = $model_student->where('s_id="'.$m_s['s_id'].'"')->update($student_array);
                         if($student_id){
@@ -971,29 +970,29 @@ class Importorder extends AdminControl
                                         $endTime = $order_endTime['order_dieline'];
                                     }
                                     $see_array = array(
-                                        'pay_sn'=>$pay_sn,
-                                        'buyer_id'=>intval($m_s['m_id']),
-                                        'buyer_name'=>trim($member['member_mobile']),
-                                        'buyer_mobile'=>trim($member['member_mobile']),
-                                        'add_time'=>time(),
-                                        'payment_code'=>'offline',
-                                        'payment_time'=>time(),
-                                        'finnshed_time'=>time(),
-                                        'pkg_name'=>trim($t_name).'（线下）',
-                                        'pkg_price'=>ncPriceFormatb($_POST['t_price']),
-                                        'pkg_length'=>intval($_POST['t_day']),
-                                        's_id'=>intval($m_s['s_id']),
-                                        's_name'=>trim($_POST['s_name']),
-                                        'schoolid'=>intval($school_info['schoolid']),
-                                        'name'=>trim($school_info['name']),
-                                        'classid'=>intval($is_class['classid']),
-                                        'classname'=>trim($is_class['classname']),
-                                        'order_amount'=>ncPriceFormatb($_POST['t_price']),
-                                        'order_state'=>'40',
-                                        'order_dieline'=>$endTime,
-                                        'option_id'=>intval($school_info['option_id']),
-                                        'over_amount'=>ncPriceFormatb($_POST['t_price']),
-                                        'admin_company_id'=>intval($school_info['admin_company_id']),
+                                        'pay_sn'           =>$pay_sn,
+                                        'buyer_id'         =>intval($m_s['m_id']),
+                                        'buyer_name'       =>trim($member['member_mobile']),
+                                        'buyer_mobile'     =>trim($member['member_mobile']),
+                                        'add_time'         =>time(),
+                                        'payment_code'     =>'offline',
+                                        'payment_time'     =>time(),
+                                        'finnshed_time'    =>time(),
+                                        'pkg_name'         =>trim($t_name).'（线下）',
+                                        'pkg_price'        =>ncPriceFormatb($_POST['t_price']),
+                                        'pkg_length'       =>intval($_POST['t_day']),
+                                        's_id'             =>intval($m_s['s_id']),
+                                        's_name'           =>trim($_POST['s_name']),
+                                        'schoolid'         =>intval($school_info['schoolid']),
+                                        'name'             =>trim($school_info['name']),
+                                        'classid'          =>intval($is_class['classid']),
+                                        'classname'        =>trim($is_class['classname']),
+                                        'order_amount'     =>ncPriceFormatb($_POST['t_price']),
+                                        'order_state'      =>'40',
+                                        'order_dieline'    =>$endTime,
+                                        'option_id'        =>intval($school_info['option_id']),
+                                        'over_amount'      =>ncPriceFormatb($_POST['t_price']),
+                                        'admin_company_id' =>intval($school_info['admin_company_id']),
                                     );
                                     $order_pay_id =$model_order->where('order_id="'.$m_s['order_id'].'"')->update($see_array);
                                     if($order_pay_id){

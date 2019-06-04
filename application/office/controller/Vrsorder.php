@@ -65,10 +65,6 @@ class Vrsorder extends AdminControl {
         return $this->fetch();
     }
 
-    public function uploads(){
-        return $this->fetch('uploads');
-    }
-
 
     protected function getAdminItemList() {
         $menu_array = array(

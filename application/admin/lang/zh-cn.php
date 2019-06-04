@@ -162,6 +162,8 @@ $lang['ds_snsmember']              = '会员标签';
 $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
 $lang['ds_import']               = '导入学生列表';
+$lang['ds_importorder']                = '导入线下订单';
+$lang['importorder']                = '导入线下订单';
 $lang['ds_robot']               = '机器人管理';
 $lang['ds_entering']               = '线下转账资金录入管理';
 
