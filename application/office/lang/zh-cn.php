@@ -31,7 +31,8 @@ $lang['nc_none_input']               = '权限组名称不能为空';
 
 //组织管理
 $lang['ds_organize'] = '组织管理';
-$lang['ds_company'] = '分/子公司（代理）管理';
+$lang['ds_agent'] = '分/子(代理)公司管理';
+$lang['ds_company'] = '代理商管理';
 $lang['ds_gadmin'] = '角色管理（权限组）';
 $lang['ds_number'] = '序号';
 $lang['ds_organize_name'] = '分/子(代理)公司名称';
@@ -39,6 +40,7 @@ $lang['ds_organize_area'] = '地区';
 $lang['ds_organize_time'] = '添加/修改时间';
 $lang['ds_organize_remark'] = '备注';
 $lang['ds_organize_assign'] = '分配管理员账号';
+$lang['ds_admin_member'] = '管理员账号列表';
 $lang['organize_index_title']='输入公司（代理）名称';
 $lang['organize_index_role']='公司级别';
 $lang['organize_index_company']='分公司';
@@ -55,7 +57,7 @@ $lang['organize_name_null']='公司名称不能为空';
 $lang['organize_teaching_child']='教孩订单';
 $lang['organize_personnel_name']='员工姓名';
 $lang['organize_personnel_account']='账号';
-$lang['organize_personnel_role']='所属角色';
+$lang['organize_personnel_role']='所属公司角色';
 $lang['organize_schoolnum_name']='学校名称';
 $lang['organize_schoolnum_city']='所在城市';
 $lang['organize_schoolnum_num']='累计发展学校总数';
@@ -66,6 +68,7 @@ $lang['organize_camera_school']='所在学校名称';
 $lang['organize_membernum_num']='所属会员数';
 $lang['organize_membernum_name']='会员登录名称';
 $lang['organize_membernum_school']='所属学校名称';
+$lang['organize_membernum_role']='所属学校角色';
 $lang['organize_membernum_class']='所属班级';
 $lang['organize_membernum_area']='所在区域';
 $lang['organize_studentnum_num']='绑定学生数';
@@ -159,6 +162,8 @@ $lang['ds_snsmember']              = '会员标签';
 $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
 $lang['ds_import']               = '导入学生列表';
+$lang['ds_importorder']                = '导入线下订单';
+$lang['importorder']                = '导入线下订单';
 $lang['ds_robot']               = '机器人管理';
 $lang['ds_entering']               = '线下转账资金录入管理';
 
@@ -195,8 +200,6 @@ $lang['ds_ownshop']                = '自营店铺';
 $lang['ds_trade']                  = '订单管理';
 $lang['ds_order']                  = '商品订单列表';
 $lang['ds_vrsorder']                = '看孩订单';
-$lang['ds_importorder']                = '导入线下订单';
-$lang['importorder']                = '导入线下订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
 $lang['ds_teach']           = '教孩订单';
 $lang['ds_teachorder']           = '教孩订单';
@@ -358,8 +361,8 @@ $lang['order_show_next_state']     = '下一状态';
 $lang['order_show_reason']         = '原因';
 
 /**
-* 页面中的常用文字
-*/
+ * 页面中的常用文字
+ */
 $lang['ds_select_all']             = '全选';
 $lang['ds_ensure_del']             = '您确定要删除吗?';
 $lang['ds_ensure_cancel']          = '您确定要取消吗?';
