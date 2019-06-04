@@ -177,7 +177,7 @@ $(function() {
                         if (!e || e == 'null') {
                             goLogin();
                             return false
-                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                            // window.location.href = WapSiteUrl + "/tmpl/member/index.html";
                         }
                         var t = parseInt($(".buy-num").val());
                         if (!e || e == 'null') {
@@ -234,7 +234,7 @@ $(function() {
                                 goLogin();
                                 return false
 
-                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                                // window.location.href = WapSiteUrl + "/tmpl/member/index.html";
                             }
                             var t = parseInt($(".buy-num").val()) || 0;
                             if (t < 1) {
@@ -266,7 +266,7 @@ $(function() {
                             var e = getCookie("key");
                             if (!e || e == 'null') {
                                 goLogin();return false
-                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                                // window.location.href = WapSiteUrl + "/tmpl/member/index.html"
 
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;

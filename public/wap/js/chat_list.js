@@ -1,7 +1,7 @@
 $(function() {
 	var e = getCookie("key");
 	if (!e) {
-		location.href = "login.html"
+		location.href = "index.html"
 	}
 	template.helper("isEmpty", function(e) {
 		for (var t in e) {

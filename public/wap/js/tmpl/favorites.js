@@ -1,7 +1,7 @@
 $(function () {
     var t = getCookie("key");
     if (!t || t == 'null') {
-        // location.href = "login.html"
+        // location.href = "index.html"
         goLogin();return false;
     }
     var i = new ncScrollLoad;

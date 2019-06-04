@@ -2,7 +2,7 @@ var order_id, order_goods_id, goods_pay_price, goods_num;
 $(function() {
     var e = getCookie("key");
     if (!e) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+        window.location.href = WapSiteUrl + "/tmpl/member/index.html"
     }
     $.getJSON(ApiUrl + "/Memberrefund/refund_form.html", {key: e, order_id: getQueryString("order_id"), order_goods_id: getQueryString("order_goods_id")}, function(o) {
         o.result.WapSiteUrl = WapSiteUrl;

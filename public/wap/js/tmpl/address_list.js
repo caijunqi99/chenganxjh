@@ -1,7 +1,7 @@
 $(function() {
     var e = getCookie("key");
     if (!e || e == 'null') {
-        // location.href = "login.html"
+        // location.href = "index.html"
         goLogin();return false;
     }
     function s() {
