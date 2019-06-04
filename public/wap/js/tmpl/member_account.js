@@ -1,7 +1,7 @@
 $(function() {
     var e = getCookie("key");
     if (!e) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+        window.location.href = WapSiteUrl + "/tmpl/member/index.html";
         return
     }
     $.ajax({type: "get", url: ApiUrl + "/Memberaccount/get_mobile_info.html", data: {key: e}, dataType: "json", success: function(e) {

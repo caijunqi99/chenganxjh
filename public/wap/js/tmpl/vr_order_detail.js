@@ -5,7 +5,7 @@ var map_list = [];
 $(function() {
     var e = getCookie("key");
     if (!e) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+        window.location.href = WapSiteUrl + "/tmpl/member/index.html";
     }
     $.getJSON(ApiUrl + "/Membervrorder/order_info.html", {
         key: e,

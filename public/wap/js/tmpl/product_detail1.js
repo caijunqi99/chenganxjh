@@ -219,7 +219,7 @@ $(function() {
                         if (!e) {
                             goLogin();
                             return false
-                            // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                            // window.location.href = WapSiteUrl + "/tmpl/member/index.html";
                         }
                         var t = parseInt($(".buy-num").val());
 
@@ -290,7 +290,7 @@ $(function() {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
                             if (!e) {
-                                // window.location.href = WapSiteUrl + "/tmpl/member/login.html";
+                                // window.location.href = WapSiteUrl + "/tmpl/member/index.html";
                                 goLogin();
                                 return false
                             }
@@ -349,7 +349,7 @@ $(function() {
                         $("#buy-now").click(function() {
                             var e = getCookie("key");
                             if (!e) {
-                                window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+                                window.location.href = WapSiteUrl + "/tmpl/member/index.html"
                             } else {
                                 var t = parseInt($(".buy-num").val()) || 0;
                                 if (t < 1) {

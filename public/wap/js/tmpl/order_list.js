@@ -6,7 +6,7 @@ var orderKey = "";
 $(function() {
     var e = getCookie("key");
     if (!e) {
-        // window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+        // window.location.href = WapSiteUrl + "/tmpl/member/index.html"
         goLogin();return false;
     }
     if (getQueryString("data-state") != "") {
