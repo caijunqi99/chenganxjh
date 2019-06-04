@@ -27,9 +27,9 @@ $(function() {
             }
         })
     } else {
-        var i = '<div class="member-info">' + '<a href="login.html" class="default-avatar" style="display:block;"></a>' + '<a href="login.html" class="to-login">点击登录</a>' + "</div>" + '<div class="member-collect"><span><a href="login.html"><i class="favorite-goods"></i>' + "<p>商品收藏</p>" + '</a> </span><span><a href="login.html"><i class="favorite-store"></i>' + "<p>店铺收藏</p>" + '</a> </span><span><a href="login.html"><i class="goods-browse"></i>' + "<p>我的足迹</p>" + "</a> </span></div>";
+        var i = '<div class="member-info">' + '<a href="index.html" class="default-avatar" style="display:block;"></a>' + '<a href="index.html" class="to-login">点击登录</a>' + "</div>" + '<div class="member-collect"><span><a href="index.html"><i class="favorite-goods"></i>' + "<p>商品收藏</p>" + '</a> </span><span><a href="index.html"><i class="favorite-store"></i>' + "<p>店铺收藏</p>" + '</a> </span><span><a href="index.html"><i class="goods-browse"></i>' + "<p>我的足迹</p>" + "</a> </span></div>";
         $(".member-top").html(i);
-        var i = '<li><a href="login.html"><i class="cc-01"></i><p>待付款</p></a></li>' + '<li><a href="login.html"><i class="cc-02"></i><p>待收货</p></a></li>' + '<li><a href="login.html"><i class="cc-03"></i><p>待自提</p></a></li>' + '<li><a href="login.html"><i class="cc-04"></i><p>待评价</p></a></li>' + '<li><a href="login.html"><i class="cc-05"></i><p>退款/退货</p></a></li>';
+        var i = '<li><a href="index.html"><i class="cc-01"></i><p>待付款</p></a></li>' + '<li><a href="index.html"><i class="cc-02"></i><p>待收货</p></a></li>' + '<li><a href="index.html"><i class="cc-03"></i><p>待自提</p></a></li>' + '<li><a href="index.html"><i class="cc-04"></i><p>待评价</p></a></li>' + '<li><a href="index.html"><i class="cc-05"></i><p>退款/退货</p></a></li>';
         $("#order_ul").html(i);
         return false
     }

@@ -2,7 +2,7 @@ var order_id;
 $(function() {
     var e = getCookie("key");
     if (!e) {
-        window.location.href = WapSiteUrl + "/tmpl/member/login.html"
+        window.location.href = WapSiteUrl + "/tmpl/member/index.html"
     }
     $.getJSON(ApiUrl + "/Memberrefund/refund_all_form.html", {
         key: e,
