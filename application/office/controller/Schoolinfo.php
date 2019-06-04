@@ -68,7 +68,7 @@ class Schoolinfo extends AdminControl {
     }
 
     public function position(){
-        $schoolid = 1;//input('param.school_id');
+        $schoolid = input('param.school_id');
         $Model = model('Position');
         $positionlist = $Model->getpositionClass(['p.school_id'=>$schoolid],10);
         $this->assign('page', $Model->page_info->render());
@@ -83,8 +83,9 @@ class Schoolinfo extends AdminControl {
 
     public function getCameraNum(){
         //查询摄像头数量
-        $schoolid = 1;//input('param.school_id');
+        $pid = input('param.pid');
         $Model = model('Position');
+        $position = $Model->getOneById($pid);
         //更新摄像头数量
         //
         echo json_encode(['num'=>3,'msg'=>'已更新']);
