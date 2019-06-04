@@ -236,12 +236,13 @@ class Common extends AdminControl
         $data = [];        
         foreach ($excel as $k => $v) {
             //写入到教室位置表
-            $position[$k] = array(
+            $position = array(
                 'school_id' => $schoolid,
                 'position' => $v['A'],
                 'camera_num' => 0,
 
             );
+            $position_id = model('Position')->position_add($position);
             //写入到班级表
             $classcard=$schoolInfo['schoolCard'].($model_classes->getNumber($schoolInfo['schoolCard']));
             $qr = $this->MakeQr($classcard,$schoolInfo['schoolCard']);
@@ -263,14 +264,10 @@ class Common extends AdminControl
                 'admin_company_id'  => $schoolInfo['admin_company_id'],
                 'res_group_id'      => 0,
                 'is_true'           => 1,  //真实
+                'position_id'       => $position_id,  //真实
             );
             $data[$k] = $model_classes->addClasses($class);
         }
-        
-        $position = model('Position')->positions_add($position);
-        $class = $model_classes->class_add($class);
-
-
         exit(json_encode(array('code'=>0,'msg'=>$file)));
 
     }
