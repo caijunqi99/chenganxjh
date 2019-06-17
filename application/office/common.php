@@ -96,7 +96,6 @@ function MobileFormat($mobile) {
  * @param  string     $encode   [编码]
  */
 function GetExcelContent($filename, $exts = 'xls' ,$start = 0,$encode = 'UTF-8') {
-    //导入PHPExcel类库，PHPExcel没有用命名空间
     vendor('PHPExcel.PHPExcel');
     //创建PHPExcel对象，注意，不能少了\
     $PHPExcel = new \PHPExcel();

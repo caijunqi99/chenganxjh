@@ -392,9 +392,9 @@
                     url:ADMIN_URL+'Camera/get_list',
                     data:{name:name,province:province,city:city,area:area,school:school,grade:grade,class:class_name,page:page,page_count:page_count},
                     success:function(data){
-                        data = jQuery.parseJSON(data);
+                        // data = jQuery.parseJSON(data);
 
-                        // console.log(data.html);
+                        console.log(data);
                         $('#html').html(data.html);
                         $('#count').html(data.count+'个');
                     }
