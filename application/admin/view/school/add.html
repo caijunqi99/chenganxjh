@@ -1,6 +1,12 @@
 {include file="public/header" /}
 <script src="{$Think.config.url_domain_root}static/common/js/mlselection.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -13,102 +19,190 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+            <li>添加新的学校信息。</li>
         </ul>
     </div>
 
 
-    <form id="user_form" enctype="multipart/form-data" method="post">
-
-        <table class="ds-default-table">
-            <tbody>
-                <tr class="noborder">
-                    <td colspan="2" class="required"><label for="school_name">{$Think.lang.school_index_name}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" name="school_name" id="school_name" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr class="noborder">
-                    <td colspan="2" class="required"><label for="typeid">{$Think.lang.school_index_region}:</label></td>
-                </tr>
-                <tr>
-                    <td id="region">
-                                 <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                                <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                                <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                                    <select name="typeid" id="typeid">
-                                        <option value="">请选择分类</option>
-                                    {volist name="region_list" id="region"}
-                                    <option value="{$region.area_id}">{$region.area_name}</option>
-                                    {/volist}
-                                    </select>
-                    </td>
-                </tr>
-                <tr class="noborder">
-                    <td colspan="2" class="required"><label>{$Think.lang.school_index_type}:</label></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform">
-                        {volist name="schoolType" id="type"}
-                        <input type="checkbox" name="school_type[]" id="school_index_region{$type.sc_id}" nc_province="{$type.sc_id}" value="{$type.sc_id}" required> {$type.sc_type}
-                        {/volist}
-                    </td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="school_address">{$Think.lang.school_index_address}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_address" name="school_address" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="school_phone">{$Think.lang.school_index_phone}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_phone" name="school_phone" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="school_username">{$Think.lang.school_index_username}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_username" name="school_username" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="school_dieline">{$Think.lang.school_index_dieline}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_dieline" name="school_dieline" class="txt date"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label for="school_desc">{$Think.lang.school_index_desc}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="school_desc" name="school_desc" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr class="tfoot">
-                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
-                </tr>
-            </tfoot>
-        </table>
+    <form id="user_form" enctype="multipart/form-data" method="post" class="layui-form">
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_name}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_name" name="school_name" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_region}：</label>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">
+                                <option value="" selected>{$Think.lang.look_address_province}</option>
+                                {volist name="region_list" id="vo"}
+                                <option value="{$vo.area_id}">{$vo.area_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">
+                                <option value="">{$Think.lang.look_address_city}</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">
+                                <option value="">{$Think.lang.look_address_area}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$Think.lang.school_index_type}：</label>
+                <div class="layui-input-block">
+                    {volist name="schoolType" id="type"}
+                    <input type="checkbox" name="school_type[]"  value="{$type.sc_id}" > {$type.sc_type}
+                    {/volist}
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.address}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_address" name="school_address" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.mob_phone}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_phone" name="school_phone" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_leading}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_username" name="school_username" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_enddate}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_dieline" name="school_dieline" class="layui-input date">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_remark}：</label>
+                    <div class="layui-input-inline">
+                        <textarea id="school_desc" name="school_desc" class="layui-text"></textarea>
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <script type="text/javascript">
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+        //省 市 区
+        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
+        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
+        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
+        if(province != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+
+        //省
+        form.on('select(province)', function(data){
+            //改变市区
+            $('#city').html('<option value="0">{$Think.lang.look_address_city}</option>');
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //市
+        form.on('select(city)', function(data){
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+            var province = $('#province').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //县/区
+        form.on('select(area)', function(data){
+            var province = $('#province').find('option:selected').val();
+            var city = $('#city').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+
+    });
     $(function() {
         //按钮先执行验证再提交表单
         $("#submitBtn").click(function() {

@@ -4,7 +4,10 @@
 //设置
 
 $lang['ds_dashboard']              = '首页';
-$lang['ds_welcome']                = '欢迎界面';
+$lang['ds_welcome']                = '我的面板';
+$lang['ds_info']                = '账号信息';
+$lang['ds_modifypw']                = '修改密码';
+$lang['ds_remind']                = '消息提醒';
 $lang['ds_aboutus']                = '关于我们';
 $lang['ds_setting']                = '系统配置';
 $lang['ds_config']                   = '通用设置/APP';
@@ -18,7 +21,7 @@ $lang['ds_seo_set']                = 'SEO设置';
 $lang['ds_upload_set']             = '上传设置';
 $lang['ds_message']                = '邮箱短信';
 $lang['ds_payment']                = '支付方式';
-$lang['ds_admin']                  = '人员管理';
+$lang['ds_admin']                  = '员工列表';
 $lang['ds_express']                = '快递公司';
 $lang['ds_waybill']                = '运单模板';
 $lang['ds_region']                 = '地区管理';
@@ -31,11 +34,11 @@ $lang['nc_none_input']               = '权限组名称不能为空';
 
 //组织管理
 $lang['ds_organize'] = '组织管理';
-$lang['ds_agent'] = '分/子(代理)公司管理';
+$lang['ds_agent'] = '代理商管理';
 $lang['ds_company'] = '代理商管理';
 $lang['ds_gadmin'] = '角色管理（权限组）';
 $lang['ds_number'] = '序号';
-$lang['ds_organize_name'] = '分/子(代理)公司名称';
+$lang['ds_organize_name'] = '代理商名称';
 $lang['ds_organize_area'] = '地区';
 $lang['ds_organize_time'] = '添加/修改时间';
 $lang['ds_organize_remark'] = '备注';
@@ -89,6 +92,10 @@ $lang['ds_platform']='平台账号资金管理';
 $lang['ds_membercash']='会员提现管理';
 $lang['ds_companycash']='代理商提现管理';
 $lang['ds_companybanks']='绑定银行卡管理';
+$lang['ds_money']='资金明细';
+$lang['ds_profit']='分润管理';
+$lang['ds_recharge']='充值管理';
+
 
 //发现
 $lang['ds_find']='发现';
@@ -132,6 +139,7 @@ $lang['school_add_address_null']='学校地址不能为空';
 //学校管理
 $lang['ds_school'] = '学校管理';
 $lang['ds_classes'] = '班级管理';
+$lang['ds_position'] = '房间管理';
 $lang['ds_student'] = '学生管理';
 $lang['ds_schoolapply'] = '学校申请审核';
 $lang['ds_coursemanage'] = '课程管理';
@@ -168,7 +176,7 @@ $lang['ds_robot']               = '机器人管理';
 $lang['ds_entering']               = '线下转账资金录入管理';
 
 //看孩管理
-$lang['ds_look']                   = '看孩管理';
+$lang['ds_look']                   = '设备管理';
 $lang['ds_camera']                 = '摄像头管理';
 $lang['ds_monitor']                = '网络监控';
 $lang['ds_revisitclass']           = '重温课堂管理';
@@ -177,8 +185,8 @@ $lang['ds_binding']                = '待审核学生绑定';
 //教孩管理
 $lang['ds_teachlist']                   = '教孩管理';
 $lang['ds_teachercertify']            = '教师认证申请';
-$lang['ds_teachtype']            = '视频分类管理';
-$lang['ds_teachvideo']            = '视频管理';
+$lang['ds_teachtype']            = '安全教育类别';
+$lang['ds_teachvideo']            = '教育视频列表';
 
 //商品
 $lang['ds_shops']                  = '商城管理';
@@ -199,7 +207,11 @@ $lang['ds_ownshop']                = '自营店铺';
 //交易
 $lang['ds_trade']                  = '订单管理';
 $lang['ds_order']                  = '商品订单列表';
-$lang['ds_vrsorder']                = '看孩订单';
+$lang['ds_vrsorder']                = '视频在线订单';
+$lang['ds_batch']                = '批量视频订单';
+$lang['ds_clock']                = '智能门禁订单';
+$lang['ds_auditvideo']                = '待审核视频订单';
+$lang['ds_auditclock']                = '待审核门禁订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
 $lang['ds_teach']           = '教孩订单';
 $lang['ds_teachorder']           = '教孩订单';
@@ -211,7 +223,7 @@ $lang['ds_inform']                 = '举报管理';
 $lang['ds_evaluate']               = '评价管理';
 $lang['ds_complain']               = '投诉管理';
 //网站
-$lang['ds_website']                = '网站';
+$lang['ds_website']                = '内容管理';
 $lang['ds_articleclass']           = '文章分类';
 $lang['ds_article']                = '文章管理';
 $lang['ds_document']               = '会员协议';
@@ -241,7 +253,7 @@ $lang['ds_delivery']               = '物流自提服务站';
 
 
 //统计
-$lang['ds_stat']                   = '统计';
+$lang['ds_stat']                   = '统计分析';
 $lang['ds_statgeneral']            = '概述及设置';
 $lang['ds_statindustry']           = '行业分析';
 $lang['ds_statmember']             = '会员统计';
@@ -250,6 +262,17 @@ $lang['ds_stattrade']              = '销量分析';
 $lang['ds_statgoods']              = '商品分析';
 $lang['ds_statmarketing']          = '市场分析';
 $lang['ds_stataftersale']          = '售后分析';
+
+$lang['ds_agentstat']          = '代理商统计';
+$lang['ds_schoolstat']          = '学校统计';
+$lang['ds_studentstat']          = '学生统计';
+$lang['ds_memberstat']          = '会员/家长统计';
+$lang['ds_camerastat']          = '摄像头统计';
+$lang['ds_robotstat']          = '机器人统计';
+$lang['ds_videostat']          = '售后分析';
+$lang['ds_clockstat']          = '视频订单统计';
+$lang['ds_moneysata']          = '资金统计';
+$lang['ds_profitstat']          = '分润统计';
 
 //手机端
 $lang['mobile']                    = '手机端';

@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -12,7 +13,7 @@
     </div>
     <h2>{$Think.lang.organize_studentnum_num}<?php echo $count; ?>个</h2>
     <form method="post" enctype="multipart/form-data" name="form1" action="">
-        <table class="ds-default-table">
+        <table class="layui-table">
             <thead>
             <tr class="thead">
                 <th class="w272">{$Think.lang.ds_number}</th>
