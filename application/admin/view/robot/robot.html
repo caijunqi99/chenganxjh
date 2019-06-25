@@ -13,24 +13,6 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <form method="get" name="formSearch" id="formSearch">
-        <table class="search-form">
-            <tbody>
-                <tr>
-                    <td>
-                        <select name="search_field_name" >
-                            <option <?php if($search_field_name == 'robot_school'){ ?>selected='selected'<?php } ?> value="robot_school">学校名称</option>
-                            <option <?php if($search_field_name == 'robot_name'){ ?>selected='selected'<?php } ?> value="robot_name">机器ID</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="<?php echo $search_field_value;?>" name="search_field_value" class="txt"></td>
-                    <td>
-                        <input type="submit" class="submit" value="搜索">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -40,8 +22,32 @@
             <li>平台打卡机器人管理，关联学校</li>
         </ul>
     </div>
+    <form method="get" name="formSearch" id="formSearch" class="layui-form">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_name}：</label>
+                    <div class="layui-input-inline">
+                        <select name="search_field_name" class="select">
+                            <option <?php if($_GET['search_field_name'] == 'robot_school'){ ?>selected='selected'<?php } ?> value="robot_school">学校名称</option>
+                            <option <?php if($_GET['search_field_name'] == 'robot_name'){ ?>selected='selected'<?php } ?> value="robot_name">机器ID</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="search_field_value" placeholder="请输入学校名称/机器ID"  id="search_field_value" value="{$_GET['search_field_value']}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-admin" lay-submit="" class="submit" type="submit" lay-filter="LAY-user-back-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 
-    <table class="ds-default-table">
+
+    <table class="layui-table">
       <thead>
         <tr class="thead">
           <th class="align-center"><span>机器ID</span></th>
@@ -82,16 +88,21 @@
         </tr>
         <?php } ?>
       </tbody>
-      <script type="text/javascript">
-        function robot_drop(id){
-          layer.confirm('是否禁用此机器人？', {
-            btn: ['删除','取消'] //按钮
-          }, function(){
-            window.location.href="{:url('/admin/robot/drop')}?robot_id="+id;
-          });
-        }
-      </script>
     </table>
     {$page}
     
 </div>
+<script type="text/javascript">
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+    });
+    function robot_drop(id){
+        layer.confirm('是否禁用此机器人？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            window.location.href="{:url('/admin/robot/drop')}?robot_id="+id;
+        });
+    }
+</script>

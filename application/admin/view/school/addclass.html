@@ -1,6 +1,12 @@
 {include file="public/header" /}
 <script src="{$Think.config.url_domain_root}static/common/js/mlselection2.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -20,57 +26,83 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+            <li>为该学校添加班级。</li>
         </ul>
     </div>
 
 
-    <form id="user_form" enctype="multipart/form-data" method="post">
-
-        <table class="ds-default-table">
-            <tbody>
-            <input type="hidden" value="{$schoolid}" name="school_id" id="school_id">
-            <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td>
-                    <select name="school_type" class="querySelect">
-                        <option value="">{$Think.lang.school_index_chosetype}</option>
-                        {volist name="schooltype" id="type"}
-                        <option value="{$key}">{$type}</option>
-                        {/volist}
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classname}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" name="school_class_name" id="class_name" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
-
-            <tr>
-                <td colspan="2" class="required"><label for="class_desc">{$Think.lang.school_index_desc}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="class_desc" name="class_desc" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr class="tfoot">
-                <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
-            </tr>
-            </tfoot>
-        </table>
+    <form id="user_form" enctype="multipart/form-data" method="post"  class="layui-form">
+        <input type="hidden" value="{$schoolid}" name="school_id" id="school_id">
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_checktype}：</label>
+                    <div class="layui-input-inline">
+                        <select name="school_type" lay-filter="school_type"  class="select"  lay-verify="type" id="school_type">
+                            <option value="">{$Think.lang.school_index_chosetype}</option>
+                            {volist name="schooltype" id="type"}
+                            <option value="{$key}">{$type}</option>
+                            {/volist}
+                        </select>
+                        <span class="err"></span>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="position" class="select" id="position">
+                            <option value="">{$Think.lang.school_index_chose_position}</option>
+                        </select>
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_classname}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="school_class_name" name="school_class_name" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_remark}：</label>
+                    <div class="layui-input-inline">
+                        <textarea id="class_desc" name="class_desc" class="layui-text"></textarea>
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <script type="text/javascript">
-
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+        var school_id= '{$schoolid}';
+        //学校类型
+        form.on('select(school_type)', function(data){
+            //改变房间位置
+            $('#position').html('<option value="0">{$Think.lang.school_index_chose_position}</option>');
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_position?school_id='+school_id+'&school_type='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变房间位置
+                    $('#position').html(data.position);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+    });
     $(function(){
         $("#region_choose").click(function() {
             if ($("#user_form").valid()) {
@@ -97,7 +129,7 @@
                         type: 'get',
                         data: {
                             class_name: function() {
-                                return $('#class_name').val();
+                                return $('#school_class_name').val();
                             },
                             school_id:'{$schoolid|default=0}'
                         }

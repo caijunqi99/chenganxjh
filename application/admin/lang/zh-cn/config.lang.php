@@ -202,23 +202,21 @@ $lang['goods_verify_notice'] ='店铺发布的商品是否需要通过商家的�
 
 
 //分成/时长/副账号设置
-$lang['teacher_children'] = '教孩视频（观看有效时间）';
-$lang['revisit_class'] = '重温课堂（观看有效时间）';
-$lang['revisit_class_price'] = '重温课堂（片段价格）';
-$lang['teacher_pay_scale'] = '教孩在线支付分成比例';
-$lang['re_class_pay_scale'] = '重温课堂在线支付分成比例';
-$lang['teacher_children_video'] = '教孩上传视频录制时长设置';
+$lang['video_pay_scale'] = '视频支付分成比例';
+$lang['after_start_password'] = '后台初始密码';
 $lang['f_account_num'] = '副账号数量设置';
+$lang['bind_student_num'] = '绑定孩子数量设置';
 $lang['zb'] = '总部';
 $lang['province_agent'] = '省代理商';
 $lang['city_agent'] = '市代理商';
 $lang['area_agent'] = '县区代理商';
 $lang['agent'] = '特约代理商';
-$lang['teacher'] = '教师';
 
 //版本升级
-$lang['version_android'] = 'Android版本更新记录';
-$lang['version_ios'] = 'IOS版本更新记录';
+$lang['member_version_android'] = 'Android版本更新记录（家长）';
+$lang['school_version_android'] = 'Android版本更新记录（学校）';
+$lang['member_version_ios'] = 'IOS版本更新记录（家长）';
+$lang['school_version_ios'] = 'IOS版本更新记录（学校）';
 $lang['version_android_num'] = 'Android版本号';
 $lang['version_ios_num'] = 'IOS版本号';
 $lang['version_android_download'] = 'Android下载地址';
