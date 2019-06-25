@@ -285,12 +285,12 @@ class School extends AdminControl {
             //生成二维码
             import('qrcode.index',EXTEND_PATH);
             $PhpQRCode = new \PhpQRCode();
-            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' . DS);
+            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' .DS. $schoolInfo['schoolCard'].DS);
             // 生成商品二维码
             $PhpQRCode->set('date', $data['classCard']);
             $PhpQRCode->set('pngTempName', $data['classCard'] . '.png');
             $qr=$PhpQRCode->init();
-            $data['qr']='/home/store/class/'.$qr;
+            $data['qr']='/home/store/class/'.$schoolInfo['schoolCard'].'/'.$qr;
             //验证数据  END
             $result = $model_class->addClasses($data);
             if ($result) {

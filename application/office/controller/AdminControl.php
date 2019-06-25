@@ -12,7 +12,9 @@ class AdminControl extends Controller {
     protected $admin_info;
 
     protected $permission;
-    public function _initialize($ControllerNmae = '') {
+    public function _initialize() {
+        $ControllerNmae = request()->controller();
+
         //个别不需要验证当前登陆身份的控制器
         $OverLimit = ['Mlselection','Common'];
         if (!empty($ControllerNmae) && in_array($ControllerNmae, $OverLimit)) {
