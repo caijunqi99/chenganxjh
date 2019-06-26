@@ -63,11 +63,13 @@ class Classes extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getClasslList($condition, $page = '', $field = '*', $class = 'classid desc', $limit = '', $extend = array(), $master = false) {
+    public function getClasslList($condition, $page = '', $field = '*', $class = 'c.classid desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('class')
                          ->alias('c')
                          ->join('__POSITION__ po','po.position_id=c.position_id','LEFT')
-                         ->field('c.*,po.position')
+                         ->join('__SCHOOL__ s','s.schoolid=c.schoolid','LEFT')
+                         ->join('__SCHOOLTYPE__ t','t.sc_id=c.typeid','LEFT')
+                         ->field('c.*,po.position,s.name as schoolname,t.sc_type as typename')
                          ->where($condition)
                          ->order($class)
                          ->paginate($page,false,['query' => request()->param()]);

@@ -505,9 +505,6 @@ class Common extends AdminControl
         $grade_html = '<option value="0">请选择学校类型</option>';
         $class_html = '<option value="0">请选择班级</option>';
         if(!empty($school_id)){
-            /*if(!empty($grade_id)){
-
-            }*/
             //班级
             $grade_where['schoolid'] = $school_id;
             $grade_class = db('schooltype')->field('sc_id,sc_type')->where(' `sc_type` = "'.$grade_name.'"')->find();
@@ -549,35 +546,47 @@ class Common extends AdminControl
 
         exit(json_encode(array('grade'=>$grade_html,'class'=>$class_html)));
     }
-
     /**
      * @desc 根据学校id获取年级和班级
      * @author langzhiyao
      * @time 20180927
      */
-    public function get_school_infos(){
+    public function get_school_info2(){
         $school_id = intval(input('get.school'));
-        $grade_name = trim(input('get.grade'));//年级类型ID
-        $class_name = trim(input('get.class'));//年级类型ID
+        $grade_id = trim(input('get.grade'));//年级类型ID
+        $class_id = trim(input('get.class'));//班级ID
+        $position_id = trim(input('get.position'));//位置ID
 
 
-        $grade_html = '<option value="0">请选择年级</option>';
+        $grade_html = '<option value="0">请选择学校类型</option>';
         $class_html = '<option value="0">请选择班级</option>';
+        $position_html = '<option value="0">请选择房间名称</option>';
         if(!empty($school_id)){
-            /*if(!empty($grade_id)){
-
-            }*/
             //班级
             $grade_where['schoolid'] = $school_id;
-            $grade_class = db('schooltype')->field('sc_id,sc_type')->where(' `sc_id` = "'.$grade_name.'"')->find();
-            $grade_where['typeid'] = $grade_class['sc_id'];
+            $grade_where['typeid'] = $grade_id;
             $class =  db('class')->field('classid,classname')->where($grade_where)->select();
             if(!empty($class)){
                 foreach($class as $key=>$value){
-                    if($value['classname'] == $class_name){
+                    if($value['classid'] == $class_id){
                         $class_html .= '<option value='.$value["classid"].' selected>'.$value["classname"].'</option>';
                     }else{
                         $class_html .= '<option value='.$value["classid"].'>'.$value["classname"].'</option>';
+                    }
+
+                }
+            }
+            //房间位置
+            $position_where['school_id'] = $school_id;
+            $position_where['type_id'] = $grade_id;
+            $position_where['is_bind'] = 1;
+            $position =  db('position')->field('position_id,position')->where($position_where)->select();
+            if(!empty($position)){
+                foreach($position as $key=>$value){
+                    if($value['position_id'] == $position_id){
+                        $position_html .= '<option value='.$value["position_id"].' selected>'.$value["position"].'</option>';
+                    }else{
+                        $position_html .= '<option value='.$value["position_id"].'>'.$value["position"].'</option>';
                     }
 
                 }
@@ -594,7 +603,7 @@ class Common extends AdminControl
 //                halt($grade);
                 if(!empty($grade)){
                     foreach($grade as $key=>$value){
-                        if($value['sc_type'] == $grade_name){
+                        if($value['sc_id'] == $grade_id){
                             $grade_html .= '<option value='.$value["sc_id"].' selected> '.$value["sc_type"].'</option>';
                         }else{
                             $grade_html .= '<option value='.$value["sc_id"].'>'.$value["sc_type"].'</option>';
@@ -606,7 +615,27 @@ class Common extends AdminControl
 
         }
 
-        exit(json_encode(array('grade'=>$grade_html,'class'=>$class_html)));
+        exit(json_encode(array('grade'=>$grade_html,'class'=>$class_html,'position'=>$position_html)));
+    }
+
+    /**
+     * @desc 根据学校id 学校类型ID 获取房间位置
+     * @author langzhiyao
+     * @time 20180927
+     */
+    public function get_position(){
+        $school_id = intval(input('get.school_id'));
+        $type_id = trim(input('get.school_type'));//学校类型ID
+        $position_html = '<option value="0">请选择房间位置</option>';
+        if(!empty($type_id)){
+            $position_list = db('position')->where(array('school_id'=>$school_id,'type_id'=>$type_id,'is_bind'=>1))->select();
+            if(!empty($position_list)){
+                foreach($position_list as $key=>$value){
+                    $position_html .= '<option value='.$value["id"].'>'.$value["position"].'</option>';
+                }
+            }
+        }
+        exit(json_encode(array('position'=>$position_html)));
     }
     /**
      * @desc 根据会员ID 获取代理商ID

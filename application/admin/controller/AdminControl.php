@@ -241,17 +241,20 @@ class AdminControl extends Controller {
 
     /*
      * 侧边栏列表
+     * @author langzhiyao
      */
 
     function menuList() {
-
+        //总后台不存在的父级导航
+        //65：统计分析；167：智能门禁；
+        $no_perms = array('65','167');
         //获取父级所有栏目
-        $menu = db('perms')->where(array('pid'=>0,'status'=>1))->select();
+        $menu = db('perms')->where(array('pid'=>0,'status'=>1,'permid'=>array('not in',$no_perms)))->order('sort ASC')->select();
         if(!empty($menu)){
             foreach($menu as $key=>$val){
                 $menu[$key]['text'] = lang($val['text']);
                 //获取子目录
-                $menu[$key]['children'] = db('perms')->where(array('pid'=>$val['permid'],'status'=>1))->select();
+                $menu[$key]['children'] = db('perms')->where(array('pid'=>$val['permid'],'status'=>1))->order('sort ASC')->select();
                 if(!empty($menu[$key]['children'])){
                     foreach($menu[$key]['children'] as $k=>$v){
                         $menu[$key]['children'][$k]['text'] = lang($v['text']);
@@ -271,13 +274,16 @@ class AdminControl extends Controller {
      */
     function limitList() {
         if ($this->admin_info['admin_is_super'] == 1) {
+            //总后台权限分配不存在的父级导航
+            //65：统计分析；167：智能门禁；1：首页
+            $no_perms = array('1','65','167');
             //获取父级所有栏目
-            $_limit = db('perms')->field('permid,name,text')->where("pid=0  AND permid != 1 AND status=1")->select();
+            $_limit = db('perms')->field('permid,name,text')->where(array('pid'=>0,'status'=>1,'permid'=>array('not in',$no_perms)))->order('sort ASC')->select();
             if(!empty($_limit)){
                 foreach($_limit as $key=>$val){
                     $_limit[$key]['text'] = lang($val['text']);
                     //获取子目录
-                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."'  AND status=1")->select();
+                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."'  AND status=1")->order('sort ASC')->select();
 //                halt($_limit);
                     if(!empty($_limit[$key]['child'])){
                         foreach($_limit[$key]['child'] as $k=>$v){
@@ -316,13 +322,13 @@ class AdminControl extends Controller {
 
 //            halt($limits);
             //获取父级所有栏目
-            $_limit = db('perms')->field('permid,name,text')->where("pid=0 AND name IN ($nav) AND permid != 1  AND status=1")->select();
+            $_limit = db('perms')->field('permid,name,text')->where("pid=0 AND name IN ($nav) AND permid != 1  AND status=1")->order('sort ASC')->select();
 //            halt($_limit);
             if(!empty($_limit)){
                 foreach($_limit as $key=>$val){
                     $_limit[$key]['text'] = lang($val['text']);
                     //获取子目录
-                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."' AND name IN ($limits)  AND status=1")->select();
+                    $_limit[$key]['child'] = db('perms')->field('permid,text,name,action')->where("pid='".$val['permid']."' AND name IN ($limits)  AND status=1")->order('sort ASC')->select();
 //                halt($_limit);
                     if(!empty($_limit[$key]['child'])){
                         foreach($_limit[$key]['child'] as $k=>$v){
@@ -408,6 +414,9 @@ class AdminControl extends Controller {
                 break;
             case 'CashWithdrawal'://17
                 return '提现';
+                break;
+            case 'AddPosition'://18
+                return '添加房间';
                 break;
 
         }

@@ -10,6 +10,7 @@ class Robot extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/member.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/look.lang.php');
         //获取当前角色对当前子目录的权限
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
@@ -44,8 +45,6 @@ class Robot extends AdminControl {
         // p($condition);exit;
         $robot_list = $Robot->getRobotList($condition, '*', 10);
         $this->assign('robot_list', $robot_list);
-        $this->assign('search_field_name', trim($search_field_name));
-        $this->assign('search_field_value', trim($search_field_value));
         $this->assign('page', $Robot->page_info->render());
 
         $this->setAdminCurItem('robot');
@@ -176,10 +175,11 @@ class Robot extends AdminControl {
         }
 
         if (request()->action() == 'edit') {
+            $id=trim($_GET['id']);
             $menu_array[] = array(
                 'name' => 'edit',
                 'text' => '编辑',
-                'url' => url('Admin/Robot/edit')
+                'url' => url('Admin/Robot/edit',array('id'=>$id))
             );
         }
         return $menu_array;

@@ -11,6 +11,7 @@ class Classes extends AdminControl {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/school.lang.php');
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/look.lang.php');
         //获取当前角色对当前子目录的权限
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
@@ -25,112 +26,51 @@ class Classes extends AdminControl {
         }
         $model_class = model('Classes');
         $condition = array();
-        $admininfo = $this->getAdminInfo();
-        if($admininfo['admin_id']!=1){
-            if(!empty($admininfo['admin_school_id'])){
-                $condition['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $model_company = Model("Company");
-                $condition = $model_company->getCondition($admininfo['admin_company_id'],"class");
-            }
-        }
-        $classname = input('param.school_index_classname');//学校名称
+        //学校名称
+        $classname = input('param.school_index_classname');
         if ($classname) {
-            $condition['classname'] = array('like', "%" . $classname . "%");
+            $condition['c.classname'] = array('like', "%" . $classname . "%");
         }
-        $school_type = input('param.school_type');//学校类型
+        //学校
+        $school = input('param.school');
+        if ($school) {
+            $condition['c.schoolid'] = $school;
+        }
+        $school_type = input('param.grade');
         if ($school_type) {
-            $condition['typeid'] = $school_type;
+            $school_type = array($school_type);
+            $condition['c.typeid'] = array('IN',$school_type);
         }
-        $class_name = input('param.class_name');
+        $class_name = input('param.class');
         if ($class_name) {
-            $condition['classid'] = $class_name;
+            $condition['c.classid'] = $class_name;
         }
-        $school_name = input('param.school_name');
-        if ($school_name) {
-            $condition['schoolid'] = $school_name;
+
+        //地区
+        if(!empty($_GET['province'])){
+            $province_id=input('param.province');
+            $condition['c.school_provinceid']=$province_id;
         }
-        $area_id = input('param.area_id');//地区
-        if($area_id){
-            $region_info = db('area')->where('area_id',$area_id)->find();
-            if($region_info['area_deep']==1){
-                $condition['school_provinceid'] = $area_id;
-            }elseif($region_info['area_deep']==2){
-                $condition['school_cityid'] = $area_id;
-            }else{
-                $condition['school_areaid'] = $area_id;
-            }
+        if(!empty($_GET['city'])) {
+            $city_id = input('param.o_cityid');
+            $condition['c.school_cityid'] =$city_id;
         }
-        $condition['isdel'] = 1;
+        if(!empty($_GET['area'])){
+            $area_id = input('param.area');
+            $condition['c.school_areaid'] =$area_id;
+        }
+        $condition['c.isdel'] = 1;
         $class_list = $model_class->getClasslList($condition, 15);
         // 地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
-        $this->assign('region_list', $region_list);
-        $address = array(
-            'true_name' => '',
-            'area_id' => '',
-            'city_id' => '',
-            'address' => '',
-            'tel_phone' => '',
-            'mob_phone' => '',
-            'is_default' => '',
-            'area_info'=>''
-        );
-        $this->assign('address', $address);
-        //全部学校
-        if($admininfo['admin_id']!=1){
-            //$admin = db('admin')->where(array('admin_id'=>$admininfo['admin_id']))->find();
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_school['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $condition_school['admin_company_id'] = $admininfo['admin_company_id'];
-            }
-        }
+        //学校
         $condition_school['isdel'] = 1;
-        
-        //学校类型
         $model_school = model('School');
-        $model_schooltype = model('Schooltype');
-        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-        $this->assign('schooltype', $schooltype);
-        //全部学校
-        if($admininfo['admin_id']!=1){
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_school['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $model_company = Model("Company");
-                $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
-            }
-        }
-        $condition_school['isdel'] = 1;
         $school_list = $model_school->getAllAchool($condition_school,'schoolid,name');
-        $left_menu = array_column($school_list, 'schoolid');
-        
-        $schooltypeList  = db('schooltype')->field('sc_id,sc_type')->select();
-        $schooltypeList=array_column($schooltypeList,NULL,'sc_id');
-        foreach ($class_list as $k=>$v){
-            $key = array_search($v['schoolid'], $left_menu); 
-            $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
-            $class_list[$k]['schoolname'] = $school_list[$key]['name'];
-        }
-        $this->assign('page', $model_class->page_info->render());
         $this->assign('schoolList', $school_list);
+        $this->assign('region_list', $region_list);
+        $this->assign('page', $model_class->page_info->render());
         $this->assign('class_list', $class_list);
-        //全部班级
-        if($admininfo['admin_id']!=1){
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_class['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $model_company = Model("Company");
-                $condition_class = $model_company->getCondition($admininfo['admin_company_id'],"class");
-            }
-        }
-        $condition_class['isdel'] = 1;
-        $classname = $model_class->getAllClasses($condition_class);
-        foreach ($classname as $k=>$v){
-            $classname[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];   
-        }
-        $this->assign('classname', $classname);
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
@@ -143,42 +83,39 @@ class Classes extends AdminControl {
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
             $this->assign('region_list', $region_list);
-            $address = array(
-                'true_name' => '',
-                'area_id' => '',
-                'city_id' => '',
-                'address' => '',
-                'tel_phone' => '',
-                'mob_phone' => '',
-                'is_default' => '',
-                'area_info'=>''
-            );
-            $this->assign('address', $address);
-            //学校类型
-            $model_schooltype = model('Schooltype');
-            $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-            $this->assign('schooltype', $schooltype);
             $this->setAdminCurItem('add');
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
             $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
             $model_classes = model('Classes');
+            $position_id = input('post.position');
+            if(empty($position_id)){
+                $this->error('请绑定房间位置');
+            }
             $data = array(
-                'school_areaid' => input('post.area_id'),
-                'school_region' => input('post.area_info'),
-                'typeid' => input('post.classtype'),
-                'schoolid' => input('post.order_state'),
+                'typeid' => input('post.grade'),
+                'schoolid' => input('post.school'),
+                'position_id' => $position_id,
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'option_id' => $admininfo['admin_id'],
                 'admin_company_id' => $schoolInfo['admin_company_id'],
                 'createtime' => date('Y-m-d H:i:s',time())
             );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['school_cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['school_provinceid'] = $province_id['area_parent_id'];
+            //判断位置是否被绑定
+            $is_bind = db('position')->where(array('position_id'=>$position_id,'is_bind'=>1))->find();
+            if(!$is_bind){
+                $this->error('该房间位置已被绑定，无法绑定');
+            }
+            //更改房间位置状态
+            db('position')->where(array('position_id'=>$position_id))->update(array('is_bind'=>2));
+
+            $schoolinfo = db('school')->find(array("schoolid"=>input('post.school')));
+            $data['school_provinceid'] = $schoolinfo['provinceid'];
+            $data['school_cityid'] = $schoolinfo['cityid'];
+            $data['school_areaid'] = $schoolinfo['areaid'];
+            $data['school_region'] = $schoolinfo['region'];
             //学校识别码
             $classcard=$schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
             $data['classCard'] =$classcard;
@@ -213,50 +150,41 @@ class Classes extends AdminControl {
         if (!request()->isPost()) {
             $condition['classid'] = $class_id;
             $class_array = $model_class->getClassInfo($condition);
+//            halt($class_array);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
             $this->assign('region_list', $region_list);
-            $address = array(
-                'true_name' => '',
-                'area_id' => '',
-                'city_id' => '',
-                'address' => '',
-                'tel_phone' => '',
-                'mob_phone' => '',
-                'is_default' => '',
-                'area_info'=>''
-            );
-            $this->assign('address', $address);
             $this->assign('class_array', $class_array);
-            //学校类型
-            $schooltype = db('schooltype')->where('sc_enabled','1')->select();
-            $this->assign('schooltype', $schooltype);
-            //学校名称
-            $schoolname = db('school')->where('areaid',$class_array['school_areaid'])->select();
-            $this->assign('schoolname', $schoolname);
             $this->setAdminCurItem('edit');
             return $this->fetch();
         } else {
-            if(input('post.order_state')){
-                $schoolname = input('post.order_state');
-            }
-            $schoolid = isset($schoolname)?input('post.order_state'):input('post.school_name');
+//            $position_id = input('post.position');
+//            if(empty($position_id)){
+//                $this->error('请绑定房间位置');
+//            }
+
             $data = array(
-                'school_areaid' => input('post.area_id'),
+                'school_provinceid' => input('post.province'),
+                'school_cityid' => input('post.city'),
+                'school_areaid' => input('post.area'),
                 'school_region' => input('post.area_info'),
-                'typeid' => input('post.school_type'),
-                'schoolid' => $schoolid,
+                'typeid' => input('post.grade'),
+                'schoolid' => input('post.school'),
+//                'position_id' => $position_id,
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'createtime' => date('Y-m-d H:i:s',time())
             );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['school_cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['school_provinceid'] = $province_id['area_parent_id'];
-            //学校识别码
-//            $schoolInfo = db('school')->where('schoolid',$schoolid)->find();
-//            $data['classCard'] = $schoolInfo['schoolCard'].($model_class -> getNumber($schoolInfo['schoolCard']));
+            /*//判断位置是否被绑定
+            $is_bind = db('position')->where(array('position_id'=>$position_id,'is_bind'=>1))->find();
+            if(!$is_bind){
+                $this->error('该房间位置已被绑定，无法绑定');
+            }
+            //更改房间位置状态
+            db('position')->where(array('position_id'=>$position_id))->update(array('is_bind'=>2));
+            //解绑原来的房间*/
+
+
             //验证数据  END
             $result = $model_class->editClass($data,array('classid'=>$class_id));
             if ($result) {
@@ -397,17 +325,19 @@ class Classes extends AdminControl {
         }
 
         if (request()->action() == 'edit') {
+            $class_id=trim($_GET['class_id']);
             $menu_array[] = array(
                 'name' => 'edit',
                 'text' => '编辑',
-                'url' => url('Admin/Classes/edit')
+                'url' => url('Admin/Classes/edit',array('class_id'=>$class_id))
             );
         }
         if (request()->action() == 'addstudent') {
+            $class_id=trim($_GET['class_id']);
             $menu_array[] = array(
                 'name' => 'addstudent',
                 'text' => '添加学生',
-                'url' => url('Admin/Classes/addstudent')
+                'url' => url('Admin/Classes/addstudent',array('class_id'=>$class_id))
             );
         }
         return $menu_array;

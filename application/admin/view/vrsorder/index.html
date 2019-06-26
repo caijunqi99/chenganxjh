@@ -20,44 +20,55 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <form method="get" name="formSearch" id="formSearch">
-        <table class="search-form">
-            <tbody>
-            <tr>
-                <td><label>{$Think.lang.school_index_names}</label></td>
-                <td><input class="txt2" type="text" name="buyer_name" value="{$Think.get.buyer_name}" /></td>
-                <td><label>{$Think.lang.school_index_paytype}</label></td>
-                <td colspan="4">
-                    <select name="payment_code" class="querySelect">
-                    <option value="">{$Think.lang.ds_please_choose}</option>
-                        {volist name="payment" id="item"}
-                    <option value="{$item.payment_code}" {if condition="$Think.get.payment_code eq $item.payment_code"}selected{/if}>{$item.payment_name}</option>
-                    {/volist}
-                    </select>
-                </td>
-                <td><label>{$Think.lang.order_state}</label></td>
-                <td colspan="4"><select name="order_state" class="querySelect">
-                    <option value="">{$Think.lang.ds_please_choose}</option>
-                    <option value="10" {if condition="$Think.get.order_state eq '10'"}selected{/if}>待支付</option>
-                    <option value="40" {if condition="$Think.get.order_state eq '40'"}selected{/if}>已支付</option>
-                </select></td>
-                <td>
-                    <input type="submit" id="submit" value="{$Think.lang.ds_query}">
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+            <li>线上视频订单信息。</li>
         </ul>
     </div>
-    <table class="ds-default-table">
+    <form method="get" name="formSearch" id="formSearch" class="layui-form">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_names}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="buyer_name" placeholder="请输入会员账号"  id="buyer_name" value="{$_GET['buyer_name']}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_paytype}：</label>
+                    <div class="layui-input-inline">
+                        <select name="payment_code" class="select">
+                            <option value="">{$Think.lang.ds_please_choose}</option>
+                            {volist name="payment" id="item"}
+                            <option value="{$item.payment_code}" {if condition="$Think.get.payment_code eq $item.payment_code"}selected{/if}>{$item.payment_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.order_state}：</label>
+                    <div class="layui-input-inline">
+                        <select name="order_state" class="select">
+                            <option value="">{$Think.lang.ds_please_choose}</option>
+                            <option value="10" {if condition="$Think.get.order_state eq '10'"}selected{/if}>待支付</option>
+                            <option value="40" {if condition="$Think.get.order_state eq '40'"}selected{/if}>已支付</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-admin" lay-submit="" class="submit" type="submit" lay-filter="LAY-user-back-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
         <thead>
         <tr class="thead">
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
@@ -115,7 +126,11 @@
 </div>
 
 <script type="text/javascript">
-
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+    });
     $(function() {
         regionInit("region");
     });

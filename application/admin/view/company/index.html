@@ -2,6 +2,11 @@
 <script src="{$Think.config.url_domain_root}static/common/js/mlselectiones.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
 <link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .align-center{
+        text-align: center;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -25,49 +30,42 @@
             <li>分/子公司信息展示。</li>
         </ul>
     </div>
-    <form method="post" name="formSearch" id="formSearch">
-        <table class="search-form">
-            <tbody>
-            <tr>
-                <th><label for="search_organize_name">公司名称：</label></th>
-                <td><input class="txt" name="search_organize_name" id="search_organize_name" value="{$search_organize_name}" type="text"></td>
-
-                <td id="region">
-                    <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                    <input type="hidden"  name="o_provinceid" id="o_provinceid" class="o_provinceid">
-                    <input type="hidden"  name="o_cityid" id="o_cityid" class="o_cityid">
-                    <input type="hidden" name="dep" id="dep" class="dep" value="1">
-                    <input type="hidden"  name="sid" id="sid" value="1">
-                    {notempty name="address.area_id"}
-                    <span>{$address.area_info}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="0">请选择地区</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {else}
-                    <select>
-                        <option value="0">请选择地区</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
-
-                </td>
-
-                <td><a href="javascript:document.formSearch.submit();" class="btn-search " title="{$Think.lang.ds_query}"></a>
-                    {if $search_brand_name != '' || $search_brand_class != ''}
-                    <a class="btns " href="{:url('student/index')}" title="{$Think.lang.ds_cancel_search}"><span>{$Think.lang.ds_cancel_search}</span></a>
-                    {/if}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <input type="hidden" value="" name="export">
+    <form method="get" name="formSearch" id="formSearch" class="layui-form">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.ds_organize_name}</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="search_organize_name" placeholder="请输入代理商名称"  id="search_organize_name" value="{$_GET['search_organize_name']}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">
+                            <option value="" selected>{$Think.lang.look_address_province}</option>
+                            {volist name="region_list" id="vo"}
+                            <option value="{$vo.area_id}" <?php if($vo['area_id'] == $_GET['province']){echo 'selected';}?> >{$vo.area_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">
+                            <option value="">{$Think.lang.look_address_city}</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">
+                            <option value="">{$Think.lang.look_address_area}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-admin" lay-submit="" type="submit" lay-filter="LAY-user-back-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </form>
 
 
@@ -75,27 +73,32 @@
         <?php if(session('admin_is_super') ==1 || in_array(7,$action)){?>
             <div style="text-align:right;"><a class="btns layui-btn layui-btn-sm"  href="{:url('company/export_step1',['o_name'=>$search_organize_name,'o_provinceid'=>$o_provinceid,'o_cityid'=>$o_cityid,'area_id'=>$area_id])}" id="ncexport"><span>{$Think.lang.ds_export}Excel</span></a></div>
         <?php }?>
-        <table class="ds-default-table">
+        <table class="layui-table">
+            <colgroup>
+                <col >
+                <col >
+                <col>
+            </colgroup>
             <thead>
             <tr class="thead">
-                <th class="w272">{$Think.lang.ds_number}</th>
-                <th class="w172">{$Think.lang.ds_organize_name}</th>
-                <th class="w272 align-center">{$Think.lang.organize_index_address}</th>
-                <th class="w272 align-center">{$Think.lang.ds_organize_time}</th>
+                <th class="w272" style="text-align: center;">{$Think.lang.ds_number}</th>
+                <th class="w172" style="text-align: center;">{$Think.lang.ds_organize_name}</th>
+                <th class="w272" style="text-align: center;">{$Think.lang.organize_index_address}</th>
+                <th class="w272" style="text-align: center;">{$Think.lang.ds_organize_time}</th>
                 <?php if(session('admin_is_super') ==1 || in_array(4,$action) || in_array(3,$action) || in_array(2,$action) || in_array(6,$action)){?>
-                <th class="w172">{$Think.lang.ds_handle}</th>
+                <th class="w172" style="text-align: center;">{$Think.lang.ds_handle}</th>
                 <?php }?>
-                <th class="w172">{$Think.lang.ds_organize_remark}</th>
+                <th class="w172" style="text-align: center;">{$Think.lang.ds_organize_remark}</th>
             </tr>
             </thead>
             <tbody>
             {notempty name="organize_list"}
             {volist name="organize_list" id="v"}
             <tr class="hover edit">
-                <td class="sort">{$key+1}</td>
-                <td class="name">{$v.o_name}</td>
-                <td class="class">{$v.o_area}</td>
-                <td class="picture">{$v.o_createtime}</td>
+                <td class="sort align-center">{$key+1}</td>
+                <td class="name align-center">{$v.o_name}</td>
+                <td class="class align-center">{$v.o_area}</td>
+                <td class="picture align-center">{$v.o_createtime}</td>
                 <?php if(session('admin_is_super') ==1 || in_array(4,$action) || in_array(3,$action) || in_array(2,$action) || in_array(6,$action)){?>
                 <td class="align-center">
                     <?php if(session('admin_is_super') ==1 || in_array(4,$action)){?>
@@ -137,6 +140,80 @@
 </div>
 <script type="text/javascript" src="{:config('url_domain_root')}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script>
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+        //省 市 区
+        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
+        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
+        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
+        if(province != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+
+        //省
+        form.on('select(province)', function(data){
+            //改变市区
+            $('#city').html('<option value="0">{$Think.lang.look_address_city}</option>');
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //市
+        form.on('select(city)', function(data){
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+            var province = $('#province').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //县/区
+        form.on('select(area)', function(data){
+            var province = $('#province').find('option:selected').val();
+            var city = $('#city').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+
+    });
     function dd(id) {
         var urls=ADMIN_URL+'organizes/company?o_id='+id;
         //多窗口模式，层叠置顶

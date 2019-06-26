@@ -1,8 +1,14 @@
 {include file="public/header" /}
-<div id="append_parent"></div>
-<div id="ajaxwaitid"></div>
 <script src="{$Think.config.url_domain_root}static/common/js/mlselectiones.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
 <div class="page">
     <div class="fixed-bar">
         <div class="item-title">
@@ -13,141 +19,195 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-
-    <form id="add_form" method="post" enctype="multipart/form-data">
-        <table class="ds-default-table">
-            <tbody>
-            <tr class="noborder">
-                <td colspan="2"><label class="validation" for="o_name">{$Think.lang.organize_index_title}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" id="o_name" name="o_name" class="txt" value="{$organize_array.o_name}">
-                <input type="hidden" id="o_id" name="o_id" value="{$organize_array.o_id}">
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation" >{$Think.lang.organize_index_role}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform">
-                    <input type="hidden"  name="sid" id="sid" value="{$organize_array.o_role}">
-                    <input type="hidden" name="dep" id="dep" class="dep" value="1">
-                    <?php if(!empty($gadmin)){?>
-                        <?php foreach($gadmin as $key=>$value){?>
-                            <?php if($value['gid'] == $organize_array['o_role']){?>
-                                <li>
-                                    <input name="o_role" type="radio" value="<?php echo $value['gid'];?>" checked="checked">
-                                    <label><?php echo $value['gname'];?></label>
-                                </li>
-                            <?php }else{?>
-                                <li>
-                                    <input type="radio" name="o_role" value="<?php echo $value['gid'];?>">
-                                    <label><?php echo $value['gname'];?></label>
-                                </li>
-                            <?php }?>
-                        <?php }?>
-                    <?php }?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation" >{$Think.lang.organize_index_is_child}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform">
-                    <?php if(1 == $organize_array['is_child']){?>
-                    <li>
-                        <input name="is_child" type="radio" value="1"  checked="checked">
-                        <label>是</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="is_child" value="2">
-                        <label>否</label>
-                    </li>
-                    <?php }else{?>
-                    <li>
-                        <input name="is_child" type="radio" value="1">
-                        <label>是</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="is_child" value="2" checked="checked">
-                        <label>否</label>
-                    </li>
-                    <?php }?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation" for="type_ides">{$Think.lang.organize_index_address}:</label></td>
-            </tr>
-            <tr>
-                <td id="region">
-                    <input type="hidden" value="{$organize_array.o_provinceid}" name="o_provinceid" id="o_provinceid" class="o_provinceid">
-                    <input type="hidden" value="{$organize_array.o_cityid}" name="city_id" id="city_id" class="o_cityid">
-                    <input type="hidden" name="area_id" id="area_id" value="{$organize_array.o_areaid}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$organize_array.o_area}" class="area_names" />
-                    {notempty name="organize_array.o_provinceid"}
-                    <span>{$organize_array.o_area}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {else}
-                    <select name="type_ides" id="type_ides">
-                        <option value="" >请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation" >{$Think.lang.address}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" id="o_address" name="o_address" class="txt" value="{$organize_array.o_address}"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation">{$Think.lang.mob_phone}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" id="o_phone" name="o_phone" class="txt" value="{$organize_array.o_phone}"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation">{$Think.lang.organize_index_leading}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" id="o_leading" name="o_leading" class="txt" value="{$organize_array.o_leading}"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label class="validation">{$Think.lang.organize_index_enddate}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" id="activity_end_date" name="activity_end_date" class="txt date" value="{$organize_array.o_enddate}"/></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label>{$Think.lang.organize_index_remark}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td>
-                    <textarea name="o_remark" id="o_remark">{$organize_array.o_remark}</textarea>
-
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr class="tfoot">
-                <td colspan="2"><a href="JavaScript:void(0);" class="btn" id="submitBtn"><span>{$Think.lang.ds_submit}</span></a></td>
-            </tr>
-            </tfoot>
-        </table>
+    <!-- 操作说明 -->
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>修改新的代理商公司</li>
+        </ul>
+    </div>
+    <form id="add_form" method="post" enctype="multipart/form-data" class="layui-form">
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_title}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="o_name" name="o_name" value="{$organize_array.o_name}" class="layui-input">
+                        <span class="err"></span>
+                        <input type="hidden" id="o_id" name="o_id" value="{$organize_array.o_id}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_role}：</label>
+                    <div class="layui-input-inline">
+                        <select  class="layui-select"  name="o_role" id="o_role">
+                            {volist name="gadmin" id="vo"}
+                            <option value="{$vo.gid}" <?php if($organize_array['o_role'] == $vo['gid']){echo 'selected';}?>>{$vo.gname}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_address}：</label>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <select  lay-filter="province"  class="select"  lay-verify="type" name="province" id="province">
+                                <option value="" selected>{$Think.lang.look_address_province}</option>
+                                {volist name="region_list" id="vo"}
+                                <option value="{$vo.area_id}" <?php if($organize_array['o_provinceid'] == $vo['area_id']){echo 'selected';}?>>{$vo.area_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city" lay-filter="city"  class="select"  lay-verify="type"  id="city">
+                                <option value="">{$Think.lang.look_address_city}</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="area" lay-filter="area"  class="select"  lay-verify="type"  id="area">
+                                <option value="">{$Think.lang.look_address_area}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.address}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="o_address" name="o_address" value="{$organize_array.o_address}" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.mob_phone}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="o_phone" name="o_phone" value="{$organize_array.o_phone}" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_leading}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="o_leading" name="o_leading" value="{$organize_array.o_leading}"  class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_enddate}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="activity_end_date" name="activity_end_date" value="{$organize_array.o_enddate}"   class="layui-input date">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.organize_index_remark}：</label>
+                    <div class="layui-input-inline">
+                        <textarea id="o_remark" name="o_remark" class="layui-text">{$organize_array.o_remark}</textarea>
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
+        </div>
     </form>
 
 </div>
 <script>
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+        //省 市 区
+        var province = '<?php if(!empty($organize_array["o_provinceid"])){echo $organize_array["o_provinceid"];}?>';
+        var city = '<?php if(!empty($organize_array["o_cityid"])){echo $organize_array["o_cityid"];}?>';
+        var area = '<?php if(!empty($organize_array["o_areaid"])){echo $organize_array["o_areaid"];}?>';
+        if(province != 0){
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        }
+
+        //省
+        form.on('select(province)', function(data){
+            //改变市区
+            $('#city').html('<option value="0">{$Think.lang.look_address_city}</option>');
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变市区
+                    $('#city').html(data.city);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //市
+        form.on('select(city)', function(data){
+            //改变县区
+            $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+            var province = $('#province').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    //改变县区
+                    $('#area').html(data.area);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+        //县/区
+        form.on('select(area)', function(data){
+            var province = $('#province').find('option:selected').val();
+            var city = $('#city').find('option:selected').val();
+            $.ajax({
+                type:'POST',
+                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
+                success:function(data){
+                    data = jQuery.parseJSON(data);
+                    form.render('select');//select是固定写法 不是选择器
+                }
+            })
+        });
+
+    });
     //按钮先执行验证再提交表单
     $(function(){$("#submitBtn").click(function(){
         if($("#add_form").valid()){

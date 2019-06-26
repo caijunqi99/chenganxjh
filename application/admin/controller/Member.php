@@ -10,6 +10,7 @@ class Member extends AdminControl {
     public function _initialize() {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/member.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/look.lang.php');
         //获取当前角色对当前子目录的权限
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
@@ -373,10 +374,11 @@ class Member extends AdminControl {
         }
 
         if (request()->action() == 'edit') {
+            $mid=$_GET['member_id'];
             $menu_array[] = array(
                 'name' => 'edit',
                 'text' => '编辑',
-                'url' => url('Admin/Member/edit')
+                'url' => url('Admin/Member/edit',array('member_id'=>$mid))
             );
         }
         return $menu_array;
