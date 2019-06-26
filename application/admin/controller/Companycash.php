@@ -87,11 +87,11 @@ class Companycash extends AdminControl {
         if($result&&$status==2){
             $member_data['status'] = 1;
             $log_model->addLog($member_data);
-            $this->success("提现成功", 'Companycash/company_cash');
+            $this->success("提现成功", 'Companycash/index');
         }else{
             $member_data['status'] = 2;
             $log_model->addLog($member_data);
-            $this->success("提现失败", 'Companycash/company_cash');
+            $this->success("提现失败", 'Companycash/index');
         }
     }
 
@@ -141,7 +141,7 @@ class Companycash extends AdminControl {
             //验证数据  END
             $result = $company_cash->addCpdCash($data);
             if ($result) {
-                $this->success("提现申请成功", 'Companycash/company_cash');
+                $this->success("提现申请成功", 'Companycash/index');
             } else {
                 $this->error("提现申请失败");
             }
@@ -177,7 +177,7 @@ class Companycash extends AdminControl {
         $menu_array = array(
             array(
                 'name' => 'index',
-                'text' => '管理',
+                'text' => '提现列表',
                 'url' => url('Admin/Companycash/index')
             )
         );
