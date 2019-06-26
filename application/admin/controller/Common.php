@@ -578,15 +578,24 @@ class Common extends AdminControl
             }
             //房间位置
             $position_where['school_id'] = $school_id;
-            $position_where['type_id'] = $grade_id;
-            $position_where['is_bind'] = 1;
-            $position =  db('position')->field('position_id,position')->where($position_where)->select();
+//            $position_where['type_id'] = $grade_id;
+//            $position_where['is_bind'] = 1;
+            $position =  db('position')->field('position_id,position,is_bind')->where($position_where)->select();
             if(!empty($position)){
                 foreach($position as $key=>$value){
                     if($value['position_id'] == $position_id){
-                        $position_html .= '<option value='.$value["position_id"].' selected>'.$value["position"].'</option>';
+                        if($value['is_bind'] == 1){
+                            $position_html .= '<option value='.$value["position_id"].' selected>'.$value["position"].'（未绑定）</option>';
+                        }else{
+                            $position_html .= '<option value='.$value["position_id"].' selected>'.$value["position"].'（已绑定）</option>';
+                        }
                     }else{
-                        $position_html .= '<option value='.$value["position_id"].'>'.$value["position"].'</option>';
+                        if($value['is_bind'] == 1){
+                            $position_html .= '<option value='.$value["position_id"].'>'.$value["position"].'（未绑定）</option>';
+                        }else{
+                            $position_html .= '<option value='.$value["position_id"].'>'.$value["position"].'（已绑定）</option>';
+                        }
+
                     }
 
                 }

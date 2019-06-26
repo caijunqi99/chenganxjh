@@ -87,10 +87,10 @@ class Classes extends AdminControl {
             return $this->fetch();
         } else {
             $admininfo = $this->getAdminInfo();
-            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
+            $schoolInfo = db('school')->where('schoolid', input('post.order_state'))->find();
             $model_classes = model('Classes');
             $position_id = input('post.position');
-            if(empty($position_id)){
+            if (empty($position_id)) {
                 $this->error('请绑定房间位置');
             }
             $data = array(
@@ -101,39 +101,52 @@ class Classes extends AdminControl {
                 'desc' => input('post.class_desc'),
                 'option_id' => $admininfo['admin_id'],
                 'admin_company_id' => $schoolInfo['admin_company_id'],
-                'createtime' => date('Y-m-d H:i:s',time())
+                'createtime' => date('Y-m-d H:i:s', time())
             );
-            //判断位置是否被绑定
-            $is_bind = db('position')->where(array('position_id'=>$position_id,'is_bind'=>1))->find();
-            if(!$is_bind){
-                $this->error('该房间位置已被绑定，无法绑定');
-            }
-            //更改房间位置状态
-            db('position')->where(array('position_id'=>$position_id))->update(array('is_bind'=>2));
-
-            $schoolinfo = db('school')->find(array("schoolid"=>input('post.school')));
+            $schoolinfo = db('school')->find(array("schoolid" => input('post.school')));
             $data['school_provinceid'] = $schoolinfo['provinceid'];
             $data['school_cityid'] = $schoolinfo['cityid'];
             $data['school_areaid'] = $schoolinfo['areaid'];
             $data['school_region'] = $schoolinfo['region'];
             //学校识别码
-            $classcard=$schoolInfo['schoolCard'].($model_classes -> getNumber($schoolInfo['schoolCard']));
-            $data['classCard'] =$classcard;
+            $classcard = $schoolInfo['schoolCard'] . ($model_classes->getNumber($schoolInfo['schoolCard']));
+            $data['classCard'] = $classcard;
             //生成二维码
-            import('qrcode.index',EXTEND_PATH);
+            import('qrcode.index', EXTEND_PATH);
             $PhpQRCode = new \PhpQRCode();
-            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' .DS. $schoolInfo['schoolCard'].DS);
+            $PhpQRCode->set('pngTempDir', BASE_UPLOAD_PATH . DS . ATTACH_STORE . DS . 'class' . DS . $schoolInfo['schoolCard'] . DS);
             // 生成商品二维码
             $PhpQRCode->set('date', $classcard);
             $PhpQRCode->set('pngTempName', $classcard . '.png');
-            $qr=$PhpQRCode->init();
-            $data['qr']='/home/store/class/'.$schoolInfo['schoolCard'].'/'.$qr;
+            $qr = $PhpQRCode->init();
+            $data['qr'] = '/home/store/class/' . $schoolInfo['schoolCard'] . '/' . $qr;
             //验证数据  END
-            $result = $model_classes->addClasses($data);
-            if ($result) {
-                $this->success(lang('school_class_add_succ'), 'Classes/index');
-            } else {
-                $this->error(lang('school_class_add_fail'));
+            //判断位置是否被绑定
+            $is_bind = db('position')->where(array('position_id' => $position_id))->find();
+            if (!empty($is_bind)) {
+                if ($is_bind['is_bind'] == 1) {
+                    //更改房间位置状态
+                    $now = db('position')->where(array('position_id' => $position_id))->update(array('is_bind' => 2, 'create_time' => time()));
+                    $result = $model_classes->addClasses($data);
+                    if ($result && $now) {
+                        $model_classes->commit();
+                        $this->success('保存成功', 'Classes/index');
+                    } else {
+                        $model_classes->rollback();
+                        $this->error('保存失败', 'Classes/add');
+                    }
+                } else {
+                    //更改房间位置状态
+                    $old_result = $model_classes->editClass(array('position_id' => $position_id), array('position_id' => 0));
+                    $result = $model_classes->addClasses($data);
+                    if ($result && $old_result) {
+                        $model_classes->commit();
+                        $this->success('更换成功', 'Classes/index');
+                    } else {
+                        $model_classes->rollback();
+                        $this->error('更换失败', 'Classes/add');
+                    }
+                }
             }
         }
     }
@@ -158,39 +171,52 @@ class Classes extends AdminControl {
             $this->setAdminCurItem('edit');
             return $this->fetch();
         } else {
-//            $position_id = input('post.position');
-//            if(empty($position_id)){
-//                $this->error('请绑定房间位置');
-//            }
+            //开启事物
+            $model_class->startTrans();
 
+            //原来信息
+            $res = $model_class->getClassInfo(array('classid'=>$class_id));
+
+            $position_id = input('post.position');
+            if(empty($position_id)){
+                $this->error('请绑定房间位置');
+            }
             $data = array(
-                'school_provinceid' => input('post.province'),
-                'school_cityid' => input('post.city'),
-                'school_areaid' => input('post.area'),
-                'school_region' => input('post.area_info'),
                 'typeid' => input('post.grade'),
-                'schoolid' => input('post.school'),
-//                'position_id' => $position_id,
+                'position_id' => $position_id,
                 'classname' => input('post.school_class_name'),
                 'desc' => input('post.class_desc'),
                 'createtime' => date('Y-m-d H:i:s',time())
             );
-            /*//判断位置是否被绑定
-            $is_bind = db('position')->where(array('position_id'=>$position_id,'is_bind'=>1))->find();
-            if(!$is_bind){
-                $this->error('该房间位置已被绑定，无法绑定');
-            }
-            //更改房间位置状态
-            db('position')->where(array('position_id'=>$position_id))->update(array('is_bind'=>2));
-            //解绑原来的房间*/
-
-
-            //验证数据  END
-            $result = $model_class->editClass($data,array('classid'=>$class_id));
-            if ($result) {
-                $this->success('编辑成功', 'Classes/index');
-            } else {
-                $this->error('编辑失败');
+            //判断位置是否被绑定
+            $is_bind = db('position')->where(array('position_id'=>$position_id))->find();
+            if(!empty($is_bind)){
+                if($is_bind['is_bind'] == 1){
+                    //更改房间位置状态
+                    $now = db('position')->where(array('position_id'=>$position_id))->update(array('is_bind'=>2,'create_time'=>time()));
+                    $old_now = db('position')->where(array('position_id'=>$res['position_id']))->update(array('is_bind'=>1,'create_time'=>time()));
+                    $result = $model_class->editClass($data,array('classid'=>$class_id));
+                    if ($result && $now && $old_now) {
+                        $model_class->commit();
+                        $this->success('编辑成功', 'Classes/index');
+                    } else {
+                        $model_class->rollback();
+                        $this->error('编辑失败','Classes/edit?class_id="'.$class_id.'"');
+                    }
+                }else{
+                    //更改房间位置状态
+                    $old_result = $model_class->editClass(array('position_id'=>$res['position_id']),array('position_id'=>$position_id));
+                    $result = $model_class->editClass($data,array('classid'=>$class_id));
+                    if ($result && $old_result) {
+                        $model_class->commit();
+                        $this->success('更换成功', 'Classes/index');
+                    } else {
+                        $model_class->rollback();
+                        $this->error('更换失败','Classes/edit?class_id="'.$class_id.'"');
+                    }
+                }
+            }else{
+                $this->error('该房间位置不存在，无法绑定');
             }
         }
     }

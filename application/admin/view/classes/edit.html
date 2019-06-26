@@ -37,7 +37,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{$Think.lang.school_index_schoolregion}：</label>
                     <div class="layui-input-inline">
-                        <select  lay-filter="province" disabled class="select"  lay-verify="type" name="province" id="province">
+                        <select  lay-filter="province" class="select" disabled lay-verify="type" name="province" id="province">
                             <option value="">{$Think.lang.look_address_province}</option>
                             {volist name="region_list" id="vo"}
                             <option value="{$vo.area_id}" <?php if($vo['area_id'] == $class_array["school_provinceid"]){echo 'selected';}?> >{$vo.area_name}</option>
@@ -45,7 +45,7 @@
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="city" lay-filter="city" disabled  class="select"  lay-verify="type"  id="city">
+                        <select name="city" lay-filter="city" disabled class="select"  lay-verify="type"  id="city">
                             <option value="">{$Think.lang.look_address_city}</option>
                         </select>
                     </div>
@@ -56,23 +56,22 @@
                     </div>
                 </div>
             </div>
-            <input id="area_info" name="area_info" value="{$class_array['school_region']}" type="hidden">
             <input  name="classid" value="{$class_array['classid']}" type="hidden">
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">{$Think.lang.school_index_checkname}：</label>
                     <div class="layui-input-inline">
-                        <select  lay-filter="school" disabled  class="select"  lay-verify="type" name="school" id="school">
+                        <select  lay-filter="school" disabled class="select"  lay-verify="type" name="school" id="school">
                             <option value="">{$Think.lang.school_index_allschool}</option>
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="grade" lay-filter="grade" disabled  class="select"  lay-verify="type"  id="grade">
+                        <select name="grade" lay-filter="grade"   class="select"  lay-verify="type"  id="grade">
                             <option value="">{$Think.lang.school_index_type}</option>
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="position" lay-filter="position" disabled class="select"  lay-verify="type"  id="position">
+                        <select name="position" lay-filter="position"  class="select"  lay-verify="type"  id="position">
                             <option value="">{$Think.lang.school_index_positionname}</option>
                         </select>
                     </div>
@@ -285,7 +284,7 @@
         });
         $('#user_form').validate({
             errorPlacement: function(error, element) {
-                error.appendTo(element.parent().parent().prev().find('td:first'));
+                error.appendTo(element.nextAll('span.err'));
             },
             rules: {
                 school_name: {

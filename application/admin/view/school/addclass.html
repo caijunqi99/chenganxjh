@@ -36,19 +36,27 @@
         <div class="ncap-form-default">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{$Think.lang.school_index_checktype}：</label>
+                    <label class="layui-form-label">{$Think.lang.school_index_chosetype}：</label>
                     <div class="layui-input-inline">
-                        <select name="school_type" lay-filter="school_type"  class="select"  lay-verify="type" id="school_type">
-                            <option value="">{$Think.lang.school_index_chosetype}</option>
-                            {volist name="schooltype" id="type"}
-                            <option value="{$key}">{$type}</option>
-                            {/volist}
-                        </select>
-                        <span class="err"></span>
+                    <select name="school_type" lay-filter="school_type"  class="select"  lay-verify="type" id="school_type">
+                    <option value="">{$Think.lang.school_index_chosetype}</option>
+                    {volist name="schooltype" id="type"}
+                    <option value="{$key}">{$type}</option>
+                    {/volist}
+                    </select>
+                    <span class="err"></span>
                     </div>
+            </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_chose_position}：</label>
                     <div class="layui-input-inline">
                         <select name="position" class="select" id="position">
                             <option value="">{$Think.lang.school_index_chose_position}</option>
+                            {volist name="position_list" id="vo"}
+                            <option value="{$vo.position_id}">{$vo.position}</option>
+                            {/volist}
                         </select>
                         <span class="err"></span>
                     </div>
@@ -88,7 +96,7 @@
             ,layer = layui.layer;
         var school_id= '{$schoolid}';
         //学校类型
-        form.on('select(school_type)', function(data){
+        /*form.on('select(school_type)', function(data){
             //改变房间位置
             $('#position').html('<option value="0">{$Think.lang.school_index_chose_position}</option>');
             $.ajax({
@@ -101,7 +109,7 @@
                     form.render('select');//select是固定写法 不是选择器
                 }
             })
-        });
+        });*/
     });
     $(function(){
         $("#region_choose").click(function() {

@@ -194,7 +194,7 @@ class School extends AdminControl {
             $this->error(lang('param_error'));
         }
         if (!request()->isPost()) {
-            $schooltype = db('schooltype')->where('sc_enabled','1')->select();
+            /*$schooltype = db('schooltype')->where('sc_enabled','1')->select();
             $schoolinfo = $model_school->getSchoolInfo(array('schoolid'=>$school_id));
             $typeids = explode(',',$schoolinfo['typeid']);
             foreach ($schooltype as $k=>$v){
@@ -204,7 +204,7 @@ class School extends AdminControl {
                     }
                 }
             }
-            $this->assign('schooltype', $type);
+            $this->assign('schooltype', $type);*/
             $this->assign('schoolid', $school_id);
             $this->setAdminCurItem('addposition');
             return $this->fetch();
@@ -212,7 +212,7 @@ class School extends AdminControl {
             $model_class = model('position');
             $data = array(
                 'school_id' => $school_id,
-                'type_id' => input('post.school_type'),
+//                'type_id' => input('post.school_type'),
                 'position' => input('post.school_position_name'),
             );
             $schoolinfo = $model_school->find(array("schoolid"=>$school_id));
@@ -258,6 +258,9 @@ class School extends AdminControl {
                 }
             }
             $this->assign('schooltype', $type);
+            //房间列表
+            $position_list = db('position')->where(array('school_id'=>$school_id,'is_bind'=>1))->select();
+            $this->assign('position_list',$position_list);
             $this->assign('schoolid', $school_id);
             $this->setAdminCurItem('addclass');
             return $this->fetch();
