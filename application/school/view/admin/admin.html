@@ -7,7 +7,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>权限设置</h3>
+                <h3>账号管理</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -116,9 +116,7 @@
                         <?php if(session('admin_is_super')==1 || in_array('2',$action)){?>
                         <a href="javascript:void(0)" onclick="return del('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">{$Think.lang.admin_index_del_admin}</a>
                         <?php }?>
-                        <?php if(session('admin_is_super')==1 || in_array('12',$action)){?>
-                        <a href="javascript:void(0)" onclick="return reset_pwd('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');" class="layui-btn  layui-btn-sm" lay-event="reset">{$Think.lang.admin_index_reset_password}</a>
-                        <?php }?>
+                        <a href="javascript:void(0)" onclick="return reset_pwd('<?php echo $v[admin_name];?>','<?php echo $v[admin_id];?>');" class="layui-btn layui-btn-sm" lay-event="reset">{$Think.lang.admin_index_reset_password}</a>
                         <?php }?>
                     </div>
                 </td>

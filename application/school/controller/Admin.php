@@ -293,7 +293,7 @@ class Admin extends AdminControl {
             $menu_array = array(
                 array(
                     'name' => 'admin',
-                    'text' => '管理员',
+                    'text' => '管理',
                     'url' => url('School/Admin/admin')
                 )
             );
@@ -301,12 +301,12 @@ class Admin extends AdminControl {
             $menu_array = array(
                 array(
                     'name' => 'admin',
-                    'text' => '管理员',
+                    'text' => '管理',
                     'url' => url('School/Admin/admin')
                 ),
                 array(
                     'name' => 'admin_add',
-                    'text' => '添加管理员',
+                    'text' => '添加账号',
                     'url' => url('School/Admin/admin_add')
                 )
             );
@@ -315,7 +315,7 @@ class Admin extends AdminControl {
         if (request()->action() == 'edit') {
             $menu_array[] = array(
                 'name' => 'edit',
-                'text' => '编辑',
+                'text' => '编辑账号',
                 'url' => url('School/Admin/edit')
             );
         }

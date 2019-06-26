@@ -53,11 +53,19 @@ class Robotreport extends Model {
      */
     public function getReportList($condition = array(), $page = '', $orderby = 'id desc') {
         if ($page) {
-            $result = db('robotreport')->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
+            $result = db('robotreport')->alias('r')
+                ->join('__STUDENT__ s','s.s_id=r.student_id','LEFT')
+                ->join('__CLASS__ c','s.s_classid=c.classid','LEFT')
+                ->field('r.*,s.s_name,s.s_classid,c.classname')
+                ->where($condition)->order($orderby)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
             return $result->items();
         } else {
-             return db('robotreport')->where($condition)->order($orderby)->select();
+             return db('robotreport')->alias('r')
+                 ->join('__STUDENT__ s','s.s_id=r.student_id','LEFT')
+                 ->join('__CLASS__ c','s.s_classid=c.classid','LEFT')
+                 ->join('__SCHOOLTYPE__ sc','sc.sc_id=c.typeid','LEFT')
+                 ->field('r.*,s.s_name,s.s_classid,c.classname,sc.sc_type')->where($condition)->order($orderby)->select();
         }
     }
 

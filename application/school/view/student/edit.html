@@ -29,57 +29,15 @@
         <input type="hidden" name="student_id" value="<?php echo $student_array['s_id'];?>" />
         <table class="ds-default-table">
             <tbody>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_schoolregion}:</label></td>
-            </tr>
-            <tr>
-                <td id="region">
-                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                    <input type="hidden" name="area_id" id="area_id" value="{$student_array.s_areaid}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$student_array.s_region}" class="area_names" />
-                    {notempty name="$student_array.s_areaid"}
-                    <span>{$student_array.s_region}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="0">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {else}
-                    <select>
-                        <option value="0">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
 
-                </td>
-            </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td id="school_list">
-                    <select name="order_state" class="querySelect">
-                        <option value="">{$Think.lang.school_index_chosename}</option>
-                        {volist name="schoolList" id="school"}
-                        <option value="{$school.schoolid}" {if condition="$student_array.s_schoolid eq $school.schoolid"} selected {/if}>{$school.name}</option>
-                        {/volist}
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+                <td colspan="2" class="required"><label>所在年级:</label></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
                 <td id="type_list">
                     <select name="classtype" class="querySelect" id="school_type">
-                        <option value="">{$Think.lang.school_index_chosetype}</option>
+                        <option value="">请选择所在年级</option>
                         {volist name="typeInfo" id="type"}
                         <option value="{$type.sc_id}" {if condition="$student_array.s_sctype eq $type.sc_id"} selected {/if} >{$type.sc_type}</option>
                         {/volist}

@@ -1,0 +1,114 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>统计分析</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>已进入系统的学生总人数、家长总人数、摄像头个数、机器人个数、订单总金额；</li>
+        </ul>
+    </div>
+
+    <div class="info-panel">
+        <dl class="member">
+            <dt>
+            <div class="ico"><i></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="menber"><?php echo $students; ?></em></span></sub></div>
+            <h3>学生总人数</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <!--<li class="w50pre normal lbn"><a href="{:url('Member/member')}">{$Think.lang.dashboard_wel_new_add}<sub><em id="statistics_week_add_member"></em></sub></a></li>
+                    <li class="w50pre none"><a href="{:url('Predeposit/pdcash_list')}">{$Think.lang.dashboard_wel_predeposit_get}<sub><em id="statistics_cashlist">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当日<sub><em id="statistics_member_day">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当月<sub><em id="statistics_member_month">0</em></sub></a></li>-->
+                </ul>
+            </dd>
+        </dl>
+
+        <dl class="teacher">
+            <dt>
+                <div class="ico"><i class="myicons1"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_teacher"><?php echo $member; ?></em></span></sub></div>
+                <h3>家长总人数</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <!--<li class="w50pre normal lbn"><a>当日<sub><em id="statistics_teacher_day">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当月<sub><em id="statistics_teacher_month">0</em></sub></a></li>-->
+                </ul>
+            </dd>
+        </dl>
+        <dl class="teacherVideo">
+            <dt>
+                <div class="ico"><i class="myicons5"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_teacherVideo"><?php echo $camera; ?></em></span></sub></div>
+                <h3>摄像头个数</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <!--<li class="w50pre normal lbn"><a>当日<sub><em id="statistics_teacherVideo_day">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当月<sub><em id="statistics_teacherVideo_month">0</em></sub></a></li>-->
+                </ul>
+            </dd>
+        </dl>
+        <dl class="agent">
+            <dt>
+                <div class="ico"><i class="myicons3"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_agent"><?php echo $robot; ?></em></span></sub></div>
+                <h3>机器人个数</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <!--<li class="w50pre normal lbn"><a>当日<sub><em id="statistics_agent_day">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当月<sub><em id="statistics_agent_month">0</em></sub></a></li>-->
+                </ul>
+            </dd>
+        </dl>
+        <dl class="school">
+            <dt>
+                <div class="ico"><i class="myicons4"></i><sub title="{$Think.lang.dashboard_wel_total_member}"><span><em id="statistics_school"></em></span></sub></div>
+                <h3>订单总金额</h3>
+            </dt>
+            <dd>
+                <ul>
+                    <!--<li class="w50pre normal lbn"><a>当日<sub><em id="statistics_school_day">0</em></sub></a></li>-->
+                    <!--<li class="w50pre normal lbn"><a>当月<sub><em id="statistics_school_month">0</em></sub></a></li>-->
+                </ul>
+            </dd>
+        </dl>
+
+        <div class="clear"></div>
+    </div>
+
+    <script type="text/javascript">
+        var normal = ['week_add_member', 'week_add_product'];
+        var work = ['store_joinin', 'store_bind_class_applay', 'store_reopen_applay', 'store_expired', 'store_expire', 'brand_apply', 'cashlist', 'groupbuy_verify_list', 'points_order', 'complain_new_list', 'complain_handle_list', 'product_verify', 'inform_list', 'refund', 'return', 'vr_refund', 'cms_article_verify', 'cms_picture_verify', 'circle_verify', 'check_billno', 'pay_billno', 'mall_consult', 'delivery_point', 'offline'];
+        $(document).ready(function () {
+            $.getJSON("{:url('Dashboard/statistics')}", function (data) {
+                $.each(data, function (k, v) {
+                    $("#statistics_" + k).html(v);
+                    if (v != 0 && $.inArray(k, work) !== -1) {
+                        $("#statistics_" + k).parent().parent().parent().removeClass('none').addClass('high');
+                    } else if (v == 0 && $.inArray(k, normal) !== -1) {
+                        $("#statistics_" + k).parent().parent().parent().removeClass('normal').addClass('none');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</div>

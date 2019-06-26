@@ -29,42 +29,14 @@
 
         <table class="ds-default-table">
             <tbody>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_schoolregion}:</label></td>
-            </tr>
-            <tr>
-                <td id="region">
-                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                    <input type="hidden" name="area_id" id="area_id" value="{$class_array.school_areaid}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$class_array.school_region}" class="area_names" />
-                    {notempty name="$class_array.school_areaid"}
-                    <span>{$class_array.school_region}</span>
-                    <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                    <select style="display:none;">
-                        <option value="0">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {else}
-                    <select>
-                        <option value="0">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-                    {/notempty}
 
-                </td>
-            </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+                <td colspan="2" class="required"><label>所属年级:</label></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
                 <td>
                     <select name="school_type" class="querySelect">
-                        <!--<option value="">{$Think.lang.school_index_chosetype}</option>-->
                         {volist name="schooltype" id="type"}
                             <option value="{$type.sc_id}" {if condition="$class_array.typeid eq $type.sc_id"} selected {/if}>{$type.sc_type}</option>
                         {/volist}
@@ -73,22 +45,18 @@
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>
-                <td class="vatop tips"></td>
+                <td colspan="2" class="required"><label for="school_class_name">所属房间:</label></td>
             </tr>
             <tr class="noborder">
-                <td id="school_list">
-                    <select name="school_name" id="school_id" class="querySelect">
-                        <option value="">{$Think.lang.school_index_chosename}</option>
-                        {volist name="schoolname" id="name"}
-                        <option value="{$name.schoolid}" {if condition="$class_array.schoolid eq $name.schoolid"} selected {/if}>{$name.name}</option>
+                <td>
+                    <select name="class_room" class="querySelect">
+                        <option value="">请选择所属房间</option>
+                        {volist name="rooms" id="item"}
+                        <option value="{$item.id}" {if condition="$class_array.position_id eq $item.id"} selected {/if}>{$item.position}</option>
                         {/volist}
                     </select>
                 </td>
                 <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_class_name">班级所在位置:</label>&nbsp;&nbsp;&nbsp;<?php echo $class_array['position'];?></td>
             </tr>
             <tr class="noborder">
                 <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classname}:</label></td>

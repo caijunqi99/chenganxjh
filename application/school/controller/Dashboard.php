@@ -201,6 +201,36 @@ class Dashboard extends AdminControl {
         exit;
     }
 
+    public function info(){
+        $admininfo = $this->getAdminInfo();
+        $info = db("admin")->where(array("admin_id"=>$admininfo['admin_id']))->find();
+        if (!request()->isPost()) {
+            $cratename = db("admin")->field("admin_name")->where(array("admin_id"=>$info['create_uid']))->find();
+            $this->assign('cratename', $cratename);
+            $this->assign('info', $info);
+            $this->setAdminCurItem('info');
+            return $this->fetch();
+        } else {
+            if(input("post.admin_name")){
+                $data['admin_name'] = input("post.admin_name");
+            }
+            if(input("post.admin_phone")){
+                $data['admin_phone'] = input("post.admin_phone");
+            }
+            if(input("post.admin_true_name")){
+                $data['admin_true_name'] = input("post.admin_true_name");
+            }
+
+            $result = db('admin')->where(array("admin_id"=>$admininfo['admin_id']))->update($data);
+
+            if ($result) {
+                $this->success(lang('index_modifypw_success'));
+            } else {
+                $this->error(lang('index_modifypw_fail'));
+            }
+        }
+    }
+
 }
 
 ?>

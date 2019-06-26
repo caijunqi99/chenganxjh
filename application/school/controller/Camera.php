@@ -346,8 +346,7 @@ class Camera extends AdminControl
         
 //        halt($start);
         //查询未绑定的摄像头
-        $list = db('camera')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
-
+        $list = db('camera')->alias('c')->join('__POSITION__ p', 'c.position_id = p.id', 'LEFT')->where($where)->limit($start,$page_count)->order('cid DESC')->select();
         $list_count = db('camera')->where($where)->count();
 
         $html = '';
@@ -357,6 +356,7 @@ class Camera extends AdminControl
                 $html .= "<tr class='hover' id='tr_".$v['cid']."' datainfo='".$datainfo."'>";
                 $html .= "<td class='align-center'><input type='checkbox' lay-skin='primary' name='cityId' class='cityId' lay-filter='c_one'  value='".$v['cid']."' ></td>";
                 $html .= '<td class="align-center">'.$v["name"].'</td>';
+                $html .= '<td class="align-center">'.$v["position"].'</td>';
                 $html .= '<td class="align-center">'.$v["channelid"].'</td>';
                 $html .= '<td class="align-center">'.$v["deviceid"].'</td>';
                 $html .= '<td class="align-center">'.$v["id"].'</td>';

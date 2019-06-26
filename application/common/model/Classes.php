@@ -15,7 +15,7 @@ class Classes extends Model {
     public function getClassInfo($condition = array(), $extend = array(), $fields = '*', $class = '', $group = '') {
         $class_info = db('class')
                       ->alias('c')
-                      ->join('__POSITION__ po','po.id=c.position_id','LEFT')
+                      ->join('__POSITION__ po','po.position_id=c.position_id','LEFT')
                       ->field('c.*,po.position')
                       ->where($condition)->group($group)->order($class)->find();
         if (empty($class_info)) {
@@ -66,7 +66,7 @@ class Classes extends Model {
     public function getClasslList($condition, $page = '', $field = '*', $class = 'classid desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('class')
                          ->alias('c')
-                         ->join('__POSITION__ po','po.id=c.position_id','LEFT')
+                         ->join('__POSITION__ po','po.position_id=c.position_id','LEFT')
                          ->field('c.*,po.position')
                          ->where($condition)
                          ->order($class)

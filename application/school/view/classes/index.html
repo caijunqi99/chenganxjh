@@ -22,54 +22,19 @@
                 <tr>
                     <td> <label>{$Think.lang.school_index_classname}：</label></td>
                     <td><input type="text" class="text w150" name="school_index_classname" value="{$Think.get.school_index_classname}"></td>
-                    <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_region}:</label></td>
-                    <td id="region">
-                        <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                        <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                        <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                        {notempty name="address.area_id"}
-                        <span>{$address.area_info}</span>
-                        <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                        <select style="display:none;">
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {else}
-                        <select>
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {/notempty}
 
-                    </td>
-                    <td id="school_list">
-                    <select name="school_name" >
-                        <option value="">{$Think.lang.school_index_allschool}</option>
-                        <?php if(!empty($schoolList)){ ?>
-                        {volist name="schoolList" id="school"}
-                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.name}</option>
-                        {/volist}
-                        <?php } ?>
-                    </select>
-                </td>
-                    <td id="type_list">
-                    <select name="school_type" id="school_type">
-                        <option value="">{$Think.lang.school_index_type}</option>
-                        {volist name="schooltype" id="type"}
-                        <option {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if} value="{$type.sc_id}">{$type.sc_type}</option>
-                        {/volist}
-                    </select>
-                </td>
+                    <td> <label>班级识别码：</label></td>
+                    <td><input type="text" class="text w150" name="classCard" value="{$Think.get.classCard}"></td>
+
+                    <!--<td> <label>班级位置：</label></td>-->
+                    <!--<td><input type="text" class="text w150" name="school_index_classname" value="{$Think.get.school_index_classname}"></td>-->
+
 
                 <td id="class_list">
-                    <select name="class_name" id="class_name">
-                        <option value="">{$Think.lang.school_index_classname}</option>
-                        {volist name="classname" id="v"}
-                        <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.typename}-{$v.classname}</option>
+                    <select name="type_name" id="class_name">
+                        <option value="">所属年级</option>
+                        {volist name="schooltype" id="v"}
+                        <option value="{$v.sc_id}" {if condition='$Think.get.type_name eq $v.sc_id'}selected='selected'{/if}>{$v.sc_type}</option>
                         {/volist}
                     </select>
                 </td>
@@ -96,10 +61,11 @@
             <!--<th>&nbsp;</th>-->
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th class="align-center">{$Think.lang.school_index_classname}</th>
+            <th class="align-center">所属年级</th>
             <th class="align-center">{$Think.lang.school_index_classunique}</th>
-            <th class="align-center">班级位置</th>
-            <th class="align-center">{$Think.lang.school_index_name}</th>
-            <th class="align-center">{$Think.lang.school_index_region}</th>
+            <th class="align-center">所属房间</th>
+            <!--<th class="align-center">{$Think.lang.school_index_name}</th>-->
+            <!--<th class="align-center">{$Think.lang.school_index_region}</th>-->
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
             <?php  if(session('admin_is_super') ==1 || (in_array('4',$action) || in_array('3',$action) || in_array('2',$action) || in_array('11',$action))){?>
@@ -112,15 +78,12 @@
         <tr class="hover member">
             <!--<td class="align-center"><input type="checkbox" name='del_id[]' value="<?php echo $v['schoolid']; ?>" class="checkitem"></td>-->
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
-            <?php if($v['typename']){ ?>
-            <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
-            <?php }else{ ?>
             <td class="align-center"><?php echo $v['classname']; ?></td>
-            <?php } ?>
+            <td class="align-center"><?php echo $v['typename']; ?></td>
             <td class="align-center"><?php echo $v['classCard']; ?></td>
             <td class="align-center"><?php echo $v['position']; ?></td>
-            <td class="align-center"><?php echo $v['schoolname']; ?></td>
-            <td class="align-center"><?php echo $v['school_region']; ?></td>
+            <!--<td class="align-center"><?php echo $v['schoolname']; ?></td>-->
+            <!--<td class="align-center"><?php echo $v['school_region']; ?></td>-->
             <td class="align-center"><?php echo $v['createtime']; ?></td>
             <td class="align-center"><?php echo $v['desc']; ?></td>
             <td class="align-center">

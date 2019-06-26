@@ -30,43 +30,16 @@
         <table class="ds-default-table">
             <tbody>
             <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_schoolregion}:</label></td>
-            </tr>
-            <tr>
-                <td id="region">
-                    <input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                    <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                    <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                    <select name="typeid" id="typeid">
-                        <option value="">请选择分类</option>
-                        {volist name="region_list" id="region"}
-                        <option value="{$region.area_id}">{$region.area_name}</option>
-                        {/volist}
-                    </select>
-
-                </td>
-            </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checkname}:</label></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td id="school_list">
-                    <select name="school_name" class="querySelect">
-                        <option value="">{$Think.lang.school_index_chosename}</option>
-
-                    </select>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label>{$Think.lang.school_index_checktype}:</label></td>
+                <td colspan="2" class="required"><label>所在年级:</label></td>
                 <td class="vatop tips"></td>
             </tr>
             <tr class="noborder">
                 <td id="type_list">
-                    <select name="school_type" class="querySelect" id="school_type">
-                        <option value="">{$Think.lang.school_index_chosetype}</option>
+                    <select name="school_type" class="querySelect" id="school_type" onchange="fand_classname($(this))">
+                        <option value="">请选择所在年级</option>
+                        {volist name="schooltype" id="type"}
+                        <option value="{$type.sc_id}">{$type.sc_type}</option>
+                        {/volist}
                     </select>
                 </td>
                 <td class="vatop tips"></td>
@@ -79,18 +52,17 @@
                 <td id="class_list">
                     <select name="class_name" class="querySelect">
                         <option value="">{$Think.lang.school_index_choseclass}</option>
-
                     </select>
                 </td>
                 <td class="vatop tips"></td>
             </tr>
-            <tr class="noborder">
-                <td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classunique}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" name="classunique" id="classunique" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
+            <!--<tr class="noborder">-->
+                <!--<td colspan="2" class="required"><label for="school_class_name">{$Think.lang.school_index_classunique}:</label></td>-->
+            <!--</tr>-->
+            <!--<tr class="noborder">-->
+                <!--<td class="vatop rowform"><input type="text" value="" name="classunique" id="classunique" class="txt"></td>-->
+                <!--<td class="vatop tips"></td>-->
+            <!--</tr>-->
             <tr>
                 <td colspan="2" class="required"><label for="student_name">{$Think.lang.school_index_studentname}:</label></td>
             </tr>
@@ -157,7 +129,29 @@
     </form>
 </div>
 <script type="text/javascript">
-
+    function fand_classname(_sef) {
+        var ty_id = $(_sef).val();
+        if(ty_id) {
+            var url = SITE_URL + 'index.php/School/Student/fand_classname';
+            $.post(url, {'ty_id': ty_id}, function (data) {
+                data = $.parseJSON(data);
+                var classname_length = data.length;
+                var classname_list = data;
+                if (data) {
+                    var select = '<select name="class_name" id="class_name" class="querySelect"><option>请选择班级</option>';
+                    if (classname_length > 0) {
+                        for (var i = 0; i < classname_length; i++) {
+                            select += "<option value='" + classname_list[i].classid + "'>" + classname_list[i].classname + "</option>";
+                        }
+                    }
+                    select += '</select>';
+                    $("#class_list").html(select);
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    }
     $(function(){
         $("#region_choose").click(function() {
             if ($("#user_form").valid()) {

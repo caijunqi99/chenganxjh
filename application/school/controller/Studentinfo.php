@@ -120,6 +120,25 @@ class Studentinfo extends AdminControl {
 
     }
 
+    //近七天打卡记录
+    public function cardrecord(){
+        $student_id = input('param.student_id');
+        $days = array ();
+        for($i=0;$i<7;$i++) {
+            $days[] = date("Y-m-d", strtotime(' -'. $i . 'day'));
+        }
+        $startTime = strtotime($days[6]);
+        $endTime = strtotime($days[0]." 23:59:59");
+        $robot_model = Model('Robotreport');
+        $where = "student_id=".$student_id." and ioTime>=".$startTime." and ioTime<=".$endTime;
+        $RecordInfo = $robot_model->getReportList($where);
+        $path = "http://".$_SERVER['HTTP_HOST']."/uploads/home/robotvideo/";
+        $this->assign('path', $path);
+        $this->assign('recordInfo', $RecordInfo);
+        $this->setAdminCurItem('cardrecord');
+        return $this->fetch();
+    }
+
     //商城订单
     public function shopping() {
         $student_id = input('param.student_id');
@@ -164,16 +183,11 @@ class Studentinfo extends AdminControl {
                 'text' => '重温课堂订单',
                 'url' => url('School/Studentinfo/reviveorder',array('student_id'=>$student_id))
             ),
-//            array(
-//                'name' => 'shopping',
-//                'text' => '商城订单',
-//                'url' => url('School/Studentinfo/shopping',array('student_id'=>$student_id))
-//            )
-//            array(
-//                'name' => 'order',
-//                'text' => '已购套餐',
-//                'url' => url('School/Studentinfo/order',array('student_id'=>$student_id))
-//            ),
+            array(
+                'name' => 'cardrecord',
+                'text' => '近七天打卡记录',
+                'url' => url('School/Studentinfo/cardrecord',array('student_id'=>$student_id))
+            )
 
         );
         return $menu_array;

@@ -5,6 +5,8 @@
 
 $lang['ds_dashboard']              = '首页';
 $lang['ds_welcome']                = '欢迎界面';
+$lang['ds_info']                = '账户信息';
+$lang['ds_modifypw']                = '修改密码';
 $lang['ds_aboutus']                = '关于我们';
 $lang['ds_setting']                = '系统配置';
 $lang['ds_config']                   = '通用设置/APP';
@@ -18,7 +20,7 @@ $lang['ds_seo_set']                = 'SEO设置';
 $lang['ds_upload_set']             = '上传设置';
 $lang['ds_message']                = '邮箱短信';
 $lang['ds_payment']                = '支付方式';
-$lang['ds_admin']                  = '人员管理';
+$lang['ds_admin']                  = '账号管理';
 $lang['ds_express']                = '快递公司';
 $lang['ds_waybill']                = '运单模板';
 $lang['ds_region']                 = '地区管理';
@@ -30,7 +32,7 @@ $lang['pkgs_manage']               = '套餐管理';
 $lang['nc_none_input']               = '权限组名称不能为空';
 
 //组织管理
-$lang['ds_organize'] = '组织管理';
+$lang['ds_organize'] = '账号管理';
 $lang['ds_company'] = '分/子公司（代理）管理';
 $lang['ds_gadmin'] = '角色管理（权限组）';
 $lang['ds_number'] = '序号';
@@ -151,11 +153,16 @@ $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
 
 //看孩管理
-$lang['ds_look']                   = '看孩管理';
+$lang['ds_look']                   = '设备管理';
 $lang['ds_camera']                 = '摄像头管理';
 $lang['ds_monitor']                = '网络监控';
 $lang['ds_revisitclass']           = '重温课堂管理';
 $lang['ds_binding']                = '待审核学生绑定';
+$lang['ds_robot']               = '机器人管理';
+
+//智能门禁
+$lang['ds_guard']                   = '智能门禁';
+$lang['ds_recording']                 = '打卡记录';
 
 //教孩管理
 $lang['ds_teachlist']                   = '教孩管理';
@@ -181,6 +188,7 @@ $lang['ds_storejoin']              = '开店首页';
 $lang['ds_ownshop']                = '自营店铺';
 //交易
 $lang['ds_trade']                  = '订单管理';
+$lang['ds_clock']                  = '智能门禁订单';
 $lang['ds_order']                  = '商品订单列表';
 $lang['ds_vrsorder']                = '看孩订单';
 $lang['ds_revisitorder']           = '重温课堂订单';
@@ -224,7 +232,8 @@ $lang['ds_delivery']               = '物流自提服务站';
 
 
 //统计
-$lang['ds_stat']                   = '统计';
+$lang['ds_stat']                   = '统计分析';
+$lang['ds_count']                   = '统计';
 $lang['ds_statgeneral']            = '概述及设置';
 $lang['ds_statindustry']           = '行业分析';
 $lang['ds_statmember']             = '会员统计';

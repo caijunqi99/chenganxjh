@@ -1,0 +1,118 @@
+{include file="public/header" /}
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>账户信息</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+
+    <form id="user_form" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="form_submit" value="ok" />
+        <input type="hidden" name="school_id" value="<?php echo $school_array['schoolid'];?>" />
+        <table class="ds-default-table">
+            <tbody>
+            <tr class="noborder">
+                <td colspan="2" class="required"><label>账户名:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="<?php echo $info['admin_name'];?>" id="school_name" name="admin_name" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="required"><label for="school_address">创建人:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><?php echo $cratename['admin_name']; ?></td>
+                <td class="vatop tips"></td>
+            </tr>
+
+
+            <tr>
+                <td colspan="2" class="required"><label class="admin_phone">手机号:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="<?php echo $info['admin_phone'];?>" id="school_phone" name="admin_phone" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="required"><label class="admin_true_name">姓名:</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="vatop rowform"><input type="text" value="<?php echo $info['admin_true_name'];?>" id="school_username" name="admin_true_name" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr class="tfoot">
+                <td colspan="15"><a href="JavaScript:void(0);" class="btn" id="submitBtn"><span>{$Think.lang.ds_submit}</span></a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+
+</div>
+<script type="text/javascript" src="{$Think.config.url_domain_root}static/common/js/mlselection.js" charset="utf-8"></script>
+<script type="text/javascript" src="{$Think.config.url_domain_root}static/home/js/common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#submitBtn").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+    });
+    $(function() {
+        //按钮先执行验证再提交表单
+        $("#submitBtn").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+        $.datepicker.regional["zh-CN"] = { closeText: "关闭", prevText: "&#x3c;上月", nextText: "下月&#x3e;", currentText: "今天", monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"], dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"], weekHeader: "周", dateFormat: "yy-mm-dd", firstDay: 1, isRTL: !1, showMonthAfterYear: !0, yearSuffix: "年" }
+        $.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+
+        $("#activity_start_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#activity_end_date").datepicker({dateFormat: 'yy-mm-dd'});
+        $('#user_form').validate({
+
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().prev().find('td:first'));
+            },
+            rules: {
+                school_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+//                    remote: {
+//                        url: "{:url('School/school/ajax',['branch'=>'check_user_name'])}",
+//                        type: 'get',
+//                        data: {
+//                            user_name: function() {
+//                                return $('#school_name').val();
+//                            },
+//                            area_id: function () {
+//                                return $('#area_id').val();
+//                            }
+//                        }
+//                    }
+                },
+            },
+
+        });
+    });
+    $(function(){
+        $('#school_dieline').datepicker({dateFormat: 'yy-mm-dd'});
+    });
+
+    $(function() {
+        regionInit("region");
+    });
+</script>

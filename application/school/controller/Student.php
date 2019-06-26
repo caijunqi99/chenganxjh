@@ -69,45 +69,27 @@ class Student extends AdminControl {
         }
         $condition['s_del'] = 1;
         $student_list = $model_student->getStudentList($condition, 15);
-         //地区信息
-        $region_list = db('area')->where('area_parent_id','0')->select();
-        $this->assign('region_list', $region_list);
-        $address = array(
-            'true_name' => '',
-            'area_id' => '',
-            'city_id' => '',
-            'address' => '',
-            'tel_phone' => '',
-            'mob_phone' => '',
-            'is_default' => '',
-            'area_info'=>''
-        );
-        $this->assign('address', $address);
-        //全部学校
-        if($admininfo['admin_id']!=1){
-            if(!empty($admininfo['admin_school_id'])){
-                $condition_school['schoolid'] = $admininfo['admin_school_id'];
-            }else{
-                $model_company = Model("Company");
-                $condition_school = $model_company->getCondition($admininfo['admin_company_id']);
-            }
-        }
-        $condition_school['isdel'] = 1;
-        $model_school = model('School');
-        $scfield = 'schoolid,name';
-        $school_list = $model_school->getAllAchool($condition_school,$scfield);
-        $schoolLists = array_column($school_list,NULL,'schoolid');
 
         //全部班级
         $model_class = model('Classes');
         $condition_class['isdel'] = 1;
+        $condition_class['schoolid'] = $admininfo['admin_school_id'];
         $class_list = $model_class->getAllClasses($condition_class);
         $classLists = array_column($class_list,NULL,'classid');
 
+        $schoolInfo = db('school')->where('schoolid',$admininfo['admin_school_id'])->find();
+        $typeids = explode(",",$schoolInfo['typeid']);
         $model_schooltype = model('Schooltype');
-        $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-        $schooltypeList=array_column($schooltype,NULL,'sc_id');
-        $this->assign('schooltype', $schooltype);
+        $b_schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
+        foreach($b_schooltype as $k=>$v){
+            foreach($typeids as $key=>$item){
+                if($item == $v['sc_id']){
+                    $schooltypeq[] = $v;
+                }
+            }
+        }
+        $schooltypeList=array_column($schooltypeq,NULL,'sc_id');
+        $this->assign('schooltype', $schooltypeq);
 
         foreach ($class_list as $k=>$v){
             $class_list[$k]['typename'] = $schooltypeList[$v['typeid']]['sc_type'];
@@ -115,11 +97,9 @@ class Student extends AdminControl {
         foreach ($student_list as $k=>$v){
             $student_list[$k]['typename'] = $schooltypeList[$v['s_sctype']]['sc_type'];
             $student_list[$k]['classname'] = $classLists[$v['s_classid']]['classname'];
-            $student_list[$k]['schoolname'] = $schoolLists[$v['s_schoolid']]['name'];
         }
         $this->assign('page', $model_student->page_info->render());
         $this->assign('student_list', $student_list);
-        $this->assign('schoolList', $school_list);
         $this->assign('classList', $class_list);
         $this->setAdminCurItem('index');
         return $this->fetch();
@@ -129,50 +109,44 @@ class Student extends AdminControl {
         if(session('school_admin_is_super') !=1 && !in_array(1,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
+        $admininfo = $this->getAdminInfo();
+        $schoolInfo = db('school')->where('schoolid',$admininfo['admin_school_id'])->find();
         if (!request()->isPost()) {
-            //地区信息
-            $region_list = db('area')->where('area_parent_id','0')->select();
-            $this->assign('region_list', $region_list);
-            $address = array(
-                'true_name' => '',
-                'area_id' => '',
-                'city_id' => '',
-                'address' => '',
-                'tel_phone' => '',
-                'mob_phone' => '',
-                'is_default' => '',
-                'area_info'=>''
-            );
-            $this->assign('address', $address);
-            //学校类型
+            //所属年级
+            $typeids = explode(",",$schoolInfo['typeid']);
             $model_schooltype = model('Schooltype');
             $schooltype = $model_schooltype->get_sctype_List(array('sc_enabled'=>1));
-            $this->assign('schooltype', $schooltype);
+            foreach($schooltype as $k=>$v){
+                foreach($typeids as $key=>$item){
+                    if($item == $v['sc_id']){
+                        $new_schooltype[] = $v;
+                    }
+                }
+            }
+            $this->assign('schooltype', $new_schooltype);
             $this->setAdminCurItem('add');
             return $this->fetch();
         } else {
-            $admininfo = $this->getAdminInfo();
-            $schoolInfo = db('school')->where('schoolid',input('post.order_state'))->find();
+            $classInfo = db('class')->where('classid',input('post.class_name'))->find();
             $model_student = model('Student');
             $data = array(
                 's_name' => input('post.student_name'),
                 's_sex' => input('post.member_sex'),
                 's_classid' => input('post.class_name'),
-                's_schoolid' => input('post.order_state'),
-                's_sctype' => input('post.classtype'),
+                's_schoolid' => $schoolInfo['schoolid'],
+                's_sctype' => input('post.school_type'),
                 's_birthday' => input('post.student_birthday'),
                 's_card' => input('post.student_idcard'),
-                's_areaid' => input('post.area_id'),
-                's_region' => input('post.area_info'),
+                's_areaid' => $schoolInfo['areaid'],
+                's_region' => $schoolInfo['region'],
+                's_cityid' => $schoolInfo['cityid'],
+                's_provinceid' => $schoolInfo['provinceid'],
+                'classCard' => $classInfo['classCard'],
                 's_remark' => input('post.student_desc'),
                 'option_id' => $admininfo['admin_id'],
                 'admin_company_id' => $schoolInfo['admin_company_id'],
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['s_cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['s_provinceid'] = $province_id['area_parent_id'];
             //验证数据  END
             $result = $model_student->addStudent($data);
             if ($result) {
@@ -187,6 +161,8 @@ class Student extends AdminControl {
         if(session('school_admin_is_super') !=1 && !in_array(3,$this->action )){
             $this->error(lang('ds_assign_right'));
         }
+        $admininfo = $this->getAdminInfo();
+        $schoolInfo = db('school')->where('schoolid',$admininfo['admin_school_id'])->find();
         $student_id = input('param.student_id');
         if (empty($student_id)) {
             $this->error(lang('param_error'));
@@ -196,23 +172,6 @@ class Student extends AdminControl {
             $condition['s_id'] = $student_id;
             $student_array = $model_student->getStudentInfo($condition);
             $this->assign('student_array', $student_array);
-            //地区信息
-            $region_list = db('area')->where('area_parent_id','0')->select();
-            $this->assign('region_list', $region_list);
-            $address = array(
-                'true_name' => '',
-                'area_id' => '',
-                'city_id' => '',
-                'address' => '',
-                'tel_phone' => '',
-                'mob_phone' => '',
-                'is_default' => '',
-                'area_info'=>''
-            );
-            $this->assign('address', $address);
-            //学校名称
-            $schoolList = db('school')->where('areaid',$student_array['s_areaid'])->select();
-            $this->assign('schoolList', $schoolList);
             //学校类型
             $Schooltype = model('Schooltype');
             $School = model('School');
@@ -229,19 +188,17 @@ class Student extends AdminControl {
                 's_name' => input('post.student_name'),
                 's_sex' => input('post.member_sex'),
                 's_classid' => input('post.class_name'),
-                's_schoolid' => input('post.order_state'),
+                's_schoolid' => $schoolInfo['schoolid'],
                 's_sctype' => input('post.classtype'),
                 's_birthday' => input('post.student_birthday'),
                 's_card' => input('post.student_idcard'),
-                's_areaid' => input('post.area_id'),
-                's_region' => input('post.area_info'),
+                's_areaid' => $schoolInfo['areaid'],
+                's_region' => $schoolInfo['region'],
+                's_cityid' => $schoolInfo['cityid'],
+                's_provinceid' => $schoolInfo['provinceid'],
                 's_remark' => input('post.student_desc'),
                 's_createtime' => date('Y-m-d H:i:s',time())
             );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['s_cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['s_provinceid'] = $province_id['area_parent_id'];
             //验证数据  END
             $result = $model_student->editStudent($data,array('s_id'=>$student_id));
             if ($result) {
@@ -328,10 +285,11 @@ class Student extends AdminControl {
 
     public function fand_classname(){
         $ty_id = intval(input('post.ty_id'));
-        $sc_id = intval(input('post.sc_id'));
+        $admininfo = $this->getAdminInfo();
+        $sc_id = $admininfo['admin_school_id'];
         $where = ['isdel'=>1,'schoolid'=>$sc_id,'typeid'=>$ty_id];
         if($ty_id && $sc_id){
-            $classList = db('class')->where($where)->select();
+            $classList = db('class')->field("classid,classname")->where($where)->select();
             echo json_encode($classList);
         }
     }

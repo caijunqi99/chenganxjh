@@ -22,40 +22,9 @@
             <tr>
                 <td> <label>{$Think.lang.school_index_studentname}：</label></td>
                    <td> <input type="text" class="text w150" name="studentname" value="{$Think.get.studentname}"></td>
-                <td colspan="2" class="required"><label for="school_region">{$Think.lang.school_index_region}：</label></td>
-                        <td id="region"><input type="hidden" value="{$address.city_id}" name="city_id" id="city_id">
-                        <input type="hidden" name="area_id" id="area_id" value="{$address.area_id}" class="area_ids" />
-                        <input type="hidden" name="area_info" id="area_info" value="{$address.area_info}" class="area_names" />
-                        {notempty name="address.area_id"}
-                        <span>{$address.area_info}</span>
-                        <input type="button" value="{$Think.lang.ds_edit}" class="edit_region" />
-                        <select style="display:none;">
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {else}
-                        <select>
-                            <option value="0">请选择分类</option>
-                            {volist name="region_list" id="region"}
-                            <option value="{$region.area_id}">{$region.area_name}</option>
-                            {/volist}
-                        </select>
-                        {/notempty}
-                        </td>
-                <td id="school_list">
-                    <select name="school_name" >
-                        <option value="">{$Think.lang.school_index_allschool}</option>
-                        {volist name="schoolList" id="school"}
-                        <option {if condition='$Think.get.school_name eq $school.schoolid'}selected='selected'{/if} value="{$school.schoolid}">{$school.name}</option>
-                        {/volist}
-                    </select>
-                </td>
-
                 <td id="type_list">
-                    <select name="school_type" id="school_type">
-                        <option value="">{$Think.lang.school_index_type}</option>
+                    <select name="school_type" id="school_type" onchange="fand_classname($(this))">
+                        <option value="">年级</option>
                         {volist name="schooltype" id="type"}
                         <option value="{$type.sc_id}" {if condition='$Think.get.school_type eq $type.sc_id'}selected='selected'{/if}>{$type.sc_type}</option>
                         {/volist}
@@ -66,7 +35,7 @@
                     <select name="class_name" >
                         <option value="">{$Think.lang.school_index_classname}</option>
                         {volist name="classList" id="v"}
-                        <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.typename}-{$v.classname}</option>
+                        <option value="{$v.classid}" {if condition='$Think.get.class_name eq $v.classid'}selected='selected'{/if}>{$v.classname}</option>
                         {/volist}
                     </select>
                 </td>
@@ -100,9 +69,9 @@
             <th colspan="align-center">{$Think.lang.school_index_id}</th>
             <th colspan="align-center">{$Think.lang.school_index_studentname}</th>
             <th colspan="align-center">{$Think.lang.school_edit_sex}</th>
-            <th class="align-center">{$Think.lang.school_index_classname}</th>
-            <th class="align-center">{$Think.lang.school_index_name}</th>
-            <th class="align-center">{$Think.lang.school_index_region}</th>
+            <th colspan="align-center">身份证号</th>
+            <th class="align-center">所在班级</th>
+            <th class="align-center">所在年级</th>
             <th class="align-center">{$Think.lang.school_index_time}</th>
             <th class="align-center">{$Think.lang.school_index_status}</th>
             <th class="align-center">{$Think.lang.school_index_desc}</th>
@@ -118,9 +87,9 @@
             <td class="align-center"><?php if(!$_GET['page']){  echo $k+1; }else{ echo ($_GET['page']-1)*15+$k+1; }?></td>
             <td class="align-center"><?php echo $v['s_name']; ?></td>
             <td class="align-center"><?php if($v['s_sex']==1){echo "男";}elseif($v['s_sex']==2){echo "女";} ?></td>
-            <td class="align-center"><?php echo $v['typename']; ?>-<?php echo $v['classname']; ?></td>
-            <td class="align-center"><?php echo $v['schoolname']; ?></td>
-            <td class="align-center"><?php echo $v['s_region']; ?></td>
+            <td class="align-center"><?php echo $v['s_card']; ?></td>
+            <td class="align-center"><?php echo $v['classname']; ?></td>
+            <td class="align-center"><?php echo $v['typename']; ?></td>
             <td class="align-center"><?php echo $v['s_createtime']; ?></td>
             <td class="align-center"><?php if(empty($v['s_ownerAccount'])){echo "未绑定";}else{echo "已绑定";} ?></td>
             <td class="align-center"><?php echo $v['s_remark']; ?></td>
@@ -161,6 +130,29 @@
 </div>
 
 <script type="text/javascript">
+    function fand_classname(_sef) {
+        var ty_id = $(_sef).val();
+        if(ty_id) {
+            var url = SITE_URL + 'index.php/School/Student/fand_classname';
+            $.post(url, {'ty_id': ty_id}, function (data) {
+                data = $.parseJSON(data);
+                var classname_length = data.length;
+                var classname_list = data;
+                if (data) {
+                    var select = '<select name="class_name" id="class_name" class="querySelect"><option value="">请选择班级</option>';
+                    if (classname_length > 0) {
+                        for (var i = 0; i < classname_length; i++) {
+                            select += "<option value='" + classname_list[i].classid + "'>" + classname_list[i].classname + "</option>";
+                        }
+                    }
+                    select += '</select>';
+                    $("#class_list").html(select);
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    }
     function dd(id) {
         var urls=ADMIN_URL+'studentinfo/index?student_id='+id;
         //多窗口模式，层叠置顶

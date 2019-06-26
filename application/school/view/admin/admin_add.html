@@ -6,7 +6,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>权限设置</h3>
+                <h3>账号管理</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -15,11 +15,11 @@
     <form method="post" id="add_form">
         <div  class="ncap-form-default">
             <dl>
-                <dt>{$Think.lang.admin_index_username}</dt>
+                <dt>账号</dt>
                 <dd>
                     <input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
                     <span class="err"></span>
-                    <p class="notic">{$Think.lang.admin_add_username_tip}</p>
+                    <p class="notic">请输入账号</p>
                 </dd>
             </dl>
             <dl>
@@ -37,7 +37,7 @@
                 </dd>
             </dl>
             <dl>
-                <dt>{$Think.lang.admin_index_password}</dt>
+                <dt>初始密码</dt>
                 <dd>
                     <input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
                     <span class="err"></span>
