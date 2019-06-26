@@ -46,71 +46,6 @@
                 <button class="layui-btn" onclick="sctype_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button>
             </th>
     <?php } ?>
-  <script>     
-
-$(function(){
-  $("#course").click(function(event) {
-    var pid = $("#sc_id").val();
-    var sc_sort = $("#sc_sort").val();
-    var actions = $("#actions").val();
-    var sc_type = $("#sc_type").val();
-
-      if (sc_type == '') {layer.tips('请输入学校类型', '#sc_type');return false;}
-    if (sc_sort < 1) {layer.tips('请输入正确的排序', '#sc_sort');return false;}
-    $.ajax({
-      url: "{:url('/Admin/Sctype/sctype_edit')}",
-      type: 'POST',
-      dataType: 'json',
-      data: {'sc_sort': sc_sort,'sc_id':pid,'actions':actions,'sc_type':sc_type},
-      success:function(sb){
-        if (sb.m) {
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            window.location.href="{:url('/Admin/Sctype/sctype_manage')}";  
-          });
-          
-        }
-      }
-    });      
-  });
-})
-  function sctype_edit(act,id=false){
-    $('#actions').val(act);
-    
-    if (id) {
-      $('#sc_id').val(id);
-      var sc_sort = $('#pid_'+id).attr('sc_sort');
-      var sc_type = $('#pid_'+id).attr('sc_type');
-      $('#sc_sort').val(sc_sort);
-      $('#sc_type').val(sc_type);
-    }else{      
-      $('#sc_id').val('');
-    } 
-    layer.open({
-      type: 1,
-      title: '学校类型',
-      shadeClose: true,
-      shade: 0.4,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['400px', '300px'],
-      content: $('#courForm')
-    });
-  }
-  function check_class(id){
-    var url = '{:url("/Admin/Classtype/classtype_manage")}?sc_id='+id;
-    layer.open({
-      type: 2,
-      title: '学校类型',
-      shadeClose: true,
-      shade: 0.4,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['90%', '90%'],
-      content: url
-    });
-  }
-
-</script>
-  
-  
   <div class="explanation" id="explanation">
       <div class="title" id="checkZoom">
           <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -125,10 +60,9 @@ $(function(){
   
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
-          <!-- <th><input type="checkbox" class="checkall"/></th> -->
           <th>{$Think.lang.sc_type}</th>
           <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.up_time}</th>
@@ -177,25 +111,72 @@ $(function(){
         <?php } ?>
       </tbody>
       <tfoot>
-        <!-- <tr class="tfoot">
-          <td><input type="checkbox" class="checkall" id="checkall"/></td>
-          <td id="batchAction" colspan="15"><span class="all_checkbox">
-            <label for="checkall">{$Think.lang.ds_select_all}</label>
-            </span>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" onclick="if(confirm('{$Think.lang.ap_del_sure}')){$('#store_form').submit();}"><span>{$Think.lang.ds_del}</span></a>
-          </td>
-        </tr> -->
       </tfoot>
     </table>
     {$page}
   </form>
 </div>
-
- 
-
-
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
-  
+    $(function(){
+        $("#course").click(function(event) {
+            var pid = $("#sc_id").val();
+            var sc_sort = $("#sc_sort").val();
+            var actions = $("#actions").val();
+            var sc_type = $("#sc_type").val();
+
+            if (sc_type == '') {layer.tips('请输入学校类型', '#sc_type');return false;}
+            if (sc_sort < 1) {layer.tips('请输入正确的排序', '#sc_sort');return false;}
+            $.ajax({
+                url: "{:url('/Admin/Sctype/sctype_edit')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'sc_sort': sc_sort,'sc_id':pid,'actions':actions,'sc_type':sc_type},
+                success:function(sb){
+                    if (sb.m) {
+                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                            window.location.href="{:url('/Admin/Sctype/sctype_manage')}";
+                        });
+
+                    }
+                }
+            });
+        });
+    })
+    function sctype_edit(act,id=false){
+        $('#actions').val(act);
+
+        if (id) {
+            $('#sc_id').val(id);
+            var sc_sort = $('#pid_'+id).attr('sc_sort');
+            var sc_type = $('#pid_'+id).attr('sc_type');
+            $('#sc_sort').val(sc_sort);
+            $('#sc_type').val(sc_type);
+        }else{
+            $('#sc_id').val('');
+        }
+        layer.open({
+            type: 1,
+            title: '学校类型',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '300px'],
+            content: $('#courForm')
+        });
+    }
+    function check_class(id){
+        var url = '{:url("/Admin/Classtype/classtype_manage")}?sc_id='+id;
+        layer.open({
+            type: 2,
+            title: '学校类型',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['90%', '90%'],
+            content: url
+        });
+    }x
 </script>

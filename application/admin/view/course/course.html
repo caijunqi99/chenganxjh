@@ -46,60 +46,6 @@
                 <button class="layui-btn" onclick="course_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button>
             </th>
     <?php } ?>
-  <script>     
-
-$(function(){
-  $("#course").click(function(event) {
-    var pid = $("#co_id").val();
-    var co_sort = $("#co_sort").val();
-    var actions = $("#actions").val();
-    var co_type = $("#co_type").val();
-    if (co_type == '') {layer.tips('请输入课程名称', '#co_type');return false;}
-    if (co_sort < 1) {layer.tips('请输入正确的排序', '#co_sort');return false;}
-    $.ajax({
-      url: "{:url('/Admin/Course/course_edit')}",
-      type: 'POST',
-      dataType: 'json',
-      data: {'co_sort': co_sort,'co_id':pid,'actions':actions,'co_type':co_type},
-      success:function(sb){
-        if (sb.m) {
-          
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            window.location.href="{:url('/Admin/Course/course_manage')}"; 
-            layer.closeAll(); 
-          });
-          
-        }
-      }
-    });      
-  });
-})
-  function course_edit(act,id=false){
-    $('#actions').val(act);
-    
-    if (id) {
-      $('#co_id').val(id);
-      var co_sort = $('#pid_'+id).attr('co_sort');
-      var co_type = $('#pid_'+id).attr('co_type');
-      $('#co_sort').val(co_sort);
-      $('#co_type').val(co_type);
-    }else{      
-      $('#co_id').val('');
-    } 
-    layer.open({
-      type: 1,
-      title: '课程管理',
-      shadeClose: true,
-      shade: false,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['400px', '300px'],
-      content: $('#courForm')
-    });
-  }
-
-</script>
-  
-  
   <div class="explanation" id="explanation">
       <div class="title" id="checkZoom">
           <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -115,10 +61,9 @@ $(function(){
   
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
-          <!-- <th><input type="checkbox" class="checkall"/></th> -->
           <th>{$Think.lang.co_type}</th>
           <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.up_time}</th>
@@ -135,7 +80,6 @@ $(function(){
         <?php if(!empty($course_list) && is_array($course_list)){ ?>
         <?php foreach($course_list as $k => $v){ ?>
         <tr class="hover" id="pid_<?php echo $v['co_id'];?>" co_sort="<?php echo $v['co_sort'];?>" co_type="<?php echo str_cut($v['co_type'], '40');?>">
-          <!-- <td class="w24"><input type="checkbox" class="checkitem" name="del_id[]" value="<?php echo $v['co_id']; ?>" /></td> -->
           <td><span title="<?php echo $v['co_type'];?>"><?php echo str_cut($v['co_type'], '40');?></span></td>          
           <td class="align-center"><?php echo $v['co_sort'];?></td>
           <td class="align-center"><?php echo date('Y-m-d H:i:s', $v['up_time']);?></td>
@@ -179,12 +123,56 @@ $(function(){
   </form>
 </div>
 
- 
-
-
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
-  
+    $(function(){
+        $("#course").click(function(event) {
+            var pid = $("#co_id").val();
+            var co_sort = $("#co_sort").val();
+            var actions = $("#actions").val();
+            var co_type = $("#co_type").val();
+            if (co_type == '') {layer.tips('请输入课程名称', '#co_type');return false;}
+            if (co_sort < 1) {layer.tips('请输入正确的排序', '#co_sort');return false;}
+            $.ajax({
+                url: "{:url('/Admin/Course/course_edit')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'co_sort': co_sort,'co_id':pid,'actions':actions,'co_type':co_type},
+                success:function(sb){
+                    if (sb.m) {
+
+                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                            window.location.href="{:url('/Admin/Course/course_manage')}";
+                            layer.closeAll();
+                        });
+
+                    }
+                }
+            });
+        });
+    })
+    function course_edit(act,id=false){
+        $('#actions').val(act);
+
+        if (id) {
+            $('#co_id').val(id);
+            var co_sort = $('#pid_'+id).attr('co_sort');
+            var co_type = $('#pid_'+id).attr('co_type');
+            $('#co_sort').val(co_sort);
+            $('#co_type').val(co_type);
+        }else{
+            $('#co_id').val('');
+        }
+        layer.open({
+            type: 1,
+            title: '课程管理',
+            shadeClose: true,
+            shade: false,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '300px'],
+            content: $('#courForm')
+        });
+    }
 </script>

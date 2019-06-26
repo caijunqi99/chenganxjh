@@ -13,7 +13,7 @@
             {include file="public/admin_items" /}
         </div>
     </div>
-    <form method="post" id="admin_form">
+    <form method="post" id="admin_form" class="layui-form">
         <div  class="ncap-form-default">
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -28,7 +28,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{$Think.lang.gadmin_name}：</label>
                     <div class="layui-input-inline">
-                        <select name="gid" id="gid" class="layui-select">
+                        <select name="gid" id="gid" class="select">
                             <option value="" <?php if(empty($admin['admin_gid'])){?>selected<?php }?>>{$Think.lang.admin_add_role_chose}</option>
                             <?php foreach((array)$gadmin as $v){?>
                             <option value="<?php echo $v['gid'];?>" <?php if($v['gid']==$admin['admin_gid']){?>selected<?php }?>><?php echo $v['gname'];?></option>
@@ -102,7 +102,11 @@
 </div>
 
 <script>
-
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+    });
 
 //按钮先执行验证再提交表单
                     $(function() {
