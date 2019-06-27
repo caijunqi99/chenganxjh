@@ -26,7 +26,7 @@
 
 
     <form id="user_form" enctype="multipart/form-data" method="post">
-        <input type="hidden" name="student_id" value="<?php echo $student_array['s_id'];?>" />
+        <input type="hidden" name="student_id" id="student_id" value="<?php echo $student_array['s_id'];?>" />
         <table class="ds-default-table">
             <tbody>
 
@@ -165,7 +165,7 @@
                     minlength: 15,
                     maxlength: 18,
                     remote: {
-                        url: "{:url('School/student/ajax',['branch'=>'check_user_cards'])}",
+                        url: "{:url('School/student/ajax',['branch'=>'check_user_cards_self'])}",
                         type: 'get',
                         data: {
                             student_idcard: function() {
@@ -173,6 +173,9 @@
                             },
                             class_name: function () {
                                 return $('#class_name').val();
+                            },
+                            student_id: function () {
+                                return $('#student_id').val();
                             }
                         }
                     }

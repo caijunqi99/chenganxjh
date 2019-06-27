@@ -27,7 +27,7 @@ class Classes extends AdminControl {
         $admininfo = $this->getAdminInfo();
         if($admininfo['admin_id']!=1){
             if(!empty($admininfo['admin_school_id'])){
-                $condition['schoolid'] = $admininfo['admin_school_id'];
+                $condition['c.schoolid'] = $admininfo['admin_school_id'];
             }else{
                 $model_company = Model("Company");
                 $condition = $model_company->getCondition($admininfo['admin_company_id'],"class");
@@ -35,17 +35,17 @@ class Classes extends AdminControl {
         }
         $school_index_classname = input('param.school_index_classname');//班级名称
         if ($school_index_classname) {
-            $condition['classname'] = array('like', "%" . $school_index_classname . "%");
+            $condition['c.classname'] = array('like', "%" . $school_index_classname . "%");
         }
         $type_name = input('param.type_name');//所属年级
         if ($type_name) {
-            $condition['typeid'] = $type_name;
+            $condition['c.typeid'] = $type_name;
         }
         $classCard = input('param.classCard');//班级识别码
         if ($classCard) {
-            $condition['classCard'] = $classCard;
+            $condition['c.classCard'] = $classCard;
         }
-        $condition['isdel'] = 1;
+        $condition['c.isdel'] = 1;
         $class_list = $model_class->getClasslList($condition, 15);
         //全部学校
         if($admininfo['admin_id']!=1){

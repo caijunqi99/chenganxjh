@@ -6,6 +6,7 @@
 $lang['ds_dashboard']              = '首页';
 $lang['ds_welcome']                = '欢迎界面';
 $lang['ds_info']                = '账户信息';
+$lang['ds_remind']                = '学校/代理商信息';
 $lang['ds_modifypw']                = '修改密码';
 $lang['ds_aboutus']                = '关于我们';
 $lang['ds_setting']                = '系统配置';

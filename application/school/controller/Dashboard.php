@@ -224,11 +224,33 @@ class Dashboard extends AdminControl {
             $result = db('admin')->where(array("admin_id"=>$admininfo['admin_id']))->update($data);
 
             if ($result) {
-                $this->success(lang('index_modifypw_success'));
+                $this->success("更新成功");
             } else {
-                $this->error(lang('index_modifypw_fail'));
+                $this->error("更新失败");
             }
         }
+    }
+
+    public function remind(){
+        $admininfo = $this->getAdminInfo();
+        $info = db("admin")->where(array("admin_id"=>$admininfo['admin_id']))->find();
+
+        //所属代理商
+        if($admininfo['admin_company_id']==1){
+            $company['o_name'] = "总公司";
+            $company['o_role'] = 0;
+            $company['o_area'] = "北京 北京市 房山区";
+            $company['o_address'] = "北京市房山区良乡凯旋大街48号";
+            $company['o_phone'] = "010-12345678";
+        }else{
+            $company = db("company")->field("o_name,o_role,o_area,o_address,o_phone")->where(array("o_id"=>$admininfo['admin_company_id']))->find();
+        }
+        $this->assign('company', $company);
+        //学校信息
+        $school = db("school")->where(array("schoolid"=>$admininfo['admin_school_id']))->find();
+        $this->assign('school', $school);
+        $this->setAdminCurItem('remind');
+        return $this->fetch();
     }
 
 }

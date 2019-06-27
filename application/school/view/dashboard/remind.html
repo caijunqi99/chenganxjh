@@ -7,7 +7,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h2>账号信息</h2>
+                <h2>学校/归属代理商信息</h2>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -27,41 +27,101 @@
         <div class="ncap-form-default">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">账号</label>
+                    <label class="layui-form-label">--代理商信息</label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">归属代理商</label>
                     <div class="layui-input-inline">
-                        <input type="text" value="{$info.admin_name}" readonly class="layui-input">
+                        <?php echo $company['o_name']; ?>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">创建人</label>
+                    <label class="layui-form-label">代理商身份</label>
                     <div class="layui-input-inline">
-                        <?php echo $cratename['admin_name']; ?>
+                        <?php if($company['o_role']==0){echo "总公司";}elseif($company['o_role']==1){echo "县区代理";}elseif($company['o_role']==2){echo "省级代理";}
+                         elseif($company['o_role']==3){echo "市级代理";}elseif($company['o_role']==4){echo "特约代理";} ?>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">姓名</label>
+                    <label class="layui-form-label">代理商地区</label>
                     <div class="layui-input-inline">
-                        <input type="text" value="{$info.admin_true_name}" readonly class="layui-input">
+                        <?php echo $company['o_area']; ?>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">手机号</label>
+                    <label class="layui-form-label">代理商地址</label>
                     <div class="layui-input-inline">
-                        <input type="tel" id="admin_phone"  name="admin_phone" value="{$info.admin_phone}" lay-verify="required|number" autocomplete="off" class="layui-input">
-                        <span class="err"></span>
+                        <?php echo $company['o_address']; ?>
                     </div>
                 </div>
             </div>
-
             <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                <div class="layui-inline">
+                    <label class="layui-form-label">代理商电话</label>
+                    <div class="layui-input-inline">
+                        <?php echo $company['o_phone']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">----学校信息</label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学校名称</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['name']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学校识别码</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['schoolCard']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学校地址</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['address']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学校电话</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['common_phone']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学校负责人</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['username']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">合同截止日期</label>
+                    <div class="layui-input-inline">
+                        <?php echo $school['dieline']; ?>
+                    </div>
                 </div>
             </div>
         </div>

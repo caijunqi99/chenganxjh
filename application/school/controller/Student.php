@@ -249,6 +249,24 @@ class Student extends AdminControl {
                     exit;
                 }
                 break;
+            /**
+             * 验证身份证是否重复（同一班级,除去自己）
+             */
+            case 'check_user_cards_self':
+                $model_student = model('Student');
+                $condition['s_id'] = array("neq",input('param.student_id'));
+                $condition['s_card'] = input('param.student_idcard');
+                $condition['s_classid'] = input('param.class_name');
+                $condition['s_del'] = 1;
+                $list = $model_student->getStudentInfo($condition);
+                if (empty($list)) {
+                    echo 'true';
+                    exit;
+                } else {
+                    echo 'false';
+                    exit;
+                }
+                break;
         }
     }
 
