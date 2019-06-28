@@ -68,31 +68,86 @@ class Companycash extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         $pdc_id = input('param.pdc_id');
-        $status = input('param.status');
-        $id = input('param.id');
-        $name = input('param.name');
-        $price = input('param.price');
-        $number = input('param.number');
+        $status = input('param.sta');
         $company_cash = Model("Companycash");
-        $result = $company_cash->editCpdCash(array('status'=>$status),array('pdc_id'=>$pdc_id));
-        $log_model = Model("Adminpdlog");
-        $member_data = [
-            "lg_member_id" => $id,
-            "lg_member_name" => $name,
-            "lg_type" => "cash_pay",
-            "lg_av_amount" => $price,
-            "lg_add_time" => time(),
-            "lg_desc" => "代理商提现。提现编号：".$number
-        ];
-        if($result&&$status==2){
-            $member_data['status'] = 1;
-            $log_model->addLog($member_data);
-            $this->success("提现成功", 'Companycash/index');
-        }else{
-            $member_data['status'] = 2;
-            $log_model->addLog($member_data);
-            $this->success("提现失败", 'Companycash/index');
+        $res = $company_cash->where(array('pdc_id'=>$pdc_id))->field(array('pdc_member_id','pdc_member_name','pdc_amount','pdc_sn'))->find();
+//        halt($res);
+        switch ($status){
+            case 2:
+                $data = array(
+                    'status'=>$status,
+                    'img'=>input('param.img')
+                );
+                $result = $company_cash->editCpdCash($data,array('pdc_id'=>$pdc_id));
+                if($result){
+                    //记录日志
+                    $log_model = Model("Adminpdlog");
+                    $member_data = [
+                        "lg_member_id" => $res['pdc_member_id'],
+                        "lg_member_name" => $res['pdc_member_name'],
+                        "lg_type" => "cash_pay",
+                        "lg_av_amount" => $res['pdc_amount'],
+                        "lg_add_time" => time(),
+                        "lg_desc" => "代理商提现。提现编号：".$res['pdc_sn'],
+                        "status" =>1
+                    ];
+                    $log_model->addLog($member_data);
+                    exit(json_encode(array('code'=>1,'msg'=>'审核成功')));
+                }else{
+                    //记录日志
+                    $log_model = Model("Adminpdlog");
+                    $member_data = [
+                        "lg_member_id" => $res['pdc_member_id'],
+                        "lg_member_name" => $res['pdc_member_name'],
+                        "lg_type" => "cash_pay",
+                        "lg_av_amount" => $res['pdc_amount'],
+                        "lg_add_time" => time(),
+                        "lg_desc" => "代理商提现。提现编号：".$res['pdc_sn'],
+                        "status" =>2
+                    ];
+                    $log_model->addLog($member_data);
+                    exit(json_encode(array('code'=>0,'msg'=>'审核失败')));
+                }
+                break;
+            case 3:
+                $data = array(
+                    'status'=>$status,
+                    'desc'=>input('param.desc')
+                );
+                $result = $company_cash->editCpdCash($data,array('pdc_id'=>$pdc_id));
+                if($result){
+                    //记录日志
+                    $log_model = Model("Adminpdlog");
+                    $member_data = [
+                        "lg_member_id" => $res['pdc_member_id'],
+                        "lg_member_name" => $res['pdc_member_name'],
+                        "lg_type" => "cash_pay",
+                        "lg_av_amount" => $res['pdc_amount'],
+                        "lg_add_time" => time(),
+                        "lg_desc" => "代理商提现。提现编号：".$res['pdc_sn'],
+                        "status" =>1
+                    ];
+                    $log_model->addLog($member_data);
+                    exit(json_encode(array('code'=>1,'msg'=>'驳回成功')));
+                }else{
+                    //记录日志
+                    $log_model = Model("Adminpdlog");
+                    $member_data = [
+                        "lg_member_id" => $res['pdc_member_id'],
+                        "lg_member_name" => $res['pdc_member_name'],
+                        "lg_type" => "cash_pay",
+                        "lg_av_amount" => $res['pdc_amount'],
+                        "lg_add_time" => time(),
+                        "lg_desc" => "代理商提现。提现编号：".$res['pdc_sn'],
+                        "status" =>2
+                    ];
+                    $log_model->addLog($member_data);
+                    exit(json_encode(array('code'=>0,'msg'=>'驳回失败')));
+                }
+                break;
         }
+
+
     }
 
     //提现

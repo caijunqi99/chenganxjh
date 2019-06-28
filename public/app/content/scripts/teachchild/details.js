@@ -150,7 +150,7 @@ $(function() {
             List +=   '</div>' +
                 '</a></li>';
         }
-        if(data[0]['data']['myself'] == 0){
+        /*if(data[0]['data']['myself'] == 0){
             if (data[0]['data']['t_price'] == 0 && data[0]['data']['buy'] == 0) {
                 price = '免费观看';
             } else if(data[0]['data']['t_price'] != 0 && data[0]['data']['buy'] == 0){
@@ -167,8 +167,8 @@ $(function() {
                 price = '审核通过';
             }
 
-        }
-
+        }*/
+        price = '分享';
         template = '<div class="related_wrap body_content" id="my-player" data-id="' + data[0]['data']['t_id'] + '">' +
             '<div class="related" style="height: 120px">' +
             '<div class="related1">' +

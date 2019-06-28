@@ -31,6 +31,32 @@ class Common extends AdminControl
     }
 
     /**
+     * @desc  凭证图片上传
+     * @author langzhiyao
+     * @time 20181121
+     */
+    public function img_upload()
+    {
+        $file = request()->file('file'); // 获取上传的文件
+        if($file==null){
+            exit(json_encode(array('code'=>0,'msg'=>'未上传文件')));
+        }
+        // 获取文件后缀
+        $temp = explode(".", $_FILES["file"]["name"]);
+        $extension = end($temp);
+        // 判断文件是否合法
+        if(!in_array($extension,array("jpg",'png','gif','jpeg'))){
+            exit(json_encode(array('code'=>0,'msg'=>'上传图片类型不合法')));
+        }
+        $info = $file->move(ROOT_PATH.'public'.DS.'uploads'.DS.'apk');
+        // 移动文件到指定目录 没有则创建
+        $file = UPLOAD_SITE_URL.DS.'check_img'.DS.$info->getSaveName();
+
+        exit(json_encode(array('code'=>1,'msg'=>$file)));
+    }
+
+
+    /**
      * 图片裁剪
      *
      */

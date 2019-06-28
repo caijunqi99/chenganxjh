@@ -37,19 +37,30 @@
 
     <!-- 主要内容 -->
     <div class="main">
-
-        <div class="cont margt30">
-            <div class="container2">
+        <h2 class="feed_title">问题详情</h2>
+        <div class="cont" style="margin-bottom:10px;">
+            <div class="container3">
                 <div class="weui-cells weui-cells_form">
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
-                            <textarea class="weui-textarea feedback_txt"   id="sizeStatistics" placeholder="请输入文本" rows="10"></textarea>
+                            <textarea class="weui-textarea feedback_txt" id="sizeStatistics" placeholder="请输入文本" rows="10"></textarea>
                             <div class="weui-textarea-counter keepwatch"><span id="currentSize">0</span>/400</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <h2 class="feed_title">您的联系方式</h2>
+        <div class="cont">
+            <div class="container3">
+                <div class="bang_list">
+                    <div class="input_box input_box2">
+                        <input class="input_txt input_txtqq" style="text-align:left;" id="phone" type="number" placeholder="电子邮箱、手机号或QQ" value="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="bang_submit_box" style="padding-top: 200px;">
             <input class="bang_submit" id="show-alert" type="button" value="发 送" />
         </div>

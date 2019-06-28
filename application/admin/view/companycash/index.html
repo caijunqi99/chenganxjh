@@ -42,9 +42,9 @@
                     <div class="layui-input-inline">
                         <select name="status" lay-filter="status"  class="select"  lay-verify="type"  id="status">
                             <option value="">状态</option>
-                            <option value="2" {if condition='$Think.get.status eq 2'}selected='selected'{/if}>提现成功</option>
-                            <option value="3" {if condition='$Think.get.status eq 3'}selected='selected'{/if}>提现失败</option>
-                            <option value="1" {if condition='$Think.get.status eq 1'}selected='selected'{/if}>未知</option>
+                            <option value="1" {if condition='$Think.get.status eq 1'}selected='selected'{/if}>待审核</option>
+                            <option value="2" {if condition='$Think.get.status eq 2'}selected='selected'{/if}>审核成功</option>
+                            <option value="3" {if condition='$Think.get.status eq 3'}selected='selected'{/if}>审核失败</option>
                         </select>
                     </div>
                 </div>
@@ -101,8 +101,10 @@
                 <td class="align-center"><?php if($v['status']==1){echo "未知";}elseif($v['status']==2){echo "成功";}elseif($v['status']==3){echo "失败";} ?></td>
                 <?php if(session('admin_is_super') ==1 || in_array('15',$action)){ ?>
                 <td class="align-center"><?php if($v['status']==1){ ?>
-                    <a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>2,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">成功</a>
-                    <a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>3,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">失败</a>
+                    <a class="layui-btn layui-btn-sm" href="javascript:check('<?php echo $v['pdc_id'];?>')" >审核</a>
+                    <!--<a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>2,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">成功</a>-->
+                    <!--<a href="{:url('/admin/companycash/company_option',['pdc_id'=>$v.pdc_id,'status'=>3,'id'=>$v.pdc_member_id,'name'=>$v.pdc_member_name,'price'=>$v.pdc_amount,'number'=>$v.pdc_sn])}" class="layui-btn layui-btn-xs">失败</a>-->
+
                     <?php }else{ ?>
                     无操作
                     <?php } ?>
@@ -138,13 +140,135 @@
             <?php } ?>
         </div>
     </form>
-
 </div>
+<form class="layui-form" onsubmit="return false;" style="display: none;" id="courForm" >
+    <input type="hidden" id="pdc_id" name="pdc_id" />
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">审核结果</label>
+            <div class="layui-input-inline">
+                <select name="sta" lay-filter="sta"  class="select"  lay-verify="type" id="sta" >
+                    <option  value="2">通过</option>
+                    <option  value="3">驳回</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" id="images">
+        <label class="layui-form-label"><span style="color: #E00515;">*</span>上传凭证</label>
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <button type="button" class="layui-btn layui-btn-normal" id="upload-change" >选择并上传</button>
+                <input type="hidden" name="img" id="img">
+                <input class="layui-upload-file" accept="undefined" name="file" type="text">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="image" src="" style="width: 150px;height: 150px;">
+                    <p id="demoText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" id="desc" style="display: none;">
+        <label class="layui-form-label">原因：</label>
+        <div class="layui-input-inline">
+            <textarea class="layui-text" name="desc" style="width: 300px;height: 100px;" ></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" id="course">立即提交</button>
+        </div>
+    </div>
+
+</form>
 <script type="text/javascript">
-    layui.use(['form','laypage', 'layer'], function() {
+    layui.use(['form','laypage', 'upload','layer'], function() {
         var form = layui.form,
             laypage = layui.laypage
+         ,upload = layui.upload
             , layer = layui.layer;
 
+        upload.render({
+            elem: '#upload-change'
+            ,accept: 'images' //只允许上传图片
+            ,acceptMime: 'image/*' //只筛选图片
+            // ,size: 1024*2 //限定大小
+            ,url: '{:url("/Admin/Common/img_upload")}'
+            // ,data:{'form_submit':'ok','uploadpath':'check_agent_tx'}
+            ,choose: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                obj.preview(function(index, file, result){
+                    $('#image').attr('src',result);
+                });
+            }
+            ,done: function(res, index, upload){
+                //上传完毕回调
+                if(res.code == 1){
+                    $('#img').val(res.msg);
+                }else{
+                    parent.layer.msg(res.msg,{icon:2});
+                }
+                layer.closeAll('loading'); //关闭loading
+            }
+            ,error: function(index, upload){
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+        //审核
+        form.on('select(sta)', function(data){
+            if(data.value == 3){
+                $('#images').css('display','none');
+                $('#desc').css('display','block');
+            }else{
+                $('#images').css('display','block');
+                $('#desc').css('display','none');
+            }
+        });
     });
+    function check(pdc_id){
+        $('#pdc_id').val(pdc_id);
+        $("#course").click(function(event) {
+            var pdc_id = $("#pdc_id").val();
+            var sta = $("#sta").find('option:selected').val();
+            var img = '';
+            var desc = '';
+            if(sta== 2){
+                 img = $("#img").val();
+                if (img == '') {layer.msg('请上传转账凭证');return false;}
+            }else{
+                 desc = $('textarea[name=desc]').val();
+                if (desc == '') {layer.msg('请输入驳回理由');return false;}
+            }
+
+            $.ajax({
+                url: "{:url('/Admin/Companycash/company_option')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'pdc_id': pdc_id,'sta':sta,'img':img,'desc':desc},
+                success:function(sb){
+                        if(sb.code == 1){
+                            layer.msg(sb.msg,{icon:1},function(){
+                                layer.closeAll();
+                            })
+                        }else{
+                            layer.msg(sb.msg,{icon:2},function(){
+                                layer.closeAll();
+                            })
+                        }
+                }
+            });
+        });
+        layer.open({
+            type: 1,
+            title: '代理商提现审核',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['600px', '400px'],
+            content: $('#courForm'),
+            end:function(){
+                location.reload()
+            }
+        });
+
+    }
 </script>
