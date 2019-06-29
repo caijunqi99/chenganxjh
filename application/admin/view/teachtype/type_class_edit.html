@@ -25,7 +25,7 @@
     <form id="goods_class_form" name="goodsClassForm" enctype="multipart/form-data" method="post">
         <input type="hidden" name="form_submit" value="ok" />
         <input type="hidden" name="gc_id" value="<?php echo $class_array['gc_id'];?>" />
-        <input type="hidden" name="gc_parent_id" id="gc_parent_id" value="<?php echo $class_array['gc_parent_id'];?>" />
+        <input type="hidden" name="gc_parent_id" value="<?php echo $class_array['gc_parent_id'];?>" />
         <input type="hidden" name="old_type_id" value="<?php echo $class_array['type_id'];?>">
         <table class="ds-default-table">
             <tbody>
@@ -51,55 +51,6 @@
                         </select></td>
                     <td class="vatop tips"><span style="color:#ff0000">注意：切换不要把顶级分类整体移动到其它分类下；</span> 如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</td>
                 </tr>
-                <!--<tr>-->
-                    <!--<td colspan="2" class="required"><label class="validation">{$Think.lang.teacher_type_index_type}:</label>-->
-                        <!--<span>-->
-                            <!--<label for="t_associated">-->
-                                <!--<input class="checkbox" type="checkbox" name="t_associated" value="1" checked="checked" id="t_associated" />-->
-                                <!--关联到子分类</label>-->
-                        <!--</span></td>-->
-                <!--</tr>-->
-                <!--<tr class="noborder">-->
-                    <!--<td colspan="2" id="gcategory">-->
-                        <!--<select class="class-select">-->
-                            <!--<option value="0">{$Think.lang.ds_please_choose}...</option>-->
-                            <!--<?php if(!empty($gc_list)){ ?>-->
-                            <!--<?php foreach($gc_list as $k => $v){ ?>-->
-                            <!--<?php if ($v['gc_parent_id'] == 0) {?>-->
-                            <!--<option value="<?php echo $v['gc_id'];?>"><?php echo $v['gc_name'];?></option>-->
-                            <!--<?php } ?>-->
-                            <!--<?php } ?>-->
-                            <!--<?php } ?>-->
-                        <!--</select>{$Think.lang.ds_quickly_targeted}</td>-->
-                <!--</tr>-->
-                <!--<tr class="noborder">-->
-                    <!--<td class="vatop rowform"><input type="hidden" name="t_name" id="t_name" value="<?php echo $class_array['type_name'];?>" />-->
-                        <!--<input type="hidden" name="t_sign" id="t_sign" value="" />-->
-                        <!--<div id="type_div" class="goods-sort-type">-->
-                            <!--<div class="container">-->
-                                <!--<dl>-->
-                                    <!--<dd>-->
-                                        <!--<input type="radio" name="t_id" value="0" <?php if($class_array['type_id'] == 0){?>checked="checked"<?php }?> />-->
-                                               <!--{$Think.lang.teacher_class_null_type}</dd>-->
-                                <!--</dl>-->
-                                <!--<?php if(!empty($type_list)){?>-->
-                                <!--<?php foreach($type_list as $k=>$val){?>-->
-                                <!--<?php if(!empty($val['type'])){?>-->
-                                <!--<dl>-->
-                                    <!--<dt id="type_dt_<?php echo $k;?>"><?php echo $val['name']?></dt>-->
-                                    <!--<?php foreach($val['type'] as $v){?>-->
-                                    <!--<dd>-->
-                                        <!--<input type="radio" class="radio" name="t_id" value="<?php echo $v['type_id']?>" <?php if($class_array['type_id'] == $v['type_id']){?>checked="checked"<?php }?> />-->
-                                               <!--<span><?php echo $v['type_name'];?></span></dd>-->
-                                    <!--<?php }?>-->
-                                <!--</dl>-->
-                                <!--<?php }?>-->
-                                <!--<?php }?>-->
-                                <!--<?php }?>-->
-                            <!--</div>-->
-                        <!--</div></td>-->
-                    <!--<td class="vatop tips">如果当前下拉选项中没有适合的类型，可以去<a onclick="window.parent.openItem('index,type,goods')" href="JavaScript:void(0);">{$Think.lang.ds_type}</a>功能中添加新的类型</td>-->
-                <!--</tr>-->
                 <tr>
                     <td colspan="2" class="required"><label for="gc_sort">{$Think.lang.ds_sort}:</label></td>
                 </tr>
@@ -163,7 +114,7 @@
                                                     return $('#gc_name').val();
                                                 },
                                                 gc_parent_id: function() {
-                                                    return $('#gc_parent_id').val();
+                                                    return $('input[name=gc_parent_id]').val();
                                                 },
                                                 gc_id: '{$class_array.gc_id}'
                                             }
