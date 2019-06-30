@@ -45,8 +45,7 @@ class Camera extends Model {
      * @return bool
      */
     public function camera_update($param) {
-        $sc_id = (int) $param['sc_id'];
-        return db('camera')->where('sc_id', $param['sc_id'])->update($param);
+        return db('camera')->where('position_id', $param['parentid'])->update($param);
     }
     /**
      * 编辑分子公司
@@ -133,6 +132,11 @@ class Camera extends Model {
     public function getCameraCount($condition)
     {
         return db('camera')->where($condition)->count();
+    }
+    public function select()
+    {
+        $condition['replace']=1;
+        return db('camera')->field('position_id')->where('channelid','null')->where($condition)->select();
     }
 
 }

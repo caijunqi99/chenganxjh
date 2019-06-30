@@ -397,7 +397,7 @@ class Camera extends AdminControl
      */
     public function get_entered_list(){
 
-        $where = ' 1=1 ';
+        $where['replace'] =2;
         if(!empty($_POST)){
             // p($_POST);exit;
             $cond = array();
@@ -541,33 +541,33 @@ class Camera extends AdminControl
      * 自动导入摄像头
      */
     public function get_camera(){
-        $model_school = Model('school');
-        $condition=array();
-        $condition['isdel']=1;
-        $school=$model_school->getSchoolList($condition);
-        $shu=array();
-        foreach($school as $v){
-            if($v['res_group_id']!=0){
-                $shu[] = $v['res_group_id'];
-            }
-        }
-        $model_class=Model('classes');
-        $where=array();
-        $where['isdel']=1;
-        $class=$model_class->getAllClasses($where);
-        foreach($class as $v){
-            if($v['res_group_id']!=0){
-                $shu[]=$v['res_group_id'];
-            }
-        }
+//        $model_school = Model('school');
+//        $condition=array();
+//        $condition['isdel']=1;
+//        $school=$model_school->getSchoolList($condition);
+//        $shu=array();
+//        foreach($school as $v){
+//            if($v['res_group_id']!=0){
+//                $shu[] = $v['res_group_id'];
+//            }
+//        }
+//        $model_class=Model('classes');
+//        $where=array();
+//        $where['isdel']=1;
+//        $class=$model_class->getAllClasses($where);
+//        foreach($class as $v){
+//            if($v['res_group_id']!=0){
+//                $shu[]=$v['res_group_id'];
+//            }
+//        }
+        $model_camera=Model('camera');
+        $shu=$model_camera->select();
         $vlink = new Vomont();
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
         $data='';
-        //$b=$vlink->AddResources($accountid,'112','3');
-        //print_r($b);exit;
         foreach($shu as $v){
-            $datas=$vlink->SetPlay($accountid,$v);
+            $datas=$vlink->SetPlay($accountid,$v['position_id']);
             if(empty($data)) {
                 $data = !empty($datas['resources'])?$datas['resources']:'';
             }else{
@@ -577,20 +577,27 @@ class Camera extends AdminControl
 
             }
         }
+
         foreach($data as $k=>$v){
-            $play=$v['deviceid'].'-'.$v['channelid'].',';
-            $video=$vlink->Resources($accountid,$play);
-            $data[$k]['imageurl']=$video['channels'][0]['imageurl'];
-            $data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
+            //$play=$v['deviceid'].'-'.$v['channelid'].',';
+            //$video=$vlink->Resources($accountid,$play);
+            //$data[$k]['imageurl']=$video['channels'][0]['imageurl'];
+            //$data[$k]['rtmpplayurl']=$video['channels'][0]['rtmpplayurl'];
             $data[$k]['is_rtmp']=1;
             $data[$k]['sq_time']=time();
             $data[$k]['status']=1;
             $data[$k]['is_classroom']=1;
+            $data[$k]['replace']=2;
         }
-        $model_camera=Model('camera');
-        $result=$model_camera->getCameraList('','','id');
-        $ret=$this->get_diff_array_by_pk($data,$result);
-        $sult=$model_camera->cameras_add($ret);
+        //print_r($data);exit;
+        //$model_camera=Model('camera');
+        //$result=$model_camera->getCameraList('','','id');
+        //$ret=$this->get_diff_array_by_pk($data,$result);
+        //print_r($data);exit;
+        foreach($data as $k=>$v){
+            $model_camera->camera_update($data[$k]);
+            $sult++;
+        }
         if($sult){
             echo json_encode(array('count'=>$sult));
         }else{
