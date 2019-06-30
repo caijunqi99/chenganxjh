@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use think\Lang;
 use think\Validate;
+use vomont\Vomont;
 
 class School extends AdminControl {
 
@@ -104,6 +105,11 @@ class School extends AdminControl {
             }
             $number = $model_school -> getNumber($uniqueCard);
             $data['schoolCard'] = $uniqueCard.$number;
+            $vlink = new Vomont();
+            $res= $vlink->SetLogin();
+            $accountid=$res['accountid'];
+            $vlinker=$vlink->AddResources($accountid,$data['name'],$data['areaid']);
+            $data['vlinkerid']=$vlinker['groupres']['id'];
             //验证数据  END
             $result = $model_school->addSchool($data);
             if ($result) {
