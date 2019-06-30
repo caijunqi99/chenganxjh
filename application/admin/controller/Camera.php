@@ -428,8 +428,8 @@ class Camera extends AdminControl
                     if($da==0){
                         $da=7;
                     }
-                    if($dates!='') {
-                        if (in_array($da, $dates, TRUE)) {
+                    if($v['datetime']!='') {
+                        if (in_array($da, $dates)) {
                             if (!empty($v['begintime']) && !empty($v['endtime'])) {
                                 $begintime = date('H:i', $v['begintime']);
                                 $endtime = date('H:i', $v['endtime']);
@@ -456,7 +456,7 @@ class Camera extends AdminControl
                 }
             }
         }
-        //return $list;exit;
+        //print_r($list);exit;
         $list_count = db('camera')->where($where)->count();
         $html = '';
         if(!empty($list)){
