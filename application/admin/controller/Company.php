@@ -110,8 +110,23 @@ class Company extends AdminControl {
             $input['o_name'] = trim($_POST['o_name']);
             $input['o_role'] = intval($_POST['o_role']);
             $input['o_provinceid'] = intval($_POST['province']);
-            $input['o_cityid'] = intval($_POST['city']);
-            $input['o_areaid'] = intval($_POST['area']);
+            if($_POST['o_role']==2){
+                $input['o_cityid']=0;
+                $input['o_areaid'] = 0;
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==3){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = 0;
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==1){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = intval($_POST['area']);
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==4){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = intval($_POST['area']);
+                $input['o_parent_id'] = intval($_POST['o_parent_id']);
+            }
             $input['o_address'] = trim($_POST['o_address']);
             $input['o_phone'] = trim($_POST['o_phone']);
             $input['o_leading'] = trim($_POST['o_leading']);
@@ -155,18 +170,27 @@ class Company extends AdminControl {
             $update_array = array();
             $update_array['o_name'] = trim($_POST['o_name']);
             $update_array['o_role'] = intval($_POST['o_role']);
+            $update_array['o_provinceid'] = intval($_POST['province']);
             if($_POST['o_role']==2){
                 $update_array['o_cityid']=0;
                 $update_array['o_areaid'] = 0;
+                $update_array['o_parent_id'] = 0;
             }else if($_POST['o_role']==3){
-                $update_array['o_cityid'] = intval($_POST['city_id']);
+                $update_array['o_cityid'] = intval($_POST['city']);
                 $update_array['o_areaid'] = 0;
-            }else{
-                $update_array['o_cityid'] = intval($_POST['city_id']);
-                $update_array['o_areaid'] = intval($_POST['area_id']);
+                $update_array['o_parent_id'] = 0;
+            }else if($_POST['o_role']==1){
+                $update_array['o_cityid'] = intval($_POST['city']);
+                $update_array['o_areaid'] = intval($_POST['area']);
+                $update_array['o_parent_id'] = 0;
+            }else if($_POST['o_role']==4){
+                $update_array['o_cityid'] = intval($_POST['city']);
+                $update_array['o_areaid'] = intval($_POST['area']);
+                $update_array['o_parent_id'] = intval($_POST['o_parent_id']);
             }
-            $update_array['o_provinceid'] = intval($_POST['o_provinceid']);
+
             $update_array['o_area'] = trim($_POST['area_info']);
+            $input['o_parent_id'] = intval($_POST['o_parent_id']);
             $update_array['o_address'] = trim($_POST['o_address']);
             $update_array['o_phone'] = trim($_POST['o_phone']);
             $update_array['o_leading'] = trim($_POST['o_leading']);
