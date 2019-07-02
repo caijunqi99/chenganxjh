@@ -44,7 +44,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{$Think.lang.organize_index_role}：</label>
                     <div class="layui-input-inline">
-                        <select  class="layui-select"  name="o_role" id="o_role">
+                        <select  class="select"  name="o_role" lay-verify="type" lay-filter="o_role" id="o_role">
                         {volist name="gadmin" id="vo"}
                         <option value="{$vo.gid}">{$vo.gname}</option>
                         {/volist}
@@ -74,6 +74,16 @@
                                 <option value="">{$Think.lang.look_address_area}</option>
                             </select>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" id="parent_id" style="display: none;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">上级代理商：</label>
+                    <div class="layui-input-inline">
+                        <select  class="select" lay-verify="type" lay-filter="o_parent_id" name="o_parent_id" id="o_parent_id">
+                            <option value="">请选择上级代理商</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -137,24 +147,28 @@
         var form = layui.form,
             laypage = layui.laypage
             ,layer = layui.layer;
-        //省 市 区
-        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
-        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
-        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
-        if(province != 0){
-            $.ajax({
-                type:'POST',
-                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
-                success:function(data){
-                    data = jQuery.parseJSON(data);
-                    //改变市区
-                    $('#city').html(data.city);
-                    //改变县区
-                    $('#area').html(data.area);
-                    form.render('select');//select是固定写法 不是选择器
-                }
-            })
-        }
+
+        //特约代理商的直属上级
+        form.on('select(o_role)', function(data){
+            if(data.value == 4){
+                $('#parent_id').css('display','block');
+                var province = $('#province').find('option:selected').val();
+                var city = $('#city').find('option:selected').val();
+                var area = $('#area').find('option:selected').val();
+                $.ajax({
+                    type:'POST',
+                    url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
+                    success:function(data){
+                        data = jQuery.parseJSON(data);
+                        //改变上级代理商
+                        $('#o_parent_id').html(data.agent);
+                        form.render('select');//select是固定写法 不是选择器
+                    }
+                })
+            }else{
+                $('#parent_id').css('display','none');
+            }
+        });
 
         //省
         form.on('select(province)', function(data){
@@ -162,7 +176,8 @@
             $('#city').html('<option value="0">{$Think.lang.look_address_city}</option>');
             //改变县区
             $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
-
+            //改变上级代理商
+            $('#o_parent_id').html('<option value="0">请选择上级代理商</option>');
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+data.value,
@@ -172,6 +187,8 @@
                     $('#city').html(data.city);
                     //改变县区
                     $('#area').html(data.area);
+                    //改变上级代理商
+                    $('#o_parent_id').html(data.agent);
                     form.render('select');//select是固定写法 不是选择器
                 }
             })
@@ -180,6 +197,8 @@
         form.on('select(city)', function(data){
             //改变县区
             $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+            //改变上级代理商
+            $('#o_parent_id').html('<option value="0">请选择上级代理商</option>');
             var province = $('#province').find('option:selected').val();
             $.ajax({
                 type:'POST',
@@ -188,12 +207,16 @@
                     data = jQuery.parseJSON(data);
                     //改变县区
                     $('#area').html(data.area);
+                    //改变上级代理商
+                    $('#o_parent_id').html(data.agent);
                     form.render('select');//select是固定写法 不是选择器
                 }
             })
         });
         //县/区
         form.on('select(area)', function(data){
+            //改变上级代理商
+            $('#o_parent_id').html('<option value="0">请选择上级代理商</option>');
             var province = $('#province').find('option:selected').val();
             var city = $('#city').find('option:selected').val();
             $.ajax({
@@ -201,6 +224,8 @@
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
                 success:function(data){
                     data = jQuery.parseJSON(data);
+                    //改变上级代理商
+                    $('#o_parent_id').html(data.agent);
                     form.render('select');//select是固定写法 不是选择器
                 }
             })
