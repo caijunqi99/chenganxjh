@@ -93,7 +93,8 @@ class Lookchild extends MobileMall
                 $condition=array();
                 $condition['parentid']=$classid;
                 $conditions['parentid']=$schoolid;
-                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,privilege,type,usernum,is_classroom,status,begintime,endtime');
+//                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,privilege,type,usernum,is_classroom,status,begintime,endtime');
+                $html=$camera_model->getCameras($condition,$conditions,'ability,channelid,companyid,deviceid,id,name,online,parentid,type,is_classroom,status,begintime,endtime');
                 $date=date('H:i',time());
                 foreach($html as $k=> $v){
                     if($v['online']==0){
