@@ -161,6 +161,7 @@
         form.on('select(city)', function(data){
             //改变县区
             $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
+            var province = $('#province').find('option:selected').val();
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
@@ -177,6 +178,8 @@
         });
         //县/区
         form.on('select(area)', function(data){
+            var province = $('#province').find('option:selected').val();
+            var city = $('#city').find('option:selected').val();
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
