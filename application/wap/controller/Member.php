@@ -568,13 +568,15 @@ class Member extends MobileMember
                 $updateMember['schoolid'] = $school_id;
             }
             //给家长绑定学校id和班级id
-             // db('member')->where('member_id',$member_id)->update($updateMember);
+             db('member')->where('member_id',$member_id)->update($updateMember);
             $sid = $student;
         }   
         if($student){
-            $BindLogic  = model('Bindorder','logic');
-            $bind = $BindLogic->BindOfflineOrder($member,$student);
-            exit;
+            //绑定线下订单
+            // $BindLogic  = model('Bindorder','logic');
+            // $bind = $BindLogic->BindOfflineOrder($member,$student);
+            // exit;
+
             //发送站内信--未写
             // $model_message = Model('message');
             $insert_arr = array();
