@@ -105,6 +105,7 @@ class School extends AdminControl {
             }
             $number = $model_school -> getNumber($uniqueCard);
             $data['schoolCard'] = $uniqueCard.$number;
+            //物盟学校添加
             $vlink = new Vomont();
             $res= $vlink->SetLogin();
             $accountid=$res['accountid'];
