@@ -138,9 +138,14 @@ class Student extends Model {
      * @param unknown $extend 追加返回那些表的信息,如array('order_common','order_goods','store')
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getStudentList($condition, $page = '', $field = '*', $class = 's_id desc', $limit = '', $extend = array(), $master = false) {
-        //$list_paginate = db('student')->alias('s')->join('__ADMIN__ a',' a.admin_id=s.option_id ','LEFT')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
-        $list_paginate = db('student')->field($field)->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
+    public function getStudentList($condition, $page = '', $field = '*', $class = 's.s_id desc', $limit = '', $extend = array(), $master = false) {
+
+        $list_paginate = db('student')->alias('s')
+            ->field('s.*,c.name as schoolname,t.sc_type as typename,l.classname')
+            ->join('school c','c.schoolid = s.s_schoolid')
+            ->join('schooltype t','t.sc_id = s.s_sctype')
+            ->join('class l','l.classid = s.s_classid')
+            ->where($condition)->order($class)->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 

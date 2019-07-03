@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -26,13 +27,15 @@
 
     <form id="add_form" method="post">
         <div  class="ncap-form-default">
-            <dl>
-                <dt style="font-size: 14px;">{$Think.lang.gadmin_name}</dt>
-                <dd>
-                    <input id="gname" name="gname" value="" class="input-txt" type="text">
-                    <span class="err"></span>
-                </dd>
-            </dl>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.gadmin_name}：</label>
+                    <div class="layui-input-inline">
+                        <input id="gname" name="gname"  type="text" value=""  class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
             <table class="ds-default-table qx_table">
                 <thead>
                     <tr class="space">
@@ -62,10 +65,11 @@
                 <?php } ?>
                 </tbody>
             </table>
-            <dl>
-                <dt></dt>
-                <dd><a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
-            </dl>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
         </div>
 
 

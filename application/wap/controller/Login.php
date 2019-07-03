@@ -17,6 +17,8 @@ class Login extends MobileMall
 
 
     public function dologin(){
+//        echo strtotime('2019-10-09 10:10');exit;
+//        echo date('Y-m-d H:i','1552058481');exit;
         $input = input();
         $phone    = $input['mobile'];
         $password = $input['password'];

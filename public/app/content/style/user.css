@@ -1178,3 +1178,23 @@ a.repayments_btn {
 .student_tab>li.active {
     background: #fff;
 }
+
+/*20190624*/
+
+.feed_title {
+    font-size: 26px;
+    color: #666;
+    padding: 30px 20px 20px;
+}
+
+.input_box2 {
+    width: 100%;
+}
+
+.input_txtqq {
+    width: 100%;
+    line-height: 50px;
+    padding: 20px 0;
+    font-size: 30px;
+    margin-top: 0;
+}

@@ -1,6 +1,12 @@
 {include file="public/header" /}
 <script src="{$Think.config.url_domain_root}static/common/js/mlselection2.js"></script>
 <script src="{$Think.config.url_domain_root}static/home/js/common.js"></script>
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -20,84 +26,75 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+            <li>添加班级学生信息。</li>
         </ul>
     </div>
 
 
-    <form id="user_form" enctype="multipart/form-data" method="post">
-
-        <table class="ds-default-table">
-            <tbody>
-            <input type="hidden" value="{$class_id}" name="class_id" id="class_id">
-            <tr>
-                <td colspan="2" class="required"><label for="student_name">{$Think.lang.school_index_studentname}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="student_name" name="student_name" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label for="student_sex"> {$Think.lang.school_edit_sex}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform">
-                    <label>
-                        <input type="radio" value="1" name="student_sex" id="student_sex" class="required" checked="true">{$Think.lang.member_edit_male}
-                    </label>
-                    <label>
-                        <input type="radio" value="2" name="student_sex" class="required">{$Think.lang.member_edit_female}
-                    </label>
-                </td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label for="student_birthday">{$Think.lang.school_index_studentbirthday}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="student_birthday" name="student_birthday" class="txt date"></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="required"><label for="student_idcard">{$Think.lang.school_index_studentidcard}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="student_idcard" name="student_idcard" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
-            <!--<tr class="noborder">-->
-                <!--<td colspan="2" class="required"><label>{$Think.lang.school_index_susername}:</label></td>-->
-                <!--<td class="vatop tips"></td>-->
-            <!--</tr>-->
-            <!--<tr class="noborder">-->
-                <!--<td id="username_list">-->
-                    <!--<select name="class_name" class="querySelect">-->
-                        <!--<option value="">{$Think.lang.school_index_choseusername}</option>-->
-
-                    <!--</select>-->
-                <!--</td>-->
-                <!--<td class="vatop tips"></td>-->
-            <!--</tr>-->
-            <tr>
-                <td colspan="2" class="required"><label for="student_desc">{$Think.lang.school_index_desc}:</label></td>
-            </tr>
-            <tr class="noborder">
-                <td class="vatop rowform"><input type="text" value="" id="student_desc" name="student_desc" class="txt"></td>
-                <td class="vatop tips"></td>
-            </tr>
-
-
-            </tbody>
-            <tfoot>
-            <tr class="tfoot">
-                <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
-            </tr>
-            </tfoot>
-        </table>
+    <form id="user_form" enctype="multipart/form-data" method="post" class="layui-form">
+        <input type="hidden" value="{$class_id}" name="class_id" id="class_id">
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_studentname}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="student_name" value="" name="student_name" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_edit_sex}：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" value="1" name="student_sex" id="student_sex" checked="checked">{$Think.lang.member_edit_male}
+                        <input type="radio" value="2" name="student_sex">{$Think.lang.member_edit_female}
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_studentbirthday}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="student_birthday" value="" name="student_birthday" class="layui-input date">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_studentidcard}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="student_idcard" value="" name="student_idcard" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.school_index_desc}：</label>
+                    <div class="layui-input-inline">
+                        <textarea id="student_desc" name="student_desc" class="layui-text"></textarea>
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <script type="text/javascript">
-
+    layui.use(['form','laypage', 'layer'], function() {
+        var form = layui.form,
+            laypage = layui.laypage
+            , layer = layui.layer;
+    });
     $(function(){
         $("#region_choose").click(function() {
             if ($("#user_form").valid()) {

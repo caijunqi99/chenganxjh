@@ -31,45 +31,29 @@ class Config extends AdminControl {
         $model_config = model('config');
         if (!request()->isPost()) {
             $list_config = rkcache('config', true);
-            $list_config['teacher_pay_scale'] = json_decode($list_config['teacher_pay_scale']);
-            $list_config['re_class_pay_scale'] = json_decode($list_config['re_class_pay_scale']);
-
-//            halt($list_config['teacher_pay_scale']->province_agent);
+            $list_config['video_pay_scale'] = json_decode($list_config['video_pay_scale']);
             $this->assign('list_config', $list_config);
             /* 设置卖家当前栏目 */
             $this->setAdminCurItem('index');
             return $this->fetch();
         } else {
-
-            $p_s_t = floatval(input('post.city_agent'))+floatval(input('post.area_agent'))+floatval(input('post.teacher'));
-            $r_s_t = floatval(input('post.reClass_city_agent'))+floatval(input('post.reClass_area_agent'))+floatval(input('post.reClass_agent'));
+            $p_s_t = floatval(input('post.province_agent'))+floatval(input('post.city_agent'))+floatval(input('post.area_agent'))+floatval(input('post.agent'));
             if($p_s_t >= 100){
                 //分配错误
-                $this->error('教孩在线支付分成比例已超出100%，请重新分配');
+                $this->error('视频支付分成比例已超出100%，请重新分配');
             }
-            if($r_s_t >= 100){
-                //分配错误
-                $this->error('重温课堂在线支付分成比例已超出100%，请重新分配');
-            }
-            $teacher_scale = array(
+            $video_scale = array(
+                'province_agent' =>floatval(input('post.province_agent')),
                 'city_agent' =>floatval(input('post.city_agent')),
                 'area_agent' =>floatval(input('post.area_agent')),
-                'teacher' =>floatval(input('post.teacher')),
+                'agent' =>floatval(input('post.agent')),
             );
-            $re_class_scale = array(
-                'city_agent' =>floatval(input('post.reClass_city_agent')),
-                'area_agent' =>floatval(input('post.reClass_area_agent')),
-                'agent' =>floatval(input('post.reClass_agent')),
-            );
-            $update_array['teacher_children'] = input('post.teacher_children');
-            $update_array['revisit_class'] = input('post.revisit_class');
-            $update_array['revisit_class_price'] = input('post.revisit_class_price');
-            $update_array['teacher_children_video'] = input('post.teacher_children_video');
+            $update_array['bind_student_num'] = input('post.bind_student_num');
             $update_array['f_account_num'] = input('post.f_account_num');
+            $update_array['after_start_password'] = input('post.after_start_password');
             //教孩在线支付分成比例
-            $update_array['teacher_pay_scale'] = json_encode($teacher_scale);
-            //重温课堂在线支付分成比例
-            $update_array['re_class_pay_scale'] = json_encode($re_class_scale);
+            $update_array['video_pay_scale'] = json_encode($video_scale);
+//            halt($update_array);
 
             $result = $model_config->updateConfig($update_array);
             if ($result) {
@@ -214,9 +198,13 @@ class Config extends AdminControl {
         }
         $list_count = db('version_update')->where('type=1')->count();
         $list_count2 = db('version_update')->where('type=2')->count();
+        $list_count3 = db('version_update')->where('type=3')->count();
+        $list_count4 = db('version_update')->where('type=4')->count();
 
         $this->assign('list_count',$list_count);
         $this->assign('list_count2',$list_count2);
+        $this->assign('list_count3',$list_count3);
+        $this->assign('list_count4',$list_count4);
         $this->setAdminCurItem('version');
         return $this->fetch();
 

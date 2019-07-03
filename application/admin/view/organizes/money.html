@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -14,7 +15,7 @@
         冻结余额：<?php if(!empty($company['freeze_amount'])){echo sprintf('%.2f',$company['freeze_amount']);}else{echo 0;} ?>元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         银行卡信息：<?php if(!empty($company['bank_name'])){echo sprintf('%.2f',$company['bank_name']);}else{echo "无";} ?><?php echo $company['bank_card']; ?></h2>
     <form method="post" enctype="multipart/form-data" name="form1" action="">
-        <table class="ds-default-table">
+        <table class="layui-table">
             <thead>
             <tr class="thead">
                 <th class="w272">{$Think.lang.ds_number}</th>

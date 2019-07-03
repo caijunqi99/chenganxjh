@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -18,99 +19,71 @@
             <span id="explanationZoom" title="收起提示" class="arrow"></span>
         </div>
         <ul>
-            <li>平台会员管理，包括家长和教师个人基础信息</li>
+            <li>添加会员信息</li>
         </ul>
     </div>
 
 
-    <form id="user_form" enctype="multipart/form-data" method="post">
-        <table class="ds-default-table">
-            <tbody>
-                <tr class="noborder">
-                    <td colspan="2" class="required"><label class="validation" for="member_name">{$Think.lang.member_index_name}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" name="member_name" id="member_name" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label class="validation" for="member_password">{$Think.lang.member_edit_password}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" id="member_password" name="member_password" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label>{$Think.lang.member_index_email}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="member_email" name="member_email" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label class="validation" for="member_name">手机号码:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="member_mobile" name="member_mobile" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-
-                <tr>
-                    <td colspan="2" class="required"><label for="member_truename">{$Think.lang.member_index_true_name}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="member_truename" name="member_truename" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label> {$Think.lang.member_edit_sex}:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform">
-                        <label>
-                            <input type="radio" checked="checked" value="0" name="member_sex">{$Think.lang.member_edit_secret}
-                        </label>
-                        <label>
-                            <input type="radio" value="1" name="member_sex">{$Think.lang.member_edit_male}
-                        </label>
-                        <label>
-                            <input type="radio" value="2" name="member_sex">{$Think.lang.member_edit_female}
-                        </label>
-                    </td>
-                    <td class="vatop tips"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="required"><label> 身份:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform">
-                        <label>
-                            <input type="radio" checked="checked" value="1" name="member_identity">家长
-                        </label>
-                        <label>
-                            <input type="radio" value="2" name="member_identity">教师
-                        </label>
-                        <!--<label>
-                            <input type="radio" value="3" name="member_identity">其他
-                        </label>-->
-                    </td>
-                    <td class="vatop tips"></td>
-                </tr>
-    <!--             <tr>
-                    <td colspan="2" class="required"><label for="member_qq">QQ:</label></td>
-                </tr>
-                <tr class="noborder">
-                    <td class="vatop rowform"><input type="text" value="" id="member_qq" name="member_qq" class="txt"></td>
-                    <td class="vatop tips"></td>
-                </tr>
-                -->
-            </tbody>
-            <tfoot>
-                <tr class="tfoot">
-                    <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
-                </tr>
-            </tfoot>
-        </table>
+    <form id="user_form" enctype="multipart/form-data" method="post" >
+        <div class="ncap-form-default">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.member_name}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="member_name" id="member_name" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.member_edit_password}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" id="member_password" name="member_password" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.member_index_email}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="member_email" name="member_email" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>-->
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.mob_phone}</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" id="member_mobile" name="member_mobile" lay-verify="required|number" autocomplete="off" class="layui-input">
+                        <span class="err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{$Think.lang.member_index_true_name}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="member_truename" name="member_truename"  class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.member_edit_sex}</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" checked="checked" value="0" name="member_sex" >{$Think.lang.member_edit_secret}<br/><br/>
+                        <input type="radio" value="1" name="member_sex">{$Think.lang.member_edit_male}<br/><br/>
+                        <input type="radio" value="2" name="member_sex">{$Think.lang.member_edit_female}
+                    </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <script type="text/javascript">

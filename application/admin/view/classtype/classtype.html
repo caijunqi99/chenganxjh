@@ -59,82 +59,7 @@
                 <button class="layui-btn" onclick="classtype_edit('add',false,'')"><i class="layui-icon">&#xe608;</i> 添加</button>
             </th>
     <?php } ?>
-  <script>     
 
-$(function(){
-  layui.use(['form'], function(){
-    var form = layui.form;
-  });
-  $("#course").click(function(event) {
-    var pid = $("#cl_id").val();
-    var cl_sort = $("#cl_sort").val();
-    var actions = $("#actions").val();
-    var cl_type = $("#cl_type").val();
-    var sc_id = $("#sc_type").val();
-
-      if (cl_type == '') {layer.tips('请输入年级名称', '#cl_type');return false;}
-    if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
-    $.ajax({
-      url: "{:url('/Admin/Classtype/classtype_edit')}",
-      type: 'POST',
-      dataType: 'json',
-      data: {'cl_sort': cl_sort,'cl_id':pid,'actions':actions,'cl_type':cl_type,'sc_id':sc_id},
-      success:function(sb){
-        if (sb.m) {
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            var sc_id = $("#sc_id").val();
-            window.location.href="{:url('/Admin/Classtype/classtype_manage')}?sc_id="+sc_id;  
-          });
-          
-        }
-      }
-    });      
-  });
-})
-  function classtype_edit(act,id=false,str=''){
-    $('#actions').val(act);
-    if (id) {
-      $('#cl_id').val(id);
-      var cl_sort = $('#pid_'+id).attr('cl_sort');
-      var cl_type = $('#pid_'+id).attr('cl_type');
-      var sc_id   = $('#pid_'+id).attr('sc_id');
-      $('#cl_sort').val(cl_sort);
-      $('#cl_type').val(cl_type);
-      $('#sc_'+sc_id).attr('selected','selected');
-        //1、首先设置输框
-        $("#sc_type").siblings("div[class='layui-form-select']").children("div[class='layui-select-title']").children("input").val(str);
-        //2、其次，设置dl下的dd
-        $("#sc_type").siblings("div[class='layui-form-select']").children("dl").children("dd").each(function(){
-            if ($(this).text() == str){
-                if (!$(this).hasClass("layui-this")) {
-                    $(this).addClass("layui-this");
-                    $(this).click();
-                }
-                return true;
-            }else{
-                if ($(this).hasClass("layui-this")) {
-                    $(this).removeClass("layui-this");
-                }
-            }
-        });
-    }else{
-      $('#cl_id').val('');
-    } 
-    layer.open({
-      type: 1,
-      title: '年级管理',
-      shadeClose: true,
-      shade: 0.4,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['400px', '500px'],
-      content: $('#courForm')
-      //   content:'../type.html'
-    });
-  }
-
-</script>
-  
-  
   <div class="explanation" id="explanation">
       <div class="title" id="checkZoom">
           <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -149,11 +74,9 @@ $(function(){
   
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
-          <!-- <th><input type="checkbox" class="checkall"/></th> -->
-
             <th class="align-center">{$Think.lang.ds_sort}</th>
           <th class="align-center">{$Think.lang.cl_type}</th>
           <th class="align-center">{$Think.lang.school_type}</th>
@@ -202,26 +125,84 @@ $(function(){
         </tr>
         <?php } ?>
       </tbody>
-      <tfoot>
-        <!-- <tr class="tfoot">
-          <td><input type="checkbox" class="checkall" id="checkall"/></td>
-          <td id="batchAction" colspan="15"><span class="all_checkbox">
-            <label for="checkall">{$Think.lang.ds_select_all}</label>
-            </span>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" onclick="if(confirm('{$Think.lang.ap_del_sure}')){$('#store_form').submit();}"><span>{$Think.lang.ds_del}</span></a>
-          </td>
-        </tr> -->
-      </tfoot>
     </table>
     {$page}
   </form>
 </div>
-
- 
-
-
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
-  
+
+    $(function(){
+        layui.use(['form'], function(){
+            var form = layui.form;
+        });
+        $("#course").click(function(event) {
+            var pid = $("#cl_id").val();
+            var cl_sort = $("#cl_sort").val();
+            var actions = $("#actions").val();
+            var cl_type = $("#cl_type").val();
+            var sc_id = $("#sc_type").val();
+
+            if (cl_type == '') {layer.tips('请输入年级名称', '#cl_type');return false;}
+            if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
+            $.ajax({
+                url: "{:url('/Admin/Classtype/classtype_edit')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'cl_sort': cl_sort,'cl_id':pid,'actions':actions,'cl_type':cl_type,'sc_id':sc_id},
+                success:function(sb){
+                    if (sb.m) {
+                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                            var sc_id = $("#sc_id").val();
+                            window.location.href="{:url('/Admin/Classtype/classtype_manage')}?sc_id="+sc_id;
+                        });
+
+                    }
+                }
+            });
+        });
+    })
+    function classtype_edit(act,id=false,str=''){
+        $('#actions').val(act);
+        if (id) {
+            $('#cl_id').val(id);
+            var cl_sort = $('#pid_'+id).attr('cl_sort');
+            var cl_type = $('#pid_'+id).attr('cl_type');
+            var sc_id   = $('#pid_'+id).attr('sc_id');
+            $('#cl_sort').val(cl_sort);
+            $('#cl_type').val(cl_type);
+            $('#sc_'+sc_id).attr('selected','selected');
+            //1、首先设置输框
+            $("#sc_type").siblings("div[class='layui-form-select']").children("div[class='layui-select-title']").children("input").val(str);
+            //2、其次，设置dl下的dd
+            $("#sc_type").siblings("div[class='layui-form-select']").children("dl").children("dd").each(function(){
+                if ($(this).text() == str){
+                    if (!$(this).hasClass("layui-this")) {
+                        $(this).addClass("layui-this");
+                        $(this).click();
+                    }
+                    return true;
+                }else{
+                    if ($(this).hasClass("layui-this")) {
+                        $(this).removeClass("layui-this");
+                    }
+                }
+            });
+        }else{
+            $('#cl_id').val('');
+        }
+        layer.open({
+            type: 1,
+            title: '年级管理',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '500px'],
+            content: $('#courForm')
+            //   content:'../type.html'
+        });
+    }
+
 </script>

@@ -66,8 +66,30 @@ class Position extends Model {
      * @param obj $page 分页对象
      * @return array 二维数组
      */
-    public function getpositionList($condition, $page = '', $field = '*', $school = 'id desc', $limit = '', $extend = array(), $master = false) {
+    public function getpositionList($condition, $page = '', $field = '*', $school = 'position_id desc', $limit = '', $extend = array(), $master = false) {
         $list_paginate = db('position')->field($field)->where($condition)->order($school)->paginate($page,false,['query' => request()->param()]);
+        $this->page_info = $list_paginate;
+        $list = $list_paginate->items();
+
+        if (empty($list))
+            return array();
+        return $list;
+    }
+
+    /*
+     * @desc 获取位置信息列表
+     * @author langzhiyao
+     * @time 20190625
+     */
+    public function get_position_list($condition, $page = '', $field = '*', $order = 'p.position_id desc', $limit = '', $extend = array(), $master = false) {
+        $list_paginate = db('position')
+            ->alias('p')
+            ->field('p.*,s.name as school_name')
+            ->join('school s','s.schoolid=p.school_id',LEFT)
+//            ->join('schooltype t','t.sc_id=p.type_id',LEFT)
+            ->where($condition)
+            ->order($order)
+            ->paginate($page,false,['query' => request()->param()]);
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 

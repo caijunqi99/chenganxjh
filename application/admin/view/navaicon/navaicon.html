@@ -60,69 +60,6 @@
                 <!-- <button class="layui-btn" onclick="classtype_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button> -->
             </th>
     <?php } ?>
-  <script>     
-
-$(function(){
-  layui.use(['form'], function(){
-    var form = layui.form;
-  });
-
-
-  $("#course").click(function(event) {
-    
-
-
-    var pid = $("#cl_id").val();
-    var cl_sort = $("#cl_sort").val();
-    var actions = $("#actions").val();
-    var cl_type = $("#cl_type").val();
-    var sc_id = $("#sc_type").val();
-    if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
-    $.ajax({
-      url: "{:url('/Admin/Classtype/classtype_edit')}",
-      type: 'POST',
-      dataType: 'json',
-      data: {'cl_sort': cl_sort,'cl_id':pid,'actions':actions,'cl_type':cl_type,'sc_id':sc_id},
-      success:function(sb){
-        if (sb.m) {
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            var sc_id = $("#sc_id").val();
-            window.location.href="{:url('/Admin/Classtype/classtype_manage')}?sc_id="+sc_id;  
-          });
-          
-        }
-      }
-    });      
-  });
-})
-  function classtype_edit(act,id=false){
-    $('#actions').val(act);
-    
-    if (id) {
-      $('#cl_id').val(id);
-      var cl_sort = $('#pid_'+id).attr('cl_sort');
-      var cl_type = $('#pid_'+id).attr('cl_type');
-      var sc_id   = $('#pid_'+id).attr('sc_id');
-      $('#cl_sort').val(cl_sort);
-      $('#cl_type').val(cl_type);      
-      $('#sc_'+sc_id).attr('selected','selected');
-    }else{      
-      $('#cl_id').val('');
-    } 
-    layer.open({
-      type: 1,
-      title: '课程管理',
-      shadeClose: true,
-      shade: 0.4,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['400px', '500px'],
-      content: $('#courForm')
-    });
-  }
-
-</script>
-  
-  
   <div class="explanation" id="explanation">
       <div class="title" id="checkZoom">
           <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -137,7 +74,7 @@ $(function(){
   
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
           <!-- <th><input type="checkbox" class="checkall"/></th> -->
@@ -222,5 +159,61 @@ $(function(){
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
-  
+    $(function(){
+        layui.use(['form'], function(){
+            var form = layui.form;
+        });
+
+
+        $("#course").click(function(event) {
+
+
+
+            var pid = $("#cl_id").val();
+            var cl_sort = $("#cl_sort").val();
+            var actions = $("#actions").val();
+            var cl_type = $("#cl_type").val();
+            var sc_id = $("#sc_type").val();
+            if (cl_sort < 1) {layer.tips('请输入正确的排序', '#cl_sort');return false;}
+            $.ajax({
+                url: "{:url('/Admin/Classtype/classtype_edit')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'cl_sort': cl_sort,'cl_id':pid,'actions':actions,'cl_type':cl_type,'sc_id':sc_id},
+                success:function(sb){
+                    if (sb.m) {
+                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                            var sc_id = $("#sc_id").val();
+                            window.location.href="{:url('/Admin/Classtype/classtype_manage')}?sc_id="+sc_id;
+                        });
+
+                    }
+                }
+            });
+        });
+    })
+    function classtype_edit(act,id=false){
+        $('#actions').val(act);
+
+        if (id) {
+            $('#cl_id').val(id);
+            var cl_sort = $('#pid_'+id).attr('cl_sort');
+            var cl_type = $('#pid_'+id).attr('cl_type');
+            var sc_id   = $('#pid_'+id).attr('sc_id');
+            $('#cl_sort').val(cl_sort);
+            $('#cl_type').val(cl_type);
+            $('#sc_'+sc_id).attr('selected','selected');
+        }else{
+            $('#cl_id').val('');
+        }
+        layer.open({
+            type: 1,
+            title: '课程管理',
+            shadeClose: true,
+            shade: 0.4,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '500px'],
+            content: $('#courForm')
+        });
+    }
 </script>

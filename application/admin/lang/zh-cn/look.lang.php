@@ -22,6 +22,7 @@ $lang['look_camera_begintime']                 = '开启——关闭时间';
 $lang['look_camera_update']                 = '更新';
 $lang['look_camera_az_area']			    = '绑定班级/区域';
 $lang['look_camera_is_public_area']			    = '是否公共区域';
+$lang['look_camera_is_default']			    = '是否默认';
 $lang['look_camera_import']			    = '导入摄像头安装申请表';
 $lang['look_camera_import_true']			    = '导入摄像头安装申请表真实数据';
 $lang['look_camera_import_name']			    = '导入摄像头安装申请表名称';

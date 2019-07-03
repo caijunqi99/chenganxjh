@@ -21,7 +21,8 @@
  */
 $lang['member_index_is_admin']		= '该会员是管理员,不能删除';
 $lang['member_index_manage']		= '会员管理';
-$lang['member_index_name']			= '账号名称';
+$lang['member_index_name']			= '账号信息';
+$lang['member_name']			= '账号';
 $lang['member_index_email']			= '电子邮箱';
 $lang['member_index_true_name']		= '真实姓名';
 $lang['member_index_reg_time']		= '注册时间';

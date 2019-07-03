@@ -14,6 +14,7 @@ class Company extends AdminControl {
     {
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/zh-cn/admin.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/zh-cn/look.lang.php');
         //获取当前角色对当前子目录的权限
         $class_name=explode('\\',__CLASS__);
         $class_name = strtolower(end($class_name));
@@ -30,78 +31,33 @@ class Company extends AdminControl {
         if(session('admin_is_super') !=1 && !in_array(4,$this->action)){
             $this->error(lang('ds_assign_right'));
         }
-        $admin_company_id = $this->admin_info['admin_company_id'];//登录账号所属公司
+
         //地区信息
         $region_list = db('area')->where('area_parent_id','0')->select();
-        $this->assign('region_list', $region_list);
-        $address = array(
-            'true_name' => '',
-            'area_id' => '',
-            'city_id' => '',
-            'address' => '',
-            'tel_phone' => '',
-            'mob_phone' => '',
-            'is_default' => '',
-            'area_info'=>''
-        );
-        $this->assign('address', $address);
-        //分子公司列表
-        $model_organize = Model('company');
+        //筛选条件
         $condition = array();
-        $condition['o_del']=1;
-        if($admin_company_id != 1){
-            //查询所属地区公司
-            $company = db('company')->field('o_id,o_role,o_provinceid,o_cityid,o_areaid')->where('o_id="'.$admin_company_id.'"')->find();
-            if(!empty($company)){
-                $roleID = $company['o_role'];
-                switch ($roleID){
-                    case 1://县区代理
-                        $condition['o_provinceid']=$company['o_provinceid'];
-                        $condition['o_cityid']=$company['o_cityid'];
-                        $condition['o_areaid']=$company['o_areaid'];
-                        break;
-                    case 2://省代理商
-                        $condition['o_provinceid']=$company['o_provinceid'];
-                        break;
-                    case 3://市代理商
-                        $condition['o_provinceid']=$company['o_provinceid'];
-                        $condition['o_cityid']=$company['o_cityid'];
-                        break;
-                    case 4://特约代理商
-                        $condition['o_id']=$company['o_id'];
-                        break;
-                }
-            }else{
-                $this->error('该公司不存在/已被删除',url('Admin/Dashboard/index'));
-            }
-        }
-
-        if (!empty($_POST['search_organize_name'])) {
+        if (!empty($_GET['search_organize_name'])) {
             $o_name=input('param.search_organize_name');
             $condition['o_name']=array('like', '%' . trim($o_name) . '%');
-            $this->assign('search_organize_name',$o_name);
         }
-        if(!empty($_POST['o_provinceid'])){
-            $o_provinceid=input('param.o_provinceid');
-            $condition['o_provinceid']=$o_provinceid;
-            $this->assign('o_provinceid',$o_provinceid);
-        }
-        if(!empty($_POST['o_cityid'])) {
-            if ($_POST['dep'] == 2 || $_POST['dep'] == 3){
-                $o_cityid = input('param.o_cityid');
-                $condition['o_cityid'] =$o_cityid;
-                $this->assign('o_cityid', $o_cityid);
-            }
-        }
-        if(!empty($_POST['area_id'])){
-            if ($_POST['dep'] == 3) {
-                $area_id = input('param.area_id');
-                $condition['o_areaid'] =$area_id;
-                $this->assign('area_id', $area_id);
-            }
-        }
-        $organize_list = $model_organize->getOrganizeList($condition, "*",15);
 
+        if(!empty($_GET['province'])){
+            $province_id=input('param.province');
+            $condition['o_provinceid']=$province_id;
+        }
+        if(!empty($_GET['city'])) {
+            $city_id = input('param.o_cityid');
+            $condition['o_cityid'] =$city_id;
+        }
+        if(!empty($_GET['area'])){
+            $area_id = input('param.area');
+            $condition['o_areaid'] =$area_id;
+        }
+        //分子公司列表
+        $model_organize = Model('company');
+        $condition['o_del']=1;
+        $organize_list = $model_organize->getOrganizeList($condition, "*",15);
+        $this->assign('region_list', $region_list);
         $this->assign('page', $model_organize->page_info->render());
         $this->assign('organize_list', $organize_list);
         $this->setAdminCurItem('index');
@@ -128,7 +84,7 @@ class Company extends AdminControl {
                 ),
                 array(
                     'name' => 'add',
-                    'text' => '添加',
+                    'text' => '添加代理商',
                     'url' => url('Admin/Company/add')
                 )
             );
@@ -150,15 +106,27 @@ class Company extends AdminControl {
             $this->error(lang('ds_assign_right'));
         }
         if (request()->isPost()) {
-            //提交表单
-            //保存
             $input = array();
             $input['o_name'] = trim($_POST['o_name']);
             $input['o_role'] = intval($_POST['o_role']);
-            $input['o_provinceid'] = intval($_POST['o_provinceid']);
-            $input['o_cityid'] = intval($_POST['o_cityid']);
-            $input['o_areaid'] = intval($_POST['area_id']);
-            $input['o_area'] = trim($_POST['area_info']);
+            $input['o_provinceid'] = intval($_POST['province']);
+            if($_POST['o_role']==2){
+                $input['o_cityid']=0;
+                $input['o_areaid'] = 0;
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==3){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = 0;
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==1){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = intval($_POST['area']);
+                $input['o_parent_id'] = 0;
+            }else if($_POST['o_role']==4){
+                $input['o_cityid'] = intval($_POST['city']);
+                $input['o_areaid'] = intval($_POST['area']);
+                $input['o_parent_id'] = intval($_POST['o_parent_id']);
+            }
             $input['o_address'] = trim($_POST['o_address']);
             $input['o_phone'] = trim($_POST['o_phone']);
             $input['o_leading'] = trim($_POST['o_leading']);
@@ -166,7 +134,6 @@ class Company extends AdminControl {
             $input['o_createtime']=date('Y-m-d H:i:s',time());
             $input['o_remark'] = trim($_POST['o_remark']);
             $input['o_del']=1;
-            //$input['is_child']=intval($_POST['is_child']);
             $activity = Model('company');
             $result = $activity->addOrganize($input);
             if ($result) {
@@ -179,9 +146,10 @@ class Company extends AdminControl {
         } else {
             // 角色
             $gadmin = db('gadmin')->where('gid < 5')->order('sort ASC')->select();
-            $this->assign('gadmin',$gadmin);
+//            halt($gadmin);
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
+            $this->assign('gadmin',$gadmin);
             $this->assign('region_list', $region_list);
             $this->setAdminCurItem('add');
             return $this->fetch();
@@ -202,18 +170,27 @@ class Company extends AdminControl {
             $update_array = array();
             $update_array['o_name'] = trim($_POST['o_name']);
             $update_array['o_role'] = intval($_POST['o_role']);
+            $update_array['o_provinceid'] = intval($_POST['province']);
             if($_POST['o_role']==2){
                 $update_array['o_cityid']=0;
                 $update_array['o_areaid'] = 0;
+                $update_array['o_parent_id'] = 0;
             }else if($_POST['o_role']==3){
-                $update_array['o_cityid'] = intval($_POST['city_id']);
+                $update_array['o_cityid'] = intval($_POST['city']);
                 $update_array['o_areaid'] = 0;
-            }else{
-                $update_array['o_cityid'] = intval($_POST['city_id']);
-                $update_array['o_areaid'] = intval($_POST['area_id']);
+                $update_array['o_parent_id'] = 0;
+            }else if($_POST['o_role']==1){
+                $update_array['o_cityid'] = intval($_POST['city']);
+                $update_array['o_areaid'] = intval($_POST['area']);
+                $update_array['o_parent_id'] = 0;
+            }else if($_POST['o_role']==4){
+                $update_array['o_cityid'] = intval($_POST['city']);
+                $update_array['o_areaid'] = intval($_POST['area']);
+                $update_array['o_parent_id'] = intval($_POST['o_parent_id']);
             }
-            $update_array['o_provinceid'] = intval($_POST['o_provinceid']);
+
             $update_array['o_area'] = trim($_POST['area_info']);
+            $input['o_parent_id'] = intval($_POST['o_parent_id']);
             $update_array['o_address'] = trim($_POST['o_address']);
             $update_array['o_phone'] = trim($_POST['o_phone']);
             $update_array['o_leading'] = trim($_POST['o_leading']);
@@ -231,14 +208,14 @@ class Company extends AdminControl {
         } else {
             // 角色
             $gadmin = db('gadmin')->where('gid < 5')->select();
-            $this->assign('gadmin',$gadmin);
             $organize_info = $model_organize->getOrganizeInfo(array('o_id' => intval(input('param.organize_id'))));
             //地区信息
             $region_list = db('area')->where('area_parent_id','0')->select();
-            $this->assign('region_list', $region_list);
             if (empty($organize_info)) {
                 $this->error(lang('param_error'));
             }
+            $this->assign('region_list', $region_list);
+            $this->assign('gadmin',$gadmin);
             $this->assign('organize_array', $organize_info);
             $this->setAdminCurItem('organize_edit');
             return $this->fetch('edit');

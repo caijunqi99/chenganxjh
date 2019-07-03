@@ -46,60 +46,6 @@
                 <button class="layui-btn" onclick="course_edit('add',false)"><i class="layui-icon">&#xe608;</i> 添加</button>
             </th>
     <?php } ?>
-  <script>
-
-$(function(){
-  $("#course").click(function(event) {
-    var pid = $("#pgk_id").val();
-    var price = $("#price").val();
-    var actions = $("#actions").val();
-    var pname = $("#pname").val();
-    if (pname == '') {layer.tips('请输入价格说明', '#pname');return false;}
-    if (price < 1) {layer.tips('请输入正确的价格', '#price');return false;}
-    $.ajax({
-      url: "{:url('/Admin/Pkgs/course_edit')}",
-      type: 'POST',
-      dataType: 'json',
-      data: {'price': price,'pkg_id':pid,'actions':actions,'pname':pname},
-      success:function(sb){
-        if (sb.m) {
-          layer.msg(sb.ms, {icon: 16,time: 500},function(){
-            window.location.href="{:url('/Admin/Pkgs/courseware',['pkg_id'=>3])}";
-          });
-
-        }
-      }
-    });
-  });
-})
-  function course_edit(act,id=false){
-    $('#actions').val(act);
-
-    if (id) {
-      $('#pgk_id').val(id);
-      var price = $('#pid_'+id).attr('pprice');
-      var pname = $('#pid_'+id).attr('pname');
-      $('#price').val(price);
-      $('#pname').val(pname);
-    }else{
-
-      $('#pgk_id').val('');
-      $('#price').val('');
-    }
-    layer.open({
-      type: 1,
-      title: '价格示例',
-      shadeClose: true,
-      shade: false,
-      maxmin: false, //开启最大化最小化按钮
-      area: ['400px', '300px'],
-      content: $('#courForm')
-    });
-  }
-
-</script>
-
-
   <div class="explanation" id="explanation">
       <div class="title" id="checkZoom">
           <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
@@ -114,7 +60,7 @@ $(function(){
 
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
           <!-- <th><input type="checkbox" class="checkall"/></th> -->
@@ -163,13 +109,57 @@ $(function(){
     {$page}
   </form>
 </div>
-
-
-
-
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
+    $(function(){
+        $("#course").click(function(event) {
+            var pid = $("#pgk_id").val();
+            var price = $("#price").val();
+            var actions = $("#actions").val();
+            var pname = $("#pname").val();
+            if (pname == '') {layer.tips('请输入价格说明', '#pname');return false;}
+            if (price < 1) {layer.tips('请输入正确的价格', '#price');return false;}
+            $.ajax({
+                url: "{:url('/Admin/Pkgs/course_edit')}",
+                type: 'POST',
+                dataType: 'json',
+                data: {'price': price,'pkg_id':pid,'actions':actions,'pname':pname},
+                success:function(sb){
+                    if (sb.m) {
+                        layer.msg(sb.ms, {icon: 16,time: 500},function(){
+                            window.location.href="{:url('/Admin/Pkgs/courseware',['pkg_id'=>3])}";
+                        });
+
+                    }
+                }
+            });
+        });
+    })
+    function course_edit(act,id=false){
+        $('#actions').val(act);
+
+        if (id) {
+            $('#pgk_id').val(id);
+            var price = $('#pid_'+id).attr('pprice');
+            var pname = $('#pid_'+id).attr('pname');
+            $('#price').val(price);
+            $('#pname').val(pname);
+        }else{
+
+            $('#pgk_id').val('');
+            $('#price').val('');
+        }
+        layer.open({
+            type: 1,
+            title: '价格示例',
+            shadeClose: true,
+            shade: false,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['400px', '300px'],
+            content: $('#courForm')
+        });
+    }
 
 </script>

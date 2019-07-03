@@ -33,8 +33,10 @@
     </div>
     <div class="layui-tab">
         <ul class="layui-tab-title">
-            <li class="layui-this" data-id="1">{$Think.lang.version_android}</li>
-            <li data-id="2">{$Think.lang.version_ios}</li>
+            <li class="layui-this" data-id="1">{$Think.lang.member_version_android}</li>
+            <li data-id="2">{$Think.lang.member_version_ios}</li>
+            <li data-id="3">{$Think.lang.school_version_android}</li>
+            <li data-id="4">{$Think.lang.school_version_ios}</li>
         </ul>
 
         <div class="layui-tab-content">
@@ -113,6 +115,81 @@
                     </div>
                 </form>
             </div>
+            <div class="layui-tab-item ">
+                <form method="get" id='form_admin3' class="layui-form">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col >
+                            <col >
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr class="thead">
+                            <th colspan="7">
+                                <div class="layui-table-tool-self">
+                                    <a class="layui-btn layui-btn-sm " lay-event="getCheckData" id="send_android2">发送Android更新包</a>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr class="thead">
+                            <th class="align-center">序号</th>
+                            <th class="align-center">更新内容</th>
+                            <th class="align-center">更新方式</th>
+                            <th class="align-center">版本号</th>
+                            <th class="align-center">渠道标识</th>
+                            <th class="align-center">安装包名</th>
+                            <th class="align-center">更新时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="html3">
+                        </tbody>
+                    </table>
+                    <div style="float: right;">
+                        <tr class="tfoot">
+                            <div id="page3"></div>
+                        </tr>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form method="get" id='form_admin4' class="layui-form">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col >
+                            <col >
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr class="thead">
+                            <th colspan="6">
+                                <div class="layui-table-tool-self">
+                                    <a class="layui-btn layui-btn-sm " lay-event="getCheckData" id="send_ios2">发送IOS更新包</a>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr class="thead">
+                            <th class="align-center">序号</th>
+                            <th class="align-center">更新内容</th>
+                            <th class="align-center">更新方式</th>
+                            <th class="align-center">版本号</th>
+                            <th class="align-center">下载地址</th>
+                            <th class="align-center">更新时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="html4">
+                        </tbody>
+                    </table>
+                    <div style="float: right;">
+                        <tr class="tfoot">
+                            <div id="page4"></div>
+                        </tr>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -169,7 +246,7 @@
                         })
                     }
                 });
-            }else{
+            }else if(type_id == 2){
                 //分页
                 laypage.render({
                     elem: 'page2'
@@ -180,7 +257,6 @@
                         // console.log(obj);
                         var page = obj.curr,
                             page_count = obj.limit;
-
                         $.ajax({
                             type:'POST',
                             url:ADMIN_URL+'Config/get_version_list.html?type='+type_id,
@@ -192,11 +268,55 @@
                         })
                     }
                 });
+            }else if(type_id == 3){
+                //分页
+                laypage.render({
+                    elem: 'page3'
+                    ,count: '<?php echo $list_count3;?>'
+                    ,limit:10
+                    ,layout: ['count', 'prev', 'page', 'next',  'skip']
+                    ,jump: function(obj){
+                        // console.log(obj);
+                        var page = obj.curr,
+                            page_count = obj.limit;
+                        $.ajax({
+                            type:'POST',
+                            url:ADMIN_URL+'Config/get_version_list.html?type='+type_id,
+                            data:{type:1},
+                            success:function(data){
+                                data = jQuery.parseJSON(data);
+                                $('#html3').html(data.html);
+                            }
+                        })
+                    }
+                });
+            }else if(type_id == 4){
+                //分页
+                laypage.render({
+                    elem: 'page4'
+                    ,count: '<?php echo $list_count4;?>'
+                    ,limit:10
+                    ,layout: ['count', 'prev', 'page', 'next',  'skip']
+                    ,jump: function(obj){
+                        // console.log(obj);
+                        var page = obj.curr,
+                            page_count = obj.limit;
+                        $.ajax({
+                            type:'POST',
+                            url:ADMIN_URL+'Config/get_version_list.html?type='+type_id,
+                            data:{type:1},
+                            success:function(data){
+                                data = jQuery.parseJSON(data);
+                                $('#html4').html(data.html);
+                            }
+                        })
+                    }
+                });
             }
 
         })
 
-        $('#send_android').click(function(){
+        $('#send_android,#send_android2').click(function(){
             //页面层
             layer.open({
                 type: 2,
@@ -210,7 +330,7 @@
                 }
             });
         })
-        $('#send_ios').click(function(){
+        $('#send_ios,#send_ios2').click(function(){
             //页面层
             layer.open({
                 type: 2,

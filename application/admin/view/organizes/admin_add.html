@@ -1,52 +1,79 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
+<style>
+    .layui-form-label{
+        width: 200px;
+    }
+</style>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
-<form method="post" id="add_form">
+<!-- 操作说明 -->
+<div class="explanation" id="explanation">
+    <div class="title" id="checkZoom">
+        <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+        <span id="explanationZoom" title="收起提示" class="arrow"></span>
+    </div>
+    <ul>
+        <li>给代理商分配管理账号。</li>
+    </ul>
+</div>
+<form method="post" id="add_form" class="layui-form">
     <div  class="ncap-form-default">
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_username}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_name" name="admin_name" value="" class="input-txt" type="text">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_username_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.gadmin_name}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="gid" id="gid">
-                <option value="{$company_role_id}">{$Think.lang.super_admin}</option>
-                <?php foreach((array)$gadmin_list as $v){?>
-                <option value="<?php echo $v['gid'];?>"><?php echo $v['gname'];?></option>
-                <?php }?>
-            </select>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_gid_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_index_password}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_password" name="admin_password" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_rpassword}</dt>
-            <dd>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="admin_rpassword" name="admin_rpassword" value="" class="input-txt" type="password">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err"></span>
-                <p class="notic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$Think.lang.admin_add_password_tip}</p>
-            </dd>
-        </dl>
-        <dl>
-            <dt></dt>
-            <dd>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a></dd>
-        </dl>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">{$Think.lang.admin_index_username}：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="admin_name" name="admin_name" class="layui-input">
+                    <span class="err"></span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">{$Think.lang.gadmin_name}：</label>
+                <div class="layui-input-inline">
+                    <select name="gid" id="gid" class="select" >
+                        <option value="{$company_role_id}">{$Think.lang.super_admin}</option>
+                        <?php foreach((array)$gadmin_list as $v){?>
+                        <option value="<?php echo $v['gid'];?>"><?php echo $v['gname'];?></option>
+                        <?php }?>
+                    </select>
+                    <span class="err"></span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">{$Think.lang.admin_index_password}：</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="admin_password" name="admin_password" class="layui-input">
+                    <span class="err"></span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">{$Think.lang.admin_rpassword}：</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="admin_rpassword" name="admin_rpassword" class="layui-input">
+                    <span class="err"></span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <a href="JavaScript:void(0);" class="btn" id="submitBtn">确认提交</a>
+            </div>
+        </div>
     </div>
 </form>
 <script>
+    layui.use(['form','laypage', 'layer'], function(){
+        var form = layui.form,
+            laypage = layui.laypage
+            ,layer = layui.layer;
+    });
     //按钮先执行验证再提交表
     $(document).ready(function() {
         //按钮先执行验证再提交表单

@@ -104,49 +104,9 @@
   <input type="hidden" name="type" value="{$type}" id="ptype">
   <input type="hidden" name="replay" value="1" id="replay">
 </form>
-<script> 
-layui.use(['form','laydate'], function(){
-  var form = layui.form
-  ,laydate = layui.laydate;
-  var replay = '{$editInfo.replay}';
-  if(replay == 2){
-    $('#weeksItem').css('display','block');
-  }
-  
-  //时间选择器
-  laydate.render({
-    elem: '#start_time'
-    ,type: 'time'
-  });
-  laydate.render({
-    elem: '#end_time'
-    ,type: 'time'
-  });
-  //监听指定开关
-  form.on('switch(replay)', function(data){
-    var replay = this.checked ? 'true' : 'false';
-    if (replay=='true') { //每天
-      $('#replay').val(1);
-      $('#weeksItem').css('display','none');
-    }else{ //自定义
-      $('#replay').val(2);
-      $('#weeksItem').css('display','block');
-    }
-    
-  });
-})
-$(function(){
-
-})
-</script>
-  
-  
-
-  
-  
   <form method="post" id="store_form">
     <input type="hidden" name="form_submit" value="ok" />
-    <table class="ds-default-table">
+    <table class="layui-table">
       <thead>
         <tr class="thead">
           <th><input type="checkbox" class="checkall"/></th>
@@ -215,13 +175,38 @@ $(function(){
     {$page}
   </form>
 </div>
-
- 
-
-
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/jquery.edit.js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.config.url_domain_root}static/plugins/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
-  
+    layui.use(['form','laydate'], function(){
+        var form = layui.form
+            ,laydate = layui.laydate;
+        var replay = '{$editInfo.replay}';
+        if(replay == 2){
+            $('#weeksItem').css('display','block');
+        }
+
+        //时间选择器
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'time'
+        });
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'time'
+        });
+        //监听指定开关
+        form.on('switch(replay)', function(data){
+            var replay = this.checked ? 'true' : 'false';
+            if (replay=='true') { //每天
+                $('#replay').val(1);
+                $('#weeksItem').css('display','none');
+            }else{ //自定义
+                $('#replay').val(2);
+                $('#weeksItem').css('display','block');
+            }
+
+        });
+    });
 </script>

@@ -7,7 +7,7 @@ header('content-type:application:json;charset=utf8');
  
 $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
 $allow_origin = array(
-    'http://117.78.26.155',
+    'http://39.97.235.153',
 );
  
 if(in_array($origin, $allow_origin)){

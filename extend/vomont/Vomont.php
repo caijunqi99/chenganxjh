@@ -134,5 +134,34 @@ class Vomont
         $data = json_decode($request,TRUE);
         return $data;
     }
-
+    /**
+     * 添加资源组
+    */
+    public function AddResources($accpuntid,$name,$parentid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::AddResources;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&name={$name}&parentid={$parentid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
+    /**
+     *修改资源组
+    */
+    public function ModifyResources($accpuntid,$name,$groupresid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::ModifyResources;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&name={$name}&groupresid={$groupresid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
+    /**
+     * 删除资源组
+    */
+    public function DelResources($accpuntid,$groupresid){
+        $SDK      = new CommandSDK();
+        $msgid = $SDK::DelResources;
+        $request = httpRequest($this->http."msgid={$msgid}&authkey={$this->authkey}&accountid={$accpuntid}&groupresid={$groupresid}");
+        $data = json_decode($request,TRUE);
+        return $data;
+    }
 }

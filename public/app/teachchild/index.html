@@ -31,34 +31,7 @@
 
         <ul class="sort_tabs_top"></ul>
         <div class="sort_block clearBoth" style="display: none"></div>
-        <!-- <ul class="sort_tabs" style="display: none"></ul> -->
-        <ul class="filter" style="display: none">
-            <div class="filter_top">
-                <div class="body_content clearBoth">
-                    <li class="float_left filterSort"><span data-id="0">综合</span>&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-iconfontjiantou"></i></li>
-                    <li class="float_left isfree" onclick="sortPrice(0)">查看免费</li>
-                    <li class="float_left isfree" onclick="sortPrice(1)" style="display: none" id="pay">查看付费</li>
-                    <p class="float_right filterFilter" data-select="false"><span data-select="false">筛选</span>&nbsp;&nbsp;&nbsp;<i data-select="false" class="icon iconfont icon-guolv"></i></p>
-                </div>
-            </div>
-            <div class="filter_sort">
-                <ul class="body_content"></ul>
-            </div>
-            <div class="filter_filter">
-                <div class="body_content">
-                    <div class="clearBoth filter_span_wrap stage">
-                    </div>
-                    <div class="clearBoth filter_span_wrap grade">
-                    </div>
-                    <div class="clearBoth filter_span_wrap subject">
-                    </div>
-                </div>
-                <div class="filter_confirm">
-                    <span onclick="filterOK(0)">重置</span>
-                    <span onclick="filterOK(1)">确认</span>
-                </div>
-            </div>
-        </ul>
+
 
         <!-- 主要内容部分 -->
         <div class="body_content clearBoth main_content">
@@ -188,7 +161,6 @@
                 $('.sort_tabs_top li i').removeClass('action');
                 $(el).addClass('action');
                 var top = Index['result'][0]['categorize'];
-                var filtsort = Index['result'][0]['navigate']['subsume']['child'];
                 if (ID == 0) {
                     hideFilterBox();
                     $('.sort_block').hide();

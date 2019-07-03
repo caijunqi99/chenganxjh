@@ -421,23 +421,42 @@ class Camera extends AdminControl
                 $list[$k]['statuses']=2;
             }else{
                 if($v['status']==1){
-                    if(!empty($v['begintime'])&&!empty($v['endtime'])){
-                        $begintime=date('H:i',$v['begintime']);
-                        $endtime=date('H:i',$v['endtime']);
-                        if($date<$begintime||$date>$endtime){
-                            $list[$k]['statuses']=2;
-                        }else{
-                            $list[$k]['statuses']=1;
+                    $da = date("w");
+                    if($v['datetime']!='') {
+                        $dates = explode(",", $v['datetime']);
+                    }
+                    if($da==0){
+                        $da=7;
+                    }
+                    if($v['datetime']!='') {
+                        if (in_array($da, $dates)) {
+                            if (!empty($v['begintime']) && !empty($v['endtime'])) {
+                                $begintime = date('H:i', $v['begintime']);
+                                $endtime = date('H:i', $v['endtime']);
+                                if ($date < $begintime || $date > $endtime) {
+                                    $list[$k]['statuses'] = 2;
+                                } else {
+                                    $list[$k]['statuses'] = 1;
+                                }
+                            } else {
+                                $list[$k]['statuses'] = 1;
+                            }
+                        } else {
+                            $list[$k]['statuses'] = 2;
                         }
                     }else{
-                        $list[$k]['statuses']=1;
+                        if (!empty($v['begintime']) && !empty($v['endtime'])) {
+                            $list[$k]['statuses'] = 2;
+                        } else {
+                            $list[$k]['statuses'] = 1;
+                        }
                     }
                 }else{
                     $list[$k]['statuses']=2;
                 }
             }
         }
-        //return $list;exit;
+        //print_r($list);exit;
         $list_count = db('camera')->where($where)->count();
         $html = '';
         if(!empty($list)){
@@ -462,18 +481,24 @@ class Camera extends AdminControl
                     //$html .= '<td id="rmt_' . $v['cid'] . '" class="align-center"><a href="javascript:viod(0)" onClick="rtmplay(' . $v['cid'] . ')">点击播放</a></td>';
                 //}
                 //<img onClick="rtmplay('.$v['cid'].')" src="'.$v["imageurl"].'" width="120" height="50">
-                if($v['is_classroom'] == 1){
-                    //$html .= '<td class="align-center"><b style="color:red;">否</b></td>';
-                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
-                }else if($v['is_classroom'] == 2){
-                    //$html .= '<td class="align-center"><b style="color:green;">是</b></td>';
-                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                if($v['is_public_area'] == 2){
+                    $html .= '<td class="align-center"><a id="dpss_'.$v['cid'].'" statu="'.$v['is_public_area'].'" class="layui-unselect layui-form-checkbox " onclick="makedefaultss('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                }else if($v['is_public_area'] == 1){
+                    $html .= '<td class="align-center"><a id="dpss_'.$v['cid'].'" statu="'.$v['is_public_area'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefaultss('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }
+                if($v['is_default'] == 1){
+                    $html .= '<td class="align-center"><a id="dpsss_'.$v['cid'].'" statu="'.$v['is_default'].'" class="layui-unselect layui-form-checkbox" onclick="makedefaultsss('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                }else if($v['is_default'] == 2){
+                    $html .= '<td class="align-center"><a id="dpsss_'.$v['cid'].'" statu="'.$v['is_default'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefaultsss('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+                }
+//                if($v['is_classroom'] == 1){
+//                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+//                }else if($v['is_classroom'] == 2){
+//                    $html .= '<td class="align-center"><a id="dp_'.$v['cid'].'" statu="'.$v['is_classroom'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefault('.$v['cid'].','.$v['id'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
+//                }
                 if($v['status'] == 1){
-                    //$html .= '<td class="align-center">开启</td>';
                     $html .= '<td class="align-center"><a id="dps_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox layui-form-checked" onclick="makedefaults('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }else if($v['status'] == 2){
-                    //$html .= '<td class="align-center">关闭</td>';
                     $html .= '<td class="align-center"><a id="dps_'.$v['cid'].'" statu="'.$v['status'].'" class="layui-unselect layui-form-checkbox" onclick="makedefaults('.$v['cid'].');" ><span>启用</span><i class="layui-icon layui-icon-ok"></i></a></td>';
                 }
                 $html .= '<td class="align-left">'.date('Y-m-d H:i:s',$v["sq_time"]).'</td>';
@@ -484,6 +509,7 @@ class Camera extends AdminControl
                 $html .= "<td class='align-center'>
                     开启时间：<input type='text' class='pictime' id='picktimeStart".$v['cid']."' onfocus='timesss(".'"'.$start.'"'.")' value='".$defulbegin."'/> <hr>
                     关闭时间：<input type='text' class='pictime' id='picktimeEnd".$v['cid']."' onfocus='timesss(".'"'.$end.'"'.")' value='".$defulend."' />
+                    <input type='hidden' id='date".$v['cid']."' value='".$v['datetime']."'>
                     </td>";
                 $html .='<td class="align-center"><a href="javascript:del('.$v["cid"].')" class="layui-btn layui-btn-xs">删除</a></td>';
                 $html .= '</tr>';
@@ -538,6 +564,8 @@ class Camera extends AdminControl
         $res= $vlink->SetLogin();
         $accountid=$res['accountid'];
         $data='';
+        //$b=$vlink->AddResources($accountid,'112','3');
+        //print_r($b);exit;
         foreach($shu as $v){
             $datas=$vlink->SetPlay($accountid,$v);
             if(empty($data)) {
@@ -584,10 +612,9 @@ class Camera extends AdminControl
         $cid = $input['cid'];
         $updata = array(
             'begintime' =>strtotime($input['starttime']),
-            'endtime' =>strtotime($input['endtime'])
+            'endtime' =>strtotime($input['endtime']),
+            'datetime'=>$input['datetime']
         );
-        $starttime =
-        $endtime =
         $result = db('camera')->where('cid',$cid)->update($updata);
         if ($result) {
             ds_json_encode('200', $msg.'设置成功');
@@ -601,10 +628,9 @@ class Camera extends AdminControl
         $cid['cid'] =array('in',$input['cid']);
         $updata = array(
             'begintime' =>strtotime($input['starttime']),
-            'endtime' =>strtotime($input['endtime'])
+            'endtime' =>strtotime($input['endtime']),
+            'datetime'=>$input['datetime']
         );
-        $starttime =
-        $endtime =
         $result = db('camera')->where($cid)->update($updata);
         if ($result) {
             ds_json_encode('200', $msg.'设置成功');
@@ -620,14 +646,14 @@ class Camera extends AdminControl
         $id=$input['id'];
         if($cid && $key ){
             $result = db('camera')->where('cid',$cid)->setField('is_classroom', $key);
-            $vlink = new Vomont();
-            $res= $vlink->SetLogin();
-            $accountid=$res['accountid'];
-            if($key==2) {
-                $vlink->AaaStorage($accountid, $id);
-            }else{
-                $vlink->DelStorage($accountid, $id);
-            }
+//            $vlink = new Vomont();
+//            $res= $vlink->SetLogin();
+//            $accountid=$res['accountid'];
+//            if($key==2) {
+//                $vlink->AaaStorage($accountid, $id);
+//            }else{
+//                $vlink->DelStorage($accountid, $id);
+//            }
             if ($result) {
                 ds_json_encode('200', $msg.'设置成功');
             }else{
@@ -652,7 +678,36 @@ class Camera extends AdminControl
             ds_json_encode('100', '参数错误');;
         }
     }
-
+    public function makedefaultss(){
+        $input = input();
+        $cid = $input['cid'];
+        $key=$input['is_public_area'];
+        if($cid && $key ){
+            $result = db('camera')->where('cid',$cid)->setField('is_public_area', $key);
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
+        }
+    }
+    public function makedefaultsss(){
+        $input = input();
+        $cid = $input['cid'];
+        $key=$input['is_default'];
+        if($cid && $key ){
+            $result = db('camera')->where('cid',$cid)->setField('is_default', $key);
+            if ($result) {
+                ds_json_encode('200', $msg.'设置成功');
+            }else{
+                ds_json_encode('100', $msg.'设置失败');
+            }
+        }else{
+            ds_json_encode('100', '参数错误');;
+        }
+    }
     /**
      * 获取卖家栏目列表,针对控制器下的栏目
      */
