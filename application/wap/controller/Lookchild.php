@@ -88,7 +88,8 @@ class Lookchild extends MobileMall
                 $user['ip']='39.97.235.153';
                 $user['port']='9001';
                 $user['username']='admin';
-                $user['pwd']='888000';
+//                $user['pswd']='888000';
+                $user['pswd']='888000';
                 $camera_model=Model('camera');
                 $condition=array();
                 $condition['parentid']=$classid;
