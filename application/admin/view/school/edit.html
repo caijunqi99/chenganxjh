@@ -65,6 +65,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="area_info" id="area_info" value="<?php echo $school_array['region'];?>" />
             <div class="layui-form-item">
                 <label class="layui-form-label">{$Think.lang.school_index_type}：</label>
                 <div class="layui-input-block">
@@ -164,6 +165,8 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').val();
+                    $('#area_info').val(province_html);
                     data = jQuery.parseJSON(data);
                     //改变市区
                     $('#city').html(data.city);
@@ -182,6 +185,9 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    $('#area_info').val(province_html+city_html);
                     data = jQuery.parseJSON(data);
                     //改变县区
                     $('#area').html(data.area);
@@ -197,6 +203,10 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    var area_html = $('#area').find('option:selected').html();
+                    $('#area_info').val(province_html+city_html+area_html);
                     data = jQuery.parseJSON(data);
                     form.render('select');//select是固定写法 不是选择器
                 }

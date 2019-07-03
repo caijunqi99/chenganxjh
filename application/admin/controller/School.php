@@ -150,7 +150,9 @@ class School extends AdminControl {
             $data = array(
 
                 'name' => input('post.school_name'),
-                'areaid' => input('post.area_id'),
+                'provinceid' => input('post.province'),
+                'cityid' => input('post.city'),
+                'areaid' => input('post.area'),
                 'region' => input('post.area_info'),
                 'typeid' => implode(",",$_POST['school_type']),
                 'address' => input('post.school_address'),
@@ -161,10 +163,6 @@ class School extends AdminControl {
                 'createtime' => date('Y-m-d H:i:s',time())
 
             );
-            $city_id = db('area')->where('area_id',input('post.area_id'))->find();
-            $data['cityid'] = $city_id['area_parent_id'];
-            $province_id = db('area')->where('area_id',$city_id['area_parent_id'])->find();
-            $data['provinceid'] = $province_id['area_parent_id'];
             //验证数据  END
             $result = $model_school->editSchool($data,array('schoolid'=>$school_id));
             //修改学校信息的同时 要修改班级和学生的地区

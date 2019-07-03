@@ -66,6 +66,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="area_info" id="area_info" value="" />
             <div class="layui-form-item">
                 <label class="layui-form-label">{$Think.lang.school_index_type}：</label>
                 <div class="layui-input-block">
@@ -133,24 +134,6 @@
         var form = layui.form,
             laypage = layui.laypage
             ,layer = layui.layer;
-        //省 市 区
-        var province = '<?php if(!empty($_GET["province"])){echo $_GET["province"];}?>';
-        var city = '<?php if(!empty($_GET["city"])){echo $_GET["city"];}?>';
-        var area = '<?php if(!empty($_GET["area"])){echo $_GET["area"];}?>';
-        if(province != 0){
-            $.ajax({
-                type:'POST',
-                url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+area,
-                success:function(data){
-                    data = jQuery.parseJSON(data);
-                    //改变市区
-                    $('#city').html(data.city);
-                    //改变县区
-                    $('#area').html(data.area);
-                    form.render('select');//select是固定写法 不是选择器
-                }
-            })
-        }
 
         //省
         form.on('select(province)', function(data){
@@ -163,6 +146,8 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').val();
+                    $('#area_info').val(province_html);
                     data = jQuery.parseJSON(data);
                     //改变市区
                     $('#city').html(data.city);
@@ -176,11 +161,13 @@
         form.on('select(city)', function(data){
             //改变县区
             $('#area').html('<option value="0">{$Think.lang.look_address_area}</option>');
-            var province = $('#province').find('option:selected').val();
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    $('#area_info').val(province_html+city_html);
                     data = jQuery.parseJSON(data);
                     //改变县区
                     $('#area').html(data.area);
@@ -190,12 +177,14 @@
         });
         //县/区
         form.on('select(area)', function(data){
-            var province = $('#province').find('option:selected').val();
-            var city = $('#city').find('option:selected').val();
             $.ajax({
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    var area_html = $('#area').find('option:selected').html();
+                    $('#area_info').val(province_html+city_html+area_html);
                     data = jQuery.parseJSON(data);
                     form.render('select');//select是固定写法 不是选择器
                 }
