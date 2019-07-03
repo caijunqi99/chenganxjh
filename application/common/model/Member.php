@@ -381,6 +381,17 @@ class Member extends Model
     }
 
     /**
+     * 批量加入用户
+     * @Author 老王
+     * @创建时间   2019-06-24
+     * @param  [type]     $member_info [description]
+     */
+    public function addMembersAll($member_info)
+    {
+        return db('member')->insertAll($member_info);
+    }
+
+    /**
      * 会员登录检查
      *
      */

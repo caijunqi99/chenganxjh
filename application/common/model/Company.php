@@ -28,6 +28,17 @@ class Company extends Model {
             return $res->items();
         }
     }
+
+    public function setValueUpdate($o_id,$key,$v,$type=false){
+        //默认减少某字段值
+        if ($type) {
+            return db('company')->where('o_id', $o_id)->setInc($key, $v);
+        }else{
+            return db('company')->where('o_id', $o_id)->setDec($key, $v);
+        }
+        
+    }
+
     /**
      * 添加分子公司
      * @param array $insert

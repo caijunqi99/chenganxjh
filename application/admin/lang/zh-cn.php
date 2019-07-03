@@ -161,7 +161,7 @@ $lang['ds_snstrace']               = '买家动态';
 $lang['ds_snsmember']              = '会员标签';
 $lang['ds_chatlog']                = '聊天记录';
 $lang['points_unit']               = '积分';
-$lang['ds_import']               = '导入学生列表';
+$lang['ds_import']               = '导入线下订单';
 $lang['ds_importorder']                = '导入线下订单';
 $lang['importorder']                = '导入线下订单';
 $lang['ds_robot']               = '机器人管理';
@@ -478,11 +478,13 @@ $lang['ds_common_save_fail']       = '保存失败';
 $lang['ds_succ']                   = '成功';
 $lang['ds_fail']                   = '失败';
 
-$lang['ds_add']                    = '添加';
-$lang['ds_new']                    = '新增';
-$lang['ds_update']                 = '更新';
-$lang['ds_edit']                   = '编辑';
-$lang['ds_del']                    = '删除';
+$lang['ds_add']     = '添加';
+$lang['ds_new']     = '新增';
+$lang['ds_update']  = '更新';
+$lang['ds_edit']    = '编辑';
+$lang['ds_del']     = '删除';
+$lang['ds_checkup'] = '审核';
+$lang['ds_settle']  = '结算';
 
 $lang['ds_cut']                    = '裁剪';
 $lang['download_lang']             = '数据分段下载';

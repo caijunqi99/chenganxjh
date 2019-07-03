@@ -49,11 +49,25 @@
         <div class="layui-card-body" style="margin-top: 100px;">
             <div class="layui-upload">
                 <div class="layui-col-md5">
-                    <input name="sxt_name"  placeholder="{$Think.lang.student_import_name}" class="layui-input" readonly />
+                    <input name="sxt_name"  placeholder="{$Think.lang.import_offline_order_true}" class="layui-input" readonly />
                 </div>
                 <button type="button" class="layui-btn layui-btn-normal" id="upload-change" >{$Think.lang.look_camera_file}</button>
                 <input class="layui-upload-file" accept="undefined" name="file" type="text">
             </div>
+        </div>
+        <div class="layui-form-item" id="pics"  style="margin-top: 10px;">
+          <div class="layui-form-label">上传凭证</div>
+          <div class="layui-input-block" style="width: 70%;">
+            <div class="layui-upload">
+              <button type="button" class="layui-btn layui-btn-primary pull-left" id="slide-pc">选择多图</button>
+            </div>
+          </div>
+          <div class="pic-more">
+            <br/>
+            <ul class="pic-more-upload-list" id="slide-pc-priview">
+
+            </ul>
+          </div>
         </div>
         <div style="margin-top: 100px;margin-left: 245px;">
             <button type="button" class="layui-btn" id="true" >{$Think.lang.look_camera_true}</button>
@@ -61,8 +75,62 @@
         </div>
     </form>
 </div>
-
+<style>
+.layui-upload-img { width: 90px; height: 90px; margin: 0; }
+.pic-more { width:100%; left; margin: 10px 0px 0px 0px;}
+.pic-more li { width:90px; float: left; margin-right: 5px;}
+.pic-more li .layui-input { display: initial; }
+.pic-more li a { position: absolute; top: 0; display: block; }
+.pic-more li a i { font-size: 24px; background-color: #008800; }    
+#slide-pc-priview .item_img img{ width: 90px; height: 90px;}
+#slide-pc-priview li{position: relative;}
+#slide-pc-priview li .operate{ color: #000; display: none;}
+#slide-pc-priview li .toleft{ position: absolute;top: 40px; left: 1px; cursor:pointer;}
+#slide-pc-priview li .toright{ position: absolute;top: 40px; right: 1px;cursor:pointer;}
+#slide-pc-priview li .close{position: absolute;top: 5px; right: 5px;cursor:pointer;}
+#slide-pc-priview li:hover .operate{ display: block;}    
+</style>
 <script type="text/javascript">
+         layui.use('upload', function(){
+         var $ = layui.jquery;
+         var upload = layui.upload;            
+         upload.render({
+             elem: '#slide-pc',
+             url: ADMIN_URL + 'Common/voucher_upload.html', //上传凭证
+             size: 5000,
+             exts: 'jpg|png|jpeg|gif',
+             multiple: true,
+             before: function(obj) {
+                 layer.msg('图片上传中...', {
+                        icon: 16,
+                        shade: 0.01,
+                        time: 0
+                    })
+             },
+             done: function(res) {
+                layer.close(layer.msg());//关闭上传提示窗口
+                 if(res.status == 0) {
+                     return layer.msg(res.msg);
+                 }
+                 $('#slide-pc-priview').append('<li class="item_img"><div class="operate"><i class="close layui-icon" path="'+res.filepath+'"></i></div><img src="' + res.filepath + '" class="img" ><input type="hidden" name="pc_src[]" value="' + res.filepath + '" /></li>');
+             }
+         });
+    });
+         //点击多图上传的X,删除当前的图片    
+    $("body").on("click",".close",function(){
+        var delImg = $(this).attr('path');
+        $.ajax({
+          url: ADMIN_URL + 'Common/voucher_delete.html',
+          type: 'POST',
+          dataType: 'json',
+          data: {'path': delImg},
+        })
+        .done(function(sb) {
+          layer.msg(sb.msg,{'time':1000});
+          if (sb.status==0) { return false;}
+          $(this).closest("li").remove();
+        })
+      });
     var index = parent.layer.getFrameIndex(window.name);
 
     layui.use(['form'], function(){
@@ -135,10 +203,16 @@
         //执行实例
         var uploadInst = upload.render({
             elem: '#upload-change' //绑定元素
-            , url: ADMIN_URL + 'Common/student_file_upload.html' //上传接口
+            , url: ADMIN_URL + 'Common/offline_order_import.html' //上传接口
             , accept: 'file' //普通文件
             , method: 'POST'
-            ,data:{school:function(){return $('#school').find('option:selected').val();}}
+            ,data:{school:function(){return $('#school').find('option:selected').val();},voucher:function(){
+                var pic = '';
+                $(" input[ name='pc_src[]' ] ").each(function(){
+                    pic += $(this).val()+',';
+                });
+                return pic;
+            }}
             , auto: false  //是否自主上传
             , bindAction: '#true'  //确认上传按钮
             , exts: 'xlsx' //只允许上传文件类型
@@ -162,21 +236,32 @@
             }
             , done: function (res) {
                 // console.log(res);
-                parent.layer.closeAll('loading');
                 //上传完毕回调
                 if(res.code == 0){
-
-                    var index = layer.open({
-                        type:2,
-                        title:'{$Think.lang.look_camera_import_true}',
-                        area: ['1230px', '550px'],
-                        fixed: false, //不固定
-                        maxmin: true,
-                        content: 'excelTrue.html'
-                    });
-                    layer.full(index);
+                    parent.layer.closeAll();
+                    layer.closeAll();
+                    parent.layer.msg(res.msg,{icon:1});
+                    parent.reload();
                 }else{
-                    parent.layer.msg(res.msg,{icon:2});
+                    if (res.msg.error) {
+                        //页面层-自定义
+                        var errors = res.msg.error;
+                        var errorbody = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            errorbody += '<div class="layui-colla-item">  <h2 class="layui-colla-title">'+(i+1) +',&nbsp;'+errors[i]+'</h2></div>';
+                        }
+                        layer.open({
+                          type: 1,
+                          title: '错误提示！',
+                          area: ['500px', '400px'],
+                          closeBtn: 0,
+                          shadeClose: true,
+                          skin: 'yourclass',
+                          content: '<div class="layui-collapse" lay-filter="test">'+errorbody+'</div>'
+                        });
+                    }else{
+                        parent.layer.msg(res.msg,{icon:2});
+                    }
                 }
 
             }

@@ -15,6 +15,7 @@ define('BASE_SITE_URL', $config['url_domain_root']);
 define('UPLOAD_SITE_URL',BASE_SITE_URL.'uploads');
 define('BASE_UPLOAD_PATH',ROOT_PATH.'/public/uploads');
 define('CHAT_SITE_URL', BASE_SITE_URL.'static/chat');
+define('OFFICE_UPLOAD_PATH',str_replace("\\",'/',BASE_UPLOAD_PATH.'/office') );
 
 define('TIMESTAMP',time());
 define('DIR_SHOP','shop');

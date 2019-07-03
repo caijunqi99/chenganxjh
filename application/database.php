@@ -4,15 +4,15 @@ return [
 // 数据库类型
 'type'           => 'mysql',
 // 服务器地址
- 'hostname'       => '39.107.140.181', //39.107.140.181
+ 'hostname'       => '127.0.0.1', //39.107.140.181
 // 'hostname'       => '172.16.15.250',//172.16.15.250
 // 数据库名
-'database'       => 'xjh',
+'database'       => 'xjh2',
 // 用户名
 'username'       => 'root',
 // 密码
-'password'       => 'tongan123.',
-// 'password'       => 'root',
+// 'password'       => 'tongan123.',
+'password'       => 'root',
 // 端口
 'hostport'       => '3306',
 // 连接dsn

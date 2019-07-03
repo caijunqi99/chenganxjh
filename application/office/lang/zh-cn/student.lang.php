@@ -26,12 +26,13 @@ $lang['t_name']			    = '套餐类型';
 $lang['t_price']			    = '购买价格';
 $lang['t_day']			    = '购买时间';
 $lang['t_content']			    = '备注说明';
-$lang['student_import_ts']			    = '注意：请选择利用申请表模板填写的excel表进行导入，如果没有严格按模板进行填写导入，会出现数据错误，导致无法使用';
+$lang['student_import_ts']			    = '注意：请选择利用申请表模板填写的Excel表进行导入，如果没有严格按模板进行填写导入，会出现数据错误，导致无法使用';
 $lang['student_import_edit_ts']			    = '注意：改正学生的信息，正确后将及时更改并通知家长';
 $lang['look_camera_true']			    = '确认  导入';
 $lang['look_camera_del']			    = '取消  导入';
 $lang['student_import_name']			    = '导入学生安装申请表名称';
-$lang['look_camera_file']			    = '选择导入excel文件';
+$lang['look_camera_file']			    = '选择导入Excel文件';
+$lang['look_camera_file']			    = '选择导入Excel文件';
 $lang['look_camera_import_true']			    = '导入学生安装申请表真实数据';
 $lang['look_excel_sq_camera_number'] = '总共';
 $lang['look_excel_sq_camera_true_number'] = '符合导入的数据';
@@ -46,7 +47,16 @@ $lang['look_address_school'] = '请选择学校';
 $lang['look_address_grade'] = '请选择学校类型';
 $lang['look_address_class'] = '请选择班级';
 $lang['look_camera_search']			    = '搜索';
-$lang['look_camera_download']			    = '下载导入学生表excel模板';
+$lang['look_camera_download']			    = '下载导入学生表Excel模板';
 $lang['look_camera_import']			    = '导入学生安装申请表';
+
+
+
+$lang['import_order']                  = '订单导入管理';
+$lang['offile_packageorder_voucher']   = '线下订单导入模板';
+$lang['import_offline_order']          = '导入线下订单';
+$lang['packageorder_voucher_download'] = '下载线下订单Excel模板';
+$lang['import_offline_order_true']     = '导入线下订单Excel';
+
 
 ?>

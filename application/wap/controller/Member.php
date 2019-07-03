@@ -488,14 +488,15 @@ class Member extends MobileMember
         }
         $where = ' member_id = "'.$member_id.'"';
 
-        $member = db('member')->field('member_id,member_paypwd,is_owner')->where($where)->find();
+        $member = db('member')->field('member_id,member_paypwd,is_owner,member_mobile')->where($where)->find();
         if(empty($member)){
             output_error('会员不存在，请联系管理员');
         }
         if($member['is_owner'] != 0){
             output_error('该手机号为副账号，不允许绑定孩子');
         }
-
+        
+        
         $name        = trim(input('post.name'));//姓名
         $sex         = intval(input('post.sex'));//性别
         $birthday    = trim(input('post.birthday'));//出生日期
@@ -567,25 +568,28 @@ class Member extends MobileMember
                 $updateMember['schoolid'] = $school_id;
             }
             //给家长绑定学校id和班级id
-             db('member')->where('member_id',$member_id)->update($updateMember);
+             // db('member')->where('member_id',$member_id)->update($updateMember);
             $sid = $student;
         }   
-            if($student){
-                //发送站内信--未写
-                // $model_message = Model('message');
-                $insert_arr = array();
-                $insert_arr['from_member_id'] = 0;
-                $insert_arr['member_id'] = $this->member_info['member_id'];
-                $insert_arr['to_member_name'] = $this->member_info['member_name'];
-                $insert_arr['message_title'] = '学生绑定';
-                // $insert_arr['msg_content'] = '您于 '.date('Y-m-d H:i',time()).' 绑定';
-                $insert_arr['message_type'] = 1;
-                // $model_message->saveMessage($insert_arr);
+        if($student){
+            $BindLogic  = model('Bindorder','logic');
+            $bind = $BindLogic->BindOfflineOrder($member,$student);
+            exit;
+            //发送站内信--未写
+            // $model_message = Model('message');
+            $insert_arr = array();
+            $insert_arr['from_member_id'] = 0;
+            $insert_arr['member_id'] = $this->member_info['member_id'];
+            $insert_arr['to_member_name'] = $this->member_info['member_name'];
+            $insert_arr['message_title'] = '学生绑定';
+            // $insert_arr['msg_content'] = '您于 '.date('Y-m-d H:i',time()).' 绑定';
+            $insert_arr['message_type'] = 1;
+            // $model_message->saveMessage($insert_arr);
 
-                output_data(array('message'=>'绑定成功','sid'=>$sid));
-            }else{
-                output_error('绑定失败');
-            }
+            output_data(array('message'=>'绑定成功','sid'=>$sid));
+        }else{
+            output_error('绑定失败');
+        }
 
     }
 

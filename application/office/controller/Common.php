@@ -30,6 +30,183 @@ class Common extends AdminControl
         }
     }
 
+    public function voucher_upload(){
+        if (!empty($_FILES['file']['tmp_name'])) {
+            $file_object = request()->file('file');
+            $image_url = OFFICE_UPLOAD_PATH . DS . 'voucher';
+            $info = $file_object->validate(['ext' => 'jpg,png,gif'])->move($image_url);
+            if ($info) {
+                echo json_encode(array('status' => 1, 'filepath' => '/uploads/office/voucher/'.$info->getSaveName()));
+                exit;
+            }
+            else {
+                echo json_encode(array('status' => 0, 'msg' => $file_object->getError()));
+                exit;
+            }
+        }
+    }
+
+    public function voucher_delete(){
+        $path =OFFICE_UPLOAD_PATH . DS . 'voucher/'.input('param.path') ;
+        if( file_exists($path) && unlink($path)){
+            echo json_encode(array('status' => 1,'msg'=>'删除成功！'));
+        }else{
+            echo json_encode(array('status' => 0,'msg'=>'删除失败！'));
+        }
+    }
+
+    /**
+     * 线下订单导入
+     * @Author 老王
+     * @创建时间   2019-06-23
+     * @return [type]     [description]
+     */
+    public function offline_order_import(){
+        $schoolid = intval(input('post.school'));
+        $voucher = explode(',',trim(input('param.voucher'),','));
+        if ( !$voucher) {
+            exit(json_encode(array('code'=>1,'msg'=>'打款凭证必须上传，并由后台审核！')));
+        }
+        foreach ($voucher as $key => $r) {
+            $voucher[$key] = str_replace("\\", '/', $r);
+        }
+        //把打款凭证用逗号拼接
+        $file = request()->file('file'); // 获取上传的文件
+        if($file==null){
+            exit(json_encode(array('code'=>1,'msg'=>'未上传文件')));
+        }
+        // 获取文件后缀
+        $temp = explode(".", $_FILES["file"]["name"]);
+        $extension = end($temp);
+        // 判断文件是否合法
+        if(!in_array($extension,array("xlsx",'xls'))){
+            exit(json_encode(array('code'=>1,'msg'=>'上传文件类型不合法')));
+        }
+        $info = $file->move(OFFICE_UPLOAD_PATH.DS.'order');
+        // 移动文件到指定目录 没有则创建
+        $file = '/uploads/office/order/'.$info->getSaveName();
+        //excel表读取
+        $file_name = OFFICE_UPLOAD_PATH.DS.'order'.DS.$info->getSaveName();   //上传文件的地址
+
+        $excel = GetExcelContent($file_name,$extension);
+        foreach ($excel as $key => $f) $excel[$key] = array_filter($f);
+        $excel = array_filter($excel);
+        $titleA = [
+            'A' => '家长手机号*' ,
+            'B' => '家长姓名*' ,
+            'C' => '家长身份证号*' ,
+            'D' => '家长性别(非必填)' ,
+            'E' => '年龄(非必填)' ,
+            'F' => '关系(非必填)' ,
+            'G' => '地址(非必填)' ,
+            'H' => '邮箱' ,
+            'I' => '购买套餐名称（非必填）' ,
+            'J' => '套餐价格(元)*支付价格' ,
+            'K' => '备注说明（非必填）' 
+        ];
+        $titleB = $excel[2];
+        unset($excel[2]);
+        foreach ($titleA as $key => $t) {
+            if($titleB[$key] != $titleA[$key]){
+                exit(json_encode(array('code'=>1,'msg'=>'上传文件表头不符合规范，请按模板上传')));
+            }
+        }
+        // sort($excel);
+        
+        //学校信息
+        $school_info = db('school')->field('schoolid,name,option_id,admin_company_id')->where('schoolid = '.$schoolid.' AND isdel=1')->find();
+        if(empty($school_info)){
+            exit(json_encode(array('code'=>1,'msg'=>'该学校合约已到期，请重新选择')));
+        }
+
+        $offlineSave = [
+            'addtime'           => time() ,
+            'updatefile'        => str_replace("\\", '/', $file) ,
+            'voucherfile'       => implode(',', $voucher) ,
+            'office_id'         => session('office_id') ,
+            'office_company_id' => session('office_company_id') ,
+            'status'            => 1,
+            'school_id'         => $school_info['schoolid']
+        ];
+        //增加上传记录
+        $offlineOrderModel = model('offlineorder');
+        $offlineSave = $offlineOrderModel->addOfflineOrders($offlineSave);
+        if (!$offlineSave) exit(json_encode(array('code'=>1,'msg'=>'A-网络错误，请重试！')));
+        $CacheSave = [];
+        $members = [];
+        $fail = array();
+        $pass = '123456';
+        $offlineCacheModel = model('offlinecache');
+        $memberModel = model('member');
+        foreach ($excel as $key => $v) {
+            $phone = trim($v['A'],"'");
+            if(!preg_match("/^1[345678]{1}\d{9}$/",$phone)){
+                $fail['error'][] =  'A-'.$key.' 家长手机号格式错误';
+            }
+            $idcard = trim($v['C'],"'");
+            if (!isIdcard($idcard)) {
+                $fail['error'][] =  'C-'.$key.' 家长身份证号格式错误';
+            }
+            if (!is_numeric($v['J'])) {
+                $fail['error'][] =  'J-'.$key.' 套餐价格格式错误，只需填写数字或小数即可，如(30,125.8)';
+            }
+
+            $CacheSave[] = [
+                'member_phone'    => $v["A"] ,
+                'member_name'     => $v["B"] ,
+                'member_card'     => $v["C"] ,
+                'member_sex'      => $v["D"]=='女'?2:1 ,
+                'member_age'      => $v["E"] ,
+                'member_relation' => $v["F"] ,
+                'member_address'  => $v["G"] ,
+                'member_email'    => $v["H"] ,
+                'pkg_name'        => $v["I"] ,
+                'pkg_price'       => $v["J"] ,
+                'order_desc'      => $v["K"] ,
+                'addtime'         => time() ,
+                'import_id'       => $offlineSave 
+            ];
+            //判断此家长是否存在，如果不存在，则新增账号
+            $is_exist = $memberModel->getMemberInfo(['member_mobile'=>$phone],'member_id');
+            if (!$is_exist) {
+                $members[] = [
+                    'member_name'        => $v["B"] ,
+                    'member_nickname'    => $v["B"] ,
+                    'member_password'    => md5(trim($pass)) ,
+                    'member_mobile'      => $v["A"] ,
+                    'member_mobile_bind' => 1 ,
+                    'member_age'         => $v["E"],
+                    'member_truename'    => $v["B"],
+                    'member_idcard'      => $v["C"],
+                    'member_sex'         => $v["D"]=='女'?2:1,
+                    'member_email'       => $v["H"],
+                    'member_add_time'    => time(),
+                    'member_areainfo'    => $v["G"] 
+                ];
+            }
+            
+        }
+        if ($fail)exit(json_encode(array('code'=>1,'msg'=>$fail)));
+        
+        try {
+            $memberModel->startTrans();
+            $result1=$offlineCacheModel->allCacheAdd($CacheSave);
+            if($members)$result2=$memberModel->addMembersAll($members);
+            $memberModel->commit();
+        } catch (Exception $e) {
+            $memberModel->rollback();
+        }
+        if ($result1 ) {
+            exit(json_encode(array('code'=>0,'msg'=>'已提交成功，请等待管理员审核！')));
+        }else{
+            $offlineOrderModel->SetOfflineOrders(['id'=>$offlineSave],'is_use',2);
+            $offlineCacheModel->delOfflineCache(['import_id'=>$offlineSave]);
+            exit(json_encode(array('code'=>1,'msg'=>'B-网络错误，请重试！')));
+        }
+        $success = array();
+
+    }
+
     /**
      * 图片裁剪
      *
@@ -141,8 +318,6 @@ class Common extends AdminControl
         $file_name = ROOT_PATH.'public'.DS.'uploads/'.$info->getSaveName();   //上传文件的地址
 
         $_SESSION['excel']['excel_number'] = count($excel)-1;
-//        halt($excel);
-        //学校信息
         $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,isdel')->where('schoolid = '.$schoolid.' AND isdel=1')->find();
         if(empty($school_info)){
         $excel = $this->goods_import($file_name,$extension);
@@ -154,14 +329,12 @@ class Common extends AdminControl
         $address = $school_info['province'].'-'.$school_info['city'].'-'.$school_info['area'];
         $school_info['address'] = $address;
         $_SESSION['excel']['school'] = $school_info;
-//        halt($_SESSION['excel']['school']);
         //根据添加人获取添加人所属公司
         $agent_info = $this->get_agent($school_info['option_id']);
         $_SESSION['excel']['agent'] = $agent_info;
 
         $res = array();
         if(!empty($excel)){
-//            halt($excel[1]['A']);
             if($excel[1]['A'] == '摄像头名称（最好能体现出具体的地方）' && $excel[1]['B'] == '绑定班级/区域' && $excel[1]['C'] == '是否公共区域' && $excel[1]['D'] == '所属学校名称' && $excel[1]['E'] == '所在地区' && $excel[1]['F'] == 'sn' && $excel[1]['G'] == 'key' && $excel[1]['H'] == '代理商/分公司' && $excel[1]['I'] == '备注' ){
                 foreach($excel as $k=>$v){
                     if($k >1 && count($v) == 9 && $v['D'] == $school_info['name'] && !empty($v['F']) && !empty($v['G'])){
@@ -182,13 +355,11 @@ class Common extends AdminControl
         }
 
         $_SESSION['excel']['excel_true_number'] = count($res);
-//        halt($res);
 
         //将符合表的数据存session
         $_SESSION['excel']['excel_data'] = $res;
 
 
-//        halt($_SESSION);
 
         exit(json_encode(array('code'=>0,'msg'=>$file)));
 
@@ -199,8 +370,7 @@ class Common extends AdminControl
      * @author langzhiyao
      * @time 20180927
      */
-    public function student_file_upload()
-    {
+    public function student_file_upload(){
         session_start();//开启session
 
         unset($_SESSION['excel']);//清空session
@@ -214,7 +384,7 @@ class Common extends AdminControl
         $temp = explode(".", $_FILES["file"]["name"]);
         $extension = end($temp);
         // 判断文件是否合法
-        if(!in_array($extension,array("xlsx"))){
+        if(!in_array($extension,array("xlsx",'xls'))){
             exit(json_encode(array('code'=>1,'msg'=>'上传文件类型不合法')));
         }
         $info = $file->move(ROOT_PATH.'public'.DS.'uploads');
@@ -225,7 +395,6 @@ class Common extends AdminControl
 
         $excel = $this->goods_import($file_name,$extension);
         $_SESSION['excel']['excel_number'] = count($excel)-1;
-//        halt($excel);
         //学校信息
         $school_info = db('school')->field('schoolid,name,provinceid,cityid,areaid,option_id,typeid,isdel,admin_company_id')->where('schoolid = '.$schoolid.' AND isdel=1')->find();
         if(empty($school_info)){
@@ -238,7 +407,6 @@ class Common extends AdminControl
         $school_info['address'] = $address;
         $_SESSION['excel']['school'] = $school_info;
         $sc_type = explode(',',$school_info['typeid']);
-//        halt($_SESSION['excel']['school']);
         //根据添加人获取添加人所属公司
         $agent_info = $this->get_agent($school_info['option_id']);
         $_SESSION['excel']['agent'] = $agent_info;
@@ -246,7 +414,6 @@ class Common extends AdminControl
         $success = array();
         $fail = array();
         if(!empty($excel)){
-//            halt($excel);
             if($excel[2]['A'] == '家长手机号' && $excel[2]['B'] == '家长姓名（非必填）' && $excel[2]['C'] == '家长性别（非必填）' && $excel[2]['D'] == '学生姓名' && $excel[2]['E'] == '学生性别（非必填）'
                 && $excel[2]['F'] == '学生身份证号' && $excel[2]['G'] == '所在学校（名称）' && $excel[2]['H'] == '学校类型' && $excel[2]['I'] == '所在班级' && $excel[2]['J'] == '购买套餐名称（非必填）'
                 && $excel[2]['K'] == '套餐价格/元 （非必填）'&& $excel[2]['L'] == '套餐期限 /天（非必填）'&& $excel[2]['M'] == '备注说明（非必填）' ){
@@ -331,14 +498,12 @@ class Common extends AdminControl
 
         $_SESSION['excel']['excel_true_number'] = count($success);
         $_SESSION['excel']['excel_false_number'] = count($fail);
-//        halt($res);
 
         //将符合表的数据存session
         $_SESSION['excel']['excel_success_data'] = $success;
         $_SESSION['excel']['excel_fail_data'] = $fail;
 
 
-//        halt($_SESSION['excel']['excel_fail_data']);
 
         exit(json_encode(array('code'=>0,'msg'=>$file)));
 
@@ -389,6 +554,10 @@ class Common extends AdminControl
                 'school_id' => $schoolid,
                 'position' => $v['A'],
                 'camera_num' => 0,
+                'province_id' => $schoolInfo['provinceid'],
+                'city_id' => $schoolInfo['cityid'],
+                'area_id' => $schoolInfo['areaid'],
+                'region' => $schoolInfo['region'],
 
             );
             $position_id = model('Position')->position_add($position);
@@ -621,7 +790,6 @@ class Common extends AdminControl
                 foreach($type as $key=>$val){
                     $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
                 }
-//                halt($grade);
                 if(!empty($grade)){
                     foreach($grade as $key=>$value){
                         if($value['sc_type'] == $grade_name){
@@ -677,7 +845,6 @@ class Common extends AdminControl
                 foreach($type as $key=>$val){
                     $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
                 }
-//                halt($grade);
                 if(!empty($grade)){
                     foreach($grade as $key=>$value){
                         if($value['sc_type'] == $grade_name){
@@ -845,7 +1012,6 @@ class Common extends AdminControl
                 foreach($type as $key=>$val){
                     $grade[]= db('schooltype')->field('sc_id,sc_type')->where('sc_id = "'.$val.'"')->order('sc_sort ASC')->find();
                 }
-//                halt($grade);
                 if(!empty($grade)){
                     foreach($grade as $key=>$value){
                         if($value['sc_id'] == $grade_id){
