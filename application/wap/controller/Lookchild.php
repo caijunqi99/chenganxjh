@@ -85,11 +85,10 @@ class Lookchild extends MobileMall
                     $schoolid=$str['res_group_id'];
                     $classid=$str['clres_group_id'];
                 }
-//                $user['ip']='117.78.26.155';
-                $user['ip']='39.97.235.153';
+                $user['ip']='117.78.26.155';
                 $user['port']='9001';
-                $user['username']='admin';
-                $user['pwd']='888000';
+                $user['username']='test';
+                $user['pwd']='123456';
                 $camera_model=Model('camera');
                 $condition=array();
                 $condition['parentid']=$classid;
