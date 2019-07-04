@@ -78,6 +78,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="area_info" name="area_info" value="{$organize_array.o_area}" />
             <div class="layui-form-item" id="parent_id" style="display: none;">
                 <div class="layui-inline">
                     <label class="layui-form-label">上级代理商：</label>
@@ -202,6 +203,8 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    $('#area_info').val(province_html);
                     data = jQuery.parseJSON(data);
                     //改变市区
                     $('#city').html(data.city);
@@ -224,6 +227,9 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    $('#area_info').val(province_html+' '+city_html);
                     data = jQuery.parseJSON(data);
                     //改变县区
                     $('#area').html(data.area);
@@ -243,6 +249,10 @@
                 type:'POST',
                 url:ADMIN_URL+'Common/get_address_school?province='+province+'&city='+city+'&area='+data.value,
                 success:function(data){
+                    var province_html = $('#province').find('option:selected').html();
+                    var city_html = $('#city').find('option:selected').html();
+                    var area_html = $('#area').find('option:selected').html();
+                    $('#area_info').val(province_html+' '+city_html+' '+area_html);
                     data = jQuery.parseJSON(data);
                     //改变上级代理商
                     $('#o_parent_id').html(data.agent);
@@ -267,7 +277,7 @@
         $("#activity_end_date").datepicker({dateFormat: 'yy-mm-dd'});
         $("#add_form").validate({
             errorPlacement: function(error, element){
-                error.appendTo(element.parent().parent().prev().find('td:first'));
+                error.appendTo(element.nextAll('span.err'));
             },
             rules : {
                 o_name: {

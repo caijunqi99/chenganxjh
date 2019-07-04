@@ -190,7 +190,7 @@ class Company extends AdminControl {
             }
 
             $update_array['o_area'] = trim($_POST['area_info']);
-            $input['o_parent_id'] = intval($_POST['o_parent_id']);
+            $update_array['o_parent_id'] = intval($_POST['o_parent_id']);
             $update_array['o_address'] = trim($_POST['o_address']);
             $update_array['o_phone'] = trim($_POST['o_phone']);
             $update_array['o_leading'] = trim($_POST['o_leading']);
