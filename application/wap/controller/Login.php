@@ -110,14 +110,15 @@ class Login extends MobileMall
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
                 $logindata['is_owner'] = $member['is_owner']==0?0:1;                
-                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']);
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']);//副账号数量
+                $logindata['StudentNum'] = $model_member->getStudentNum($member['member_id']);//绑定学生数量
                 if ($register) {
                     //发送随机密码
                     //生成数字字符随机 密码
                     $sms_tpl = config('sms_tpl');
                     $tempId = $sms_tpl['sms_password_reset'];
                     $sms = new \sendmsg\Sms();
-                    $pass = '您于'.date('Y-m-d H:i:s',time()).'注册想见孩账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
+                    $pass = '您于'.date('Y-m-d H:i:s',time()).'注册童安账号，您的账号是:'.$member['member_mobile'].'密码是：'.$pass;
                     $send = $sms->send($member['member_mobile'],$pass,$tempId);
 
                     //发送站内信,提示修改密码
@@ -176,8 +177,8 @@ class Login extends MobileMall
                 $logindata['member_identity'] = $member['member_identity'];
                 $logindata['uid'] = $member['member_id'];                
                 $logindata['is_owner'] = $member['is_owner'];                
-                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']); 
-                
+                $logindata['viceAccount'] = $model_member->getMemberViceAccount($member['member_id']);
+                $logindata['StudentNum'] = $model_member->getStudentNum($member['member_id']);//绑定学生数量
                 output_data($logindata);
             }else {
                 output_error('网络错误');
@@ -185,8 +186,6 @@ class Login extends MobileMall
         }else{
            output_error('没有此用户!'); 
         }
-
-        output_error($state);
     }
     public function get_inviter(){
         $inviter_id=intval(input('get.inviter_id'));
