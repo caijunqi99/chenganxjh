@@ -39,6 +39,21 @@ class Member extends Model
     }
 
     /**
+     * 查询绑定孩子数量
+     * @param  [type] $member_id [description]
+     * @return [type]            [description]
+     */
+    public function getStudentNum($member_id){
+        $where = ' m.member_id = "'.$member_id.'"';
+        $result = db('member')->alias('m')->field('m.member_id,m.is_owner')->where($where)->find();
+        if($result['is_owner'] == 0){
+            return db('student')->where('s_ownerAccount = "'.$result["member_id"].'"')->count();
+        }else{
+            return db('student')->where('s_ownerAccount = "'.$result["is_owner"].'"')->count();
+        }
+    }
+
+    /**
      * 取得会员详细信息（优先查询缓存）
      * 如果未找到，则缓存所有字段
      * @param int $member_id
