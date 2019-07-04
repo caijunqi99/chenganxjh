@@ -86,7 +86,6 @@ class Lookchild extends MobileMall
                     $classid=$str['clres_group_id'];
                 }
                 $user['ip']='39.97.235.153';
-//                $user['ip']='117.78.26.155';
                 $user['port']='9001';
                 $user['username']='test';
                 $user['pwd']='123456';
