@@ -1,4 +1,5 @@
 {include file="public/header" /}
+<link rel="stylesheet" href="{$Think.config.url_domain_root}static/plugins/layer/css/layui.css">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 
@@ -25,9 +26,9 @@
         </ul>
     </div>
     
-    <form method='post' id="form_link">
+    <form method='post' id="form_link" class="layui-form">
         
-        <table class="ds-default-table nobdb">
+        <table class="layui-table nobdb">
             <thead>
             <tr class="thead">
                 <th>&nbsp;</th>
@@ -42,7 +43,7 @@
             {notempty name="list"}
             {volist name="list" id="v"}
             <tr class="hover edit">
-                <td class="w24"><input type="checkbox" name="del_id[]" value="{$v.id}" class="checkitem"></td>
+                <td class="w24"><input type="checkbox" name="del_id[]" value="{$v.id}" class="checkitem" style="display: block"></td>
                 <td width="705px">{$v.content}</td>
                 <td>{$v.member_name}</td>
                 <td>{:date('Y-m-d H:i:s',$v.ftime)}</td>
@@ -59,8 +60,9 @@
             <tfoot>
             {notempty name="list"}
             <tr class="tfoot" id="dataFuncs">
-                <td><input type="checkbox" class="checkall" id="checkallBottom"></td>
-                <td colspan="16" id="batchAction"><label for="checkallBottom">{$Think.lang.ds_select_all}</label>
+                <td><input type="checkbox" class="checkall" id="checkallBottom" style="display: block;"></td>
+                <td colspan="16" id="batchAction">
+                    <!--<label for="checkallBottom">{$Think.lang.ds_select_all}</label>-->
                     &nbsp;&nbsp; <a href="JavaScript:void(0);" class="btn" id="btn_delete_batch"><span>{$Think.lang.ds_del}</span></a>
                     <div class="pagination"> {$page} </div></td>
             </tr>
