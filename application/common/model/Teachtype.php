@@ -93,7 +93,7 @@ class Teachtype extends Model
     public function getGoodsClassList($condition, $field = '*')
     {
         $condition['gc_show'] = isset($condition['gc_show'])?$condition['gc_show']:1;
-        $result = db('teachtype')->field($field)->where($condition)->order('gc_parent_id asc,gc_sort asc,gc_id asc')->limit(false)->select();
+        $result = db('teachtype')->field($field)->where($condition)->order('gc_parent_id asc,gc_sort asc,gc_id asc')->select();
         return $result;
     }
 
