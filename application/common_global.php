@@ -35,6 +35,7 @@ define('DIR_UPLOAD','public/uploads');
 define('ATTACH_PATH','home');
 define('ATTACH_COMMON',ATTACH_PATH.'/common');
 define('ATTACH_AVATAR',ATTACH_PATH.'/avatar');
+define('ATTACH_CARD',ATTACH_PATH.'/card');
 define('ATTACH_INVITER',ATTACH_PATH.'/inviter');
 define('ATTACH_EDITOR',ATTACH_PATH.'/editor');
 define('ATTACH_MEMBERTAG',ATTACH_PATH.'/membertag');

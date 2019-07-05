@@ -1019,10 +1019,25 @@ function getAddress($addressID){
     public function cardDistinguish(){
         $url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         $appcode = "77d1aa872b9143a6a3e8c7b87568a4dc";
+        if(!empty($_FILES)){
+            if ((($_FILES["cardImg_front"]["type"] == "image/*") || ($_FILES["cardImg_front"]["type"] == "image/gif") || ($_FILES["cardImg_front"]["type"] == "image/png") || ($_FILES["cardImg_front"]["type"] == "image/jpeg") || ($_FILES["cardImg_front"]["type"] == "image/pjpeg")))
+            {
+                if($_FILES["cardImg_front"]["size"] < 2*1024*1024){
+                    if ($_FILES["cardImg_front"]["error"] > 0)
+                    {
+                        output_error($_FILES["cardImg_front"]["error"]);
+                    }
+                }else{
+                    output_error('图片上传大小不允许超过2M，请重新上传');
+                }
+            }
+            else
+            {
+                output_error('图片上传类型不符合，请重新上传');
+            }
+        }
+        $file = $_FILES['cardImg_front']['tmp_name'];
 
-//        halt($_FILES['image']['tmp_name']);
-
-        $file = $_FILES['image']['tmp_name'];
         //如果输入带有inputs, 设置为True，否则设为False
         $is_old_format = false;
         //如果没有configure字段，config设为空
@@ -1102,6 +1117,45 @@ function getAddress($addressID){
 //            printf("header: %s\n", $rheader);
             output_error('身份证照片报错');
         }
+    }
+    /**
+     * @desc  实名认证
+     * @author langzhiyao
+     */
+
+    public function card_auth(){
+        $re = db('member')->where(array('member_id'=>input('post.member_id')))->find();
+        if($re['is_auth'] == 1){
+            output_error('已经认证成功');
+        }
+        $file_object= request()->file('cardImg_front');
+        $file_object2= request()->file('cardImg_back');
+
+        $base_url=BASE_UPLOAD_PATH . '/' . ATTACH_CARD . '/';
+        $ext_front = strtolower(pathinfo($_FILES['cardImg_front']['name'], PATHINFO_EXTENSION));
+        $ext_back = strtolower(pathinfo($_FILES['cardImg_back']['name'], PATHINFO_EXTENSION));
+
+        $cardImg_frontName='cardImg_front_'.time().rand(1000,9999).".$ext_front";
+        $cardImg_backName='cardImg_back_'.time().rand(1000,9999).".$ext_back";
+
+        $info = $file_object->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$cardImg_frontName);
+        $info2 = $file_object2->rule('uniqid')->validate(['ext' => 'jpg,png,gif,jpeg'])->move($base_url,$cardImg_backName);
+        $cardImg_front=UPLOAD_SITE_URL.'/'.ATTACH_CARD.'/'.$info->getFilename();
+        $cardImg_back=UPLOAD_SITE_URL.'/'.ATTACH_CARD.'/'.$info2->getFilename();
+        $data = array(
+            'member_name'=>input('post.name'),
+            'member_idcard'=>input('post.cardNum'),
+            'cardImg_front'=>$cardImg_front,
+            'cardImg_back'=>$cardImg_back,
+            'is_auth'=>1,
+        );
+        $result = db('member')->where(array('member_id'=>input('post.member_id')))->update($data);
+        if($result){
+            output_data('认证成功');
+        }else{
+            output_error('认证失败');
+        }
+
     }
 
 
