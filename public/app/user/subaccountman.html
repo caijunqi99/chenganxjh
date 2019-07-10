@@ -180,13 +180,13 @@
                 dataType: 'json',
                 success: function(response){
                     if(flag){
-                        $('.subacc_p').html('您最多可以添加'+response.result[4]['value']+'个副账号，主账号和副账号同等权限');
+                        $('.subacc_p').html('您最多可以添加'+response.result[1]['value']+'个副账号，主账号和副账号同等权限');
                     }else{
                         $('.subacc_p').html('副账号不具备添加权限');
                     }
 
 
-                    num = response.result[4]['value'];
+                    num = response.result[1]['value'];
                 }
             });
 

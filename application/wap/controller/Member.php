@@ -290,6 +290,7 @@ class Member extends MobileMember
                     $order[$key]['is_gq'] = 0;
                 }
 
+                $order[$key]['add_time']=date('Y-m-d',$value['add_time']);
             }
         }
         output_data($order);
@@ -1020,7 +1021,7 @@ function getAddress($addressID){
         $url = "https://dm-51.data.aliyun.com/rest/160601/ocr/ocr_idcard.json";
         $appcode = "77d1aa872b9143a6a3e8c7b87568a4dc";
         if(!empty($_FILES)){
-            if ((($_FILES["cardImg_front"]["type"] == "image/*") || ($_FILES["cardImg_front"]["type"] == "image/gif") || ($_FILES["cardImg_front"]["type"] == "image/png") || ($_FILES["cardImg_front"]["type"] == "image/jpeg") || ($_FILES["cardImg_front"]["type"] == "image/pjpeg")))
+            if ((($_FILES["cardImg_front"]["type"] == "image/*") || ($_FILES["cardImg_front"]["type"] == "image/gif") || ($_FILES["cardImg_front"]["type"] == "image/png") || ($_FILES["cardImg_front"]["type"] == "image/jpg") || ($_FILES["cardImg_front"]["type"] == "image/jpeg") || ($_FILES["cardImg_front"]["type"] == "image/pjpeg")))
             {
                 if($_FILES["cardImg_front"]["size"] < 2*1024*1024){
                     if ($_FILES["cardImg_front"]["error"] > 0)
@@ -1155,6 +1156,40 @@ function getAddress($addressID){
         }else{
             output_error('认证失败');
         }
+
+    }
+
+    /**
+     * @desc 获取我的页面信息
+     * @author langzhiyao
+     */
+    public function getMyInfo(){
+        $token = trim(input('post.key'));
+        $member_id = intval(input('post.member_id'));
+        $where = ' m.member_id = "'.$member_id.'"';
+        if(empty($token)){
+            output_error('缺少参数token');
+        }
+        if(empty($member_id)){
+            output_error('缺少参数id');
+        }
+        $model_member = Model('member');
+        $member = $model_member->alias('m')->field('m.member_name,m.member_mobile,m.member_idcard,m.member_avatar,m.is_auth')->where($where)->find();
+        if(empty($member)){
+            output_error('会员不存在，请联系管理员');
+        }
+        $data = array(
+            'name' =>$member['member_name'],
+            'mobile' =>$member['member_mobile'],
+            'card' =>$member['member_idcard'],
+            'avatar' =>UPLOAD_SITE_URL.$member['member_avatar'],
+            'is_auth' =>$member['is_auth'],
+            'viceAccount' =>$model_member ->getMemberViceAccount($member_id),//副账号数量
+            'StudentNum' => $model_member->getStudentNum($member_id),//绑定学生数量
+        );
+
+        output_data($data);
+
 
     }
 

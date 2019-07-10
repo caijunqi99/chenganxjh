@@ -43,6 +43,11 @@
 <!-- 主要内容 -->
 <div class="screen" id="screen"></div>
 <div class="main">
+    <div class="subacc_info">
+        <div class="container2">
+            <p class="subacc_p"></p>
+        </div>
+    </div>
     <!-- 暂无学生 -->
     <div class="no_bounds">
         <p class="no_bounds_p"><span>暂无绑定学生</span></p>
@@ -166,6 +171,7 @@
                     $('.add_student_bar').show();
                 }else{
                     $('.add_student_bar').hide();
+                    $('.subacc_p').html('副账号不具备添加权限');
                 }
             }else if(response['code'] == 400){
                 $.toast(response['message'],'forbidden');return false;

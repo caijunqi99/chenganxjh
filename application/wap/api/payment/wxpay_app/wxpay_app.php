@@ -21,7 +21,6 @@ class wxpay_app {
         $input->SetTrade_type('APP');
         $wxpay = new \WxPayApi();
         $order = $wxpay->unifiedOrder($input);
-
         if ($order['return_code'] == 'SUCCESS') {
             if ($order['result_code'] == 'SUCCESS') {
                 $order['timestamp'] = time();
